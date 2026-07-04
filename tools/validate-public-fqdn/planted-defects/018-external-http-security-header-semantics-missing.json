@@ -1,0 +1,6 @@
+{
+  "id": "018-external-http-security-header-semantics-missing",
+  "description": "Remove security header semantics from the external HTTP contract.",
+  "removeExternalHttpBehaviourSection": "securityHeaderSemantics",
+  "expectedRule": "USF-PUBLIC-FQDN-018"
+}

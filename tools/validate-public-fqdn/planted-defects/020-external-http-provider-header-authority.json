@@ -1,0 +1,6 @@
+{
+  "id": "020-external-http-provider-header-authority",
+  "description": "Treat provider cache headers as semantic authority.",
+  "setCacheProviderHeaderAuthority": true,
+  "expectedRule": "USF-PUBLIC-FQDN-020"
+}

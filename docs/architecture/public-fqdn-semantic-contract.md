@@ -27,6 +27,8 @@ The distinct non-product browser telemetry proof route for USF-264 is:
 
 - /__proof/public-route
 
+The semantic route is the no-trailing-slash path. A same-host HTTPS final URL with `/__proof/public-route/` is accepted only as provider or origin canonicalisation evidence for this proof route. Cross-host redirects, localhost/private redirects, HTTP-only delivery, or any different path are not accepted.
+
 The JSON proof endpoint and browser telemetry route are separate proof surfaces. Neither route is product UI.
 
 ## Provider Boundary

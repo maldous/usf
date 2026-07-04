@@ -8,6 +8,7 @@ SHELL := /bin/bash
 	test-readiness-coverage test-readiness-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production \
+	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
 	verify install dev dev-smoke dev.work \
@@ -57,6 +58,10 @@ help:
 		'  make public-proof-origin  Prove the gateway-neutral public proof origin locally' \
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
 		'  make public-route-proof    Narrow public browser route and telemetry bootstrap proof' \
+		'  make external-http-behaviour-proof  Validate external HTTP behaviour contract' \
+		'  make external-http-cache-proof  Prove cache policy for public proof routes' \
+		'  make external-http-observability-proof  Prove bounded external HTTP observability evidence' \
+		'  make pre-staging-external-smoke-proof  Fail-closed non-destructive external smoke gate' \
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
 		'' \
@@ -128,6 +133,18 @@ public-route-proof-staging:
 
 public-route-proof-production:
 	corepack pnpm proof:public-route:production
+
+external-http-behaviour-proof:
+	corepack pnpm proof:external-http-behaviour
+
+external-http-cache-proof:
+	corepack pnpm proof:external-http-cache
+
+external-http-observability-proof:
+	corepack pnpm proof:external-http-observability
+
+pre-staging-external-smoke-proof:
+	corepack pnpm proof:pre-staging-external-smoke
 
 validate-foundation: verify
 

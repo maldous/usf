@@ -1,0 +1,6 @@
+{
+  "id": "020-external-http-cache-evidence-missing",
+  "description": "Remove the external HTTP cache proof evidence.",
+  "dropExternalHttpCache": true,
+  "expectedRule": "USF-PUBLIC-FQDN-020"
+}

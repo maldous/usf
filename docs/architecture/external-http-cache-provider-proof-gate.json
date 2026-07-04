@@ -1,0 +1,158 @@
+{
+  "id": "external-http-cache-provider-proof-gate",
+  "title": "External HTTP Cache and Upstream Provider Behaviour Proof Gate",
+  "issueId": "USF-269",
+  "parentIssueId": "USF-267",
+  "status": "pass",
+  "statusRationale": "The public JSON proof endpoint and browser proof route declare no-store cache policy and PR #240 moved the route source from static Netlify deploy artifacts to repo-owned Netlify Function responses. Current public evidence shows Cloudflare dynamic handling and Netlify Durable bypass plus Netlify Edge miss for the canonical proof/control routes. Netlify may emit low nonzero Age on these dynamic no-store Function responses; this gate classifies that Age as provider metadata only when no Cache-Status hit or stale evidence is present and explicit miss, bypass, or dynamic evidence is present. Provider and CDN headers remain evidence only and are not semantic authority. Future static, API-like, and app route classes are classified but not claimed as staging-ready.",
+  "blocksStagingSpecificEnablement": false,
+  "publicFqdnContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "externalHttpBehaviourContract": "docs/architecture/external-http-behaviour-contract.json",
+  "proofCommand": {
+    "id": "proof:external-http-cache",
+    "command": "tsx packages/proof/src/external-http-cache-proof.ts",
+    "packageScript": "proof:external-http-cache",
+    "makeTarget": "external-http-cache-proof"
+  },
+  "routeClassEvidence": [
+    {
+      "routeClass": "json-proof-endpoint",
+      "routes": [
+        "/.well-known/usf-public-edge.json"
+      ],
+      "cachePolicy": {
+        "cacheable": false,
+        "cacheControl": "no-store",
+        "etagObserved": true,
+        "lastModifiedObserved": false,
+        "varyObserved": true,
+        "ageObserved": true,
+        "ageSecondsObserved": "low-non-zero",
+        "providerCacheHeaderObserved": true,
+        "providerCacheHitObserved": false,
+        "cacheabilityEvidenceConflict": false,
+        "compressionAllowed": true,
+        "providerCacheStaleObserved": false,
+        "providerAgeMetadataObserved": true,
+        "providerAgeAcceptedAsDynamicMetadata": true,
+        "ageEvidenceClassification": "dynamic-provider-age-metadata",
+        "cacheStatusEvidence": "netlify-durable-bypass-edge-miss-cloudflare-dynamic",
+        "ageMetadataAcceptanceBoundary": "Low nonzero Age is accepted only with no-store, no Cache-Status hit or stale directive, and explicit provider miss, bypass, or dynamic evidence. Any hit, stale, cacheable route, missing no-store, or unclassified Age remains a blocking failure."
+      }
+    },
+    {
+      "routeClass": "browser-proof-route",
+      "routes": [
+        "/__proof/public-route"
+      ],
+      "cachePolicy": {
+        "cacheable": false,
+        "cacheControl": "no-store",
+        "etagObserved": false,
+        "lastModifiedObserved": false,
+        "varyObserved": false,
+        "ageObserved": true,
+        "ageSecondsObserved": "low-non-zero",
+        "providerCacheHeaderObserved": true,
+        "providerCacheHitObserved": false,
+        "cacheabilityEvidenceConflict": false,
+        "compressionAllowed": true,
+        "providerCacheStaleObserved": false,
+        "providerAgeMetadataObserved": true,
+        "providerAgeAcceptedAsDynamicMetadata": true,
+        "ageEvidenceClassification": "dynamic-provider-age-metadata",
+        "cacheStatusEvidence": "netlify-durable-bypass-edge-miss-cloudflare-dynamic",
+        "ageMetadataAcceptanceBoundary": "Low nonzero Age is accepted only with no-store, no Cache-Status hit or stale directive, and explicit provider miss, bypass, or dynamic evidence. Any hit, stale, cacheable route, missing no-store, or unclassified Age remains a blocking failure."
+      }
+    },
+    {
+      "routeClass": "future-static-route",
+      "routes": [],
+      "cachePolicy": {
+        "cacheable": "not-assessed",
+        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "stagingReadinessClaim": false
+      }
+    },
+    {
+      "routeClass": "future-api-like-route",
+      "routes": [],
+      "cachePolicy": {
+        "cacheable": "not-assessed",
+        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "stagingReadinessClaim": false
+      }
+    },
+    {
+      "routeClass": "future-app-route",
+      "routes": [],
+      "cachePolicy": {
+        "cacheable": "not-assessed",
+        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "stagingReadinessClaim": false
+      }
+    }
+  ],
+  "providerHeaderBoundary": {
+    "providerHeadersAreSemanticAuthority": false,
+    "requiredProvider": "none",
+    "currentObservedFrontDoor": "cloudflare",
+    "currentObservedCachingLayer": "netlify-dynamic-function-route",
+    "cloudflareCacheStatusObserved": "dynamic",
+    "netlifyCacheStatusObserved": "durable-bypass-edge-miss-with-low-age-classified-as-provider-metadata",
+    "observedHeaderNames": [
+      "cf-cache-status",
+      "cache-status",
+      "age",
+      "etag",
+      "vary"
+    ],
+    "rawProviderRequestIdsRetained": false,
+    "providerAgeSemantics": "provider-age-is-evidence-only-not-semantic-authority",
+    "ageAcceptedWhen": "no-store-plus-no-hit-no-stale-plus-explicit-miss-bypass-or-dynamic"
+  },
+  "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
+  "blockers": [],
+  "freshnessAndInvalidationBoundary": {
+    "ttlExpectation": "proof-control-routes-no-store",
+    "cacheKeyBoundary": "host-scheme-path-query-method-and-vary-header-where-present",
+    "purgeBoundary": "No purge or invalidation operation is required for proof/control routes when dynamic no-store responses show miss, bypass, or dynamic provider evidence and no hit or stale directive; future cacheable route classes require separate staging-specific evidence.",
+    "staleIfErrorAssessed": true,
+    "staleWhileRevalidateAssessed": true,
+    "staleDirectiveAllowedForProofRoutes": false,
+    "providerAgeMetadataBoundary": "Low nonzero Age alone is not cache-hit evidence when paired with no-store and explicit miss, bypass, or dynamic provider evidence. It becomes blocking if hit, stale, cacheable policy, missing no-store, or unknown provider status is observed."
+  },
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-020",
+      "USF-PUBLIC-FQDN-021"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

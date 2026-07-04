@@ -1,0 +1,11 @@
+{
+  "id": "020-external-http-provider-cache-hit-hidden",
+  "expectedRule": "USF-PUBLIC-FQDN-020",
+  "description": "A cache gate cannot remain pass when provider evidence shows a cache hit for proof/control routes.",
+  "setExternalHttpCacheStatus": "pass",
+  "setCacheRoutePolicy": {
+    "routeClass": "json-proof-endpoint",
+    "field": "providerCacheHitObserved",
+    "value": true
+  }
+}

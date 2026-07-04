@@ -1,0 +1,6 @@
+{
+  "id": "022-external-http-observability-unsafe-payload-retention",
+  "description": "Allow raw payload retention in external HTTP observability evidence.",
+  "setObservabilityUnsafePayloadRetention": true,
+  "expectedRule": "USF-PUBLIC-FQDN-022"
+}

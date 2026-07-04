@@ -1,0 +1,1780 @@
+{
+  "id": "enterprise-iso-style-evidence-foundation",
+  "title": "Enterprise Readiness and ISO-Style Evidence Foundation",
+  "issueId": "USF-272",
+  "status": "foundation-index-complete",
+  "pr": "https://github.com/maldous/usf/pull/240",
+  "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+  "selftestCommand": "python3 tools/validate-enterprise/validate-enterprise.py selftest --json",
+  "stagingSpecificEnablementBlockedByThisTrack": false,
+  "laterRiskDecisionMayBlockPromotion": true,
+  "frameworkBoundary": {
+    "iso27001SupportOnly": true,
+    "iso27001CertificationClaim": false,
+    "socReadinessClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "statementOfApplicabilityStyleSupport": true,
+    "nistCsfStyleRiskOutcomeMapping": "supported-as-mapping-language-only",
+    "nistSsdfStyleSecureDevelopmentMapping": "supported-as-evidence-language-only",
+    "owaspAsvsStyleCategoryMapping": "supported-as-application-security-category-language-only"
+  },
+  "authorityBoundary": {
+    "linearTracksWorkOnly": true,
+    "repositoryEvidenceDefinesCurrentFoundation": true,
+    "providerSettingsAreEvidenceOnly": true,
+    "generatedReportsAreNotAuthority": true,
+    "noSemanticRequirementForCloudflareNetlifyCaddyNginxWorkersPages": true
+  },
+  "owners": {
+    "parentOwner": "enterprise-assurance-foundation-owner",
+    "parentRiskOwner": "enterprise-risk-owner",
+    "parentControlOwner": "enterprise-control-owner",
+    "parentEvidenceOwner": "enterprise-evidence-owner",
+    "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+    "nextReviewDate": "2026-10-04"
+  },
+  "childIssueIds": [
+    "USF-273",
+    "USF-274",
+    "USF-275",
+    "USF-276",
+    "USF-277",
+    "USF-278",
+    "USF-279",
+    "USF-280",
+    "USF-281",
+    "USF-282",
+    "USF-283",
+    "USF-284",
+    "USF-285",
+    "USF-286",
+    "USF-287",
+    "USF-288"
+  ],
+  "domains": [
+    {
+      "issueId": "USF-273",
+      "domainId": "isms-scope-context-risk",
+      "title": "ISMS scope, context, interested parties, risk register, and control ownership",
+      "purpose": "Define ISMS-style scope, context, interested parties, assets, owners, risk treatment, review cadence, and residual risk boundaries.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "isms-scope-context-risk-owner",
+      "riskOwner": "isms-scope-context-risk-risk-owner",
+      "controlOwner": "isms-scope-context-risk-control-owner",
+      "evidenceOwner": "isms-scope-context-risk-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.isms-scope-context-risk",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "enterprise readiness assessment",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-274",
+      "domainId": "soa-control-evidence-matrix",
+      "title": "Statement of Applicability-style control evidence matrix",
+      "purpose": "Map controls to purpose, risk treated, assets, owners, evidence source, validation expectation, status, deferral, and non-claims.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "soa-control-evidence-matrix-owner",
+      "riskOwner": "soa-control-evidence-matrix-risk-owner",
+      "controlOwner": "soa-control-evidence-matrix-control-owner",
+      "evidenceOwner": "soa-control-evidence-matrix-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.soa-control-evidence-matrix",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "enterprise readiness assessment",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-275",
+      "domainId": "iam-privileged-access",
+      "title": "Enterprise IAM, SSO, MFA, privileged access, and break-glass",
+      "purpose": "Inventory IAM, SSO, MFA, privileged roles, access reviews, deprovisioning, break-glass, and audit expectations.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "iam-privileged-access-owner",
+      "riskOwner": "iam-privileged-access-risk-owner",
+      "controlOwner": "iam-privileged-access-control-owner",
+      "evidenceOwner": "iam-privileged-access-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.iam-privileged-access",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-276",
+      "domainId": "secrets-crypto-certificates",
+      "title": "Secrets, cryptography, certificates, and key lifecycle",
+      "purpose": "Record secrets boundary, certificate ownership, key lifecycle, rotation, revocation, expiry, emergency handling, and no-real-secret evidence policy.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "secrets-crypto-certificates-owner",
+      "riskOwner": "secrets-crypto-certificates-risk-owner",
+      "controlOwner": "secrets-crypto-certificates-control-owner",
+      "evidenceOwner": "secrets-crypto-certificates-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.secrets-crypto-certificates",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-277",
+      "domainId": "audit-retention-tamper-evidence",
+      "title": "Audit logging, evidence retention, and tamper-evident trail",
+      "purpose": "Record audit event classes, tenant-safe fields, redaction, retention, export, integrity or tamper-evidence posture, and evidence owner.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "audit-retention-tamper-evidence-owner",
+      "riskOwner": "audit-retention-tamper-evidence-risk-owner",
+      "controlOwner": "audit-retention-tamper-evidence-control-owner",
+      "evidenceOwner": "audit-retention-tamper-evidence-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.audit-retention-tamper-evidence",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "enterprise readiness assessment",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-278",
+      "domainId": "incident-security-operations",
+      "title": "Incident response and security operations",
+      "purpose": "Record detection hooks, alerting posture, escalation, response workflow, corrective action, post-incident evidence, vulnerability intake, and review cadence.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "incident-security-operations-owner",
+      "riskOwner": "incident-security-operations-risk-owner",
+      "controlOwner": "incident-security-operations-control-owner",
+      "evidenceOwner": "incident-security-operations-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.incident-security-operations",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-279",
+      "domainId": "backup-dr-business-continuity",
+      "title": "Backup, restore, disaster recovery, and business continuity",
+      "purpose": "Record data-bearing services, backup posture, restore proof expectations, RPO/RTO targets or non-claims, corruption scenarios, cleanup proof, DR, and continuity owner.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "backup-dr-business-continuity-owner",
+      "riskOwner": "backup-dr-business-continuity-risk-owner",
+      "controlOwner": "backup-dr-business-continuity-control-owner",
+      "evidenceOwner": "backup-dr-business-continuity-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.backup-dr-business-continuity",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-280",
+      "domainId": "change-release-deployment-governance",
+      "title": "Change, release, and deployment governance",
+      "purpose": "Record change control, review evidence, approvals, rollback, deployment boundary, environment promotion boundary, artifact evidence, and approver expectations.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "change-release-deployment-governance-owner",
+      "riskOwner": "change-release-deployment-governance-risk-owner",
+      "controlOwner": "change-release-deployment-governance-control-owner",
+      "evidenceOwner": "change-release-deployment-governance-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.change-release-deployment-governance",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production readiness by later gate",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-281",
+      "domainId": "supply-chain-sbom-provenance",
+      "title": "Supply chain, SBOM, provenance, dependency, and vulnerability management",
+      "purpose": "Record dependency and license expectations, SBOM posture, provenance/signing posture, advisory review, patch SLA, exception governance, and update owner.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "supply-chain-sbom-provenance-owner",
+      "riskOwner": "supply-chain-sbom-provenance-risk-owner",
+      "controlOwner": "supply-chain-sbom-provenance-control-owner",
+      "evidenceOwner": "supply-chain-sbom-provenance-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.supply-chain-sbom-provenance",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-282",
+      "domainId": "privacy-data-protection-retention",
+      "title": "Privacy, data protection, retention, deletion, and export workflows",
+      "purpose": "Record data classification, PII posture, minimisation, retention, purge, deletion, export, legal hold, residency, cross-border boundary, and owner.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "privacy-data-protection-retention-owner",
+      "riskOwner": "privacy-data-protection-retention-risk-owner",
+      "controlOwner": "privacy-data-protection-retention-control-owner",
+      "evidenceOwner": "privacy-data-protection-retention-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.privacy-data-protection-retention",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-283",
+      "domainId": "supplier-cloud-third-party-risk",
+      "title": "Supplier, cloud, Netlify, Cloudflare, GitHub, Linear, and third-party risk",
+      "purpose": "Record supplier inventory, purpose, data boundary, access boundary, risk owner, contractual boundary, review cadence, provider-as-evidence-only posture, and exceptions.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "supplier-cloud-third-party-risk-owner",
+      "riskOwner": "supplier-cloud-third-party-risk-risk-owner",
+      "controlOwner": "supplier-cloud-third-party-risk-control-owner",
+      "evidenceOwner": "supplier-cloud-third-party-risk-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.supplier-cloud-third-party-risk",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-284",
+      "domainId": "tenant-isolation-customer-data",
+      "title": "Tenant isolation and customer data boundary",
+      "purpose": "Record tenant boundary, access and authorization controls, data separation, proof expectations, cross-tenant denial, support access boundary, and customer data constraints.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "tenant-isolation-customer-data-owner",
+      "riskOwner": "tenant-isolation-customer-data-risk-owner",
+      "controlOwner": "tenant-isolation-customer-data-control-owner",
+      "evidenceOwner": "tenant-isolation-customer-data-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.tenant-isolation-customer-data",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production and enterprise readiness until complete",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-285",
+      "domainId": "resilience-capacity-abuse-slo",
+      "title": "Resilience, capacity, rate limiting, abuse controls, and SLOs",
+      "purpose": "Record capacity assumptions, rate limits, abuse cases, throttling, fail-closed behaviour, SLO or explicit non-claim, degradation posture, and owner.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "resilience-capacity-abuse-slo-owner",
+      "riskOwner": "resilience-capacity-abuse-slo-risk-owner",
+      "controlOwner": "resilience-capacity-abuse-slo-control-owner",
+      "evidenceOwner": "resilience-capacity-abuse-slo-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.resilience-capacity-abuse-slo",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-286",
+      "domainId": "observability-alerting-runbooks",
+      "title": "Observability, alerting, dashboards, and runbooks",
+      "purpose": "Record metrics, logs, traces, correlation, alerting, dashboard ownership, runbooks, escalation, retention, redaction, and provider/origin evidence boundary.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "observability-alerting-runbooks-owner",
+      "riskOwner": "observability-alerting-runbooks-risk-owner",
+      "controlOwner": "observability-alerting-runbooks-control-owner",
+      "evidenceOwner": "observability-alerting-runbooks-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.observability-alerting-runbooks",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-287",
+      "domainId": "data-lifecycle-migration-rollback",
+      "title": "Data lifecycle, migrations, integrity, and rollback safety",
+      "purpose": "Record schema/data migrations, integrity checks, import/export, rollback boundaries, cleanup, recovery, data retention, and owner evidence.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "data-lifecycle-migration-rollback-owner",
+      "riskOwner": "data-lifecycle-migration-rollback-risk-owner",
+      "controlOwner": "data-lifecycle-migration-rollback-control-owner",
+      "evidenceOwner": "data-lifecycle-migration-rollback-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.data-lifecycle-migration-rollback",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "production or enterprise readiness by later risk decision",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "issueId": "USF-288",
+      "domainId": "policy-pack-governance",
+      "title": "Policy pack and governance evidence",
+      "purpose": "Record policy inventory, ownership, approval cadence, review cadence, exceptions, waivers, acknowledgement boundary, evidence retention, and continual improvement handover.",
+      "scopeRecorded": true,
+      "evidenceModelDefined": true,
+      "owner": "policy-pack-governance-owner",
+      "riskOwner": "policy-pack-governance-risk-owner",
+      "controlOwner": "policy-pack-governance-control-owner",
+      "evidenceOwner": "policy-pack-governance-evidence-owner",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "nextReviewDate": "2026-10-04",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.policy-pack-governance",
+      "validationExpectation": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "implementationStatus": "foundation-defined-detailed-proof-deferred",
+      "riskTreatment": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "readinessBlockingPosture": {
+        "blocksStagingSpecificEnablementByDefault": false,
+        "blocksFutureReadiness": "enterprise readiness assessment",
+        "promotionImpact": [
+          "production-readiness",
+          "enterprise-readiness",
+          "iso-supporting-evidence-completeness"
+        ]
+      },
+      "deferredBoundary": "Detailed implementation proof remains in this domain issue or later successor; this foundation records evidence shape and ownership only.",
+      "evidenceExpectations": [
+        "repository evidence row with owner and risk treatment",
+        "validation command or explicit validation boundary",
+        "exception and waiver handling if deferred or out of scope",
+        "review date and owner for unresolved evidence",
+        "non-claim language for readiness and certification boundaries"
+      ],
+      "plantedDefectExpectations": [
+        "missing owner",
+        "missing risk treatment",
+        "missing evidence source",
+        "missing review date",
+        "readiness or certification overclaim"
+      ],
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    }
+  ],
+  "controlMatrix": [
+    {
+      "controlId": "enterprise-foundation-isms-scope-context-risk",
+      "issueId": "USF-273",
+      "purpose": "Define ISMS-style scope, context, interested parties, assets, owners, risk treatment, review cadence, and residual risk boundaries.",
+      "riskTreated": "ISMS scope, context, interested parties, risk register, and control ownership evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "isms-scope-context-risk-owner",
+      "riskOwner": "isms-scope-context-risk-risk-owner",
+      "controlOwner": "isms-scope-context-risk-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-isms-scope-context-risk",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-soa-control-evidence-matrix",
+      "issueId": "USF-274",
+      "purpose": "Map controls to purpose, risk treated, assets, owners, evidence source, validation expectation, status, deferral, and non-claims.",
+      "riskTreated": "Statement of Applicability-style control evidence matrix evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "soa-control-evidence-matrix-owner",
+      "riskOwner": "soa-control-evidence-matrix-risk-owner",
+      "controlOwner": "soa-control-evidence-matrix-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-soa-control-evidence-matrix",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-iam-privileged-access",
+      "issueId": "USF-275",
+      "purpose": "Inventory IAM, SSO, MFA, privileged roles, access reviews, deprovisioning, break-glass, and audit expectations.",
+      "riskTreated": "Enterprise IAM, SSO, MFA, privileged access, and break-glass evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "iam-privileged-access-owner",
+      "riskOwner": "iam-privileged-access-risk-owner",
+      "controlOwner": "iam-privileged-access-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-iam-privileged-access",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-secrets-crypto-certificates",
+      "issueId": "USF-276",
+      "purpose": "Record secrets boundary, certificate ownership, key lifecycle, rotation, revocation, expiry, emergency handling, and no-real-secret evidence policy.",
+      "riskTreated": "Secrets, cryptography, certificates, and key lifecycle evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "secrets-crypto-certificates-owner",
+      "riskOwner": "secrets-crypto-certificates-risk-owner",
+      "controlOwner": "secrets-crypto-certificates-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-secrets-crypto-certificates",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-audit-retention-tamper-evidence",
+      "issueId": "USF-277",
+      "purpose": "Record audit event classes, tenant-safe fields, redaction, retention, export, integrity or tamper-evidence posture, and evidence owner.",
+      "riskTreated": "Audit logging, evidence retention, and tamper-evident trail evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "audit-retention-tamper-evidence-owner",
+      "riskOwner": "audit-retention-tamper-evidence-risk-owner",
+      "controlOwner": "audit-retention-tamper-evidence-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-audit-retention-tamper-evidence",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-incident-security-operations",
+      "issueId": "USF-278",
+      "purpose": "Record detection hooks, alerting posture, escalation, response workflow, corrective action, post-incident evidence, vulnerability intake, and review cadence.",
+      "riskTreated": "Incident response and security operations evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "incident-security-operations-owner",
+      "riskOwner": "incident-security-operations-risk-owner",
+      "controlOwner": "incident-security-operations-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-incident-security-operations",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-backup-dr-business-continuity",
+      "issueId": "USF-279",
+      "purpose": "Record data-bearing services, backup posture, restore proof expectations, RPO/RTO targets or non-claims, corruption scenarios, cleanup proof, DR, and continuity owner.",
+      "riskTreated": "Backup, restore, disaster recovery, and business continuity evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "backup-dr-business-continuity-owner",
+      "riskOwner": "backup-dr-business-continuity-risk-owner",
+      "controlOwner": "backup-dr-business-continuity-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-backup-dr-business-continuity",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-change-release-deployment-governance",
+      "issueId": "USF-280",
+      "purpose": "Record change control, review evidence, approvals, rollback, deployment boundary, environment promotion boundary, artifact evidence, and approver expectations.",
+      "riskTreated": "Change, release, and deployment governance evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "change-release-deployment-governance-owner",
+      "riskOwner": "change-release-deployment-governance-risk-owner",
+      "controlOwner": "change-release-deployment-governance-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-change-release-deployment-governance",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-supply-chain-sbom-provenance",
+      "issueId": "USF-281",
+      "purpose": "Record dependency and license expectations, SBOM posture, provenance/signing posture, advisory review, patch SLA, exception governance, and update owner.",
+      "riskTreated": "Supply chain, SBOM, provenance, dependency, and vulnerability management evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "supply-chain-sbom-provenance-owner",
+      "riskOwner": "supply-chain-sbom-provenance-risk-owner",
+      "controlOwner": "supply-chain-sbom-provenance-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-supply-chain-sbom-provenance",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-privacy-data-protection-retention",
+      "issueId": "USF-282",
+      "purpose": "Record data classification, PII posture, minimisation, retention, purge, deletion, export, legal hold, residency, cross-border boundary, and owner.",
+      "riskTreated": "Privacy, data protection, retention, deletion, and export workflows evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "privacy-data-protection-retention-owner",
+      "riskOwner": "privacy-data-protection-retention-risk-owner",
+      "controlOwner": "privacy-data-protection-retention-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-privacy-data-protection-retention",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-supplier-cloud-third-party-risk",
+      "issueId": "USF-283",
+      "purpose": "Record supplier inventory, purpose, data boundary, access boundary, risk owner, contractual boundary, review cadence, provider-as-evidence-only posture, and exceptions.",
+      "riskTreated": "Supplier, cloud, Netlify, Cloudflare, GitHub, Linear, and third-party risk evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "supplier-cloud-third-party-risk-owner",
+      "riskOwner": "supplier-cloud-third-party-risk-risk-owner",
+      "controlOwner": "supplier-cloud-third-party-risk-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-supplier-cloud-third-party-risk",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-tenant-isolation-customer-data",
+      "issueId": "USF-284",
+      "purpose": "Record tenant boundary, access and authorization controls, data separation, proof expectations, cross-tenant denial, support access boundary, and customer data constraints.",
+      "riskTreated": "Tenant isolation and customer data boundary evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "tenant-isolation-customer-data-owner",
+      "riskOwner": "tenant-isolation-customer-data-risk-owner",
+      "controlOwner": "tenant-isolation-customer-data-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-tenant-isolation-customer-data",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-resilience-capacity-abuse-slo",
+      "issueId": "USF-285",
+      "purpose": "Record capacity assumptions, rate limits, abuse cases, throttling, fail-closed behaviour, SLO or explicit non-claim, degradation posture, and owner.",
+      "riskTreated": "Resilience, capacity, rate limiting, abuse controls, and SLOs evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "resilience-capacity-abuse-slo-owner",
+      "riskOwner": "resilience-capacity-abuse-slo-risk-owner",
+      "controlOwner": "resilience-capacity-abuse-slo-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-resilience-capacity-abuse-slo",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-observability-alerting-runbooks",
+      "issueId": "USF-286",
+      "purpose": "Record metrics, logs, traces, correlation, alerting, dashboard ownership, runbooks, escalation, retention, redaction, and provider/origin evidence boundary.",
+      "riskTreated": "Observability, alerting, dashboards, and runbooks evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "observability-alerting-runbooks-owner",
+      "riskOwner": "observability-alerting-runbooks-risk-owner",
+      "controlOwner": "observability-alerting-runbooks-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-observability-alerting-runbooks",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-data-lifecycle-migration-rollback",
+      "issueId": "USF-287",
+      "purpose": "Record schema/data migrations, integrity checks, import/export, rollback boundaries, cleanup, recovery, data retention, and owner evidence.",
+      "riskTreated": "Data lifecycle, migrations, integrity, and rollback safety evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "data-lifecycle-migration-rollback-owner",
+      "riskOwner": "data-lifecycle-migration-rollback-risk-owner",
+      "controlOwner": "data-lifecycle-migration-rollback-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-data-lifecycle-migration-rollback",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    },
+    {
+      "controlId": "enterprise-foundation-policy-pack-governance",
+      "issueId": "USF-288",
+      "purpose": "Record policy inventory, ownership, approval cadence, review cadence, exceptions, waivers, acknowledgement boundary, evidence retention, and continual improvement handover.",
+      "riskTreated": "Policy pack and governance evidence evidence gap could lead to unsupported enterprise readiness or certification claims.",
+      "affectedAssetsOrServices": [
+        "repository evidence",
+        "public FQDN proof surfaces",
+        "future staging and production governance"
+      ],
+      "owner": "policy-pack-governance-owner",
+      "riskOwner": "policy-pack-governance-risk-owner",
+      "controlOwner": "policy-pack-governance-control-owner",
+      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-policy-pack-governance",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "status": "documented-foundation",
+      "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity"
+      ]
+    }
+  ],
+  "riskRegister": [
+    {
+      "riskId": "risk-isms-scope-context-risk",
+      "issueId": "USF-273",
+      "riskStatement": "ISMS scope, context, interested parties, risk register, and control ownership remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "isms-scope-context-risk-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-273",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-soa-control-evidence-matrix",
+      "issueId": "USF-274",
+      "riskStatement": "Statement of Applicability-style control evidence matrix remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "soa-control-evidence-matrix-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-274",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-iam-privileged-access",
+      "issueId": "USF-275",
+      "riskStatement": "Enterprise IAM, SSO, MFA, privileged access, and break-glass remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "iam-privileged-access-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-275",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-secrets-crypto-certificates",
+      "issueId": "USF-276",
+      "riskStatement": "Secrets, cryptography, certificates, and key lifecycle remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "secrets-crypto-certificates-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-276",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-audit-retention-tamper-evidence",
+      "issueId": "USF-277",
+      "riskStatement": "Audit logging, evidence retention, and tamper-evident trail remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "audit-retention-tamper-evidence-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-277",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-incident-security-operations",
+      "issueId": "USF-278",
+      "riskStatement": "Incident response and security operations remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "incident-security-operations-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-278",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-backup-dr-business-continuity",
+      "issueId": "USF-279",
+      "riskStatement": "Backup, restore, disaster recovery, and business continuity remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "backup-dr-business-continuity-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-279",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-change-release-deployment-governance",
+      "issueId": "USF-280",
+      "riskStatement": "Change, release, and deployment governance remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "change-release-deployment-governance-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-280",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-supply-chain-sbom-provenance",
+      "issueId": "USF-281",
+      "riskStatement": "Supply chain, SBOM, provenance, dependency, and vulnerability management remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "supply-chain-sbom-provenance-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-281",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-privacy-data-protection-retention",
+      "issueId": "USF-282",
+      "riskStatement": "Privacy, data protection, retention, deletion, and export workflows remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "privacy-data-protection-retention-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-282",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-supplier-cloud-third-party-risk",
+      "issueId": "USF-283",
+      "riskStatement": "Supplier, cloud, Netlify, Cloudflare, GitHub, Linear, and third-party risk remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "supplier-cloud-third-party-risk-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-283",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-tenant-isolation-customer-data",
+      "issueId": "USF-284",
+      "riskStatement": "Tenant isolation and customer data boundary remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "tenant-isolation-customer-data-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-284",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-resilience-capacity-abuse-slo",
+      "issueId": "USF-285",
+      "riskStatement": "Resilience, capacity, rate limiting, abuse controls, and SLOs remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "resilience-capacity-abuse-slo-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-285",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-observability-alerting-runbooks",
+      "issueId": "USF-286",
+      "riskStatement": "Observability, alerting, dashboards, and runbooks remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "observability-alerting-runbooks-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-286",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-data-lifecycle-migration-rollback",
+      "issueId": "USF-287",
+      "riskStatement": "Data lifecycle, migrations, integrity, and rollback safety remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "data-lifecycle-migration-rollback-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-287",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    },
+    {
+      "riskId": "risk-policy-pack-governance",
+      "issueId": "USF-288",
+      "riskStatement": "Policy pack and governance evidence remains incomplete beyond the foundation index without later operating evidence.",
+      "treatment": "defer",
+      "owner": "policy-pack-governance-risk-owner",
+      "reviewDate": "2026-10-04",
+      "followUpIssue": "USF-288",
+      "promotionImpact": [
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ]
+    }
+  ],
+  "exceptionWorkflow": {
+    "requiredFields": [
+      "reason",
+      "owner",
+      "riskOwner",
+      "compensatingControl",
+      "expiry",
+      "validationCommand",
+      "followUpIssue"
+    ],
+    "expiredExceptionAccepted": false,
+    "ownerlessExceptionAccepted": false,
+    "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+  },
+  "childAcceptanceCoverage": [
+    {
+      "issueId": "USF-273",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.isms-scope-context-risk",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-274",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.soa-control-evidence-matrix",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-275",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.iam-privileged-access",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-276",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.secrets-crypto-certificates",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-277",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.audit-retention-tamper-evidence",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-278",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.incident-security-operations",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-279",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.backup-dr-business-continuity",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-280",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.change-release-deployment-governance",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-281",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.supply-chain-sbom-provenance",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-282",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.privacy-data-protection-retention",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-283",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.supplier-cloud-third-party-risk",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-284",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.tenant-isolation-customer-data",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-285",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.resilience-capacity-abuse-slo",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-286",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.observability-alerting-runbooks",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-287",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.data-lifecycle-migration-rollback",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    },
+    {
+      "issueId": "USF-288",
+      "repositoryEvidence": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.policy-pack-governance",
+      "acceptanceMapped": true,
+      "closureScope": "foundation-index-and-evidence-shape-only",
+      "detailedOperatingEvidenceDeferredToFutureRiskDecision": true
+    }
+  ],
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "iso27001CertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity"
+  ]
+}

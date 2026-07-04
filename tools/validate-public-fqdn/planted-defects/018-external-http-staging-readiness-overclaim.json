@@ -1,0 +1,9 @@
+{
+  "id": "018-external-http-staging-readiness-overclaim",
+  "description": "Allow a staging readiness claim from the external HTTP behaviour contract.",
+  "setExternalHttpReadinessClaim": {
+    "field": "stagingReadinessClaim",
+    "value": true
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-018"
+}

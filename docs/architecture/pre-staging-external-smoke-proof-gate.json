@@ -1,0 +1,132 @@
+{
+  "id": "pre-staging-external-smoke-proof-gate",
+  "title": "Non-Destructive Pre-Staging External Smoke Proof Gate",
+  "issueId": "USF-271",
+  "parentIssueId": "USF-267",
+  "status": "pass",
+  "statusRationale": "The non-destructive smoke gate is implemented and passing. Public HTTPS JSON and browser proof routes pass, both root FQDNs redirect the JSON proof route from HTTP to same-host HTTPS, proof/control routes run through repo-owned Netlify Function responses, and the upstream cache/provider prerequisite accepts low Netlify Age only as provider metadata when no-store, miss/bypass, and no hit/stale evidence are all present. This permits Staging-specific enablement to begin without claiming Staging readiness.",
+  "blocksStagingSpecificEnablement": false,
+  "stagingSpecificEnablementMayBegin": true,
+  "proofCommand": {
+    "id": "proof:pre-staging-external-smoke",
+    "command": "tsx packages/proof/src/pre-staging-external-smoke-proof.ts",
+    "packageScript": "proof:pre-staging-external-smoke",
+    "makeTarget": "pre-staging-external-smoke-proof"
+  },
+  "prerequisites": [
+    {
+      "issueId": "USF-261",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-proof-baseline-tag-gate.json"
+    },
+    {
+      "issueId": "USF-262",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-semantic-contract.json"
+    },
+    {
+      "issueId": "USF-263",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-external-proof-gate.json"
+    },
+    {
+      "issueId": "USF-264",
+      "status": "done",
+      "evidence": "docs/architecture/public-route-telemetry-proof-gate.json"
+    },
+    {
+      "issueId": "USF-265",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-proof-baseline-tag-gate.json"
+    },
+    {
+      "issueId": "USF-266",
+      "status": "done",
+      "evidence": "docs/architecture/public-proof-origin-service.json"
+    },
+    {
+      "issueId": "USF-268",
+      "status": "done",
+      "evidence": "docs/architecture/external-http-behaviour-contract.json"
+    },
+    {
+      "issueId": "USF-269",
+      "status": "done",
+      "evidence": "docs/architecture/external-http-cache-provider-proof-gate.json"
+    },
+    {
+      "issueId": "USF-270",
+      "status": "done",
+      "evidence": "docs/architecture/external-http-observability-evidence-gate.json"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "pre-staging-provider-log-boundary",
+      "issueId": "USF-270",
+      "affectedFqdn": "1e100.network aldous.info",
+      "observed": "Repository access cannot collect external provider access logs.",
+      "requiredOperatorAction": "Before any staging readiness claim, attach provider or origin access-log evidence with safe redaction, retention, and correlation boundaries, or record a later approved bounded rationale.",
+      "blocksStagingSpecificEnablement": false
+    }
+  ],
+  "resolvedBlockers": [
+    {
+      "id": "pre-staging-http-redirect-staging-root",
+      "issueId": "USF-271",
+      "affectedFqdn": "1e100.network",
+      "observed": "Plain HTTP GET to /.well-known/usf-public-edge.json now redirects to https://1e100.network/.well-known/usf-public-edge.json.",
+      "blocksStagingSpecificEnablement": false
+    }
+  ],
+  "nonDestructiveBoundary": {
+    "allowedMethods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "destructiveChecksAllowed": false,
+    "persistentDataMutationAllowed": false,
+    "realTenantDataRequired": false,
+    "realSecretsRequired": false,
+    "proofRoutesOnly": true
+  },
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-024",
+      "USF-PUBLIC-FQDN-025"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ],
+  "cacheProviderBoundary": {
+    "status": "pass",
+    "evidence": "docs/architecture/external-http-cache-provider-proof-gate.json",
+    "ageMetadataBoundary": "Low provider Age is accepted only with no-store, no hit/stale cache status, and explicit miss, bypass, or dynamic provider evidence."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "022-external-http-observability-correlation-missing",
+  "description": "Disable the external HTTP correlation id requirement.",
+  "setObservabilityCorrelationRequired": false,
+  "expectedRule": "USF-PUBLIC-FQDN-022"
+}

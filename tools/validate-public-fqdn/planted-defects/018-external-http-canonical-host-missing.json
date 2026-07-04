@@ -1,0 +1,6 @@
+{
+  "id": "018-external-http-canonical-host-missing",
+  "description": "Remove canonical host semantics from the external HTTP contract.",
+  "removeExternalHttpBehaviourSection": "canonicalHostSemantics",
+  "expectedRule": "USF-PUBLIC-FQDN-018"
+}

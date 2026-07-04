@@ -1,0 +1,47 @@
+[build]
+publish = "netlify/public"
+functions = "netlify/functions"
+
+[[redirects]]
+from = "/.well-known/usf-public-edge.json"
+to = "/.netlify/functions/public-edge"
+status = 200
+force = true
+
+[[redirects]]
+from = "/__proof/public-route"
+to = "/.netlify/functions/public-route"
+status = 200
+force = true
+
+[[redirects]]
+from = "/__proof/public-route/"
+to = "/.netlify/functions/public-route"
+status = 200
+force = true
+
+[[headers]]
+for = "/.well-known/usf-public-edge.json"
+[headers.values]
+Cache-Control = "no-store, no-cache, must-revalidate, max-age=0"
+CDN-Cache-Control = "no-store"
+Netlify-CDN-Cache-Control = "no-store"
+X-Content-Type-Options = "nosniff"
+
+[[headers]]
+for = "/__proof/public-route"
+[headers.values]
+Cache-Control = "no-store, no-cache, must-revalidate, max-age=0"
+CDN-Cache-Control = "no-store"
+Netlify-CDN-Cache-Control = "no-store"
+X-Content-Type-Options = "nosniff"
+Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
+
+[[headers]]
+for = "/__proof/public-route/"
+[headers.values]
+Cache-Control = "no-store, no-cache, must-revalidate, max-age=0"
+CDN-Cache-Control = "no-store"
+Netlify-CDN-Cache-Control = "no-store"
+X-Content-Type-Options = "nosniff"
+Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"

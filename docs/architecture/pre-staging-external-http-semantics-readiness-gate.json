@@ -1,0 +1,83 @@
+{
+  "id": "pre-staging-external-http-semantics-readiness-gate",
+  "title": "Pre-Staging External HTTP Semantics Readiness Gate",
+  "issueId": "USF-267",
+  "status": "pass",
+  "stagingSpecificEnablementMayBegin": true,
+  "statusRationale": "The external HTTP semantics gate is defined, validator-backed, and passing. Both root FQDNs redirect the public JSON proof endpoint from HTTP to same-host HTTPS. Proof/control routes run through repo-owned Netlify Function responses, declare no-store, and show Cloudflare dynamic handling plus Netlify miss/bypass evidence. Low Netlify Age is classified as provider metadata only under the explicit no-store plus miss/bypass no-hit no-stale boundary. Staging-specific enablement may begin; this is not a Staging readiness claim.",
+  "children": [
+    {
+      "issueId": "USF-268",
+      "status": "done",
+      "evidence": "docs/architecture/external-http-behaviour-contract.json"
+    },
+    {
+      "issueId": "USF-269",
+      "status": "done",
+      "evidence": "docs/architecture/external-http-cache-provider-proof-gate.json"
+    },
+    {
+      "issueId": "USF-270",
+      "status": "done",
+      "evidence": "docs/architecture/external-http-observability-evidence-gate.json"
+    },
+    {
+      "issueId": "USF-271",
+      "status": "done",
+      "evidence": "docs/architecture/pre-staging-external-smoke-proof-gate.json"
+    }
+  ],
+  "blockers": [],
+  "resolvedBlockers": [
+    {
+      "id": "pre-staging-http-redirect-staging-root",
+      "issueId": "USF-271",
+      "observed": "http://1e100.network/.well-known/usf-public-edge.json now returns HTTP 301 with Location https://1e100.network/.well-known/usf-public-edge.json.",
+      "protectedRecordChecked": "ssh.aldous.info remains DNS-only A 103.138.244.121."
+    }
+  ],
+  "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ],
+  "cacheProviderDecision": {
+    "status": "pass",
+    "ageMetadataBoundary": "Low provider Age is accepted only when proof/control routes declare no-store, Cache-Status has no hit or stale directive, and provider evidence shows miss, bypass, or dynamic handling.",
+    "unsafeEvidenceStillFails": [
+      "Cache-Status hit",
+      "Cache-Status stale",
+      "cacheable proof/control route",
+      "missing no-store",
+      "unknown provider status with Age",
+      "provider-specific semantic requirement"
+    ]
+  },
+  "observabilityDecision": {
+    "status": "done-with-bounded-provider-log-evidence",
+    "evidence": "docs/architecture/external-http-observability-evidence-gate.json",
+    "boundary": "Repository evidence defines correlation, tracing, event, metrics, redaction, and provider/origin boundaries. Provider access-log collection remains a later staging-readiness evidence requirement and is not claimed here."
+  }
+}

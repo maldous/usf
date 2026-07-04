@@ -1,0 +1,10 @@
+{
+  "id": "025-noop-pre-staging-smoke-command",
+  "description": "Replace the pre-Staging external smoke proof command with a no-op.",
+  "setPackageScript": {
+    "name": "proof:pre-staging-external-smoke",
+    "command": "true"
+  },
+  "setPreStagingSmokeCommand": "true",
+  "expectedRule": "USF-PUBLIC-FQDN-025"
+}

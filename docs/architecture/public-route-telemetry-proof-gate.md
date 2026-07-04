@@ -8,6 +8,8 @@ The proof route is:
 
 - /__proof/public-route
 
+The proof may finish on `/__proof/public-route/` only when the final URL remains HTTPS, same-host, and otherwise matches the declared public FQDN. This trailing slash is provider or origin canonicalisation evidence only; it is not a separate product route and does not permit cross-host redirects or HTTP-only delivery.
+
 The proof uses Playwright Core against local Chromium to navigate over HTTPS to the declared public FQDNs:
 
 | Environment | Required FQDN |

@@ -1,0 +1,10 @@
+{
+  "id": "021-noop-external-http-cache-command",
+  "description": "Replace the external HTTP cache proof command with a no-op.",
+  "setPackageScript": {
+    "name": "proof:external-http-cache",
+    "command": "true"
+  },
+  "setCacheProofCommand": "true",
+  "expectedRule": "USF-PUBLIC-FQDN-021"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "018-external-http-method-semantics-missing",
+  "description": "Remove method semantics from the external HTTP contract.",
+  "removeExternalHttpBehaviourSection": "methodSemantics",
+  "expectedRule": "USF-PUBLIC-FQDN-018"
+}

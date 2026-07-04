@@ -1,0 +1,88 @@
+{
+  "id": "external-http-observability-evidence-gate",
+  "title": "External HTTP Observability Tracing Logging and Event Evidence Gate",
+  "issueId": "USF-270",
+  "parentIssueId": "USF-267",
+  "status": "bounded",
+  "statusRationale": "The repository can prove safe correlation and trace-context header injection to the public proof route and can define the log, event, metric, redaction, and retention boundaries. It cannot collect Cloudflare or external provider access logs from repository access alone. This is bounded evidence, not staging readiness.",
+  "publicFqdnContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "externalHttpBehaviourContract": "docs/architecture/external-http-behaviour-contract.json",
+  "proofCommand": {
+    "id": "proof:external-http-observability",
+    "command": "tsx packages/proof/src/external-http-observability-proof.ts",
+    "packageScript": "proof:external-http-observability",
+    "makeTarget": "external-http-observability-proof"
+  },
+  "correlation": {
+    "correlationIdRequired": true,
+    "requestHeader": "x-usf-correlation-id",
+    "responseEchoRequiredBeforeStagingReadiness": false,
+    "valueRetentionPolicy": "record-presence-only"
+  },
+  "tracing": {
+    "traceContextBoundaryDefined": true,
+    "acceptedRequestHeaders": [
+      "traceparent",
+      "tracestate"
+    ],
+    "liveTracingBackendRequired": false,
+    "productionTelemetryClaim": false
+  },
+  "loggingAndEvents": {
+    "applicationEventMarkerRequired": true,
+    "eventMarker": "usf-public-edge",
+    "providerAccessLogEvidenceAvailable": false,
+    "providerAccessLogFollowUpRequiredBeforeStagingReadinessClaim": true,
+    "providerOriginSplitWhereAvailable": true
+  },
+  "metrics": {
+    "requestCountMetricRequired": true,
+    "statusClassMetricRequired": true,
+    "latencyBucketMetricRequired": true,
+    "valueFreeTenantSafeMetrics": true
+  },
+  "redactionAndRetention": {
+    "rawPayloadRetentionAllowed": false,
+    "rawProviderRequestIdRetentionAllowed": false,
+    "tenantActorTokenEndpointStackTraceRetentionAllowed": false,
+    "retentionBoundary": "safe value-free evidence only"
+  },
+  "providerBoundary": {
+    "requiredProvider": "none",
+    "cloudflareEvidenceOnly": true,
+    "providerSpecificRequirementAllowed": false
+  },
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-022",
+      "USF-PUBLIC-FQDN-023"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

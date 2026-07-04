@@ -140,6 +140,14 @@
     "id": "public-route-telemetry-proof-route",
     "required": true,
     "route": "/__proof/public-route",
+    "canonicalRoute": "/__proof/public-route",
+    "acceptedRouteVariants": [
+      "/__proof/public-route",
+      "/__proof/public-route/"
+    ],
+    "trailingSlashPolicy": "The route without a trailing slash is the canonical semantic route. A same-host HTTPS final URL with a trailing slash is accepted only as provider/origin canonicalisation evidence for this non-product proof route. Cross-host redirects, localhost/private redirects, HTTP-only delivery, or a different path are not accepted.",
+    "crossHostRedirectAllowed": false,
+    "httpOnlyVariantAllowed": false,
     "routeClass": "non-product-browser-telemetry-proof-route",
     "productUiReadinessClaimAllowed": false,
     "browserE2eReadinessClaimAllowed": false,
@@ -187,7 +195,24 @@
       "USF-PUBLIC-FQDN-005",
       "USF-PUBLIC-FQDN-006",
       "USF-PUBLIC-FQDN-007",
-      "USF-PUBLIC-FQDN-008"
+      "USF-PUBLIC-FQDN-008",
+      "USF-PUBLIC-FQDN-009",
+      "USF-PUBLIC-FQDN-010",
+      "USF-PUBLIC-FQDN-011",
+      "USF-PUBLIC-FQDN-012",
+      "USF-PUBLIC-FQDN-013",
+      "USF-PUBLIC-FQDN-014",
+      "USF-PUBLIC-FQDN-015",
+      "USF-PUBLIC-FQDN-016",
+      "USF-PUBLIC-FQDN-017",
+      "USF-PUBLIC-FQDN-018",
+      "USF-PUBLIC-FQDN-019",
+      "USF-PUBLIC-FQDN-020",
+      "USF-PUBLIC-FQDN-021",
+      "USF-PUBLIC-FQDN-022",
+      "USF-PUBLIC-FQDN-023",
+      "USF-PUBLIC-FQDN-024",
+      "USF-PUBLIC-FQDN-025"
     ],
     "plantedDefectCoverage": {
       "USF-PUBLIC-FQDN-001": [
@@ -204,8 +229,8 @@
         "tools/validate-public-fqdn/planted-defects/003-telemetry-binding-unresolved.json"
       ],
       "USF-PUBLIC-FQDN-004": [
-        "tools/validate-public-fqdn/planted-defects/004-telemetry-bootstrap-missing.json",
-        "tools/validate-public-fqdn/planted-defects/004-route-binding-malformed.json"
+        "tools/validate-public-fqdn/planted-defects/004-route-binding-malformed.json",
+        "tools/validate-public-fqdn/planted-defects/004-telemetry-bootstrap-missing.json"
       ],
       "USF-PUBLIC-FQDN-005": [
         "tools/validate-public-fqdn/planted-defects/005-caddy-required-gateway.json",
@@ -220,6 +245,85 @@
       "USF-PUBLIC-FQDN-008": [
         "tools/validate-public-fqdn/planted-defects/008-product-ui-readiness-overclaim.json",
         "tools/validate-public-fqdn/planted-defects/008-staging-readiness-overclaim.json"
+      ],
+      "USF-PUBLIC-FQDN-009": [
+        "tools/validate-public-fqdn/planted-defects/009-external-proof-missing.json",
+        "tools/validate-public-fqdn/planted-defects/009-external-required-fqdn-missing.json"
+      ],
+      "USF-PUBLIC-FQDN-010": [
+        "tools/validate-public-fqdn/planted-defects/010-noop-external-proof-command.json"
+      ],
+      "USF-PUBLIC-FQDN-011": [
+        "tools/validate-public-fqdn/planted-defects/011-blocked-state-does-not-block-v2-proof.json"
+      ],
+      "USF-PUBLIC-FQDN-012": [
+        "tools/validate-public-fqdn/planted-defects/012-caddy-required-proof-overclaim.json",
+        "tools/validate-public-fqdn/planted-defects/012-external-nxdomain-accepted.json",
+        "tools/validate-public-fqdn/planted-defects/012-external-private-only-resolution.json",
+        "tools/validate-public-fqdn/planted-defects/012-missing-tls-proof.json",
+        "tools/validate-public-fqdn/planted-defects/012-proof-endpoint-missing-on-pass.json",
+        "tools/validate-public-fqdn/planted-defects/012-staging-readiness-proof-overclaim.json"
+      ],
+      "USF-PUBLIC-FQDN-013": [
+        "tools/validate-public-fqdn/planted-defects/013-origin-caddy-required.json",
+        "tools/validate-public-fqdn/planted-defects/013-origin-catalogue-service-missing.json",
+        "tools/validate-public-fqdn/planted-defects/013-origin-healthcheck-production-host-missing.json",
+        "tools/validate-public-fqdn/planted-defects/013-origin-proof-command-stale.json",
+        "tools/validate-public-fqdn/planted-defects/013-origin-service-missing.json",
+        "tools/validate-public-fqdn/planted-defects/013-origin-test-public-internet-dependency.json"
+      ],
+      "USF-PUBLIC-FQDN-014": [
+        "tools/validate-public-fqdn/planted-defects/014-public-route-http-only-accepted.json",
+        "tools/validate-public-fqdn/planted-defects/014-public-route-localhost-accepted.json",
+        "tools/validate-public-fqdn/planted-defects/014-public-route-missing-proof-marker.json",
+        "tools/validate-public-fqdn/planted-defects/014-public-route-missing-telemetry-bootstrap.json",
+        "tools/validate-public-fqdn/planted-defects/014-public-route-proof-missing.json",
+        "tools/validate-public-fqdn/planted-defects/014-public-route-wrong-host-accepted.json"
+      ],
+      "USF-PUBLIC-FQDN-015": [
+        "tools/validate-public-fqdn/planted-defects/015-noop-public-route-proof-command.json"
+      ],
+      "USF-PUBLIC-FQDN-016": [
+        "tools/validate-public-fqdn/planted-defects/016-public-route-browser-e2e-overclaim.json",
+        "tools/validate-public-fqdn/planted-defects/016-public-route-caddy-required-overclaim.json"
+      ],
+      "USF-PUBLIC-FQDN-017": [
+        "tools/validate-public-fqdn/planted-defects/017-noop-proof-baseline-tag-command.json"
+      ],
+      "USF-PUBLIC-FQDN-018": [
+        "tools/validate-public-fqdn/planted-defects/018-external-http-canonical-host-missing.json",
+        "tools/validate-public-fqdn/planted-defects/018-external-http-method-semantics-missing.json",
+        "tools/validate-public-fqdn/planted-defects/018-external-http-provider-required.json",
+        "tools/validate-public-fqdn/planted-defects/018-external-http-security-header-semantics-missing.json",
+        "tools/validate-public-fqdn/planted-defects/018-external-http-staging-readiness-overclaim.json"
+      ],
+      "USF-PUBLIC-FQDN-019": [
+        "tools/validate-public-fqdn/planted-defects/019-noop-external-http-behaviour-command.json"
+      ],
+      "USF-PUBLIC-FQDN-020": [
+        "tools/validate-public-fqdn/planted-defects/020-external-http-cache-evidence-missing.json",
+        "tools/validate-public-fqdn/planted-defects/020-external-http-provider-cache-hit-hidden.json",
+        "tools/validate-public-fqdn/planted-defects/020-external-http-proof-route-cacheable.json",
+        "tools/validate-public-fqdn/planted-defects/020-external-http-provider-header-authority.json"
+      ],
+      "USF-PUBLIC-FQDN-021": [
+        "tools/validate-public-fqdn/planted-defects/021-noop-external-http-cache-command.json"
+      ],
+      "USF-PUBLIC-FQDN-022": [
+        "tools/validate-public-fqdn/planted-defects/022-external-http-observability-correlation-missing.json",
+        "tools/validate-public-fqdn/planted-defects/022-external-http-observability-provider-required.json",
+        "tools/validate-public-fqdn/planted-defects/022-external-http-observability-unsafe-payload-retention.json"
+      ],
+      "USF-PUBLIC-FQDN-023": [
+        "tools/validate-public-fqdn/planted-defects/023-noop-external-http-observability-command.json"
+      ],
+      "USF-PUBLIC-FQDN-024": [
+        "tools/validate-public-fqdn/planted-defects/024-pre-staging-smoke-destructive-check.json",
+        "tools/validate-public-fqdn/planted-defects/024-pre-staging-smoke-missing-prerequisite.json",
+        "tools/validate-public-fqdn/planted-defects/024-pre-staging-smoke-staging-readiness-overclaim.json"
+      ],
+      "USF-PUBLIC-FQDN-025": [
+        "tools/validate-public-fqdn/planted-defects/025-noop-pre-staging-smoke-command.json"
       ]
     }
   },
@@ -244,7 +348,12 @@
   "downstreamIssues": [
     "USF-263",
     "USF-264",
-    "USF-265"
+    "USF-265",
+    "USF-267",
+    "USF-268",
+    "USF-269",
+    "USF-270",
+    "USF-271"
   ],
   "remainingProofBoundaries": [
     {
