@@ -574,6 +574,7 @@ The naming domains are distinct and governed separately:
 | Taxonomy ID | `provider-classification` (family/taxonomy id) | Taxonomy catalogue | No | Yes |
 | ADR ID | `0001` numeric prefix (+ kebab title) | §13 | No | Yes |
 | One-off baseline tag | `v2-foundation` (exact annotated tag only) | Git Practices Standard §9.6.1 | No | Exception: exact tag only |
+| One-off proof-baseline tag | `v2-proof` (exact annotated tag only) | Git Practices Standard §9.6.2 | No | Exception: exact tag only |
 | Source reference | exact historical path/commit, marked external | §20 | n/a (verbatim) | Allowed inside the reference as historical evidence |
 
 ---
@@ -601,6 +602,7 @@ Allowed exceptions (consolidated; AGENTS `Strict Naming Rules`; Vocabulary `forb
 - historical aliases recorded in the Vocabulary catalogue;
 - explanatory text (including this section);
 - the exact annotated Git tag `v2-foundation`, only as the one-off dev-ready foundation baseline exception governed by [`git-practices-standard.md`](./git-practices-standard.md) §9.6.1;
+- the exact annotated Git tag `v2-proof`, only as the one-off post-Test public-FQDN proof-baseline exception governed by [`git-practices-standard.md`](./git-practices-standard.md) §9.6.2;
 - the `usf.` global, machine-readable artefact-ID namespace.
 
 Crucial distinction:

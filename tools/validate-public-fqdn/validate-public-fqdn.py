@@ -25,6 +25,7 @@ CONTRACT_PATH = Path("docs/architecture/public-fqdn-semantic-contract.json")
 EXTERNAL_PROOF_PATH = Path("docs/architecture/public-fqdn-external-proof-gate.json")
 ORIGIN_SERVICE_PATH = Path("docs/architecture/public-proof-origin-service.json")
 PUBLIC_ROUTE_PROOF_PATH = Path("docs/architecture/public-route-telemetry-proof-gate.json")
+TAG_GATE_PATH = Path("docs/architecture/public-fqdn-proof-baseline-tag-gate.json")
 COMPOSE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
@@ -47,6 +48,7 @@ RULES = {
     "USF-PUBLIC-FQDN-014": ("blocking", "public browser route Playwright proof evidence is missing or unsafe"),
     "USF-PUBLIC-FQDN-015": ("blocking", "public browser route proof command wiring is missing stale or no-op"),
     "USF-PUBLIC-FQDN-016": ("blocking", "public browser route proof overclaims readiness or gateway requirements"),
+    "USF-PUBLIC-FQDN-017": ("blocking", "public FQDN proof-baseline tag gate is missing unsafe or overclaimed"),
     "USF-PUBLIC-FQDN-SELFTEST": ("blocking", "planted public FQDN defect did not raise its expected rule"),
 }
 
@@ -180,6 +182,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "externalProof": load_optional_json(EXTERNAL_PROOF_PATH),
         "originService": load_optional_json(ORIGIN_SERVICE_PATH),
         "publicRouteProof": load_optional_json(PUBLIC_ROUTE_PROOF_PATH),
+        "tagGate": load_optional_json(TAG_GATE_PATH),
         "composeCatalogue": load_optional_json(COMPOSE_CATALOGUE_PATH),
         "package": load_json(PACKAGE_PATH),
         "makefile": (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8"),
@@ -397,6 +400,24 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
                             row[key].update(value)
                         else:
                             row[key] = value
+    tag_gate = mutated.get("tagGate")
+    if defect.get("dropTagGate"):
+        mutated["tagGate"] = None
+        tag_gate = None
+    if isinstance(tag_gate, dict):
+        if "setTagGateCommand" in defect:
+            tag_gate.setdefault("tag", {})["command"] = defect["setTagGateCommand"]
+        if "setTagGateName" in defect:
+            tag_gate.setdefault("tag", {})["name"] = defect["setTagGateName"]
+        if "setTagGateReadinessClaim" in defect:
+            patch = defect["setTagGateReadinessClaim"]
+            tag_gate.setdefault("claims", {})[patch["field"]] = patch["value"]
+        if "removeTagGateNonClaim" in defect:
+            tag_gate["nonClaims"] = [
+                claim
+                for claim in tag_gate.get("nonClaims", [])
+                if claim != defect["removeTagGateNonClaim"]
+            ]
     compose_catalogue = mutated.get("composeCatalogue")
     if defect.get("dropOriginCatalogueService") and isinstance(compose_catalogue, dict):
         compose_catalogue["services"] = [
@@ -1337,6 +1358,122 @@ def check_public_route_negative_evidence_and_claims(
         F.add("USF-PUBLIC-FQDN-016", f"{PUBLIC_ROUTE_PROOF_PATH}#nonClaims", f"required public route proof non-claims are missing: {sorted(missing)}")
 
 
+def check_public_fqdn_tag_gate(F: Findings, tag_gate: Any) -> None:
+    if not isinstance(tag_gate, dict):
+        F.add("USF-PUBLIC-FQDN-017", str(TAG_GATE_PATH), "public FQDN proof-baseline tag gate evidence is missing")
+        return
+
+    if tag_gate.get("sourceIssue") != "USF-265" or tag_gate.get("parentIssue") != "USF-261":
+        F.add("USF-PUBLIC-FQDN-017", str(TAG_GATE_PATH), "tag gate issue linkage is stale")
+
+    tag = tag_gate.get("tag")
+    if not isinstance(tag, dict):
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag", "tag gate tag metadata is missing")
+        return
+    if tag.get("name") != "v2-proof" or tag.get("type") != "annotated":
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag", "tag gate must authorize only the exact annotated v2-proof tag")
+    if tag.get("authorityException") != "docs/architecture/git-practices-standard.md#9.6.2":
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag.authorityException", "tag gate authority exception linkage is stale")
+    command = tag.get("command")
+    if not is_non_empty_string(command) or command_is_noop(command):
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag.command", "tag command is missing or no-op")
+    elif "git tag -a v2-proof" not in command:
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag.command", "tag command does not create the exact annotated v2-proof tag")
+    if tag.get("remoteRef") != "refs/tags/v2-proof":
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag.remoteRef", "tag remote ref is stale")
+    if tag.get("recordFinalTagEvidenceInLinear") is not True:
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#tag.recordFinalTagEvidenceInLinear", "final tag evidence recording boundary is missing")
+
+    prerequisites = tag_gate.get("prerequisites")
+    expected_prerequisites = {"USF-226", "USF-234", "USF-262", "USF-263", "USF-264", "USF-266"}
+    if not isinstance(prerequisites, list):
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#prerequisites", "tag prerequisites are missing")
+    else:
+        by_issue = {row.get("issueId"): row for row in prerequisites if isinstance(row, dict)}
+        if set(by_issue) != expected_prerequisites:
+            F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#prerequisites", "tag prerequisites are incomplete or stale")
+        for issue_id in sorted(expected_prerequisites):
+            row = by_issue.get(issue_id)
+            if not isinstance(row, dict) or row.get("status") != "done":
+                F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#prerequisites.{issue_id}", "tag prerequisite is not recorded as done")
+
+    validation_suite = tag_gate.get("finalValidationSuite")
+    required_commands = {
+        "corepack pnpm proof:public-origin",
+        "corepack pnpm proof:public-fqdn",
+        "corepack pnpm proof:public-route",
+        "corepack pnpm public-fqdn:validate",
+        "corepack pnpm public-fqdn:selftest",
+        "corepack pnpm test-readiness",
+        "corepack pnpm test-readiness:selftest",
+        "corepack pnpm verify",
+        "corepack pnpm parity",
+        "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+        "python3 tools/validate-spec/validate-spec.py all --json",
+        "git diff --check",
+        "git status --short",
+    }
+    if not isinstance(validation_suite, list):
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#finalValidationSuite", "final validation suite is missing")
+    else:
+        commands = {row for row in validation_suite if isinstance(row, str)}
+        missing = required_commands - commands
+        if missing:
+            F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#finalValidationSuite", f"final validation suite is missing commands: {sorted(missing)}")
+        if any(command_is_noop(row) for row in commands):
+            F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#finalValidationSuite", "final validation suite contains a no-op command")
+
+    open_checks = tag_gate.get("openWorkChecks")
+    if not isinstance(open_checks, dict):
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#openWorkChecks", "open work checks are missing")
+    else:
+        for key in ("githubOpenPullRequestSearchRequired", "linearReadinessSearchRequired"):
+            if open_checks.get(key) is not True:
+                F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#openWorkChecks.{key}", "required open-work search is not enforced")
+        if open_checks.get("usf39MutationAllowed") is not False:
+            F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#openWorkChecks.usf39MutationAllowed", "USF-39 mutation boundary is unsafe")
+
+    evidence_sources = set(tag_gate.get("evidenceSources", []))
+    required_sources = {
+        str(CONTRACT_PATH),
+        str(EXTERNAL_PROOF_PATH),
+        str(ORIGIN_SERVICE_PATH),
+        str(PUBLIC_ROUTE_PROOF_PATH),
+        "tools/validate-public-fqdn/validate-public-fqdn.py",
+    }
+    if not required_sources <= evidence_sources:
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#evidenceSources", "tag gate evidence sources are incomplete")
+
+    claims = tag_gate.get("claims")
+    if not isinstance(claims, dict):
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#claims", "tag gate claims map is missing")
+    else:
+        for key in (
+            "stagingReadinessClaim",
+            "productionReadinessClaim",
+            "deploymentReadinessClaim",
+            "liveProviderReadinessClaim",
+            "socReadinessClaim",
+            "isoCertificationClaim",
+            "enterpriseProductionReadinessClaim",
+            "productUiReadinessClaim",
+            "browserE2eReadinessClaim",
+            "fullReactProductParityClaim",
+        ):
+            if claims.get(key) is not False:
+                F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#claims.{key}", "tag gate overclaims readiness")
+
+    non_claims = set(tag_gate.get("nonClaims", []))
+    required_non_claims = REQUIRED_NON_CLAIMS - {"caddy-required-gateway"} | {
+        "no-caddy-semantic-requirement",
+    }
+    missing = required_non_claims - non_claims
+    if missing:
+        F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#nonClaims", f"tag gate non-claims are missing: {sorted(missing)}")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     contract = state.get("contract")
@@ -1368,6 +1505,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
         check_public_route_proof_commands(F, public_route_proof, state["package"], state["makefile"])
         check_public_route_fqdn_evidence(F, public_route_proof, contract)
         check_public_route_negative_evidence_and_claims(F, public_route_proof)
+    check_public_fqdn_tag_gate(F, state.get("tagGate"))
     return F
 
 

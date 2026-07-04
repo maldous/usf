@@ -1,0 +1,6 @@
+{
+  "id": "017-noop-proof-baseline-tag-command",
+  "description": "Replace the public FQDN proof-baseline tag command with a no-op command.",
+  "setTagGateCommand": "true",
+  "expectedRule": "USF-PUBLIC-FQDN-017"
+}

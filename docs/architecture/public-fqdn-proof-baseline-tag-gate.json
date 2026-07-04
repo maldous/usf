@@ -1,0 +1,136 @@
+{
+  "id": "public-fqdn-proof-baseline-tag-gate",
+  "title": "Public FQDN Proof Baseline Tag Gate",
+  "sourceIssue": "USF-265",
+  "parentIssue": "USF-261",
+  "tag": {
+    "name": "v2-proof",
+    "type": "annotated",
+    "authorityException": "docs/architecture/git-practices-standard.md#9.6.2",
+    "command": "git tag -a v2-proof <target-commit-sha> -m <message-preserving-usf-265-boundary>",
+    "targetCommitSha": "resolved-after-governance-pr-merge",
+    "tagObjectSha": "resolved-after-tag-push",
+    "remoteRef": "refs/tags/v2-proof",
+    "remoteRefVerificationCommand": "git ls-remote --tags origin refs/tags/v2-proof",
+    "recordFinalTagEvidenceInLinear": true
+  },
+  "prerequisites": [
+    {
+      "issueId": "USF-226",
+      "requirement": "Dev readiness remains complete as prior merged evidence.",
+      "status": "done"
+    },
+    {
+      "issueId": "USF-234",
+      "requirement": "Bounded Test readiness remains complete after PR #234 validator hardening.",
+      "status": "done"
+    },
+    {
+      "issueId": "USF-262",
+      "requirement": "Public FQDN semantic contract is Done.",
+      "status": "done"
+    },
+    {
+      "issueId": "USF-263",
+      "requirement": "External DNS TLS HTTPS JSON proof gate is Done.",
+      "status": "done"
+    },
+    {
+      "issueId": "USF-264",
+      "requirement": "Public route and telemetry bootstrap Playwright proof gate is Done.",
+      "status": "done"
+    },
+    {
+      "issueId": "USF-266",
+      "requirement": "Gateway-neutral public proof origin service is Done.",
+      "status": "done"
+    }
+  ],
+  "finalValidationSuite": [
+    "corepack pnpm install --frozen-lockfile",
+    "corepack pnpm proof:public-origin",
+    "corepack pnpm proof:public-fqdn",
+    "corepack pnpm proof:public-fqdn:staging",
+    "corepack pnpm proof:public-fqdn:production",
+    "corepack pnpm proof:public-route",
+    "corepack pnpm proof:public-route:staging",
+    "corepack pnpm proof:public-route:production",
+    "corepack pnpm public-fqdn:validate",
+    "corepack pnpm public-fqdn:selftest",
+    "corepack pnpm test-readiness",
+    "corepack pnpm test-readiness:selftest",
+    "corepack pnpm verify",
+    "corepack pnpm parity",
+    "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "python3 tools/validate-public-fqdn/validate-public-fqdn.py selftest --json",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+    "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json",
+    "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+    "python3 tools/validate-spec/validate-spec.py all --json",
+    "python3 tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --json",
+    "git diff --check",
+    "git status --short"
+  ],
+  "openWorkChecks": {
+    "githubOpenPullRequestSearchRequired": true,
+    "linearReadinessSearchRequired": true,
+    "allowedLinearOpenScope": "future Staging work explicitly outside USF-261 through USF-265",
+    "usf39MutationAllowed": false
+  },
+  "tagBoundary": {
+    "means": [
+      "Dev readiness complete.",
+      "Bounded Test readiness complete after PR #234 validator hardening.",
+      "Public FQDN semantic proof gate complete for 1e100.network and aldous.info.",
+      "External DNS TLS HTTPS JSON proof gate complete for 1e100.network and aldous.info.",
+      "Public browser route and telemetry bootstrap proof gate complete for 1e100.network and aldous.info."
+    ],
+    "doesNotMean": [
+      "Staging readiness.",
+      "Production readiness.",
+      "Deployment readiness.",
+      "Live-provider readiness.",
+      "SOC readiness.",
+      "ISO certification readiness.",
+      "Enterprise production readiness.",
+      "Product UI readiness.",
+      "Browser E2E readiness.",
+      "Full React product parity.",
+      "Caddy, Netlify, Cloudflare Worker, nginx, or any gateway product as a semantic requirement."
+    ]
+  },
+  "evidenceSources": [
+    "docs/architecture/public-fqdn-semantic-contract.json",
+    "docs/architecture/public-fqdn-external-proof-gate.json",
+    "docs/architecture/public-proof-origin-service.json",
+    "docs/architecture/public-route-telemetry-proof-gate.json",
+    "tools/validate-public-fqdn/validate-public-fqdn.py"
+  ],
+  "claims": {
+    "tagAuthorizationGateDefined": true,
+    "tagCreated": false,
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "no-caddy-semantic-requirement"
+  ]
+}
