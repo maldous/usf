@@ -16,6 +16,7 @@ interface ProbeResult {
   readonly jsonEndpoint: {
     readonly status: number;
     readonly contentTypeMatched: boolean;
+    readonly noStoreHeadersObserved: boolean;
     readonly markerObserved: boolean;
     readonly environmentMatched: boolean;
     readonly fqdnMatched: boolean;
@@ -23,8 +24,16 @@ interface ProbeResult {
   readonly browserRoute: {
     readonly status: number;
     readonly contentTypeMatched: boolean;
+    readonly noStoreHeadersObserved: boolean;
     readonly markerObserved: boolean;
     readonly telemetryBootstrapObserved: boolean;
+  };
+  readonly safeMethods: {
+    readonly jsonHeadStatus: number;
+    readonly jsonOptionsStatus: number;
+    readonly routeHeadStatus: number;
+    readonly routeOptionsStatus: number;
+    readonly accepted: boolean;
   };
   readonly status: "pass" | "fail";
 }
@@ -37,17 +46,32 @@ const EXPECTED = [
 interface HttpProbeResponse {
   readonly status: number;
   readonly contentType: string;
+  readonly cacheControl: string;
+  readonly cdnCacheControl: string;
+  readonly netlifyCdnCacheControl: string;
   readonly body: string;
 }
 
-async function request(port: number, fqdn: string, route: string): Promise<HttpProbeResponse> {
+function headerValue(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
+  return value ?? "";
+}
+
+async function request(
+  port: number,
+  fqdn: string,
+  route: string,
+  method = "GET",
+): Promise<HttpProbeResponse> {
   return await new Promise<HttpProbeResponse>((resolve, reject) => {
     const req = httpRequest(
       {
         host: "127.0.0.1",
         port,
         path: route,
-        method: "GET",
+        method,
         headers: {
           Host: fqdn,
         },
@@ -61,7 +85,10 @@ async function request(port: number, fqdn: string, route: string): Promise<HttpP
         response.on("end", () => {
           resolve({
             status: response.statusCode ?? 0,
-            contentType: response.headers["content-type"] ?? "",
+            contentType: headerValue(response.headers["content-type"]),
+            cacheControl: headerValue(response.headers["cache-control"]),
+            cdnCacheControl: headerValue(response.headers["cdn-cache-control"]),
+            netlifyCdnCacheControl: headerValue(response.headers["netlify-cdn-cache-control"]),
             body,
           });
         });
@@ -74,6 +101,18 @@ async function request(port: number, fqdn: string, route: string): Promise<HttpP
 
 async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<ProbeResult> {
   const jsonResponse = await request(port, row.fqdn, "/.well-known/usf-public-edge.json");
+  const jsonHeadResponse = await request(
+    port,
+    row.fqdn,
+    "/.well-known/usf-public-edge.json",
+    "HEAD",
+  );
+  const jsonOptionsResponse = await request(
+    port,
+    row.fqdn,
+    "/.well-known/usf-public-edge.json",
+    "OPTIONS",
+  );
   const jsonContentType = jsonResponse.contentType;
   const jsonPayload = JSON.parse(jsonResponse.body) as {
     readonly marker?: string;
@@ -81,14 +120,25 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
     readonly fqdn?: string;
   };
   const routeResponse = await request(port, row.fqdn, "/__proof/public-route");
+  const routeHeadResponse = await request(port, row.fqdn, "/__proof/public-route", "HEAD");
+  const routeOptionsResponse = await request(port, row.fqdn, "/__proof/public-route", "OPTIONS");
   const routeContentType = routeResponse.contentType;
   const routeBody = routeResponse.body;
+  const jsonNoStoreHeaders =
+    jsonResponse.cacheControl.includes("no-store") &&
+    jsonResponse.cdnCacheControl.includes("no-store") &&
+    jsonResponse.netlifyCdnCacheControl.includes("no-store");
+  const routeNoStoreHeaders =
+    routeResponse.cacheControl.includes("no-store") &&
+    routeResponse.cdnCacheControl.includes("no-store") &&
+    routeResponse.netlifyCdnCacheControl.includes("no-store");
   const result = {
     fqdn: row.fqdn,
     environment: row.environment,
     jsonEndpoint: {
       status: jsonResponse.status,
       contentTypeMatched: jsonContentType.includes("application/json"),
+      noStoreHeadersObserved: jsonNoStoreHeaders,
       markerObserved: jsonPayload.marker === "usf-public-edge",
       environmentMatched: jsonPayload.environment === row.environment,
       fqdnMatched: jsonPayload.fqdn === row.fqdn,
@@ -96,8 +146,20 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
     browserRoute: {
       status: routeResponse.status,
       contentTypeMatched: routeContentType.includes("text/html"),
+      noStoreHeadersObserved: routeNoStoreHeaders,
       markerObserved: routeBody.includes("usf-public-route"),
       telemetryBootstrapObserved: routeBody.includes("usf-public-route-telemetry-bootstrap"),
+    },
+    safeMethods: {
+      jsonHeadStatus: jsonHeadResponse.status,
+      jsonOptionsStatus: jsonOptionsResponse.status,
+      routeHeadStatus: routeHeadResponse.status,
+      routeOptionsStatus: routeOptionsResponse.status,
+      accepted:
+        jsonHeadResponse.status === 200 &&
+        jsonOptionsResponse.status === 204 &&
+        routeHeadResponse.status === 200 &&
+        routeOptionsResponse.status === 204,
     },
   };
   return {
@@ -105,13 +167,16 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
     status:
       result.jsonEndpoint.status === 200 &&
       result.jsonEndpoint.contentTypeMatched &&
+      result.jsonEndpoint.noStoreHeadersObserved &&
       result.jsonEndpoint.markerObserved &&
       result.jsonEndpoint.environmentMatched &&
       result.jsonEndpoint.fqdnMatched &&
       result.browserRoute.status === 200 &&
       result.browserRoute.contentTypeMatched &&
+      result.browserRoute.noStoreHeadersObserved &&
       result.browserRoute.markerObserved &&
-      result.browserRoute.telemetryBootstrapObserved
+      result.browserRoute.telemetryBootstrapObserved &&
+      result.safeMethods.accepted
         ? "pass"
         : "fail",
   };

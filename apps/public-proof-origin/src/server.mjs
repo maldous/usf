@@ -22,6 +22,13 @@ const NON_CLAIMS = Object.freeze([
   "no-v2-proof-tag-authorization",
 ]);
 
+const NO_STORE_HEADERS = Object.freeze({
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+  "CDN-Cache-Control": "no-store",
+  "Netlify-CDN-Cache-Control": "no-store",
+  "X-Content-Type-Options": "nosniff",
+});
+
 function normaliseHost(hostHeader) {
   const host = String(hostHeader ?? "").trim().toLowerCase();
   if (!host) {
@@ -77,8 +84,8 @@ function sendJson(response, status, payload) {
   const body = `${JSON.stringify(payload, null, 2)}\n`;
   response.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store",
-    "X-Content-Type-Options": "nosniff",
+    "Allow": "GET, HEAD, OPTIONS",
+    ...NO_STORE_HEADERS,
   });
   response.end(body);
 }
@@ -86,12 +93,29 @@ function sendJson(response, status, payload) {
 function sendHtml(response, status, html) {
   response.writeHead(status, {
     "Content-Type": "text/html; charset=utf-8",
-    "Cache-Control": "no-store",
-    "X-Content-Type-Options": "nosniff",
+    "Allow": "GET, HEAD, OPTIONS",
+    ...NO_STORE_HEADERS,
     "Content-Security-Policy":
       "default-src 'none'; script-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'",
   });
   response.end(html);
+}
+
+function sendHead(response, contentType) {
+  response.writeHead(200, {
+    "Content-Type": contentType,
+    "Allow": "GET, HEAD, OPTIONS",
+    ...NO_STORE_HEADERS,
+  });
+  response.end();
+}
+
+function sendOptions(response) {
+  response.writeHead(204, {
+    "Allow": "GET, HEAD, OPTIONS",
+    ...NO_STORE_HEADERS,
+  });
+  response.end();
 }
 
 function publicEdgePayload(context) {
@@ -165,13 +189,33 @@ export function createPublicProofOriginServer(options = {}) {
       });
       return;
     }
-    if (request.method === "GET" && url.pathname === "/.well-known/usf-public-edge.json") {
-      sendJson(response, 200, publicEdgePayload(context));
-      return;
+    if (url.pathname === "/.well-known/usf-public-edge.json") {
+      if (request.method === "GET") {
+        sendJson(response, 200, publicEdgePayload(context));
+        return;
+      }
+      if (request.method === "HEAD") {
+        sendHead(response, "application/json; charset=utf-8");
+        return;
+      }
+      if (request.method === "OPTIONS") {
+        sendOptions(response);
+        return;
+      }
     }
-    if (request.method === "GET" && url.pathname === "/__proof/public-route") {
-      sendHtml(response, 200, publicRouteHtml(context));
-      return;
+    if (url.pathname === "/__proof/public-route") {
+      if (request.method === "GET") {
+        sendHtml(response, 200, publicRouteHtml(context));
+        return;
+      }
+      if (request.method === "HEAD") {
+        sendHead(response, "text/html; charset=utf-8");
+        return;
+      }
+      if (request.method === "OPTIONS") {
+        sendOptions(response);
+        return;
+      }
     }
     sendJson(response, 404, {
       marker: "usf-public-edge-route-missing",

@@ -9,9 +9,9 @@ The gate records cache and upstream-provider behaviour for the public JSON proof
 
 Current decision: blocked.
 
-Blocker: the proof/control routes declare `Cache-Control: no-store`, but current provider evidence includes cache hit and nonzero `Age` observations. Provider headers are evidence only and are not semantic authority; they still block this gate because they contradict the declared no-store behaviour.
+Blocker: the proof/control routes declare no-store cache policy, but current provider evidence includes Netlify Edge cache hit and nonzero Age observations. Cloudflare reports dynamic handling for the same responses, so Cloudflare is the public front door evidence but the observed cache conflict is at the Netlify edge/origin layer.
 
-Required operator action: configure the public edge or origin so proof/control routes are not served from provider cache when `Cache-Control` is `no-store`, or record a later explicit human-approved bounded rationale.
+Required operator action: deploy the proof origin or an equivalent route implementation with ordinary and CDN no-store cache headers, purge or redeploy the provider cache, then rerun the external cache proof until proof/control routes no longer report provider cache hit or nonzero Age. If the selected provider is Netlify, the repository origin emits Netlify-CDN-Cache-Control no-store as an implementation hint; that does not make Netlify semantic authority.
 
 Provider or CDN headers such as cache status, age, etag, vary, and content encoding are evidence only. They do not define USF semantics and do not make Cloudflare, Netlify, or any other provider a required gateway.
 

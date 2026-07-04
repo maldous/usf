@@ -31,10 +31,27 @@
     "cloudflareWorkerRequired": false
   },
   "responseContract": {
+    "cacheHeaders": {
+      "semanticRequirement": "proof-control-routes-must-not-be-served-from-provider-cache",
+      "requiredResponseHeaders": {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "CDN-Cache-Control": "no-store"
+      },
+      "providerImplementationHints": {
+        "Netlify-CDN-Cache-Control": "no-store"
+      },
+      "providerSpecificHeadersAreSemanticAuthority": false,
+      "netlifyRequired": false,
+      "cloudflareRequired": false,
+      "caddyRequired": false
+    },
     "jsonProofEndpoint": {
       "method": "GET",
+      "methods": ["GET", "HEAD", "OPTIONS"],
       "route": "/.well-known/usf-public-edge.json",
       "status": 200,
+      "headStatus": 200,
+      "optionsStatus": 204,
       "contentTypeIncludes": "application/json",
       "requiredMarker": "usf-public-edge",
       "requiredFields": [
@@ -50,8 +67,11 @@
     },
     "browserProofRoute": {
       "method": "GET",
+      "methods": ["GET", "HEAD", "OPTIONS"],
       "route": "/__proof/public-route",
       "status": 200,
+      "headStatus": 200,
+      "optionsStatus": 204,
       "contentTypeIncludes": "text/html",
       "requiredMarker": "usf-public-route",
       "requiredTelemetryBootstrapMarker": "usf-public-route-telemetry-bootstrap",
@@ -113,7 +133,9 @@
         "staging JSON proof response",
         "production JSON proof response",
         "staging reserved browser route response",
-        "production reserved browser route response"
+        "production reserved browser route response",
+        "ordinary and CDN no-store headers for both proof surfaces",
+        "HEAD and OPTIONS safe-method boundary for both proof surfaces"
       ]
     },
     "externalPublicFqdn": {

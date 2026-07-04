@@ -4,7 +4,7 @@
   "issueId": "USF-269",
   "parentIssueId": "USF-267",
   "status": "blocked",
-  "statusRationale": "The public JSON proof endpoint and browser proof route declare no-store cache policy, but current provider evidence shows cache-hit and nonzero Age observations on proof/control routes. Provider and CDN headers are recorded as evidence only and are not semantic authority; they still block the cache proof because they contradict the declared no-store behaviour. Future static, API-like, and app route classes are classified but not claimed as staging-ready.",
+  "statusRationale": "The public JSON proof endpoint and browser proof route declare no-store cache policy, but current provider evidence shows Netlify Edge cache-hit and nonzero Age observations on proof/control routes while Cloudflare reports dynamic handling. Provider and CDN headers are recorded as evidence only and are not semantic authority; they still block the cache proof because they contradict the declared no-store behaviour. Future static, API-like, and app route classes are classified but not claimed as staging-ready.",
   "blocksStagingSpecificEnablement": true,
   "publicFqdnContract": "docs/architecture/public-fqdn-semantic-contract.json",
   "externalHttpBehaviourContract": "docs/architecture/external-http-behaviour-contract.json",
@@ -84,6 +84,10 @@
   "providerHeaderBoundary": {
     "providerHeadersAreSemanticAuthority": false,
     "requiredProvider": "none",
+    "currentObservedFrontDoor": "cloudflare",
+    "currentObservedCachingLayer": "netlify-edge",
+    "cloudflareCacheStatusObserved": "dynamic",
+    "netlifyCacheStatusObserved": "hit-with-nonzero-age",
     "observedHeaderNames": [
       "cf-cache-status",
       "cache-status",
@@ -101,8 +105,8 @@
         "/.well-known/usf-public-edge.json",
         "/__proof/public-route"
       ],
-      "observed": "Proof/control routes declare Cache-Control no-store but provider evidence includes cache hit and nonzero Age observations.",
-      "requiredOperatorAction": "Configure the public edge or origin so proof/control routes are not served from provider cache when Cache-Control is no-store, or record a later explicit human-approved bounded rationale.",
+      "observed": "Proof/control routes declare no-store but public evidence includes Cache-Status \"Netlify Edge\" hit and nonzero Age observations. Cloudflare cache status is dynamic, so a Cloudflare cache rule alone is not sufficient evidence that the Netlify edge/origin cache conflict is resolved.",
+      "requiredOperatorAction": "Deploy the proof origin or equivalent route implementation with Cache-Control, CDN-Cache-Control, and any provider-specific CDN no-store header required by the chosen provider; purge or redeploy the provider cache; rerun the external cache proof until proof/control routes no longer report provider cache hit or nonzero Age, or record a later explicit human-approved bounded rationale.",
       "blocksStagingSpecificEnablement": true
     }
   ],
