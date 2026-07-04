@@ -1,0 +1,16 @@
+{
+  "id": "014-public-route-wrong-host-accepted",
+  "description": "Claim public route proof passed while the browser evidence ended on the wrong public host.",
+  "patchPublicRouteFqdnRows": [
+    {
+      "environment": "production",
+      "values": {
+        "browserRoute": {
+          "finalHostMatched": false,
+          "finalHostname": "example.com"
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-014"
+}

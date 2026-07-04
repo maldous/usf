@@ -1,0 +1,6 @@
+{
+  "id": "014-public-route-proof-missing",
+  "description": "Remove public browser route proof evidence so USF-264 cannot be satisfied by USF-263 JSON proof alone.",
+  "dropPublicRouteProof": true,
+  "expectedRule": "USF-PUBLIC-FQDN-014"
+}

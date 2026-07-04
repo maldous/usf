@@ -7,6 +7,7 @@ SHELL := /bin/bash
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
+	public-route-proof public-route-proof-staging public-route-proof-production \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
 	verify install dev dev-smoke dev.work \
@@ -55,6 +56,7 @@ help:
 		'  make public-fqdn-validate  Validate public FQDN semantic contract and non-claims' \
 		'  make public-proof-origin  Prove the gateway-neutral public proof origin locally' \
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
+		'  make public-route-proof    Narrow public browser route and telemetry bootstrap proof' \
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
 		'' \
@@ -117,6 +119,15 @@ public-fqdn-proof-staging:
 
 public-fqdn-proof-production:
 	corepack pnpm proof:public-fqdn:production
+
+public-route-proof:
+	corepack pnpm proof:public-route
+
+public-route-proof-staging:
+	corepack pnpm proof:public-route:staging
+
+public-route-proof-production:
+	corepack pnpm proof:public-route:production
 
 validate-foundation: verify
 

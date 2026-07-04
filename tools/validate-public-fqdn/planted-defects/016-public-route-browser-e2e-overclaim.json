@@ -1,0 +1,6 @@
+{
+  "id": "016-public-route-browser-e2e-overclaim",
+  "description": "Remove the browser E2E non-claim from public route proof evidence.",
+  "removePublicRouteNonClaim": "browser-e2e-readiness",
+  "expectedRule": "USF-PUBLIC-FQDN-016"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "014-public-route-localhost-accepted",
+  "description": "Claim public route proof passed while the browser evidence ended on localhost.",
+  "patchPublicRouteFqdnRows": [
+    {
+      "environment": "staging",
+      "values": {
+        "browserRoute": {
+          "finalHostMatched": false,
+          "finalHostname": "localhost",
+          "localhostOrPrivateHostObserved": true
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-014"
+}

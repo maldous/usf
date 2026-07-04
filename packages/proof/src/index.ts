@@ -33,3 +33,4 @@ export { runWindmillConfiguredProof } from "./windmill-configured-proof.ts";
 export { runRedisComposedProof } from "./redis-composed-proof.ts";
 export { runResourceLifecycleProof } from "./resource-lifecycle-proof.ts";
 export { runPublicFqdnProof } from "./public-fqdn-proof.ts";
+export { runPublicRouteTelemetryProof } from "./public-route-telemetry-proof.ts";

@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = Path("docs/architecture/public-fqdn-semantic-contract.json")
 EXTERNAL_PROOF_PATH = Path("docs/architecture/public-fqdn-external-proof-gate.json")
 ORIGIN_SERVICE_PATH = Path("docs/architecture/public-proof-origin-service.json")
+PUBLIC_ROUTE_PROOF_PATH = Path("docs/architecture/public-route-telemetry-proof-gate.json")
 COMPOSE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
@@ -43,6 +44,9 @@ RULES = {
     "USF-PUBLIC-FQDN-011": ("blocking", "blocked public FQDN proof does not block v2-proof authorization"),
     "USF-PUBLIC-FQDN-012": ("blocking", "external public FQDN proof evidence is incomplete or overclaims readiness"),
     "USF-PUBLIC-FQDN-013": ("blocking", "public proof origin service evidence is missing gateway-specific or not locally reproducible"),
+    "USF-PUBLIC-FQDN-014": ("blocking", "public browser route Playwright proof evidence is missing or unsafe"),
+    "USF-PUBLIC-FQDN-015": ("blocking", "public browser route proof command wiring is missing stale or no-op"),
+    "USF-PUBLIC-FQDN-016": ("blocking", "public browser route proof overclaims readiness or gateway requirements"),
     "USF-PUBLIC-FQDN-SELFTEST": ("blocking", "planted public FQDN defect did not raise its expected rule"),
 }
 
@@ -121,6 +125,23 @@ EXPECTED_ORIGIN_MAKE_TARGET = "public-proof-origin"
 EXPECTED_ORIGIN_SERVICE_ID = "public-proof-origin"
 EXPECTED_ORIGIN_SERVICE_NAME = "public-proof-origin"
 EXPECTED_ORIGIN_PROFILE = "public-proof-origin"
+EXPECTED_PUBLIC_ROUTE_PROOF_COMMANDS = {
+    "proof:public-route": {
+        "scope": "all",
+        "command": "tsx packages/proof/src/public-route-telemetry-proof.ts all",
+        "makeTarget": "public-route-proof",
+    },
+    "proof:public-route:staging": {
+        "scope": "staging",
+        "command": "tsx packages/proof/src/public-route-telemetry-proof.ts staging",
+        "makeTarget": "public-route-proof-staging",
+    },
+    "proof:public-route:production": {
+        "scope": "production",
+        "command": "tsx packages/proof/src/public-route-telemetry-proof.ts production",
+        "makeTarget": "public-route-proof-production",
+    },
+}
 
 
 class Findings:
@@ -158,6 +179,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "contract": load_optional_json(CONTRACT_PATH),
         "externalProof": load_optional_json(EXTERNAL_PROOF_PATH),
         "originService": load_optional_json(ORIGIN_SERVICE_PATH),
+        "publicRouteProof": load_optional_json(PUBLIC_ROUTE_PROOF_PATH),
         "composeCatalogue": load_optional_json(COMPOSE_CATALOGUE_PATH),
         "package": load_json(PACKAGE_PATH),
         "makefile": (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8"),
@@ -346,6 +368,35 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
                 for claim in origin_service.get("nonClaims", [])
                 if claim != defect["removeOriginNonClaim"]
             ]
+    public_route_proof = mutated.get("publicRouteProof")
+    if defect.get("dropPublicRouteProof"):
+        mutated["publicRouteProof"] = None
+        public_route_proof = None
+    if isinstance(public_route_proof, dict):
+        if "setPublicRouteProofStatus" in defect:
+            public_route_proof["status"] = defect["setPublicRouteProofStatus"]
+        if "setPublicRouteProofCommand" in defect:
+            patch = defect["setPublicRouteProofCommand"]
+            for row in public_route_proof.get("proofCommands", {}).values():
+                if row.get("id") == patch.get("id"):
+                    row["command"] = patch.get("command")
+        if "setPublicRouteNegativeEvidence" in defect:
+            patch = defect["setPublicRouteNegativeEvidence"]
+            public_route_proof.setdefault("negativeEvidence", {})[patch["field"]] = patch["value"]
+        if "removePublicRouteNonClaim" in defect:
+            public_route_proof["nonClaims"] = [
+                claim
+                for claim in public_route_proof.get("nonClaims", [])
+                if claim != defect["removePublicRouteNonClaim"]
+            ]
+        for row_patch in defect.get("patchPublicRouteFqdnRows", []):
+            for row in public_route_proof.get("requiredFqdns", []):
+                if row.get("environment") == row_patch.get("environment"):
+                    for key, value in row_patch.get("values", {}).items():
+                        if isinstance(value, dict) and isinstance(row.get(key), dict):
+                            row[key].update(value)
+                        else:
+                            row[key] = value
     compose_catalogue = mutated.get("composeCatalogue")
     if defect.get("dropOriginCatalogueService") and isinstance(compose_catalogue, dict):
         compose_catalogue["services"] = [
@@ -1098,6 +1149,194 @@ def check_public_proof_origin_service(
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#nonClaims", f"origin non-claims are missing: {sorted(missing)}")
 
 
+def check_public_route_proof_shape(F: Findings, route_proof: Any) -> None:
+    if not isinstance(route_proof, dict):
+        F.add("USF-PUBLIC-FQDN-014", str(PUBLIC_ROUTE_PROOF_PATH), "public route proof evidence is missing")
+        return
+    required_fields = {
+        "id",
+        "issueId",
+        "parentIssueId",
+        "semanticContract",
+        "originServiceEvidence",
+        "status",
+        "statusRationale",
+        "blocksV2Proof",
+        "v2ProofAuthorizationAllowed",
+        "proofCommands",
+        "requiredFqdns",
+        "negativeEvidence",
+        "browserAutomation",
+        "telemetryBootstrapBoundary",
+        "validator",
+        "nonClaims",
+    }
+    for field in sorted(required_fields):
+        if field not in route_proof:
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#{field}", "required field is missing")
+    if route_proof.get("issueId") != "USF-264" or route_proof.get("parentIssueId") != "USF-261":
+        F.add("USF-PUBLIC-FQDN-014", str(PUBLIC_ROUTE_PROOF_PATH), "issue linkage is stale")
+    if route_proof.get("semanticContract") != str(CONTRACT_PATH):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#semanticContract", "semantic contract linkage is stale")
+    if route_proof.get("originServiceEvidence") != str(ORIGIN_SERVICE_PATH):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#originServiceEvidence", "origin service linkage is stale")
+    if route_proof.get("status") != "pass":
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#status", "public route proof must record a passing proof or remain open")
+    if not is_non_empty_string(route_proof.get("statusRationale")):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#statusRationale", "status rationale is missing")
+    if route_proof.get("blocksV2Proof") is not False or route_proof.get("v2ProofAuthorizationAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-016", str(PUBLIC_ROUTE_PROOF_PATH), "USF-264 alone must not authorize v2-proof")
+
+
+def check_public_route_proof_commands(
+    F: Findings,
+    route_proof: dict[str, Any],
+    package: dict[str, Any],
+    makefile: str,
+) -> None:
+    proof_commands = route_proof.get("proofCommands")
+    if not isinstance(proof_commands, dict):
+        F.add("USF-PUBLIC-FQDN-015", f"{PUBLIC_ROUTE_PROOF_PATH}#proofCommands", "public route proof command map is missing")
+        return
+    by_id = {
+        row.get("id"): row
+        for row in proof_commands.values()
+        if isinstance(row, dict) and isinstance(row.get("id"), str)
+    }
+    scripts = package.get("scripts", {})
+    for script_id, expected in EXPECTED_PUBLIC_ROUTE_PROOF_COMMANDS.items():
+        row = by_id.get(script_id)
+        if not isinstance(row, dict):
+            F.add("USF-PUBLIC-FQDN-015", f"{PUBLIC_ROUTE_PROOF_PATH}#proofCommands.{script_id}", "public route proof command row is missing")
+            continue
+        if row.get("command") != expected["command"] or command_is_noop(row.get("command")):
+            F.add("USF-PUBLIC-FQDN-015", f"{PUBLIC_ROUTE_PROOF_PATH}#proofCommands.{script_id}.command", "public route proof command is stale or no-op")
+        if row.get("packageScript") != script_id:
+            F.add("USF-PUBLIC-FQDN-015", f"{PUBLIC_ROUTE_PROOF_PATH}#proofCommands.{script_id}.packageScript", "public route proof package script id is stale")
+        if row.get("makeTarget") != expected["makeTarget"]:
+            F.add("USF-PUBLIC-FQDN-015", f"{PUBLIC_ROUTE_PROOF_PATH}#proofCommands.{script_id}.makeTarget", "public route proof Make target is stale")
+        if scripts.get(script_id) != expected["command"] or command_is_noop(scripts.get(script_id)):
+            F.add("USF-PUBLIC-FQDN-015", f"package.json#scripts.{script_id}", "public route proof package script is missing stale or no-op")
+        target = expected["makeTarget"]
+        command = f"corepack pnpm {script_id}"
+        if not re.search(rf"^{re.escape(target)}:\n\t{re.escape(command)}$", makefile, re.MULTILINE):
+            F.add("USF-PUBLIC-FQDN-015", f"Makefile#{target}", "public route proof Make target is missing or stale")
+
+
+def check_public_route_fqdn_evidence(
+    F: Findings,
+    route_proof: dict[str, Any],
+    contract: Any,
+) -> None:
+    rows = route_proof.get("requiredFqdns")
+    if not isinstance(rows, list) or len(rows) != len(EXPECTED_ENVIRONMENTS):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns", "public route FQDN proof rows are incomplete")
+        return
+    by_environment = {row.get("environment"): row for row in rows if isinstance(row, dict)}
+    if set(by_environment) != set(EXPECTED_ENVIRONMENTS):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns", "public route FQDN environments are stale")
+
+    contract_route = "/__proof/public-route"
+    expected_content_type = "text/html"
+    if isinstance(contract, dict) and isinstance(contract.get("publicRouteBinding"), dict):
+        binding = contract["publicRouteBinding"]
+        contract_route = binding.get("route", contract_route)
+        expected_content_type = binding.get("expectedContentType", expected_content_type)
+
+    for environment, expected_fqdn in EXPECTED_ENVIRONMENTS.items():
+        row = by_environment.get(environment)
+        if not isinstance(row, dict):
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns.{environment}", "required public route FQDN proof row is missing")
+            continue
+        if row.get("fqdn") != expected_fqdn:
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns.{environment}.fqdn", "public route proof row FQDN is stale")
+        if row.get("proofCommandId") != f"proof:public-route:{environment}":
+            F.add("USF-PUBLIC-FQDN-015", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns.{environment}.proofCommandId", "public route proof command id is stale")
+        route = row.get("browserRoute")
+        if not isinstance(route, dict):
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns.{environment}.browserRoute", "browser route evidence is missing")
+            continue
+        expected_values = {
+            "attemptedRoute": contract_route,
+            "expectedContentType": expected_content_type,
+            "lastObservedStatus": 200,
+            "finalUrlScheme": "https",
+            "finalHostMatched": True,
+            "finalHostname": expected_fqdn,
+            "canonicalRouteMatched": True,
+            "localhostOrPrivateHostObserved": False,
+            "httpOnlyDeliveryObserved": False,
+            "mixedContentObserved": False,
+            "proofMarkerObserved": True,
+            "telemetryBootstrapObserved": True,
+            "telemetryBootstrapOnlyObserved": True,
+            "productUiReadinessClaimObserved": False,
+            "browserE2eReadinessClaimObserved": False,
+            "caddyRequiredGatewayClaimObserved": False,
+        }
+        for key, expected in expected_values.items():
+            if route.get(key) != expected:
+                rule_id = "USF-PUBLIC-FQDN-016" if key in {"productUiReadinessClaimObserved", "browserE2eReadinessClaimObserved", "caddyRequiredGatewayClaimObserved"} else "USF-PUBLIC-FQDN-014"
+                F.add(rule_id, f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns.{environment}.browserRoute.{key}", "public route proof evidence is missing unsafe or stale")
+        systems = set(route.get("telemetrySystemsObserved", []))
+        if not {"faro", "sentry"}.issubset(systems):
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#requiredFqdns.{environment}.browserRoute.telemetrySystemsObserved", "Faro and Sentry telemetry bootstrap evidence is incomplete")
+
+
+def check_public_route_negative_evidence_and_claims(
+    F: Findings,
+    route_proof: dict[str, Any],
+) -> None:
+    negative = route_proof.get("negativeEvidence")
+    if not isinstance(negative, dict):
+        F.add("USF-PUBLIC-FQDN-016", f"{PUBLIC_ROUTE_PROOF_PATH}#negativeEvidence", "public route negative evidence is missing")
+        return
+    for key in (
+        "localhostAccepted",
+        "privateInternalHostAccepted",
+        "wrongHostAccepted",
+        "httpOnlyAccepted",
+        "mixedContentAccepted",
+        "missingProofMarkerAccepted",
+        "missingTelemetryBootstrapAccepted",
+        "caddyRequiredGatewayClaim",
+        "productUiReadinessClaim",
+        "browserE2eReadinessClaim",
+    ):
+        if negative.get(key) is not False:
+            F.add("USF-PUBLIC-FQDN-016", f"{PUBLIC_ROUTE_PROOF_PATH}#negativeEvidence.{key}", "unsafe public route proof posture is accepted")
+
+    automation = route_proof.get("browserAutomation")
+    if not isinstance(automation, dict):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#browserAutomation", "browser automation evidence is missing")
+    else:
+        if automation.get("packageName") != "playwright-core" or automation.get("version") != "1.61.1":
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#browserAutomation", "Playwright Core package evidence is missing or stale")
+        if automation.get("usedOnlyFromProofBoundary") is not True:
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#browserAutomation.usedOnlyFromProofBoundary", "browser automation boundary is not proof-only")
+
+    telemetry = route_proof.get("telemetryBootstrapBoundary")
+    if not isinstance(telemetry, dict):
+        F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#telemetryBootstrapBoundary", "telemetry bootstrap boundary is missing")
+    else:
+        systems = set(telemetry.get("systems", []))
+        if not {"faro", "sentry"}.issubset(systems) or telemetry.get("bootstrapOnly") is not True:
+            F.add("USF-PUBLIC-FQDN-014", f"{PUBLIC_ROUTE_PROOF_PATH}#telemetryBootstrapBoundary", "telemetry bootstrap boundary is incomplete")
+        for key in (
+            "liveTelemetryIngestionProven",
+            "rawTelemetryPayloadRetentionAllowed",
+            "productUiReadinessClaimAllowed",
+            "browserE2eReadinessClaimAllowed",
+        ):
+            if telemetry.get(key) is not False:
+                F.add("USF-PUBLIC-FQDN-016", f"{PUBLIC_ROUTE_PROOF_PATH}#telemetryBootstrapBoundary.{key}", "telemetry bootstrap boundary overclaims readiness or retention")
+
+    non_claims = set(route_proof.get("nonClaims", []))
+    missing = REQUIRED_EXTERNAL_NON_CLAIMS - non_claims
+    if missing:
+        F.add("USF-PUBLIC-FQDN-016", f"{PUBLIC_ROUTE_PROOF_PATH}#nonClaims", f"required public route proof non-claims are missing: {sorted(missing)}")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     contract = state.get("contract")
@@ -1123,6 +1362,12 @@ def run_checks(state: dict[str, Any]) -> Findings:
         state["package"],
         state["makefile"],
     )
+    public_route_proof = state.get("publicRouteProof")
+    check_public_route_proof_shape(F, public_route_proof)
+    if isinstance(public_route_proof, dict):
+        check_public_route_proof_commands(F, public_route_proof, state["package"], state["makefile"])
+        check_public_route_fqdn_evidence(F, public_route_proof, contract)
+        check_public_route_negative_evidence_and_claims(F, public_route_proof)
     return F
 
 

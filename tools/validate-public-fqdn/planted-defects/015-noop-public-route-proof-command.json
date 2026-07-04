@@ -1,0 +1,13 @@
+{
+  "id": "015-noop-public-route-proof-command",
+  "description": "Replace the all-scope public browser route proof command with a no-op.",
+  "setPackageScript": {
+    "name": "proof:public-route",
+    "command": "true"
+  },
+  "setPublicRouteProofCommand": {
+    "id": "proof:public-route",
+    "command": "true"
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-015"
+}

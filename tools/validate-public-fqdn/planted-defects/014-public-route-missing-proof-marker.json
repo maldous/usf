@@ -1,0 +1,15 @@
+{
+  "id": "014-public-route-missing-proof-marker",
+  "description": "Claim public route proof passed while the route marker is missing.",
+  "patchPublicRouteFqdnRows": [
+    {
+      "environment": "production",
+      "values": {
+        "browserRoute": {
+          "proofMarkerObserved": false
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-014"
+}

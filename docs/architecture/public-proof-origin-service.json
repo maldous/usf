@@ -124,11 +124,21 @@
         "corepack pnpm proof:public-fqdn:production"
       ],
       "responseContractObserved": true,
-      "checkedFqdns": [
-        "1e100.network",
-        "aldous.info"
-      ],
+      "checkedFqdns": ["1e100.network", "aldous.info"],
       "claimBoundary": "External public JSON endpoint proof only; this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, product UI readiness, browser E2E readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization."
+    },
+    "externalPublicRoute": {
+      "status": "pass",
+      "issueId": "USF-264",
+      "evidence": "docs/architecture/public-route-telemetry-proof-gate.json",
+      "commands": [
+        "corepack pnpm proof:public-route",
+        "corepack pnpm proof:public-route:staging",
+        "corepack pnpm proof:public-route:production"
+      ],
+      "responseContractObserved": true,
+      "checkedFqdns": ["1e100.network", "aldous.info"],
+      "claimBoundary": "External public browser route and telemetry bootstrap marker/config proof only; this does not claim product UI readiness, browser E2E readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization."
     }
   },
   "validator": {

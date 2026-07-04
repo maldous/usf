@@ -1,0 +1,131 @@
+{
+  "id": "public-route-telemetry-proof-gate",
+  "title": "Public Route and Telemetry Bootstrap Playwright Proof Gate",
+  "issueId": "USF-264",
+  "parentIssueId": "USF-261",
+  "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "originServiceEvidence": "docs/architecture/public-proof-origin-service.json",
+  "status": "pass",
+  "statusRationale": "Playwright Core navigated over HTTPS to the non-product public browser route for 1e100.network and aldous.info. The proof observed the declared FQDN host, route marker, Faro and Sentry telemetry bootstrap marker/config, no localhost or private host acceptance, no HTTP-only delivery, no mixed content, and no product UI or browser E2E readiness claim.",
+  "blocksV2Proof": false,
+  "v2ProofAuthorizationAllowed": false,
+  "humanAuthorizationRequiredToBypass": false,
+  "proofCommands": {
+    "all": {
+      "id": "proof:public-route",
+      "command": "tsx packages/proof/src/public-route-telemetry-proof.ts all",
+      "packageScript": "proof:public-route",
+      "makeTarget": "public-route-proof",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    },
+    "staging": {
+      "id": "proof:public-route:staging",
+      "command": "tsx packages/proof/src/public-route-telemetry-proof.ts staging",
+      "packageScript": "proof:public-route:staging",
+      "makeTarget": "public-route-proof-staging",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    },
+    "production": {
+      "id": "proof:public-route:production",
+      "command": "tsx packages/proof/src/public-route-telemetry-proof.ts production",
+      "packageScript": "proof:public-route:production",
+      "makeTarget": "public-route-proof-production",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    }
+  },
+  "requiredFqdns": [
+    {
+      "environment": "staging",
+      "fqdn": "1e100.network",
+      "proofCommandId": "proof:public-route:staging",
+      "browserRoute": {
+        "attemptedRoute": "/__proof/public-route",
+        "expectedContentType": "text/html",
+        "lastObservedStatus": 200,
+        "finalUrlScheme": "https",
+        "finalHostMatched": true,
+        "finalHostname": "1e100.network",
+        "canonicalRouteMatched": true,
+        "localhostOrPrivateHostObserved": false,
+        "httpOnlyDeliveryObserved": false,
+        "mixedContentObserved": false,
+        "proofMarkerObserved": true,
+        "telemetryBootstrapObserved": true,
+        "telemetrySystemsObserved": ["faro", "sentry"],
+        "telemetryBootstrapOnlyObserved": true,
+        "productUiReadinessClaimObserved": false,
+        "browserE2eReadinessClaimObserved": false,
+        "caddyRequiredGatewayClaimObserved": false
+      }
+    },
+    {
+      "environment": "production",
+      "fqdn": "aldous.info",
+      "proofCommandId": "proof:public-route:production",
+      "browserRoute": {
+        "attemptedRoute": "/__proof/public-route",
+        "expectedContentType": "text/html",
+        "lastObservedStatus": 200,
+        "finalUrlScheme": "https",
+        "finalHostMatched": true,
+        "finalHostname": "aldous.info",
+        "canonicalRouteMatched": true,
+        "localhostOrPrivateHostObserved": false,
+        "httpOnlyDeliveryObserved": false,
+        "mixedContentObserved": false,
+        "proofMarkerObserved": true,
+        "telemetryBootstrapObserved": true,
+        "telemetrySystemsObserved": ["faro", "sentry"],
+        "telemetryBootstrapOnlyObserved": true,
+        "productUiReadinessClaimObserved": false,
+        "browserE2eReadinessClaimObserved": false,
+        "caddyRequiredGatewayClaimObserved": false
+      }
+    }
+  ],
+  "negativeEvidence": {
+    "localhostAccepted": false,
+    "privateInternalHostAccepted": false,
+    "wrongHostAccepted": false,
+    "httpOnlyAccepted": false,
+    "mixedContentAccepted": false,
+    "missingProofMarkerAccepted": false,
+    "missingTelemetryBootstrapAccepted": false,
+    "caddyRequiredGatewayClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false
+  },
+  "browserAutomation": {
+    "packageName": "playwright-core",
+    "version": "1.61.1",
+    "selectionRationale": "The proof reuses the maintained de-facto standard Playwright Core dependency already pinned for bounded browser telemetry proof. It drives a local Chromium executable and does not add product UI, broad browser E2E, bundled browser binaries, or live telemetry ingestion.",
+    "usedOnlyFromProofBoundary": true
+  },
+  "telemetryBootstrapBoundary": {
+    "systems": ["faro", "sentry"],
+    "bootstrapOnly": true,
+    "liveTelemetryIngestionProven": false,
+    "rawTelemetryPayloadRetentionAllowed": false,
+    "productUiReadinessClaimAllowed": false,
+    "browserE2eReadinessClaimAllowed": false
+  },
+  "validator": {
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "rules": ["USF-PUBLIC-FQDN-014", "USF-PUBLIC-FQDN-015", "USF-PUBLIC-FQDN-016"],
+    "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects"
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}
