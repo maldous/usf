@@ -6,9 +6,9 @@ This evidence pack supports USF-267, USF-269, and USF-271. It records provider o
 
 The gate remains blocked. Public reachability works and the earlier `1e100.network` same-host HTTP-to-HTTPS redirect blocker is now resolved, but provider cache evidence still contradicts the pre-Staging external HTTP semantics gate.
 
-The external provider evidence was last materially checked on PR head `5003b05d61756c0dfbea093b54bdb12ea1ae8847`. Later metadata-only commits must not be used to claim the provider blocker is resolved unless the external proof commands are rerun and pass or this evidence pack is regenerated.
+The external provider evidence was last materially checked on PR head `5330fc491f723dd636ece7cc0c4b47b47d9a8f85`. Later metadata-only commits must not be used to claim the provider blocker is resolved unless the external proof commands are rerun and pass or this evidence pack is regenerated.
 
-- HTTPS proof/control routes for `1e100.network` and `aldous.info` show `Cache-Status: "Netlify Edge"; fwd=stale` or `hit` with nonzero `Age` while the routes declare no-store cache policy.
+- HTTPS proof/control routes for `1e100.network` and `aldous.info` show `Cache-Status: "Netlify Edge"; fwd=stale` or `hit` evidence, and the JSON proof endpoints continue to show nonzero `Age`, while the routes declare no-store cache policy.
 
 Both root FQDNs now redirect HTTP to the same HTTPS host for the JSON proof endpoint. Cloudflare reports dynamic handling for the blocked cache observations, so the current evidence points to Netlify Edge or the route implementation/deploy cache boundary rather than Cloudflare edge cache as the cache source.
 
@@ -32,7 +32,7 @@ Because provider mutation was not available, the repo preserves fail-closed proo
 
 1. No further redirect action is currently required for `1e100.network`; the same-host HTTPS redirect is now observed. Keep the setting in place, do not redirect to `aldous.info`, do not redirect to `www`, and do not alter `ssh.aldous.info`.
 
-2. For the current Netlify or equivalent route implementation, redeploy or configure both proof/control routes so they emit ordinary `Cache-Control: no-store` and CDN no-store headers, then purge or redeploy provider cache. The routes are `/.well-known/usf-public-edge.json` and `/__proof/public-route/`.
+2. Inspect whether the current Netlify or equivalent route implementation serves both proof/control routes as static deploy artifacts, Netlify Function responses, Netlify Edge Function responses, proxy or redirect responses, another origin behind Netlify, or another provider routed through Netlify. Then redeploy or configure both proof/control routes so they emit ordinary `Cache-Control: no-store` and CDN no-store headers, then purge or redeploy provider cache. The routes are `/.well-known/usf-public-edge.json` and `/__proof/public-route/`.
 
 3. Verify with the commands listed in `docs/architecture/external-http-provider-configuration-evidence-pack.json`. The gate remains blocked until `corepack pnpm proof:external-http-cache` and `corepack pnpm proof:pre-staging-external-smoke` pass against the public FQDNs.
 

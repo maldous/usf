@@ -7,10 +7,10 @@
     "USF-271"
   ],
   "pr": "https://github.com/maldous/usf/pull/240",
-  "checkedCommit": "5003b05d61756c0dfbea093b54bdb12ea1ae8847",
-  "checkedAt": "2026-07-04T07:55:58Z",
+  "checkedCommit": "5330fc491f723dd636ece7cc0c4b47b47d9a8f85",
+  "checkedAt": "2026-07-04T11:15:12Z",
   "evidenceFreshness": {
-    "lastMaterialExternalProofCommit": "5003b05d61756c0dfbea093b54bdb12ea1ae8847",
+    "lastMaterialExternalProofCommit": "5330fc491f723dd636ece7cc0c4b47b47d9a8f85",
     "lastMaterialExternalProofCommands": [
       "corepack pnpm proof:external-http-cache",
       "corepack pnpm proof:pre-staging-external-smoke"
@@ -121,7 +121,7 @@
         "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 22217,
+        "ageSecondsObserved": 36004,
         "etagObserved": true,
         "varyObserved": true,
         "xNfRequestIdObserved": true,
@@ -134,10 +134,10 @@
         "server": "cloudflare",
         "contentType": "text/html; charset=utf-8",
         "cacheControl": "no-store",
-        "cacheStatus": "Netlify Edge hit",
+        "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 276,
+        "ageSecondsObserved": 0,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
         "blockerId": "external-http-proof-route-provider-cache-hit"
@@ -146,7 +146,7 @@
         "redirectBlockerLikelyBoundary": "resolved-observed-same-host-https-redirect",
         "cacheBlockerLikelyBoundary": "netlify-edge-cache-or-netlify-route-implementation",
         "cloudflareCacheObservation": "Cloudflare reports dynamic handling, so current evidence does not show Cloudflare edge cache hit as the cache blocker.",
-        "netlifyCacheObservation": "Netlify Edge reports stale or hit cache evidence with nonzero Age on no-store proof/control routes."
+        "netlifyCacheObservation": "Netlify Edge reports stale or hit cache evidence and nonzero Age on no-store proof/control routes."
       }
     },
     {
@@ -200,7 +200,7 @@
         "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 23229,
+        "ageSecondsObserved": 36005,
         "etagObserved": true,
         "varyObserved": true,
         "xNfRequestIdObserved": true,
@@ -216,7 +216,7 @@
         "cacheStatus": "Netlify Edge hit",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 275,
+        "ageSecondsObserved": 5463,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
         "blockerId": "external-http-proof-route-provider-cache-hit"
@@ -225,7 +225,7 @@
         "redirectBlockerLikelyBoundary": "none-observed-for-aldous-info-json-proof-endpoint",
         "cacheBlockerLikelyBoundary": "netlify-edge-cache-or-netlify-route-implementation",
         "cloudflareCacheObservation": "Cloudflare reports dynamic handling, so current evidence does not show Cloudflare edge cache hit as the cache blocker.",
-        "netlifyCacheObservation": "Netlify Edge reports stale or hit cache evidence with nonzero Age on no-store proof/control routes."
+        "netlifyCacheObservation": "Netlify Edge reports stale or hit cache evidence and nonzero Age on no-store proof/control routes."
       }
     }
   ],
@@ -247,8 +247,17 @@
     {
       "id": "operator-change-netlify-no-store-proof-routes",
       "providerBoundary": "netlify-edge-or-equivalent-origin-route-implementation",
-      "change": "Redeploy or configure the route implementation so /.well-known/usf-public-edge.json and /__proof/public-route/ emit ordinary Cache-Control no-store and CDN no-store headers, then purge or redeploy provider cache.",
-      "expectedValue": "HTTPS proof/control routes no longer report provider cache hit or nonzero Age. Netlify Edge cache evidence should be miss, bypass, no-store, or absent, not hit with nonzero Age.",
+      "change": "Inspect whether /.well-known/usf-public-edge.json and /__proof/public-route/ are served as static deploy artifacts, Netlify Function responses, Netlify Edge Function responses, proxy or redirect responses, another origin behind Netlify, or another provider routed through Netlify. Redeploy or configure the selected route implementation so both proof/control routes emit ordinary Cache-Control no-store and CDN no-store headers, then purge or redeploy provider cache.",
+      "expectedValue": "HTTPS proof/control routes no longer report Netlify Edge hit, Netlify Edge stale, provider cache-hit evidence, or nonzero Age. Netlify Edge cache evidence should be miss, bypass, no-store, absent, or otherwise explicitly bounded by later approved rationale.",
+      "routeSourceCandidates": [
+        "static-deploy-artifact",
+        "netlify-function",
+        "netlify-edge-function",
+        "proxy-or-redirect-response",
+        "another-origin-behind-netlify",
+        "another-provider-routed-through-netlify"
+      ],
+      "providerDocumentationRationale": "Netlify static asset responses can remain cached on global edge nodes until deploy or manual purge, while Functions, Edge Functions, and proxies are not cached by default unless cache headers opt them in. The operator must inspect the actual route source before choosing purge, redeploy, header configuration, or route implementation change.",
       "mustNotDo": [
         "do not remove the public JSON proof response contract",
         "do not make Netlify a semantic requirement",
