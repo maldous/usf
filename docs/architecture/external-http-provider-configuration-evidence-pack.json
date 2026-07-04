@@ -7,9 +7,9 @@
     "USF-271"
   ],
   "pr": "https://github.com/maldous/usf/pull/240",
-  "checkedCommit": "688a03a7906a2e3c616517596e54657944b375a4",
-  "checkedAt": "2026-07-04T07:03:24Z",
-  "status": "blocked-by-provider-configuration",
+  "checkedCommit": "89414f9badaaa600c5fdcf49d382d31f68a812ad",
+  "checkedAt": "2026-07-04T07:37:53Z",
+  "status": "blocked-by-provider-cache-configuration",
   "semanticBoundary": {
     "semanticRequirement": "ExternalHttpCapability with gateway-neutral public proof/control routes.",
     "providersAreSemanticAuthority": false,
@@ -70,7 +70,7 @@
       },
       "cloudflareSettings": {
         "proxyMode": "inferred-proxied",
-        "alwaysUseHttps": "not-inspectable-without-provider-access",
+        "alwaysUseHttps": "observed-effective-for-json-proof-endpoint-http-to-https",
         "redirectRules": "not-inspectable-without-provider-access",
         "pageRules": "not-inspectable-without-provider-access",
         "cacheRules": "not-inspectable-without-provider-access",
@@ -88,19 +88,20 @@
       },
       "httpJsonProofEndpoint": {
         "url": "http://1e100.network/.well-known/usf-public-edge.json",
-        "observedStatus": 200,
+        "observedStatus": 301,
         "expectedStatus": "301-or-308-same-host-https-redirect",
-        "observedLocation": null,
+        "observedLocation": "https://1e100.network/.well-known/usf-public-edge.json",
         "expectedLocation": "https://1e100.network/.well-known/usf-public-edge.json",
         "server": "cloudflare",
-        "cacheControl": "no-store",
-        "cacheStatus": "Netlify Edge hit",
+        "cacheControl": null,
+        "cacheStatus": null,
         "cfCacheStatus": "DYNAMIC",
-        "ageObserved": true,
-        "ageSecondsObserved": 2468,
+        "ageObserved": false,
+        "ageSecondsObserved": null,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
-        "blockerId": "pre-staging-http-redirect-staging-root"
+        "redirectSemanticsPass": true,
+        "resolvedBlockerId": "pre-staging-http-redirect-staging-root"
       },
       "httpsJsonProofEndpoint": {
         "url": "https://1e100.network/.well-known/usf-public-edge.json",
@@ -108,10 +109,10 @@
         "server": "cloudflare",
         "contentType": "application/json; charset=utf-8",
         "cacheControl": "no-store",
-        "cacheStatus": "Netlify Edge hit",
+        "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 20882,
+        "ageSecondsObserved": 21966,
         "etagObserved": true,
         "varyObserved": true,
         "xNfRequestIdObserved": true,
@@ -127,16 +128,16 @@
         "cacheStatus": "Netlify Edge hit",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 5487,
+        "ageSecondsObserved": 25,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
         "blockerId": "external-http-proof-route-provider-cache-hit"
       },
       "providerCauseAssessment": {
-        "redirectBlockerLikelyBoundary": "cloudflare-zone-or-redirect-rule-for-1e100.network",
+        "redirectBlockerLikelyBoundary": "resolved-observed-same-host-https-redirect",
         "cacheBlockerLikelyBoundary": "netlify-edge-cache-or-netlify-route-implementation",
         "cloudflareCacheObservation": "Cloudflare reports dynamic handling, so current evidence does not show Cloudflare edge cache hit as the cache blocker.",
-        "netlifyCacheObservation": "Netlify Edge reports cache hit with nonzero Age on no-store proof/control routes."
+        "netlifyCacheObservation": "Netlify Edge reports stale or hit cache evidence with nonzero Age on no-store proof/control routes."
       }
     },
     {
@@ -187,10 +188,10 @@
         "server": "cloudflare",
         "contentType": "application/json; charset=utf-8",
         "cacheControl": "no-store",
-        "cacheStatus": "Netlify Edge hit",
+        "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 19085,
+        "ageSecondsObserved": 21965,
         "etagObserved": true,
         "varyObserved": true,
         "xNfRequestIdObserved": true,
@@ -206,7 +207,7 @@
         "cacheStatus": "Netlify Edge hit",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 19425,
+        "ageSecondsObserved": 24,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
         "blockerId": "external-http-proof-route-provider-cache-hit"
@@ -215,24 +216,25 @@
         "redirectBlockerLikelyBoundary": "none-observed-for-aldous-info-json-proof-endpoint",
         "cacheBlockerLikelyBoundary": "netlify-edge-cache-or-netlify-route-implementation",
         "cloudflareCacheObservation": "Cloudflare reports dynamic handling, so current evidence does not show Cloudflare edge cache hit as the cache blocker.",
-        "netlifyCacheObservation": "Netlify Edge reports cache hit with nonzero Age on no-store proof/control routes."
+        "netlifyCacheObservation": "Netlify Edge reports stale or hit cache evidence with nonzero Age on no-store proof/control routes."
       }
     }
   ],
-  "requiredOperatorChanges": [
+  "completedOperatorChanges": [
     {
       "id": "operator-change-1e100-same-host-https-redirect",
       "providerBoundary": "cloudflare-zone-or-equivalent-front-door-for-1e100.network",
-      "change": "Enable Always Use HTTPS or an equivalent scoped same-host redirect rule for 1e100.network so HTTP requests for /.well-known/usf-public-edge.json redirect to the same HTTPS host and path.",
-      "expectedValue": "http://1e100.network/.well-known/usf-public-edge.json returns 301 or 308 with Location https://1e100.network/.well-known/usf-public-edge.json",
+      "observedValue": "http://1e100.network/.well-known/usf-public-edge.json returns 301 with Location https://1e100.network/.well-known/usf-public-edge.json",
+      "verificationCommand": "curl -svI http://1e100.network/.well-known/usf-public-edge.json",
+      "rollback": "Disable the specific Always Use HTTPS toggle or scoped redirect rule if this change causes unintended behaviour and verify the prior response is restored.",
       "mustNotDo": [
         "do not redirect to aldous.info",
         "do not redirect to www unless later declared",
         "do not alter ssh.aldous.info"
-      ],
-      "verificationCommand": "curl -svI http://1e100.network/.well-known/usf-public-edge.json",
-      "rollback": "Disable the specific Always Use HTTPS toggle or scoped redirect rule that was added for 1e100.network and verify the prior response is restored."
-    },
+      ]
+    }
+  ],
+  "requiredOperatorChanges": [
     {
       "id": "operator-change-netlify-no-store-proof-routes",
       "providerBoundary": "netlify-edge-or-equivalent-origin-route-implementation",
@@ -262,7 +264,7 @@
     "usf271CanClose": false,
     "usf267CanClose": false,
     "stagingSpecificEnablementMayBegin": false,
-    "reason": "The cache proof and pre-staging external smoke proof intentionally fail closed until provider configuration evidence no longer contradicts no-store proof/control route semantics and 1e100.network HTTP redirects to same-host HTTPS."
+    "reason": "The 1e100.network same-host HTTPS redirect is now observed, but the cache proof and pre-staging external smoke proof intentionally fail closed until provider configuration evidence no longer contradicts no-store proof/control route semantics."
   },
   "nonClaims": [
     "staging-readiness",

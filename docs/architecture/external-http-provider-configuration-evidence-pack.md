@@ -4,12 +4,11 @@ This evidence pack supports USF-267, USF-269, and USF-271. It records provider o
 
 ## Current Result
 
-The gate remains blocked. Public reachability works, but two provider configuration behaviours still contradict the pre-Staging external HTTP semantics gate:
+The gate remains blocked. Public reachability works and the earlier `1e100.network` same-host HTTP-to-HTTPS redirect blocker is now resolved, but provider cache evidence still contradicts the pre-Staging external HTTP semantics gate:
 
-- `http://1e100.network/.well-known/usf-public-edge.json` returns HTTP 200 instead of a same-host HTTPS redirect.
-- HTTPS proof/control routes for `1e100.network` and `aldous.info` show `Cache-Status: "Netlify Edge"; hit` with nonzero `Age` while the routes declare no-store cache policy.
+- HTTPS proof/control routes for `1e100.network` and `aldous.info` show `Cache-Status: "Netlify Edge"; fwd=stale` or `hit` with nonzero `Age` while the routes declare no-store cache policy.
 
-`aldous.info` already redirects HTTP to the same HTTPS host for the JSON proof endpoint. Cloudflare reports dynamic handling for the blocked cache observations, so the current evidence points to Netlify Edge or the route implementation/deploy cache boundary rather than Cloudflare edge cache as the cache-hit source.
+Both root FQDNs now redirect HTTP to the same HTTPS host for the JSON proof endpoint. Cloudflare reports dynamic handling for the blocked cache observations, so the current evidence points to Netlify Edge or the route implementation/deploy cache boundary rather than Cloudflare edge cache as the cache source.
 
 ## Provider Access
 
@@ -29,7 +28,7 @@ Because provider mutation was not available, the repo preserves fail-closed proo
 
 ## Operator Actions
 
-1. For `1e100.network`, enable Cloudflare Always Use HTTPS or an equivalent scoped same-host redirect rule so the JSON proof route redirects from HTTP to `https://1e100.network/.well-known/usf-public-edge.json`. Do not redirect to `aldous.info`, do not redirect to `www`, and do not alter `ssh.aldous.info`.
+1. No further redirect action is currently required for `1e100.network`; the same-host HTTPS redirect is now observed. Keep the setting in place, do not redirect to `aldous.info`, do not redirect to `www`, and do not alter `ssh.aldous.info`.
 
 2. For the current Netlify or equivalent route implementation, redeploy or configure both proof/control routes so they emit ordinary `Cache-Control: no-store` and CDN no-store headers, then purge or redeploy provider cache. The routes are `/.well-known/usf-public-edge.json` and `/__proof/public-route/`.
 

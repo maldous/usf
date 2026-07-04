@@ -4,7 +4,7 @@
   "issueId": "USF-271",
   "parentIssueId": "USF-267",
   "status": "blocked",
-  "statusRationale": "The non-destructive smoke gate is implemented and fail-closed. Current public HTTPS JSON and browser proof routes pass, but 1e100.network currently serves the JSON proof route over plain HTTP without redirecting to HTTPS. The upstream cache/provider prerequisite is also blocked because proof/control routes show provider cache-hit or nonzero Age evidence despite declaring Cache-Control no-store. These blockers prevent staging-specific enablement until corrected or explicitly reclassified by a later human decision.",
+  "statusRationale": "The non-destructive smoke gate is implemented and fail-closed. Current public HTTPS JSON and browser proof routes pass, and both root FQDNs now redirect the JSON proof route from HTTP to same-host HTTPS. The upstream cache/provider prerequisite remains blocked because proof/control routes show provider stale or cache-hit and nonzero Age evidence despite declaring Cache-Control no-store. This blocker prevents staging-specific enablement until corrected or explicitly reclassified by a later human decision.",
   "blocksStagingSpecificEnablement": true,
   "stagingSpecificEnablementMayBegin": false,
   "proofCommand": {
@@ -62,18 +62,10 @@
   ],
   "blockers": [
     {
-      "id": "pre-staging-http-redirect-staging-root",
-      "issueId": "USF-271",
-      "affectedFqdn": "1e100.network",
-      "observed": "Plain HTTP GET to /.well-known/usf-public-edge.json returned HTTP 200 instead of redirecting to HTTPS.",
-      "requiredOperatorAction": "Configure the public edge or origin for 1e100.network so HTTP requests to proof/control routes redirect to the same host over HTTPS, or record a later explicit human-approved reclassification.",
-      "blocksStagingSpecificEnablement": true
-    },
-    {
       "id": "external-http-proof-route-provider-cache-hit",
       "issueId": "USF-269",
       "affectedFqdn": "1e100.network aldous.info",
-      "observed": "Proof/control routes declare Cache-Control no-store but provider evidence includes cache hit or nonzero Age observations.",
+      "observed": "Proof/control routes declare Cache-Control no-store but provider evidence includes stale cache, cache hit, or nonzero Age observations.",
       "requiredOperatorAction": "Configure the public edge or origin so proof/control routes are not served from provider cache when Cache-Control is no-store, or record a later explicit human-approved bounded rationale.",
       "blocksStagingSpecificEnablement": true
     },
@@ -83,6 +75,15 @@
       "affectedFqdn": "1e100.network aldous.info",
       "observed": "Repository access cannot collect external provider access logs.",
       "requiredOperatorAction": "Before any staging readiness claim, attach provider or origin access-log evidence with safe redaction, retention, and correlation boundaries, or record a later approved bounded rationale.",
+      "blocksStagingSpecificEnablement": false
+    }
+  ],
+  "resolvedBlockers": [
+    {
+      "id": "pre-staging-http-redirect-staging-root",
+      "issueId": "USF-271",
+      "affectedFqdn": "1e100.network",
+      "observed": "Plain HTTP GET to /.well-known/usf-public-edge.json now redirects to https://1e100.network/.well-known/usf-public-edge.json.",
       "blocksStagingSpecificEnablement": false
     }
   ],

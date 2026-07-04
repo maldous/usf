@@ -4,7 +4,7 @@
   "issueId": "USF-267",
   "status": "blocked",
   "stagingSpecificEnablementMayBegin": false,
-  "statusRationale": "The external HTTP semantics gate is defined and validator-backed, but staging-specific enablement remains blocked because 1e100.network currently serves the public JSON proof endpoint over plain HTTP instead of redirecting to HTTPS, while aldous.info already redirects correctly, and proof/control routes currently show Netlify Edge cache-hit or nonzero Age evidence despite declaring no-store cache policy.",
+  "statusRationale": "The external HTTP semantics gate is defined and validator-backed, and both root FQDNs now redirect the public JSON proof endpoint from HTTP to same-host HTTPS. Staging-specific enablement remains blocked because proof/control routes currently show Netlify Edge stale or cache-hit and nonzero Age evidence despite declaring no-store cache policy.",
   "children": [
     {
       "issueId": "USF-268",
@@ -29,18 +29,19 @@
   ],
   "blockers": [
     {
-      "id": "pre-staging-http-redirect-staging-root",
-      "issueId": "USF-271",
-      "observed": "http://1e100.network/.well-known/usf-public-edge.json returns HTTP 200 through Cloudflare instead of a same-host HTTPS redirect. http://aldous.info/.well-known/usf-public-edge.json already returns a same-host HTTPS redirect.",
-      "likelyProviderBoundary": "cloudflare-zone-or-redirect-rule-for-1e100.network",
-      "requiredAction": "Enable Always Use HTTPS or an equivalent same-host redirect rule for 1e100.network without changing ssh.aldous.info. Verify the HTTP proof route returns a 301 or 308 Location pointing to https://1e100.network/.well-known/usf-public-edge.json."
-    },
-    {
       "id": "external-http-proof-route-provider-cache-hit",
       "issueId": "USF-269",
-      "observed": "HTTPS proof/control routes return Cache-Status \"Netlify Edge\" hit and nonzero Age while Cloudflare cache status is dynamic.",
+      "observed": "HTTPS proof/control routes return Cache-Status \"Netlify Edge\" stale or hit evidence and nonzero Age while Cloudflare cache status is dynamic.",
       "likelyProviderBoundary": "netlify-edge-or-origin-cache-configuration",
       "requiredAction": "Deploy or configure the route implementation so proof/control routes emit ordinary and CDN no-store headers, purge or redeploy the provider cache, and verify the routes no longer report provider cache hit or nonzero Age."
+    }
+  ],
+  "resolvedBlockers": [
+    {
+      "id": "pre-staging-http-redirect-staging-root",
+      "issueId": "USF-271",
+      "observed": "http://1e100.network/.well-known/usf-public-edge.json now returns HTTP 301 with Location https://1e100.network/.well-known/usf-public-edge.json.",
+      "protectedRecordChecked": "ssh.aldous.info remains DNS-only A 103.138.244.121."
     }
   ],
   "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
