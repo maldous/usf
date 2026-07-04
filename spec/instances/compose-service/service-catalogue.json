@@ -4,17 +4,8 @@
   "description": "Durable semantic service catalogue and CMDB-style foundation asset for Compose service classification, owner/risk/control metadata, environment disposition, generated Compose targets, and explicit readiness non-claims. Generated Compose files are derivative; this catalogue is authoritative for service disposition.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
-  "ontologyConcepts": [
-    "Service",
-    "Provider",
-    "Environment",
-    "Proof",
-    "Source Reference"
-  ],
-  "taxonomyRefs": [
-    "semantic-architecture-classification",
-    "source-role-classification"
-  ],
+  "ontologyConcepts": ["Service", "Provider", "Environment", "Proof", "Source Reference"],
+  "taxonomyRefs": ["semantic-architecture-classification", "source-role-classification"],
   "vocabularyRefs": [
     "compose-realisation-modes",
     "compose-environment-scopes",
@@ -170,9 +161,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "relational-storage"
-      ],
+      "semanticRoles": ["relational-storage"],
       "serviceKind": "database",
       "requirementState": true,
       "classificationStates": [
@@ -183,10 +172,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state",
-        "mutates-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state", "mutates-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -196,15 +182,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "postgres"
-      ],
+      "reactComposeServiceNames": ["postgres"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#postgres"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -319,11 +301,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "database",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -373,13 +351,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -455,10 +428,7 @@
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "pg_isready -U foundation_app -d foundation"
-          ],
+          "test": ["CMD-SHELL", "pg_isready -U foundation_app -d foundation"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 5
@@ -546,9 +516,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "identity-state"
-      ],
+      "semanticRoles": ["identity-state"],
       "serviceKind": "identity-backing-store",
       "requirementState": true,
       "classificationStates": [
@@ -559,9 +527,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -571,15 +537,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "keycloak-postgres"
-      ],
+      "reactComposeServiceNames": ["keycloak-postgres"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak-db"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -685,13 +647,8 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -767,10 +724,7 @@
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "pg_isready -U keycloak -d keycloak"
-          ],
+          "test": ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 5
@@ -859,9 +813,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "identity-provider"
-      ],
+      "semanticRoles": ["identity-provider"],
       "serviceKind": "identity-provider",
       "requirementState": true,
       "classificationStates": [
@@ -872,10 +824,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "grants-access",
-        "administers-system"
-      ],
+      "serviceAuthorityLevels": ["grants-access", "administers-system"],
       "accessModel": "admin-only",
       "sourceEvidence": [
         {
@@ -885,15 +834,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "keycloak"
-      ],
+      "reactComposeServiceNames": ["keycloak"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -1000,11 +945,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "identity",
           "accessModel": "admin-only",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -1054,13 +995,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "identity authority boundary",
       "secretBoundary": "admin credential boundary",
       "adminSurface": {
@@ -1117,9 +1053,7 @@
         "serviceName": "keycloak",
         "image": "quay.io/keycloak/keycloak:26.2.5",
         "profiles": [],
-        "command": [
-          "start-dev"
-        ],
+        "command": ["start-dev"],
         "environment": [
           {
             "name": "KC_DB",
@@ -1239,9 +1173,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "event-bus"
-      ],
+      "semanticRoles": ["event-bus"],
       "serviceKind": "event-bus",
       "requirementState": true,
       "classificationStates": [
@@ -1251,10 +1183,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "routes-traffic",
-        "stores-state"
-      ],
+      "serviceAuthorityLevels": ["routes-traffic", "stores-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -1268,9 +1197,7 @@
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#nats"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -1377,11 +1304,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "runtime-api",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -1431,13 +1354,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -1494,9 +1412,7 @@
         "serviceName": "nats",
         "image": "nats:2.10.26-alpine",
         "profiles": [],
-        "command": [
-          "-js"
-        ],
+        "command": ["-js"],
         "environment": [],
         "ports": [],
         "volumes": [],
@@ -1585,9 +1501,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "application-workflow-runtime"
-      ],
+      "semanticRoles": ["application-workflow-runtime"],
       "serviceKind": "workflow-runtime",
       "requirementState": true,
       "classificationStates": [
@@ -1598,11 +1512,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "executes-code",
-        "stores-state",
-        "mutates-state"
-      ],
+      "serviceAuthorityLevels": ["executes-code", "stores-state", "mutates-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -1612,15 +1522,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "temporal"
-      ],
+      "reactComposeServiceNames": ["temporal"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -1727,11 +1633,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "workflow-runtime",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -1781,13 +1683,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "workflow credential boundary",
       "adminSurface": {
@@ -1962,9 +1859,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "object-storage"
-      ],
+      "semanticRoles": ["object-storage"],
       "serviceKind": "object-storage",
       "requirementState": true,
       "classificationStates": [
@@ -1975,10 +1870,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state",
-        "mutates-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state", "mutates-state"],
       "accessModel": "admin-only",
       "sourceEvidence": [
         {
@@ -1988,15 +1880,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "minio"
-      ],
+      "reactComposeServiceNames": ["minio"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#minio"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -2103,11 +1991,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "object-storage",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -2165,11 +2049,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "object-storage",
           "accessModel": "admin-only",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -2219,13 +2099,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "object storage credential boundary",
       "adminSurface": {
@@ -2282,12 +2157,7 @@
         "serviceName": "minio",
         "image": "minio/minio:RELEASE.2024-12-18T13-15-44Z",
         "profiles": [],
-        "command": [
-          "server",
-          "/data",
-          "--console-address",
-          ":9001"
-        ],
+        "command": ["server", "/data", "--console-address", ":9001"],
         "environment": [
           {
             "name": "MINIO_ROOT_USER",
@@ -2302,12 +2172,7 @@
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD",
-            "mc",
-            "ready",
-            "local"
-          ],
+          "test": ["CMD", "mc", "ready", "local"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 5
@@ -2396,9 +2261,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "secrets-management"
-      ],
+      "semanticRoles": ["secrets-management"],
       "serviceKind": "secret-store",
       "requirementState": true,
       "classificationStates": [
@@ -2424,15 +2287,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "openbao"
-      ],
+      "reactComposeServiceNames": ["openbao"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#openbao"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -2539,11 +2398,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "secrets",
           "accessModel": "admin-only",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -2593,13 +2448,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "secret authority boundary",
       "adminSurface": {
@@ -2656,11 +2506,7 @@
         "serviceName": "openbao",
         "image": "openbao/openbao:2.2.0",
         "profiles": [],
-        "command": [
-          "server",
-          "-dev",
-          "-dev-listen-address=0.0.0.0:8200"
-        ],
+        "command": ["server", "-dev", "-dev-listen-address=0.0.0.0:8200"],
         "environment": [
           {
             "name": "BAO_DEV_ROOT_TOKEN_ID",
@@ -2754,9 +2600,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "observability"
-      ],
+      "semanticRoles": ["observability"],
       "serviceKind": "observability-collector",
       "requirementState": true,
       "classificationStates": [
@@ -2766,10 +2610,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -2779,15 +2620,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "otel-collector"
-      ],
+      "reactComposeServiceNames": ["otel-collector"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#otel-collector"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -2894,11 +2731,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "no-human-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -2956,11 +2789,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "no-human-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -3010,13 +2839,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -3073,9 +2897,7 @@
         "serviceName": "otel-collector",
         "image": "otel/opentelemetry-collector-contrib:0.114.0",
         "profiles": [],
-        "command": [
-          "--config=/etc/otelcol-contrib/config.yaml"
-        ],
+        "command": ["--config=/etc/otelcol-contrib/config.yaml"],
         "environment": [],
         "ports": [],
         "volumes": [
@@ -3166,9 +2988,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "observability"
-      ],
+      "semanticRoles": ["observability"],
       "serviceKind": "observability-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -3178,10 +2998,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -3191,15 +3008,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "prometheus"
-      ],
+      "reactComposeServiceNames": ["prometheus"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#prometheus"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -3306,11 +3119,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "no-human-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -3360,13 +3169,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -3423,14 +3227,10 @@
         "serviceName": "prometheus",
         "image": "prom/prometheus:v3.0.1",
         "profiles": [],
-        "command": [
-          "--config.file=/etc/prometheus/prometheus.yaml"
-        ],
+        "command": ["--config.file=/etc/prometheus/prometheus.yaml"],
         "environment": [],
         "ports": [],
-        "volumes": [
-          "../adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro"
-        ],
+        "volumes": ["../adapters/obs/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro"],
         "dependsOn": [],
         "healthcheck": null
       }
@@ -3517,9 +3317,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "observability"
-      ],
+      "semanticRoles": ["observability"],
       "serviceKind": "observability-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -3529,10 +3327,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses"],
       "accessModel": "developer-access",
       "sourceEvidence": [
         {
@@ -3542,15 +3337,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "grafana"
-      ],
+      "reactComposeServiceNames": ["grafana"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#grafana"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -3657,11 +3448,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -3711,13 +3498,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -3868,9 +3650,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "observability"
-      ],
+      "semanticRoles": ["observability"],
       "serviceKind": "observability-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -3880,10 +3660,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -3893,15 +3670,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "loki"
-      ],
+      "reactComposeServiceNames": ["loki"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#loki"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -4008,11 +3781,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "no-human-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -4062,13 +3831,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -4125,14 +3889,10 @@
         "serviceName": "loki",
         "image": "grafana/loki:3.3.2",
         "profiles": [],
-        "command": [
-          "-config.file=/etc/loki/config.yaml"
-        ],
+        "command": ["-config.file=/etc/loki/config.yaml"],
         "environment": [],
         "ports": [],
-        "volumes": [
-          "../adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro"
-        ],
+        "volumes": ["../adapters/obs/config/loki.yaml:/etc/loki/config.yaml:ro"],
         "dependsOn": [],
         "healthcheck": null
       }
@@ -4218,9 +3978,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "observability"
-      ],
+      "semanticRoles": ["observability"],
       "serviceKind": "observability-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -4230,10 +3988,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -4243,15 +3998,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "tempo"
-      ],
+      "reactComposeServiceNames": ["tempo"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#tempo"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -4358,11 +4109,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "no-human-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -4412,13 +4159,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -4475,14 +4217,10 @@
         "serviceName": "tempo",
         "image": "grafana/tempo:2.6.1",
         "profiles": [],
-        "command": [
-          "-config.file=/etc/tempo/config.yaml"
-        ],
+        "command": ["-config.file=/etc/tempo/config.yaml"],
         "environment": [],
         "ports": [],
-        "volumes": [
-          "../adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro"
-        ],
+        "volumes": ["../adapters/obs/config/tempo.yaml:/etc/tempo/config.yaml:ro"],
         "dependsOn": [],
         "healthcheck": null
       }
@@ -4569,9 +4307,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "email-capture"
-      ],
+      "semanticRoles": ["email-capture"],
       "serviceKind": "notification-sink",
       "requirementState": true,
       "classificationStates": [
@@ -4581,9 +4317,7 @@
         "required-for-dev-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "observes"
-      ],
+      "serviceAuthorityLevels": ["observes"],
       "accessModel": "developer-access",
       "sourceEvidence": [
         {
@@ -4593,15 +4327,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "mailpit"
-      ],
+      "reactComposeServiceNames": ["mailpit"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mailpit"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -4708,11 +4438,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "notification-test",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -4770,11 +4496,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "notification-test",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -4824,13 +4546,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -4977,9 +4694,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "webhook-capture"
-      ],
+      "semanticRoles": ["webhook-capture"],
       "serviceKind": "webhook-sink",
       "requirementState": true,
       "classificationStates": [
@@ -4988,9 +4703,7 @@
         "required-for-dev-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "observes"
-      ],
+      "serviceAuthorityLevels": ["observes"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -5004,9 +4717,7 @@
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#webhook-sink"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -5113,11 +4824,7 @@
           "bindScope": "loopback-only",
           "exposureClass": "webhook-test",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
           "composeProfiles": [],
           "profileScope": [],
           "required": true,
@@ -5167,13 +4874,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -5320,9 +5022,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "cache-provider"
-      ],
+      "semanticRoles": ["cache-provider"],
       "serviceKind": "cache",
       "requirementState": true,
       "classificationStates": [
@@ -5332,10 +5032,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state",
-        "mutates-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state", "mutates-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -5345,15 +5042,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "redis"
-      ],
+      "reactComposeServiceNames": ["redis"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#redis"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -5387,9 +5080,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "runtime-providers"
-          ],
+          "composeProfiles": ["runtime-providers"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -5411,9 +5102,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "runtime-providers"
-          ],
+          "composeProfiles": ["runtime-providers"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -5448,9 +5137,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production cloud-provider policy"
         }
       },
-      "composeProfiles": [
-        "runtime-providers"
-      ],
+      "composeProfiles": ["runtime-providers"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -5466,16 +5153,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "cache",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "runtime-providers"
-          ],
-          "profileScope": [
-            "runtime-providers"
-          ],
+          "environmentScopes": ["test", "staging"],
+          "composeProfiles": ["runtime-providers"],
+          "profileScope": ["runtime-providers"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -5523,13 +5203,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -5582,9 +5257,7 @@
       "composeService": {
         "serviceName": "redis",
         "image": "redis:7.4.2-alpine",
-        "profiles": [
-          "runtime-providers"
-        ],
+        "profiles": ["runtime-providers"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -5675,9 +5348,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "search-provider"
-      ],
+      "semanticRoles": ["search-provider"],
       "serviceKind": "search-provider",
       "requirementState": true,
       "classificationStates": [
@@ -5687,10 +5358,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["stores-state", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -5700,15 +5368,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "meilisearch"
-      ],
+      "reactComposeServiceNames": ["meilisearch"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#meilisearch"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -5742,9 +5406,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "runtime-providers"
-          ],
+          "composeProfiles": ["runtime-providers"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -5766,9 +5428,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "runtime-providers"
-          ],
+          "composeProfiles": ["runtime-providers"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -5803,9 +5463,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production cloud-provider policy"
         }
       },
-      "composeProfiles": [
-        "runtime-providers"
-      ],
+      "composeProfiles": ["runtime-providers"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -5821,16 +5479,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "runtime-api",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "runtime-providers"
-          ],
-          "profileScope": [
-            "runtime-providers"
-          ],
+          "environmentScopes": ["test", "staging"],
+          "composeProfiles": ["runtime-providers"],
+          "profileScope": ["runtime-providers"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -5878,13 +5529,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -5937,9 +5583,7 @@
       "composeService": {
         "serviceName": "meilisearch",
         "image": "getmeili/meilisearch:v1.10",
-        "profiles": [
-          "runtime-providers"
-        ],
+        "profiles": ["runtime-providers"],
         "command": [],
         "environment": [
           {
@@ -6035,9 +5679,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "analytics-storage"
-      ],
+      "semanticRoles": ["analytics-storage"],
       "serviceKind": "analytics-store",
       "requirementState": true,
       "classificationStates": [
@@ -6047,10 +5689,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["stores-state", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -6060,15 +5699,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "clickhouse"
-      ],
+      "reactComposeServiceNames": ["clickhouse"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clickhouse"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -6102,9 +5737,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "runtime-providers"
-          ],
+          "composeProfiles": ["runtime-providers"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -6126,9 +5759,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "runtime-providers"
-          ],
+          "composeProfiles": ["runtime-providers"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -6163,9 +5794,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production cloud-provider policy"
         }
       },
-      "composeProfiles": [
-        "runtime-providers"
-      ],
+      "composeProfiles": ["runtime-providers"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -6181,16 +5810,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "runtime-api",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "runtime-providers"
-          ],
-          "profileScope": [
-            "runtime-providers"
-          ],
+          "environmentScopes": ["test", "staging"],
+          "composeProfiles": ["runtime-providers"],
+          "profileScope": ["runtime-providers"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -6246,16 +5868,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "runtime-api",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "runtime-providers"
-          ],
-          "profileScope": [
-            "runtime-providers"
-          ],
+          "environmentScopes": ["test", "staging"],
+          "composeProfiles": ["runtime-providers"],
+          "profileScope": ["runtime-providers"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -6303,13 +5918,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -6360,9 +5970,7 @@
       "composeService": {
         "serviceName": "clickhouse",
         "image": "clickhouse/clickhouse-server:24.12",
-        "profiles": [
-          "runtime-providers"
-        ],
+        "profiles": ["runtime-providers"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -6452,20 +6060,11 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "database-admin"
-      ],
+      "semanticRoles": ["database-admin"],
       "serviceKind": "operator-admin",
       "requirementState": true,
-      "classificationStates": [
-        "profile-gated",
-        "required-for-dev-compose",
-        "shared-control-plane"
-      ],
-      "serviceAuthorityLevels": [
-        "administers-system",
-        "observes"
-      ],
+      "classificationStates": ["profile-gated", "required-for-dev-compose", "shared-control-plane"],
+      "serviceAuthorityLevels": ["administers-system", "observes"],
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
@@ -6475,15 +6074,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "pgadmin"
-      ],
+      "reactComposeServiceNames": ["pgadmin"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgadmin"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -6495,9 +6090,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "no-substitute-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "operator-tools"
-          ],
+          "composeProfiles": ["operator-tools"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -6519,9 +6112,7 @@
           "sharingModel": "shared-control-plane",
           "substitutionPolicy": "managed-equivalent-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "operator-tools"
-          ],
+          "composeProfiles": ["operator-tools"],
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "test shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
@@ -6543,9 +6134,7 @@
           "sharingModel": "shared-control-plane",
           "substitutionPolicy": "managed-equivalent-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "operator-tools"
-          ],
+          "composeProfiles": ["operator-tools"],
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "staging shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
@@ -6580,9 +6169,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "operator-tools"
-      ],
+      "composeProfiles": ["operator-tools"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -6598,17 +6185,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "operator-admin",
           "accessModel": "operator-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "operator-tools"
-          ],
-          "profileScope": [
-            "operator-tools"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["operator-tools"],
+          "profileScope": ["operator-tools"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -6656,13 +6235,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "operator identity boundary",
       "secretBoundary": "database admin credential boundary",
       "adminSurface": {
@@ -6720,9 +6294,7 @@
       "composeService": {
         "serviceName": "pgadmin",
         "image": "dpage/pgadmin4:8.14",
-        "profiles": [
-          "operator-tools"
-        ],
+        "profiles": ["operator-tools"],
         "command": [],
         "environment": [
           {
@@ -6820,9 +6392,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "assurance-state"
-      ],
+      "semanticRoles": ["assurance-state"],
       "serviceKind": "assurance-backing-store",
       "requirementState": true,
       "classificationStates": [
@@ -6833,9 +6403,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -6845,15 +6413,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "sonar-postgres"
-      ],
+      "reactComposeServiceNames": ["sonar-postgres"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-postgres"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -6865,9 +6429,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -6889,9 +6451,7 @@
           "sharingModel": "shared-control-plane",
           "substitutionPolicy": "managed-equivalent-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "test shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
@@ -6913,9 +6473,7 @@
           "sharingModel": "shared-control-plane",
           "substitutionPolicy": "managed-equivalent-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "staging shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
@@ -6950,9 +6508,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "assurance"
-      ],
+      "composeProfiles": ["assurance"],
       "dependencies": [],
       "volumes": [
         {
@@ -6967,13 +6523,8 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -7029,9 +6580,7 @@
       "composeService": {
         "serviceName": "sonar-postgres",
         "image": "postgres:16.6-alpine",
-        "profiles": [
-          "assurance"
-        ],
+        "profiles": ["assurance"],
         "command": [],
         "environment": [
           {
@@ -7051,10 +6600,7 @@
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "pg_isready -U sonar -d sonar"
-          ],
+          "test": ["CMD-SHELL", "pg_isready -U sonar -d sonar"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 5
@@ -7141,9 +6687,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "assurance-plugin-bootstrap"
-      ],
+      "semanticRoles": ["assurance-plugin-bootstrap"],
       "serviceKind": "assurance-backing-store",
       "requirementState": true,
       "classificationStates": [
@@ -7151,9 +6695,7 @@
         "profile-gated",
         "required-for-dev-compose"
       ],
-      "serviceAuthorityLevels": [
-        "observes"
-      ],
+      "serviceAuthorityLevels": ["observes"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -7163,15 +6705,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "sonar-oidc-plugin"
-      ],
+      "reactComposeServiceNames": ["sonar-oidc-plugin"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-oidc-plugin"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -7183,9 +6721,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -7264,22 +6800,15 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "assurance"
-      ],
+      "composeProfiles": ["assurance"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -7327,12 +6856,8 @@
       "composeService": {
         "serviceName": "sonar-oidc-plugin",
         "image": "curlimages/curl:8.11.1",
-        "profiles": [
-          "assurance"
-        ],
-        "command": [
-          "--version"
-        ],
+        "profiles": ["assurance"],
+        "command": ["--version"],
         "environment": [],
         "ports": [],
         "volumes": [],
@@ -7421,9 +6946,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "code-quality-assurance"
-      ],
+      "semanticRoles": ["code-quality-assurance"],
       "serviceKind": "assurance-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -7432,11 +6955,7 @@
         "required-for-dev-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses",
-        "gates-promotion"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses", "gates-promotion"],
       "accessModel": "developer-access",
       "sourceEvidence": [
         {
@@ -7446,15 +6965,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "sonarqube"
-      ],
+      "reactComposeServiceNames": ["sonarqube"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonarqube"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -7466,9 +6981,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "no-substitute-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -7490,9 +7003,7 @@
           "sharingModel": "shared-control-plane",
           "substitutionPolicy": "managed-equivalent-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "test shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
@@ -7514,9 +7025,7 @@
           "sharingModel": "shared-control-plane",
           "substitutionPolicy": "managed-equivalent-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "assurance"
-          ],
+          "composeProfiles": ["assurance"],
           "generated": true,
           "seedReset": "shared-control-plane-managed",
           "proofObligation": "staging shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
@@ -7551,9 +7060,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "assurance"
-      ],
+      "composeProfiles": ["assurance"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -7569,17 +7076,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "assurance",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "assurance"
-          ],
-          "profileScope": [
-            "assurance"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["assurance"],
+          "profileScope": ["assurance"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -7627,13 +7126,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -7691,9 +7185,7 @@
       "composeService": {
         "serviceName": "sonarqube",
         "image": "sonarqube:25.9.0.112764-community",
-        "profiles": [
-          "assurance"
-        ],
+        "profiles": ["assurance"],
         "command": [],
         "environment": [
           {
@@ -7752,9 +7244,7 @@
       "operatorAccessBoundary": "No operator/admin service boundary applies.",
       "sharedControlPlaneJustification": "not-applicable; service is not classified as a shared cross-environment control plane.",
       "breakGlassRelevance": "deferred",
-      "missingEvidence": [
-        "accepted implementation/proof decision for deferred service depth"
-      ],
+      "missingEvidence": ["accepted implementation/proof decision for deferred service depth"],
       "iso27001Support": {
         "statementOfApplicabilitySupport": true,
         "supportAreas": [
@@ -7800,19 +7290,11 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "identity-provider-mock"
-      ],
+      "semanticRoles": ["identity-provider-mock"],
       "serviceKind": "provider-mock",
       "requirementState": "deferred",
-      "classificationStates": [
-        "deferred",
-        "profile-gated",
-        "requires-human-decision"
-      ],
-      "serviceAuthorityLevels": [
-        "emulates-provider"
-      ],
+      "classificationStates": ["deferred", "profile-gated", "requires-human-decision"],
+      "serviceAuthorityLevels": ["emulates-provider"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -7822,15 +7304,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "mock-oidc"
-      ],
+      "reactComposeServiceNames": ["mock-oidc"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mock-oidc"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -7928,13 +7406,8 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -8054,9 +7527,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "cloud-provider-emulation"
-      ],
+      "semanticRoles": ["cloud-provider-emulation"],
       "serviceKind": "provider-emulator",
       "requirementState": true,
       "classificationStates": [
@@ -8064,9 +7535,7 @@
         "required-for-dev-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "emulates-provider"
-      ],
+      "serviceAuthorityLevels": ["emulates-provider"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -8076,15 +7545,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "localstack"
-      ],
+      "reactComposeServiceNames": ["localstack"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#localstack"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -8096,9 +7561,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "mock-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "provider-emulation"
-          ],
+          "composeProfiles": ["provider-emulation"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev emulation must not be treated as live provider readiness.",
@@ -8120,9 +7583,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "mock-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "provider-emulation"
-          ],
+          "composeProfiles": ["provider-emulation"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test emulation must not be treated as live provider readiness.",
@@ -8179,9 +7640,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "provider-emulation"
-      ],
+      "composeProfiles": ["provider-emulation"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -8197,16 +7656,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "provider-emulation",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test"
-          ],
-          "composeProfiles": [
-            "provider-emulation"
-          ],
-          "profileScope": [
-            "provider-emulation"
-          ],
+          "environmentScopes": ["dev", "test"],
+          "composeProfiles": ["provider-emulation"],
+          "profileScope": ["provider-emulation"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -8254,13 +7706,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -8292,9 +7739,7 @@
         "environment policy explicit",
         "generated Compose freshness when generated"
       ],
-      "nonEquivalenceBoundaries": [
-        "LocalStack emulation is not live external provider evidence."
-      ],
+      "nonEquivalenceBoundaries": ["LocalStack emulation is not live external provider evidence."],
       "deferredDepth": 0,
       "outOfScopeRationale": "",
       "humanDecisionState": "accepted",
@@ -8313,9 +7758,7 @@
       "composeService": {
         "serviceName": "localstack",
         "image": "localstack/localstack:4.8.1",
-        "profiles": [
-          "provider-emulation"
-        ],
+        "profiles": ["provider-emulation"],
         "command": [],
         "environment": [
           {
@@ -8409,9 +7852,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "http-provider-mock"
-      ],
+      "semanticRoles": ["http-provider-mock"],
       "serviceKind": "provider-mock",
       "requirementState": true,
       "classificationStates": [
@@ -8419,9 +7860,7 @@
         "required-for-dev-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "emulates-provider"
-      ],
+      "serviceAuthorityLevels": ["emulates-provider"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -8431,15 +7870,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "wiremock"
-      ],
+      "reactComposeServiceNames": ["wiremock"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#wiremock"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -8451,9 +7886,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "mock-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "provider-mocks"
-          ],
+          "composeProfiles": ["provider-mocks"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev mock must not be treated as live provider readiness.",
@@ -8475,9 +7908,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "mock-allowed",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "provider-mocks"
-          ],
+          "composeProfiles": ["provider-mocks"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test mock must not be treated as live provider readiness.",
@@ -8534,9 +7965,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "provider-mocks"
-      ],
+      "composeProfiles": ["provider-mocks"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -8552,16 +7981,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "provider-mock",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test"
-          ],
-          "composeProfiles": [
-            "provider-mocks"
-          ],
-          "profileScope": [
-            "provider-mocks"
-          ],
+          "environmentScopes": ["dev", "test"],
+          "composeProfiles": ["provider-mocks"],
+          "profileScope": ["provider-mocks"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -8609,13 +8031,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -8647,9 +8064,7 @@
         "environment policy explicit",
         "generated Compose freshness when generated"
       ],
-      "nonEquivalenceBoundaries": [
-        "WireMock proves configured mock behaviour only."
-      ],
+      "nonEquivalenceBoundaries": ["WireMock proves configured mock behaviour only."],
       "deferredDepth": 0,
       "outOfScopeRationale": "",
       "humanDecisionState": "accepted",
@@ -8668,9 +8083,7 @@
       "composeService": {
         "serviceName": "wiremock",
         "image": "wiremock/wiremock:3.13.2-2-alpine",
-        "profiles": [
-          "provider-mocks"
-        ],
+        "profiles": ["provider-mocks"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -8762,9 +8175,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "alert-routing"
-      ],
+      "semanticRoles": ["alert-routing"],
       "serviceKind": "observability-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -8774,10 +8185,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "routes-traffic"
-      ],
+      "serviceAuthorityLevels": ["observes", "routes-traffic"],
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
@@ -8787,15 +8195,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "alertmanager"
-      ],
+      "reactComposeServiceNames": ["alertmanager"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alertmanager"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -8807,9 +8211,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "observability"
-          ],
+          "composeProfiles": ["observability"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -8831,9 +8233,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "observability"
-          ],
+          "composeProfiles": ["observability"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -8855,9 +8255,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "observability"
-          ],
+          "composeProfiles": ["observability"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -8892,9 +8290,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "observability"
-      ],
+      "composeProfiles": ["observability"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -8910,17 +8306,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "operator-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "observability"
-          ],
-          "profileScope": [
-            "observability"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["observability"],
+          "profileScope": ["observability"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -8968,13 +8356,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -9030,9 +8413,7 @@
       "composeService": {
         "serviceName": "alertmanager",
         "image": "prom/alertmanager:v0.27.0",
-        "profiles": [
-          "observability"
-        ],
+        "profiles": ["observability"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -9123,9 +8504,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "telemetry-agent"
-      ],
+      "semanticRoles": ["telemetry-agent"],
       "serviceKind": "observability-collector",
       "requirementState": true,
       "classificationStates": [
@@ -9134,9 +8513,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "observes"
-      ],
+      "serviceAuthorityLevels": ["observes"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -9146,15 +8523,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "alloy"
-      ],
+      "reactComposeServiceNames": ["alloy"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alloy"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -9166,9 +8539,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "observability"
-          ],
+          "composeProfiles": ["observability"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -9190,9 +8561,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "observability"
-          ],
+          "composeProfiles": ["observability"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -9214,9 +8583,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "observability"
-          ],
+          "composeProfiles": ["observability"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -9251,9 +8618,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "observability"
-      ],
+      "composeProfiles": ["observability"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -9269,17 +8634,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "observability",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "observability"
-          ],
-          "profileScope": [
-            "observability"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["observability"],
+          "profileScope": ["observability"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -9327,13 +8684,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -9389,9 +8741,7 @@
       "composeService": {
         "serviceName": "alloy",
         "image": "grafana/alloy:v1.5.1",
-        "profiles": [
-          "observability"
-        ],
+        "profiles": ["observability"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -9482,9 +8832,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "operator-automation-backing-store"
-      ],
+      "semanticRoles": ["operator-automation-backing-store"],
       "serviceKind": "workflow-backing-store",
       "requirementState": true,
       "classificationStates": [
@@ -9494,9 +8842,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -9506,15 +8852,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "windmill-postgres"
-      ],
+      "reactComposeServiceNames": ["windmill-postgres"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-postgres"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -9526,9 +8868,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -9550,9 +8890,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -9574,9 +8912,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -9611,22 +8947,15 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -9682,9 +9011,7 @@
       "composeService": {
         "serviceName": "windmill-postgres",
         "image": "postgres:16.6-alpine",
-        "profiles": [
-          "workflow-provider"
-        ],
+        "profiles": ["workflow-provider"],
         "command": [],
         "environment": [
           {
@@ -9704,10 +9031,7 @@
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "pg_isready -U windmill -d windmill"
-          ],
+          "test": ["CMD-SHELL", "pg_isready -U windmill -d windmill"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 30
@@ -9796,9 +9120,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "operator-automation-backing-store"
-      ],
+      "semanticRoles": ["operator-automation-backing-store"],
       "serviceKind": "workflow-backing-store",
       "requirementState": true,
       "classificationStates": [
@@ -9808,9 +9130,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -9820,15 +9140,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "windmill-redis"
-      ],
+      "reactComposeServiceNames": ["windmill-redis"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-redis"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -9840,9 +9156,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -9864,9 +9178,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -9888,9 +9200,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -9925,22 +9235,15 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -9996,20 +9299,14 @@
       "composeService": {
         "serviceName": "windmill-redis",
         "image": "redis:7.4.2-alpine",
-        "profiles": [
-          "workflow-provider"
-        ],
+        "profiles": ["workflow-provider"],
         "command": [],
         "environment": [],
         "ports": [],
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD",
-            "redis-cli",
-            "ping"
-          ],
+          "test": ["CMD", "redis-cli", "ping"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 30
@@ -10099,9 +9396,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "platform-operator-automation"
-      ],
+      "semanticRoles": ["platform-operator-automation"],
       "serviceKind": "operator-automation",
       "requirementState": true,
       "classificationStates": [
@@ -10112,11 +9407,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "executes-code",
-        "administers-system",
-        "mutates-state"
-      ],
+      "serviceAuthorityLevels": ["executes-code", "administers-system", "mutates-state"],
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
@@ -10126,15 +9417,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "windmill"
-      ],
+      "reactComposeServiceNames": ["windmill"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -10146,9 +9433,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -10170,9 +9455,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -10194,9 +9477,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -10231,9 +9512,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -10249,17 +9528,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "operator-admin",
           "accessModel": "operator-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "workflow-provider"
-          ],
-          "profileScope": [
-            "workflow-provider"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["workflow-provider"],
+          "profileScope": ["workflow-provider"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -10307,13 +9578,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "automation credential boundary",
       "adminSurface": {
@@ -10371,9 +9637,7 @@
       "composeService": {
         "serviceName": "windmill",
         "image": "ghcr.io/windmill-labs/windmill:1.734@sha256:93aca0f0954c86d85c88ce1f82c628be1f9bc1b310b648a239ca40d4dcbe390b",
-        "profiles": [
-          "workflow-provider"
-        ],
+        "profiles": ["workflow-provider"],
         "command": [],
         "environment": [
           {
@@ -10414,10 +9678,7 @@
           }
         ],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "curl -fsS http://127.0.0.1:8000/api/version >/dev/null || exit 1"
-          ],
+          "test": ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/api/version >/dev/null || exit 1"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 30
@@ -10506,9 +9767,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "platform-operator-automation-worker"
-      ],
+      "semanticRoles": ["platform-operator-automation-worker"],
       "serviceKind": "operator-automation-worker",
       "requirementState": true,
       "classificationStates": [
@@ -10518,10 +9777,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "executes-code",
-        "mutates-state"
-      ],
+      "serviceAuthorityLevels": ["executes-code", "mutates-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -10531,15 +9787,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "windmill-worker"
-      ],
+      "reactComposeServiceNames": ["windmill-worker"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-worker"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -10551,9 +9803,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -10575,9 +9825,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -10599,9 +9847,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -10636,22 +9882,15 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "automation worker credential boundary",
       "adminSurface": {
@@ -10707,12 +9946,8 @@
       "composeService": {
         "serviceName": "windmill-worker",
         "image": "ghcr.io/windmill-labs/windmill:1.734@sha256:93aca0f0954c86d85c88ce1f82c628be1f9bc1b310b648a239ca40d4dcbe390b",
-        "profiles": [
-          "workflow-provider"
-        ],
-        "command": [
-          "windmill"
-        ],
+        "profiles": ["workflow-provider"],
+        "command": ["windmill"],
         "environment": [
           {
             "name": "DATABASE_URL",
@@ -10756,10 +9991,7 @@
           }
         ],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "windmill --version >/dev/null 2>&1 || exit 1"
-          ],
+          "test": ["CMD-SHELL", "windmill --version >/dev/null 2>&1 || exit 1"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 30
@@ -10798,9 +10030,7 @@
       "operatorAccessBoundary": "No operator/admin service boundary applies.",
       "sharedControlPlaneJustification": "not-applicable; service is not classified as a shared cross-environment control plane.",
       "breakGlassRelevance": "not-applicable",
-      "missingEvidence": [
-        "accepted implementation/proof decision for deferred service depth"
-      ],
+      "missingEvidence": ["accepted implementation/proof decision for deferred service depth"],
       "iso27001Support": {
         "statementOfApplicabilitySupport": true,
         "supportAreas": [
@@ -10846,9 +10076,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "workflow-runtime-backing-store"
-      ],
+      "semanticRoles": ["workflow-runtime-backing-store"],
       "serviceKind": "workflow-backing-store",
       "requirementState": true,
       "classificationStates": [
@@ -10856,9 +10084,7 @@
         "historical-implementation-detail",
         "requires-human-decision"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state"
-      ],
+      "serviceAuthorityLevels": ["stores-state"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -10868,15 +10094,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "temporal-postgres"
-      ],
+      "reactComposeServiceNames": ["temporal-postgres"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-postgres"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -10888,9 +10110,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -10912,9 +10132,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -10936,9 +10154,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -10973,22 +10189,15 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -11046,9 +10255,7 @@
       "composeService": {
         "serviceName": "temporal-postgres",
         "image": "postgres:16.6-alpine",
-        "profiles": [
-          "workflow-provider"
-        ],
+        "profiles": ["workflow-provider"],
         "command": [],
         "environment": [
           {
@@ -11068,10 +10275,7 @@
         "volumes": [],
         "dependsOn": [],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "pg_isready -U temporal -d temporal"
-          ],
+          "test": ["CMD-SHELL", "pg_isready -U temporal -d temporal"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 5
@@ -11161,19 +10365,11 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "workflow-runtime-inspection"
-      ],
+      "semanticRoles": ["workflow-runtime-inspection"],
       "serviceKind": "workflow-operator-ui",
       "requirementState": true,
-      "classificationStates": [
-        "profile-gated",
-        "required-for-dev-compose"
-      ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "administers-system"
-      ],
+      "classificationStates": ["profile-gated", "required-for-dev-compose"],
+      "serviceAuthorityLevels": ["observes", "administers-system"],
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
@@ -11183,15 +10379,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "temporal-ui"
-      ],
+      "reactComposeServiceNames": ["temporal-ui"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-ui"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -11203,9 +10395,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -11227,9 +10417,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -11251,9 +10439,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "workflow-provider"
-          ],
+          "composeProfiles": ["workflow-provider"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -11288,9 +10474,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -11306,17 +10490,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "workflow-ui",
           "accessModel": "operator-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "workflow-provider"
-          ],
-          "profileScope": [
-            "workflow-provider"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["workflow-provider"],
+          "profileScope": ["workflow-provider"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -11364,13 +10540,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -11426,9 +10597,7 @@
       "composeService": {
         "serviceName": "temporal-ui",
         "image": "temporalio/ui:2.35.0",
-        "profiles": [
-          "workflow-provider"
-        ],
+        "profiles": ["workflow-provider"],
         "command": [],
         "environment": [
           {
@@ -11530,9 +10699,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "database-backup-restore"
-      ],
+      "semanticRoles": ["database-backup-restore"],
       "serviceKind": "backup-restore",
       "requirementState": true,
       "classificationStates": [
@@ -11542,10 +10709,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "stores-state",
-        "observes"
-      ],
+      "serviceAuthorityLevels": ["stores-state", "observes"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -11555,15 +10719,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "pgbackrest"
-      ],
+      "reactComposeServiceNames": ["pgbackrest"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgbackrest"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -11575,9 +10735,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "backup-restore"
-          ],
+          "composeProfiles": ["backup-restore"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -11599,9 +10757,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "backup-restore"
-          ],
+          "composeProfiles": ["backup-restore"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -11623,9 +10779,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "backup-restore"
-          ],
+          "composeProfiles": ["backup-restore"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -11660,18 +10814,12 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "backup-restore"
-      ],
+      "composeProfiles": ["backup-restore"],
       "dependencies": [
         {
           "serviceId": "postgres",
           "relationship": "synthetic-local-cold-backup-source-for-proof",
-          "requiredIn": [
-            "dev",
-            "test",
-            "staging"
-          ]
+          "requiredIn": ["dev", "test", "staging"]
         }
       ],
       "volumes": [
@@ -11694,9 +10842,7 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
+      "healthchecks": ["catalogue policy validation"],
       "readinessChecks": [
         "compose catalogue validation",
         "generated Compose freshness",
@@ -11762,9 +10908,7 @@
       "composeService": {
         "serviceName": "pgbackrest",
         "image": "woblerr/pgbackrest:2.58.0@sha256:18cdff011e974308510d056b4039d9b4d21ec33d9124879882c6f05e99be2ab9",
-        "profiles": [
-          "backup-restore"
-        ],
+        "profiles": ["backup-restore"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -11780,10 +10924,7 @@
           }
         ],
         "healthcheck": {
-          "test": [
-            "CMD-SHELL",
-            "pgbackrest version >/dev/null"
-          ],
+          "test": ["CMD-SHELL", "pgbackrest version >/dev/null"],
           "interval": "10s",
           "timeout": "5s",
           "retries": 5
@@ -11872,9 +11013,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "content-scanning"
-      ],
+      "semanticRoles": ["content-scanning"],
       "serviceKind": "file-scanner",
       "requirementState": true,
       "classificationStates": [
@@ -11884,10 +11023,7 @@
         "required-for-test-compose",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "scans-content",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["scans-content", "analyses"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -11897,15 +11033,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "clamav"
-      ],
+      "reactComposeServiceNames": ["clamav"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clamav"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -11917,9 +11049,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "scanning"
-          ],
+          "composeProfiles": ["scanning"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -11941,9 +11071,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "scanning"
-          ],
+          "composeProfiles": ["scanning"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -11965,9 +11093,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "scanning"
-          ],
+          "composeProfiles": ["scanning"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -12002,22 +11128,15 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }
       },
-      "composeProfiles": [
-        "scanning"
-      ],
+      "composeProfiles": ["scanning"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -12075,9 +11194,7 @@
       "composeService": {
         "serviceName": "clamav",
         "image": "clamav/clamav:stable",
-        "profiles": [
-          "scanning"
-        ],
+        "profiles": ["scanning"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -12166,9 +11283,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "error-assurance-control-plane"
-      ],
+      "semanticRoles": ["error-assurance-control-plane"],
       "serviceKind": "observability-control-plane",
       "requirementState": true,
       "classificationStates": [
@@ -12176,10 +11291,7 @@
         "production-external-provider",
         "shared-control-plane"
       ],
-      "serviceAuthorityLevels": [
-        "observes",
-        "analyses"
-      ],
+      "serviceAuthorityLevels": ["observes", "analyses"],
       "accessModel": "external-provider-console",
       "sourceEvidence": [
         {
@@ -12213,9 +11325,7 @@
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sentry"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -12313,13 +11423,8 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {
@@ -12359,6 +11464,372 @@
       "outOfScopeRationale": "",
       "humanDecisionState": "accepted",
       "generatedComposeTargets": []
+    },
+    {
+      "serviceId": "public-proof-origin",
+      "displayName": "Public Proof Origin",
+      "serviceOwner": "platform-public-edge-foundation",
+      "riskOwner": "platform-public-edge-risk-owner",
+      "controlOwner": "platform-public-edge-control-owner",
+      "purpose": "Serve gateway-neutral non-product public FQDN proof endpoints for USF-263 and the reserved USF-264 browser proof route without making Caddy, Netlify, Cloudflare Worker, or any gateway product semantic authority.",
+      "environmentDisposition": "environment-specific",
+      "providerBoundary": {
+        "disposition": "local-composed",
+        "supplierBoundary": "Cloudflare, Caddy, Netlify, Cloudflare Worker, nginx, or other gateway/origin products may provide deployment evidence, but no gateway product is semantic authority.",
+        "evidenceBoundary": "Local Compose and response-contract proof only; external public FQDN proof must be recorded by USF-263.",
+        "notes": "Provider boundary is gateway-neutral and local-composed for repository proof. This does not claim staging, production, live-provider, SOC, ISO certification, product UI, browser E2E, or full React parity readiness."
+      },
+      "dataClassification": "synthetic-data",
+      "dataBoundary": "metadata-only",
+      "readinessTier": "compose-target-catalogued",
+      "evidenceGrade": "b",
+      "controlPurpose": "Provide local and environment-scoped public proof-origin evidence for declared public FQDN routes while preserving non-claims and gateway neutrality.",
+      "assetInventoryClass": "runtime-service",
+      "accessPosture": "developer-loopback",
+      "authRequirement": "not-required",
+      "auditPosture": "local-operational-logs",
+      "auditRequirement": "local-operational-logs",
+      "secretPosture": "no-secrets",
+      "backupRestorePosture": "not-required",
+      "retentionPosture": "local-ephemeral",
+      "tenantBoundary": "The public proof origin serves synthetic, non-product proof markers only; it does not process real tenant data and does not satisfy staging, production, live-provider, product UI, or browser E2E readiness.",
+      "operationalOwnerBoundary": "platform-public-edge-foundation owns the local proof-origin implementation. External Cloudflare/origin routing remains operator-controlled evidence for USF-263 and is not encoded as a gateway requirement.",
+      "operatorAccessBoundary": "No operator/admin application surface is provided by this proof origin.",
+      "sharedControlPlaneJustification": "not-applicable; service is profile-gated per generated environment target and does not create a shared control plane.",
+      "breakGlassRelevance": "not-applicable",
+      "missingEvidence": [
+        "external Cloudflare origin routing evidence for 1e100.network",
+        "external Cloudflare origin routing evidence for aldous.info",
+        "USF-264 Playwright public route and telemetry bootstrap evidence"
+      ],
+      "iso27001Support": {
+        "statementOfApplicabilitySupport": true,
+        "supportAreas": [
+          "asset-inventory",
+          "change-evidence-boundary",
+          "access-boundary",
+          "public-edge-proof-boundary",
+          "non-claim-preservation"
+        ],
+        "supportStatement": "public-proof-origin metadata supports ISO/IEC 27001-style evidence organisation for public-edge proof boundary tracking only.",
+        "certificationClaimed": false,
+        "nonClaim": "No ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, full React parity, or v2-proof tag authorization is claimed."
+      },
+      "enterpriseFeatureSupport": {
+        "assetInventory": "public-proof-origin is registered as a runtime-service in the semantic service catalogue.",
+        "riskOwnership": "Risk ownership is assigned to platform-public-edge-risk-owner; Linear remains tracking only.",
+        "controlOwnership": "Control ownership is assigned to platform-public-edge-control-owner; generated Compose does not define control authority.",
+        "accessControlBoundary": "Access posture is developer-loopback for local proof; public Cloudflare routing evidence is separate and does not create application access readiness.",
+        "privilegedAccessBoundary": "privileged/operator boundary is not applicable to the local proof origin.",
+        "auditEvidence": "Audit posture is local-operational-logs; external public route proof evidence is recorded separately by USF-263.",
+        "backupRestoreResilience": "Backup and restore are not required for a stateless proof-origin service.",
+        "supplierProviderBoundary": "Gateway and hosting products are implementation evidence sources only, not semantic requirements.",
+        "secretCredentialBoundary": "No real secrets or tenant credentials are required by the service.",
+        "changePromotionEvidence": "Change evidence is limited to service catalogue validation, generated Compose determinism, proof command output, git history, and PR checks.",
+        "incidentResponseEvidence": "Incident response readiness is not claimed; route failures are blocker evidence for USF-263 only.",
+        "statementOfApplicabilitySupport": true,
+        "certificationOrReadinessClaims": "Supports evidence organisation only; does not claim SOC readiness, ISO/IEC 27001 certification, staging readiness, production readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, full React parity, or v2-proof tag authorization."
+      },
+      "readinessClaimsAllowed": [
+        "service-catalogue-validation",
+        "generated-compose-derivation",
+        "local-proof-origin-response-contract"
+      ],
+      "readinessClaimsProhibited": [
+        "full-react-parity-readiness",
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "v2-proof-tag-authorization"
+      ],
+      "semanticRoles": ["public-proof-origin"],
+      "serviceKind": "application-runtime",
+      "requirementState": true,
+      "classificationStates": ["implemented", "profile-gated", "required-for-staging-compose"],
+      "serviceAuthorityLevels": ["routes-traffic", "executes-code"],
+      "accessModel": "no-human-access",
+      "sourceEvidence": [
+        {
+          "sourceKind": "current-source",
+          "sourcePath": "apps/public-proof-origin/src/server.mjs",
+          "evidenceRole": "local-proof-origin-implementation",
+          "notes": "Current USF proof-origin implementation; gateway products remain evidence sources only and are not semantic requirements."
+        },
+        {
+          "sourceKind": "semantic-contract",
+          "sourcePath": "docs/architecture/public-fqdn-semantic-contract.json",
+          "evidenceRole": "semantic-authority",
+          "notes": "Defines the public FQDN JSON endpoint and reserved public route semantics."
+        }
+      ],
+      "reactComposeServiceNames": [],
+      "reactParityRows": [],
+      "usfCapabilityRefs": ["semantic-contract.public-fqdn-proof-origin"],
+      "environmentPolicies": {
+        "dev": {
+          "environmentScope": "dev",
+          "required": false,
+          "realisationMode": "prohibited",
+          "deploymentForm": "prohibited",
+          "lifecycle": "ephemeral-per-run",
+          "dataBoundary": "none",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "no-substitute-allowed",
+          "composePolicy": "do-not-generate-deferred",
+          "composeProfiles": [],
+          "generated": false,
+          "seedReset": "not-required",
+          "proofObligation": "dev realisation must preserve gateway neutrality, non-product proof endpoints, and non-claims.",
+          "selectedComposeTarget": "not-generated",
+          "rationale": "Dev foundation does not require public internet proof-origin generation.",
+          "environmentScopeMechanism": "dev does not require public proof-origin generation",
+          "projectBoundary": "dev public proof origin is not generated",
+          "tenantBoundary": "dev public proof origin serves synthetic metadata only and no real tenant data",
+          "accessBoundary": "dev access follows accessModel no-human-access and local loopback profile where generated",
+          "productionExposureBoundary": "No local generated port is a production exposure; public exposure requires separate Cloudflare/origin evidence and does not imply readiness."
+        },
+        "test": {
+          "environmentScope": "test",
+          "required": false,
+          "realisationMode": "prohibited",
+          "deploymentForm": "prohibited",
+          "lifecycle": "ephemeral-per-run",
+          "dataBoundary": "none",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "no-substitute-allowed",
+          "composePolicy": "do-not-generate-deferred",
+          "composeProfiles": [],
+          "generated": false,
+          "seedReset": "not-required",
+          "proofObligation": "test realisation must preserve gateway neutrality, non-product proof endpoints, and non-claims.",
+          "selectedComposeTarget": "not-generated",
+          "rationale": "Test readiness remains local/composed/synthetic and must not depend on public DNS/TLS or public internet.",
+          "environmentScopeMechanism": "test does not require public proof-origin generation",
+          "projectBoundary": "test public proof origin is not generated",
+          "tenantBoundary": "test public proof origin serves synthetic metadata only and no real tenant data",
+          "accessBoundary": "test access follows accessModel no-human-access and local loopback profile where generated",
+          "productionExposureBoundary": "No local generated port is a production exposure; public exposure requires separate Cloudflare/origin evidence and does not imply readiness."
+        },
+        "staging": {
+          "environmentScope": "staging",
+          "required": true,
+          "realisationMode": "composed-environment-isolated",
+          "deploymentForm": "composed",
+          "lifecycle": "persistent-per-environment",
+          "dataBoundary": "metadata-only",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "managed-equivalent-allowed",
+          "composePolicy": "generate-profile-gated-service",
+          "composeProfiles": ["public-proof-origin"],
+          "generated": true,
+          "seedReset": "seeded-once-or-evolving",
+          "proofObligation": "staging realisation must preserve gateway neutrality, non-product proof endpoints, and non-claims.",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
+          "rationale": "Profile-gated local/staging proof-origin service is required to serve the public proof response contract where used.",
+          "environmentScopeMechanism": "staging generated Compose target/profile isolates public-proof-origin",
+          "projectBoundary": "staging Compose project/profile boundary for public-proof-origin",
+          "tenantBoundary": "staging public proof origin serves synthetic metadata only and no real tenant data",
+          "accessBoundary": "staging access follows accessModel no-human-access and local loopback profile where generated",
+          "productionExposureBoundary": "No local generated port is a production exposure; public exposure requires separate Cloudflare/origin evidence and does not imply readiness."
+        },
+        "production": {
+          "environmentScope": "production",
+          "required": true,
+          "realisationMode": "composed-environment-isolated",
+          "deploymentForm": "composed",
+          "lifecycle": "persistent-per-environment",
+          "dataBoundary": "metadata-only",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "managed-equivalent-allowed",
+          "composePolicy": "generate-profile-gated-service",
+          "composeProfiles": ["public-proof-origin"],
+          "generated": true,
+          "seedReset": "seeded-once-or-evolving",
+          "proofObligation": "production realisation must preserve gateway neutrality, non-product proof endpoints, and non-claims.",
+          "selectedComposeTarget": "compose/compose.production.generated.yaml",
+          "rationale": "Profile-gated production proof-origin service is generated for local proof of the response contract only; public production readiness is not claimed.",
+          "environmentScopeMechanism": "production generated Compose target/profile isolates public-proof-origin",
+          "projectBoundary": "production Compose project/profile boundary for public-proof-origin",
+          "tenantBoundary": "production public proof origin serves synthetic metadata only and no real tenant data",
+          "accessBoundary": "production access follows accessModel no-human-access and local loopback profile where generated",
+          "productionExposureBoundary": "No local generated port is a production exposure; public exposure requires separate Cloudflare/origin evidence and does not imply readiness."
+        }
+      },
+      "composeProfiles": ["public-proof-origin"],
+      "dependencies": [],
+      "volumes": [],
+      "networks": [],
+      "ports": [
+        {
+          "portId": "public-proof-origin-http",
+          "name": "public-proof-origin-http",
+          "containerPort": 8080,
+          "publishedPort": 18080,
+          "protocol": "tcp",
+          "appProtocol": "http",
+          "hostIp": "127.0.0.1",
+          "bindScope": "loopback-only",
+          "exposureClass": "runtime-api",
+          "accessModel": "developer-access",
+          "environmentScopes": ["staging", "production"],
+          "composeProfiles": ["public-proof-origin"],
+          "profileScope": ["public-proof-origin"],
+          "required": true,
+          "collisionGroup": "host-published",
+          "concurrentEnvironmentPolicy": "single-environment-only",
+          "portAllocationMode": "fixed",
+          "productionExposure": "external-provider",
+          "rationale": "Loopback-only generated Compose exposure for the public proof origin response contract.",
+          "exposureRationale": "Non-product proof endpoint; loopback-only and not a production/public exposure by itself.",
+          "accessPolicy": "Access follows developer-access for local proof; public route exposure requires separate external Cloudflare/origin evidence.",
+          "authRequired": false,
+          "tlsRequired": false,
+          "auditRequired": false,
+          "secretExposureRisk": "none",
+          "dataClassification": "synthetic-data",
+          "adminSurface": false,
+          "operatorSurface": false,
+          "internetExposureAllowed": false,
+          "defaultDenyReason": "Host publication defaults to 127.0.0.1; LAN/public bind is denied without explicit accepted authority.",
+          "productionExposureBoundary": "No local generated port is a production exposure; production public route delivery requires separate external Cloudflare/origin evidence.",
+          "iso27001SupportStatement": "Supports public-edge proof evidence organisation without claiming ISO/IEC 27001 certification.",
+          "readinessClaimsAllowed": [
+            "local-compose-config",
+            "local-port-availability",
+            "classification-validation",
+            "local-proof-origin-response-contract"
+          ],
+          "readinessClaimsProhibited": [
+            "full-dev-readiness",
+            "production-readiness",
+            "staging-readiness",
+            "deployment-readiness",
+            "live-provider-readiness",
+            "product-ui-readiness",
+            "browser-e2e-readiness",
+            "iso27001-certification",
+            "soc-readiness"
+          ],
+          "controlPurpose": "Control local public-proof-origin exposure.",
+          "riskOwner": "platform-public-edge-risk-owner",
+          "retentionLoggingPosture": "Generated Compose logs are local operational evidence only and must not contain raw secrets.",
+          "breakGlassRelevance": "not-production-break-glass",
+          "evidenceProduced": [
+            "compose-validator-report",
+            "docker-compose-config",
+            "port-availability-check",
+            "public-proof-origin-response-contract-proof"
+          ],
+          "deferredControls": [
+            "External public route attachment and TLS edge proof remain USF-263 evidence, not local Compose evidence."
+          ]
+        }
+      ],
+      "secrets": [],
+      "configs": [],
+      "healthchecks": ["HTTP 200 JSON marker check on loopback with declared staging Host header"],
+      "readinessChecks": [
+        "compose catalogue validation",
+        "generated Compose freshness",
+        "public proof origin response contract proof"
+      ],
+      "identityBoundary": "none",
+      "secretBoundary": "no runtime secrets; PUBLIC_PROOF_ORIGIN_FQDN_MAP is a non-secret public FQDN-to-environment map",
+      "adminSurface": {
+        "present": false,
+        "model": "none",
+        "notes": "No admin surface; only proof endpoints are served."
+      },
+      "operatorSurface": {
+        "present": false,
+        "model": "none",
+        "notes": "No operator surface; gateway/operator configuration is outside the service semantic requirement."
+      },
+      "observability": {
+        "logs": true,
+        "metrics": false,
+        "traces": false,
+        "auditRequired": true,
+        "notes": "Local HTTP access logs and response-contract proof output are audit-style local evidence only; no production telemetry or incident readiness claim."
+      },
+      "backupRestore": {
+        "required": false,
+        "model": "not-required",
+        "notes": "The proof origin is stateless and serves synthetic proof responses."
+      },
+      "seedReset": "stateless-proof-service",
+      "failureImpact": "Service failure blocks USF-263 public route proof and v2-proof tag authorization, but does not affect Test readiness or product UI readiness.",
+      "proofRequirements": [
+        "classification present",
+        "environment policy explicit",
+        "generated Compose freshness when generated",
+        "corepack pnpm proof:public-origin passes locally",
+        "corepack pnpm proof:public-fqdn remains fail-closed until external route delivery is proven"
+      ],
+      "nonEquivalenceBoundaries": [
+        "Local public-proof-origin proof is not external public FQDN route proof.",
+        "Public browser route presence is not product UI readiness or browser E2E readiness.",
+        "Cloudflare routing evidence is not live-provider readiness."
+      ],
+      "deferredDepth": 1,
+      "outOfScopeRationale": "Deployment-specific public origin attachment and Cloudflare routing are operator-controlled evidence for USF-263 and are not implemented as staging work here.",
+      "humanDecisionState": "accepted",
+      "generatedComposeTargets": [
+        {
+          "environmentScope": "staging",
+          "path": "compose/compose.staging.generated.yaml",
+          "purpose": "Generated profile-gated Compose target for staging proof-origin response contract."
+        },
+        {
+          "environmentScope": "production",
+          "path": "compose/compose.production.generated.yaml",
+          "purpose": "Generated profile-gated Compose target for production proof-origin response contract."
+        }
+      ],
+      "composeService": {
+        "serviceName": "public-proof-origin",
+        "image": "node:24.16.0-alpine3.22",
+        "profiles": ["public-proof-origin"],
+        "command": ["node", "/srv/public-proof-origin/server.mjs"],
+        "environment": [
+          {
+            "name": "PUBLIC_PROOF_ORIGIN_HOST",
+            "value": "0.0.0.0"
+          },
+          {
+            "name": "PUBLIC_PROOF_ORIGIN_PORT",
+            "value": "8080"
+          },
+          {
+            "name": "PUBLIC_PROOF_ORIGIN_FQDN_MAP",
+            "value": "1e100.network=staging,aldous.info=production"
+          }
+        ],
+        "ports": [],
+        "volumes": [
+          "../apps/public-proof-origin/src/server.mjs:/srv/public-proof-origin/server.mjs:ro"
+        ],
+        "dependsOn": [],
+        "healthcheck": {
+          "test": [
+            "CMD",
+            "node",
+            "-e",
+            "require('node:http').request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host:'1e100.network'}},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).end()"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 6
+        }
+      }
     },
     {
       "serviceId": "caddy",
@@ -12443,10 +11914,7 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "edge-gateway",
-        "forward-auth-gateway"
-      ],
+      "semanticRoles": ["edge-gateway", "forward-auth-gateway"],
       "serviceKind": "gateway",
       "requirementState": true,
       "classificationStates": [
@@ -12456,10 +11924,7 @@
         "required-for-staging-compose",
         "required-for-test-compose"
       ],
-      "serviceAuthorityLevels": [
-        "routes-traffic",
-        "grants-access"
-      ],
+      "serviceAuthorityLevels": ["routes-traffic", "grants-access"],
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
@@ -12469,15 +11934,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "external-caddy"
-      ],
+      "reactComposeServiceNames": ["external-caddy"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#caddy"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -12489,9 +11950,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "gateway"
-          ],
+          "composeProfiles": ["gateway"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
@@ -12513,9 +11972,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "gateway"
-          ],
+          "composeProfiles": ["gateway"],
           "generated": true,
           "seedReset": "reset-per-run",
           "proofObligation": "test realisation must prove environment-scoped policy compliance.",
@@ -12537,9 +11994,7 @@
           "sharingModel": "environment-isolated",
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
-          "composeProfiles": [
-            "gateway"
-          ],
+          "composeProfiles": ["gateway"],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
           "proofObligation": "staging realisation must prove environment-scoped policy compliance.",
@@ -12574,9 +12029,7 @@
           "productionExposureBoundary": "production exposure is allowed only through the explicit production cloud-provider policy"
         }
       },
-      "composeProfiles": [
-        "gateway"
-      ],
+      "composeProfiles": ["gateway"],
       "dependencies": [],
       "volumes": [],
       "networks": [],
@@ -12592,17 +12045,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "gateway",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "gateway"
-          ],
-          "profileScope": [
-            "gateway"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["gateway"],
+          "profileScope": ["gateway"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -12658,17 +12103,9 @@
           "bindScope": "loopback-only",
           "exposureClass": "gateway",
           "accessModel": "developer-access",
-          "environmentScopes": [
-            "dev",
-            "test",
-            "staging"
-          ],
-          "composeProfiles": [
-            "gateway"
-          ],
-          "profileScope": [
-            "gateway"
-          ],
+          "environmentScopes": ["dev", "test", "staging"],
+          "composeProfiles": ["gateway"],
+          "profileScope": ["gateway"],
           "required": true,
           "collisionGroup": "host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
@@ -12716,13 +12153,8 @@
       ],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "forward-auth identity boundary",
       "secretBoundary": "TLS and gateway credential boundary",
       "adminSurface": {
@@ -12778,9 +12210,7 @@
       "composeService": {
         "serviceName": "external-caddy",
         "image": "caddy:2-alpine",
-        "profiles": [
-          "gateway"
-        ],
+        "profiles": ["gateway"],
         "command": [],
         "environment": [],
         "ports": [],
@@ -12869,18 +12299,11 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "historical-application-runtime"
-      ],
+      "semanticRoles": ["historical-application-runtime"],
       "serviceKind": "application-runtime",
       "requirementState": false,
-      "classificationStates": [
-        "historical-implementation-detail",
-        "out-of-foundation-scope"
-      ],
-      "serviceAuthorityLevels": [
-        "executes-code"
-      ],
+      "classificationStates": ["historical-implementation-detail", "out-of-foundation-scope"],
+      "serviceAuthorityLevels": ["executes-code"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -12890,15 +12313,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "platform-api"
-      ],
+      "reactComposeServiceNames": ["platform-api"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#platform-api"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -12996,13 +12415,8 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "historical runtime credential boundary",
       "adminSurface": {
@@ -13123,18 +12537,11 @@
         "iso27001-certification",
         "enterprise-production-readiness"
       ],
-      "semanticRoles": [
-        "historical-implementation-ui"
-      ],
+      "semanticRoles": ["historical-implementation-ui"],
       "serviceKind": "implementation-ui",
       "requirementState": false,
-      "classificationStates": [
-        "historical-implementation-detail",
-        "out-of-foundation-scope"
-      ],
-      "serviceAuthorityLevels": [
-        "routes-traffic"
-      ],
+      "classificationStates": ["historical-implementation-detail", "out-of-foundation-scope"],
+      "serviceAuthorityLevels": ["routes-traffic"],
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
@@ -13144,15 +12551,11 @@
           "notes": "Historical React Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [
-        "react-app"
-      ],
+      "reactComposeServiceNames": ["react-app"],
       "reactParityRows": [
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#react-app"
       ],
-      "usfCapabilityRefs": [
-        "semantic-contract.internal-service-catalog-and-readiness"
-      ],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",
@@ -13250,13 +12653,8 @@
       "ports": [],
       "secrets": [],
       "configs": [],
-      "healthchecks": [
-        "catalogue policy validation"
-      ],
-      "readinessChecks": [
-        "compose catalogue validation",
-        "generated Compose freshness"
-      ],
+      "healthchecks": ["catalogue policy validation"],
+      "readinessChecks": ["compose catalogue validation", "generated Compose freshness"],
       "identityBoundary": "none",
       "secretBoundary": "none",
       "adminSurface": {

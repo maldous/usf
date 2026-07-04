@@ -73,6 +73,7 @@
     "proof:cache:redis": "tsx packages/proof/src/redis-composed-proof.ts",
     "proof:mock-substrate": "tsx packages/proof/src/mock-provider-substrate-proof.ts",
     "proof:resources": "tsx packages/proof/src/resource-lifecycle-proof.ts",
+    "proof:public-origin": "tsx packages/proof/src/public-proof-origin-proof.ts",
     "proof:public-fqdn": "tsx packages/proof/src/public-fqdn-proof.ts all",
     "proof:public-fqdn:staging": "tsx packages/proof/src/public-fqdn-proof.ts staging",
     "proof:public-fqdn:production": "tsx packages/proof/src/public-fqdn-proof.ts production",

@@ -23,6 +23,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = Path("docs/architecture/public-fqdn-semantic-contract.json")
 EXTERNAL_PROOF_PATH = Path("docs/architecture/public-fqdn-external-proof-gate.json")
+ORIGIN_SERVICE_PATH = Path("docs/architecture/public-proof-origin-service.json")
+COMPOSE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
 PLANTED_DEFECT_DIR = Path("tools/validate-public-fqdn/planted-defects")
@@ -40,6 +42,7 @@ RULES = {
     "USF-PUBLIC-FQDN-010": ("blocking", "public FQDN proof command wiring is missing stale or no-op"),
     "USF-PUBLIC-FQDN-011": ("blocking", "blocked public FQDN proof does not block v2-proof authorization"),
     "USF-PUBLIC-FQDN-012": ("blocking", "external public FQDN proof evidence is incomplete or overclaims readiness"),
+    "USF-PUBLIC-FQDN-013": ("blocking", "public proof origin service evidence is missing gateway-specific or not locally reproducible"),
     "USF-PUBLIC-FQDN-SELFTEST": ("blocking", "planted public FQDN defect did not raise its expected rule"),
 }
 
@@ -80,6 +83,10 @@ REQUIRED_NON_CLAIMS = {
     "caddy-required-gateway",
 }
 REQUIRED_EXTERNAL_NON_CLAIMS = REQUIRED_NON_CLAIMS | {"v2-proof-tag-authorization"}
+REQUIRED_ORIGIN_NON_CLAIMS = REQUIRED_EXTERNAL_NON_CLAIMS | {
+    "netlify-required-gateway",
+    "cloudflare-worker-required-gateway",
+}
 PROHIBITED_ALLOWED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "staging",
     "production",
@@ -108,6 +115,12 @@ EXPECTED_EXTERNAL_PROOF_COMMANDS = {
         "makeTarget": "public-fqdn-proof-production",
     },
 }
+EXPECTED_ORIGIN_PROOF_COMMAND = "tsx packages/proof/src/public-proof-origin-proof.ts"
+EXPECTED_ORIGIN_PROOF_SCRIPT = "proof:public-origin"
+EXPECTED_ORIGIN_MAKE_TARGET = "public-proof-origin"
+EXPECTED_ORIGIN_SERVICE_ID = "public-proof-origin"
+EXPECTED_ORIGIN_SERVICE_NAME = "public-proof-origin"
+EXPECTED_ORIGIN_PROFILE = "public-proof-origin"
 
 
 class Findings:
@@ -144,6 +157,8 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     state = {
         "contract": load_optional_json(CONTRACT_PATH),
         "externalProof": load_optional_json(EXTERNAL_PROOF_PATH),
+        "originService": load_optional_json(ORIGIN_SERVICE_PATH),
+        "composeCatalogue": load_optional_json(COMPOSE_CATALOGUE_PATH),
         "package": load_json(PACKAGE_PATH),
         "makefile": (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8"),
     }
@@ -284,6 +299,66 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
                 for row in external_proof.get("requiredFqdns", [])
                 if row.get("environment") != env_id
             ]
+    origin_service = mutated.get("originService")
+    if defect.get("dropOriginService"):
+        mutated["originService"] = None
+        origin_service = None
+    if isinstance(origin_service, dict):
+        if "setOriginRequiredGateway" in defect:
+            origin_service.setdefault("selectedImplementation", {})["requiredGateway"] = defect[
+                "setOriginRequiredGateway"
+            ]
+        if "setOriginCaddyRequired" in defect:
+            origin_service.setdefault("selectedImplementation", {})["caddyRequired"] = defect[
+                "setOriginCaddyRequired"
+            ]
+        if "setOriginNetlifyRequired" in defect:
+            origin_service.setdefault("selectedImplementation", {})["netlifyRequired"] = defect[
+                "setOriginNetlifyRequired"
+            ]
+        if "setOriginCloudflareWorkerRequired" in defect:
+            origin_service.setdefault("selectedImplementation", {})["cloudflareWorkerRequired"] = defect[
+                "setOriginCloudflareWorkerRequired"
+            ]
+        if "setOriginTestPublicInternetDependency" in defect:
+            compose = origin_service.setdefault("composeRealisation", {})
+            compose["testEnvironmentPublicInternetDependency"] = defect[
+                "setOriginTestPublicInternetDependency"
+            ]
+        if "setOriginGeneratedFor" in defect:
+            origin_service.setdefault("composeRealisation", {})["generatedFor"] = defect[
+                "setOriginGeneratedFor"
+            ]
+        if "setOriginJsonRoute" in defect:
+            origin_service.setdefault("responseContract", {}).setdefault("jsonProofEndpoint", {})[
+                "route"
+            ] = defect["setOriginJsonRoute"]
+        if "setOriginLocalProofCommand" in defect:
+            origin_service.setdefault("selectedImplementation", {})["localProofCommand"] = defect[
+                "setOriginLocalProofCommand"
+            ]
+            origin_service.setdefault("proofEvidence", {}).setdefault("localOrigin", {})[
+                "command"
+            ] = defect["setOriginLocalProofCommand"]
+        if "removeOriginNonClaim" in defect:
+            origin_service["nonClaims"] = [
+                claim
+                for claim in origin_service.get("nonClaims", [])
+                if claim != defect["removeOriginNonClaim"]
+            ]
+    compose_catalogue = mutated.get("composeCatalogue")
+    if defect.get("dropOriginCatalogueService") and isinstance(compose_catalogue, dict):
+        compose_catalogue["services"] = [
+            service
+            for service in compose_catalogue.get("services", [])
+            if service.get("serviceId") != EXPECTED_ORIGIN_SERVICE_ID
+        ]
+    if "setOriginCatalogueServiceName" in defect and isinstance(compose_catalogue, dict):
+        for service in compose_catalogue.get("services", []):
+            if service.get("serviceId") == EXPECTED_ORIGIN_SERVICE_ID:
+                service.setdefault("composeService", {})["serviceName"] = defect[
+                    "setOriginCatalogueServiceName"
+                ]
     if "setPackageScript" in defect:
         patch = defect["setPackageScript"]
         mutated.get("package", {}).setdefault("scripts", {})[patch["name"]] = patch["command"]
@@ -836,6 +911,151 @@ def check_external_negative_evidence_and_claims(F: Findings, external_proof: dic
         F.add("USF-PUBLIC-FQDN-012", f"{EXTERNAL_PROOF_PATH}#nonClaims", f"required external proof non-claims are missing: {sorted(missing)}")
 
 
+def find_compose_service(catalogue: Any, service_id: str) -> dict[str, Any] | None:
+    if not isinstance(catalogue, dict):
+        return None
+    for service in catalogue.get("services", []):
+        if isinstance(service, dict) and service.get("serviceId") == service_id:
+            return service
+    return None
+
+
+def check_public_proof_origin_service(
+    F: Findings,
+    origin_service: Any,
+    contract: Any,
+    compose_catalogue: Any,
+    package: dict[str, Any],
+    makefile: str,
+) -> None:
+    if not isinstance(origin_service, dict):
+        F.add("USF-PUBLIC-FQDN-013", str(ORIGIN_SERVICE_PATH), "public proof origin service evidence is missing")
+        return
+    if origin_service.get("issueId") != "USF-266" or origin_service.get("unblocksIssueId") != "USF-263":
+        F.add("USF-PUBLIC-FQDN-013", str(ORIGIN_SERVICE_PATH), "origin service issue linkage is stale")
+    if origin_service.get("semanticContract") != str(CONTRACT_PATH):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#semanticContract", "origin service semantic contract linkage is stale")
+
+    implementation = origin_service.get("selectedImplementation")
+    if not isinstance(implementation, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#selectedImplementation", "selected implementation block is missing")
+        implementation = {}
+    if implementation.get("gatewayNeutral") is not True or implementation.get("requiredGateway") != "none":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#selectedImplementation", "origin implementation must be gateway neutral")
+    for gateway_field in ("caddyRequired", "netlifyRequired", "cloudflareWorkerRequired"):
+        if implementation.get(gateway_field) is not False:
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#selectedImplementation.{gateway_field}", "gateway product is required by origin evidence")
+    if implementation.get("entrypoint") != "apps/public-proof-origin/src/server.mjs":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#selectedImplementation.entrypoint", "origin entrypoint is stale")
+    if implementation.get("localProofCommand") != "corepack pnpm proof:public-origin":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#selectedImplementation.localProofCommand", "origin local proof command is stale")
+
+    response = origin_service.get("responseContract")
+    if not isinstance(response, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract", "origin response contract is missing")
+        response = {}
+    json_endpoint = response.get("jsonProofEndpoint")
+    if not isinstance(json_endpoint, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.jsonProofEndpoint", "JSON endpoint contract is missing")
+        json_endpoint = {}
+    contract_json_route = "/.well-known/usf-public-edge.json"
+    if isinstance(contract, dict) and isinstance(contract.get("publicJsonProofEndpoint"), dict):
+        contract_json_route = contract["publicJsonProofEndpoint"].get("route", contract_json_route)
+    if json_endpoint.get("method") != "GET" or json_endpoint.get("route") != contract_json_route:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.jsonProofEndpoint", "JSON proof endpoint route is stale")
+    if json_endpoint.get("status") != 200 or json_endpoint.get("requiredMarker") != "usf-public-edge":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.jsonProofEndpoint", "JSON proof endpoint response requirements are incomplete")
+    if json_endpoint.get("contentTypeIncludes") != "application/json":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.jsonProofEndpoint.contentTypeIncludes", "JSON proof endpoint content type is stale")
+
+    browser_route = response.get("browserProofRoute")
+    if not isinstance(browser_route, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.browserProofRoute", "browser proof route contract is missing")
+        browser_route = {}
+    contract_browser_route = "/__proof/public-route"
+    if isinstance(contract, dict) and isinstance(contract.get("publicRouteBinding"), dict):
+        contract_browser_route = contract["publicRouteBinding"].get("route", contract_browser_route)
+    if browser_route.get("method") != "GET" or browser_route.get("route") != contract_browser_route:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.browserProofRoute", "browser proof route is stale")
+    if browser_route.get("requiredMarker") != "usf-public-route" or browser_route.get("requiredTelemetryBootstrapMarker") != "usf-public-route-telemetry-bootstrap":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.browserProofRoute", "browser proof route markers are incomplete")
+
+    environments = {
+        row.get("environment"): row
+        for row in origin_service.get("environments", [])
+        if isinstance(row, dict)
+    }
+    if set(environments) != set(EXPECTED_ENVIRONMENTS):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#environments", "origin environments must be staging and production only")
+    for environment, expected_fqdn in EXPECTED_ENVIRONMENTS.items():
+        row = environments.get(environment)
+        if not isinstance(row, dict) or row.get("fqdn") != expected_fqdn:
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#environments.{environment}", "origin FQDN environment row is stale")
+
+    compose = origin_service.get("composeRealisation")
+    if not isinstance(compose, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#composeRealisation", "origin Compose realisation is missing")
+        compose = {}
+    if compose.get("serviceId") != EXPECTED_ORIGIN_SERVICE_ID or compose.get("serviceName") != EXPECTED_ORIGIN_SERVICE_NAME:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#composeRealisation.service", "origin Compose service identity is stale")
+    if compose.get("profile") != EXPECTED_ORIGIN_PROFILE:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#composeRealisation.profile", "origin Compose profile is stale")
+    if compose.get("generatedFor") != ["staging", "production"]:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#composeRealisation.generatedFor", "origin must be generated only for staging and production")
+    if compose.get("notGeneratedFor") != ["dev", "test"]:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#composeRealisation.notGeneratedFor", "origin dev/test non-generation boundary is stale")
+    for field in (
+        "testEnvironmentPublicInternetDependency",
+        "testEnvironmentPublicDnsDependency",
+        "testEnvironmentPublicTlsDependency",
+        "gatewayRequiredByCompose",
+    ):
+        if compose.get(field) is not False:
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#composeRealisation.{field}", "origin Compose boundary overclaims or requires public internet/gateway")
+
+    scripts = package.get("scripts", {})
+    if scripts.get(EXPECTED_ORIGIN_PROOF_SCRIPT) != EXPECTED_ORIGIN_PROOF_COMMAND:
+        F.add("USF-PUBLIC-FQDN-013", f"package.json#scripts.{EXPECTED_ORIGIN_PROOF_SCRIPT}", "origin proof script is missing or stale")
+    if not re.search(
+        rf"^{re.escape(EXPECTED_ORIGIN_MAKE_TARGET)}:\n\tcorepack pnpm {re.escape(EXPECTED_ORIGIN_PROOF_SCRIPT)}$",
+        makefile,
+        re.MULTILINE,
+    ):
+        F.add("USF-PUBLIC-FQDN-013", f"Makefile#{EXPECTED_ORIGIN_MAKE_TARGET}", "origin Make target is missing or stale")
+    proof = origin_service.get("proofEvidence", {})
+    local_origin = proof.get("localOrigin") if isinstance(proof, dict) else None
+    if not isinstance(local_origin, dict) or local_origin.get("status") != "pass" or local_origin.get("command") != "corepack pnpm proof:public-origin":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.localOrigin", "origin local proof evidence is missing or stale")
+    external = proof.get("externalPublicFqdn") if isinstance(proof, dict) else None
+    if not isinstance(external, dict) or external.get("status") != "blocked":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn", "external route proof boundary must remain explicit while USF-263 is blocked")
+
+    service = find_compose_service(compose_catalogue, EXPECTED_ORIGIN_SERVICE_ID)
+    if service is None:
+        F.add("USF-PUBLIC-FQDN-013", str(COMPOSE_CATALOGUE_PATH), "public proof origin catalogue service is missing")
+    else:
+        if service.get("serviceKind") != "application-runtime":
+            F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.serviceKind", "origin service kind is stale")
+        if service.get("composeService", {}).get("serviceName") != EXPECTED_ORIGIN_SERVICE_NAME:
+            F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.composeService.serviceName", "origin compose service name is stale")
+        policies = service.get("environmentPolicies", {})
+        for environment in ("dev", "test"):
+            policy = policies.get(environment, {})
+            if policy.get("required") is not False or policy.get("generated") is not False:
+                F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.{environment}", "origin must not be required or generated for dev/test")
+        for environment in ("staging", "production"):
+            policy = policies.get(environment, {})
+            if policy.get("required") is not True or policy.get("generated") is not True:
+                F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.{environment}", "origin must be generated for staging/production")
+            if policy.get("composePolicy") != "generate-profile-gated-service" or policy.get("composeProfiles") != [EXPECTED_ORIGIN_PROFILE]:
+                F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.{environment}.composeProfiles", "origin must be profile-gated")
+
+    non_claims = set(origin_service.get("nonClaims", []))
+    missing = REQUIRED_ORIGIN_NON_CLAIMS - non_claims
+    if missing:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#nonClaims", f"origin non-claims are missing: {sorted(missing)}")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     contract = state.get("contract")
@@ -853,6 +1073,14 @@ def run_checks(state: dict[str, Any]) -> Findings:
         check_external_blocked_state(F, external_proof)
         check_external_fqdn_evidence(F, external_proof, contract)
         check_external_negative_evidence_and_claims(F, external_proof)
+    check_public_proof_origin_service(
+        F,
+        state.get("originService"),
+        contract,
+        state.get("composeCatalogue"),
+        state["package"],
+        state["makefile"],
+    )
     return F
 
 

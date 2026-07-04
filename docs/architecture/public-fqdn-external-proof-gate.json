@@ -5,13 +5,19 @@
   "parentIssueId": "USF-261",
   "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
   "status": "blocked",
-  "statusRationale": "The proof harness exists and public DNS plus Cloudflare HTTPS edge responses are observable, but the declared public JSON proof endpoint currently returns Cloudflare 521, so bounded proof endpoint content delivery is not proven.",
+  "statusRationale": "The proof harness exists and public DNS plus Cloudflare HTTPS edge responses are observable. USF-266 adds a gateway-neutral local proof origin service and generated staging/production Compose profile, but the declared public JSON proof endpoint currently returns Cloudflare 521, so external bounded proof endpoint content delivery is not proven.",
   "blocksV2Proof": true,
   "v2ProofAuthorizationAllowed": false,
   "humanAuthorizationRequiredToBypass": true,
-  "blockerIssueIds": [
-    "USF-263"
-  ],
+  "blockerIssueIds": ["USF-263", "USF-266"],
+  "localOriginEvidence": {
+    "issueId": "USF-266",
+    "evidence": "docs/architecture/public-proof-origin-service.json",
+    "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
+    "localProofCommand": "corepack pnpm proof:public-origin",
+    "status": "pass",
+    "externalRouteDeliveryStatus": "blocked"
+  },
   "proofCommands": {
     "all": {
       "id": "proof:public-fqdn",
@@ -98,7 +104,8 @@
       "USF-PUBLIC-FQDN-009",
       "USF-PUBLIC-FQDN-010",
       "USF-PUBLIC-FQDN-011",
-      "USF-PUBLIC-FQDN-012"
+      "USF-PUBLIC-FQDN-012",
+      "USF-PUBLIC-FQDN-013"
     ],
     "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects"
   },

@@ -1,0 +1,5 @@
+{
+  "id": "public-fqdn-origin-catalogue-service-missing",
+  "expectedRule": "USF-PUBLIC-FQDN-013",
+  "dropOriginCatalogueService": true
+}

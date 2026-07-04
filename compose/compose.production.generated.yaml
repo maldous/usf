@@ -4,7 +4,37 @@ name: foundation-bootstrap-production
 x-usf-generated:
   source: spec/instances/compose-service/service-catalogue.json
   environment: production
-services: {}
+services:
+  public-proof-origin:
+    image: node:24.16.0-alpine3.22
+    command:
+      - node
+      - /srv/public-proof-origin/server.mjs
+    environment:
+      PUBLIC_PROOF_ORIGIN_HOST: 0.0.0.0
+      PUBLIC_PROOF_ORIGIN_PORT: 8080
+      PUBLIC_PROOF_ORIGIN_FQDN_MAP: "1e100.network=staging,aldous.info=production"
+    ports:
+      -
+        name: public-proof-origin-http
+        target: 8080
+        published: 18080
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+    volumes:
+      - ../apps/public-proof-origin/src/server.mjs:/srv/public-proof-origin/server.mjs:ro
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('node:http').request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host:'1e100.network'}},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).end()"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    profiles:
+      - public-proof-origin
 x-usf-requirements:
   -
     serviceId: postgres

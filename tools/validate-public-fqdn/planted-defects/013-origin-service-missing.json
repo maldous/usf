@@ -1,0 +1,5 @@
+{
+  "id": "public-fqdn-origin-service-missing",
+  "expectedRule": "USF-PUBLIC-FQDN-013",
+  "dropOriginService": true
+}

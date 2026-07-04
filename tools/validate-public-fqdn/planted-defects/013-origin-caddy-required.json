@@ -1,0 +1,6 @@
+{
+  "id": "public-fqdn-origin-caddy-required",
+  "expectedRule": "USF-PUBLIC-FQDN-013",
+  "setOriginRequiredGateway": "caddy",
+  "setOriginCaddyRequired": true
+}

@@ -3,7 +3,12 @@
   "title": "Environment Tooling Governance Test Gate",
   "issueId": "USF-258",
   "parentIssueId": "USF-234",
-  "dependsOnIssueIds": ["USF-239", "USF-248", "USF-243", "USF-259"],
+  "dependsOnIssueIds": [
+    "USF-239",
+    "USF-248",
+    "USF-243",
+    "USF-259"
+  ],
   "sourceAuthorities": {
     "linearIssue": "USF-258",
     "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
@@ -76,9 +81,14 @@
     ]
   },
   "workspaceLockfileConsistency": {
-    "workspaceGlobs": ["apps/*", "capabilities/*", "adapters/*", "packages/*"],
+    "workspaceGlobs": [
+      "apps/*",
+      "capabilities/*",
+      "adapters/*",
+      "packages/*"
+    ],
     "requiredRootImporter": ".",
-    "expectedImporterCount": 33,
+    "expectedImporterCount": 34,
     "sharedWorkspaceLockfileRequired": true,
     "frozenInstallCommand": "corepack pnpm install --frozen-lockfile",
     "lockfileVersion": "9.0",
@@ -107,8 +117,16 @@
   },
   "environmentBoundaries": {
     "profileSelectionExplicit": true,
-    "allowedEnvironmentClasses": ["local", "hermetic", "integration"],
-    "disallowedClaimEnvironmentClasses": ["staging", "production-shaped", "production-live"],
+    "allowedEnvironmentClasses": [
+      "local",
+      "hermetic",
+      "integration"
+    ],
+    "disallowedClaimEnvironmentClasses": [
+      "staging",
+      "production-shaped",
+      "production-live"
+    ],
     "optionalEnvironmentVariables": [
       "USF_DEV_RUNTIME_MODE",
       "USF_WORKER_RUN_ONCE",
@@ -217,7 +235,15 @@
     "branchPolicy": {
       "recommendedIssueBranch": "test/environment-tooling-governance-gate",
       "linearSuggestedBranchNotUsedBecauseContainsRedundantLocalUsf": true,
-      "forbiddenTokens": ["v2", "legacy", "old", "new", "temp", "transitional", "usf"],
+      "forbiddenTokens": [
+        "v2",
+        "legacy",
+        "old",
+        "new",
+        "temp",
+        "transitional",
+        "usf"
+      ],
       "branchNameMustBeSemanticPurpose": true,
       "draftPrRequiredUntilValidationPasses": true
     },
@@ -227,7 +253,12 @@
     },
     "hiddenLocalState": {
       "trackedPrivateStateAllowed": false,
-      "privateStatePrefixes": [".codex/", ".claude/", ".env", ".env."],
+      "privateStatePrefixes": [
+        ".codex/",
+        ".claude/",
+        ".env",
+        ".env."
+      ],
       "gitignoreMustCoverPrivateState": true,
       "realSecretsRequired": false,
       "realTenantDataRequired": false,
@@ -256,7 +287,12 @@
     "largeTransientArtifacts": {
       "committedLargeTransientArtifactsAllowed": false,
       "maxOwnedEvidenceFileBytes": 200000,
-      "blockedPathFragments": ["node_modules/", "dist/", "coverage/", ".pnpm-store/"]
+      "blockedPathFragments": [
+        "node_modules/",
+        "dist/",
+        "coverage/",
+        ".pnpm-store/"
+      ]
     }
   },
   "complianceBoundary": {
@@ -315,7 +351,9 @@
       "expectedFinding": "USF-258-UNSUPPORTED-OVERCLAIM"
     }
   ],
-  "allowedClaims": ["bounded-environment-tooling-governance-test-gate-defined"],
+  "allowedClaims": [
+    "bounded-environment-tooling-governance-test-gate-defined"
+  ],
   "nonClaims": [
     "final-test-readiness",
     "test-readiness",

@@ -1,0 +1,138 @@
+{
+  "id": "public-proof-origin-service",
+  "title": "Gateway-Neutral Public Proof Origin Service",
+  "issueId": "USF-266",
+  "parentIssueId": "USF-261",
+  "unblocksIssueId": "USF-263",
+  "relatedIssueIds": ["USF-264", "USF-265"],
+  "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
+  "status": "local-origin-implemented-external-route-blocked",
+  "selectedImplementation": {
+    "implementationId": "node-built-in-http-origin",
+    "packageName": "@foundation/app-public-proof-origin",
+    "entrypoint": "apps/public-proof-origin/src/server.mjs",
+    "localProofCommand": "corepack pnpm proof:public-origin",
+    "runtime": "node-built-in-http",
+    "gatewayNeutral": true,
+    "requiredGateway": "none",
+    "requiredDeploymentFrontend": "none",
+    "allowedImplementationEvidenceSources": [
+      "caddy-observed-configuration",
+      "nginx-observed-configuration",
+      "fastify-observed-configuration",
+      "static-file-server-observed-configuration",
+      "cloudflare-worker-observed-configuration",
+      "netlify-observed-configuration",
+      "other-public-http-origin-observed-configuration"
+    ],
+    "caddyRequired": false,
+    "netlifyRequired": false,
+    "cloudflareWorkerRequired": false
+  },
+  "responseContract": {
+    "jsonProofEndpoint": {
+      "method": "GET",
+      "route": "/.well-known/usf-public-edge.json",
+      "status": 200,
+      "contentTypeIncludes": "application/json",
+      "requiredMarker": "usf-public-edge",
+      "requiredFields": [
+        "marker",
+        "environment",
+        "fqdn",
+        "gatewayNeutral",
+        "requiredGateway",
+        "nonClaims"
+      ],
+      "routeClass": "non-product-json-proof-endpoint",
+      "proofIssueId": "USF-263"
+    },
+    "browserProofRoute": {
+      "method": "GET",
+      "route": "/__proof/public-route",
+      "status": 200,
+      "contentTypeIncludes": "text/html",
+      "requiredMarker": "usf-public-route",
+      "requiredTelemetryBootstrapMarker": "usf-public-route-telemetry-bootstrap",
+      "routeClass": "non-product-browser-telemetry-proof-route",
+      "proofIssueId": "USF-264",
+      "implementedNowAsReservedRoute": true
+    }
+  },
+  "environments": [
+    {
+      "environment": "staging",
+      "fqdn": "1e100.network",
+      "expectedResponseEnvironment": "staging"
+    },
+    {
+      "environment": "production",
+      "fqdn": "aldous.info",
+      "expectedResponseEnvironment": "production"
+    }
+  ],
+  "composeRealisation": {
+    "serviceId": "public-proof-origin",
+    "serviceName": "public-proof-origin",
+    "profile": "public-proof-origin",
+    "containerPort": 8080,
+    "localPublishedPort": 18080,
+    "hostIp": "127.0.0.1",
+    "generatedFor": ["staging", "production"],
+    "notGeneratedFor": ["dev", "test"],
+    "testEnvironmentPublicInternetDependency": false,
+    "testEnvironmentPublicDnsDependency": false,
+    "testEnvironmentPublicTlsDependency": false,
+    "gatewayRequiredByCompose": false
+  },
+  "cloudflareOriginRequirements": {
+    "cloudflareProviderBoundary": "Cloudflare may route the public FQDNs to any implementation that serves the response contract.",
+    "requiredOriginReachability": true,
+    "requiredRoutes": ["/.well-known/usf-public-edge.json", "/__proof/public-route"],
+    "basicProofRequiresCloudflareApiSecret": false,
+    "currentExternalBlocker": "The public Cloudflare edge currently returns 521 for the JSON proof endpoint, so an operator must attach reachable origin routing before USF-263 can pass."
+  },
+  "proofEvidence": {
+    "localOrigin": {
+      "status": "pass",
+      "command": "corepack pnpm proof:public-origin",
+      "checkedSurfaces": [
+        "staging JSON proof response",
+        "production JSON proof response",
+        "staging reserved browser route response",
+        "production reserved browser route response"
+      ]
+    },
+    "externalPublicFqdn": {
+      "status": "blocked",
+      "commands": [
+        "corepack pnpm proof:public-fqdn",
+        "corepack pnpm proof:public-fqdn:staging",
+        "corepack pnpm proof:public-fqdn:production"
+      ],
+      "blockedBy": "Cloudflare 521 route delivery failure until a reachable public origin is configured."
+    }
+  },
+  "validator": {
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "rules": ["USF-PUBLIC-FQDN-013"],
+    "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects"
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "netlify-required-gateway",
+    "cloudflare-worker-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

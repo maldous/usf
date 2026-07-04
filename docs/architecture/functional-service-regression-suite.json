@@ -15,7 +15,7 @@
   "scope": {
     "testLayer": "functional-regression",
     "semanticContractCount": 67,
-    "serviceRegressionCount": 38,
+    "serviceRegressionCount": 39,
     "behaviourCaseTypesRequired": [
       "positive",
       "negative",
@@ -11560,16 +11560,16 @@
   ],
   "serviceRegressionRows": [
     {
-      "serviceId": "postgres",
-      "composeServiceId": "postgres",
+      "serviceId": "alertmanager",
+      "composeServiceId": "alertmanager",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.postgres",
-      "fixtureCorpusSeedId": "fixture.postgres",
-      "integrationMatrixDisposition": "tested",
+      "fixtureSeedId": "fixture.alertmanager",
+      "fixtureCorpusSeedId": "fixture.alertmanager",
+      "integrationMatrixDisposition": "profile-gated-tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: postgres",
+      "testName": "service functional regression boundary remains current: alertmanager",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -11581,11 +11581,591 @@
         "USF-248",
         "USF-252",
         "USF-251",
-        "USF-249",
+        "USF-249"
+      ],
+      "assetInventoryClass": "control-plane",
+      "dataClassification": "telemetry-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "alloy",
+      "composeServiceId": "alloy",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.alloy",
+      "fixtureCorpusSeedId": "fixture.alloy",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: alloy",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251"
+      ],
+      "assetInventoryClass": "runtime-service",
+      "dataClassification": "telemetry-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "caddy",
+      "composeServiceId": "external-caddy",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.caddy",
+      "fixtureCorpusSeedId": "fixture.caddy",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: caddy",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249"
+      ],
+      "assetInventoryClass": "gateway",
+      "dataClassification": "routing-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "clamav",
+      "composeServiceId": "clamav",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.clamav",
+      "fixtureCorpusSeedId": "fixture.clamav",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: clamav",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-250"
+      ],
+      "assetInventoryClass": "runtime-service",
+      "dataClassification": "content-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "clickhouse",
+      "composeServiceId": "clickhouse",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.clickhouse",
+      "fixtureCorpusSeedId": "fixture.clickhouse",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: clickhouse",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
         "USF-250"
       ],
       "assetInventoryClass": "data-store",
       "dataClassification": "environment-runtime-data",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "grafana",
+      "composeServiceId": "grafana",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.grafana",
+      "fixtureCorpusSeedId": "fixture.grafana",
+      "integrationMatrixDisposition": "tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: grafana",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249"
+      ],
+      "assetInventoryClass": "control-plane",
+      "dataClassification": "telemetry-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "tested"
+    },
+    {
+      "serviceId": "keycloak",
+      "composeServiceId": "keycloak",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.keycloak",
+      "fixtureCorpusSeedId": "fixture.keycloak",
+      "integrationMatrixDisposition": "tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: keycloak",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249"
+      ],
+      "assetInventoryClass": "control-plane",
+      "dataClassification": "identity-metadata",
       "behaviourCases": [
         {
           "caseType": "positive",
@@ -11756,16 +12336,113 @@
       "serviceCatalogueDisposition": "tested"
     },
     {
-      "serviceId": "keycloak",
-      "composeServiceId": "keycloak",
+      "serviceId": "localstack",
+      "composeServiceId": "localstack",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.keycloak",
-      "fixtureCorpusSeedId": "fixture.keycloak",
+      "fixtureSeedId": "fixture.localstack",
+      "fixtureCorpusSeedId": "fixture.localstack",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: localstack",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-250"
+      ],
+      "assetInventoryClass": "provider-emulator",
+      "dataClassification": "provider-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "loki",
+      "composeServiceId": "loki",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.loki",
+      "fixtureCorpusSeedId": "fixture.loki",
       "integrationMatrixDisposition": "tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: keycloak",
+      "testName": "service functional regression boundary remains current: loki",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -11780,7 +12457,7 @@
         "USF-249"
       ],
       "assetInventoryClass": "control-plane",
-      "dataClassification": "identity-metadata",
+      "dataClassification": "telemetry-metadata",
       "behaviourCases": [
         {
           "caseType": "positive",
@@ -11853,16 +12530,16 @@
       "serviceCatalogueDisposition": "tested"
     },
     {
-      "serviceId": "nats",
-      "composeServiceId": "nats",
+      "serviceId": "mailpit",
+      "composeServiceId": "mailpit",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.nats",
-      "fixtureCorpusSeedId": "fixture.nats",
+      "fixtureSeedId": "fixture.mailpit",
+      "fixtureCorpusSeedId": "fixture.mailpit",
       "integrationMatrixDisposition": "tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: nats",
+      "testName": "service functional regression boundary remains current: mailpit",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -11876,6 +12553,200 @@
         "USF-251"
       ],
       "assetInventoryClass": "runtime-service",
+      "dataClassification": "synthetic-data",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "tested"
+    },
+    {
+      "serviceId": "meilisearch",
+      "composeServiceId": "meilisearch",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.meilisearch",
+      "fixtureCorpusSeedId": "fixture.meilisearch",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: meilisearch",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-250"
+      ],
+      "assetInventoryClass": "data-store",
+      "dataClassification": "environment-runtime-data",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "minio",
+      "composeServiceId": "minio",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.minio",
+      "fixtureCorpusSeedId": "fixture.minio",
+      "integrationMatrixDisposition": "tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: minio",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-250"
+      ],
+      "assetInventoryClass": "data-store",
       "dataClassification": "environment-runtime-data",
       "behaviourCases": [
         {
@@ -11949,16 +12820,111 @@
       "serviceCatalogueDisposition": "tested"
     },
     {
-      "serviceId": "temporal",
-      "composeServiceId": "temporal",
+      "serviceId": "mock-oidc",
+      "composeServiceId": null,
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: mock-oidc",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252"
+      ],
+      "assetInventoryClass": "provider-mock",
+      "dataClassification": "provider-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": false,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "historical-dev-only"
+    },
+    {
+      "serviceId": "nats",
+      "composeServiceId": "nats",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.temporal",
-      "fixtureCorpusSeedId": "fixture.temporal",
+      "fixtureSeedId": "fixture.nats",
+      "fixtureCorpusSeedId": "fixture.nats",
       "integrationMatrixDisposition": "tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: temporal",
+      "testName": "service functional regression boundary remains current: nats",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -11972,103 +12938,6 @@
         "USF-251"
       ],
       "assetInventoryClass": "runtime-service",
-      "dataClassification": "workflow-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "tested"
-    },
-    {
-      "serviceId": "minio",
-      "composeServiceId": "minio",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.minio",
-      "fixtureCorpusSeedId": "fixture.minio",
-      "integrationMatrixDisposition": "tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: minio",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-250"
-      ],
-      "assetInventoryClass": "data-store",
       "dataClassification": "environment-runtime-data",
       "behaviourCases": [
         {
@@ -12336,6 +13205,393 @@
       "serviceCatalogueDisposition": "tested"
     },
     {
+      "serviceId": "pgadmin",
+      "composeServiceId": "pgadmin",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.pgadmin",
+      "fixtureCorpusSeedId": "fixture.pgadmin",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: pgadmin",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249"
+      ],
+      "assetInventoryClass": "operator-surface",
+      "dataClassification": "operator-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "pgbackrest",
+      "composeServiceId": "pgbackrest",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.pgbackrest",
+      "fixtureCorpusSeedId": "fixture.pgbackrest",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: pgbackrest",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-250"
+      ],
+      "assetInventoryClass": "backup-restore",
+      "dataClassification": "backup-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "platform-api",
+      "composeServiceId": null,
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: platform-api",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252"
+      ],
+      "assetInventoryClass": "out-of-scope-historical",
+      "dataClassification": "historical-runtime-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": false,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "historical-dev-only"
+    },
+    {
+      "serviceId": "postgres",
+      "composeServiceId": "postgres",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.postgres",
+      "fixtureCorpusSeedId": "fixture.postgres",
+      "integrationMatrixDisposition": "tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: postgres",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249",
+        "USF-250"
+      ],
+      "assetInventoryClass": "data-store",
+      "dataClassification": "environment-runtime-data",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "tested"
+    },
+    {
       "serviceId": "prometheus",
       "composeServiceId": "prometheus",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
@@ -12433,403 +13689,111 @@
       "serviceCatalogueDisposition": "tested"
     },
     {
-      "serviceId": "grafana",
-      "composeServiceId": "grafana",
+      "serviceId": "public-proof-origin",
+      "composeServiceId": "public-proof-origin",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.grafana",
-      "fixtureCorpusSeedId": "fixture.grafana",
-      "integrationMatrixDisposition": "tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: grafana",
+      "testName": "service functional regression boundary remains current: public-proof-origin",
       "ownerIssueIds": [
         "USF-239",
-        "USF-242",
         "USF-243",
         "USF-244",
-        "USF-245",
         "USF-246",
         "USF-247",
-        "USF-248",
         "USF-252",
-        "USF-251",
-        "USF-249"
-      ],
-      "assetInventoryClass": "control-plane",
-      "dataClassification": "telemetry-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "tested"
-    },
-    {
-      "serviceId": "loki",
-      "composeServiceId": "loki",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.loki",
-      "fixtureCorpusSeedId": "fixture.loki",
-      "integrationMatrixDisposition": "tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: loki",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-249"
-      ],
-      "assetInventoryClass": "control-plane",
-      "dataClassification": "telemetry-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "tested"
-    },
-    {
-      "serviceId": "tempo",
-      "composeServiceId": "tempo",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.tempo",
-      "fixtureCorpusSeedId": "fixture.tempo",
-      "integrationMatrixDisposition": "tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: tempo",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-249"
-      ],
-      "assetInventoryClass": "control-plane",
-      "dataClassification": "telemetry-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "tested"
-    },
-    {
-      "serviceId": "mailpit",
-      "composeServiceId": "mailpit",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.mailpit",
-      "fixtureCorpusSeedId": "fixture.mailpit",
-      "integrationMatrixDisposition": "tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: mailpit",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251"
+        "USF-263",
+        "USF-266",
+        "USF-248"
       ],
       "assetInventoryClass": "runtime-service",
       "dataClassification": "synthetic-data",
       "behaviourCases": [
         {
           "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         },
         {
           "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         },
         {
           "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         },
         {
           "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         },
         {
           "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         },
         {
           "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         },
         {
           "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
+          "status": "bounded-post-test-public-proof-origin-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         }
       ],
-      "serviceBackedClaimRequiresComposedService": true,
+      "serviceBackedClaimRequiresComposedService": false,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "tested"
+      "nonClaimBoundary": "Public proof-origin functional mapping records a bounded post-Test disposition only. Local proof-origin response-contract evidence is not external public route proof, not final Test acceptance, and not staging, production, deployment, live-provider, SOC, ISO, product UI, browser E2E, full React product parity, or v2-proof authorization.",
+      "serviceCatalogueDisposition": "deferred-with-follow-up"
     },
     {
-      "serviceId": "webhook-sink",
-      "composeServiceId": "webhook-sink",
+      "serviceId": "react-app",
+      "composeServiceId": null,
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.webhook-sink",
-      "fixtureCorpusSeedId": "fixture.webhook-sink",
-      "integrationMatrixDisposition": "tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: webhook-sink",
+      "testName": "service functional regression boundary remains current: react-app",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -12839,17 +13803,16 @@
         "USF-246",
         "USF-247",
         "USF-248",
-        "USF-252",
-        "USF-251"
+        "USF-252"
       ],
-      "assetInventoryClass": "runtime-service",
-      "dataClassification": "synthetic-data",
+      "assetInventoryClass": "out-of-scope-historical",
+      "dataClassification": "historical-runtime-metadata",
       "behaviourCases": [
         {
           "caseType": "positive",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
@@ -12857,8 +13820,8 @@
         {
           "caseType": "negative",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
@@ -12866,8 +13829,8 @@
         {
           "caseType": "authorization",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
@@ -12875,8 +13838,8 @@
         {
           "caseType": "tenant-isolation",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
@@ -12884,8 +13847,8 @@
         {
           "caseType": "audit",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
@@ -12893,8 +13856,8 @@
         {
           "caseType": "readiness",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
@@ -12902,18 +13865,18 @@
         {
           "caseType": "provider-boundary",
           "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
           "fixtureRequired": true,
           "inMemoryServiceSubstituteAllowed": false,
           "testReadinessClaimAllowed": false
         }
       ],
-      "serviceBackedClaimRequiresComposedService": true,
+      "serviceBackedClaimRequiresComposedService": false,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
       "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "tested"
+      "serviceCatalogueDisposition": "historical-dev-only"
     },
     {
       "serviceId": "redis",
@@ -13013,16 +13976,16 @@
       "serviceCatalogueDisposition": "profile-gated-tested"
     },
     {
-      "serviceId": "meilisearch",
-      "composeServiceId": "meilisearch",
+      "serviceId": "sentry",
+      "composeServiceId": null,
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.meilisearch",
-      "fixtureCorpusSeedId": "fixture.meilisearch",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: meilisearch",
+      "testName": "service functional regression boundary remains current: sentry",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -13033,205 +13996,10 @@
         "USF-247",
         "USF-248",
         "USF-252",
-        "USF-251",
-        "USF-250"
-      ],
-      "assetInventoryClass": "data-store",
-      "dataClassification": "environment-runtime-data",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "clickhouse",
-      "composeServiceId": "clickhouse",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.clickhouse",
-      "fixtureCorpusSeedId": "fixture.clickhouse",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: clickhouse",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-250"
-      ],
-      "assetInventoryClass": "data-store",
-      "dataClassification": "environment-runtime-data",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "pgadmin",
-      "composeServiceId": "pgadmin",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.pgadmin",
-      "fixtureCorpusSeedId": "fixture.pgadmin",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: pgadmin",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
         "USF-249"
       ],
-      "assetInventoryClass": "operator-surface",
-      "dataClassification": "operator-metadata",
+      "assetInventoryClass": "control-plane",
+      "dataClassification": "telemetry-metadata",
       "behaviourCases": [
         {
           "caseType": "positive",
@@ -13301,7 +14069,103 @@
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
       "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
+      "serviceCatalogueDisposition": "external-live-out-of-scope"
+    },
+    {
+      "serviceId": "sonar-oidc-plugin",
+      "composeServiceId": null,
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: sonar-oidc-plugin",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-250"
+      ],
+      "assetInventoryClass": "data-store",
+      "dataClassification": "assurance-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "unsupported"
     },
     {
       "serviceId": "sonar-postgres",
@@ -13401,102 +14265,6 @@
       "serviceCatalogueDisposition": "profile-gated-tested"
     },
     {
-      "serviceId": "sonar-oidc-plugin",
-      "composeServiceId": null,
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "not-generated",
-      "fixtureSeedId": "not-applicable",
-      "fixtureCorpusSeedId": "not-applicable",
-      "integrationMatrixDisposition": null,
-      "integrationMatrixProofCommand": null,
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: sonar-oidc-plugin",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-250"
-      ],
-      "assetInventoryClass": "data-store",
-      "dataClassification": "assurance-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "unsupported"
-    },
-    {
       "serviceId": "sonarqube",
       "composeServiceId": "sonarqube",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
@@ -13594,304 +14362,16 @@
       "serviceCatalogueDisposition": "profile-gated-tested"
     },
     {
-      "serviceId": "mock-oidc",
-      "composeServiceId": null,
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "not-generated",
-      "fixtureSeedId": "not-applicable",
-      "fixtureCorpusSeedId": "not-applicable",
-      "integrationMatrixDisposition": null,
-      "integrationMatrixProofCommand": null,
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: mock-oidc",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252"
-      ],
-      "assetInventoryClass": "provider-mock",
-      "dataClassification": "provider-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": false,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "historical-dev-only"
-    },
-    {
-      "serviceId": "localstack",
-      "composeServiceId": "localstack",
+      "serviceId": "tempo",
+      "composeServiceId": "tempo",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.localstack",
-      "fixtureCorpusSeedId": "fixture.localstack",
-      "integrationMatrixDisposition": "profile-gated-tested",
+      "fixtureSeedId": "fixture.tempo",
+      "fixtureCorpusSeedId": "fixture.tempo",
+      "integrationMatrixDisposition": "tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: localstack",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-250"
-      ],
-      "assetInventoryClass": "provider-emulator",
-      "dataClassification": "provider-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "wiremock",
-      "composeServiceId": "wiremock",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.wiremock",
-      "fixtureCorpusSeedId": "fixture.wiremock",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: wiremock",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251"
-      ],
-      "assetInventoryClass": "provider-mock",
-      "dataClassification": "provider-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "alertmanager",
-      "composeServiceId": "alertmanager",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.alertmanager",
-      "fixtureCorpusSeedId": "fixture.alertmanager",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: alertmanager",
+      "testName": "service functional regression boundary remains current: tempo",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -13976,19 +14456,19 @@
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
       "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
+      "serviceCatalogueDisposition": "tested"
     },
     {
-      "serviceId": "alloy",
-      "composeServiceId": "alloy",
+      "serviceId": "temporal",
+      "composeServiceId": "temporal",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.alloy",
-      "fixtureCorpusSeedId": "fixture.alloy",
-      "integrationMatrixDisposition": "profile-gated-tested",
+      "fixtureSeedId": "fixture.temporal",
+      "fixtureCorpusSeedId": "fixture.temporal",
+      "integrationMatrixDisposition": "tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: alloy",
+      "testName": "service functional regression boundary remains current: temporal",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -14002,7 +14482,394 @@
         "USF-251"
       ],
       "assetInventoryClass": "runtime-service",
-      "dataClassification": "telemetry-metadata",
+      "dataClassification": "workflow-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "tested"
+    },
+    {
+      "serviceId": "temporal-postgres",
+      "composeServiceId": "temporal-postgres",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.temporal-postgres",
+      "fixtureCorpusSeedId": "fixture.temporal-postgres",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: temporal-postgres",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-250"
+      ],
+      "assetInventoryClass": "data-store",
+      "dataClassification": "workflow-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "temporal-ui",
+      "composeServiceId": "temporal-ui",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.temporal-ui",
+      "fixtureCorpusSeedId": "fixture.temporal-ui",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: temporal-ui",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249"
+      ],
+      "assetInventoryClass": "operator-surface",
+      "dataClassification": "workflow-metadata",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "profile-gated-tested"
+    },
+    {
+      "serviceId": "webhook-sink",
+      "composeServiceId": "webhook-sink",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.webhook-sink",
+      "fixtureCorpusSeedId": "fixture.webhook-sink",
+      "integrationMatrixDisposition": "tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: webhook-sink",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251"
+      ],
+      "assetInventoryClass": "runtime-service",
+      "dataClassification": "synthetic-data",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "mapped-to-service-regression-boundary",
+          "requiresComposedEvidence": true,
+          "integrationMatrixRequired": true,
+          "fixtureRequired": true,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": true,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
+      "serviceCatalogueDisposition": "tested"
+    },
+    {
+      "serviceId": "windmill",
+      "composeServiceId": "windmill",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "compose/compose.test.generated.yaml",
+      "fixtureSeedId": "fixture.windmill",
+      "fixtureCorpusSeedId": "fixture.windmill",
+      "integrationMatrixDisposition": "profile-gated-tested",
+      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: windmill",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-242",
+        "USF-243",
+        "USF-244",
+        "USF-245",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-252",
+        "USF-251",
+        "USF-249"
+      ],
+      "assetInventoryClass": "operator-surface",
+      "dataClassification": "workflow-metadata",
       "behaviourCases": [
         {
           "caseType": "positive",
@@ -14269,103 +15136,6 @@
       "serviceCatalogueDisposition": "profile-gated-tested"
     },
     {
-      "serviceId": "windmill",
-      "composeServiceId": "windmill",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.windmill",
-      "fixtureCorpusSeedId": "fixture.windmill",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: windmill",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-249"
-      ],
-      "assetInventoryClass": "operator-surface",
-      "dataClassification": "workflow-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
       "serviceId": "windmill-worker",
       "composeServiceId": "windmill-worker",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
@@ -14462,16 +15232,16 @@
       "serviceCatalogueDisposition": "profile-gated-tested"
     },
     {
-      "serviceId": "temporal-postgres",
-      "composeServiceId": "temporal-postgres",
+      "serviceId": "wiremock",
+      "composeServiceId": "wiremock",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.temporal-postgres",
-      "fixtureCorpusSeedId": "fixture.temporal-postgres",
+      "fixtureSeedId": "fixture.wiremock",
+      "fixtureCorpusSeedId": "fixture.wiremock",
       "integrationMatrixDisposition": "profile-gated-tested",
       "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: temporal-postgres",
+      "testName": "service functional regression boundary remains current: wiremock",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",
@@ -14482,11 +15252,10 @@
         "USF-247",
         "USF-248",
         "USF-252",
-        "USF-251",
-        "USF-250"
+        "USF-251"
       ],
-      "assetInventoryClass": "data-store",
-      "dataClassification": "workflow-metadata",
+      "assetInventoryClass": "provider-mock",
+      "dataClassification": "provider-metadata",
       "behaviourCases": [
         {
           "caseType": "positive",
@@ -14557,680 +15326,6 @@
       "testReadinessClaimAllowed": false,
       "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
       "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "temporal-ui",
-      "composeServiceId": "temporal-ui",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.temporal-ui",
-      "fixtureCorpusSeedId": "fixture.temporal-ui",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: temporal-ui",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-249"
-      ],
-      "assetInventoryClass": "operator-surface",
-      "dataClassification": "workflow-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "pgbackrest",
-      "composeServiceId": "pgbackrest",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.pgbackrest",
-      "fixtureCorpusSeedId": "fixture.pgbackrest",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: pgbackrest",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-250"
-      ],
-      "assetInventoryClass": "backup-restore",
-      "dataClassification": "backup-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "clamav",
-      "composeServiceId": "clamav",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.clamav",
-      "fixtureCorpusSeedId": "fixture.clamav",
-      "integrationMatrixDisposition": "profile-gated-tested",
-      "integrationMatrixProofCommand": "corepack pnpm test-readiness:integration",
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: clamav",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-250"
-      ],
-      "assetInventoryClass": "runtime-service",
-      "dataClassification": "content-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "sentry",
-      "composeServiceId": null,
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "not-generated",
-      "fixtureSeedId": "not-applicable",
-      "fixtureCorpusSeedId": "not-applicable",
-      "integrationMatrixDisposition": null,
-      "integrationMatrixProofCommand": null,
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: sentry",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-249"
-      ],
-      "assetInventoryClass": "control-plane",
-      "dataClassification": "telemetry-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "external-live-out-of-scope"
-    },
-    {
-      "serviceId": "caddy",
-      "composeServiceId": "external-caddy",
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "compose/compose.test.generated.yaml",
-      "fixtureSeedId": "fixture.caddy",
-      "fixtureCorpusSeedId": "fixture.caddy",
-      "integrationMatrixDisposition": null,
-      "integrationMatrixProofCommand": null,
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: caddy",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252",
-        "USF-251",
-        "USF-249"
-      ],
-      "assetInventoryClass": "gateway",
-      "dataClassification": "routing-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": true,
-          "integrationMatrixRequired": true,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": true,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "profile-gated-tested"
-    },
-    {
-      "serviceId": "platform-api",
-      "composeServiceId": null,
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "not-generated",
-      "fixtureSeedId": "not-applicable",
-      "fixtureCorpusSeedId": "not-applicable",
-      "integrationMatrixDisposition": null,
-      "integrationMatrixProofCommand": null,
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: platform-api",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252"
-      ],
-      "assetInventoryClass": "out-of-scope-historical",
-      "dataClassification": "historical-runtime-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": false,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "historical-dev-only"
-    },
-    {
-      "serviceId": "react-app",
-      "composeServiceId": null,
-      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
-      "composeTarget": "not-generated",
-      "fixtureSeedId": "not-applicable",
-      "fixtureCorpusSeedId": "not-applicable",
-      "integrationMatrixDisposition": null,
-      "integrationMatrixProofCommand": null,
-      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: react-app",
-      "ownerIssueIds": [
-        "USF-239",
-        "USF-242",
-        "USF-243",
-        "USF-244",
-        "USF-245",
-        "USF-246",
-        "USF-247",
-        "USF-248",
-        "USF-252"
-      ],
-      "assetInventoryClass": "out-of-scope-historical",
-      "dataClassification": "historical-runtime-metadata",
-      "behaviourCases": [
-        {
-          "caseType": "positive",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "negative",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "authorization",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "tenant-isolation",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "audit",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "readiness",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        },
-        {
-          "caseType": "provider-boundary",
-          "status": "mapped-to-service-regression-boundary",
-          "requiresComposedEvidence": false,
-          "integrationMatrixRequired": false,
-          "fixtureRequired": true,
-          "inMemoryServiceSubstituteAllowed": false,
-          "testReadinessClaimAllowed": false
-        }
-      ],
-      "serviceBackedClaimRequiresComposedService": false,
-      "inMemoryServiceSubstituteAllowed": false,
-      "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Service-level functional regression mapping links to composed integration and fixture evidence but does not prove final USF-234 acceptance by itself.",
-      "serviceCatalogueDisposition": "historical-dev-only"
     }
   ],
   "driftDetection": {

@@ -14,7 +14,7 @@
   },
   "ownedTestFile": "tests/packages/performance-concurrency-resource-regression-suite.test.ts",
   "scope": {
-    "serviceBudgetDispositionCount": 38,
+    "serviceBudgetDispositionCount": 39,
     "composeProfileStartupBudgetCount": 10,
     "semanticContractFixtureCount": 67,
     "usesRealTimers": false,
@@ -350,56 +350,357 @@
     }
   ],
   "serviceBudgetRows": [
-    {"serviceId":"postgres","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.postgres"},
-    {"serviceId":"keycloak-db","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.keycloak-db"},
-    {"serviceId":"keycloak","budgetProfileId":"control-plane-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.control-plane-pressure","fixtureSeedId":"fixture.keycloak"},
-    {"serviceId":"nats","budgetProfileId":"queue-worker-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.queue-worker-pressure","fixtureSeedId":"fixture.nats"},
-    {"serviceId":"temporal","budgetProfileId":"workflow-worker-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.workflow-worker-pressure","fixtureSeedId":"fixture.temporal"},
-    {"serviceId":"minio","budgetProfileId":"provider-batch-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.provider-batch-pressure","fixtureSeedId":"fixture.minio"},
-    {"serviceId":"openbao","budgetProfileId":"secret-access-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.secret-access-pressure","fixtureSeedId":"fixture.openbao"},
-    {"serviceId":"otel-collector","budgetProfileId":"observability-ingest-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.observability-ingest-pressure","fixtureSeedId":"fixture.otel-collector"},
-    {"serviceId":"prometheus","budgetProfileId":"observability-ingest-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.observability-ingest-pressure","fixtureSeedId":"fixture.prometheus"},
-    {"serviceId":"grafana","budgetProfileId":"operator-surface-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.operator-surface-pressure","fixtureSeedId":"fixture.grafana"},
-    {"serviceId":"loki","budgetProfileId":"observability-ingest-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.observability-ingest-pressure","fixtureSeedId":"fixture.loki"},
-    {"serviceId":"tempo","budgetProfileId":"observability-ingest-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.observability-ingest-pressure","fixtureSeedId":"fixture.tempo"},
-    {"serviceId":"mailpit","budgetProfileId":"provider-batch-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.provider-batch-pressure","fixtureSeedId":"fixture.mailpit"},
-    {"serviceId":"webhook-sink","budgetProfileId":"gateway-webhook-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.gateway-webhook-pressure","fixtureSeedId":"fixture.webhook-sink"},
-    {"serviceId":"redis","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.redis"},
-    {"serviceId":"meilisearch","budgetProfileId":"search-index-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.search-index-pressure","fixtureSeedId":"fixture.meilisearch"},
-    {"serviceId":"clickhouse","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.clickhouse"},
-    {"serviceId":"pgadmin","budgetProfileId":"operator-surface-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.operator-surface-pressure","fixtureSeedId":"fixture.pgadmin"},
-    {"serviceId":"sonar-postgres","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.sonar-postgres"},
-    {"serviceId":"sonar-oidc-plugin","budgetProfileId":null,"budgetDisposition":"catalogue-only-budget-disposition","baselineRef":"baseline.performance-concurrency-resource.catalogue-only-disposition","fixtureSeedId":"not-applicable","unsupportedReason":"not generated in the test Compose target; bounded disposition only"},
-    {"serviceId":"sonarqube","budgetProfileId":"control-plane-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.control-plane-pressure","fixtureSeedId":"fixture.sonarqube"},
-    {"serviceId":"mock-oidc","budgetProfileId":null,"budgetDisposition":"out-of-scope-budget-disposition","baselineRef":"baseline.performance-concurrency-resource.out-of-scope-disposition","fixtureSeedId":"not-applicable","unsupportedReason":"out of current test-readiness composed target"},
-    {"serviceId":"localstack","budgetProfileId":"provider-batch-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.provider-batch-pressure","fixtureSeedId":"fixture.localstack"},
-    {"serviceId":"wiremock","budgetProfileId":"gateway-webhook-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.gateway-webhook-pressure","fixtureSeedId":"fixture.wiremock"},
-    {"serviceId":"alertmanager","budgetProfileId":"observability-ingest-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.observability-ingest-pressure","fixtureSeedId":"fixture.alertmanager"},
-    {"serviceId":"alloy","budgetProfileId":"observability-ingest-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.observability-ingest-pressure","fixtureSeedId":"fixture.alloy"},
-    {"serviceId":"windmill-postgres","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.windmill-postgres"},
-    {"serviceId":"windmill-redis","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.windmill-redis"},
-    {"serviceId":"windmill","budgetProfileId":"workflow-worker-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.workflow-worker-pressure","fixtureSeedId":"fixture.windmill"},
-    {"serviceId":"windmill-worker","budgetProfileId":"workflow-worker-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.workflow-worker-pressure","fixtureSeedId":"fixture.windmill-worker"},
-    {"serviceId":"temporal-postgres","budgetProfileId":"data-store-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.data-store-pressure","fixtureSeedId":"fixture.temporal-postgres"},
-    {"serviceId":"temporal-ui","budgetProfileId":"operator-surface-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.operator-surface-pressure","fixtureSeedId":"fixture.temporal-ui"},
-    {"serviceId":"pgbackrest","budgetProfileId":"provider-batch-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.provider-batch-pressure","fixtureSeedId":"fixture.pgbackrest"},
-    {"serviceId":"clamav","budgetProfileId":"provider-batch-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.provider-batch-pressure","fixtureSeedId":"fixture.clamav"},
-    {"serviceId":"sentry","budgetProfileId":null,"budgetDisposition":"catalogue-only-budget-disposition","baselineRef":"baseline.performance-concurrency-resource.catalogue-only-disposition","fixtureSeedId":"not-applicable","unsupportedReason":"not generated in the test Compose target; bounded disposition only"},
-    {"serviceId":"caddy","budgetProfileId":"gateway-webhook-pressure","budgetDisposition":"deterministic-budgeted","baselineRef":"baseline.performance-concurrency-resource.gateway-webhook-pressure","fixtureSeedId":"fixture.caddy"},
-    {"serviceId":"platform-api","budgetProfileId":null,"budgetDisposition":"out-of-scope-budget-disposition","baselineRef":"baseline.performance-concurrency-resource.out-of-scope-disposition","fixtureSeedId":"not-applicable","unsupportedReason":"historical runtime surface is out of current composed test-readiness target"},
-    {"serviceId":"react-app","budgetProfileId":null,"budgetDisposition":"out-of-scope-budget-disposition","baselineRef":"baseline.performance-concurrency-resource.out-of-scope-disposition","fixtureSeedId":"not-applicable","unsupportedReason":"historical runtime surface is out of current composed test-readiness target"}
+    {
+      "serviceId": "alertmanager",
+      "budgetProfileId": "observability-ingest-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.observability-ingest-pressure",
+      "fixtureSeedId": "fixture.alertmanager"
+    },
+    {
+      "serviceId": "alloy",
+      "budgetProfileId": "observability-ingest-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.observability-ingest-pressure",
+      "fixtureSeedId": "fixture.alloy"
+    },
+    {
+      "serviceId": "caddy",
+      "budgetProfileId": "gateway-webhook-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.gateway-webhook-pressure",
+      "fixtureSeedId": "fixture.caddy"
+    },
+    {
+      "serviceId": "clamav",
+      "budgetProfileId": "provider-batch-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.provider-batch-pressure",
+      "fixtureSeedId": "fixture.clamav"
+    },
+    {
+      "serviceId": "clickhouse",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.clickhouse"
+    },
+    {
+      "serviceId": "grafana",
+      "budgetProfileId": "operator-surface-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.operator-surface-pressure",
+      "fixtureSeedId": "fixture.grafana"
+    },
+    {
+      "serviceId": "keycloak",
+      "budgetProfileId": "control-plane-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.control-plane-pressure",
+      "fixtureSeedId": "fixture.keycloak"
+    },
+    {
+      "serviceId": "keycloak-db",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.keycloak-db"
+    },
+    {
+      "serviceId": "localstack",
+      "budgetProfileId": "provider-batch-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.provider-batch-pressure",
+      "fixtureSeedId": "fixture.localstack"
+    },
+    {
+      "serviceId": "loki",
+      "budgetProfileId": "observability-ingest-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.observability-ingest-pressure",
+      "fixtureSeedId": "fixture.loki"
+    },
+    {
+      "serviceId": "mailpit",
+      "budgetProfileId": "provider-batch-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.provider-batch-pressure",
+      "fixtureSeedId": "fixture.mailpit"
+    },
+    {
+      "serviceId": "meilisearch",
+      "budgetProfileId": "search-index-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.search-index-pressure",
+      "fixtureSeedId": "fixture.meilisearch"
+    },
+    {
+      "serviceId": "minio",
+      "budgetProfileId": "provider-batch-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.provider-batch-pressure",
+      "fixtureSeedId": "fixture.minio"
+    },
+    {
+      "serviceId": "mock-oidc",
+      "budgetProfileId": null,
+      "budgetDisposition": "out-of-scope-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "out of current test-readiness composed target"
+    },
+    {
+      "serviceId": "nats",
+      "budgetProfileId": "queue-worker-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.queue-worker-pressure",
+      "fixtureSeedId": "fixture.nats"
+    },
+    {
+      "serviceId": "openbao",
+      "budgetProfileId": "secret-access-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.secret-access-pressure",
+      "fixtureSeedId": "fixture.openbao"
+    },
+    {
+      "serviceId": "otel-collector",
+      "budgetProfileId": "observability-ingest-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.observability-ingest-pressure",
+      "fixtureSeedId": "fixture.otel-collector"
+    },
+    {
+      "serviceId": "pgadmin",
+      "budgetProfileId": "operator-surface-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.operator-surface-pressure",
+      "fixtureSeedId": "fixture.pgadmin"
+    },
+    {
+      "serviceId": "pgbackrest",
+      "budgetProfileId": "provider-batch-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.provider-batch-pressure",
+      "fixtureSeedId": "fixture.pgbackrest"
+    },
+    {
+      "serviceId": "platform-api",
+      "budgetProfileId": null,
+      "budgetDisposition": "out-of-scope-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "historical runtime surface is out of current composed test-readiness target"
+    },
+    {
+      "serviceId": "postgres",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.postgres"
+    },
+    {
+      "serviceId": "prometheus",
+      "budgetProfileId": "observability-ingest-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.observability-ingest-pressure",
+      "fixtureSeedId": "fixture.prometheus"
+    },
+    {
+      "serviceId": "public-proof-origin",
+      "budgetProfileId": null,
+      "budgetDisposition": "out-of-scope-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "post-Test public FQDN proof-origin service is outside the canonical Test readiness composed target and does not make a service-backed load or performance claim"
+    },
+    {
+      "serviceId": "react-app",
+      "budgetProfileId": null,
+      "budgetDisposition": "out-of-scope-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "historical runtime surface is out of current composed test-readiness target"
+    },
+    {
+      "serviceId": "redis",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.redis"
+    },
+    {
+      "serviceId": "sentry",
+      "budgetProfileId": null,
+      "budgetDisposition": "catalogue-only-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.catalogue-only-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "not generated in the test Compose target; bounded disposition only"
+    },
+    {
+      "serviceId": "sonar-oidc-plugin",
+      "budgetProfileId": null,
+      "budgetDisposition": "catalogue-only-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.catalogue-only-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "not generated in the test Compose target; bounded disposition only"
+    },
+    {
+      "serviceId": "sonar-postgres",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.sonar-postgres"
+    },
+    {
+      "serviceId": "sonarqube",
+      "budgetProfileId": "control-plane-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.control-plane-pressure",
+      "fixtureSeedId": "fixture.sonarqube"
+    },
+    {
+      "serviceId": "tempo",
+      "budgetProfileId": "observability-ingest-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.observability-ingest-pressure",
+      "fixtureSeedId": "fixture.tempo"
+    },
+    {
+      "serviceId": "temporal",
+      "budgetProfileId": "workflow-worker-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.workflow-worker-pressure",
+      "fixtureSeedId": "fixture.temporal"
+    },
+    {
+      "serviceId": "temporal-postgres",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.temporal-postgres"
+    },
+    {
+      "serviceId": "temporal-ui",
+      "budgetProfileId": "operator-surface-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.operator-surface-pressure",
+      "fixtureSeedId": "fixture.temporal-ui"
+    },
+    {
+      "serviceId": "webhook-sink",
+      "budgetProfileId": "gateway-webhook-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.gateway-webhook-pressure",
+      "fixtureSeedId": "fixture.webhook-sink"
+    },
+    {
+      "serviceId": "windmill",
+      "budgetProfileId": "workflow-worker-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.workflow-worker-pressure",
+      "fixtureSeedId": "fixture.windmill"
+    },
+    {
+      "serviceId": "windmill-postgres",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.windmill-postgres"
+    },
+    {
+      "serviceId": "windmill-redis",
+      "budgetProfileId": "data-store-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.data-store-pressure",
+      "fixtureSeedId": "fixture.windmill-redis"
+    },
+    {
+      "serviceId": "windmill-worker",
+      "budgetProfileId": "workflow-worker-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.workflow-worker-pressure",
+      "fixtureSeedId": "fixture.windmill-worker"
+    },
+    {
+      "serviceId": "wiremock",
+      "budgetProfileId": "gateway-webhook-pressure",
+      "budgetDisposition": "deterministic-budgeted",
+      "baselineRef": "baseline.performance-concurrency-resource.gateway-webhook-pressure",
+      "fixtureSeedId": "fixture.wiremock"
+    }
   ],
   "profileStartupBudgets": [
-    {"profile":"assurance","startupBudgetTicks":20,"maxContainers":2,"maxVolumeUnits":2,"cleanupRequired":true},
-    {"profile":"backup-restore","startupBudgetTicks":12,"maxContainers":1,"maxVolumeUnits":2,"cleanupRequired":true},
-    {"profile":"gateway","startupBudgetTicks":12,"maxContainers":1,"maxVolumeUnits":1,"cleanupRequired":true},
-    {"profile":"observability","startupBudgetTicks":20,"maxContainers":2,"maxVolumeUnits":1,"cleanupRequired":true},
-    {"profile":"operator-tools","startupBudgetTicks":12,"maxContainers":1,"maxVolumeUnits":1,"cleanupRequired":true},
-    {"profile":"provider-emulation","startupBudgetTicks":12,"maxContainers":1,"maxVolumeUnits":1,"cleanupRequired":true},
-    {"profile":"provider-mocks","startupBudgetTicks":12,"maxContainers":1,"maxVolumeUnits":1,"cleanupRequired":true},
-    {"profile":"runtime-providers","startupBudgetTicks":24,"maxContainers":3,"maxVolumeUnits":2,"cleanupRequired":true},
-    {"profile":"scanning","startupBudgetTicks":12,"maxContainers":1,"maxVolumeUnits":1,"cleanupRequired":true},
-    {"profile":"workflow-provider","startupBudgetTicks":32,"maxContainers":6,"maxVolumeUnits":2,"cleanupRequired":true}
+    {
+      "profile": "assurance",
+      "startupBudgetTicks": 20,
+      "maxContainers": 2,
+      "maxVolumeUnits": 2,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "backup-restore",
+      "startupBudgetTicks": 12,
+      "maxContainers": 1,
+      "maxVolumeUnits": 2,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "gateway",
+      "startupBudgetTicks": 12,
+      "maxContainers": 1,
+      "maxVolumeUnits": 1,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "observability",
+      "startupBudgetTicks": 20,
+      "maxContainers": 2,
+      "maxVolumeUnits": 1,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "operator-tools",
+      "startupBudgetTicks": 12,
+      "maxContainers": 1,
+      "maxVolumeUnits": 1,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "provider-emulation",
+      "startupBudgetTicks": 12,
+      "maxContainers": 1,
+      "maxVolumeUnits": 1,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "provider-mocks",
+      "startupBudgetTicks": 12,
+      "maxContainers": 1,
+      "maxVolumeUnits": 1,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "runtime-providers",
+      "startupBudgetTicks": 24,
+      "maxContainers": 3,
+      "maxVolumeUnits": 2,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "scanning",
+      "startupBudgetTicks": 12,
+      "maxContainers": 1,
+      "maxVolumeUnits": 1,
+      "cleanupRequired": true
+    },
+    {
+      "profile": "workflow-provider",
+      "startupBudgetTicks": 32,
+      "maxContainers": 6,
+      "maxVolumeUnits": 2,
+      "cleanupRequired": true
+    }
   ],
   "evidenceBoundary": {
     "evidenceId": "evidence.performance-concurrency-resource-regression-suite",

@@ -1,0 +1,5 @@
+{
+  "id": "public-fqdn-origin-test-public-internet-dependency",
+  "expectedRule": "USF-PUBLIC-FQDN-013",
+  "setOriginTestPublicInternetDependency": true
+}
