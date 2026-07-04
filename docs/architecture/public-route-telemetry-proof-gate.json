@@ -40,6 +40,12 @@
       "proofCommandId": "proof:public-route:staging",
       "browserRoute": {
         "attemptedRoute": "/__proof/public-route",
+        "acceptedFinalRoutes": [
+          "/__proof/public-route",
+          "/__proof/public-route/"
+        ],
+        "trailingSlashCanonicalisationAllowed": true,
+        "crossHostRedirectAllowed": false,
         "expectedContentType": "text/html",
         "lastObservedStatus": 200,
         "finalUrlScheme": "https",
@@ -64,6 +70,12 @@
       "proofCommandId": "proof:public-route:production",
       "browserRoute": {
         "attemptedRoute": "/__proof/public-route",
+        "acceptedFinalRoutes": [
+          "/__proof/public-route",
+          "/__proof/public-route/"
+        ],
+        "trailingSlashCanonicalisationAllowed": true,
+        "crossHostRedirectAllowed": false,
         "expectedContentType": "text/html",
         "lastObservedStatus": 200,
         "finalUrlScheme": "https",

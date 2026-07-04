@@ -4,7 +4,9 @@ This evidence pack supports USF-267, USF-269, and USF-271. It records provider o
 
 ## Current Result
 
-The gate remains blocked. Public reachability works and the earlier `1e100.network` same-host HTTP-to-HTTPS redirect blocker is now resolved, but provider cache evidence still contradicts the pre-Staging external HTTP semantics gate:
+The gate remains blocked. Public reachability works and the earlier `1e100.network` same-host HTTP-to-HTTPS redirect blocker is now resolved, but provider cache evidence still contradicts the pre-Staging external HTTP semantics gate.
+
+The external provider evidence was last materially checked on PR head `5003b05d61756c0dfbea093b54bdb12ea1ae8847`. Later metadata-only commits must not be used to claim the provider blocker is resolved unless the external proof commands are rerun and pass or this evidence pack is regenerated.
 
 - HTTPS proof/control routes for `1e100.network` and `aldous.info` show `Cache-Status: "Netlify Edge"; fwd=stale` or `hit` with nonzero `Age` while the routes declare no-store cache policy.
 

@@ -140,6 +140,14 @@
     "id": "public-route-telemetry-proof-route",
     "required": true,
     "route": "/__proof/public-route",
+    "canonicalRoute": "/__proof/public-route",
+    "acceptedRouteVariants": [
+      "/__proof/public-route",
+      "/__proof/public-route/"
+    ],
+    "trailingSlashPolicy": "The route without a trailing slash is the canonical semantic route. A same-host HTTPS final URL with a trailing slash is accepted only as provider/origin canonicalisation evidence for this non-product proof route. Cross-host redirects, localhost/private redirects, HTTP-only delivery, or a different path are not accepted.",
+    "crossHostRedirectAllowed": false,
+    "httpOnlyVariantAllowed": false,
     "routeClass": "non-product-browser-telemetry-proof-route",
     "productUiReadinessClaimAllowed": false,
     "browserE2eReadinessClaimAllowed": false,

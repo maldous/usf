@@ -7,8 +7,17 @@
     "USF-271"
   ],
   "pr": "https://github.com/maldous/usf/pull/240",
-  "checkedCommit": "89414f9badaaa600c5fdcf49d382d31f68a812ad",
-  "checkedAt": "2026-07-04T07:37:53Z",
+  "checkedCommit": "5003b05d61756c0dfbea093b54bdb12ea1ae8847",
+  "checkedAt": "2026-07-04T07:55:58Z",
+  "evidenceFreshness": {
+    "lastMaterialExternalProofCommit": "5003b05d61756c0dfbea093b54bdb12ea1ae8847",
+    "lastMaterialExternalProofCommands": [
+      "corepack pnpm proof:external-http-cache",
+      "corepack pnpm proof:pre-staging-external-smoke"
+    ],
+    "currentDocumentMayBeUpdatedByLaterMetadataOnlyCommit": true,
+    "freshnessBoundary": "The checkedCommit records the PR head on which the external provider behaviour was materially rechecked. Later metadata-only commits must not be used to claim the provider blocker is resolved unless the external proof commands are rerun and pass or the evidence rows are regenerated."
+  },
   "status": "blocked-by-provider-cache-configuration",
   "semanticBoundary": {
     "semanticRequirement": "ExternalHttpCapability with gateway-neutral public proof/control routes.",
@@ -112,7 +121,7 @@
         "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 21966,
+        "ageSecondsObserved": 22217,
         "etagObserved": true,
         "varyObserved": true,
         "xNfRequestIdObserved": true,
@@ -128,7 +137,7 @@
         "cacheStatus": "Netlify Edge hit",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 25,
+        "ageSecondsObserved": 276,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
         "blockerId": "external-http-proof-route-provider-cache-hit"
@@ -191,7 +200,7 @@
         "cacheStatus": "Netlify Edge fwd=stale",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 21965,
+        "ageSecondsObserved": 23229,
         "etagObserved": true,
         "varyObserved": true,
         "xNfRequestIdObserved": true,
@@ -207,7 +216,7 @@
         "cacheStatus": "Netlify Edge hit",
         "cfCacheStatus": "DYNAMIC",
         "ageObserved": true,
-        "ageSecondsObserved": 24,
+        "ageSecondsObserved": 275,
         "xNfRequestIdObserved": true,
         "rawProviderRequestIdsRetained": false,
         "blockerId": "external-http-proof-route-provider-cache-hit"
