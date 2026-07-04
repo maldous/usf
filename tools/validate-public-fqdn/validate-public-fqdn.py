@@ -26,6 +26,15 @@ EXTERNAL_PROOF_PATH = Path("docs/architecture/public-fqdn-external-proof-gate.js
 ORIGIN_SERVICE_PATH = Path("docs/architecture/public-proof-origin-service.json")
 PUBLIC_ROUTE_PROOF_PATH = Path("docs/architecture/public-route-telemetry-proof-gate.json")
 TAG_GATE_PATH = Path("docs/architecture/public-fqdn-proof-baseline-tag-gate.json")
+EXTERNAL_HTTP_BEHAVIOUR_PATH = Path("docs/architecture/external-http-behaviour-contract.json")
+EXTERNAL_HTTP_CACHE_PATH = Path("docs/architecture/external-http-cache-provider-proof-gate.json")
+EXTERNAL_HTTP_OBSERVABILITY_PATH = Path(
+    "docs/architecture/external-http-observability-evidence-gate.json"
+)
+PRE_STAGING_SMOKE_PATH = Path("docs/architecture/pre-staging-external-smoke-proof-gate.json")
+PRE_STAGING_GATE_PATH = Path(
+    "docs/architecture/pre-staging-external-http-semantics-readiness-gate.json"
+)
 COMPOSE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
@@ -49,19 +58,18 @@ RULES = {
     "USF-PUBLIC-FQDN-015": ("blocking", "public browser route proof command wiring is missing stale or no-op"),
     "USF-PUBLIC-FQDN-016": ("blocking", "public browser route proof overclaims readiness or gateway requirements"),
     "USF-PUBLIC-FQDN-017": ("blocking", "public FQDN proof-baseline tag gate is missing unsafe or overclaimed"),
+    "USF-PUBLIC-FQDN-018": ("blocking", "external HTTP behaviour semantic contract is missing incomplete or unsafe"),
+    "USF-PUBLIC-FQDN-019": ("blocking", "external HTTP behaviour proof command wiring is missing stale or no-op"),
+    "USF-PUBLIC-FQDN-020": ("blocking", "external HTTP cache and upstream provider proof evidence is missing incomplete or unsafe"),
+    "USF-PUBLIC-FQDN-021": ("blocking", "external HTTP cache proof command wiring is missing stale or no-op"),
+    "USF-PUBLIC-FQDN-022": ("blocking", "external HTTP observability evidence is missing incomplete or unsafe"),
+    "USF-PUBLIC-FQDN-023": ("blocking", "external HTTP observability proof command wiring is missing stale or no-op"),
+    "USF-PUBLIC-FQDN-024": ("blocking", "pre-staging external smoke gate is missing destructive or overclaimed"),
+    "USF-PUBLIC-FQDN-025": ("blocking", "pre-staging external smoke proof command wiring is missing stale or no-op"),
     "USF-PUBLIC-FQDN-SELFTEST": ("blocking", "planted public FQDN defect did not raise its expected rule"),
 }
 
-REQUIRED_CONTRACT_RULE_IDS = {
-    "USF-PUBLIC-FQDN-001",
-    "USF-PUBLIC-FQDN-002",
-    "USF-PUBLIC-FQDN-003",
-    "USF-PUBLIC-FQDN-004",
-    "USF-PUBLIC-FQDN-005",
-    "USF-PUBLIC-FQDN-006",
-    "USF-PUBLIC-FQDN-007",
-    "USF-PUBLIC-FQDN-008",
-}
+REQUIRED_CONTRACT_RULE_IDS = set(RULES) - {"USF-PUBLIC-FQDN-SELFTEST"}
 REQUIRED_PLANTED_RULE_IDS = set(RULES) - {"USF-PUBLIC-FQDN-SELFTEST"}
 EXPECTED_ENVIRONMENTS = {
     "staging": "1e100.network",
@@ -144,6 +152,37 @@ EXPECTED_PUBLIC_ROUTE_PROOF_COMMANDS = {
         "makeTarget": "public-route-proof-production",
     },
 }
+EXPECTED_EXTERNAL_HTTP_BEHAVIOUR_COMMAND = {
+    "id": "proof:external-http-behaviour",
+    "command": "tsx packages/proof/src/external-http-behaviour-proof.ts",
+    "makeTarget": "external-http-behaviour-proof",
+}
+EXPECTED_EXTERNAL_HTTP_CACHE_COMMAND = {
+    "id": "proof:external-http-cache",
+    "command": "tsx packages/proof/src/external-http-cache-proof.ts",
+    "makeTarget": "external-http-cache-proof",
+}
+EXPECTED_EXTERNAL_HTTP_OBSERVABILITY_COMMAND = {
+    "id": "proof:external-http-observability",
+    "command": "tsx packages/proof/src/external-http-observability-proof.ts",
+    "makeTarget": "external-http-observability-proof",
+}
+EXPECTED_PRE_STAGING_SMOKE_COMMAND = {
+    "id": "proof:pre-staging-external-smoke",
+    "command": "tsx packages/proof/src/pre-staging-external-smoke-proof.ts",
+    "makeTarget": "pre-staging-external-smoke-proof",
+}
+EXPECTED_PRE_STAGING_PREREQUISITES = {
+    "USF-261",
+    "USF-262",
+    "USF-263",
+    "USF-264",
+    "USF-265",
+    "USF-266",
+    "USF-268",
+    "USF-269",
+    "USF-270",
+}
 
 
 class Findings:
@@ -183,6 +222,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "originService": load_optional_json(ORIGIN_SERVICE_PATH),
         "publicRouteProof": load_optional_json(PUBLIC_ROUTE_PROOF_PATH),
         "tagGate": load_optional_json(TAG_GATE_PATH),
+        "externalHttpBehaviour": load_optional_json(EXTERNAL_HTTP_BEHAVIOUR_PATH),
+        "externalHttpCache": load_optional_json(EXTERNAL_HTTP_CACHE_PATH),
+        "externalHttpObservability": load_optional_json(EXTERNAL_HTTP_OBSERVABILITY_PATH),
+        "preStagingSmoke": load_optional_json(PRE_STAGING_SMOKE_PATH),
+        "preStagingGate": load_optional_json(PRE_STAGING_GATE_PATH),
         "composeCatalogue": load_optional_json(COMPOSE_CATALOGUE_PATH),
         "package": load_json(PACKAGE_PATH),
         "makefile": (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8"),
@@ -417,6 +461,133 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
                 claim
                 for claim in tag_gate.get("nonClaims", [])
                 if claim != defect["removeTagGateNonClaim"]
+            ]
+    behaviour = mutated.get("externalHttpBehaviour")
+    if defect.get("dropExternalHttpBehaviour"):
+        mutated["externalHttpBehaviour"] = None
+        behaviour = None
+    if isinstance(behaviour, dict):
+        if "removeExternalHttpBehaviourSection" in defect:
+            behaviour.pop(defect["removeExternalHttpBehaviourSection"], None)
+        if "setExternalHttpRequiredProvider" in defect:
+            behaviour.setdefault("gatewayNeutrality", {})["requiredProvider"] = defect[
+                "setExternalHttpRequiredProvider"
+            ]
+        if "setExternalHttpRequiredGateway" in defect:
+            behaviour.setdefault("gatewayNeutrality", {})["requiredGateway"] = defect[
+                "setExternalHttpRequiredGateway"
+            ]
+        if "setExternalHttpReadinessClaim" in defect:
+            patch = defect["setExternalHttpReadinessClaim"]
+            behaviour.setdefault("claims", {})[patch["field"]] = patch["value"]
+        if "removeExternalHttpNonClaim" in defect:
+            behaviour["nonClaims"] = [
+                claim
+                for claim in behaviour.get("nonClaims", [])
+                if claim != defect["removeExternalHttpNonClaim"]
+            ]
+        if "setExternalHttpProofCommand" in defect:
+            behaviour.setdefault("proofCommand", {})["command"] = defect[
+                "setExternalHttpProofCommand"
+            ]
+    cache = mutated.get("externalHttpCache")
+    if defect.get("dropExternalHttpCache"):
+        mutated["externalHttpCache"] = None
+        cache = None
+    if isinstance(cache, dict):
+        if "setExternalHttpCacheStatus" in defect:
+            cache["status"] = defect["setExternalHttpCacheStatus"]
+        if "setCacheRoutePolicy" in defect:
+            patch = defect["setCacheRoutePolicy"]
+            for row in cache.get("routeClassEvidence", []):
+                if row.get("routeClass") == patch.get("routeClass"):
+                    row.setdefault("cachePolicy", {})[patch["field"]] = patch["value"]
+        if "setCacheProviderHeaderAuthority" in defect:
+            cache.setdefault("providerHeaderBoundary", {})["providerHeadersAreSemanticAuthority"] = defect[
+                "setCacheProviderHeaderAuthority"
+            ]
+        if "setCacheRequiredProvider" in defect:
+            cache.setdefault("providerHeaderBoundary", {})["requiredProvider"] = defect[
+                "setCacheRequiredProvider"
+            ]
+        if "removeCacheNonClaim" in defect:
+            cache["nonClaims"] = [
+                claim for claim in cache.get("nonClaims", []) if claim != defect["removeCacheNonClaim"]
+            ]
+        if "setCacheProofCommand" in defect:
+            cache.setdefault("proofCommand", {})["command"] = defect["setCacheProofCommand"]
+    observability = mutated.get("externalHttpObservability")
+    if defect.get("dropExternalHttpObservability"):
+        mutated["externalHttpObservability"] = None
+        observability = None
+    if isinstance(observability, dict):
+        if "setObservabilityCorrelationRequired" in defect:
+            observability.setdefault("correlation", {})["correlationIdRequired"] = defect[
+                "setObservabilityCorrelationRequired"
+            ]
+        if "setObservabilityTraceBoundary" in defect:
+            observability.setdefault("tracing", {})["traceContextBoundaryDefined"] = defect[
+                "setObservabilityTraceBoundary"
+            ]
+        if "setObservabilityUnsafePayloadRetention" in defect:
+            observability.setdefault("redactionAndRetention", {})["rawPayloadRetentionAllowed"] = defect[
+                "setObservabilityUnsafePayloadRetention"
+            ]
+        if "setObservabilityRequiredProvider" in defect:
+            observability.setdefault("providerBoundary", {})["requiredProvider"] = defect[
+                "setObservabilityRequiredProvider"
+            ]
+        if "removeObservabilityNonClaim" in defect:
+            observability["nonClaims"] = [
+                claim
+                for claim in observability.get("nonClaims", [])
+                if claim != defect["removeObservabilityNonClaim"]
+            ]
+        if "setObservabilityProofCommand" in defect:
+            observability.setdefault("proofCommand", {})["command"] = defect[
+                "setObservabilityProofCommand"
+            ]
+    smoke = mutated.get("preStagingSmoke")
+    if defect.get("dropPreStagingSmoke"):
+        mutated["preStagingSmoke"] = None
+        smoke = None
+    if isinstance(smoke, dict):
+        for issue_id in defect.get("dropPreStagingPrerequisiteIds", []):
+            smoke["prerequisites"] = [
+                row for row in smoke.get("prerequisites", []) if row.get("issueId") != issue_id
+            ]
+        if "setPreStagingPrerequisiteStatus" in defect:
+            patch = defect["setPreStagingPrerequisiteStatus"]
+            for row in smoke.get("prerequisites", []):
+                if row.get("issueId") == patch.get("issueId"):
+                    row["status"] = patch.get("status")
+        if "setPreStagingDestructiveCheck" in defect:
+            smoke.setdefault("nonDestructiveBoundary", {})["destructiveChecksAllowed"] = defect[
+                "setPreStagingDestructiveCheck"
+            ]
+        if "setPreStagingPersistentMutation" in defect:
+            smoke.setdefault("nonDestructiveBoundary", {})["persistentDataMutationAllowed"] = defect[
+                "setPreStagingPersistentMutation"
+            ]
+        if "setPreStagingReadinessClaim" in defect:
+            patch = defect["setPreStagingReadinessClaim"]
+            smoke.setdefault("claims", {})[patch["field"]] = patch["value"]
+        if "removePreStagingNonClaim" in defect:
+            smoke["nonClaims"] = [
+                claim for claim in smoke.get("nonClaims", []) if claim != defect["removePreStagingNonClaim"]
+            ]
+        if "setPreStagingSmokeCommand" in defect:
+            smoke.setdefault("proofCommand", {})["command"] = defect["setPreStagingSmokeCommand"]
+    gate = mutated.get("preStagingGate")
+    if defect.get("dropPreStagingGate"):
+        mutated["preStagingGate"] = None
+        gate = None
+    if isinstance(gate, dict):
+        if "setPreStagingGateMayBegin" in defect:
+            gate["stagingSpecificEnablementMayBegin"] = defect["setPreStagingGateMayBegin"]
+        if "removePreStagingGateNonClaim" in defect:
+            gate["nonClaims"] = [
+                claim for claim in gate.get("nonClaims", []) if claim != defect["removePreStagingGateNonClaim"]
             ]
     compose_catalogue = mutated.get("composeCatalogue")
     if defect.get("dropOriginCatalogueService") and isinstance(compose_catalogue, dict):
@@ -1474,6 +1645,342 @@ def check_public_fqdn_tag_gate(F: Findings, tag_gate: Any) -> None:
         F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#nonClaims", f"tag gate non-claims are missing: {sorted(missing)}")
 
 
+def check_single_proof_command(
+    F: Findings,
+    rule_id: str,
+    evidence_path: Path,
+    evidence: dict[str, Any],
+    package: dict[str, Any],
+    makefile: str,
+    expected: dict[str, str],
+) -> None:
+    command_row = evidence.get("proofCommand")
+    if not isinstance(command_row, dict):
+        F.add(rule_id, f"{evidence_path}#proofCommand", "proof command metadata is missing")
+        return
+    script_id = expected["id"]
+    expected_command = expected["command"]
+    expected_target = expected["makeTarget"]
+    if command_row.get("id") != script_id:
+        F.add(rule_id, f"{evidence_path}#proofCommand.id", "proof command id is stale")
+    if command_row.get("command") != expected_command or command_is_noop(command_row.get("command")):
+        F.add(rule_id, f"{evidence_path}#proofCommand.command", "proof command is missing stale or no-op")
+    if command_row.get("packageScript") != script_id:
+        F.add(rule_id, f"{evidence_path}#proofCommand.packageScript", "proof package script is stale")
+    if command_row.get("makeTarget") != expected_target:
+        F.add(rule_id, f"{evidence_path}#proofCommand.makeTarget", "proof Make target is stale")
+    scripts = package.get("scripts", {})
+    if scripts.get(script_id) != expected_command or command_is_noop(scripts.get(script_id)):
+        F.add(rule_id, f"package.json#scripts.{script_id}", "proof package script is missing stale or no-op")
+    if not re.search(
+        rf"^{re.escape(expected_target)}:\n\tcorepack pnpm {re.escape(script_id)}$",
+        makefile,
+        re.MULTILINE,
+    ):
+        F.add(rule_id, f"Makefile#{expected_target}", "proof Make target is missing or stale")
+
+
+def check_false_claims(F: Findings, rule_id: str, path: Path, evidence: dict[str, Any]) -> None:
+    claims = evidence.get("claims", {})
+    if not isinstance(claims, dict):
+        F.add(rule_id, f"{path}#claims", "claims map is missing")
+        return
+    for key in (
+        "stagingReadinessClaim",
+        "productionReadinessClaim",
+        "deploymentReadinessClaim",
+        "liveProviderReadinessClaim",
+        "socReadinessClaim",
+        "isoCertificationClaim",
+        "enterpriseProductionReadinessClaim",
+        "productUiReadinessClaim",
+        "browserE2eReadinessClaim",
+        "fullReactProductParityClaim",
+    ):
+        if claims.get(key) is not False:
+            F.add(rule_id, f"{path}#claims.{key}", "external HTTP evidence overclaims readiness")
+
+
+def check_external_http_non_claims(F: Findings, rule_id: str, path: Path, evidence: dict[str, Any]) -> None:
+    non_claims = set(evidence.get("nonClaims", []))
+    missing = REQUIRED_EXTERNAL_NON_CLAIMS - non_claims
+    if missing:
+        F.add(rule_id, f"{path}#nonClaims", f"required non-claims are missing: {sorted(missing)}")
+
+
+def check_external_http_behaviour_contract(
+    F: Findings,
+    behaviour: Any,
+    package: dict[str, Any],
+    makefile: str,
+) -> None:
+    if not isinstance(behaviour, dict):
+        F.add("USF-PUBLIC-FQDN-018", str(EXTERNAL_HTTP_BEHAVIOUR_PATH), "external HTTP behaviour contract is missing")
+        return
+    if behaviour.get("issueId") != "USF-268" or behaviour.get("parentIssueId") != "USF-267":
+        F.add("USF-PUBLIC-FQDN-018", str(EXTERNAL_HTTP_BEHAVIOUR_PATH), "issue linkage is stale")
+    if behaviour.get("publicFqdnContract") != str(CONTRACT_PATH):
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#publicFqdnContract", "public FQDN contract linkage is stale")
+    if behaviour.get("status") != "defined":
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#status", "contract must be defined before downstream proof")
+
+    required_sections = {
+        "canonicalHostSemantics",
+        "redirectSemantics",
+        "httpsSemantics",
+        "methodSemantics",
+        "statusSemantics",
+        "contentTypeSemantics",
+        "cacheControlSemantics",
+        "securityHeaderSemantics",
+        "corsOptionsSemantics",
+        "compressionBoundary",
+        "sizeBoundary",
+        "providerHeaderTreatment",
+        "gatewayNeutrality",
+        "testEnvironmentBoundary",
+        "proofCommand",
+        "claims",
+        "nonClaims",
+    }
+    for section in sorted(required_sections):
+        if section not in behaviour:
+            F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#{section}", "required semantic section is missing")
+
+    canonical = behaviour.get("canonicalHostSemantics", {})
+    if not isinstance(canonical, dict) or canonical.get("requiredFqdns") != list(EXPECTED_ENVIRONMENTS.values()):
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#canonicalHostSemantics", "canonical host semantics are incomplete")
+    redirect = behaviour.get("redirectSemantics", {})
+    if not isinstance(redirect, dict) or redirect.get("crossHostRedirectAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#redirectSemantics", "unsafe redirect semantics are allowed")
+    https = behaviour.get("httpsSemantics", {})
+    if not isinstance(https, dict) or https.get("httpsRequiredForProofRoutes") is not True:
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#httpsSemantics", "HTTPS-only proof route semantics are missing")
+    methods = behaviour.get("methodSemantics", {})
+    if not isinstance(methods, dict):
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#methodSemantics", "method semantics are missing")
+        methods = {}
+    if methods.get("jsonProofRequiredMethods") != ["GET", "HEAD"]:
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#methodSemantics.jsonProofRequiredMethods", "GET and HEAD semantics are not explicit")
+    if methods.get("unsupportedMethodsMustMutate") is not False:
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#methodSemantics.unsupportedMethodsMustMutate", "unsupported methods may mutate")
+    security = behaviour.get("securityHeaderSemantics", {})
+    if not isinstance(security, dict) or not security.get("minimumExpectedHeaders"):
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#securityHeaderSemantics", "security header semantics are missing")
+    provider_headers = behaviour.get("providerHeaderTreatment", {})
+    if not isinstance(provider_headers, dict) or provider_headers.get("providerHeadersAreSemanticAuthority") is not False:
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#providerHeaderTreatment", "provider headers are treated as semantic authority")
+    gateway = behaviour.get("gatewayNeutrality", {})
+    if not isinstance(gateway, dict) or gateway.get("requiredGateway") != "none" or gateway.get("requiredProvider") != "none":
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#gatewayNeutrality", "external HTTP semantics require a provider or gateway")
+    boundary = behaviour.get("testEnvironmentBoundary", {})
+    if not isinstance(boundary, dict) or boundary.get("testEnvironmentPublicInternetDependencyAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-018", f"{EXTERNAL_HTTP_BEHAVIOUR_PATH}#testEnvironmentBoundary", "Test environment public internet dependency is allowed")
+    check_false_claims(F, "USF-PUBLIC-FQDN-018", EXTERNAL_HTTP_BEHAVIOUR_PATH, behaviour)
+    check_external_http_non_claims(F, "USF-PUBLIC-FQDN-018", EXTERNAL_HTTP_BEHAVIOUR_PATH, behaviour)
+    check_single_proof_command(
+        F,
+        "USF-PUBLIC-FQDN-019",
+        EXTERNAL_HTTP_BEHAVIOUR_PATH,
+        behaviour,
+        package,
+        makefile,
+        EXPECTED_EXTERNAL_HTTP_BEHAVIOUR_COMMAND,
+    )
+
+
+def check_external_http_cache_gate(
+    F: Findings,
+    cache: Any,
+    package: dict[str, Any],
+    makefile: str,
+) -> None:
+    if not isinstance(cache, dict):
+        F.add("USF-PUBLIC-FQDN-020", str(EXTERNAL_HTTP_CACHE_PATH), "external HTTP cache proof evidence is missing")
+        return
+    if cache.get("issueId") != "USF-269" or cache.get("parentIssueId") != "USF-267":
+        F.add("USF-PUBLIC-FQDN-020", str(EXTERNAL_HTTP_CACHE_PATH), "issue linkage is stale")
+    status = cache.get("status")
+    if status not in {"pass", "bounded", "blocked"}:
+        F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#status", "cache proof status must be pass bounded or blocked")
+    if status == "blocked":
+        blockers = cache.get("blockers")
+        if not isinstance(blockers, list) or not blockers:
+            F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#blockers", "blocked cache proof lacks explicit blocker evidence")
+        else:
+            for blocker in blockers:
+                if not isinstance(blocker, dict):
+                    F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#blockers", "blocked cache proof blocker is invalid")
+                    continue
+                if blocker.get("issueId") != "USF-269" or blocker.get("blocksStagingSpecificEnablement") is not True:
+                    F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#blockers", "blocked cache proof blocker lacks issue linkage or staging gate impact")
+                if not is_non_empty_string(blocker.get("requiredOperatorAction")):
+                    F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#blockers", "blocked cache proof blocker lacks operator action")
+    rows = cache.get("routeClassEvidence")
+    required_route_classes = {
+        "json-proof-endpoint",
+        "browser-proof-route",
+        "future-static-route",
+        "future-api-like-route",
+        "future-app-route",
+    }
+    if not isinstance(rows, list):
+        F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence", "route class cache evidence is missing")
+        rows = []
+    by_class = {row.get("routeClass"): row for row in rows if isinstance(row, dict)}
+    if set(by_class) != required_route_classes:
+        F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence", "route class cache inventory is incomplete")
+    for route_class in ("json-proof-endpoint", "browser-proof-route"):
+        row = by_class.get(route_class, {})
+        policy = row.get("cachePolicy") if isinstance(row, dict) else None
+        if not isinstance(policy, dict):
+            F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence.{route_class}", "proof route cache policy is missing")
+            continue
+        if policy.get("cacheable") is not False or policy.get("cacheControl") != "no-store":
+            F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence.{route_class}.cachePolicy", "proof/control routes must not be cacheable")
+        provider_cache_conflict = (
+            policy.get("providerCacheHitObserved") is True
+            or policy.get("cacheabilityEvidenceConflict") is True
+            or policy.get("ageSecondsObserved") == "non-zero"
+        )
+        if status != "blocked" and provider_cache_conflict:
+            F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence.{route_class}.cachePolicy", "provider cache evidence conflict is hidden by non-blocked status")
+    provider = cache.get("providerHeaderBoundary", {})
+    if not isinstance(provider, dict) or provider.get("providerHeadersAreSemanticAuthority") is not False:
+        F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#providerHeaderBoundary", "provider headers are treated as semantic authority")
+    if provider.get("requiredProvider") != "none":
+        F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#providerHeaderBoundary.requiredProvider", "cache proof requires a provider")
+    freshness = cache.get("freshnessAndInvalidationBoundary", {})
+    if not isinstance(freshness, dict) or not is_non_empty_string(freshness.get("purgeBoundary")):
+        F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#freshnessAndInvalidationBoundary", "purge/bypass/invalidation boundary is missing")
+    check_false_claims(F, "USF-PUBLIC-FQDN-020", EXTERNAL_HTTP_CACHE_PATH, cache)
+    check_external_http_non_claims(F, "USF-PUBLIC-FQDN-020", EXTERNAL_HTTP_CACHE_PATH, cache)
+    check_single_proof_command(
+        F,
+        "USF-PUBLIC-FQDN-021",
+        EXTERNAL_HTTP_CACHE_PATH,
+        cache,
+        package,
+        makefile,
+        EXPECTED_EXTERNAL_HTTP_CACHE_COMMAND,
+    )
+
+
+def check_external_http_observability_gate(
+    F: Findings,
+    observability: Any,
+    package: dict[str, Any],
+    makefile: str,
+) -> None:
+    if not isinstance(observability, dict):
+        F.add("USF-PUBLIC-FQDN-022", str(EXTERNAL_HTTP_OBSERVABILITY_PATH), "external HTTP observability evidence is missing")
+        return
+    if observability.get("issueId") != "USF-270" or observability.get("parentIssueId") != "USF-267":
+        F.add("USF-PUBLIC-FQDN-022", str(EXTERNAL_HTTP_OBSERVABILITY_PATH), "issue linkage is stale")
+    if observability.get("status") not in {"pass", "bounded"}:
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#status", "observability evidence status must be pass or bounded")
+    correlation = observability.get("correlation", {})
+    if not isinstance(correlation, dict) or correlation.get("correlationIdRequired") is not True:
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#correlation", "correlation id evidence boundary is missing")
+    tracing = observability.get("tracing", {})
+    if not isinstance(tracing, dict) or tracing.get("traceContextBoundaryDefined") is not True:
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#tracing", "trace boundary is missing")
+    logging = observability.get("loggingAndEvents", {})
+    if not isinstance(logging, dict) or logging.get("applicationEventMarkerRequired") is not True:
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#loggingAndEvents", "event/log marker boundary is missing")
+    metrics = observability.get("metrics", {})
+    if not isinstance(metrics, dict) or metrics.get("statusClassMetricRequired") is not True:
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#metrics", "metrics boundary is missing")
+    redaction = observability.get("redactionAndRetention", {})
+    if not isinstance(redaction, dict) or redaction.get("rawPayloadRetentionAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#redactionAndRetention", "unsafe payload retention is allowed")
+    provider = observability.get("providerBoundary", {})
+    if not isinstance(provider, dict) or provider.get("requiredProvider") != "none":
+        F.add("USF-PUBLIC-FQDN-022", f"{EXTERNAL_HTTP_OBSERVABILITY_PATH}#providerBoundary", "observability evidence requires a provider")
+    check_false_claims(F, "USF-PUBLIC-FQDN-022", EXTERNAL_HTTP_OBSERVABILITY_PATH, observability)
+    check_external_http_non_claims(F, "USF-PUBLIC-FQDN-022", EXTERNAL_HTTP_OBSERVABILITY_PATH, observability)
+    check_single_proof_command(
+        F,
+        "USF-PUBLIC-FQDN-023",
+        EXTERNAL_HTTP_OBSERVABILITY_PATH,
+        observability,
+        package,
+        makefile,
+        EXPECTED_EXTERNAL_HTTP_OBSERVABILITY_COMMAND,
+    )
+
+
+def check_pre_staging_smoke_gate(
+    F: Findings,
+    smoke: Any,
+    package: dict[str, Any],
+    makefile: str,
+) -> None:
+    if not isinstance(smoke, dict):
+        F.add("USF-PUBLIC-FQDN-024", str(PRE_STAGING_SMOKE_PATH), "pre-staging external smoke gate is missing")
+        return
+    if smoke.get("issueId") != "USF-271" or smoke.get("parentIssueId") != "USF-267":
+        F.add("USF-PUBLIC-FQDN-024", str(PRE_STAGING_SMOKE_PATH), "issue linkage is stale")
+    if smoke.get("status") not in {"pass", "blocked"}:
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#status", "pre-staging smoke status must be pass or blocked")
+    prerequisites = smoke.get("prerequisites")
+    if not isinstance(prerequisites, list):
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#prerequisites", "pre-staging prerequisites are missing")
+        prerequisites = []
+    by_issue = {row.get("issueId"): row for row in prerequisites if isinstance(row, dict)}
+    missing = EXPECTED_PRE_STAGING_PREREQUISITES - set(by_issue)
+    if missing:
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#prerequisites", f"pre-staging prerequisites are missing: {sorted(missing)}")
+    if smoke.get("status") == "pass":
+        for issue_id in sorted(EXPECTED_PRE_STAGING_PREREQUISITES):
+            if by_issue.get(issue_id, {}).get("status") != "done":
+                F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#prerequisites.{issue_id}", "passing smoke has incomplete prerequisite")
+    else:
+        if smoke.get("blocksStagingSpecificEnablement") is not True:
+            F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#blocksStagingSpecificEnablement", "blocked smoke must block staging-specific enablement")
+        blockers = smoke.get("blockers")
+        if not isinstance(blockers, list) or not blockers:
+            F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#blockers", "blocked smoke must record exact blockers")
+    boundary = smoke.get("nonDestructiveBoundary", {})
+    if not isinstance(boundary, dict):
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#nonDestructiveBoundary", "non-destructive boundary is missing")
+        boundary = {}
+    for key in ("destructiveChecksAllowed", "persistentDataMutationAllowed", "realTenantDataRequired", "realSecretsRequired"):
+        if boundary.get(key) is not False:
+            F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#nonDestructiveBoundary.{key}", "unsafe smoke boundary is allowed")
+    safe_methods = set(boundary.get("allowedMethods", []))
+    if not safe_methods <= {"GET", "HEAD", "OPTIONS"}:
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_SMOKE_PATH}#nonDestructiveBoundary.allowedMethods", "pre-staging smoke allows unsafe methods")
+    check_false_claims(F, "USF-PUBLIC-FQDN-024", PRE_STAGING_SMOKE_PATH, smoke)
+    check_external_http_non_claims(F, "USF-PUBLIC-FQDN-024", PRE_STAGING_SMOKE_PATH, smoke)
+    check_single_proof_command(
+        F,
+        "USF-PUBLIC-FQDN-025",
+        PRE_STAGING_SMOKE_PATH,
+        smoke,
+        package,
+        makefile,
+        EXPECTED_PRE_STAGING_SMOKE_COMMAND,
+    )
+
+
+def check_pre_staging_gate(F: Findings, gate: Any, smoke: Any) -> None:
+    if not isinstance(gate, dict):
+        F.add("USF-PUBLIC-FQDN-024", str(PRE_STAGING_GATE_PATH), "pre-staging parent gate evidence is missing")
+        return
+    if gate.get("issueId") != "USF-267":
+        F.add("USF-PUBLIC-FQDN-024", str(PRE_STAGING_GATE_PATH), "parent gate issue linkage is stale")
+    may_begin = gate.get("stagingSpecificEnablementMayBegin")
+    if may_begin not in {True, False}:
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_GATE_PATH}#stagingSpecificEnablementMayBegin", "gate decision is missing")
+    if isinstance(smoke, dict) and smoke.get("status") == "blocked" and may_begin is not False:
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_GATE_PATH}#stagingSpecificEnablementMayBegin", "blocked smoke cannot allow staging-specific enablement")
+    if isinstance(smoke, dict) and smoke.get("status") == "pass" and may_begin is not True:
+        F.add("USF-PUBLIC-FQDN-024", f"{PRE_STAGING_GATE_PATH}#stagingSpecificEnablementMayBegin", "passing smoke should explicitly allow staging-specific enablement")
+    check_false_claims(F, "USF-PUBLIC-FQDN-024", PRE_STAGING_GATE_PATH, gate)
+    check_external_http_non_claims(F, "USF-PUBLIC-FQDN-024", PRE_STAGING_GATE_PATH, gate)
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     contract = state.get("contract")
@@ -1506,6 +2013,27 @@ def run_checks(state: dict[str, Any]) -> Findings:
         check_public_route_fqdn_evidence(F, public_route_proof, contract)
         check_public_route_negative_evidence_and_claims(F, public_route_proof)
     check_public_fqdn_tag_gate(F, state.get("tagGate"))
+    check_external_http_behaviour_contract(
+        F,
+        state.get("externalHttpBehaviour"),
+        state["package"],
+        state["makefile"],
+    )
+    check_external_http_cache_gate(
+        F,
+        state.get("externalHttpCache"),
+        state["package"],
+        state["makefile"],
+    )
+    check_external_http_observability_gate(
+        F,
+        state.get("externalHttpObservability"),
+        state["package"],
+        state["makefile"],
+    )
+    pre_staging_smoke = state.get("preStagingSmoke")
+    check_pre_staging_smoke_gate(F, pre_staging_smoke, state["package"], state["makefile"])
+    check_pre_staging_gate(F, state.get("preStagingGate"), pre_staging_smoke)
     return F
 
 

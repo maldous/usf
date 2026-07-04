@@ -1,0 +1,6 @@
+{
+  "id": "018-external-http-provider-required",
+  "description": "Make a provider a semantic requirement for external HTTP behaviour.",
+  "setExternalHttpRequiredProvider": "cloudflare",
+  "expectedRule": "USF-PUBLIC-FQDN-018"
+}

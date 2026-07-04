@@ -1,0 +1,10 @@
+{
+  "id": "023-noop-external-http-observability-command",
+  "description": "Replace the external HTTP observability proof command with a no-op.",
+  "setPackageScript": {
+    "name": "proof:external-http-observability",
+    "command": "true"
+  },
+  "setObservabilityProofCommand": "true",
+  "expectedRule": "USF-PUBLIC-FQDN-023"
+}

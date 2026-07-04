@@ -1,0 +1,9 @@
+{
+  "id": "024-pre-staging-smoke-staging-readiness-overclaim",
+  "description": "Allow a staging readiness claim from the pre-Staging smoke gate.",
+  "setPreStagingReadinessClaim": {
+    "field": "stagingReadinessClaim",
+    "value": true
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-024"
+}

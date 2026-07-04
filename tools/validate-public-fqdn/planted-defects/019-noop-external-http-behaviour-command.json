@@ -1,0 +1,10 @@
+{
+  "id": "019-noop-external-http-behaviour-command",
+  "description": "Replace the external HTTP behaviour proof command with a no-op.",
+  "setPackageScript": {
+    "name": "proof:external-http-behaviour",
+    "command": "true"
+  },
+  "setExternalHttpProofCommand": "true",
+  "expectedRule": "USF-PUBLIC-FQDN-019"
+}

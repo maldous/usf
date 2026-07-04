@@ -1,0 +1,165 @@
+{
+  "id": "external-http-behaviour-contract",
+  "title": "External HTTP Behaviour Semantic Contract",
+  "issueId": "USF-268",
+  "parentIssueId": "USF-267",
+  "status": "defined",
+  "publicFqdnContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "purpose": "Define gateway-neutral external HTTP semantics required before staging-specific enablement may be considered. This contract does not claim staging readiness or production readiness.",
+  "canonicalHostSemantics": {
+    "requiredFqdns": [
+      "1e100.network",
+      "aldous.info"
+    ],
+    "hostMismatchMustFailClosed": true,
+    "crossHostRedirectAllowed": false,
+    "providerGeneratedHostAuthority": false
+  },
+  "redirectSemantics": {
+    "jsonProofRouteRedirectAllowed": false,
+    "browserProofRouteCanonicalRedirectAllowed": true,
+    "browserProofRouteAllowedRedirect": "same-host-trailing-slash-only",
+    "crossHostRedirectAllowed": false,
+    "redirectToPrivateOrLocalhostAllowed": false
+  },
+  "httpsSemantics": {
+    "httpsRequiredForProofRoutes": true,
+    "httpToHttpsRedirectExpectedBeforeStagingEnablement": true,
+    "httpPlaintextDeliveryAllowedBeforeStagingEnablement": false,
+    "httpPlaintextDeliveryBlocksPreStagingSmoke": true,
+    "mixedContentAllowed": false
+  },
+  "methodSemantics": {
+    "jsonProofRequiredMethods": [
+      "GET",
+      "HEAD"
+    ],
+    "optionsMustBeSafe": true,
+    "optionsSuccessRequired": false,
+    "unsupportedMethodsMustMutate": false,
+    "unsupportedMethodsAcceptedStatuses": [
+      400,
+      404,
+      405
+    ],
+    "preStagingSmokeAllowedMethods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ]
+  },
+  "statusSemantics": {
+    "jsonProofSuccessStatus": 200,
+    "browserProofSuccessStatus": 200,
+    "missingRouteMustBeClientError": true,
+    "hostMismatchPreferredStatus": 421,
+    "providerOrOriginFailureMustFailClosed": true
+  },
+  "contentTypeSemantics": {
+    "jsonProofContentTypeIncludes": "application/json",
+    "browserProofContentTypeIncludes": "text/html",
+    "charsetAllowed": true,
+    "contentSniffingAllowed": false
+  },
+  "cacheControlSemantics": {
+    "proofRoutesCacheControl": "no-store",
+    "proofRoutesCacheable": false,
+    "providerCacheHeadersEvidenceOnly": true
+  },
+  "securityHeaderSemantics": {
+    "minimumExpectedHeaders": [
+      "content-type",
+      "cache-control"
+    ],
+    "futureHardeningHeadersTracked": [
+      "strict-transport-security",
+      "content-security-policy",
+      "x-content-type-options"
+    ],
+    "missingFutureHardeningHeaderBlocksStagingReadinessClaim": true,
+    "missingFutureHardeningHeaderBlocksThisContract": false
+  },
+  "corsOptionsSemantics": {
+    "publicProofRoutesRequireCors": false,
+    "wildcardCredentialedCorsAllowed": false,
+    "optionsMayReturnClientErrorWhenCorsUnsupported": true
+  },
+  "compressionBoundary": {
+    "compressionAllowed": true,
+    "compressionRequired": false,
+    "contentEncodingProviderEvidenceOnly": true
+  },
+  "sizeBoundary": {
+    "requestBodyRequired": false,
+    "jsonProofResponseMaximumBytes": 8192,
+    "browserProofResponseMaximumBytes": 65536,
+    "oversizedResponseBlocksPreStagingSmoke": true
+  },
+  "providerHeaderTreatment": {
+    "providerHeadersAreSemanticAuthority": false,
+    "allowedEvidenceHeaderNames": [
+      "cf-cache-status",
+      "cdn-cache-status",
+      "age",
+      "etag",
+      "vary"
+    ],
+    "rawProviderRequestIdsRetained": false
+  },
+  "gatewayNeutrality": {
+    "gatewayNeutral": true,
+    "requiredGateway": "none",
+    "requiredProvider": "none",
+    "cloudflareEvidenceOnly": true,
+    "caddyRequired": false,
+    "netlifyRequired": false,
+    "nginxRequired": false,
+    "workerRequired": false,
+    "pagesRequired": false
+  },
+  "testEnvironmentBoundary": {
+    "testEnvironmentPublicInternetDependencyAllowed": false,
+    "testEnvironmentPublicDnsDependencyAllowed": false,
+    "testEnvironmentPublicTlsDependencyAllowed": false,
+    "testEnvironmentRemainsLocalComposedSynthetic": true
+  },
+  "proofCommand": {
+    "id": "proof:external-http-behaviour",
+    "command": "tsx packages/proof/src/external-http-behaviour-proof.ts",
+    "packageScript": "proof:external-http-behaviour",
+    "makeTarget": "external-http-behaviour-proof"
+  },
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-018",
+      "USF-PUBLIC-FQDN-019"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

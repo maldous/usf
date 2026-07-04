@@ -1,0 +1,149 @@
+{
+  "id": "external-http-cache-provider-proof-gate",
+  "title": "External HTTP Cache and Upstream Provider Behaviour Proof Gate",
+  "issueId": "USF-269",
+  "parentIssueId": "USF-267",
+  "status": "blocked",
+  "statusRationale": "The public JSON proof endpoint and browser proof route declare no-store cache policy, but current provider evidence shows cache-hit and nonzero Age observations on proof/control routes. Provider and CDN headers are recorded as evidence only and are not semantic authority; they still block the cache proof because they contradict the declared no-store behaviour. Future static, API-like, and app route classes are classified but not claimed as staging-ready.",
+  "blocksStagingSpecificEnablement": true,
+  "publicFqdnContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "externalHttpBehaviourContract": "docs/architecture/external-http-behaviour-contract.json",
+  "proofCommand": {
+    "id": "proof:external-http-cache",
+    "command": "tsx packages/proof/src/external-http-cache-proof.ts",
+    "packageScript": "proof:external-http-cache",
+    "makeTarget": "external-http-cache-proof"
+  },
+  "routeClassEvidence": [
+    {
+      "routeClass": "json-proof-endpoint",
+      "routes": [
+        "/.well-known/usf-public-edge.json"
+      ],
+      "cachePolicy": {
+        "cacheable": false,
+        "cacheControl": "no-store",
+        "etagObserved": true,
+        "lastModifiedObserved": false,
+        "varyObserved": true,
+        "ageObserved": true,
+        "ageSecondsObserved": "non-zero",
+        "providerCacheHeaderObserved": true,
+        "providerCacheHitObserved": true,
+        "cacheabilityEvidenceConflict": true,
+        "compressionAllowed": true
+      }
+    },
+    {
+      "routeClass": "browser-proof-route",
+      "routes": [
+        "/__proof/public-route"
+      ],
+      "cachePolicy": {
+        "cacheable": false,
+        "cacheControl": "no-store",
+        "etagObserved": false,
+        "lastModifiedObserved": false,
+        "varyObserved": false,
+        "ageObserved": true,
+        "ageSecondsObserved": "non-zero",
+        "providerCacheHeaderObserved": true,
+        "providerCacheHitObserved": true,
+        "cacheabilityEvidenceConflict": true,
+        "compressionAllowed": true
+      }
+    },
+    {
+      "routeClass": "future-static-route",
+      "routes": [],
+      "cachePolicy": {
+        "cacheable": "not-assessed",
+        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "stagingReadinessClaim": false
+      }
+    },
+    {
+      "routeClass": "future-api-like-route",
+      "routes": [],
+      "cachePolicy": {
+        "cacheable": "not-assessed",
+        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "stagingReadinessClaim": false
+      }
+    },
+    {
+      "routeClass": "future-app-route",
+      "routes": [],
+      "cachePolicy": {
+        "cacheable": "not-assessed",
+        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "stagingReadinessClaim": false
+      }
+    }
+  ],
+  "providerHeaderBoundary": {
+    "providerHeadersAreSemanticAuthority": false,
+    "requiredProvider": "none",
+    "observedHeaderNames": [
+      "cf-cache-status",
+      "cache-status",
+      "age",
+      "etag",
+      "vary"
+    ],
+    "rawProviderRequestIdsRetained": false
+  },
+  "blockers": [
+    {
+      "id": "external-http-proof-route-provider-cache-hit",
+      "issueId": "USF-269",
+      "affectedRoutes": [
+        "/.well-known/usf-public-edge.json",
+        "/__proof/public-route"
+      ],
+      "observed": "Proof/control routes declare Cache-Control no-store but provider evidence includes cache hit and nonzero Age observations.",
+      "requiredOperatorAction": "Configure the public edge or origin so proof/control routes are not served from provider cache when Cache-Control is no-store, or record a later explicit human-approved bounded rationale.",
+      "blocksStagingSpecificEnablement": true
+    }
+  ],
+  "freshnessAndInvalidationBoundary": {
+    "ttlExpectation": "proof-control-routes-no-store",
+    "cacheKeyBoundary": "host-scheme-path-query-method-and-vary-header-where-present",
+    "purgeBoundary": "No purge or invalidation operation is required for proof/control routes; future cacheable route classes require separate staging-specific evidence.",
+    "staleIfErrorAssessed": false,
+    "staleWhileRevalidateAssessed": false
+  },
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-020",
+      "USF-PUBLIC-FQDN-021"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

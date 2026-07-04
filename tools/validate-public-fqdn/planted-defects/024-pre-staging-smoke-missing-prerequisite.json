@@ -1,0 +1,8 @@
+{
+  "id": "024-pre-staging-smoke-missing-prerequisite",
+  "description": "Remove a required prerequisite from the pre-Staging smoke gate.",
+  "dropPreStagingPrerequisiteIds": [
+    "USF-263"
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-024"
+}

@@ -1,0 +1,134 @@
+{
+  "id": "pre-staging-external-smoke-proof-gate",
+  "title": "Non-Destructive Pre-Staging External Smoke Proof Gate",
+  "issueId": "USF-271",
+  "parentIssueId": "USF-267",
+  "status": "blocked",
+  "statusRationale": "The non-destructive smoke gate is implemented and fail-closed. Current public HTTPS JSON and browser proof routes pass, but 1e100.network currently serves the JSON proof route over plain HTTP without redirecting to HTTPS. The upstream cache/provider prerequisite is also blocked because proof/control routes show provider cache-hit or nonzero Age evidence despite declaring Cache-Control no-store. These blockers prevent staging-specific enablement until corrected or explicitly reclassified by a later human decision.",
+  "blocksStagingSpecificEnablement": true,
+  "stagingSpecificEnablementMayBegin": false,
+  "proofCommand": {
+    "id": "proof:pre-staging-external-smoke",
+    "command": "tsx packages/proof/src/pre-staging-external-smoke-proof.ts",
+    "packageScript": "proof:pre-staging-external-smoke",
+    "makeTarget": "pre-staging-external-smoke-proof"
+  },
+  "prerequisites": [
+    {
+      "issueId": "USF-261",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-proof-baseline-tag-gate.json"
+    },
+    {
+      "issueId": "USF-262",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-semantic-contract.json"
+    },
+    {
+      "issueId": "USF-263",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-external-proof-gate.json"
+    },
+    {
+      "issueId": "USF-264",
+      "status": "done",
+      "evidence": "docs/architecture/public-route-telemetry-proof-gate.json"
+    },
+    {
+      "issueId": "USF-265",
+      "status": "done",
+      "evidence": "docs/architecture/public-fqdn-proof-baseline-tag-gate.json"
+    },
+    {
+      "issueId": "USF-266",
+      "status": "done",
+      "evidence": "docs/architecture/public-proof-origin-service.json"
+    },
+    {
+      "issueId": "USF-268",
+      "status": "pending-merge",
+      "evidence": "docs/architecture/external-http-behaviour-contract.json"
+    },
+    {
+      "issueId": "USF-269",
+      "status": "blocked",
+      "evidence": "docs/architecture/external-http-cache-provider-proof-gate.json"
+    },
+    {
+      "issueId": "USF-270",
+      "status": "bounded-pending-merge",
+      "evidence": "docs/architecture/external-http-observability-evidence-gate.json"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "pre-staging-http-redirect-staging-root",
+      "issueId": "USF-271",
+      "affectedFqdn": "1e100.network",
+      "observed": "Plain HTTP GET to /.well-known/usf-public-edge.json returned HTTP 200 instead of redirecting to HTTPS.",
+      "requiredOperatorAction": "Configure the public edge or origin for 1e100.network so HTTP requests to proof/control routes redirect to the same host over HTTPS, or record a later explicit human-approved reclassification.",
+      "blocksStagingSpecificEnablement": true
+    },
+    {
+      "id": "external-http-proof-route-provider-cache-hit",
+      "issueId": "USF-269",
+      "affectedFqdn": "1e100.network aldous.info",
+      "observed": "Proof/control routes declare Cache-Control no-store but provider evidence includes cache hit or nonzero Age observations.",
+      "requiredOperatorAction": "Configure the public edge or origin so proof/control routes are not served from provider cache when Cache-Control is no-store, or record a later explicit human-approved bounded rationale.",
+      "blocksStagingSpecificEnablement": true
+    },
+    {
+      "id": "pre-staging-provider-log-boundary",
+      "issueId": "USF-270",
+      "affectedFqdn": "1e100.network aldous.info",
+      "observed": "Repository access cannot collect external provider access logs.",
+      "requiredOperatorAction": "Before any staging readiness claim, attach provider or origin access-log evidence with safe redaction, retention, and correlation boundaries, or record a later approved bounded rationale.",
+      "blocksStagingSpecificEnablement": false
+    }
+  ],
+  "nonDestructiveBoundary": {
+    "allowedMethods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "destructiveChecksAllowed": false,
+    "persistentDataMutationAllowed": false,
+    "realTenantDataRequired": false,
+    "realSecretsRequired": false,
+    "proofRoutesOnly": true
+  },
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-024",
+      "USF-PUBLIC-FQDN-025"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "id": "024-pre-staging-smoke-destructive-check",
+  "description": "Allow destructive checks in the pre-Staging smoke gate.",
+  "setPreStagingDestructiveCheck": true,
+  "expectedRule": "USF-PUBLIC-FQDN-024"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "022-external-http-observability-provider-required",
+  "description": "Make a provider a semantic requirement for external HTTP observability evidence.",
+  "setObservabilityRequiredProvider": "cloudflare",
+  "expectedRule": "USF-PUBLIC-FQDN-022"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "020-external-http-proof-route-cacheable",
+  "description": "Mark the JSON proof route cacheable even though proof/control routes must be no-store.",
+  "setCacheRoutePolicy": {
+    "routeClass": "json-proof-endpoint",
+    "field": "cacheable",
+    "value": true
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-020"
+}
