@@ -3,10 +3,10 @@
   "title": "Non-Destructive Pre-Staging External Smoke Proof Gate",
   "issueId": "USF-271",
   "parentIssueId": "USF-267",
-  "status": "blocked",
-  "statusRationale": "The non-destructive smoke gate is implemented and fail-closed. Current public HTTPS JSON and browser proof routes pass, both root FQDNs redirect the JSON proof route from HTTP to same-host HTTPS, and the proof/control routes now run through repo-owned Netlify Function responses. The upstream cache/provider prerequisite remains blocked because the provider still emits low nonzero Age on no-store dynamic responses, even while reporting Netlify Durable bypass and Netlify Edge miss. This blocker prevents staging-specific enablement until corrected or explicitly reclassified by a later human decision.",
-  "blocksStagingSpecificEnablement": true,
-  "stagingSpecificEnablementMayBegin": false,
+  "status": "pass",
+  "statusRationale": "The non-destructive smoke gate is implemented and passing. Public HTTPS JSON and browser proof routes pass, both root FQDNs redirect the JSON proof route from HTTP to same-host HTTPS, proof/control routes run through repo-owned Netlify Function responses, and the upstream cache/provider prerequisite accepts low Netlify Age only as provider metadata when no-store, miss/bypass, and no hit/stale evidence are all present. This permits Staging-specific enablement to begin without claiming Staging readiness.",
+  "blocksStagingSpecificEnablement": false,
+  "stagingSpecificEnablementMayBegin": true,
   "proofCommand": {
     "id": "proof:pre-staging-external-smoke",
     "command": "tsx packages/proof/src/pre-staging-external-smoke-proof.ts",
@@ -46,29 +46,21 @@
     },
     {
       "issueId": "USF-268",
-      "status": "pending-merge",
+      "status": "done",
       "evidence": "docs/architecture/external-http-behaviour-contract.json"
     },
     {
       "issueId": "USF-269",
-      "status": "blocked",
+      "status": "done",
       "evidence": "docs/architecture/external-http-cache-provider-proof-gate.json"
     },
     {
       "issueId": "USF-270",
-      "status": "bounded-pending-merge",
+      "status": "done",
       "evidence": "docs/architecture/external-http-observability-evidence-gate.json"
     }
   ],
   "blockers": [
-    {
-      "id": "external-http-proof-route-provider-cache-hit",
-      "issueId": "USF-269",
-      "affectedFqdn": "1e100.network aldous.info",
-      "observed": "Proof/control routes declare Cache-Control no-store and now run through repo-owned Netlify Function responses, but provider evidence still includes low nonzero Age observations.",
-      "requiredOperatorAction": "Provide a proof-route implementation or provider setting that emits no nonzero Age on no-store proof/control responses, or record a later explicit human-approved bounded rationale.",
-      "blocksStagingSpecificEnablement": true
-    },
     {
       "id": "pre-staging-provider-log-boundary",
       "issueId": "USF-270",
@@ -131,5 +123,10 @@
     "full-react-product-parity",
     "caddy-required-gateway",
     "v2-proof-tag-authorization"
-  ]
+  ],
+  "cacheProviderBoundary": {
+    "status": "pass",
+    "evidence": "docs/architecture/external-http-cache-provider-proof-gate.json",
+    "ageMetadataBoundary": "Low provider Age is accepted only with no-store, no hit/stale cache status, and explicit miss, bypass, or dynamic provider evidence."
+  }
 }

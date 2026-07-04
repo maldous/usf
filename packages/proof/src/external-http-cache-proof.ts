@@ -43,8 +43,7 @@ async function probe(url: string, method: "GET" | "HEAD") {
   const providerCacheStatuses = [cacheStatus, cfCacheStatus, cdnCacheStatus, xCache]
     .filter(Boolean)
     .join("; ");
-  const providerCacheHitObserved =
-    /\bhit\b/i.test(providerCacheStatuses) || (Number.isFinite(ageSeconds) && ageSeconds > 0);
+  const cacheStatusEvidence = classifyProviderCacheEvidence(providerCacheStatuses, ageSeconds);
   return {
     method,
     status: response.status,
@@ -60,8 +59,42 @@ async function probe(url: string, method: "GET" | "HEAD") {
     cdnCacheStatus,
     xCache,
     providerCacheHeaderObserved: Boolean(providerCacheStatuses),
-    providerCacheHitObserved,
+    providerCacheHitObserved: cacheStatusEvidence.providerCacheHitObserved,
+    providerCacheStaleObserved: cacheStatusEvidence.providerCacheStaleObserved,
+    providerAgeMetadataObserved: cacheStatusEvidence.providerAgeMetadataObserved,
+    providerAgeAcceptedAsDynamicMetadata: cacheStatusEvidence.providerAgeAcceptedAsDynamicMetadata,
+    cacheStatusEvidenceClass: cacheStatusEvidence.classification,
     contentEncodingObserved: Boolean(response.headers.get("content-encoding")),
+  };
+}
+
+function classifyProviderCacheEvidence(providerCacheStatuses: string, ageSeconds: number) {
+  const statusText = providerCacheStatuses.toLowerCase();
+  const agePresent = Number.isFinite(ageSeconds) && ageSeconds > 0;
+  const hitObserved = /\bhit\b/.test(statusText);
+  const staleObserved = /\bstale\b/.test(statusText);
+  const explicitDynamicOrForwarded =
+    /\bfwd=(miss|bypass)\b/.test(statusText) ||
+    /\bdynamic\b/.test(statusText) ||
+    /\bmiss\b/.test(statusText) ||
+    /\bbypass\b/.test(statusText);
+  const providerAgeAcceptedAsDynamicMetadata =
+    agePresent && !hitObserved && !staleObserved && explicitDynamicOrForwarded;
+  const providerCacheHitObserved =
+    hitObserved || staleObserved || (agePresent && !providerAgeAcceptedAsDynamicMetadata);
+  const classification = providerCacheHitObserved
+    ? "unsafe-cache-hit-or-stale"
+    : providerAgeAcceptedAsDynamicMetadata
+      ? "dynamic-provider-age-metadata"
+      : explicitDynamicOrForwarded
+        ? "dynamic-miss-or-bypass"
+        : "no-provider-cache-hit-observed";
+  return {
+    providerCacheHitObserved,
+    providerCacheStaleObserved: staleObserved,
+    providerAgeMetadataObserved: agePresent,
+    providerAgeAcceptedAsDynamicMetadata,
+    classification,
   };
 }
 

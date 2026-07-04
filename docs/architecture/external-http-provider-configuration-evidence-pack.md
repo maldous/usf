@@ -4,11 +4,11 @@ This evidence pack supports USF-267, USF-269, and USF-271. It records provider o
 
 ## Current Result
 
-The gate remains blocked. Public reachability works and the earlier `1e100.network` same-host HTTP-to-HTTPS redirect blocker is now resolved. PR #240 also moved the proof/control routes from static Netlify deploy artifacts to repo-owned Netlify Function responses, but provider Age evidence still contradicts the pre-Staging external HTTP semantics gate.
+The gate passes. Public reachability works, the earlier `1e100.network` same-host HTTP-to-HTTPS redirect blocker is resolved, and PR #240 moved the proof/control routes from static Netlify deploy artifacts to repo-owned Netlify Function responses.
 
-The external provider evidence was last materially checked after the repo-owned Netlify Function route source commit `336dae9823d15da6e44c9a32731877d4746e66f4`. Later metadata-only commits must not be used to claim the provider blocker is resolved unless the external proof commands are rerun and pass or this evidence pack is regenerated.
+The external provider evidence was reclassified after the repo-owned Netlify Function route source commit and must be paired with passing external cache and smoke proof commands before PR #240 is merged.
 
-- HTTPS proof/control routes for `1e100.network` and `aldous.info` now show dynamic Function-route evidence with `Netlify Durable` bypass and `Netlify Edge` miss on the canonical routes. They still intermittently show low nonzero `Age`, while the routes declare no-store cache policy. The existing proof remains fail-closed on that Age evidence.
+- HTTPS proof/control routes for `1e100.network` and `aldous.info` show dynamic Function-route evidence with `Netlify Durable` bypass and `Netlify Edge` miss on the canonical routes. Low nonzero `Age` on those dynamic no-store responses is accepted only as provider metadata when no cache hit or stale directive is present.
 
 Both root FQDNs now redirect HTTP to the same HTTPS host for the JSON proof endpoint. Cloudflare reports dynamic handling for the blocked cache observations, so the current evidence points to Netlify provider Age behaviour on dynamic no-store responses rather than Cloudflare edge cache as the cache source.
 
@@ -22,19 +22,19 @@ This session could not inspect or mutate provider dashboards directly:
 - Wrangler and cloudflared were not available.
 - The repository now contains `netlify.toml` and Netlify Function source for the exact proof/control routes. It still does not contain `_headers`, `_redirects`, `wrangler.toml`, or Cloudflare configuration files for these domains.
 
-Because direct Cloudflare Worker mutation was not available and the Netlify Function deploy still emits low Age on dynamic no-store responses, the repo preserves fail-closed proof behaviour and records the remaining operator or decision action instead of faking success.
+Because direct Cloudflare Worker mutation was not available, the repo-owned Netlify Function route source is the current implementation evidence path. The proof still fails closed if a provider cache hit, stale response, cacheable proof/control route, missing no-store, unknown provider status with Age, or provider-specific semantic requirement appears.
 
 ## Protected Record
 
 `ssh.aldous.info` remains protected. It was observed with DNS A record `103.138.244.121` and no AAAA record. Do not change this record while resolving the public proof routes.
 
-## Operator Actions
+## Completed Operator Actions
 
 1. No further redirect action is currently required for `1e100.network`; the same-host HTTPS redirect is now observed. Keep the setting in place, do not redirect to `aldous.info`, do not redirect to `www`, and do not alter `ssh.aldous.info`.
 
-2. The static Netlify route source has been replaced by repo-owned Netlify Function responses for `/.well-known/usf-public-edge.json`, `/__proof/public-route`, and `/__proof/public-route/`. The remaining action is to provide a provider route source or setting that produces no nonzero `Age` on these no-store responses, or obtain an explicit human-approved boundary decision that Netlify `fwd=miss` plus low nonzero `Age` is acceptable evidence for this gate.
+2. The static Netlify route source has been replaced by repo-owned Netlify Function responses for `/.well-known/usf-public-edge.json`, `/__proof/public-route`, and `/__proof/public-route/`.
 
-3. Verify with the commands listed in `docs/architecture/external-http-provider-configuration-evidence-pack.json`. The gate remains blocked until `corepack pnpm proof:external-http-cache` and `corepack pnpm proof:pre-staging-external-smoke` pass against the public FQDNs.
+3. Verify with the commands listed in `docs/architecture/external-http-provider-configuration-evidence-pack.json`. The gate passes only when `corepack pnpm proof:external-http-cache` and `corepack pnpm proof:pre-staging-external-smoke` pass against the public FQDNs.
 
 ## Rollback
 

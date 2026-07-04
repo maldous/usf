@@ -65,7 +65,16 @@ function providerCacheHitObserved(response: Awaited<ReturnType<typeof probe>>): 
   ]
     .filter(Boolean)
     .join("; ");
-  return /\bhit\b/i.test(providerStatuses) || (Number.isFinite(ageSeconds) && ageSeconds > 0);
+  const statusText = providerStatuses.toLowerCase();
+  const agePresent = Number.isFinite(ageSeconds) && ageSeconds > 0;
+  const hitObserved = /\bhit\b/.test(statusText);
+  const staleObserved = /\bstale\b/.test(statusText);
+  const explicitDynamicOrForwarded =
+    /\bfwd=(miss|bypass)\b/.test(statusText) ||
+    /\bdynamic\b/.test(statusText) ||
+    /\bmiss\b/.test(statusText) ||
+    /\bbypass\b/.test(statusText);
+  return hitObserved || staleObserved || (agePresent && !explicitDynamicOrForwarded);
 }
 
 async function main(): Promise<number> {

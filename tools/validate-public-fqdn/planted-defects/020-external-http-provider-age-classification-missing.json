@@ -1,0 +1,11 @@
+{
+  "id": "020-external-http-provider-age-classification-missing",
+  "description": "A passing cache gate cannot accept low provider Age on proof/control routes without explicit miss/bypass dynamic metadata classification.",
+  "setExternalHttpCacheStatus": "pass",
+  "setCacheRoutePolicy": {
+    "routeClass": "json-proof-endpoint",
+    "field": "ageEvidenceClassification",
+    "value": "unclassified-provider-age"
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-020"
+}

@@ -64,6 +64,9 @@ BACKUP_RESTORE_EXECUTION_PROOF_PATH = Path(
 GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH = Path(
     "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json"
 )
+ENTERPRISE_ISO_STYLE_EVIDENCE_FOUNDATION_PATH = Path(
+    "docs/architecture/enterprise-iso-style-evidence-foundation.json"
+)
 ENVIRONMENT_PROMOTION_PATH = Path("spec/instances/environment-promotion/environment-promotion-enterprise-standard.json")
 OPERATOR_ACCESS_PROOF_PATH = Path("packages/proof/src/operator-access-proof.ts")
 OPERATOR_ACCESS_LIFECYCLE_PROOF_SOURCE_PATH = Path("packages/proof/src/operator-access-lifecycle-proof.ts")
@@ -127,6 +130,10 @@ RULES = {
         "blocking",
         "backup restore DR PITR and RPO/RTO execution proof enterprise evidence is incomplete or overclaimed",
     ),
+    "USF-ENTERPRISE-032": (
+        "blocking",
+        "enterprise ISO-style evidence foundation is incomplete or overclaimed",
+    ),
     "USF-ENTERPRISE-SELFTEST": ("blocking", "planted enterprise defect did not raise its expected rule"),
 }
 
@@ -143,6 +150,7 @@ REQUIRED_NON_CLAIMS = {
     "full-react-parity-readiness",
 }
 REQUIRED_LANES = {"USF-185", "USF-186", "USF-187", "USF-188", "USF-189", "USF-190", "USF-191"}
+REQUIRED_ENTERPRISE_FOUNDATION_ISSUES = {f"USF-{issue_number}" for issue_number in range(273, 289)}
 APPROVED_LANES = REQUIRED_LANES
 BLOCKED_LANES = REQUIRED_LANES - APPROVED_LANES
 VALIDATOR_ROWS = {
@@ -1033,6 +1041,11 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         if (ROOT / GENERATED_CLIENT_GRAPHQL_DELIVERY_DEPTH_PATH).exists()
         else None
     )
+    enterprise_iso_style_evidence_foundation = (
+        read_json(ENTERPRISE_ISO_STYLE_EVIDENCE_FOUNDATION_PATH)
+        if (ROOT / ENTERPRISE_ISO_STYLE_EVIDENCE_FOUNDATION_PATH).exists()
+        else None
+    )
     environment_promotion = (
         read_json(ENVIRONMENT_PROMOTION_PATH) if (ROOT / ENVIRONMENT_PROMOTION_PATH).exists() else None
     )
@@ -1132,6 +1145,13 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
             generated_client_graphql_delivery_depth,
             defect,
         )
+    if defect.get("removeEnterpriseIsoStyleEvidenceFoundation"):
+        enterprise_iso_style_evidence_foundation = None
+    elif enterprise_iso_style_evidence_foundation is not None:
+        enterprise_iso_style_evidence_foundation = apply_enterprise_iso_style_foundation_defect(
+            enterprise_iso_style_evidence_foundation,
+            defect,
+        )
     if environment_promotion is not None:
         environment_promotion = apply_environment_promotion_defect(environment_promotion, defect)
     package = apply_package_defect(package, defect)
@@ -1170,6 +1190,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "backupRestoreOperationalDepth": backup_restore_operational_depth,
         "backupRestoreExecutionProof": backup_restore_execution_proof,
         "generatedClientGraphqlDeliveryDepth": generated_client_graphql_delivery_depth,
+        "enterpriseIsoStyleEvidenceFoundation": enterprise_iso_style_evidence_foundation,
         "environmentPromotion": environment_promotion,
         "operatorAccessProofText": operator_access_proof_text,
         "operatorAccessLifecycleProofText": operator_access_lifecycle_proof_text,
@@ -1184,6 +1205,39 @@ def apply_package_defect(package: dict[str, Any], defect: dict[str, Any]) -> dic
         scripts.pop(key, None)
     for key, value in defect.get("packageScriptSet", {}).items():
         scripts[key] = value
+    return out
+
+
+def apply_enterprise_iso_style_foundation_defect(
+    foundation: dict[str, Any],
+    defect: dict[str, Any],
+) -> dict[str, Any]:
+    out = copy.deepcopy(foundation)
+    for issue_id in defect.get("dropEnterpriseIsoDomainIssueIds", []):
+        out["domains"] = [
+            row for row in out.get("domains", []) if row.get("issueId") != issue_id
+        ]
+        out["controlMatrix"] = [
+            row for row in out.get("controlMatrix", []) if row.get("issueId") != issue_id
+        ]
+        out["riskRegister"] = [
+            row for row in out.get("riskRegister", []) if row.get("issueId") != issue_id
+        ]
+    for patch in defect.get("enterpriseIsoDomainPatch", []):
+        for row in out.get("domains", []):
+            if row.get("issueId") == patch.get("issueId") or row.get("domainId") == patch.get("domainId"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
+    if "setEnterpriseIsoCertificationClaim" in defect:
+        out.setdefault("frameworkBoundary", {})["iso27001CertificationClaim"] = defect[
+            "setEnterpriseIsoCertificationClaim"
+        ]
+    if "setEnterpriseIsoBlocksStaging" in defect:
+        out["stagingSpecificEnablementBlockedByThisTrack"] = defect[
+            "setEnterpriseIsoBlocksStaging"
+        ]
     return out
 
 
@@ -5045,6 +5099,109 @@ def check_generated_client_graphql_delivery_depth(F: Findings, state: dict[str, 
             )
 
 
+def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str, Any]) -> None:
+    foundation = state.get("enterpriseIsoStyleEvidenceFoundation")
+    if not isinstance(foundation, dict):
+        F.add(
+            "USF-ENTERPRISE-032",
+            str(ENTERPRISE_ISO_STYLE_EVIDENCE_FOUNDATION_PATH),
+            "enterprise ISO-style evidence foundation is missing",
+        )
+        return
+    if foundation.get("issueId") != "USF-272" or foundation.get("status") != "foundation-index-complete":
+        F.add("USF-ENTERPRISE-032", str(ENTERPRISE_ISO_STYLE_EVIDENCE_FOUNDATION_PATH), "foundation issue linkage or status is invalid")
+    if foundation.get("stagingSpecificEnablementBlockedByThisTrack") is not False:
+        F.add("USF-ENTERPRISE-032", "stagingSpecificEnablementBlockedByThisTrack", "foundation must not block staging-specific enablement by default")
+    boundary = foundation.get("frameworkBoundary", {})
+    if not isinstance(boundary, dict):
+        F.add("USF-ENTERPRISE-032", "frameworkBoundary", "framework boundary is missing")
+        boundary = {}
+    expected_false_claims = (
+        "iso27001CertificationClaim",
+        "socReadinessClaim",
+        "enterpriseProductionReadinessClaim",
+    )
+    for key in expected_false_claims:
+        if boundary.get(key) is not False:
+            F.add("USF-ENTERPRISE-032", f"frameworkBoundary.{key}", "certification or readiness claim must remain false")
+    if boundary.get("iso27001SupportOnly") is not True or boundary.get("statementOfApplicabilityStyleSupport") is not True:
+        F.add("USF-ENTERPRISE-032", "frameworkBoundary", "ISO support and SoA-style posture must be explicit")
+
+    child_ids = set(foundation.get("childIssueIds", []))
+    if child_ids != REQUIRED_ENTERPRISE_FOUNDATION_ISSUES:
+        F.add("USF-ENTERPRISE-032", "childIssueIds", f"child issue set is incomplete: {sorted(REQUIRED_ENTERPRISE_FOUNDATION_ISSUES - child_ids)}")
+    domains = foundation.get("domains")
+    if not isinstance(domains, list):
+        F.add("USF-ENTERPRISE-032", "domains", "domain evidence rows are missing")
+        domains = []
+    domains_by_issue = {row.get("issueId"): row for row in domains if isinstance(row, dict)}
+    if set(domains_by_issue) != REQUIRED_ENTERPRISE_FOUNDATION_ISSUES:
+        F.add("USF-ENTERPRISE-032", "domains", "domain rows do not cover all child issues")
+    required_non_claims = {
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-product-parity",
+    }
+    for issue_id in sorted(REQUIRED_ENTERPRISE_FOUNDATION_ISSUES):
+        row = domains_by_issue.get(issue_id, {})
+        for field in (
+            "domainId",
+            "purpose",
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "evidenceOwner",
+            "reviewCadence",
+            "nextReviewDate",
+            "evidenceSource",
+            "validationExpectation",
+            "implementationStatus",
+            "riskTreatment",
+            "deferredBoundary",
+        ):
+            if not row.get(field):
+                F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.{field}", "foundation domain field is missing")
+        if row.get("scopeRecorded") is not True or row.get("evidenceModelDefined") is not True:
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}", "scope and evidence model must be defined")
+        if row.get("validationExpectation") != "python3 tools/validate-enterprise/validate-enterprise.py all --json":
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.validationExpectation", "domain validation command is invalid")
+        posture = row.get("readinessBlockingPosture", {})
+        if not isinstance(posture, dict) or posture.get("blocksStagingSpecificEnablementByDefault") is not False:
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.readinessBlockingPosture", "staging blocking posture is missing or unsafe")
+        if len(row.get("evidenceExpectations", [])) < 5:
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.evidenceExpectations", "evidence expectations are incomplete")
+        if len(row.get("plantedDefectExpectations", [])) < 5:
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.plantedDefectExpectations", "planted defect expectations are incomplete")
+        if required_non_claims - set(row.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.nonClaims", "domain non-claims are incomplete")
+
+    for collection_name in ("controlMatrix", "riskRegister", "childAcceptanceCoverage"):
+        rows = foundation.get(collection_name)
+        if not isinstance(rows, list):
+            F.add("USF-ENTERPRISE-032", collection_name, "foundation collection is missing")
+            continue
+        issue_ids = {row.get("issueId") for row in rows if isinstance(row, dict)}
+        if issue_ids != REQUIRED_ENTERPRISE_FOUNDATION_ISSUES:
+            F.add("USF-ENTERPRISE-032", collection_name, "foundation collection does not cover all child issues")
+
+    exceptions = foundation.get("exceptionWorkflow", {})
+    if not isinstance(exceptions, dict):
+        F.add("USF-ENTERPRISE-032", "exceptionWorkflow", "exception workflow is missing")
+    else:
+        required_fields = {"reason", "owner", "riskOwner", "compensatingControl", "expiry", "validationCommand", "followUpIssue"}
+        if set(exceptions.get("requiredFields", [])) != required_fields:
+            F.add("USF-ENTERPRISE-032", "exceptionWorkflow.requiredFields", "exception workflow required fields are incomplete")
+        if exceptions.get("expiredExceptionAccepted") is not False or exceptions.get("ownerlessExceptionAccepted") is not False:
+            F.add("USF-ENTERPRISE-032", "exceptionWorkflow", "expired or ownerless exceptions are allowed")
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     check_shape(F, state)
@@ -5076,6 +5233,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     check_backup_restore_operational_depth(F, state)
     check_backup_restore_execution_proof(F, state)
     check_generated_client_graphql_delivery_depth(F, state)
+    check_enterprise_iso_style_evidence_foundation(F, state)
     return F
 
 

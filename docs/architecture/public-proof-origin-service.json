@@ -4,7 +4,10 @@
   "issueId": "USF-266",
   "parentIssueId": "USF-261",
   "unblocksIssueId": "USF-263",
-  "relatedIssueIds": ["USF-264", "USF-265"],
+  "relatedIssueIds": [
+    "USF-264",
+    "USF-265"
+  ],
   "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
   "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
   "status": "local-origin-implemented-external-route-proven",
@@ -48,7 +51,11 @@
     },
     "jsonProofEndpoint": {
       "method": "GET",
-      "methods": ["GET", "HEAD", "OPTIONS"],
+      "methods": [
+        "GET",
+        "HEAD",
+        "OPTIONS"
+      ],
       "route": "/.well-known/usf-public-edge.json",
       "status": 200,
       "headStatus": 200,
@@ -68,7 +75,11 @@
     },
     "browserProofRoute": {
       "method": "GET",
-      "methods": ["GET", "HEAD", "OPTIONS"],
+      "methods": [
+        "GET",
+        "HEAD",
+        "OPTIONS"
+      ],
       "route": "/__proof/public-route",
       "status": 200,
       "headStatus": 200,
@@ -100,8 +111,14 @@
     "containerPort": 8080,
     "localPublishedPort": 18080,
     "hostIp": "127.0.0.1",
-    "generatedFor": ["staging", "production"],
-    "notGeneratedFor": ["dev", "test"],
+    "generatedFor": [
+      "staging",
+      "production"
+    ],
+    "notGeneratedFor": [
+      "dev",
+      "test"
+    ],
     "testEnvironmentPublicInternetDependency": false,
     "testEnvironmentPublicDnsDependency": false,
     "testEnvironmentPublicTlsDependency": false,
@@ -110,9 +127,12 @@
   "cloudflareOriginRequirements": {
     "cloudflareProviderBoundary": "Cloudflare may route the public FQDNs to any implementation that serves the response contract.",
     "requiredOriginReachability": true,
-    "requiredRoutes": ["/.well-known/usf-public-edge.json", "/__proof/public-route"],
+    "requiredRoutes": [
+      "/.well-known/usf-public-edge.json",
+      "/__proof/public-route"
+    ],
     "basicProofRequiresCloudflareApiSecret": false,
-    "currentExternalBlocker": "provider-age-evidence-blocks-usf269-usf271",
+    "currentExternalBlocker": null,
     "externalImplementationEvidence": {
       "implementationEvidenceSource": "netlify-function-observed-configuration",
       "cloudflareBoundary": "Cloudflare remains DNS and edge/provider-boundary evidence only. The semantic requirement is PublicProofOriginService, not Netlify or Cloudflare.",
@@ -130,7 +150,7 @@
         "6a48f66f1d5a1fa9dad7defe",
         "6a48f66f96b60db3c2db53bb"
       ],
-      "remainingProviderBoundary": "Netlify Function responses are dynamic and emit no-store headers, but current provider evidence still includes low nonzero Age with Durable fwd=bypass and Edge fwd=miss. USF-269 and USF-271 remain blocked until that Age evidence is corrected or explicitly reclassified by a later human decision.",
+      "remainingProviderBoundary": "Netlify Function responses are dynamic and emit no-store headers. Low nonzero Age with Durable fwd=bypass and Edge fwd=miss is accepted only as provider metadata and not cache-hit evidence. USF-269 and USF-271 rely on their own proof commands for current pass evidence.",
       "gatewayNeutral": true,
       "netlifyRequired": false,
       "cloudflareWorkerRequired": false,
@@ -158,7 +178,10 @@
         "corepack pnpm proof:public-fqdn:production"
       ],
       "responseContractObserved": true,
-      "checkedFqdns": ["1e100.network", "aldous.info"],
+      "checkedFqdns": [
+        "1e100.network",
+        "aldous.info"
+      ],
       "claimBoundary": "External public JSON endpoint proof only; this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, product UI readiness, browser E2E readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization."
     },
     "externalPublicRoute": {
@@ -171,13 +194,18 @@
         "corepack pnpm proof:public-route:production"
       ],
       "responseContractObserved": true,
-      "checkedFqdns": ["1e100.network", "aldous.info"],
+      "checkedFqdns": [
+        "1e100.network",
+        "aldous.info"
+      ],
       "claimBoundary": "External public browser route and telemetry bootstrap marker/config proof only; this does not claim product UI readiness, browser E2E readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization."
     }
   },
   "validator": {
     "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
-    "rules": ["USF-PUBLIC-FQDN-013"],
+    "rules": [
+      "USF-PUBLIC-FQDN-013"
+    ],
     "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects"
   },
   "nonClaims": [

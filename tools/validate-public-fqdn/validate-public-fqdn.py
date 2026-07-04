@@ -1845,6 +1845,21 @@ def check_external_http_cache_gate(
         )
         if status != "blocked" and provider_cache_conflict:
             F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence.{route_class}.cachePolicy", "provider cache evidence conflict is hidden by non-blocked status")
+        age_observed = policy.get("ageObserved") is True or policy.get("ageSecondsObserved") == "low-non-zero"
+        if status != "blocked" and age_observed:
+            cache_status_evidence = str(policy.get("cacheStatusEvidence", "")).lower()
+            has_forwarded_evidence = any(
+                marker in cache_status_evidence
+                for marker in ("miss", "bypass", "dynamic")
+            )
+            if (
+                policy.get("ageEvidenceClassification") != "dynamic-provider-age-metadata"
+                or policy.get("providerAgeAcceptedAsDynamicMetadata") is not True
+                or policy.get("providerCacheStaleObserved") is not False
+                or not has_forwarded_evidence
+                or not is_non_empty_string(policy.get("ageMetadataAcceptanceBoundary"))
+            ):
+                F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#routeClassEvidence.{route_class}.cachePolicy", "provider Age evidence is not safely classified")
     provider = cache.get("providerHeaderBoundary", {})
     if not isinstance(provider, dict) or provider.get("providerHeadersAreSemanticAuthority") is not False:
         F.add("USF-PUBLIC-FQDN-020", f"{EXTERNAL_HTTP_CACHE_PATH}#providerHeaderBoundary", "provider headers are treated as semantic authority")

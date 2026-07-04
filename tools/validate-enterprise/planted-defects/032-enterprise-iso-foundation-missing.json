@@ -1,0 +1,6 @@
+{
+  "id": "032-enterprise-iso-foundation-missing",
+  "description": "Remove the enterprise ISO-style evidence foundation.",
+  "removeEnterpriseIsoStyleEvidenceFoundation": true,
+  "expectedRule": "USF-ENTERPRISE-032"
+}

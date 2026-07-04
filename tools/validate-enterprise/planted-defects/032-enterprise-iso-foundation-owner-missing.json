@@ -1,0 +1,13 @@
+{
+  "id": "032-enterprise-iso-foundation-owner-missing",
+  "description": "Remove a risk owner from one enterprise ISO-style foundation domain.",
+  "enterpriseIsoDomainPatch": [
+    {
+      "issueId": "USF-273",
+      "drop": [
+        "riskOwner"
+      ]
+    }
+  ],
+  "expectedRule": "USF-ENTERPRISE-032"
+}
