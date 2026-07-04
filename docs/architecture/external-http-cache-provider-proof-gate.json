@@ -4,7 +4,7 @@
   "issueId": "USF-269",
   "parentIssueId": "USF-267",
   "status": "blocked",
-  "statusRationale": "The public JSON proof endpoint and browser proof route declare no-store cache policy, but current provider evidence shows Netlify Edge cache-hit and nonzero Age observations on proof/control routes while Cloudflare reports dynamic handling. Provider and CDN headers are recorded as evidence only and are not semantic authority; they still block the cache proof because they contradict the declared no-store behaviour. Future static, API-like, and app route classes are classified but not claimed as staging-ready.",
+  "statusRationale": "The public JSON proof endpoint and browser proof route declare no-store cache policy, and PR #240 moved the route source from static Netlify deploy artifacts to repo-owned Netlify Function responses. Current provider evidence now shows Netlify Durable bypass and Netlify Edge miss on canonical proof/control routes while Cloudflare reports dynamic handling, but Netlify still emits low nonzero Age on dynamic no-store responses. Provider and CDN headers are recorded as evidence only and are not semantic authority; the existing proof still blocks because nonzero Age contradicts the declared no-store evidence boundary. Future static, API-like, and app route classes are classified but not claimed as staging-ready.",
   "blocksStagingSpecificEnablement": true,
   "publicFqdnContract": "docs/architecture/public-fqdn-semantic-contract.json",
   "externalHttpBehaviourContract": "docs/architecture/external-http-behaviour-contract.json",
@@ -27,7 +27,7 @@
         "lastModifiedObserved": false,
         "varyObserved": true,
         "ageObserved": true,
-        "ageSecondsObserved": "non-zero",
+        "ageSecondsObserved": "low-non-zero",
         "providerCacheHeaderObserved": true,
         "providerCacheHitObserved": true,
         "cacheabilityEvidenceConflict": true,
@@ -46,7 +46,7 @@
         "lastModifiedObserved": false,
         "varyObserved": false,
         "ageObserved": true,
-        "ageSecondsObserved": "non-zero",
+        "ageSecondsObserved": "low-non-zero",
         "providerCacheHeaderObserved": true,
         "providerCacheHitObserved": true,
         "cacheabilityEvidenceConflict": true,
@@ -85,9 +85,9 @@
     "providerHeadersAreSemanticAuthority": false,
     "requiredProvider": "none",
     "currentObservedFrontDoor": "cloudflare",
-    "currentObservedCachingLayer": "netlify-edge",
+    "currentObservedCachingLayer": "netlify-dynamic-function-route",
     "cloudflareCacheStatusObserved": "dynamic",
-    "netlifyCacheStatusObserved": "hit-with-nonzero-age",
+    "netlifyCacheStatusObserved": "durable-bypass-edge-miss-with-low-nonzero-age",
     "observedHeaderNames": [
       "cf-cache-status",
       "cache-status",
@@ -100,14 +100,14 @@
   "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
   "blockers": [
     {
-      "id": "external-http-proof-route-provider-cache-hit",
+      "id": "external-http-proof-route-provider-age-observed",
       "issueId": "USF-269",
       "affectedRoutes": [
         "/.well-known/usf-public-edge.json",
         "/__proof/public-route"
       ],
-      "observed": "Proof/control routes declare no-store but public evidence includes Cache-Status \"Netlify Edge\" hit and nonzero Age observations. Cloudflare cache status is dynamic, so a Cloudflare cache rule alone is not sufficient evidence that the Netlify edge/origin cache conflict is resolved.",
-      "requiredOperatorAction": "Deploy the proof origin or equivalent route implementation with Cache-Control, CDN-Cache-Control, and any provider-specific CDN no-store header required by the chosen provider; purge or redeploy the provider cache; rerun the external cache proof until proof/control routes no longer report provider cache hit or nonzero Age, or record a later explicit human-approved bounded rationale.",
+      "observed": "Proof/control routes declare no-store and now run through repo-owned Netlify Function responses, but public evidence still includes low nonzero Age observations while Netlify reports Durable fwd=bypass and Edge fwd=miss. Cloudflare cache status is dynamic, so a Cloudflare cache rule alone is not sufficient evidence that the provider Age conflict is resolved.",
+      "requiredOperatorAction": "Provide a proof-route implementation or provider setting that emits no nonzero Age on no-store proof/control responses, or record a later explicit human-approved bounded rationale that Netlify Durable fwd=bypass plus Edge fwd=miss with low Age is acceptable non-cache-hit evidence for this gate.",
       "blocksStagingSpecificEnablement": true
     }
   ],

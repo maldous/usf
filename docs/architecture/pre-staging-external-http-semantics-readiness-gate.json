@@ -4,7 +4,7 @@
   "issueId": "USF-267",
   "status": "blocked",
   "stagingSpecificEnablementMayBegin": false,
-  "statusRationale": "The external HTTP semantics gate is defined and validator-backed, and both root FQDNs now redirect the public JSON proof endpoint from HTTP to same-host HTTPS. Staging-specific enablement remains blocked because proof/control routes currently show Netlify Edge stale or cache-hit and nonzero Age evidence despite declaring no-store cache policy.",
+  "statusRationale": "The external HTTP semantics gate is defined and validator-backed, both root FQDNs redirect the public JSON proof endpoint from HTTP to same-host HTTPS, and PR #240 moved proof/control routes from static Netlify deploy artifacts to repo-owned Function responses. Staging-specific enablement remains blocked because proof/control routes still show low nonzero Age evidence despite declaring no-store cache policy and reporting Netlify Durable bypass plus Netlify Edge miss.",
   "children": [
     {
       "issueId": "USF-268",
@@ -31,7 +31,7 @@
     {
       "id": "external-http-proof-route-provider-cache-hit",
       "issueId": "USF-269",
-      "observed": "HTTPS proof/control routes return Cache-Status \"Netlify Edge\" stale or hit evidence and nonzero Age while Cloudflare cache status is dynamic.",
+      "observed": "HTTPS proof/control routes return Netlify Durable bypass and Netlify Edge miss evidence, but still emit low nonzero Age while Cloudflare cache status is dynamic.",
       "likelyProviderBoundary": "netlify-edge-or-origin-cache-configuration",
       "requiredAction": "Deploy or configure the route implementation so proof/control routes emit ordinary and CDN no-store headers, purge or redeploy the provider cache, and verify the routes no longer report provider cache hit or nonzero Age."
     }

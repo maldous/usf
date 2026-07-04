@@ -22,6 +22,7 @@
       "nginx-observed-configuration",
       "fastify-observed-configuration",
       "static-file-server-observed-configuration",
+      "netlify-function-observed-configuration",
       "cloudflare-worker-observed-configuration",
       "netlify-observed-configuration",
       "other-public-http-origin-observed-configuration"
@@ -111,14 +112,25 @@
     "requiredOriginReachability": true,
     "requiredRoutes": ["/.well-known/usf-public-edge.json", "/__proof/public-route"],
     "basicProofRequiresCloudflareApiSecret": false,
-    "currentExternalBlocker": "none",
+    "currentExternalBlocker": "provider-age-evidence-blocks-usf269-usf271",
     "externalImplementationEvidence": {
-      "implementationEvidenceSource": "netlify-observed-configuration",
+      "implementationEvidenceSource": "netlify-function-observed-configuration",
       "cloudflareBoundary": "Cloudflare remains DNS and edge/provider-boundary evidence only. The semantic requirement is PublicProofOriginService, not Netlify or Cloudflare.",
       "routesObserved": [
         "https://1e100.network/.well-known/usf-public-edge.json",
         "https://aldous.info/.well-known/usf-public-edge.json"
       ],
+      "repoOwnedProviderRouteSource": [
+        "netlify.toml",
+        "netlify/functions/public-edge.js",
+        "netlify/functions/public-route.js",
+        "netlify/functions/public-proof-shared.js"
+      ],
+      "deployIds": [
+        "6a48f66f1d5a1fa9dad7defe",
+        "6a48f66f96b60db3c2db53bb"
+      ],
+      "remainingProviderBoundary": "Netlify Function responses are dynamic and emit no-store headers, but current provider evidence still includes low nonzero Age with Durable fwd=bypass and Edge fwd=miss. USF-269 and USF-271 remain blocked until that Age evidence is corrected or explicitly reclassified by a later human decision.",
       "gatewayNeutral": true,
       "netlifyRequired": false,
       "cloudflareWorkerRequired": false,

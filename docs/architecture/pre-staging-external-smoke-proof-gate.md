@@ -15,8 +15,8 @@ Resolved:
 
 Remaining blocker:
 
-- Proof/control routes currently declare `Cache-Control: no-store`, but provider evidence includes Netlify Edge stale or cache-hit observations and nonzero `Age` observations.
+- Proof/control routes currently declare `Cache-Control: no-store` and run through repo-owned Netlify Function responses, but provider evidence still includes low nonzero `Age` observations.
 
-Required operator actions: inspect whether Netlify or the equivalent route implementation is serving the proof/control routes as static deploy artifacts, Function responses, Edge Function responses, proxy or redirect responses, another origin behind Netlify, or another provider routed through Netlify. Configure or redeploy that route source so proof/control routes are not served from provider cache when `Cache-Control` is `no-store`; purge or redeploy provider cache; then rerun the external cache proof and pre-Staging smoke proof. Alternatively, record a later explicit human-approved reclassification.
+Required operator or decision actions: provide a proof-route implementation or provider setting that emits no nonzero `Age` on no-store proof/control responses, or record a later explicit human-approved reclassification that Netlify Durable bypass plus Edge miss with low `Age` is acceptable bounded evidence. Then rerun the external cache proof and pre-Staging smoke proof.
 
 Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or v2-proof tag authorisation.
