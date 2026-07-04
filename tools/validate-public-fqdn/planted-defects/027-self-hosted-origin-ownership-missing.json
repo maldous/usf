@@ -1,0 +1,5 @@
+{
+  "id": "027-self-hosted-origin-ownership-missing",
+  "expectedRule": "USF-PUBLIC-FQDN-027",
+  "removeSelfHostedOriginOwnership": true
+}

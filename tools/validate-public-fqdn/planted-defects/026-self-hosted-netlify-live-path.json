@@ -1,0 +1,7 @@
+{
+  "id": "026-self-hosted-netlify-live-path",
+  "expectedRule": "USF-PUBLIC-FQDN-026",
+  "setSelfHostedStatus": "pass",
+  "setSelfHostedCutoverComplete": true,
+  "setSelfHostedNetlifyLivePath": true
+}

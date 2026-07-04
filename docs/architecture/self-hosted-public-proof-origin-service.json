@@ -1,0 +1,377 @@
+{
+  "id": "self-hosted-public-proof-origin-service",
+  "title": "Self-Hosted Public Proof Origin Service",
+  "issueId": "USF-289",
+  "relatedIssueIds": [
+    "USF-261",
+    "USF-263",
+    "USF-264",
+    "USF-267",
+    "USF-268",
+    "USF-269",
+    "USF-270",
+    "USF-271",
+    "USF-272"
+  ],
+  "status": "origin-configured-public-dns-cutover-blocked",
+  "checkedAt": "2026-07-04T23:17:50Z",
+  "checkedCommit": "28aa03456007e550f84d1b5128d9c0c5ef83a81b",
+  "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "externalHttpContract": "docs/architecture/external-http-behaviour-contract.json",
+  "publicProofOriginService": "docs/architecture/public-proof-origin-service.json",
+  "runbook": "docs/runbooks/self-hosted-public-proof-origin.md",
+  "protectedOperationalRecords": {
+    "sshAldousInfo": {
+      "fqdn": "ssh.aldous.info",
+      "expectedARecord": "103.138.244.121",
+      "observedARecords": [
+        "103.138.244.121"
+      ],
+      "observedAaaaRecords": [],
+      "mustRemainDnsOnly": true,
+      "mutatedByThisWork": false,
+      "riskBoundary": "This record provides SSH access to the self-hosted origin and must not be proxied, removed, or repointed by public proof route work."
+    }
+  },
+  "dnsCutover": {
+    "targetFqdns": [
+      {
+        "fqdn": "1e100.network",
+        "environment": "staging",
+        "currentObservedARecords": [
+          "104.21.0.220",
+          "172.67.128.84"
+        ],
+        "currentObservedAaaaRecords": [
+          "2606:4700:3031::ac43:8054",
+          "2606:4700:3032::6815:dc"
+        ],
+        "requiredARecord": "103.138.244.121",
+        "directDnsObserved": false,
+        "cloudflareProxyEvidenceObserved": true,
+        "netlifyLiveServingEvidenceObserved": true
+      },
+      {
+        "fqdn": "aldous.info",
+        "environment": "production",
+        "currentObservedARecords": [
+          "104.21.45.124",
+          "172.67.214.19"
+        ],
+        "currentObservedAaaaRecords": [
+          "2606:4700:3030::6815:2d7c",
+          "2606:4700:3031::ac43:d613"
+        ],
+        "requiredARecord": "103.138.244.121",
+        "directDnsObserved": false,
+        "cloudflareProxyEvidenceObserved": true,
+        "netlifyLiveServingEvidenceObserved": true
+      }
+    ],
+    "requiredARecord": "103.138.244.121",
+    "directToSelfHostedOriginRequired": true,
+    "cloudflareProxyAllowedForProofRoutes": false,
+    "netlifyLiveServingPathAllowed": false,
+    "cloudflareProxyCurrentlyObserved": true,
+    "netlifyLiveServingCurrentlyObserved": true,
+    "cutoverComplete": false,
+    "providerMutationAvailableFromThisSession": false,
+    "blockers": [
+      {
+        "id": "cloudflare-dns-only-cutover-unavailable",
+        "issueId": "USF-289",
+        "blocksPublicMigrationCompletion": true,
+        "requiredOperatorAction": "In Cloudflare DNS, change the apex records for 1e100.network and aldous.info to DNS-only A records pointing at 103.138.244.121, remove or disable any proxied CNAME or flattened CNAME to Netlify for those apex names, and leave ssh.aldous.info unchanged as DNS-only A 103.138.244.121.",
+        "verification": "After DNS propagation, the apex A records must resolve to 103.138.244.121, public HTTPS must be served by the self-hosted origin, Netlify headers must be absent, and the public external HTTP cache and pre-staging smoke proof commands must pass.",
+        "rollback": "Restore the previous Cloudflare DNS record values for the affected apex names only if the cutover fails; do not alter ssh.aldous.info."
+      }
+    ]
+  },
+  "selfHostedOrigin": {
+    "hostAlias": "ssh.aldous.info",
+    "publicIpv4": "103.138.244.121",
+    "serviceManager": "systemd",
+    "serviceName": "caddy",
+    "serviceActive": true,
+    "serviceEnabled": true,
+    "implementationEvidence": "caddy-observed-configuration",
+    "caddyVersionObserved": "2.6.2",
+    "configPath": "/etc/caddy/Caddyfile",
+    "configSourceOfTruth": "docs/runbooks/self-hosted-public-proof-origin.md",
+    "caddyConfigValidated": true,
+    "listeningPorts": {
+      "22": true,
+      "80": true,
+      "443": true
+    },
+    "requiredGateway": "none",
+    "caddyRequiredSemantically": false,
+    "nginxRequiredSemantically": false,
+    "netlifyRequiredSemantically": false,
+    "cloudflareRequiredSemantically": false
+  },
+  "routeSemantics": {
+    "jsonProofRoute": "/.well-known/usf-public-edge.json",
+    "browserProofRoutes": [
+      "/__proof/public-route",
+      "/__proof/public-route/"
+    ],
+    "safeMethods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "unsupportedMethodsFailSafely": true,
+    "unsupportedMethodsExpectedStatus": 405,
+    "missingRoutesFailSafely": true,
+    "missingRoutesExpectedStatus": 404,
+    "hostMismatchFailsSafely": true,
+    "persistentMutationAllowed": false,
+    "tenantDataRequired": false,
+    "realSecretsRequired": false,
+    "productUiReadinessClaimAllowed": false,
+    "browserE2eReadinessClaimAllowed": false
+  },
+  "headerSemantics": {
+    "noStoreRequired": true,
+    "requiredCacheControl": "no-store, no-cache, max-age=0, must-revalidate",
+    "cdnCacheControlRequired": "no-store",
+    "pragmaNoCacheRequired": true,
+    "expiresZeroRequired": true,
+    "contentTypeNosniffRequired": true,
+    "referrerPolicyRequired": true,
+    "corsOptionsBounded": true,
+    "hstsBoundary": "HSTS may be enabled once direct DNS and public TLS certificate issuance are stable for the host.",
+    "cspBoundary": "The browser proof route must keep a restrictive CSP boundary and must not load product UI assets.",
+    "providerCacheStatusAllowed": false,
+    "netlifyHeadersAllowed": false,
+    "cloudflareCacheStatusAllowedWhenDnsOnlyRequired": false,
+    "etagAndLastModifiedAreEvidenceOnly": true,
+    "serverHeaderMinimizedWherePractical": true
+  },
+  "directOriginEvidence": {
+    "caddyConfigValidation": "pass",
+    "httpRedirectEvidencePass": true,
+    "publicHttpsEvidencePass": false,
+    "publicHttpsBlocker": "The self-hosted origin cannot obtain public certificates or satisfy public HTTPS proof until 1e100.network and aldous.info DNS are changed from Cloudflare-proxied Netlify serving to DNS-only A records for 103.138.244.121.",
+    "directHttpChecks": [
+      {
+        "fqdn": "1e100.network",
+        "route": "/.well-known/usf-public-edge.json",
+        "resolveOverride": "1e100.network:80:103.138.244.121",
+        "observedStatus": 308,
+        "observedLocation": "https://1e100.network/.well-known/usf-public-edge.json",
+        "cacheControlObserved": "no-store, no-cache, max-age=0, must-revalidate"
+      },
+      {
+        "fqdn": "aldous.info",
+        "route": "/.well-known/usf-public-edge.json",
+        "resolveOverride": "aldous.info:80:103.138.244.121",
+        "observedStatus": 308,
+        "observedLocation": "https://aldous.info/.well-known/usf-public-edge.json",
+        "cacheControlObserved": "no-store, no-cache, max-age=0, must-revalidate"
+      },
+      {
+        "fqdn": "example.invalid",
+        "route": "/.well-known/usf-public-edge.json",
+        "resolveOverride": "example.invalid:80:103.138.244.121",
+        "observedStatus": 404,
+        "hostMismatchFailsSafely": true
+      }
+    ]
+  },
+  "enterpriseOriginSemantics": {
+    "assetOwnership": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/architecture/self-hosted-public-proof-origin-service.json#selfHostedOrigin",
+      "riskTreatment": "controlled-origin-required-before-public-cutover-completion",
+      "statement": "The self-hosted server at 103.138.244.121 is the controlled origin for proof/control route cutover evidence. DNS, CDN, gateway, reverse proxy, and hosting layers are implementation evidence only."
+    },
+    "availability": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#availability",
+      "riskTreatment": "systemd-managed-caddy-service-with-proof-route-health-evidence-and-rollback",
+      "restartBehaviour": "systemd-managed service restart is expected for caddy.service; public proof route health must be checked after reload or restart."
+    },
+    "tls": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#tls",
+      "riskTreatment": "automatic-certificate-renewal-after-dns-only-cutover",
+      "certificateIssuer": "Caddy automatic ACME issuer after DNS-only cutover",
+      "renewalMonitoring": "TLS expiry check remains required after cutover."
+    },
+    "accessControl": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#access-control",
+      "riskTreatment": "key-based-ssh-and-sudo-change-boundary",
+      "privilegedAccessBoundary": "SSH access to ssh.aldous.info and sudo changes to /etc/caddy/Caddyfile are privileged operational changes."
+    },
+    "changeControl": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#change-control",
+      "riskTreatment": "config-backup-validate-reload-verify-rollback",
+      "rollbackPath": "Restore the timestamped /etc/caddy/Caddyfile backup and reload caddy.service."
+    },
+    "loggingAndPrivacy": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#logging-and-privacy",
+      "riskTreatment": "proof-routes-do-not-accept-sensitive-payloads-and-retain-only-safe-operational-evidence",
+      "rawProviderRequestIdsRetained": false
+    },
+    "monitoring": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#monitoring",
+      "riskTreatment": "add-uptime-tls-expiry-process-disk-cpu-memory-and-network-checks-before-readiness-claims",
+      "stagingBlockingByDefault": false
+    },
+    "backupAndRecovery": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#backup-and-recovery",
+      "riskTreatment": "timestamped-config-backups-and-restore-test-evidence-required-before-production-readiness",
+      "rtoRpoBoundary": "No production RTO or RPO is claimed by this proof route origin evidence."
+    },
+    "securityHardening": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#security-hardening",
+      "riskTreatment": "minimal-open-ports-ssh-http-https-patch-cadence-and-no-route-secrets",
+      "openPorts": [
+        22,
+        80,
+        443
+      ]
+    },
+    "supplyChain": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#supply-chain",
+      "riskTreatment": "track-caddy-version-and-prohibit-unapproved-third-party-modules",
+      "caddyVersionObserved": "2.6.2"
+    },
+    "incidentResponse": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#incident-response",
+      "riskTreatment": "collect-dns-tls-route-cache-log-and-config-evidence-during-origin-serving-incidents",
+      "rollbackPath": "Restore last known good Caddyfile and DNS state."
+    },
+    "tenantAndDataBoundary": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/runbooks/self-hosted-public-proof-origin.md#tenant-and-data-boundary",
+      "riskTreatment": "proof-control-routes-expose-no-tenant-data-and-mutate-no-application-state",
+      "tenantDataExposed": false,
+      "persistentMutationAllowed": false
+    },
+    "providerIndependence": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/architecture/self-hosted-public-proof-origin-service.json#providerIndependence",
+      "riskTreatment": "providers-remain-replaceable-implementation-layers",
+      "requiredProvider": "none",
+      "requiredGateway": "none"
+    },
+    "iso27001StyleControlSupport": {
+      "owner": "platform-origin-owner",
+      "riskOwner": "platform-origin-risk-owner",
+      "controlOwner": "platform-origin-control-owner",
+      "evidenceOwner": "platform-origin-evidence-owner",
+      "evidenceSource": "docs/architecture/self-hosted-public-proof-origin-service.json#enterpriseOriginSemantics",
+      "riskTreatment": "support-control-evidence-without-certification-claim",
+      "controlThemes": [
+        "asset-inventory-and-ownership",
+        "access-control-and-privileged-access",
+        "secure-configuration",
+        "change-management",
+        "logging-and-monitoring",
+        "backup-and-recovery",
+        "incident-response",
+        "vulnerability-and-patch-management",
+        "supplier-provider-dependency-management",
+        "business-continuity-and-resilience",
+        "cryptographic-control-via-tls-certificate-lifecycle",
+        "data-minimisation-and-privacy-boundary",
+        "auditability-of-operational-changes"
+      ]
+    }
+  },
+  "providerIndependence": {
+    "repositoryContractSemanticAuthority": true,
+    "providerHeadersEvidenceOnly": true,
+    "generatedReportsAuthority": false,
+    "requiredProvider": "none",
+    "requiredGateway": "none",
+    "cloudflareEvidenceOnly": true,
+    "netlifyEvidenceOnly": true,
+    "caddyEvidenceOnly": true,
+    "nginxEvidenceOnly": true
+  },
+  "claims": {
+    "stagingReadinessClaim": false,
+    "productionReadinessClaim": false,
+    "deploymentReadinessClaim": false,
+    "liveProviderReadinessClaim": false,
+    "socReadinessClaim": false,
+    "isoCertificationClaim": false,
+    "enterpriseProductionReadinessClaim": false,
+    "productUiReadinessClaim": false,
+    "browserE2eReadinessClaim": false,
+    "fullReactProductParityClaim": false
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ],
+  "validator": {
+    "rules": [
+      "USF-PUBLIC-FQDN-026",
+      "USF-PUBLIC-FQDN-027"
+    ],
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "selftestCommand": "python3 tools/validate-public-fqdn/validate-public-fqdn.py selftest --json"
+  }
+}

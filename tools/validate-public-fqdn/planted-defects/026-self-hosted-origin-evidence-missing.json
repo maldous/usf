@@ -1,0 +1,5 @@
+{
+  "id": "026-self-hosted-origin-evidence-missing",
+  "expectedRule": "USF-PUBLIC-FQDN-026",
+  "dropSelfHostedOrigin": true
+}

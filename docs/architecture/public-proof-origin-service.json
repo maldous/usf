@@ -136,6 +136,8 @@
     "externalImplementationEvidence": {
       "implementationEvidenceSource": "netlify-function-observed-configuration",
       "cloudflareBoundary": "Cloudflare remains DNS and edge/provider-boundary evidence only. The semantic requirement is PublicProofOriginService, not Netlify or Cloudflare.",
+      "supersededAsIntendedLiveServingPathBy": "USF-289",
+      "targetLiveServingPath": "dns-only-public-apex-to-self-hosted-origin-103.138.244.121",
       "routesObserved": [
         "https://1e100.network/.well-known/usf-public-edge.json",
         "https://aldous.info/.well-known/usf-public-edge.json"

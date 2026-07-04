@@ -1,0 +1,5 @@
+{
+  "id": "026-self-hosted-missing-no-store",
+  "expectedRule": "USF-PUBLIC-FQDN-026",
+  "setSelfHostedNoStore": false
+}

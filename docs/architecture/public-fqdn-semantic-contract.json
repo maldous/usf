@@ -212,7 +212,9 @@
       "USF-PUBLIC-FQDN-022",
       "USF-PUBLIC-FQDN-023",
       "USF-PUBLIC-FQDN-024",
-      "USF-PUBLIC-FQDN-025"
+      "USF-PUBLIC-FQDN-025",
+      "USF-PUBLIC-FQDN-026",
+      "USF-PUBLIC-FQDN-027"
     ],
     "plantedDefectCoverage": {
       "USF-PUBLIC-FQDN-001": [
@@ -324,6 +326,19 @@
       ],
       "USF-PUBLIC-FQDN-025": [
         "tools/validate-public-fqdn/planted-defects/025-noop-pre-staging-smoke-command.json"
+      ],
+      "USF-PUBLIC-FQDN-026": [
+        "tools/validate-public-fqdn/planted-defects/026-self-hosted-origin-evidence-missing.json",
+        "tools/validate-public-fqdn/planted-defects/026-self-hosted-netlify-live-path.json",
+        "tools/validate-public-fqdn/planted-defects/026-self-hosted-cloudflare-proxy-enabled.json",
+        "tools/validate-public-fqdn/planted-defects/026-self-hosted-missing-no-store.json",
+        "tools/validate-public-fqdn/planted-defects/026-self-hosted-unsafe-methods.json"
+      ],
+      "USF-PUBLIC-FQDN-027": [
+        "tools/validate-public-fqdn/planted-defects/027-self-hosted-origin-ownership-missing.json",
+        "tools/validate-public-fqdn/planted-defects/027-self-hosted-enterprise-evidence-missing.json",
+        "tools/validate-public-fqdn/planted-defects/027-self-hosted-provider-required.json",
+        "tools/validate-public-fqdn/planted-defects/027-self-hosted-readiness-overclaim.json"
       ]
     }
   },
@@ -353,7 +368,8 @@
     "USF-268",
     "USF-269",
     "USF-270",
-    "USF-271"
+    "USF-271",
+    "USF-289"
   ],
   "remainingProofBoundaries": [
     {
