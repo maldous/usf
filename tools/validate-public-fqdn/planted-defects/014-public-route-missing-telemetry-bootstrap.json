@@ -1,0 +1,16 @@
+{
+  "id": "014-public-route-missing-telemetry-bootstrap",
+  "description": "Claim public route proof passed while Faro/Sentry telemetry bootstrap evidence is missing.",
+  "patchPublicRouteFqdnRows": [
+    {
+      "environment": "staging",
+      "values": {
+        "browserRoute": {
+          "telemetryBootstrapObserved": false,
+          "telemetrySystemsObserved": ["sentry"]
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-014"
+}

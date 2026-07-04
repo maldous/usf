@@ -1,0 +1,9 @@
+{
+  "id": "016-public-route-caddy-required-overclaim",
+  "description": "Claim public route proof requires Caddy as a gateway.",
+  "setPublicRouteNegativeEvidence": {
+    "field": "caddyRequiredGatewayClaim",
+    "value": true
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-016"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "014-public-route-http-only-accepted",
+  "description": "Claim public route proof passed while the browser evidence was HTTP-only.",
+  "patchPublicRouteFqdnRows": [
+    {
+      "environment": "staging",
+      "values": {
+        "browserRoute": {
+          "finalUrlScheme": "http",
+          "httpOnlyDeliveryObserved": true
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-014"
+}
