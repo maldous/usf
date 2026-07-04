@@ -290,7 +290,7 @@ import/<short-purpose>
 
 9.5 A pushed tag MUST NOT be moved except through an explicit corrective process (§13).
 
-9.6 Tag names MUST avoid forbidden migration-phase language (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`), except for the one-off `v2-foundation` annotated release-baseline tag authorised by §9.6.1.
+9.6 Tag names MUST avoid forbidden migration-phase language (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`), except for the one-off `v2-foundation` annotated release-baseline tag authorised by §9.6.1 and the one-off `v2-proof` annotated public-FQDN proof-baseline tag authorised by §9.6.2.
 
 9.6.1 **One-off dev-ready foundation baseline tag exception.** Matthew authorised a narrow governance amendment for the exact annotated tag name `v2-foundation` to mark the immutable dev-ready foundation baseline before post-foundation optimisation/minimalisation begins. This exception:
 
@@ -301,6 +301,16 @@ import/<short-purpose>
 - does not make the tag proof of correctness by itself;
 - does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity;
 - records a baseline state for later optimisation/minimalisation, not a permission to remove lineage, weaken validators, or reduce proof/evidence quality.
+
+9.6.2 **One-off post-Test public-FQDN proof-baseline tag exception.** USF-265 authorises a narrow governance amendment for the exact annotated tag name `v2-proof` to mark the immutable post-Test public-FQDN proof baseline after bounded Test readiness and the public FQDN proof gates are validated. This exception:
+
+- applies only to the exact tag name `v2-proof`;
+- applies only to the single post-Test public-FQDN proof-baseline target commit recorded by USF-265;
+- does not authorise arbitrary `v2-*` tags, branches, repository paths, file names, package names, schema IDs, taxonomy IDs, vocabulary IDs, implementation names, or local value IDs;
+- does not weaken the general prohibition on migration-phase naming;
+- does not make the tag proof of correctness by itself;
+- does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity;
+- records that dev readiness, bounded Test readiness, and the agreed public-FQDN proof gates have passed to their bounded evidence level, not that Staging or Production readiness has started or completed.
 
 9.7 **Recommended first tag:**
 
@@ -353,6 +363,8 @@ This tag does not import runtime/application code from ../react.
 ```
 
 9.9.1 **Required `v2-foundation` annotated tag message shape.** The one-off `v2-foundation` tag MUST carry a message that identifies the dev-ready foundation baseline, the target commit, the USF-228 governance exception, and the non-claims in §9.6.1. The tag message MUST NOT claim staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.
+
+9.9.2 **Required `v2-proof` annotated tag message shape.** The one-off `v2-proof` tag MUST carry a message that identifies the post-Test public-FQDN proof baseline, the target commit, the USF-265 governance exception, the completed prerequisite gates, and the non-claims in §9.6.2. The tag message MUST NOT claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity readiness.
 
 9.10 No tag is created in this task.
 
