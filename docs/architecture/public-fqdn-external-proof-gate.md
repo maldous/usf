@@ -17,11 +17,11 @@ The strict proof command is expected to fail closed until each FQDN serves the n
 
 ## Current Observation
 
-Public DNS resolution is observable and the HTTPS edge answers through Cloudflare. The public JSON proof endpoint is not yet delivered: both required FQDNs currently return Cloudflare 521 for the proof endpoint.
+Public DNS resolution, HTTPS/TLS host coverage, and JSON proof endpoint delivery are observable for both declared root FQDNs. The required public JSON proof endpoint returned HTTP 200 with an application/json content type and the usf-public-edge marker for 1e100.network and aldous.info.
 
-USF-266 adds a gateway-neutral local proof origin service that serves the JSON proof endpoint and the reserved non-product browser route under generated staging and production Compose profiles. That local service proves the response contract only; it does not prove external Cloudflare route delivery.
+USF-266 adds a gateway-neutral local proof origin service that serves the JSON proof endpoint and the reserved non-product browser route under generated staging and production Compose profiles. A Netlify-backed custom-domain route is recorded as implementation evidence for the external proof endpoint only. Netlify, Cloudflare, Caddy, and any other gateway or hosting product remain implementation evidence sources, not semantic requirements.
 
-That means USF-263 remains blocked for completion and the v2-proof tag remains blocked unless a later human decision explicitly accepts a bounded rationale.
+This clears the USF-263 external DNS TLS HTTPS JSON proof gate. It does not authorize the v2-proof tag by itself; USF-264 and USF-265 remain separate downstream gates.
 
 ## Commands
 

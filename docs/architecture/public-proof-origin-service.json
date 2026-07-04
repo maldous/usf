@@ -7,7 +7,7 @@
   "relatedIssueIds": ["USF-264", "USF-265"],
   "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
   "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
-  "status": "local-origin-implemented-external-route-blocked",
+  "status": "local-origin-implemented-external-route-proven",
   "selectedImplementation": {
     "implementationId": "node-built-in-http-origin",
     "packageName": "@foundation/app-public-proof-origin",
@@ -91,7 +91,19 @@
     "requiredOriginReachability": true,
     "requiredRoutes": ["/.well-known/usf-public-edge.json", "/__proof/public-route"],
     "basicProofRequiresCloudflareApiSecret": false,
-    "currentExternalBlocker": "The public Cloudflare edge currently returns 521 for the JSON proof endpoint, so an operator must attach reachable origin routing before USF-263 can pass."
+    "currentExternalBlocker": "none",
+    "externalImplementationEvidence": {
+      "implementationEvidenceSource": "netlify-observed-configuration",
+      "cloudflareBoundary": "Cloudflare remains DNS and edge/provider-boundary evidence only. The semantic requirement is PublicProofOriginService, not Netlify or Cloudflare.",
+      "routesObserved": [
+        "https://1e100.network/.well-known/usf-public-edge.json",
+        "https://aldous.info/.well-known/usf-public-edge.json"
+      ],
+      "gatewayNeutral": true,
+      "netlifyRequired": false,
+      "cloudflareWorkerRequired": false,
+      "caddyRequired": false
+    }
   },
   "proofEvidence": {
     "localOrigin": {
@@ -105,13 +117,18 @@
       ]
     },
     "externalPublicFqdn": {
-      "status": "blocked",
+      "status": "pass",
       "commands": [
         "corepack pnpm proof:public-fqdn",
         "corepack pnpm proof:public-fqdn:staging",
         "corepack pnpm proof:public-fqdn:production"
       ],
-      "blockedBy": "Cloudflare 521 route delivery failure until a reachable public origin is configured."
+      "responseContractObserved": true,
+      "checkedFqdns": [
+        "1e100.network",
+        "aldous.info"
+      ],
+      "claimBoundary": "External public JSON endpoint proof only; this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, product UI readiness, browser E2E readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization."
     }
   },
   "validator": {

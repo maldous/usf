@@ -29,7 +29,7 @@ services:
         - CMD
         - node
         - -e
-        - "require('node:http').request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host:'1e100.network'}},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).end()"
+        - "const http=require('node:http');const hosts=['1e100.network','aldous.info'];let left=hosts.length;let failed=false;const done=ok=>{failed=failed||!ok;if(--left===0)process.exit(failed?1:0)};for(const Host of hosts){http.request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host}},r=>{let body='';r.setEncoding('utf8');r.on('data',c=>body+=c);r.on('end',()=>done(r.statusCode===200&&String(r.headers['content-type']||'').includes('application/json')&&body.includes('usf-public-edge')))}).on('error',()=>done(false)).end()}setTimeout(()=>process.exit(1),4000)"
       interval: 10s
       timeout: 5s
       retries: 6

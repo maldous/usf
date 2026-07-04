@@ -359,6 +359,15 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
                 service.setdefault("composeService", {})["serviceName"] = defect[
                     "setOriginCatalogueServiceName"
                 ]
+    if "setOriginCatalogueHealthcheckScript" in defect and isinstance(compose_catalogue, dict):
+        for service in compose_catalogue.get("services", []):
+            if service.get("serviceId") == EXPECTED_ORIGIN_SERVICE_ID:
+                service.setdefault("composeService", {}).setdefault("healthcheck", {})["test"] = [
+                    "CMD",
+                    "node",
+                    "-e",
+                    defect["setOriginCatalogueHealthcheckScript"],
+                ]
     if "setPackageScript" in defect:
         patch = defect["setPackageScript"]
         mutated.get("package", {}).setdefault("scripts", {})[patch["name"]] = patch["command"]
@@ -1027,8 +1036,24 @@ def check_public_proof_origin_service(
     if not isinstance(local_origin, dict) or local_origin.get("status") != "pass" or local_origin.get("command") != "corepack pnpm proof:public-origin":
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.localOrigin", "origin local proof evidence is missing or stale")
     external = proof.get("externalPublicFqdn") if isinstance(proof, dict) else None
-    if not isinstance(external, dict) or external.get("status") != "blocked":
-        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn", "external route proof boundary must remain explicit while USF-263 is blocked")
+    if not isinstance(external, dict) or external.get("status") not in {"pass", "blocked"}:
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn", "external route proof evidence must record pass or blocked status")
+    elif external.get("status") == "pass":
+        expected_commands = {
+            "corepack pnpm proof:public-fqdn",
+            "corepack pnpm proof:public-fqdn:staging",
+            "corepack pnpm proof:public-fqdn:production",
+        }
+        commands = set(external.get("commands", []))
+        if commands != expected_commands:
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn.commands", "passing external route proof must list all strict proof commands")
+        if external.get("responseContractObserved") is not True:
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn.responseContractObserved", "passing external route proof must observe the response contract")
+        if set(external.get("checkedFqdns", [])) != set(EXPECTED_ENVIRONMENTS.values()):
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn.checkedFqdns", "passing external route proof must cover every declared FQDN")
+    else:
+        if not is_non_empty_string(external.get("blockedBy")):
+            F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn.blockedBy", "blocked external route proof must record the blocker")
 
     service = find_compose_service(compose_catalogue, EXPECTED_ORIGIN_SERVICE_ID)
     if service is None:
@@ -1038,6 +1063,23 @@ def check_public_proof_origin_service(
             F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.serviceKind", "origin service kind is stale")
         if service.get("composeService", {}).get("serviceName") != EXPECTED_ORIGIN_SERVICE_NAME:
             F.add("USF-PUBLIC-FQDN-013", f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.composeService.serviceName", "origin compose service name is stale")
+        healthcheck = service.get("composeService", {}).get("healthcheck", {})
+        healthcheck_test = healthcheck.get("test") if isinstance(healthcheck, dict) else None
+        healthcheck_script = " ".join(str(part) for part in healthcheck_test) if isinstance(healthcheck_test, list) else ""
+        for expected_fqdn in EXPECTED_ENVIRONMENTS.values():
+            if expected_fqdn not in healthcheck_script:
+                F.add(
+                    "USF-PUBLIC-FQDN-013",
+                    f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.composeService.healthcheck",
+                    f"origin healthcheck must probe declared public Host header: {expected_fqdn}",
+                )
+        for expected_fragment in ("usf-public-edge", "application/json"):
+            if expected_fragment not in healthcheck_script:
+                F.add(
+                    "USF-PUBLIC-FQDN-013",
+                    f"{COMPOSE_CATALOGUE_PATH}#public-proof-origin.composeService.healthcheck",
+                    f"origin healthcheck must verify {expected_fragment}",
+                )
         policies = service.get("environmentPolicies", {})
         for environment in ("dev", "test"):
             policy = policies.get(environment, {})

@@ -4,19 +4,19 @@
   "issueId": "USF-263",
   "parentIssueId": "USF-261",
   "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
-  "status": "blocked",
-  "statusRationale": "The proof harness exists and public DNS plus Cloudflare HTTPS edge responses are observable. USF-266 adds a gateway-neutral local proof origin service and generated staging/production Compose profile, but the declared public JSON proof endpoint currently returns Cloudflare 521, so external bounded proof endpoint content delivery is not proven.",
-  "blocksV2Proof": true,
+  "status": "pass",
+  "statusRationale": "The proof harness exists and public DNS plus HTTPS route delivery are observable for both declared root FQDNs. USF-266 provides a gateway-neutral local proof origin service and generated staging/production Compose profile, and the external public JSON proof endpoint returned HTTP 200 with the required marker for 1e100.network and aldous.info. This satisfies the USF-263 external DNS TLS HTTPS JSON proof gate only.",
+  "blocksV2Proof": false,
   "v2ProofAuthorizationAllowed": false,
-  "humanAuthorizationRequiredToBypass": true,
-  "blockerIssueIds": ["USF-263", "USF-266"],
+  "humanAuthorizationRequiredToBypass": false,
+  "blockerIssueIds": [],
   "localOriginEvidence": {
     "issueId": "USF-266",
     "evidence": "docs/architecture/public-proof-origin-service.json",
     "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
     "localProofCommand": "corepack pnpm proof:public-origin",
     "status": "pass",
-    "externalRouteDeliveryStatus": "blocked"
+    "externalRouteDeliveryStatus": "pass"
   },
   "proofCommands": {
     "all": {
@@ -58,12 +58,11 @@
       },
       "httpRoute": {
         "preferredRoute": "/.well-known/usf-public-edge.json",
-        "lastObservedStatus": 521,
-        "proofEndpointContentDelivered": false,
-        "expectedMarkerObserved": false,
+        "lastObservedStatus": 200,
+        "proofEndpointContentDelivered": true,
+        "expectedMarkerObserved": true,
         "cloudflareEdgeObserved": true
-      },
-      "currentBlocker": "Cloudflare edge returns 521 for the JSON proof endpoint, so origin/proof endpoint delivery is not proven."
+      }
     },
     {
       "environment": "production",
@@ -81,12 +80,11 @@
       },
       "httpRoute": {
         "preferredRoute": "/.well-known/usf-public-edge.json",
-        "lastObservedStatus": 521,
-        "proofEndpointContentDelivered": false,
-        "expectedMarkerObserved": false,
+        "lastObservedStatus": 200,
+        "proofEndpointContentDelivered": true,
+        "expectedMarkerObserved": true,
         "cloudflareEdgeObserved": true
-      },
-      "currentBlocker": "Cloudflare edge returns 521 for the JSON proof endpoint, so origin/proof endpoint delivery is not proven."
+      }
     }
   ],
   "negativeEvidence": {
