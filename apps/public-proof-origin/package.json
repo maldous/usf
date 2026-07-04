@@ -1,0 +1,9 @@
+{
+  "name": "@foundation/app-public-proof-origin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/server.mjs"
+  }
+}

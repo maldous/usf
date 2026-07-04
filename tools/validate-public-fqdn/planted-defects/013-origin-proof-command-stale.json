@@ -1,0 +1,9 @@
+{
+  "id": "public-fqdn-origin-proof-command-stale",
+  "expectedRule": "USF-PUBLIC-FQDN-013",
+  "setOriginLocalProofCommand": "true",
+  "setPackageScript": {
+    "name": "proof:public-origin",
+    "command": "true"
+  }
+}

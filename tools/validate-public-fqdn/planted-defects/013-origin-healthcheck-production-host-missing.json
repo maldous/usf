@@ -1,0 +1,5 @@
+{
+  "id": "public-fqdn-origin-healthcheck-production-host-missing",
+  "expectedRule": "USF-PUBLIC-FQDN-013",
+  "setOriginCatalogueHealthcheckScript": "require('node:http').request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host:'1e100.network'}},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).end()"
+}

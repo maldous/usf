@@ -945,6 +945,28 @@
       "enterpriseExceptionRef": "exception-service-caddy"
     },
     {
+      "serviceId": "public-proof-origin",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#public-proof-origin",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-167",
+        "USF-261",
+        "USF-263",
+        "USF-264",
+        "USF-265",
+        "USF-266"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-public-proof-origin"
+    },
+    {
       "serviceId": "platform-api",
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#platform-api",
       "enterpriseEvidenceSource": "closure-matrix-row",
@@ -2909,6 +2931,48 @@
         "enterprise-production-readiness",
         "full-react-parity-readiness",
         "usf-133-closure"
+      ]
+    },
+    {
+      "id": "exception-service-public-proof-origin",
+      "targetType": "service",
+      "targetId": "public-proof-origin",
+      "disposition": "deferred-with-owner",
+      "reason": "USF-266 defines and locally proves the gateway-neutral public proof origin service, but external Cloudflare public route delivery for USF-263 remains operator-controlled and currently blocked by Cloudflare 521.",
+      "owner": "platform-public-edge-foundation",
+      "riskOwner": "platform-public-edge-risk-owner",
+      "controlOwner": "platform-public-edge-control-owner",
+      "treatmentPath": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-263",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "external-public-route-delivery-blocked-does-not-satisfy-v2-proof-tag-gate",
+      "promotionImpact": [
+        "staging-readiness",
+        "production-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "staging-readiness": true,
+        "production-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-react-parity-readiness",
+        "v2-proof-tag-authorization",
+        "usf-133-closure",
+        "full-dev-readiness",
+        "test-readiness"
       ]
     }
   ],

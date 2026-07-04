@@ -34,7 +34,7 @@
   "closure_disposition_counts": {
     "implemented": 13,
     "implemented-equivalent": 1,
-    "bounded-local-proof-with-deferred-readiness-boundaries": 2,
+    "bounded-local-proof-with-deferred-readiness-boundaries": 3,
     "deferred": 10,
     "profile-gated-bounded-proof": 6,
     "covered-by-usf-runtime": 4,
@@ -3529,6 +3529,104 @@
         "source_issue_gate": "USF-167",
         "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
         "disposition_execution_note": "USF-167 records the repository-backed disposition and links unresolved service work to the downstream source issue; it does not close the downstream issue or claim readiness."
+      }
+    },
+    {
+      "service_id": "public-proof-origin",
+      "display_name": "Public Proof Origin",
+      "service_kind": "application-runtime",
+      "react_compose_service_names": [],
+      "source_accounting_statuses": [
+        "bounded-local-proof-with-deferred-readiness-boundaries"
+      ],
+      "requirement_state": true,
+      "human_decision_state": "accepted",
+      "environment_disposition": "environment-specific",
+      "provider_boundary_disposition": "local-composed",
+      "readiness_tier": "compose-target-catalogued",
+      "evidence_grade": "b",
+      "profile_gated": true,
+      "generated_in_targets": [
+        "staging",
+        "production"
+      ],
+      "closure_evidence": {
+        "closure_disposition": "bounded-local-proof-with-deferred-readiness-boundaries",
+        "closure_blocking": true,
+        "service_catalogue_authority": true,
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
+        "react_parity_refs": [
+          "docs/architecture/public-fqdn-proof-source-use-disposition-matrix.md#public-proof-origin"
+        ],
+        "proof_evidence_refs": [
+          "corepack pnpm proof:public-origin",
+          "corepack pnpm proof:public-fqdn",
+          "docs/architecture/public-proof-origin-service.json",
+          "docs/architecture/public-fqdn-external-proof-gate.json",
+          "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+        ],
+        "tracking_issues": [
+          "USF-167",
+          "USF-261",
+          "USF-263",
+          "USF-264",
+          "USF-265",
+          "USF-266"
+        ],
+        "non_equivalence_boundaries": [
+          "A locally proven public proof origin service is not equivalent to external Cloudflare route delivery for the declared public FQDNs.",
+          "Public JSON proof delivery is not product UI readiness, browser E2E readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity.",
+          "Caddy, Netlify, Cloudflare Worker, nginx, static hosting, or any other edge/origin implementation may provide evidence, but none is a semantic requirement."
+        ],
+        "missing_evidence": [
+          "external Cloudflare route delivery for https://1e100.network/.well-known/usf-public-edge.json",
+          "external Cloudflare route delivery for https://aldous.info/.well-known/usf-public-edge.json",
+          "USF-264 public browser route and telemetry bootstrap proof",
+          "USF-265 v2-proof tag authorisation evidence"
+        ],
+        "accepted_out_of_scope_rationale": "The repo can define and prove a gateway-neutral origin locally; external DNS, Cloudflare, and origin attachment remain operator-controlled evidence before USF-263 can pass.",
+        "readiness_claims_allowed": [
+          "service-catalogue-validation",
+          "generated-compose-derivation",
+          "local-public-proof-origin-response-contract"
+        ],
+        "readiness_claims_prohibited": [
+          "full-react-parity-readiness",
+          "full-dev-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "deployment-readiness",
+          "live-provider-readiness",
+          "soc-readiness",
+          "iso27001-certification",
+          "enterprise-production-readiness",
+          "product-ui-readiness",
+          "browser-e2e-readiness",
+          "v2-proof-tag-authorization"
+        ],
+        "enterprise_evidence_refs": [
+          "soa-service-public-proof-origin",
+          "soa-deferred-boundary-public-proof-origin",
+          "soa-proof-proof-public-origin",
+          "evidence-proof-proof-public-origin",
+          "resilience-posture-public-proof-origin",
+          "incident-vulnerability-public-proof-origin",
+          "privacy-proof-proof-public-origin",
+          "evidence-lane1-service-disposition-closure-matrix",
+          "threat-lane-usf-185",
+          "evidence-enterprise-evidence-model-validator"
+        ],
+        "tracking_issue_rationale": {
+          "USF-261": "v2-proof public FQDN proof and tag authorisation coordination remains blocked until public proof gates complete",
+          "USF-263": "external DNS, TLS, HTTPS, and public JSON proof endpoint delivery gate",
+          "USF-264": "public browser route and telemetry bootstrap proof gate",
+          "USF-265": "authorised v2-proof tag gate after public-FQDN proofs are clean",
+          "USF-266": "gateway-neutral public proof origin service definition and local reproduction evidence"
+        },
+        "source_issue_gate": "USF-167",
+        "environment_promotion_standard_ref": "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json#environmentStandards",
+        "disposition_execution_note": "USF-266 adds the repo-owned gateway-neutral origin and local proof. This does not close USF-263, USF-264, USF-265, USF-261, or USF-133, and it does not claim readiness while the external public FQDN route returns Cloudflare 521."
       }
     },
     {

@@ -1,0 +1,16 @@
+{
+  "id": "012-external-private-only-resolution",
+  "description": "Accept private-only DNS resolution for a required public FQDN.",
+  "patchExternalFqdnRows": [
+    {
+      "environment": "production",
+      "values": {
+        "dns": {
+          "publicResolutionObserved": false,
+          "privateOnlyResolutionObserved": true
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-012"
+}

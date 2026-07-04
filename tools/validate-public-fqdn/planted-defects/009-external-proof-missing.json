@@ -1,0 +1,6 @@
+{
+  "id": "009-external-proof-missing",
+  "description": "Remove the external DNS TLS HTTPS proof-gate evidence so the validator must fail closed.",
+  "dropExternalProof": true,
+  "expectedRule": "USF-PUBLIC-FQDN-009"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "011-blocked-state-does-not-block-v2-proof",
+  "description": "Let a blocked external proof state authorize v2-proof instead of blocking it.",
+  "setExternalProofBlocksV2Proof": false,
+  "setExternalProofAuthorizationAllowed": true,
+  "expectedRule": "USF-PUBLIC-FQDN-011"
+}

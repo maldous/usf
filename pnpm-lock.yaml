@@ -155,6 +155,8 @@ importers:
 
   apps/api: {}
 
+  apps/public-proof-origin: {}
+
   apps/work: {}
 
   capabilities/audit: {}

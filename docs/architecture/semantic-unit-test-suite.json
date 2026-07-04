@@ -8,7 +8,7 @@
     "path": "docs/architecture/semantic-service-test-obligation-manifest.json",
     "selector": "semanticContractObligations where ownerIssueIds includes USF-241",
     "expectedSemanticContractCount": 67,
-    "expectedServiceRowCount": 38,
+    "expectedServiceRowCount": 39,
     "expectedUsf241ServiceRowCount": 0
   },
   "scope": {
@@ -168,11 +168,12 @@
   ],
   "serviceBackedRowsExcludedFromUsf241Claims": {
     "reason": "USF-241 owns pure/local unit coverage only. Service-backed rows remain owned by composed integration, profile exercise, fixture, evidence, resilience, and final acceptance issues.",
-    "serviceRowCount": 38,
+    "serviceRowCount": 39,
     "composedIntegrationRowCount": 33,
     "boundedOrOutOfScopeServiceIds": [
       "mock-oidc",
       "platform-api",
+      "public-proof-origin",
       "react-app",
       "sentry",
       "sonar-oidc-plugin"

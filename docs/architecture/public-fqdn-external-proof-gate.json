@@ -1,0 +1,124 @@
+{
+  "id": "public-fqdn-external-proof-gate",
+  "title": "External DNS TLS HTTPS Public FQDN Proof Gate",
+  "issueId": "USF-263",
+  "parentIssueId": "USF-261",
+  "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
+  "status": "pass",
+  "statusRationale": "The proof harness exists and public DNS plus HTTPS route delivery are observable for both declared root FQDNs. USF-266 provides a gateway-neutral local proof origin service and generated staging/production Compose profile, and the external public JSON proof endpoint returned HTTP 200 with the required marker for 1e100.network and aldous.info. This satisfies the USF-263 external DNS TLS HTTPS JSON proof gate only.",
+  "blocksV2Proof": false,
+  "v2ProofAuthorizationAllowed": false,
+  "humanAuthorizationRequiredToBypass": false,
+  "blockerIssueIds": [],
+  "localOriginEvidence": {
+    "issueId": "USF-266",
+    "evidence": "docs/architecture/public-proof-origin-service.json",
+    "serviceCatalogueRef": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
+    "localProofCommand": "corepack pnpm proof:public-origin",
+    "status": "pass",
+    "externalRouteDeliveryStatus": "pass"
+  },
+  "proofCommands": {
+    "all": {
+      "id": "proof:public-fqdn",
+      "command": "tsx packages/proof/src/public-fqdn-proof.ts all",
+      "packageScript": "proof:public-fqdn",
+      "makeTarget": "public-fqdn-proof",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    },
+    "staging": {
+      "id": "proof:public-fqdn:staging",
+      "command": "tsx packages/proof/src/public-fqdn-proof.ts staging",
+      "packageScript": "proof:public-fqdn:staging",
+      "makeTarget": "public-fqdn-proof-staging",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    },
+    "production": {
+      "id": "proof:public-fqdn:production",
+      "command": "tsx packages/proof/src/public-fqdn-proof.ts production",
+      "packageScript": "proof:public-fqdn:production",
+      "makeTarget": "public-fqdn-proof-production",
+      "expectedExitWhenRoutesUnavailable": "non-zero"
+    }
+  },
+  "requiredFqdns": [
+    {
+      "environment": "staging",
+      "fqdn": "1e100.network",
+      "proofCommandId": "proof:public-fqdn:staging",
+      "dns": {
+        "publicResolutionObserved": true,
+        "privateOnlyResolutionObserved": false,
+        "nxdomainObserved": false
+      },
+      "tls": {
+        "httpsAttempted": true,
+        "validCertificateObserved": true,
+        "certificateHostCoverageObserved": true
+      },
+      "httpRoute": {
+        "preferredRoute": "/.well-known/usf-public-edge.json",
+        "lastObservedStatus": 200,
+        "proofEndpointContentDelivered": true,
+        "expectedMarkerObserved": true,
+        "cloudflareEdgeObserved": true
+      }
+    },
+    {
+      "environment": "production",
+      "fqdn": "aldous.info",
+      "proofCommandId": "proof:public-fqdn:production",
+      "dns": {
+        "publicResolutionObserved": true,
+        "privateOnlyResolutionObserved": false,
+        "nxdomainObserved": false
+      },
+      "tls": {
+        "httpsAttempted": true,
+        "validCertificateObserved": true,
+        "certificateHostCoverageObserved": true
+      },
+      "httpRoute": {
+        "preferredRoute": "/.well-known/usf-public-edge.json",
+        "lastObservedStatus": 200,
+        "proofEndpointContentDelivered": true,
+        "expectedMarkerObserved": true,
+        "cloudflareEdgeObserved": true
+      }
+    }
+  ],
+  "negativeEvidence": {
+    "localhostAccepted": false,
+    "privateInternalHostAccepted": false,
+    "privateIpAccepted": false,
+    "cloudflareApiSecretRequired": false,
+    "caddyRequiredGatewayClaim": false,
+    "generatedComposeAuthority": false,
+    "generatedGatewayConfigAuthority": false
+  },
+  "validator": {
+    "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
+    "rules": [
+      "USF-PUBLIC-FQDN-009",
+      "USF-PUBLIC-FQDN-010",
+      "USF-PUBLIC-FQDN-011",
+      "USF-PUBLIC-FQDN-012",
+      "USF-PUBLIC-FQDN-013"
+    ],
+    "plantedDefectDirectory": "tools/validate-public-fqdn/planted-defects"
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "caddy-required-gateway",
+    "v2-proof-tag-authorization"
+  ]
+}

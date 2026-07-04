@@ -46,13 +46,27 @@
     "compose/**"
   ],
   "enterpriseEvidenceRefs": {
-    "soaSupportMappings": ["soa-usf-255-supply-chain-sbom-licence"],
-    "evidenceRegister": ["evidence-usf-255-supply-chain-sbom-licence"],
-    "threatModelAbuseCaseRegister": ["threat-usf-255-supply-chain-sbom-licence"],
-    "accessReviewPrivilegedOperationPosture": ["access-usf-255-supply-chain-sbom-licence"],
-    "backupRestoreResiliencePosture": ["resilience-usf-255-supply-chain-sbom-licence"],
-    "incidentVulnerabilityManagementEvidence": ["incident-usf-255-supply-chain-sbom-licence"],
-    "privacyDataMinimisationPosture": ["privacy-usf-255-supply-chain-sbom-licence"]
+    "soaSupportMappings": [
+      "soa-usf-255-supply-chain-sbom-licence"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-255-supply-chain-sbom-licence"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-255-supply-chain-sbom-licence"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-255-supply-chain-sbom-licence"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-255-supply-chain-sbom-licence"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-255-supply-chain-sbom-licence"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-255-supply-chain-sbom-licence"
+    ]
   },
   "claimBoundaries": {
     "testReadinessClaimAllowed": false,
@@ -75,7 +89,12 @@
       "id": "package-manager-and-lockfile",
       "categoryId": "supply-chain-sbom-licence",
       "scope": "package manager pin, toolchain engine pin, .npmrc posture, lockfile version, direct dependency lockfile root importer alignment, frozen install posture",
-      "evidenceRefs": ["package.json", ".npmrc", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
+      "evidenceRefs": [
+        "package.json",
+        ".npmrc",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml"
+      ],
       "testAssertion": "The issue-local Vitest suite fails on floating direct dependency specifiers, missing package-manager/toolchain posture, missing lockfile root importer entries, lockfile specifier drift, or override drift."
     },
     {
@@ -140,9 +159,14 @@
     ]
   },
   "workspaceBoundary": {
-    "workspaceGlobs": ["apps/*", "capabilities/*", "adapters/*", "packages/*"],
-    "expectedPackageJsonCountIncludingRoot": 33,
-    "expectedWorkspacePackageCount": 32,
+    "workspaceGlobs": [
+      "apps/*",
+      "capabilities/*",
+      "adapters/*",
+      "packages/*"
+    ],
+    "expectedPackageJsonCountIncludingRoot": 34,
+    "expectedWorkspacePackageCount": 33,
     "workspacePackageNamePrefix": "@foundation/",
     "workspaceExternalDependencySectionsAllowed": false
   },
@@ -185,17 +209,30 @@
       },
       {
         "id": "identity-and-secrets-sdks",
-        "packageNames": ["@keycloak/keycloak-admin-client", "node-vault"],
+        "packageNames": [
+          "@keycloak/keycloak-admin-client",
+          "node-vault"
+        ],
         "owner": "platform-identity-secrets-foundation"
       },
       {
         "id": "data-messaging-and-storage-sdks",
-        "packageNames": ["@nats-io/transport-node", "kysely", "minio", "pg", "redis"],
+        "packageNames": [
+          "@nats-io/transport-node",
+          "kysely",
+          "minio",
+          "pg",
+          "redis"
+        ],
         "owner": "platform-data-foundation"
       },
       {
         "id": "api-contract-runtime-sdks",
-        "packageNames": ["@sinclair/typebox", "fastify", "graphql"],
+        "packageNames": [
+          "@sinclair/typebox",
+          "fastify",
+          "graphql"
+        ],
         "owner": "platform-api-contract-foundation"
       },
       {
@@ -317,9 +354,13 @@
   "imagePinningPosture": {
     "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
     "composeTargetPath": "compose/compose.test.generated.yaml",
-    "imageServiceCount": 34,
+    "imageServiceCount": 35,
     "composeImageLineCount": 33,
-    "digestPinnedServiceIds": ["windmill", "windmill-worker", "pgbackrest"],
+    "digestPinnedServiceIds": [
+      "windmill",
+      "windmill-worker",
+      "pgbackrest"
+    ],
     "movingTagBlockers": [
       {
         "serviceId": "clamav",
@@ -332,6 +373,11 @@
         "serviceId": "sonar-oidc-plugin",
         "image": "curlimages/curl:8.11.1",
         "blockerId": "usf255-compose-generated-target-missing-sonar-oidc-plugin"
+      },
+      {
+        "serviceId": "public-proof-origin",
+        "image": "node:24.16.0-alpine3.22",
+        "blockerId": "usf266-compose-generated-target-missing-public-proof-origin"
       }
     ],
     "partialTagReviewRequired": [

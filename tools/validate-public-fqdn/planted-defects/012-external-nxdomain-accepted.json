@@ -1,0 +1,16 @@
+{
+  "id": "012-external-nxdomain-accepted",
+  "description": "Mark a required public FQDN as NXDOMAIN while still keeping the proof row.",
+  "patchExternalFqdnRows": [
+    {
+      "environment": "staging",
+      "values": {
+        "dns": {
+          "publicResolutionObserved": false,
+          "nxdomainObserved": true
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-012"
+}

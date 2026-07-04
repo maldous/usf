@@ -1,0 +1,17 @@
+{
+  "id": "012-missing-tls-proof",
+  "description": "Remove valid TLS host-coverage evidence for a required public FQDN.",
+  "patchExternalFqdnRows": [
+    {
+      "environment": "staging",
+      "values": {
+        "tls": {
+          "httpsAttempted": false,
+          "validCertificateObserved": false,
+          "certificateHostCoverageObserved": false
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-012"
+}

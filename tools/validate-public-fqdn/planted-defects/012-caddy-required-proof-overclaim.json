@@ -1,0 +1,9 @@
+{
+  "id": "012-caddy-required-proof-overclaim",
+  "description": "Allow external proof evidence to claim a Caddy-required gateway.",
+  "setExternalNegativeEvidence": {
+    "field": "caddyRequiredGatewayClaim",
+    "value": true
+  },
+  "expectedRule": "USF-PUBLIC-FQDN-012"
+}

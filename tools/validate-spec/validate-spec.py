@@ -2031,6 +2031,7 @@ DIRECTIVE_PLACEHOLDER_PHRASES = {
 }
 AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "apps/api",
+    "apps/public-proof-origin",
     "apps/work",
     "capabilities/auth",
     "capabilities/tenant",

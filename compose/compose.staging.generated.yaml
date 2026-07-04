@@ -501,6 +501,36 @@ services:
     image: clamav/clamav:stable
     profiles:
       - scanning
+  public-proof-origin:
+    image: node:24.16.0-alpine3.22
+    command:
+      - node
+      - /srv/public-proof-origin/server.mjs
+    environment:
+      PUBLIC_PROOF_ORIGIN_HOST: 0.0.0.0
+      PUBLIC_PROOF_ORIGIN_PORT: 8080
+      PUBLIC_PROOF_ORIGIN_FQDN_MAP: "1e100.network=staging,aldous.info=production"
+    ports:
+      -
+        name: public-proof-origin-http
+        target: 8080
+        published: 18080
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+    volumes:
+      - ../apps/public-proof-origin/src/server.mjs:/srv/public-proof-origin/server.mjs:ro
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "const http=require('node:http');const hosts=['1e100.network','aldous.info'];let left=hosts.length;let failed=false;const done=ok=>{failed=failed||!ok;if(--left===0)process.exit(failed?1:0)};for(const Host of hosts){http.request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host}},r=>{let body='';r.setEncoding('utf8');r.on('data',c=>body+=c);r.on('end',()=>done(r.statusCode===200&&String(r.headers['content-type']||'').includes('application/json')&&body.includes('usf-public-edge')))}).on('error',()=>done(false)).end()}setTimeout(()=>process.exit(1),4000)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    profiles:
+      - public-proof-origin
   external-caddy:
     image: caddy:2-alpine
     ports:

@@ -1,0 +1,18 @@
+{
+  "id": "012-proof-endpoint-missing-on-pass",
+  "description": "Claim the external proof passed while the proof endpoint marker is still missing.",
+  "setExternalProofStatus": "pass",
+  "setExternalProofBlocksV2Proof": false,
+  "patchExternalFqdnRows": [
+    {
+      "environment": "production",
+      "values": {
+        "httpRoute": {
+          "proofEndpointContentDelivered": false,
+          "expectedMarkerObserved": false
+        }
+      }
+    }
+  ],
+  "expectedRule": "USF-PUBLIC-FQDN-012"
+}

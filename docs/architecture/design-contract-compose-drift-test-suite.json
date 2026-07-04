@@ -17,11 +17,13 @@
     "semanticContracts": "spec/instances/semantic-contract/"
   },
   "expectedSemanticContractCount": 67,
-  "expectedServiceObligationCount": 38,
+  "expectedServiceObligationCount": 39,
   "expectedGeneratedServiceCount": 33,
   "expectedProfileCount": 11,
   "designContractObligationClassId": "design-contract-drift",
-  "forbiddenObligationClassIds": ["contract-design-drift"],
+  "forbiddenObligationClassIds": [
+    "contract-design-drift"
+  ],
   "requiredApiEventProviderContractIds": [
     "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
     "semantic-contract.api-keys-personal-access-tokens",
