@@ -97,6 +97,7 @@
     ],
     "rawProviderRequestIdsRetained": false
   },
+  "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
   "blockers": [
     {
       "id": "external-http-proof-route-provider-cache-hit",

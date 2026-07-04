@@ -43,6 +43,7 @@
       "requiredAction": "Deploy or configure the route implementation so proof/control routes emit ordinary and CDN no-store headers, purge or redeploy the provider cache, and verify the routes no longer report provider cache hit or nonzero Age."
     }
   ],
+  "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
   "claims": {
     "stagingReadinessClaim": false,
     "productionReadinessClaim": false,

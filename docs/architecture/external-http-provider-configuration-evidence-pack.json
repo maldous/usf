@@ -1,0 +1,282 @@
+{
+  "id": "external-http-provider-configuration-evidence-pack",
+  "title": "External HTTP Provider Configuration Evidence Pack",
+  "issueIds": [
+    "USF-267",
+    "USF-269",
+    "USF-271"
+  ],
+  "pr": "https://github.com/maldous/usf/pull/240",
+  "checkedCommit": "688a03a7906a2e3c616517596e54657944b375a4",
+  "checkedAt": "2026-07-04T07:03:24Z",
+  "status": "blocked-by-provider-configuration",
+  "semanticBoundary": {
+    "semanticRequirement": "ExternalHttpCapability with gateway-neutral public proof/control routes.",
+    "providersAreSemanticAuthority": false,
+    "cloudflareRequired": false,
+    "netlifyRequired": false,
+    "caddyRequired": false,
+    "nginxRequired": false,
+    "workersRequired": false,
+    "pagesRequired": false
+  },
+  "providerAccessInspection": {
+    "cloudflareApiTokenPresent": false,
+    "cloudflareEmailApiKeyPresent": false,
+    "netlifyCliPresent": true,
+    "netlifyCliLoggedIn": false,
+    "netlifyAuthTokenPresent": false,
+    "netlifySiteIdPresent": false,
+    "wranglerCliPresent": false,
+    "cloudflaredCliPresent": false,
+    "providerMutationAvailableFromThisSession": false
+  },
+  "repositoryConfigurationInspection": {
+    "netlifyTomlPresent": false,
+    "netlifyHeadersFilePresent": false,
+    "netlifyRedirectsFilePresent": false,
+    "wranglerTomlPresent": false,
+    "cloudflareDirectoryPresent": false,
+    "cloudflareConfigurationFilePresent": false,
+    "repoOwnedReferenceOrigin": "apps/public-proof-origin/src/server.mjs",
+    "repoOwnedReferenceOriginStatus": "emits ordinary and CDN no-store headers for proof/control routes and supports safe GET, HEAD, and OPTIONS methods locally"
+  },
+  "protectedOperationalRecords": [
+    {
+      "fqdn": "ssh.aldous.info",
+      "requiredPosture": "DNS-only A record to 103.138.244.121",
+      "observedARecords": [
+        "103.138.244.121"
+      ],
+      "observedAaaaRecords": [],
+      "mustNotChange": true
+    }
+  ],
+  "domains": [
+    {
+      "fqdn": "1e100.network",
+      "environment": "staging",
+      "dnsEvidence": {
+        "observedARecords": [
+          "104.21.0.220",
+          "172.67.128.84"
+        ],
+        "observedAaaaRecords": [
+          "2606:4700:3031::ac43:8054",
+          "2606:4700:3032::6815:dc"
+        ],
+        "cloudflareAddressEvidenceObserved": true,
+        "proxyMode": "inferred-proxied-from-cloudflare-addresses-and-server-header"
+      },
+      "cloudflareSettings": {
+        "proxyMode": "inferred-proxied",
+        "alwaysUseHttps": "not-inspectable-without-provider-access",
+        "redirectRules": "not-inspectable-without-provider-access",
+        "pageRules": "not-inspectable-without-provider-access",
+        "cacheRules": "not-inspectable-without-provider-access",
+        "transformRules": "not-inspectable-without-provider-access",
+        "workerRoutes": "not-inspectable-without-provider-access",
+        "browserCacheTtl": "not-inspectable-without-provider-access",
+        "edgeCacheTtl": "not-inspectable-without-provider-access"
+      },
+      "netlifySettings": {
+        "customDomainSettings": "not-inspectable-without-provider-access",
+        "headersConfiguration": "not-inspectable-without-provider-access",
+        "redirectsConfiguration": "not-inspectable-without-provider-access",
+        "deployStatus": "not-inspectable-without-provider-access",
+        "siteCachePurgeStatus": "not-inspectable-without-provider-access"
+      },
+      "httpJsonProofEndpoint": {
+        "url": "http://1e100.network/.well-known/usf-public-edge.json",
+        "observedStatus": 200,
+        "expectedStatus": "301-or-308-same-host-https-redirect",
+        "observedLocation": null,
+        "expectedLocation": "https://1e100.network/.well-known/usf-public-edge.json",
+        "server": "cloudflare",
+        "cacheControl": "no-store",
+        "cacheStatus": "Netlify Edge hit",
+        "cfCacheStatus": "DYNAMIC",
+        "ageObserved": true,
+        "ageSecondsObserved": 2468,
+        "xNfRequestIdObserved": true,
+        "rawProviderRequestIdsRetained": false,
+        "blockerId": "pre-staging-http-redirect-staging-root"
+      },
+      "httpsJsonProofEndpoint": {
+        "url": "https://1e100.network/.well-known/usf-public-edge.json",
+        "observedStatus": 200,
+        "server": "cloudflare",
+        "contentType": "application/json; charset=utf-8",
+        "cacheControl": "no-store",
+        "cacheStatus": "Netlify Edge hit",
+        "cfCacheStatus": "DYNAMIC",
+        "ageObserved": true,
+        "ageSecondsObserved": 20882,
+        "etagObserved": true,
+        "varyObserved": true,
+        "xNfRequestIdObserved": true,
+        "rawProviderRequestIdsRetained": false,
+        "blockerId": "external-http-proof-route-provider-cache-hit"
+      },
+      "httpsBrowserProofRoute": {
+        "url": "https://1e100.network/__proof/public-route/",
+        "observedStatus": 200,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=utf-8",
+        "cacheControl": "no-store",
+        "cacheStatus": "Netlify Edge hit",
+        "cfCacheStatus": "DYNAMIC",
+        "ageObserved": true,
+        "ageSecondsObserved": 5487,
+        "xNfRequestIdObserved": true,
+        "rawProviderRequestIdsRetained": false,
+        "blockerId": "external-http-proof-route-provider-cache-hit"
+      },
+      "providerCauseAssessment": {
+        "redirectBlockerLikelyBoundary": "cloudflare-zone-or-redirect-rule-for-1e100.network",
+        "cacheBlockerLikelyBoundary": "netlify-edge-cache-or-netlify-route-implementation",
+        "cloudflareCacheObservation": "Cloudflare reports dynamic handling, so current evidence does not show Cloudflare edge cache hit as the cache blocker.",
+        "netlifyCacheObservation": "Netlify Edge reports cache hit with nonzero Age on no-store proof/control routes."
+      }
+    },
+    {
+      "fqdn": "aldous.info",
+      "environment": "production",
+      "dnsEvidence": {
+        "observedARecords": [
+          "104.21.45.124",
+          "172.67.214.19"
+        ],
+        "observedAaaaRecords": [
+          "2606:4700:3030::6815:2d7c",
+          "2606:4700:3031::ac43:d613"
+        ],
+        "cloudflareAddressEvidenceObserved": true,
+        "proxyMode": "inferred-proxied-from-cloudflare-addresses-and-server-header"
+      },
+      "cloudflareSettings": {
+        "proxyMode": "inferred-proxied",
+        "alwaysUseHttps": "observed-effective-for-json-proof-endpoint-http-to-https",
+        "redirectRules": "not-inspectable-without-provider-access",
+        "pageRules": "not-inspectable-without-provider-access",
+        "cacheRules": "not-inspectable-without-provider-access",
+        "transformRules": "not-inspectable-without-provider-access",
+        "workerRoutes": "not-inspectable-without-provider-access",
+        "browserCacheTtl": "not-inspectable-without-provider-access",
+        "edgeCacheTtl": "not-inspectable-without-provider-access"
+      },
+      "netlifySettings": {
+        "customDomainSettings": "not-inspectable-without-provider-access",
+        "headersConfiguration": "not-inspectable-without-provider-access",
+        "redirectsConfiguration": "not-inspectable-without-provider-access",
+        "deployStatus": "not-inspectable-without-provider-access",
+        "siteCachePurgeStatus": "not-inspectable-without-provider-access"
+      },
+      "httpJsonProofEndpoint": {
+        "url": "http://aldous.info/.well-known/usf-public-edge.json",
+        "observedStatus": 301,
+        "expectedStatus": "301-or-308-same-host-https-redirect",
+        "observedLocation": "https://aldous.info/.well-known/usf-public-edge.json",
+        "expectedLocation": "https://aldous.info/.well-known/usf-public-edge.json",
+        "server": "cloudflare",
+        "redirectSemanticsPass": true
+      },
+      "httpsJsonProofEndpoint": {
+        "url": "https://aldous.info/.well-known/usf-public-edge.json",
+        "observedStatus": 200,
+        "server": "cloudflare",
+        "contentType": "application/json; charset=utf-8",
+        "cacheControl": "no-store",
+        "cacheStatus": "Netlify Edge hit",
+        "cfCacheStatus": "DYNAMIC",
+        "ageObserved": true,
+        "ageSecondsObserved": 19085,
+        "etagObserved": true,
+        "varyObserved": true,
+        "xNfRequestIdObserved": true,
+        "rawProviderRequestIdsRetained": false,
+        "blockerId": "external-http-proof-route-provider-cache-hit"
+      },
+      "httpsBrowserProofRoute": {
+        "url": "https://aldous.info/__proof/public-route/",
+        "observedStatus": 200,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=utf-8",
+        "cacheControl": "no-store",
+        "cacheStatus": "Netlify Edge hit",
+        "cfCacheStatus": "DYNAMIC",
+        "ageObserved": true,
+        "ageSecondsObserved": 19425,
+        "xNfRequestIdObserved": true,
+        "rawProviderRequestIdsRetained": false,
+        "blockerId": "external-http-proof-route-provider-cache-hit"
+      },
+      "providerCauseAssessment": {
+        "redirectBlockerLikelyBoundary": "none-observed-for-aldous-info-json-proof-endpoint",
+        "cacheBlockerLikelyBoundary": "netlify-edge-cache-or-netlify-route-implementation",
+        "cloudflareCacheObservation": "Cloudflare reports dynamic handling, so current evidence does not show Cloudflare edge cache hit as the cache blocker.",
+        "netlifyCacheObservation": "Netlify Edge reports cache hit with nonzero Age on no-store proof/control routes."
+      }
+    }
+  ],
+  "requiredOperatorChanges": [
+    {
+      "id": "operator-change-1e100-same-host-https-redirect",
+      "providerBoundary": "cloudflare-zone-or-equivalent-front-door-for-1e100.network",
+      "change": "Enable Always Use HTTPS or an equivalent scoped same-host redirect rule for 1e100.network so HTTP requests for /.well-known/usf-public-edge.json redirect to the same HTTPS host and path.",
+      "expectedValue": "http://1e100.network/.well-known/usf-public-edge.json returns 301 or 308 with Location https://1e100.network/.well-known/usf-public-edge.json",
+      "mustNotDo": [
+        "do not redirect to aldous.info",
+        "do not redirect to www unless later declared",
+        "do not alter ssh.aldous.info"
+      ],
+      "verificationCommand": "curl -svI http://1e100.network/.well-known/usf-public-edge.json",
+      "rollback": "Disable the specific Always Use HTTPS toggle or scoped redirect rule that was added for 1e100.network and verify the prior response is restored."
+    },
+    {
+      "id": "operator-change-netlify-no-store-proof-routes",
+      "providerBoundary": "netlify-edge-or-equivalent-origin-route-implementation",
+      "change": "Redeploy or configure the route implementation so /.well-known/usf-public-edge.json and /__proof/public-route/ emit ordinary Cache-Control no-store and CDN no-store headers, then purge or redeploy provider cache.",
+      "expectedValue": "HTTPS proof/control routes no longer report provider cache hit or nonzero Age. Netlify Edge cache evidence should be miss, bypass, no-store, or absent, not hit with nonzero Age.",
+      "mustNotDo": [
+        "do not remove the public JSON proof response contract",
+        "do not make Netlify a semantic requirement",
+        "do not change ssh.aldous.info"
+      ],
+      "verificationCommand": "corepack pnpm proof:external-http-cache",
+      "rollback": "Restore the prior Netlify deploy or route header configuration and rerun the same verification command to confirm rollback impact."
+    }
+  ],
+  "verificationCommands": [
+    "curl -svI http://1e100.network/.well-known/usf-public-edge.json",
+    "curl -svI https://1e100.network/.well-known/usf-public-edge.json",
+    "curl -svI http://aldous.info/.well-known/usf-public-edge.json",
+    "curl -svI https://aldous.info/.well-known/usf-public-edge.json",
+    "curl -svI https://1e100.network/__proof/public-route/",
+    "curl -svI https://aldous.info/__proof/public-route/",
+    "corepack pnpm proof:external-http-cache",
+    "corepack pnpm proof:pre-staging-external-smoke"
+  ],
+  "gateImpact": {
+    "usf269CanClose": false,
+    "usf271CanClose": false,
+    "usf267CanClose": false,
+    "stagingSpecificEnablementMayBegin": false,
+    "reason": "The cache proof and pre-staging external smoke proof intentionally fail closed until provider configuration evidence no longer contradicts no-store proof/control route semantics and 1e100.network HTTP redirects to same-host HTTPS."
+  },
+  "nonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "soc-readiness",
+    "iso27001-certification",
+    "enterprise-production-readiness",
+    "product-ui-readiness",
+    "browser-e2e-readiness",
+    "full-react-product-parity",
+    "cloudflare-required-provider",
+    "netlify-required-provider",
+    "caddy-required-gateway"
+  ]
+}
