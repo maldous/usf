@@ -5534,9 +5534,26 @@ def run_checks(state: dict[str, Any]) -> Findings:
 
 def run_selftest() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
+    planted_paths = sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json"))
     if not (ROOT / PLANTED_DEFECT_DIR).exists():
-        return findings
-    for path in sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json")):
+        return [
+            {
+                "severity": "blocking",
+                "ruleId": "USF-TEST-READINESS-SELFTEST",
+                "subject": str(PLANTED_DEFECT_DIR),
+                "message": "planted defect directory is missing",
+            }
+        ]
+    if not planted_paths:
+        return [
+            {
+                "severity": "blocking",
+                "ruleId": "USF-TEST-READINESS-SELFTEST",
+                "subject": str(PLANTED_DEFECT_DIR),
+                "message": "planted defect directory has no JSON fixtures",
+            }
+        ]
+    for path in planted_paths:
         defect = json.loads(path.read_text(encoding="utf-8"))
         expected = defect.get("expectedRule")
         F = run_checks(load_state(defect))

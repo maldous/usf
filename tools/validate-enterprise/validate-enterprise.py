@@ -1682,7 +1682,13 @@ def apply_environment_promotion_defect(promotion: dict[str, Any], defect: dict[s
 def check_shape(F: Findings, state: dict[str, Any]) -> None:
     model = state["model"]
     schema = state["schema"]
-    if Draft202012Validator is not None:
+    if Draft202012Validator is None:
+        F.add(
+            "USF-ENTERPRISE-001",
+            "tools/validate-spec/requirements.txt",
+            "jsonschema dependency unavailable; enterprise schema validation cannot run",
+        )
+    else:
         errors = list(Draft202012Validator(schema).iter_errors(model))
         for err in errors:
             loc = "/".join(str(item) for item in err.path)
@@ -5261,9 +5267,26 @@ def run_checks(state: dict[str, Any]) -> Findings:
 
 def run_selftest() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
+    planted_paths = sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json"))
     if not (ROOT / PLANTED_DEFECT_DIR).exists():
-        return findings
-    for path in sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json")):
+        return [
+            {
+                "severity": "blocking",
+                "ruleId": "USF-ENTERPRISE-SELFTEST",
+                "subject": str(PLANTED_DEFECT_DIR),
+                "message": "planted defect directory is missing",
+            }
+        ]
+    if not planted_paths:
+        return [
+            {
+                "severity": "blocking",
+                "ruleId": "USF-ENTERPRISE-SELFTEST",
+                "subject": str(PLANTED_DEFECT_DIR),
+                "message": "planted defect directory has no JSON fixtures",
+            }
+        ]
+    for path in planted_paths:
         defect = json.loads(path.read_text(encoding="utf-8"))
         expected = defect.get("expectedRule")
         state = load_state(defect)

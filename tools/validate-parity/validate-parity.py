@@ -507,7 +507,15 @@ def check_shape(F, state):
     if not isinstance(matrix, dict):
         F.add("USF-PARITY-001", MATRIX_PATH, "parity matrix is not an object")
         return False
-    if Draft202012Validator is not None and os.path.exists(SHAPE_PATH):
+    if Draft202012Validator is None:
+        F.add(
+            "USF-PARITY-002",
+            "tools/validate-spec/requirements.txt",
+            "jsonschema dependency unavailable; parity matrix schema validation cannot run",
+        )
+    elif not os.path.exists(SHAPE_PATH):
+        F.add("USF-PARITY-002", SHAPE_PATH, "parity matrix shape schema is missing")
+    else:
         try:
             shape = read_json(SHAPE_PATH)
         except Exception as exc:  # noqa: BLE001
@@ -517,11 +525,6 @@ def check_shape(F, state):
         for err in errors:
             loc = "/".join(str(p) for p in err.path)
             F.add("USF-PARITY-002", f"{MATRIX_PATH}:{loc}" if loc else MATRIX_PATH, err.message[:160])
-    else:
-        # Minimal fallback shape check when jsonschema is unavailable.
-        for key in ("domains", "uiArtefacts", "testProofGroups", "allowedPlanningCarriers"):
-            if not isinstance(matrix.get(key), list):
-                F.add("USF-PARITY-002", MATRIX_PATH, f"{key} must be an array")
     return True
 
 
@@ -1717,6 +1720,7 @@ def apply_mutation(base_state, mutation):
 def load_selftest_fixtures(F):
     fixtures = []
     if not os.path.isdir(SELFTEST_DIR):
+        F.add("USF-PARITY-SELFTEST", SELFTEST_DIR, "planted defect directory is missing")
         return fixtures
     for name in sorted(os.listdir(SELFTEST_DIR)):
         if not name.endswith(".json"):
@@ -1726,6 +1730,8 @@ def load_selftest_fixtures(F):
             fixtures.append((path, read_json(path)))
         except Exception as exc:  # noqa: BLE001
             F.add("USF-PARITY-SELFTEST", path, f"cannot load planted defect: {exc}")
+    if not fixtures:
+        F.add("USF-PARITY-SELFTEST", SELFTEST_DIR, "planted defect directory has no JSON fixtures")
     return fixtures
 
 

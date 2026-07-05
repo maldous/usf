@@ -19,9 +19,14 @@ jobs:
         with:
           node-version: "24"
       - run: corepack enable
+      - run: corepack pnpm install --frozen-lockfile
       - run: pip install -r tools/validate-spec/requirements.txt
       - name: Validate spec corpus (also exercises report emission + self-validation)
         run: python tools/validate-spec/validate-spec.py all --report /tmp/usf-validator-report.json
+      - name: Repository validation aggregate
+        run: corepack pnpm repo:validate
+      - name: Parity validation suite
+        run: corepack pnpm parity
       - name: Validate foundation substrate closure evidence
         run: corepack pnpm foundation-substrate-closure:validate
       - name: Selftest foundation substrate closure validator

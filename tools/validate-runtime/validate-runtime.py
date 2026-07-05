@@ -1028,7 +1028,13 @@ def mode_records(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
 def check_manifest(F: Findings, state: dict[str, Any]) -> None:
     manifest = state["manifest"]
     schema = state["schema"]
-    if Draft202012Validator is not None:
+    if Draft202012Validator is None:
+        F.add(
+            "USF-RUNTIME-001",
+            "tools/validate-spec/requirements.txt",
+            "jsonschema dependency unavailable; runtime schema validation cannot run",
+        )
+    else:
         errors = list(Draft202012Validator(schema).iter_errors(manifest))
         for err in errors:
             loc = "/".join(str(p) for p in err.path)
@@ -5363,7 +5369,14 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
 
 def run_selftest() -> Findings:
     F = Findings()
-    for path in sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json")):
+    planted_paths = sorted((ROOT / PLANTED_DEFECT_DIR).glob("*.json"))
+    if not (ROOT / PLANTED_DEFECT_DIR).exists():
+        F.add("USF-RUNTIME-SELFTEST", str(PLANTED_DEFECT_DIR), "planted defect directory is missing")
+        return F
+    if not planted_paths:
+        F.add("USF-RUNTIME-SELFTEST", str(PLANTED_DEFECT_DIR), "planted defect directory has no JSON fixtures")
+        return F
+    for path in planted_paths:
         try:
             defect = json.loads(path.read_text(encoding="utf-8"))
         except Exception as exc:  # noqa: BLE001
