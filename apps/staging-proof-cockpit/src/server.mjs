@@ -1473,6 +1473,13 @@ h1,h2,h3{line-height:1.25}
 .hero{background:#fff;border:1px solid var(--line);padding:22px;margin-bottom:18px}
 .hero h2{font-size:28px;margin:0 0 8px}
 .hero-actions,.actions-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.executive-summary{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.8fr);gap:16px;align-items:start}
+.decision-panel{background:#fff;border:1px solid var(--line);padding:16px}
+.decision-panel h3{margin-top:0}
+.decision-banner{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.report-lede{font-size:16px;max-width:78ch}
+.secondary-disclosure{background:#fff;border:1px solid var(--line);padding:12px;margin:12px 0}
+.secondary-disclosure summary{cursor:pointer;font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .card{background:#fff;border:1px solid var(--line);padding:14px}
 .card h3{margin:0 0 8px;font-size:16px}
@@ -1500,6 +1507,12 @@ button.danger{border-color:var(--bad);color:var(--bad)}
 .progress span{display:block;height:100%;background:#174ea6}
 .review-actions{position:sticky;bottom:0;background:#fff;border:1px solid var(--line);padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
 .review-actions form{display:inline}
+.review-actions .review-decision-form{display:block;width:100%}
+.review-decision-form fieldset{border:0;margin:0;padding:0}
+.review-confirmations{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 12px;margin:8px 0}
+.review-confirmations p{margin:0}
+.decision-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.decision-help{width:100%;margin:0 0 8px;color:var(--muted)}
 .note-form{width:100%;display:block}
 .note-form textarea{width:100%}
 .screenshot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
@@ -1510,7 +1523,7 @@ button.danger{border-color:var(--bad);color:var(--bad)}
 .evidence-card{background:#fff;border:1px solid var(--line);padding:14px;margin:10px 0}
 .print-report{background:#fff;border:1px solid var(--line);padding:24px}
 .print-cover{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:18px}
-@media(max-width:860px){.topbar{display:block}nav{justify-content:flex-start;margin-top:12px}.review-shell{display:block}.review-side{margin-top:14px}main,header,footer{padding-left:12px;padding-right:12px}.hero h2{font-size:24px}.review-actions{margin-left:-12px;margin-right:-12px;border-left:0;border-right:0}.table-wrap{overflow-x:auto}}
+@media(max-width:860px){.topbar{display:block}nav{justify-content:flex-start;margin-top:12px}.executive-summary{display:block}.decision-panel{margin-top:12px}.review-shell{display:block}.review-side{margin-top:14px}main,header,footer{padding-left:12px;padding-right:12px}.hero h2{font-size:24px}.review-actions{margin-left:-12px;margin-right:-12px;border-left:0;border-right:0}.table-wrap{overflow-x:auto}}
 @media print{body{background:#fff;color:#000;font-size:11pt}header,nav,form,button,.hero-actions,.review-actions,.no-print,.button-link,.table-wrap:before{display:none!important}main{max-width:none;padding:0}.print-report{border:0;padding:0}.print-cover{page-break-after:avoid}.screenshot-card{break-inside:avoid}.screenshot-card img{max-height:360px}section{break-inside:avoid;border-top:1px solid #999}a{color:#000;text-decoration:none}footer{border-top:1px solid #999}}
 </style>
 </head>
@@ -2094,48 +2107,55 @@ function reviewItemActionForms(item, returnTo) {
     screenshotUrl: item.screenshots?.[0]?.screenshotPath ?? "",
     role: "auditor",
     tenant: "synthetic-proof-review",
+    itemTitle: item.title,
   };
-  const decisionForm = (label, actionType, outcome, className = "") => `<form method="post" action="/proof/actions">
-${Object.entries({
-    ...base,
-    actionType,
-    outcome,
-    actionName: `${label}: ${item.title}`,
-  })
-    .map(([name, value]) => hiddenInput(name, value))
-    .join("")}
+  return `<div class="review-actions" aria-label="Review actions">
+${writePolicyNotice(policy)}
+<form class="review-decision-form" method="post" action="/proof/actions">
+${Object.entries(base)
+  .map(([name, value]) => hiddenInput(name, value))
+  .join("")}
 <fieldset>
-<legend>${escapeHtml(label)} confirmations</legend>
+<legend>Review decision</legend>
+<p class="decision-help">Use one decision for the current item. Confirmation checkboxes are explicit human assertions; none are hidden or prefilled.</p>
+<div class="review-confirmations">
 ${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence.")}
 ${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence.")}
 ${checkboxInput("noRealTenantData", "This action used no real tenant data, real secrets, or private local state.")}
 ${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
-<button class="${escapeHtml(className)}" type="submit"${disabled}>${escapeHtml(label)}</button>
+</div>
+<label>Add note, blocker, correction, or sampling observation<br><textarea name="notes" rows="3" placeholder="Optional note for accept/reject/retest; required for a note-only action."></textarea></label>
+<div class="decision-buttons">
+<button class="primary" type="submit" name="decision" value="accept"${disabled}>Accept</button>
+<button class="danger" type="submit" name="decision" value="reject"${disabled}>Reject</button>
+<button type="submit" name="decision" value="retest"${disabled}>Request retest</button>
+<button type="submit" name="decision" value="note"${disabled}>Add note</button>
+</div>
 </fieldset>
-</form>`;
-  return `<div class="review-actions" aria-label="Review actions">
-${writePolicyNotice(policy)}
-${decisionForm("Accept", "machine-evidence-accepted", "human-accepted", "primary")}
-${decisionForm("Reject", "machine-evidence-rejected", "human-rejected", "danger")}
-${decisionForm("Request retest", "retest-requested", "retest-requested")}
-<form class="note-form" method="post" action="/proof/actions">
-${Object.entries({
-    ...base,
-    actionType: "human-note-added",
-    outcome: "needs-review",
-    actionName: `Note: ${item.title}`,
-  })
-    .map(([name, value]) => hiddenInput(name, value))
-    .join("")}
-<label>Add note<br><textarea name="notes" rows="3" placeholder="Record a human observation, blocker, correction, or sampling note."></textarea></label>
-<p><button type="submit"${disabled}>Add note</button></p>
 </form>
 </div>`;
 }
 
 function normalizeAction(params, actor) {
-  const actionType = QA_ACTION_TYPES.includes(params.get("actionType")) ? params.get("actionType") : "capability-qa";
-  const outcome = QA_OUTCOMES.includes(params.get("outcome")) ? params.get("outcome") : "needs-review";
+  const decision = String(params.get("decision") ?? "").toLowerCase();
+  const itemTitle = String(params.get("itemTitle") ?? "review item").slice(0, 200);
+  const decisionMap = {
+    accept: ["machine-evidence-accepted", "human-accepted", `Accept: ${itemTitle}`],
+    reject: ["machine-evidence-rejected", "human-rejected", `Reject: ${itemTitle}`],
+    retest: ["retest-requested", "retest-requested", `Request retest: ${itemTitle}`],
+    note: ["human-note-added", "needs-review", `Note: ${itemTitle}`],
+  };
+  const mapped = decisionMap[decision];
+  const actionType = mapped
+    ? mapped[0]
+    : QA_ACTION_TYPES.includes(params.get("actionType"))
+      ? params.get("actionType")
+      : "capability-qa";
+  const outcome = mapped
+    ? mapped[1]
+    : QA_OUTCOMES.includes(params.get("outcome"))
+      ? params.get("outcome")
+      : "needs-review";
   const role = ROLES.includes(params.get("role")) ? params.get("role") : "auditor";
   const now = new Date().toISOString();
   return {
@@ -2148,7 +2168,7 @@ function normalizeAction(params, actor) {
     role,
     actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
     tenant: String(params.get("tenant") ?? "").slice(0, 160),
-    actionName: String(params.get("actionName") ?? "").slice(0, 240),
+    actionName: String(mapped?.[2] ?? params.get("actionName") ?? "").slice(0, 240),
     capabilityId: String(params.get("capabilityId") ?? "").slice(0, 160),
     serviceId: String(params.get("serviceId") ?? "").slice(0, 160),
     scenarioId: String(params.get("scenarioId") ?? "").slice(0, 200),
@@ -2223,13 +2243,31 @@ function renderHome(data, state) {
     "USF Proof Review",
     `<section class="hero">
 <h2>USF Proof Review</h2>
-<p>This is the human acceptance workflow for ${LINEAR_ISSUE}. It starts from the external-review report, then lets Matthew review evidence one item at a time. ${ACCEPTANCE_ISSUE} remains a separate human acceptance gate.</p>
+<div class="executive-summary">
+<div>
+<p class="report-lede">External-review report first: machine evidence is complete enough for selective browser review, while ${ACCEPTANCE_ISSUE} remains a separate human acceptance gate. Start with the current review item, sample screenshots inline, then use signoff only after rejected, retest, and unreviewed items are cleared.</p>
+<div class="decision-banner">
+${statusBadge(`${latest.passCount} pass`, "pass")}
+${statusBadge(`${latest.warnCount} warnings`, latest.warnCount ? "warn" : "pass")}
+${statusBadge(`${latest.gapCount} unresolved gaps`, latest.gapCount ? "warn" : "pass")}
+${statusBadge(`${latest.failCount} failures`, latest.failCount ? "bad" : "pass")}
+${statusBadge(human.finalSignoffAvailable ? "final signoff available after human criteria" : "final signoff not auto-completed", "review")}
+</div>
 <div class="hero-actions">
 <a class="button-link button-primary" href="/proof/review">Start review</a>
 <a class="button-link" href="/proof/reports/final">Open printable report</a>
 <a class="button-link" href="/proof/screenshots">Review screenshots</a>
 <a class="button-link" href="/proof/evidence">Review evidence bundle</a>
 <a class="button-link" href="/proof/signoff">Final signoff</a>
+</div>
+</div>
+<aside class="decision-panel">
+<h3>Next review item</h3>
+<p>${statusBadge(currentItem.type, "neutral")} ${statusBadge(reviewItemDecision(state, currentItem).status, reviewItemDecision(state, currentItem).tone)}</p>
+<p><strong>${escapeHtml(currentItem.title)}</strong></p>
+<p>${escapeHtml(currentItem.summary)}</p>
+<p><a class="button-link button-primary" href="/proof/review?item=${encodeURIComponent(String(currentIndex))}">Open current item</a></p>
+</aside>
 </div>
 </section>
 <section>
@@ -2239,25 +2277,17 @@ function renderHome(data, state) {
 <div class="card"><h3>Human review progress</h3><p class="metric">${state.actions.length}</p><p class="muted">recorded browser review actions</p></div>
 <div class="card"><h3>Decisions</h3><p>${statusBadge(`${decisionCounts.accepted} accepted`, "accepted")} ${statusBadge(`${decisionCounts.rejected} rejected`, "rejected")} ${statusBadge(`${decisionCounts.retest} retest`, "warn")}</p></div>
 <div class="card"><h3>Blockers</h3><p>${statusBadge(blockerText, latest.failCount || latest.warnCount || latest.gapCount ? "bad" : "pass")}</p></div>
-<div class="card"><h3>Final signoff</h3><p>${statusBadge(human.finalSignoffAvailable ? "available after human criteria" : "not available automatically", "review")}</p></div>
 <div class="card"><h3>Evidence scope</h3><p>${escapeHtml(data.claims.length)} claims, ${escapeHtml(data.capabilities.length)} capabilities, ${escapeHtml(data.services.length)} services, ${escapeHtml(data.screenshots.length)} screenshots.</p></div>
 </div>
 </section>
 <section>
-<h2>Next recommended review item</h2>
-<div class="card">
-<h3>${escapeHtml(currentItem.title)}</h3>
-<p>${statusBadge(currentItem.type, "neutral")} ${statusBadge(reviewItemDecision(state, currentItem).status, reviewItemDecision(state, currentItem).tone)}</p>
-<p>${escapeHtml(currentItem.summary)}</p>
-<p><a class="button-link button-primary" href="/proof/review?item=${encodeURIComponent(String(currentIndex))}">Open current item</a></p>
-</div>
-</section>
-<section>
-<h2>Dev to Test to Staging proof ladder</h2>
+<h2>Secondary audit detail</h2>
+<details class="secondary-disclosure">
+<summary>Dev to Test to Staging proof ladder</summary>
 ${table(["Stage", "Source artifact", "Command", "Validator/evidence", "Status", "Gaps", "Handoff condition", "Non-claims"], proofLadderFullRows())}
-</section>
-<section>
-<h2>Evidence identity</h2>
+</details>
+<details class="secondary-disclosure">
+<summary>Evidence identity and chain-of-custody anchors</summary>
 ${table(
       ["Field", "Value"],
       [
@@ -2271,6 +2301,7 @@ ${table(
         ["Related issues", RELATED_ISSUES.join(", ")],
       ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${sourcePathCell(value)}</td></tr>`),
     )}
+</details>
 </section>
 <section>
 <h2>Recent QA actions</h2>
@@ -2921,7 +2952,9 @@ function renderReview(data, state, url = new URL("/proof/review", "http://127.0.
 <p>${statusBadge(item.type, "neutral")} ${statusBadge(decision.status, decision.tone)}</p>
 <div class="progress" aria-label="Review progress"><span style="width:${escapeHtml(progress)}%"></span></div>
 <p class="muted">Item ${index + 1} of ${items.length}. ${escapeHtml(displayValue(decision.action?.createdAt, "No human decision recorded for this item yet."))}</p>
+<div class="hero-actions">${previous} ${next}</div>
 </section>
+${reviewItemActionForms(item, `/proof/review?item=${index}`)}
 <div class="review-shell">
 <article class="review-main">
 <section>
@@ -2948,7 +2981,6 @@ ${table(["Evidence", "Source artifact"], evidenceRows)}
 <h2>Human reenactment instructions</h2>
 <p>${escapeHtml(displayValue(item.screenshots[0]?.humanReenactmentInstruction, "Open the linked route or evidence record, verify source SHA, run ID, screenshot hash, redaction posture, synthetic-data boundary, and non-claims, then record a decision."))}</p>
 </section>
-${reviewItemActionForms(item, `/proof/review?item=${index}`)}
 </article>
 <aside class="review-side">
 <h2>Review navigation</h2>

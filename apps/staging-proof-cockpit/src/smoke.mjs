@@ -111,16 +111,39 @@ try {
     results.push({ route, status: response.status });
   }
   const home = await fetch(`${baseUrl}/proof`).then((response) => response.text());
-  for (const required of ["USF Proof Review", "Start review", "Open printable report", "Final signoff"]) {
+  for (const required of [
+    "USF Proof Review",
+    "External-review report first",
+    "Next review item",
+    "Start review",
+    "Open printable report",
+    "Final signoff",
+    "Secondary audit detail",
+  ]) {
     if (!home.includes(required)) {
       throw new Error(`proof-cockpit-smoke-home-missing-${required}`);
     }
   }
   const review = await fetch(`${baseUrl}/proof/review`).then((response) => response.text());
-  for (const required of ["Accept", "Reject", "Request retest", "Inline screenshot evidence", "Machine QA conclusion"]) {
+  for (const required of [
+    "review-decision-form",
+    'name="decision" value="accept"',
+    'name="decision" value="reject"',
+    'name="decision" value="retest"',
+    'name="decision" value="note"',
+    "Accept",
+    "Reject",
+    "Request retest",
+    "Inline screenshot evidence",
+    "Machine QA conclusion",
+  ]) {
     if (!review.includes(required)) {
       throw new Error(`proof-cockpit-smoke-review-missing-${required}`);
     }
+  }
+  const decisionFormCount = [...review.matchAll(/class="review-decision-form"/g)].length;
+  if (decisionFormCount !== 1) {
+    throw new Error(`proof-cockpit-smoke-review-decision-form-count-${decisionFormCount}`);
   }
   for (const forbidden of [
     'type="hidden" name="devEvidenceConfirmed"',
@@ -149,6 +172,7 @@ try {
   }
   const finalReport = await fetch(`${baseUrl}/proof/reports/final`).then((response) => response.text());
   for (const required of [
+    "@media print",
     "print-report",
     "USF-293 External Review Report",
     "Scope and non-claims",
