@@ -1,0 +1,13 @@
+{
+  "name": "@foundation/app-staging-proof-cockpit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/server.mjs"
+  },
+  "scripts": {
+    "serve": "node src/server.mjs",
+    "smoke": "node src/smoke.mjs"
+  }
+}
