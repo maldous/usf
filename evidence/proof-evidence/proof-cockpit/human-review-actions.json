@@ -1,7 +1,48 @@
 {
   "schemaVersion": 1,
-  "actions": [],
-  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "actions": [
+    {
+      "id": "qa-owner-acceptance-usf290-2026-07-06",
+      "createdAt": "2026-07-06T00:00:00.000Z",
+      "updatedAt": "2026-07-06T00:00:00.000Z",
+      "sourceSha": "0aa093ea6dfe904f4f833cf018efa7f8a2d47447",
+      "actionType": "machine-evidence-accepted",
+      "outcome": "human-accepted",
+      "role": "platform operator",
+      "actor": "Matthew Aldous",
+      "tenant": "",
+      "actionName": "Accept: current-state proof cockpit and hermetic machine evidence",
+      "capabilityId": "",
+      "serviceId": "",
+      "scenarioId": "",
+      "evidenceId": "staging-evidence-store",
+      "enterpriseTopic": "",
+      "correlationId": "owner-acceptance-usf290",
+      "traceId": "owner-acceptance-usf290-trace",
+      "auditEventId": "owner-acceptance-usf290-audit",
+      "evidenceUrl": "",
+      "sourceUrl": "",
+      "serviceUrl": "",
+      "screenshotUrl": "",
+      "notes": "Recorded by the accountable authorising human, Matthew Aldous, on explicit written instruction: I approve, I am accountable, I accept the proof cockpit. Scope of this acceptance: the current-state proof cockpit and its hermetic, locally-composed machine evidence at source 0aa093e are reviewed and accepted by the accountable owner, who authorises proceeding to AI and UI development testing on this foundation. This acceptance is a human decision by the owner of record; it does not by itself produce staging, deployment, live-provider, SOC, enterprise-production, real-user product-UI, browser end-to-end, or full-product evidence, and it makes no ISO certification claim. Those boundaries remain recorded in nonClaims below and are unchanged by this acceptance. The automated machinery continues to expose sufficientForHumanAcceptance false and finalAcceptanceClaimed false: those flags describe the machine surface, which must never auto-assert completion, and are intentionally not flipped by a human decision.",
+      "confirmations": {
+        "devEvidenceConfirmed": true,
+        "testEvidenceConfirmed": true,
+        "noRealTenantData": true,
+        "nonClaimsConfirmed": true
+      },
+      "finalAcceptanceClaimed": false
+    }
+  ],
+  "updatedAt": "2026-07-06T00:00:00.000Z",
+  "ownerAcceptance": {
+    "accepted": true,
+    "acceptedBy": "Matthew Aldous",
+    "acceptedAt": "2026-07-06T00:00:00.000Z",
+    "acceptanceScope": "current-state-proof-cockpit-and-hermetic-machine-evidence",
+    "authorisation": "explicit-accountable-owner-instruction",
+    "authorisesProceedingTo": "ai-and-ui-development-testing"
+  },
   "finalAcceptanceClaimed": false,
   "nonClaims": [
     "no-staging-readiness",
