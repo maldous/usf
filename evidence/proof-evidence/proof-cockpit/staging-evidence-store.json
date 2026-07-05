@@ -373,7 +373,7 @@
   "serviceEvidenceManifest": {
     "manifestPath": "artifacts/proof-cockpit/machine-runs/2026-07-05T16-28-26-320Z/service-evidence-manifest.json",
     "serviceEvidenceCount": 39,
-    "machinePassCount": 0,
+    "machinePassCount": 39,
     "unresolvedGapCount": 0,
     "missingScreenshotPathCount": 0,
     "missingScreenshotHashCount": 0,
