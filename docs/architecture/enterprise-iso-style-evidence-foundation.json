@@ -931,7 +931,7 @@
       "owner": "isms-scope-context-risk-owner",
       "riskOwner": "isms-scope-context-risk-risk-owner",
       "controlOwner": "isms-scope-context-risk-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-isms-scope-context-risk",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-isms-scope-context-risk",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -946,7 +946,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-soa-control-evidence-matrix",
@@ -961,7 +963,7 @@
       "owner": "soa-control-evidence-matrix-owner",
       "riskOwner": "soa-control-evidence-matrix-risk-owner",
       "controlOwner": "soa-control-evidence-matrix-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-soa-control-evidence-matrix",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-soa-control-evidence-matrix",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -976,7 +978,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-iam-privileged-access",
@@ -991,7 +995,7 @@
       "owner": "iam-privileged-access-owner",
       "riskOwner": "iam-privileged-access-risk-owner",
       "controlOwner": "iam-privileged-access-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-iam-privileged-access",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-iam-privileged-access",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1006,7 +1010,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-secrets-crypto-certificates",
@@ -1021,7 +1027,7 @@
       "owner": "secrets-crypto-certificates-owner",
       "riskOwner": "secrets-crypto-certificates-risk-owner",
       "controlOwner": "secrets-crypto-certificates-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-secrets-crypto-certificates",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-secrets-crypto-certificates",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1036,7 +1042,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-audit-retention-tamper-evidence",
@@ -1051,7 +1059,7 @@
       "owner": "audit-retention-tamper-evidence-owner",
       "riskOwner": "audit-retention-tamper-evidence-risk-owner",
       "controlOwner": "audit-retention-tamper-evidence-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-audit-retention-tamper-evidence",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-audit-retention-tamper-evidence",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1066,7 +1074,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-incident-security-operations",
@@ -1081,7 +1091,7 @@
       "owner": "incident-security-operations-owner",
       "riskOwner": "incident-security-operations-risk-owner",
       "controlOwner": "incident-security-operations-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-incident-security-operations",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-incident-security-operations",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1096,7 +1106,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-backup-dr-business-continuity",
@@ -1111,7 +1123,7 @@
       "owner": "backup-dr-business-continuity-owner",
       "riskOwner": "backup-dr-business-continuity-risk-owner",
       "controlOwner": "backup-dr-business-continuity-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-backup-dr-business-continuity",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-backup-dr-business-continuity",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1126,7 +1138,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-change-release-deployment-governance",
@@ -1141,7 +1155,7 @@
       "owner": "change-release-deployment-governance-owner",
       "riskOwner": "change-release-deployment-governance-risk-owner",
       "controlOwner": "change-release-deployment-governance-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-change-release-deployment-governance",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-change-release-deployment-governance",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1156,7 +1170,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-supply-chain-sbom-provenance",
@@ -1171,7 +1187,7 @@
       "owner": "supply-chain-sbom-provenance-owner",
       "riskOwner": "supply-chain-sbom-provenance-risk-owner",
       "controlOwner": "supply-chain-sbom-provenance-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-supply-chain-sbom-provenance",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-supply-chain-sbom-provenance",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1186,7 +1202,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-privacy-data-protection-retention",
@@ -1201,7 +1219,7 @@
       "owner": "privacy-data-protection-retention-owner",
       "riskOwner": "privacy-data-protection-retention-risk-owner",
       "controlOwner": "privacy-data-protection-retention-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-privacy-data-protection-retention",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-privacy-data-protection-retention",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1216,7 +1234,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-supplier-cloud-third-party-risk",
@@ -1231,7 +1251,7 @@
       "owner": "supplier-cloud-third-party-risk-owner",
       "riskOwner": "supplier-cloud-third-party-risk-risk-owner",
       "controlOwner": "supplier-cloud-third-party-risk-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-supplier-cloud-third-party-risk",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-supplier-cloud-third-party-risk",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1246,7 +1266,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-tenant-isolation-customer-data",
@@ -1261,7 +1283,7 @@
       "owner": "tenant-isolation-customer-data-owner",
       "riskOwner": "tenant-isolation-customer-data-risk-owner",
       "controlOwner": "tenant-isolation-customer-data-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-tenant-isolation-customer-data",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-tenant-isolation-customer-data",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1276,7 +1298,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-resilience-capacity-abuse-slo",
@@ -1291,7 +1315,7 @@
       "owner": "resilience-capacity-abuse-slo-owner",
       "riskOwner": "resilience-capacity-abuse-slo-risk-owner",
       "controlOwner": "resilience-capacity-abuse-slo-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-resilience-capacity-abuse-slo",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-resilience-capacity-abuse-slo",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1306,7 +1330,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-observability-alerting-runbooks",
@@ -1321,7 +1347,7 @@
       "owner": "observability-alerting-runbooks-owner",
       "riskOwner": "observability-alerting-runbooks-risk-owner",
       "controlOwner": "observability-alerting-runbooks-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-observability-alerting-runbooks",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-observability-alerting-runbooks",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1336,7 +1362,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-data-lifecycle-migration-rollback",
@@ -1351,7 +1379,7 @@
       "owner": "data-lifecycle-migration-rollback-owner",
       "riskOwner": "data-lifecycle-migration-rollback-risk-owner",
       "controlOwner": "data-lifecycle-migration-rollback-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-data-lifecycle-migration-rollback",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-data-lifecycle-migration-rollback",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1366,7 +1394,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     },
     {
       "controlId": "enterprise-foundation-policy-pack-governance",
@@ -1381,7 +1411,7 @@
       "owner": "policy-pack-governance-owner",
       "riskOwner": "policy-pack-governance-risk-owner",
       "controlOwner": "policy-pack-governance-control-owner",
-      "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-policy-pack-governance",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.enterprise-foundation-policy-pack-governance",
       "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
       "status": "documented-foundation",
       "deferredBoundary": "Operating evidence, approval evidence, and production-grade proof require a later dedicated readiness or enterprise issue.",
@@ -1396,7 +1426,9 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "full-product-readiness"
-      ]
+      ],
+      "residualRisk": "defer-with-owner-and-review-date-until-dedicated-enterprise-issue-proves-control",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation"
     }
   ],
   "riskRegister": [
@@ -1412,7 +1444,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-isms-scope-context-risk"
     },
     {
       "riskId": "risk-soa-control-evidence-matrix",
@@ -1426,7 +1461,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-soa-control-evidence-matrix"
     },
     {
       "riskId": "risk-iam-privileged-access",
@@ -1440,7 +1478,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-iam-privileged-access"
     },
     {
       "riskId": "risk-secrets-crypto-certificates",
@@ -1454,7 +1495,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-secrets-crypto-certificates"
     },
     {
       "riskId": "risk-audit-retention-tamper-evidence",
@@ -1468,7 +1512,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-audit-retention-tamper-evidence"
     },
     {
       "riskId": "risk-incident-security-operations",
@@ -1482,7 +1529,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-incident-security-operations"
     },
     {
       "riskId": "risk-backup-dr-business-continuity",
@@ -1496,7 +1546,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-backup-dr-business-continuity"
     },
     {
       "riskId": "risk-change-release-deployment-governance",
@@ -1510,7 +1563,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-change-release-deployment-governance"
     },
     {
       "riskId": "risk-supply-chain-sbom-provenance",
@@ -1524,7 +1580,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-supply-chain-sbom-provenance"
     },
     {
       "riskId": "risk-privacy-data-protection-retention",
@@ -1538,7 +1597,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-privacy-data-protection-retention"
     },
     {
       "riskId": "risk-supplier-cloud-third-party-risk",
@@ -1552,7 +1614,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-supplier-cloud-third-party-risk"
     },
     {
       "riskId": "risk-tenant-isolation-customer-data",
@@ -1566,7 +1631,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-tenant-isolation-customer-data"
     },
     {
       "riskId": "risk-resilience-capacity-abuse-slo",
@@ -1580,7 +1648,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-resilience-capacity-abuse-slo"
     },
     {
       "riskId": "risk-observability-alerting-runbooks",
@@ -1594,7 +1665,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-observability-alerting-runbooks"
     },
     {
       "riskId": "risk-data-lifecycle-migration-rollback",
@@ -1608,7 +1682,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-data-lifecycle-migration-rollback"
     },
     {
       "riskId": "risk-policy-pack-governance",
@@ -1622,7 +1699,10 @@
         "production-readiness",
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
-      ]
+      ],
+      "residualRisk": "documented-foundation-residual-risk-operating-evidence-deferred-until-dedicated-enterprise-issue",
+      "reviewCadence": "quarterly-until-formal-program-replaces-this-foundation",
+      "evidenceSource": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#soaSupportMappings; spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidenceRegister; docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.risk-policy-pack-governance"
     }
   ],
   "exceptionWorkflow": {
@@ -1776,5 +1856,819 @@
     "product-ui-readiness",
     "browser-e2e-readiness",
     "full-product-readiness"
-  ]
+  ],
+  "ownerRegistry": {
+    "audit-retention-tamper-evidence-control-owner": {
+      "ownerId": "audit-retention-tamper-evidence-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.audit-retention-tamper-evidence.controlOwner",
+        "controlMatrix.enterprise-foundation-audit-retention-tamper-evidence.controlOwner"
+      ]
+    },
+    "audit-retention-tamper-evidence-evidence-owner": {
+      "ownerId": "audit-retention-tamper-evidence-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.audit-retention-tamper-evidence.evidenceOwner"
+      ]
+    },
+    "audit-retention-tamper-evidence-owner": {
+      "ownerId": "audit-retention-tamper-evidence-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.audit-retention-tamper-evidence.owner",
+        "controlMatrix.enterprise-foundation-audit-retention-tamper-evidence.owner"
+      ]
+    },
+    "audit-retention-tamper-evidence-risk-owner": {
+      "ownerId": "audit-retention-tamper-evidence-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.audit-retention-tamper-evidence.riskOwner",
+        "controlMatrix.enterprise-foundation-audit-retention-tamper-evidence.riskOwner",
+        "riskRegister.risk-audit-retention-tamper-evidence.owner"
+      ]
+    },
+    "backup-dr-business-continuity-control-owner": {
+      "ownerId": "backup-dr-business-continuity-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.backup-dr-business-continuity.controlOwner",
+        "controlMatrix.enterprise-foundation-backup-dr-business-continuity.controlOwner"
+      ]
+    },
+    "backup-dr-business-continuity-evidence-owner": {
+      "ownerId": "backup-dr-business-continuity-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.backup-dr-business-continuity.evidenceOwner"
+      ]
+    },
+    "backup-dr-business-continuity-owner": {
+      "ownerId": "backup-dr-business-continuity-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.backup-dr-business-continuity.owner",
+        "controlMatrix.enterprise-foundation-backup-dr-business-continuity.owner"
+      ]
+    },
+    "backup-dr-business-continuity-risk-owner": {
+      "ownerId": "backup-dr-business-continuity-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.backup-dr-business-continuity.riskOwner",
+        "controlMatrix.enterprise-foundation-backup-dr-business-continuity.riskOwner",
+        "riskRegister.risk-backup-dr-business-continuity.owner"
+      ]
+    },
+    "change-release-deployment-governance-control-owner": {
+      "ownerId": "change-release-deployment-governance-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.change-release-deployment-governance.controlOwner",
+        "controlMatrix.enterprise-foundation-change-release-deployment-governance.controlOwner"
+      ]
+    },
+    "change-release-deployment-governance-evidence-owner": {
+      "ownerId": "change-release-deployment-governance-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.change-release-deployment-governance.evidenceOwner"
+      ]
+    },
+    "change-release-deployment-governance-owner": {
+      "ownerId": "change-release-deployment-governance-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.change-release-deployment-governance.owner",
+        "controlMatrix.enterprise-foundation-change-release-deployment-governance.owner"
+      ]
+    },
+    "change-release-deployment-governance-risk-owner": {
+      "ownerId": "change-release-deployment-governance-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.change-release-deployment-governance.riskOwner",
+        "controlMatrix.enterprise-foundation-change-release-deployment-governance.riskOwner",
+        "riskRegister.risk-change-release-deployment-governance.owner"
+      ]
+    },
+    "data-lifecycle-migration-rollback-control-owner": {
+      "ownerId": "data-lifecycle-migration-rollback-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.data-lifecycle-migration-rollback.controlOwner",
+        "controlMatrix.enterprise-foundation-data-lifecycle-migration-rollback.controlOwner"
+      ]
+    },
+    "data-lifecycle-migration-rollback-evidence-owner": {
+      "ownerId": "data-lifecycle-migration-rollback-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.data-lifecycle-migration-rollback.evidenceOwner"
+      ]
+    },
+    "data-lifecycle-migration-rollback-owner": {
+      "ownerId": "data-lifecycle-migration-rollback-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.data-lifecycle-migration-rollback.owner",
+        "controlMatrix.enterprise-foundation-data-lifecycle-migration-rollback.owner"
+      ]
+    },
+    "data-lifecycle-migration-rollback-risk-owner": {
+      "ownerId": "data-lifecycle-migration-rollback-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.data-lifecycle-migration-rollback.riskOwner",
+        "controlMatrix.enterprise-foundation-data-lifecycle-migration-rollback.riskOwner",
+        "riskRegister.risk-data-lifecycle-migration-rollback.owner"
+      ]
+    },
+    "enterprise-assurance-foundation-owner": {
+      "ownerId": "enterprise-assurance-foundation-owner",
+      "ownerKind": "parentOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "owners.parentOwner"
+      ]
+    },
+    "enterprise-control-owner": {
+      "ownerId": "enterprise-control-owner",
+      "ownerKind": "parentControlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "owners.parentControlOwner"
+      ]
+    },
+    "enterprise-evidence-owner": {
+      "ownerId": "enterprise-evidence-owner",
+      "ownerKind": "parentEvidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "owners.parentEvidenceOwner"
+      ]
+    },
+    "enterprise-risk-owner": {
+      "ownerId": "enterprise-risk-owner",
+      "ownerKind": "parentRiskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "owners.parentRiskOwner"
+      ]
+    },
+    "iam-privileged-access-control-owner": {
+      "ownerId": "iam-privileged-access-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.iam-privileged-access.controlOwner",
+        "controlMatrix.enterprise-foundation-iam-privileged-access.controlOwner"
+      ]
+    },
+    "iam-privileged-access-evidence-owner": {
+      "ownerId": "iam-privileged-access-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.iam-privileged-access.evidenceOwner"
+      ]
+    },
+    "iam-privileged-access-owner": {
+      "ownerId": "iam-privileged-access-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.iam-privileged-access.owner",
+        "controlMatrix.enterprise-foundation-iam-privileged-access.owner"
+      ]
+    },
+    "iam-privileged-access-risk-owner": {
+      "ownerId": "iam-privileged-access-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.iam-privileged-access.riskOwner",
+        "controlMatrix.enterprise-foundation-iam-privileged-access.riskOwner",
+        "riskRegister.risk-iam-privileged-access.owner"
+      ]
+    },
+    "incident-security-operations-control-owner": {
+      "ownerId": "incident-security-operations-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.incident-security-operations.controlOwner",
+        "controlMatrix.enterprise-foundation-incident-security-operations.controlOwner"
+      ]
+    },
+    "incident-security-operations-evidence-owner": {
+      "ownerId": "incident-security-operations-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.incident-security-operations.evidenceOwner"
+      ]
+    },
+    "incident-security-operations-owner": {
+      "ownerId": "incident-security-operations-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.incident-security-operations.owner",
+        "controlMatrix.enterprise-foundation-incident-security-operations.owner"
+      ]
+    },
+    "incident-security-operations-risk-owner": {
+      "ownerId": "incident-security-operations-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.incident-security-operations.riskOwner",
+        "controlMatrix.enterprise-foundation-incident-security-operations.riskOwner",
+        "riskRegister.risk-incident-security-operations.owner"
+      ]
+    },
+    "isms-scope-context-risk-control-owner": {
+      "ownerId": "isms-scope-context-risk-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.isms-scope-context-risk.controlOwner",
+        "controlMatrix.enterprise-foundation-isms-scope-context-risk.controlOwner"
+      ]
+    },
+    "isms-scope-context-risk-evidence-owner": {
+      "ownerId": "isms-scope-context-risk-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.isms-scope-context-risk.evidenceOwner"
+      ]
+    },
+    "isms-scope-context-risk-owner": {
+      "ownerId": "isms-scope-context-risk-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.isms-scope-context-risk.owner",
+        "controlMatrix.enterprise-foundation-isms-scope-context-risk.owner"
+      ]
+    },
+    "isms-scope-context-risk-risk-owner": {
+      "ownerId": "isms-scope-context-risk-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.isms-scope-context-risk.riskOwner",
+        "controlMatrix.enterprise-foundation-isms-scope-context-risk.riskOwner",
+        "riskRegister.risk-isms-scope-context-risk.owner"
+      ]
+    },
+    "observability-alerting-runbooks-control-owner": {
+      "ownerId": "observability-alerting-runbooks-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.observability-alerting-runbooks.controlOwner",
+        "controlMatrix.enterprise-foundation-observability-alerting-runbooks.controlOwner"
+      ]
+    },
+    "observability-alerting-runbooks-evidence-owner": {
+      "ownerId": "observability-alerting-runbooks-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.observability-alerting-runbooks.evidenceOwner"
+      ]
+    },
+    "observability-alerting-runbooks-owner": {
+      "ownerId": "observability-alerting-runbooks-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.observability-alerting-runbooks.owner",
+        "controlMatrix.enterprise-foundation-observability-alerting-runbooks.owner"
+      ]
+    },
+    "observability-alerting-runbooks-risk-owner": {
+      "ownerId": "observability-alerting-runbooks-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.observability-alerting-runbooks.riskOwner",
+        "controlMatrix.enterprise-foundation-observability-alerting-runbooks.riskOwner",
+        "riskRegister.risk-observability-alerting-runbooks.owner"
+      ]
+    },
+    "policy-pack-governance-control-owner": {
+      "ownerId": "policy-pack-governance-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.policy-pack-governance.controlOwner",
+        "controlMatrix.enterprise-foundation-policy-pack-governance.controlOwner"
+      ]
+    },
+    "policy-pack-governance-evidence-owner": {
+      "ownerId": "policy-pack-governance-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.policy-pack-governance.evidenceOwner"
+      ]
+    },
+    "policy-pack-governance-owner": {
+      "ownerId": "policy-pack-governance-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.policy-pack-governance.owner",
+        "controlMatrix.enterprise-foundation-policy-pack-governance.owner"
+      ]
+    },
+    "policy-pack-governance-risk-owner": {
+      "ownerId": "policy-pack-governance-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.policy-pack-governance.riskOwner",
+        "controlMatrix.enterprise-foundation-policy-pack-governance.riskOwner",
+        "riskRegister.risk-policy-pack-governance.owner"
+      ]
+    },
+    "privacy-data-protection-retention-control-owner": {
+      "ownerId": "privacy-data-protection-retention-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.privacy-data-protection-retention.controlOwner",
+        "controlMatrix.enterprise-foundation-privacy-data-protection-retention.controlOwner"
+      ]
+    },
+    "privacy-data-protection-retention-evidence-owner": {
+      "ownerId": "privacy-data-protection-retention-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.privacy-data-protection-retention.evidenceOwner"
+      ]
+    },
+    "privacy-data-protection-retention-owner": {
+      "ownerId": "privacy-data-protection-retention-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.privacy-data-protection-retention.owner",
+        "controlMatrix.enterprise-foundation-privacy-data-protection-retention.owner"
+      ]
+    },
+    "privacy-data-protection-retention-risk-owner": {
+      "ownerId": "privacy-data-protection-retention-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.privacy-data-protection-retention.riskOwner",
+        "controlMatrix.enterprise-foundation-privacy-data-protection-retention.riskOwner",
+        "riskRegister.risk-privacy-data-protection-retention.owner"
+      ]
+    },
+    "resilience-capacity-abuse-slo-control-owner": {
+      "ownerId": "resilience-capacity-abuse-slo-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.resilience-capacity-abuse-slo.controlOwner",
+        "controlMatrix.enterprise-foundation-resilience-capacity-abuse-slo.controlOwner"
+      ]
+    },
+    "resilience-capacity-abuse-slo-evidence-owner": {
+      "ownerId": "resilience-capacity-abuse-slo-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.resilience-capacity-abuse-slo.evidenceOwner"
+      ]
+    },
+    "resilience-capacity-abuse-slo-owner": {
+      "ownerId": "resilience-capacity-abuse-slo-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.resilience-capacity-abuse-slo.owner",
+        "controlMatrix.enterprise-foundation-resilience-capacity-abuse-slo.owner"
+      ]
+    },
+    "resilience-capacity-abuse-slo-risk-owner": {
+      "ownerId": "resilience-capacity-abuse-slo-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.resilience-capacity-abuse-slo.riskOwner",
+        "controlMatrix.enterprise-foundation-resilience-capacity-abuse-slo.riskOwner",
+        "riskRegister.risk-resilience-capacity-abuse-slo.owner"
+      ]
+    },
+    "secrets-crypto-certificates-control-owner": {
+      "ownerId": "secrets-crypto-certificates-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.secrets-crypto-certificates.controlOwner",
+        "controlMatrix.enterprise-foundation-secrets-crypto-certificates.controlOwner"
+      ]
+    },
+    "secrets-crypto-certificates-evidence-owner": {
+      "ownerId": "secrets-crypto-certificates-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.secrets-crypto-certificates.evidenceOwner"
+      ]
+    },
+    "secrets-crypto-certificates-owner": {
+      "ownerId": "secrets-crypto-certificates-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.secrets-crypto-certificates.owner",
+        "controlMatrix.enterprise-foundation-secrets-crypto-certificates.owner"
+      ]
+    },
+    "secrets-crypto-certificates-risk-owner": {
+      "ownerId": "secrets-crypto-certificates-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.secrets-crypto-certificates.riskOwner",
+        "controlMatrix.enterprise-foundation-secrets-crypto-certificates.riskOwner",
+        "riskRegister.risk-secrets-crypto-certificates.owner"
+      ]
+    },
+    "soa-control-evidence-matrix-control-owner": {
+      "ownerId": "soa-control-evidence-matrix-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.soa-control-evidence-matrix.controlOwner",
+        "controlMatrix.enterprise-foundation-soa-control-evidence-matrix.controlOwner"
+      ]
+    },
+    "soa-control-evidence-matrix-evidence-owner": {
+      "ownerId": "soa-control-evidence-matrix-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.soa-control-evidence-matrix.evidenceOwner"
+      ]
+    },
+    "soa-control-evidence-matrix-owner": {
+      "ownerId": "soa-control-evidence-matrix-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.soa-control-evidence-matrix.owner",
+        "controlMatrix.enterprise-foundation-soa-control-evidence-matrix.owner"
+      ]
+    },
+    "soa-control-evidence-matrix-risk-owner": {
+      "ownerId": "soa-control-evidence-matrix-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.soa-control-evidence-matrix.riskOwner",
+        "controlMatrix.enterprise-foundation-soa-control-evidence-matrix.riskOwner",
+        "riskRegister.risk-soa-control-evidence-matrix.owner"
+      ]
+    },
+    "supplier-cloud-third-party-risk-control-owner": {
+      "ownerId": "supplier-cloud-third-party-risk-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supplier-cloud-third-party-risk.controlOwner",
+        "controlMatrix.enterprise-foundation-supplier-cloud-third-party-risk.controlOwner"
+      ]
+    },
+    "supplier-cloud-third-party-risk-evidence-owner": {
+      "ownerId": "supplier-cloud-third-party-risk-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supplier-cloud-third-party-risk.evidenceOwner"
+      ]
+    },
+    "supplier-cloud-third-party-risk-owner": {
+      "ownerId": "supplier-cloud-third-party-risk-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supplier-cloud-third-party-risk.owner",
+        "controlMatrix.enterprise-foundation-supplier-cloud-third-party-risk.owner"
+      ]
+    },
+    "supplier-cloud-third-party-risk-risk-owner": {
+      "ownerId": "supplier-cloud-third-party-risk-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supplier-cloud-third-party-risk.riskOwner",
+        "controlMatrix.enterprise-foundation-supplier-cloud-third-party-risk.riskOwner",
+        "riskRegister.risk-supplier-cloud-third-party-risk.owner"
+      ]
+    },
+    "supply-chain-sbom-provenance-control-owner": {
+      "ownerId": "supply-chain-sbom-provenance-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supply-chain-sbom-provenance.controlOwner",
+        "controlMatrix.enterprise-foundation-supply-chain-sbom-provenance.controlOwner"
+      ]
+    },
+    "supply-chain-sbom-provenance-evidence-owner": {
+      "ownerId": "supply-chain-sbom-provenance-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supply-chain-sbom-provenance.evidenceOwner"
+      ]
+    },
+    "supply-chain-sbom-provenance-owner": {
+      "ownerId": "supply-chain-sbom-provenance-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supply-chain-sbom-provenance.owner",
+        "controlMatrix.enterprise-foundation-supply-chain-sbom-provenance.owner"
+      ]
+    },
+    "supply-chain-sbom-provenance-risk-owner": {
+      "ownerId": "supply-chain-sbom-provenance-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.supply-chain-sbom-provenance.riskOwner",
+        "controlMatrix.enterprise-foundation-supply-chain-sbom-provenance.riskOwner",
+        "riskRegister.risk-supply-chain-sbom-provenance.owner"
+      ]
+    },
+    "tenant-isolation-customer-data-control-owner": {
+      "ownerId": "tenant-isolation-customer-data-control-owner",
+      "ownerKind": "controlOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.tenant-isolation-customer-data.controlOwner",
+        "controlMatrix.enterprise-foundation-tenant-isolation-customer-data.controlOwner"
+      ]
+    },
+    "tenant-isolation-customer-data-evidence-owner": {
+      "ownerId": "tenant-isolation-customer-data-evidence-owner",
+      "ownerKind": "evidenceOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.tenant-isolation-customer-data.evidenceOwner"
+      ]
+    },
+    "tenant-isolation-customer-data-owner": {
+      "ownerId": "tenant-isolation-customer-data-owner",
+      "ownerKind": "owner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.tenant-isolation-customer-data.owner",
+        "controlMatrix.enterprise-foundation-tenant-isolation-customer-data.owner"
+      ]
+    },
+    "tenant-isolation-customer-data-risk-owner": {
+      "ownerId": "tenant-isolation-customer-data-risk-owner",
+      "ownerKind": "riskOwner",
+      "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory",
+      "authorityBoundary": "Repository evidence owner label only; Linear does not define owner authority and no production operating role is claimed.",
+      "reviewCadence": "quarterly-until-replaced-by-formal-governance",
+      "nextReviewDate": "2026-10-04",
+      "sourceFields": [
+        "domains.tenant-isolation-customer-data.riskOwner",
+        "controlMatrix.enterprise-foundation-tenant-isolation-customer-data.riskOwner",
+        "riskRegister.risk-tenant-isolation-customer-data.owner"
+      ]
+    }
+  }
 }

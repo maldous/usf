@@ -1,11 +1,11 @@
 import { createServer } from "node:http";
 
-const DEFAULT_FQDN_MAP = Object.freeze({
+export const DEFAULT_FQDN_MAP = Object.freeze({
   "1e100.network": "staging",
   "aldous.info": "production",
 });
 
-const NON_CLAIMS = Object.freeze([
+export const NON_CLAIMS = Object.freeze([
   "no-staging-readiness",
   "no-production-readiness",
   "no-deployment-readiness",
@@ -22,7 +22,7 @@ const NON_CLAIMS = Object.freeze([
   "no-v2-proof-tag-authorization",
 ]);
 
-const NO_STORE_HEADERS = Object.freeze({
+export const NO_STORE_HEADERS = Object.freeze({
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
   "CDN-Cache-Control": "no-store",
   "Netlify-CDN-Cache-Control": "no-store",
@@ -119,7 +119,7 @@ function sendOptions(response) {
   response.end();
 }
 
-function publicEdgePayload(context) {
+export function publicEdgePayload(context) {
   return {
     marker: "usf-public-edge",
     route: "/.well-known/usf-public-edge.json",
@@ -142,7 +142,7 @@ function publicEdgePayload(context) {
   };
 }
 
-function publicRouteHtml(context) {
+export function publicRouteHtml(context) {
   const bootstrap = JSON.stringify({
     marker: "usf-public-route",
     route: "/__proof/public-route",

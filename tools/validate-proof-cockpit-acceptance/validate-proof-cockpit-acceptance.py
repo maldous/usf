@@ -162,6 +162,18 @@ EVIDENCE_ONLY_PREFIXES = (
     "evidence/proof-evidence/proof-cockpit/",
 )
 
+DIRTY_STATE_PATHS = [
+    "apps/staging-proof-cockpit",
+    "tools/validate-proof-cockpit-acceptance",
+    "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+    "docs/architecture/proof-cockpit-foundation-substrate-closure-import.json",
+    "evidence/proof-evidence/proof-cockpit",
+    "package.json",
+    "Makefile",
+    ".github/workflows/validate-spec.yml",
+    ".github/workflows/proof-anchor.yml",
+]
+
 REQUIRED_PLANTED_KINDS = [
     "machine-run-warning-count-nonzero",
     "unresolved-warning-inventory-item",
@@ -173,10 +185,14 @@ REQUIRED_PLANTED_KINDS = [
     "claim-missing-assurance-field",
     "service-evidence-missing-reenactment",
     "stale-evidence-treated-current",
+    "dirty-proof-cockpit-state",
+    "nested-readiness-overclaim",
     "final-signoff-auto-completed",
     "auth-required-service-without-authenticated-screenshot",
     "service-missing-auth-posture",
     "openbao-credential-evidence-missing",
+    "service-evidence-missing-run-context",
+    "service-evidence-missing-target-observation",
     "secret-literal-value-exposed",
     "artifact-hash-mismatch",
 ]
@@ -264,6 +280,23 @@ def changed_paths_since(commit: str) -> list[str]:
     except subprocess.CalledProcessError:
         return ["<unresolvable-source-sha>"]
     return [line for line in output.splitlines() if line.strip()]
+
+
+def dirty_paths() -> list[str]:
+    output = subprocess.run(
+        ["git", "status", "--short", "--untracked-files=all", "--", *DIRTY_STATE_PATHS],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    ).stdout
+    paths: list[str] = []
+    for line in output.splitlines():
+        if not line.strip():
+            continue
+        path = line[3:] if len(line) > 3 else line.strip()
+        paths.append(path.strip())
+    return paths
 
 
 def evidence_only_since(commit: str) -> tuple[bool, list[str]]:
@@ -354,6 +387,7 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "nodeData": node_data(),
         "artifactDir": effective_artifact_dir,
         "currentHead": current_head(),
+        "dirtyPaths": dirty_paths(),
         "planted": [],
     }
     for path in sorted(PLANTED.glob("*.json")):
@@ -367,23 +401,64 @@ def finding(rule_id: str, message: str, subject: str = "") -> dict[str, str]:
     return {"ruleId": rule_id, "severity": "blocking", "subject": subject, "message": message}
 
 
+def iter_strings(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, Path):
+        return [str(value)]
+    if isinstance(value, (int, float, bool)):
+        return [str(value)]
+    if isinstance(value, dict):
+        strings: list[str] = []
+        for key, nested in value.items():
+            strings.extend(iter_strings(key))
+            strings.extend(iter_strings(nested))
+        return strings
+    if isinstance(value, list):
+        strings: list[str] = []
+        for nested in value:
+            strings.extend(iter_strings(nested))
+        return strings
+    return [str(value)]
+
+
 def text_blob(data: dict[str, Any]) -> str:
-    return "\n".join(
-        [
-            json.dumps(data["model"], sort_keys=True),
-            json.dumps(data["foundationImport"], sort_keys=True),
-            json.dumps(data["store"], sort_keys=True),
-            json.dumps(data["humanActions"], sort_keys=True),
-            json.dumps(data["bundleManifest"], sort_keys=True),
-            json.dumps(data.get("generatedScreenshotManifest", {}), sort_keys=True),
-            data["server"],
-            data["smoke"],
-            data["machineQa"],
-            data["validateSpecWorkflow"],
-            data["proofAnchorWorkflow"],
-            data["finalReport"],
-        ]
-    )
+    scan_roots = [
+        data["model"],
+        data["foundationImport"],
+        data["store"],
+        data["humanActions"],
+        data["bundleManifest"],
+        data.get("warningInventory", {}),
+        data.get("generatedScreenshotManifest", {}),
+        data.get("machineRunReport", {}),
+        data.get("serviceEvidenceManifest", {}),
+        data.get("evidenceIndex", {}),
+        data.get("chainOfCustody", {}),
+        data.get("gapRegister", {}),
+        data.get("nodeData", {}),
+        data["package"],
+        data["makefile"],
+        data["server"],
+        data["smoke"],
+        data["machineQa"],
+        data["validateSpecWorkflow"],
+        data["proofAnchorWorkflow"],
+        data["finalReport"],
+    ]
+    strings: list[str] = []
+    for root in scan_roots:
+        strings.extend(iter_strings(root))
+    return "\n".join(strings)
+
+
+def normalized_scan_text(text: str) -> str:
+    without_tags = re.sub(r"<[^>]*>", " ", text)
+    without_entities = re.sub(r"&[a-z0-9#]+;", " ", without_tags, flags=re.I)
+    with_camel_spacing = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", without_entities)
+    return re.sub(r"[^a-z0-9]+", " ", with_camel_spacing.lower()).strip()
 
 
 SECRET_ASSIGNMENT_RE = re.compile(
@@ -486,6 +561,7 @@ def rule_003_routes(data: dict[str, Any]) -> list[dict[str, str]]:
 
 def rule_004_nonclaims(data: dict[str, Any]) -> list[dict[str, str]]:
     text = text_blob(data).lower()
+    normalized_text = normalized_scan_text(text_blob(data))
     failures: list[dict[str, str]] = []
     for claim in REQUIRED_NON_CLAIMS:
         if claim not in text:
@@ -502,10 +578,10 @@ def rule_004_nonclaims(data: dict[str, Any]) -> list[dict[str, str]]:
         r"browser e2e readiness (is )?(complete|ready|approved|passed)",
         r"full product readiness (is )?(complete|ready|approved|passed)",
         r"usf-290 (is )?(complete|done|closed|automatically complete)\b(?![\"'])",
-        r"final acceptance automatic[\"']?\s*:\s*true",
+        r"final acceptance automatic true",
     ]
     for pattern in overclaim_patterns:
-        if re.search(pattern, text):
+        if re.search(pattern, normalized_text):
             failures.append(finding("USF-PROOF-COCKPIT-004", f"Forbidden overclaim matched: {pattern}"))
     forbidden_historical_token = "no-full-" + "react-product-" + "parity"
     if forbidden_historical_token in text:
@@ -631,6 +707,14 @@ def rule_009_gaps_corrective_actions(data: dict[str, Any]) -> list[dict[str, str
     failures: list[dict[str, str]] = []
     store = data["store"]
     latest = store.get("latestMachineRun", {})
+    if data.get("dirtyPaths"):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-009",
+                "Proof cockpit acceptance basis has uncommitted or untracked scoped changes",
+                ",".join(data["dirtyPaths"][:10]),
+            )
+        )
     machine_run = data.get("machineRunReport", {})
     machine_counts = machine_run.get("counts", {})
     for field, label in [("warnCount", "warning"), ("gapCount", "gap"), ("failCount", "failure")]:
@@ -717,11 +801,61 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
             failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence status is not machine-pass", service_id))
         if service.get("gaps"):
             failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence has unresolved gaps", service_id))
-        for field in ["screenshotPath", "screenshotHash", "artifactPath", "artifactHash", "humanReenactmentInstruction", "nextSafeAction"]:
+        for field in [
+            "runId",
+            "sourceSha",
+            "capturedAt",
+            "screenshotId",
+            "screenshotManifestRef",
+            "screenshotPath",
+            "screenshotHash",
+            "artifactPath",
+            "artifactHash",
+            "humanReenactmentInstruction",
+            "nextSafeAction",
+            "targetSystemObservation",
+            "targetSystemObservationRationale",
+        ]:
             if not service.get(field):
                 failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence missing {field}", service_id))
+        if "authPostureMismatch" not in service or not isinstance(service.get("authPostureMismatch"), bool):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence missing boolean authPostureMismatch flag", service_id))
+        if not service.get("authPostureMismatchReason"):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence missing authPostureMismatchReason", service_id))
+        if service.get("screenshotId") and not str(service.get("screenshotManifestRef", "")).endswith(str(service.get("screenshotId"))):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence screenshot manifest reference does not include screenshotId", service_id))
+        if data.get("machineRunReport", {}).get("qaRun") and service.get("runId") != data["machineRunReport"].get("qaRun"):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence runId does not match machine run", service_id))
+        if data.get("machineRunReport", {}).get("sourceSha") and service.get("sourceSha") != data["machineRunReport"].get("sourceSha"):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence sourceSha does not match machine run", service_id))
         verify_hash_for_path(failures, "USF-PROOF-COCKPIT-010", service_id, service.get("screenshotPath", ""), service.get("screenshotHash", ""), artifact_dir)
         verify_hash_for_path(failures, "USF-PROOF-COCKPIT-010", service_id, service.get("artifactPath", ""), service.get("artifactHash", ""), artifact_dir)
+        artifact_path = resolve_artifact_path(service.get("artifactPath", "") or service.get("apiCliArtifactPath", ""), artifact_dir)
+        if artifact_path and artifact_path.exists() and artifact_path.is_file():
+            try:
+                leaf = load_json(artifact_path)
+            except Exception as exc:
+                failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence leaf artifact is not strict JSON: {exc}", service_id))
+                leaf = {}
+            for field in [
+                "runId",
+                "sourceSha",
+                "capturedAt",
+                "screenshotId",
+                "screenshotManifestRef",
+                "screenshotPath",
+                "screenshotHash",
+                "targetSystemObservation",
+                "targetSystemObservationRationale",
+            ]:
+                if not leaf.get(field):
+                    failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence leaf artifact missing {field}", service_id))
+                elif service.get(field) and leaf.get(field) != service.get(field):
+                    failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence leaf artifact {field} does not match manifest row", service_id))
+            if "authPostureMismatch" not in leaf or not isinstance(leaf.get("authPostureMismatch"), bool):
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence leaf artifact missing boolean authPostureMismatch flag", service_id))
+            if not leaf.get("authPostureMismatchReason"):
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence leaf artifact missing authPostureMismatchReason", service_id))
         if service.get("evidenceClass") in {"api-equivalent", "cli-equivalent", "unsafe-to-screenshot", "unavailable", "blocked"} and not service.get("screenshotEquivalentReason"):
             failures.append(finding("USF-PROOF-COCKPIT-010", "Screenshot-equivalent service evidence missing reason", service_id))
         if service.get("actualAuthPosture") not in AUTH_POSTURES:
@@ -859,7 +993,9 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
     elif kind == "route-surface-missing":
         mutated["nodeData"]["routes"] = [route for route in mutated["nodeData"]["routes"] if route != "/proof/import"]
     elif kind == "readiness-overclaim":
-        mutated["finalReport"] += "\nStaging readiness complete.\n"
+        mutated["finalReport"] += "\n<span>Staging</span>/readiness is COMPLETE.\n"
+    elif kind == "nested-readiness-overclaim":
+        mutated["bundleManifest"].setdefault("plantedNestedOverclaim", {})["status"] = "<span>Production</span>/readiness is APPROVED"
     elif kind == "foundation-closure-validator-stale":
         mutated["foundationImport"]["validatorEvidence"]["allResult"] = "stale"
     elif kind == "artifact-manifest-missing":
@@ -906,6 +1042,8 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["serviceEvidenceManifest"]["services"][0]["humanReenactmentInstruction"] = ""
     elif kind == "stale-evidence-treated-current":
         mutated["store"]["latestMachineRun"]["sourceSha"] = "0000000000000000000000000000000000000000"
+    elif kind == "dirty-proof-cockpit-state":
+        mutated["dirtyPaths"] = ["apps/staging-proof-cockpit/src/server.mjs"]
     elif kind == "final-signoff-auto-completed":
         mutated["store"]["humanReview"]["finalSignoffCompleted"] = True
     elif kind == "auth-required-service-without-authenticated-screenshot":
@@ -923,6 +1061,16 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         service["credentialSourceRef"] = ""
         service["openBaoLogicalSecretRef"] = ""
         service["openBaoAuditEvidence"] = ""
+    elif kind == "service-evidence-missing-run-context":
+        service = mutated["serviceEvidenceManifest"]["services"][0]
+        service["runId"] = ""
+        service["sourceSha"] = ""
+        service["capturedAt"] = ""
+    elif kind == "service-evidence-missing-target-observation":
+        service = mutated["serviceEvidenceManifest"]["services"][0]
+        service["targetSystemObservation"] = ""
+        service["targetSystemObservationRationale"] = ""
+        service.pop("authPostureMismatch", None)
     elif kind == "secret-literal-value-exposed":
         mutated["store"]["secretLeak"] = "API_TOKEN=abcdefghijklmnopqrstuvwxyz123456"
     elif kind == "artifact-hash-mismatch":

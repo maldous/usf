@@ -1,0 +1,13 @@
+{
+  "id": "032-enterprise-iso-foundation-control-residual-risk-missing",
+  "description": "Remove residual risk from one enterprise ISO-style foundation control row.",
+  "enterpriseIsoControlPatch": [
+    {
+      "controlId": "enterprise-foundation-isms-scope-context-risk",
+      "drop": [
+        "residualRisk"
+      ]
+    }
+  ],
+  "expectedRule": "USF-ENTERPRISE-032"
+}

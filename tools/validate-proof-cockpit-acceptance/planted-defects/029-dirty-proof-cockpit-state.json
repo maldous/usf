@@ -1,0 +1,7 @@
+{
+  "id": "029-dirty-proof-cockpit-state",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "dirty-proof-cockpit-state"
+  }
+}

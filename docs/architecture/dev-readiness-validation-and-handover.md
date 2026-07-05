@@ -36,6 +36,7 @@ Install these tools before running the local handover path:
 | Corepack       | Provides pinned pnpm package manager                      | `corepack --version`      |
 | pnpm           | Version 11.9.0, pinned by `packageManager`                | `corepack pnpm --version` |
 | Python         | Python 3 for repository validators                        | `python3 --version`       |
+| Python packages | Pinned validator packages from `tools/validate-spec/requirements.txt`; `jsonschema` is required fail-closed validator runtime | `python3 -m pip show jsonschema` |
 | Docker Compose | Required for composed-provider proofs and `make verify`   | `docker compose version`  |
 
 The repository uses exact dependency versions in `package.json` and a committed lockfile. Do not use floating package versions or a different package manager for the handover path.
@@ -47,6 +48,7 @@ From a clean environment:
 ```bash
 git clone https://github.com/maldous/usf.git
 cd usf
+python3 -m pip install -r tools/validate-spec/requirements.txt
 make foundation
 ```
 
@@ -101,11 +103,15 @@ Representative proof commands:
 | `corepack pnpm providers-proof`                          | Provider adapter proof and SDK boundary checks                                   |
 | `corepack pnpm proof:api:graphql-generated-client`       | Generated client, external developer, GraphQL, and federation proof from USF-224 |
 | `corepack pnpm proof:observability:browser-telemetry`    | Minimal browser telemetry proof from USF-225                                     |
+| `corepack pnpm proof-cockpit:machine-qa`                  | Proof-cockpit browser QA over committed evidence, screenshots, and review routes |
+| `corepack pnpm validate-bootstrap`                        | Bootstrap governance validator compatibility command                            |
 | `corepack pnpm proof:backup:operations`                  | Backup, restore, DR, PITR, and RPO/RTO local operations proof                    |
 | `corepack pnpm proof:observability:operations-execution` | Alerting, dashboard, incident, and observability operation proof                 |
 | `make sonar-zero-issue-proof`                            | Bounded local SonarQube zero-open-issue proof for the supported synthetic scan scope |
 
 `make foundation` runs the required representative proof set through the existing `make verify` compatibility target. If a specific proof fails, rerun the failing proof directly after checking the troubleshooting section below.
+
+The proof-cockpit machine-QA command requires the Node/Corepack dependency set, read access to the committed proof-cockpit evidence store and screenshot artifacts, and a local browser executable discovered by the runner or supplied through `USF_BROWSER_EXECUTABLE`. It uses synthetic and redacted evidence only and does not require real tenant data, real secrets, live-provider access, staging readiness, or production readiness.
 
 ## Test-Readiness Command Boundary
 

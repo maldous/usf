@@ -1230,6 +1230,24 @@ def apply_enterprise_iso_style_foundation_defect(
                     row.pop(key, None)
                 for key, value in patch.get("set", {}).items():
                     row[key] = value
+    for owner_id in defect.get("dropEnterpriseIsoOwnerRegistryIds", []):
+        registry = out.get("ownerRegistry")
+        if isinstance(registry, dict):
+            registry.pop(owner_id, None)
+    for patch in defect.get("enterpriseIsoControlPatch", []):
+        for row in out.get("controlMatrix", []):
+            if row.get("issueId") == patch.get("issueId") or row.get("controlId") == patch.get("controlId"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
+    for patch in defect.get("enterpriseIsoRiskPatch", []):
+        for row in out.get("riskRegister", []):
+            if row.get("issueId") == patch.get("issueId") or row.get("riskId") == patch.get("riskId"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
     if "setEnterpriseIsoCertificationClaim" in defect:
         out.setdefault("frameworkBoundary", {})["iso27001CertificationClaim"] = defect[
             "setEnterpriseIsoCertificationClaim"
@@ -5149,6 +5167,55 @@ def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str,
     if boundary.get("iso27001SupportOnly") is not True or boundary.get("statementOfApplicabilityStyleSupport") is not True:
         F.add("USF-ENTERPRISE-032", "frameworkBoundary", "ISO support and SoA-style posture must be explicit")
 
+    owner_registry = foundation.get("ownerRegistry")
+    if not isinstance(owner_registry, dict) or not owner_registry:
+        F.add("USF-ENTERPRISE-032", "ownerRegistry", "owner registry is missing")
+        owner_registry = {}
+    else:
+        for owner_id, owner_row in owner_registry.items():
+            subject = f"ownerRegistry.{owner_id}"
+            if not isinstance(owner_row, dict):
+                F.add("USF-ENTERPRISE-032", subject, "owner registry row must be an object")
+                continue
+            for field in ("ownerId", "ownerKind", "resolution", "reviewCadence", "nextReviewDate", "sourceFields"):
+                if not owner_row.get(field):
+                    F.add("USF-ENTERPRISE-032", f"{subject}.{field}", "owner registry field is missing")
+            if owner_row.get("ownerId") != owner_id:
+                F.add("USF-ENTERPRISE-032", f"{subject}.ownerId", "owner registry key and ownerId differ")
+            if not isinstance(owner_row.get("sourceFields"), list):
+                F.add("USF-ENTERPRISE-032", f"{subject}.sourceFields", "owner source fields must be a list")
+            if isinstance(owner_row.get("nextReviewDate"), str) and not DATE_RE.match(owner_row["nextReviewDate"]):
+                F.add("USF-ENTERPRISE-032", f"{subject}.nextReviewDate", "owner registry next review date is invalid")
+
+    def owner_resolves(subject: str, owner_id: Any) -> None:
+        if not isinstance(owner_id, str) or not owner_id:
+            F.add("USF-ENTERPRISE-032", subject, "owner reference is missing")
+            return
+        if owner_id not in owner_registry:
+            F.add("USF-ENTERPRISE-032", subject, f"owner reference does not resolve through ownerRegistry: {owner_id}")
+
+    for key in ("parentOwner", "parentRiskOwner", "parentControlOwner", "parentEvidenceOwner"):
+        owner_resolves(f"owners.{key}", foundation.get("owners", {}).get(key))
+
+    def check_evidence_source(subject: str, evidence_source: Any, self_reference: str, require_model: bool = True) -> None:
+        if not isinstance(evidence_source, str) or not evidence_source.strip():
+            F.add("USF-ENTERPRISE-032", subject, "evidence source is missing")
+            return
+        parts = [part.strip() for part in evidence_source.split(";") if part.strip()]
+        if not parts:
+            F.add("USF-ENTERPRISE-032", subject, "evidence source is empty")
+            return
+        if parts == [self_reference]:
+            F.add("USF-ENTERPRISE-032", subject, "foundation evidence source cannot be self-only")
+        if require_model and str(MODEL_PATH) not in evidence_source:
+            F.add("USF-ENTERPRISE-032", subject, "foundation evidence source must cite repository enterprise evidence model")
+        for part in parts:
+            if part.startswith("USF-"):
+                continue
+            path = part.split("#", 1)[0]
+            if path and not (ROOT / path).exists():
+                F.add("USF-ENTERPRISE-032", subject, f"evidence source path does not resolve: {path}")
+
     child_ids = set(foundation.get("childIssueIds", []))
     if child_ids != REQUIRED_ENTERPRISE_FOUNDATION_ISSUES:
         F.add("USF-ENTERPRISE-032", "childIssueIds", f"child issue set is incomplete: {sorted(REQUIRED_ENTERPRISE_FOUNDATION_ISSUES - child_ids)}")
@@ -5190,12 +5257,11 @@ def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str,
         ):
             if not row.get(field):
                 F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.{field}", "foundation domain field is missing")
+        for field in ("owner", "riskOwner", "controlOwner", "evidenceOwner"):
+            owner_resolves(f"domains.{issue_id}.{field}", row.get(field))
         evidence_source = str(row.get("evidenceSource", ""))
         self_reference = f"docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.{row.get('domainId')}"
-        if "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#" not in evidence_source:
-            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.evidenceSource", "foundation domain evidence source must cite repository enterprise evidence model")
-        if evidence_source.strip() == self_reference:
-            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.evidenceSource", "foundation domain evidence source cannot be self-only")
+        check_evidence_source(f"domains.{issue_id}.evidenceSource", evidence_source, self_reference)
         if row.get("scopeRecorded") is not True or row.get("evidenceModelDefined") is not True:
             F.add("USF-ENTERPRISE-032", f"domains.{issue_id}", "scope and evidence model must be defined")
         if row.get("validationExpectation") != "python3 tools/validate-enterprise/validate-enterprise.py all --json":
@@ -5218,6 +5284,70 @@ def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str,
         issue_ids = {row.get("issueId") for row in rows if isinstance(row, dict)}
         if issue_ids != REQUIRED_ENTERPRISE_FOUNDATION_ISSUES:
             F.add("USF-ENTERPRISE-032", collection_name, "foundation collection does not cover all child issues")
+
+    for control in foundation.get("controlMatrix", []) if isinstance(foundation.get("controlMatrix"), list) else []:
+        if not isinstance(control, dict):
+            continue
+        control_id = control.get("controlId", "unknown-control")
+        subject = f"controlMatrix.{control_id}"
+        for field in (
+            "controlId",
+            "issueId",
+            "purpose",
+            "riskTreated",
+            "affectedAssetsOrServices",
+            "owner",
+            "riskOwner",
+            "controlOwner",
+            "evidenceSource",
+            "validationCommand",
+            "status",
+            "deferredBoundary",
+            "residualRisk",
+            "reviewCadence",
+        ):
+            if not control.get(field):
+                F.add("USF-ENTERPRISE-032", f"{subject}.{field}", "foundation control field is missing")
+        for field in ("owner", "riskOwner", "controlOwner"):
+            owner_resolves(f"{subject}.{field}", control.get(field))
+        if not isinstance(control.get("affectedAssetsOrServices"), list) or not control["affectedAssetsOrServices"]:
+            F.add("USF-ENTERPRISE-032", f"{subject}.affectedAssetsOrServices", "affected assets/services must be listed")
+        if control.get("validationCommand") != "python3 tools/validate-enterprise/validate-enterprise.py all --json":
+            F.add("USF-ENTERPRISE-032", f"{subject}.validationCommand", "control validation command is invalid")
+        control_self_reference = (
+            f"docs/architecture/enterprise-iso-style-evidence-foundation.json#controlMatrix.{control_id}"
+        )
+        check_evidence_source(f"{subject}.evidenceSource", control.get("evidenceSource"), control_self_reference)
+        if required_non_claims - set(control.get("nonClaims", [])):
+            F.add("USF-ENTERPRISE-032", f"{subject}.nonClaims", "control non-claims are incomplete")
+
+    for risk in foundation.get("riskRegister", []) if isinstance(foundation.get("riskRegister"), list) else []:
+        if not isinstance(risk, dict):
+            continue
+        risk_id = risk.get("riskId", "unknown-risk")
+        subject = f"riskRegister.{risk_id}"
+        for field in (
+            "riskId",
+            "issueId",
+            "riskStatement",
+            "treatment",
+            "owner",
+            "reviewDate",
+            "followUpIssue",
+            "promotionImpact",
+            "residualRisk",
+            "reviewCadence",
+            "evidenceSource",
+        ):
+            if not risk.get(field):
+                F.add("USF-ENTERPRISE-032", f"{subject}.{field}", "foundation risk field is missing")
+        owner_resolves(f"{subject}.owner", risk.get("owner"))
+        if isinstance(risk.get("reviewDate"), str) and not DATE_RE.match(risk["reviewDate"]):
+            F.add("USF-ENTERPRISE-032", f"{subject}.reviewDate", "risk review date is invalid")
+        if not isinstance(risk.get("promotionImpact"), list) or not risk["promotionImpact"]:
+            F.add("USF-ENTERPRISE-032", f"{subject}.promotionImpact", "risk promotion impact must be listed")
+        risk_self_reference = f"docs/architecture/enterprise-iso-style-evidence-foundation.json#riskRegister.{risk_id}"
+        check_evidence_source(f"{subject}.evidenceSource", risk.get("evidenceSource"), risk_self_reference)
 
     exceptions = foundation.get("exceptionWorkflow", {})
     if not isinstance(exceptions, dict):

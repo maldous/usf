@@ -1,0 +1,8 @@
+{
+  "id": "032-enterprise-iso-foundation-owner-registry-missing",
+  "description": "Remove a resolved enterprise ISO-style foundation owner from ownerRegistry.",
+  "dropEnterpriseIsoOwnerRegistryIds": [
+    "isms-scope-context-risk-owner"
+  ],
+  "expectedRule": "USF-ENTERPRISE-032"
+}

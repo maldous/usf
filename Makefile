@@ -13,6 +13,7 @@ SHELL := /bin/bash
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
+	validate-bootstrap \
 	verify install dev dev-smoke dev.work \
 	runtime-proof runtime-proof-in-memory runtime-proof-compose runtime-validate \
 	enterprise-validate \
@@ -47,6 +48,7 @@ help:
 		'  make validate-coverage     Foundation coverage validators (compatibility: parity)' \
 		'  make validate-assurance    Enterprise assurance evidence validator (compatibility: enterprise-validate)' \
 		'  make validate-evidence     Repository evidence validators (compatibility: corepack pnpm repo:validate)' \
+		'  make validate-bootstrap    Bootstrap governance validator (compatibility: corepack pnpm validate-bootstrap)' \
 		'' \
 		'Common proof groups:' \
 		'  make runtime-proof         API and worker runtime proof' \
@@ -168,6 +170,9 @@ validate-assurance: enterprise-validate
 
 validate-evidence:
 	corepack pnpm repo:validate
+
+validate-bootstrap:
+	corepack pnpm validate-bootstrap
 
 assurance: validate-assurance
 

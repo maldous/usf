@@ -1,0 +1,97 @@
+{
+  "target": "authority-index",
+  "expectedRule": "USF-AUTHORITY-001",
+  "specInstanceDirs": [
+    "semantic-contract",
+    "ui-semantic-model"
+  ],
+  "existingDirs": [
+    "spec/instances/semantic-contract",
+    "spec/instances/ui-semantic-model"
+  ],
+  "existingPaths": [
+    "docs/architecture/usf-current-state-foundation-closure-record.json",
+    "docs/architecture/usf-current-state-foundation-closure-report.md",
+    "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json",
+    "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.md",
+    "docs/architecture/superseded-lineage-closure-provenance.json",
+    "docs/architecture/superseded-lineage-closure-provenance.md"
+  ],
+  "record": {
+    "specInstanceFamilyCoverage": [
+      {
+        "family": "semantic-contract",
+        "path": "spec/instances/semantic-contract/",
+        "activeAuthority": true,
+        "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+        "stalenessPropagation": "Changes mark dependent decisions superseded until refreshed."
+      }
+    ],
+    "foundationSubstrateClosureSealRecords": [
+      {
+        "issueId": "USF-292",
+        "path": "docs/architecture/usf-current-state-foundation-closure-record.json",
+        "activeAuthority": true
+      },
+      {
+        "issueId": "USF-292",
+        "path": "docs/architecture/usf-current-state-foundation-closure-report.md",
+        "activeAuthority": true
+      },
+      {
+        "issueId": "USF-292",
+        "path": "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json",
+        "activeAuthority": true
+      },
+      {
+        "issueId": "USF-292",
+        "path": "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.md",
+        "activeAuthority": true
+      },
+      {
+        "issueId": "USF-292",
+        "path": "docs/architecture/superseded-lineage-closure-provenance.json",
+        "activeAuthority": true
+      },
+      {
+        "issueId": "USF-292",
+        "path": "docs/architecture/superseded-lineage-closure-provenance.md",
+        "activeAuthority": true
+      }
+    ],
+    "stalenessPropagationPolicy": {
+      "appliesTo": [
+        "spec/instances/**"
+      ],
+      "changedSemanticDefinitionAction": "Mark dependent proof evidence superseded until refreshed.",
+      "changedProofOrEvidenceAction": "Mark generated reports stale when evidence changes.",
+      "generatedReportAction": "Generated reports must not upgrade stale raw evidence.",
+      "humanDecisionAction": "Human decisions remain visible but superseded when evidence changes.",
+      "validatorFailureMode": "Fail closed when changed definitions lack evidence."
+    },
+    "aiUiCompositionBoundary": {
+      "allowedConsumers": [
+        "AI agents"
+      ],
+      "allowedInputs": [
+        "spec/instances/**"
+      ],
+      "requiredBoundary": "Generated UI definitions remain proposals until accepted.",
+      "prohibitedInferences": [
+        "product UI readiness"
+      ],
+      "nonClaims": [
+        "no-product-ui-readiness",
+        "no-browser-e2e-readiness",
+        "no-staging-readiness",
+        "no-production-readiness",
+        "no-deployment-readiness",
+        "no-live-provider-readiness",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-enterprise-production-readiness",
+        "no-full-product-readiness"
+      ]
+    }
+  }
+}

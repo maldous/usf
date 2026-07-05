@@ -473,13 +473,20 @@ def apply_mutation(base, mutation):
 def load_selftest_fixtures(F):
     fixtures = []
     if not os.path.isdir(SELFTEST_DIR):
+        F.add("USF-DB-SELFTEST", SELFTEST_DIR, "planted defect directory is missing")
         return fixtures
-    for name in sorted(os.listdir(SELFTEST_DIR)):
-        if not name.endswith(".json"):
-            continue
+    names = [name for name in sorted(os.listdir(SELFTEST_DIR)) if name.endswith(".json")]
+    if not names:
+        F.add("USF-DB-SELFTEST", SELFTEST_DIR, "planted defect directory is empty")
+        return fixtures
+    for name in names:
         path = f"{SELFTEST_DIR}/{name}"
         try:
-            fixtures.append((path, read_json(path)))
+            fixture = read_json(path)
+            if not isinstance(fixture, dict) or not fixture.get("expectedRule"):
+                F.add("USF-DB-SELFTEST", path, "planted defect is missing expectedRule")
+                continue
+            fixtures.append((path, fixture))
         except Exception as exc:  # noqa: BLE001
             F.add("USF-DB-SELFTEST", path, f"cannot load planted defect: {exc}")
     return fixtures

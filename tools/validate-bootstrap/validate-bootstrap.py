@@ -1143,14 +1143,21 @@ def run_checks(modes, F, state=None):
 def load_selftest_fixtures(F):
     fixtures = []
     if not os.path.isdir(SELFTEST_DIR):
+        F.add("USF-BOOTSTRAP-SELFTEST", SELFTEST_DIR, "planted defect directory is missing")
         return fixtures
-    for name in sorted(os.listdir(SELFTEST_DIR)):
-        if not name.endswith(".json"):
-            continue
+    names = [name for name in sorted(os.listdir(SELFTEST_DIR)) if name.endswith(".json")]
+    if not names:
+        F.add("USF-BOOTSTRAP-SELFTEST", SELFTEST_DIR, "planted defect directory is empty")
+        return fixtures
+    for name in names:
         path = f"{SELFTEST_DIR}/{name}"
         try:
             with open(path, encoding="utf-8") as handle:
-                fixtures.append((path, json.load(handle)))
+                fixture = json.load(handle)
+            if not isinstance(fixture, dict) or not fixture.get("expectedRule"):
+                F.add("USF-BOOTSTRAP-SELFTEST", path, "planted defect is missing expectedRule")
+                continue
+            fixtures.append((path, fixture))
         except Exception as exc:
             F.add("USF-BOOTSTRAP-SELFTEST", path, f"cannot load planted defect: {exc}")
     return fixtures

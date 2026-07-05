@@ -839,6 +839,60 @@ function serviceUiCandidates(service) {
   return candidates;
 }
 
+function serviceEvidenceScreenshotId(serviceId) {
+  return `screenshot-service-${serviceId}`;
+}
+
+function serviceEvidenceScreenshotManifestRef(serviceId) {
+  return `proof-cockpit-screenshot-manifest.json#${serviceEvidenceScreenshotId(serviceId)}`;
+}
+
+function serviceEvidenceArtifactPath(report, serviceId) {
+  return join(report.artifactDir, "service-evidence", `${slugifyRoute(serviceId)}.json`);
+}
+
+function catalogueAuthExpectation(service) {
+  const hasHttpUi = (service.ports ?? []).some((port) =>
+    ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()),
+  );
+  const catalogueAuthRequired =
+    (service.ports ?? []).some((port) => port.authRequired) ||
+    service.adminSurface?.present ||
+    service.operatorSurface?.present ||
+    /auth-required|authenticated/i.test(`${service.authRequirement ?? ""} ${service.accessPosture ?? ""}`);
+  if (!hasHttpUi) {
+    return "api/cli-only";
+  }
+  return catalogueAuthRequired ? "auth-required" : "intentionally anonymous/no-auth";
+}
+
+function authPostureMismatchForService(service, actualAuthPosture) {
+  const expected = catalogueAuthExpectation(service);
+  const authSatisfyingPostures = new Set([
+    "auth-required",
+    "service-login required",
+    "protected by gateway/forward-auth",
+    "unsafe-to-capture",
+  ]);
+  const mismatch =
+    (expected === "api/cli-only" && actualAuthPosture !== "api/cli-only") ||
+    (expected === "auth-required" && !authSatisfyingPostures.has(actualAuthPosture)) ||
+    (expected === "intentionally anonymous/no-auth" && actualAuthPosture !== "intentionally anonymous/no-auth");
+  const catalogueFields = [
+    `catalogueAuthRequirement=${service.authRequirement ?? "missing"}`,
+    `catalogueAccessPosture=${service.accessPosture ?? "missing"}`,
+    `catalogueExpectedPosture=${expected}`,
+    `actualAuthPosture=${actualAuthPosture}`,
+  ].join("; ");
+  return {
+    authPostureMismatch: mismatch,
+    authPostureMismatchReason: mismatch
+      ? `Catalogue posture and observed/declared machine QA posture differ: ${catalogueFields}. Human reviewer must inspect the rationale and non-claim boundary.`
+      : `Catalogue posture and observed/declared machine QA posture are aligned: ${catalogueFields}.`,
+    catalogueAuthExpectation: expected,
+  };
+}
+
 function serviceEvidenceRole(service) {
   if (service.serviceId === "keycloak") {
     return "tenant admin";
@@ -1370,8 +1424,15 @@ async function performServiceLogin(page, service, posture, credential) {
 }
 
 function writeServiceEvidenceArtifact(report, evidence) {
-  const serviceEvidenceDir = ensureDir(join(report.artifactDir, "service-evidence"));
-  const filePath = join(serviceEvidenceDir, `${slugifyRoute(evidence.serviceId)}.json`);
+  ensureDir(join(report.artifactDir, "service-evidence"));
+  const filePath = serviceEvidenceArtifactPath(report, evidence.serviceId);
+  evidence.apiCliArtifactPath ||= filePath;
+  evidence.artifactPath ||= filePath;
+  evidence.runId ||= report.qaRun;
+  evidence.sourceSha ||= report.sourceSha;
+  evidence.capturedAt ||= evidence.timestamp;
+  evidence.screenshotId ||= serviceEvidenceScreenshotId(evidence.serviceId);
+  evidence.screenshotManifestRef ||= serviceEvidenceScreenshotManifestRef(evidence.serviceId);
   const payload = {
     serviceId: evidence.serviceId,
     serviceName: evidence.serviceName,
@@ -1383,13 +1444,21 @@ function writeServiceEvidenceArtifact(report, evidence) {
     scenarioIds: evidence.scenarioIds,
     rolePersona: evidence.rolePersona,
     authMethodUsed: evidence.authMethodUsed,
+    runId: evidence.runId,
     timestamp: evidence.timestamp,
+    capturedAt: evidence.capturedAt,
+    sourceSha: evidence.sourceSha,
     sourceGitSha: evidence.sourceGitSha,
     deploymentEnvironment: evidence.deploymentEnvironment,
     correlationId: evidence.correlationId,
     traceId: evidence.traceId,
+    screenshotId: evidence.screenshotId,
+    screenshotManifestRef: evidence.screenshotManifestRef,
     screenshotPath: evidence.screenshotPath,
     screenshotHash: evidence.screenshotHash,
+    apiCliArtifactPath: evidence.apiCliArtifactPath,
+    artifactPath: evidence.artifactPath,
+    artifactConfirmed: evidence.artifactConfirmed,
     evidenceClass: evidence.evidenceClass,
     evidenceKind: evidence.evidenceKind,
     evidenceStatus: evidence.evidenceStatus,
@@ -1399,6 +1468,11 @@ function writeServiceEvidenceArtifact(report, evidence) {
     limitation: evidence.limitation,
     authPosture: evidence.authPosture,
     actualAuthPosture: evidence.actualAuthPosture,
+    catalogueAuthRequirement: evidence.catalogueAuthRequirement,
+    catalogueAccessPosture: evidence.catalogueAccessPosture,
+    catalogueAuthExpectation: evidence.catalogueAuthExpectation,
+    authPostureMismatch: evidence.authPostureMismatch,
+    authPostureMismatchReason: evidence.authPostureMismatchReason,
     loginMethod: evidence.loginMethod,
     authPostureConfigPath: evidence.authPostureConfigPath,
     authPostureRationale: evidence.authPostureRationale,
@@ -1429,6 +1503,9 @@ function writeServiceEvidenceArtifact(report, evidence) {
     finalAcceptanceBlocked: evidence.finalAcceptanceBlocked,
     nextSafeAction: evidence.nextSafeAction,
     humanReenactmentInstruction: evidence.humanReenactmentInstruction,
+    targetSystemObservation: evidence.targetSystemObservation,
+    targetSystemObservationRationale: evidence.targetSystemObservationRationale,
+    observationRationale: evidence.observationRationale,
     humanReviewStatus: evidence.humanReviewStatus,
     gaps: evidence.gaps,
   };
@@ -1453,7 +1530,16 @@ function serviceEvidenceHtml(evidence) {
     ["Scenario IDs", (evidence.scenarioIds ?? []).slice(0, 20).join(", ")],
     ["Claim supported", evidence.claimSupported],
     ["Limitation", evidence.limitation],
+    ["Run ID", evidence.runId],
+    ["Source SHA", evidence.sourceSha],
+    ["Captured at", evidence.capturedAt],
+    ["Screenshot ID", evidence.screenshotId],
+    ["Screenshot manifest reference", evidence.screenshotManifestRef],
+    ["Target-system observation", evidence.targetSystemObservation],
+    ["Observation rationale", evidence.targetSystemObservationRationale || evidence.observationRationale],
     ["Actual auth posture", evidence.actualAuthPosture || evidence.authPosture],
+    ["Auth posture mismatch", String(evidence.authPostureMismatch)],
+    ["Auth posture mismatch reason", evidence.authPostureMismatchReason],
     ["Login method", evidence.loginMethod],
     ["Auth config path", evidence.authPostureConfigPath],
     ["Auth posture rationale", evidence.authPostureRationale],
@@ -1515,14 +1601,24 @@ function escapeHtmlForReport(value) {
 async function captureGeneratedServiceEvidenceScreenshot(page, report, evidence) {
   const evidencePage = await page.context().newPage();
   try {
-    await evidencePage.setContent(serviceEvidenceHtml(evidence), { waitUntil: "domcontentloaded" });
+    evidence.apiCliArtifactPath ||= serviceEvidenceArtifactPath(report, evidence.serviceId);
+    evidence.artifactPath ||= evidence.apiCliArtifactPath;
+    evidence.screenshotId ||= serviceEvidenceScreenshotId(evidence.serviceId);
+    evidence.screenshotManifestRef ||= serviceEvidenceScreenshotManifestRef(evidence.serviceId);
     const fileName = `compose-service-${slugifyRoute(evidence.serviceId)}-evidence-page.png`;
     const filePath = join(report.screenshotDir, fileName);
+    evidence.screenshotPath ||= filePath;
+    evidence.screenshotHash ||= "computed-after-capture-see-manifest-row";
+    await evidencePage.setContent(serviceEvidenceHtml(evidence), { waitUntil: "domcontentloaded" });
     await evidencePage.screenshot({ path: filePath, fullPage: true });
     const screenshotHash = contentHash(readFileSync(filePath));
+    const capturedAt = new Date().toISOString();
     evidence.screenshotPath = filePath;
     evidence.screenshotHash = screenshotHash;
+    evidence.capturedAt = capturedAt;
     const entry = {
+      id: evidence.screenshotId,
+      screenshotId: evidence.screenshotId,
       kind: "compose-service-screenshot-equivalent",
       route: evidence.apiCliArtifactPath || evidence.serviceUrl || evidence.serviceId,
       serviceName: evidence.serviceName,
@@ -1532,19 +1628,26 @@ async function captureGeneratedServiceEvidenceScreenshot(page, report, evidence)
       scenarioIds: evidence.scenarioIds,
       rolePersona: evidence.rolePersona,
       authMethodUsed: evidence.authMethodUsed,
-      timestamp: new Date().toISOString(),
+      runId: report.qaRun,
+      timestamp: capturedAt,
+      capturedAt,
       sourceSha: report.sourceSha,
       deploymentEnvironment: report.environment,
       correlationId: evidence.correlationId,
       traceId: evidence.traceId,
       filePath,
+      screenshotPath: filePath,
       screenshotHash,
+      screenshotManifestRef: evidence.screenshotManifestRef,
       complianceClaimSupport: evidence.claimSupported,
       evidenceKind: evidence.evidenceKind,
       redactionStatus: evidence.redactionStatus,
       syntheticDataConfirmation: evidence.syntheticDataConfirmation,
       authPosture: evidence.authPosture,
       actualAuthPosture: evidence.actualAuthPosture,
+      catalogueAuthExpectation: evidence.catalogueAuthExpectation,
+      authPostureMismatch: evidence.authPostureMismatch,
+      authPostureMismatchReason: evidence.authPostureMismatchReason,
       loginMethod: evidence.loginMethod,
       authPostureConfigPath: evidence.authPostureConfigPath,
       authPostureRationale: evidence.authPostureRationale,
@@ -1571,6 +1674,8 @@ async function captureGeneratedServiceEvidenceScreenshot(page, report, evidence)
       finalAcceptanceBlocked: evidence.finalAcceptanceBlocked,
       nextSafeAction: evidence.nextSafeAction,
       humanReenactmentInstruction: evidence.humanReenactmentInstruction,
+      targetSystemObservation: evidence.targetSystemObservation,
+      targetSystemObservationRationale: evidence.targetSystemObservationRationale,
       result: evidence.evidenceStatus === "machine-fail" ? "fail" : "pass",
     };
     report.screenshots.push(entry);
@@ -1588,7 +1693,11 @@ async function captureCurrentServicePageScreenshot(page, report, service, url, m
   const filePath = join(report.screenshotDir, fileName);
   await page.screenshot({ path: filePath, fullPage: true });
   const screenshotHash = contentHash(readFileSync(filePath));
+  const capturedAt = new Date().toISOString();
+  const screenshotId = serviceEvidenceScreenshotId(service.serviceId);
   const entry = {
+    id: screenshotId,
+    screenshotId,
     kind: "compose-service",
     route: url,
     serviceName: service.displayName ?? service.serviceId,
@@ -1597,13 +1706,17 @@ async function captureCurrentServicePageScreenshot(page, report, service, url, m
     capabilityIds: mappings.map((mapping) => mapping.capabilityId),
     scenarioIds: unique(mappings.flatMap((mapping) => mapping.scenarioIds ?? [])),
     rolePersona: serviceEvidenceRole(service),
-    timestamp: new Date().toISOString(),
+    runId: report.qaRun,
+    timestamp: capturedAt,
+    capturedAt,
     sourceSha: report.sourceSha,
     deploymentEnvironment: report.environment,
     correlationId: `compose-service-${service.serviceId}-machine-qa`,
     traceId: `compose-service-${service.serviceId}-machine-qa-trace`,
     filePath,
+    screenshotPath: filePath,
     screenshotHash,
+    screenshotManifestRef: serviceEvidenceScreenshotManifestRef(service.serviceId),
     complianceClaimSupport: serviceClaimSupport(service),
     evidenceKind: evidenceState.evidenceKind ?? "supporting-evidence",
     redactionStatus: "no raw secret marker detected by machine text scan",
@@ -1611,9 +1724,14 @@ async function captureCurrentServicePageScreenshot(page, report, service, url, m
     result: "pass",
     authPosture: evidenceState.authPosture,
     actualAuthPosture: evidenceState.actualAuthPosture,
+    catalogueAuthExpectation: evidenceState.catalogueAuthExpectation,
+    authPostureMismatch: evidenceState.authPostureMismatch,
+    authPostureMismatchReason: evidenceState.authPostureMismatchReason,
     authenticatedCaptureStatus: evidenceState.authenticatedCaptureStatus,
     credentialSourceRef: evidenceState.credentialSourceRef,
     openBaoLogicalSecretRef: evidenceState.openBaoLogicalSecretRef,
+    targetSystemObservation: evidenceState.targetSystemObservation,
+    targetSystemObservationRationale: evidenceState.targetSystemObservationRationale,
   };
   report.screenshots.push(entry);
   report.counts.screenshots = report.screenshots.length;
@@ -1638,6 +1756,8 @@ async function verifyComposeServiceEvidence(page, data, report) {
       const posture = authPostureForService(service);
       const candidates = serviceUiCandidates(service);
       const credentialSummary = redactedCredentialSummary(posture, service.serviceId);
+      const evidenceTimestamp = new Date().toISOString();
+      const authPostureComparison = authPostureMismatchForService(service, posture.authPosture);
       const authenticatedCaptureRequired = ["auth-required", "service-login required"].includes(posture.authPosture);
       if (authenticatedCaptureRequired) {
         report.composeServiceEvidence.summary.servicesRequiringLogin += 1;
@@ -1656,6 +1776,8 @@ async function verifyComposeServiceEvidence(page, data, report) {
         serviceUrl: "",
         screenshotPath: "",
         screenshotHash: "",
+        screenshotId: serviceEvidenceScreenshotId(service.serviceId),
+        screenshotManifestRef: serviceEvidenceScreenshotManifestRef(service.serviceId),
         apiCliArtifactPath: "",
         artifactPath: "",
         artifactHash: "",
@@ -1664,7 +1786,10 @@ async function verifyComposeServiceEvidence(page, data, report) {
         evidenceClass: "unavailable",
         evidenceKind: "human-review-gap",
         evidenceStatus: "machine-gap",
-        timestamp: new Date().toISOString(),
+        runId: report.qaRun,
+        timestamp: evidenceTimestamp,
+        capturedAt: evidenceTimestamp,
+        sourceSha: report.sourceSha,
         sourceGitSha: report.sourceSha,
         deploymentEnvironment: report.environment,
         correlationId: `compose-service-${service.serviceId}-machine-qa`,
@@ -1675,6 +1800,9 @@ async function verifyComposeServiceEvidence(page, data, report) {
         limitation: "Service UI proof is bounded to local Compose and machine evidence for human review. It does not claim staging, production, live-provider, product UI, SOC, or ISO readiness.",
         authPosture: posture.authPosture,
         actualAuthPosture: posture.authPosture,
+        catalogueAuthExpectation: authPostureComparison.catalogueAuthExpectation,
+        authPostureMismatch: authPostureComparison.authPostureMismatch,
+        authPostureMismatchReason: authPostureComparison.authPostureMismatchReason,
         loginMethod: posture.loginMethod,
         authPostureConfigPath: posture.configPath,
         authPostureRationale: posture.anonymousAccessRationale ?? posture.screenshotEquivalentReason ?? posture.loginMethod,
@@ -1708,6 +1836,12 @@ async function verifyComposeServiceEvidence(page, data, report) {
         nextSafeAction: "Review the direct screenshot or approved screenshot-equivalent artifact, then record a human decision before final USF-290 acceptance.",
         humanReenactmentInstruction:
           "Retrieve only the scoped logical credential reference from OpenBao when required, open the listed service URL with synthetic data only, complete login or confirm documented anonymous posture, verify screenshot path and hash, chain of custody, redaction status, source SHA, and run ID, then record accept, reject, annotate, retest, corrective-action, or residual-risk decision.",
+        targetSystemObservation:
+          "Capture pending at service-evidence initialization; final record must replace this with the observed target URL, status, or equivalent artifact.",
+        targetSystemObservationRationale:
+          "Service evidence must name the target surface and explain why the captured screenshot or approved equivalent supports human review without claiming readiness.",
+        observationRationale:
+          "Service evidence must name the target surface and explain why the captured screenshot or approved equivalent supports human review without claiming readiness.",
         humanReviewStatus: "human-review-required",
         gaps: [],
       };
@@ -1720,8 +1854,13 @@ async function verifyComposeServiceEvidence(page, data, report) {
         evidence.directCaptureStatus = "blocked-compose-runtime-unavailable";
         evidence.gaps.push("Generated Compose target could not be started, so service UI capture could not run.");
         evidence.nextSafeAction = "Fix local Compose startup, rerun machine QA, and capture service UI evidence before human acceptance.";
-        writeServiceEvidenceArtifact(report, evidence);
+        evidence.targetSystemObservation =
+          "No target-system service page was observed because the generated Compose target could not start.";
+        evidence.targetSystemObservationRationale =
+          "A service claim with no target observation is a blocking evidence gap until Compose can run and machine QA can capture direct or approved equivalent evidence.";
+        evidence.observationRationale = evidence.targetSystemObservationRationale;
         await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+        writeServiceEvidenceArtifact(report, evidence);
         report.composeServiceEvidence.services.push(evidence);
         continue;
       }
@@ -1747,8 +1886,13 @@ async function verifyComposeServiceEvidence(page, data, report) {
           posture.screenshotEquivalentReason ??
           "The service has no safe direct UI capture target in the repository catalogue, so machine QA records a hash-addressed screenshot-equivalent page.";
         evidence.nextSafeAction = "Human auditor reviews the equivalent evidence page, verifies the service catalogue mapping and proof command, and records the review decision.";
-        writeServiceEvidenceArtifact(report, evidence);
+        evidence.targetSystemObservation =
+          `${evidence.serviceName} was classified as ${posture.authPosture}; machine QA generated a hash-addressed screenshot-equivalent artifact at ${evidence.apiCliArtifactPath || serviceEvidenceArtifactPath(report, service.serviceId)}.`;
+        evidence.targetSystemObservationRationale =
+          "The repository catalogue has no safe direct UI capture target for this service class, so the equivalent artifact records the service mapping, auth posture, redaction boundary, source SHA, run ID, and reenactment path for human review.";
+        evidence.observationRationale = evidence.targetSystemObservationRationale;
         await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+        writeServiceEvidenceArtifact(report, evidence);
         report.composeServiceEvidence.services.push(evidence);
         report.composeServiceEvidence.summary.artifactsConfirmed += evidence.artifactConfirmed ? 1 : 0;
         addCheck(report, evidence.evidenceStatus === "machine-pass" ? "pass" : "fail", "compose-service-evidence", service.serviceId, "Generated approved service screenshot-equivalent evidence.", evidence.evidenceStatus === "machine-pass" ? undefined : "missing-compose-service-screenshot");
@@ -1808,19 +1952,33 @@ async function verifyComposeServiceEvidence(page, data, report) {
             evidence.directCaptureStatus = "not-captured-approved-api-equivalent";
             evidence.authenticatedCaptureStatus = authenticatedStatus;
             evidence.screenshotEquivalentReason = posture.screenshotEquivalentReason;
-            writeServiceEvidenceArtifact(report, evidence);
+            evidence.targetSystemObservation =
+              `${evidence.serviceName} target ${currentServiceUrl} was reached, but direct UI capture was replaced by an approved authenticated API-equivalent to avoid exposing secret material.`;
+            evidence.targetSystemObservationRationale =
+              "The service is part of the credential/security workflow, so the evidence records controlled OpenBao access, redaction posture, source SHA, run ID, and a hash-addressed screenshot-equivalent instead of exposing secret-bearing UI content.";
+            evidence.observationRationale = evidence.targetSystemObservationRationale;
             await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
           } else {
             const screenshotEntry = await captureCurrentServicePageScreenshot(servicePage, report, service, currentServiceUrl, mappings, {
               evidenceKind: authenticatedCaptureRequired ? "authenticated-service-ui-screenshot" : "direct-service-ui-screenshot",
               authPosture: evidence.authPosture,
               actualAuthPosture: evidence.actualAuthPosture,
+              catalogueAuthExpectation: evidence.catalogueAuthExpectation,
+              authPostureMismatch: evidence.authPostureMismatch,
+              authPostureMismatchReason: evidence.authPostureMismatchReason,
               authenticatedCaptureStatus: authenticatedStatus,
               credentialSourceRef: evidence.credentialSourceRef,
               openBaoLogicalSecretRef: evidence.openBaoLogicalSecretRef,
+              targetSystemObservation:
+                `${evidence.serviceName} target ${currentServiceUrl} responded with HTTP ${status}; direct screenshot capture was requested.`,
+              targetSystemObservationRationale:
+                "The screenshot records the observed service UI state with synthetic data, redaction scan status, auth posture, source SHA, run ID, and hash for human review.",
             });
+            evidence.screenshotId = screenshotEntry.screenshotId;
+            evidence.screenshotManifestRef = screenshotEntry.screenshotManifestRef;
             evidence.screenshotPath = screenshotEntry.filePath;
             evidence.screenshotHash = screenshotEntry.screenshotHash;
+            evidence.capturedAt = screenshotEntry.capturedAt;
             evidence.authenticatedUiScreenshotPath = authenticatedCaptureRequired ? screenshotEntry.filePath : "";
             evidence.authenticatedUiScreenshotHash = authenticatedCaptureRequired ? screenshotEntry.screenshotHash : "";
             evidence.evidenceClass = authenticatedCaptureRequired ? "authenticated-direct-screenshot" : "direct-screenshot";
@@ -1833,10 +1991,15 @@ async function verifyComposeServiceEvidence(page, data, report) {
             evidence.screenshotEquivalentReason = authenticatedCaptureRequired
               ? "Authenticated service UI screenshot captured after OpenBao-scoped credential access without preserving secret values."
               : "Direct service UI screenshot captured after explicit auth-posture review without secret markers.";
-            writeServiceEvidenceArtifact(report, evidence);
+            evidence.targetSystemObservation =
+              `${evidence.serviceName} target ${currentServiceUrl} responded with HTTP ${status}; ${evidence.directCaptureStatus}; screenshot captured at ${evidence.screenshotPath}.`;
+            evidence.targetSystemObservationRationale =
+              "The browser observed the target service surface directly and stored a hash-addressed screenshot with synthetic-data and redaction posture for human review.";
+            evidence.observationRationale = evidence.targetSystemObservationRationale;
           }
           evidence.limitation = "Screenshot is supporting service evidence only; human acceptance remains required and no staging, production, live-provider, SOC, ISO, product UI, or full-product readiness is claimed.";
           evidence.nextSafeAction = "Human auditor reviews the screenshot, OpenBao logical credential reference where present, chain of custody, and redaction status, then records accept, reject, retest, corrective-action, or residual-risk decision.";
+          writeServiceEvidenceArtifact(report, evidence);
           report.composeServiceEvidence.summary.servicesVisited += 1;
           report.composeServiceEvidence.summary.artifactsConfirmed += evidence.artifactConfirmed ? 1 : 0;
           report.composeServiceEvidence.redactionChecks.push({
@@ -1870,8 +2033,13 @@ async function verifyComposeServiceEvidence(page, data, report) {
             : `${service.displayName ?? service.serviceId} direct UI evidence could not be captured.`,
         );
         evidence.nextSafeAction = "Complete the safe service login or document a true no-UI/unsafe-to-capture exception, rerun machine QA, and do not claim final audit readiness until this gap is zero.";
-        writeServiceEvidenceArtifact(report, evidence);
+        evidence.targetSystemObservation =
+          `${evidence.serviceName} target capture did not complete. Attempt findings: ${(evidence.directCaptureFindings ?? []).join("; ") || "no successful target observation"}.`;
+        evidence.targetSystemObservationRationale =
+          "The failed observation is retained as a blocking evidence gap so a generated equivalent cannot silently satisfy an auth-required or direct-UI service claim.";
+        evidence.observationRationale = evidence.targetSystemObservationRationale;
         await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+        writeServiceEvidenceArtifact(report, evidence);
         addCheck(report, "fail", "compose-service-evidence", service.serviceId, evidence.gaps.join("; "), "missing-compose-service-screenshot");
       }
       report.composeServiceEvidence.services.push(evidence);
@@ -2475,10 +2643,15 @@ function buildManifests(report) {
     rolePersonaUsed: service.rolePersona,
     loginAuthMethodUsed: service.authMethodUsed ?? service.authPath,
     urlOrEvidenceSurface: service.serviceUrl || service.apiCliArtifactPath || (service.serviceUrls ?? []).join(", "),
+    runId: service.runId,
+    capturedAt: service.capturedAt,
+    screenshotId: service.screenshotId,
+    screenshotManifestRef: service.screenshotManifestRef,
     screenshotPath: service.screenshotPath,
     screenshotHash: service.screenshotHash || (service.screenshotPath && existsSync(service.screenshotPath) ? contentHash(readFileSync(service.screenshotPath)) : ""),
     timestamp: service.timestamp,
-    sourceSha: service.sourceGitSha,
+    sourceSha: service.sourceSha ?? service.sourceGitSha,
+    sourceGitSha: service.sourceGitSha,
     environment: service.deploymentEnvironment,
     redactionStatus: service.redactionStatus,
     syntheticDataConfirmation: service.syntheticDataConfirmation,
@@ -2487,6 +2660,9 @@ function buildManifests(report) {
     evidenceStatus: service.evidenceStatus,
     authPosture: service.authPosture,
     actualAuthPosture: service.actualAuthPosture,
+    catalogueAuthExpectation: service.catalogueAuthExpectation,
+    authPostureMismatch: service.authPostureMismatch,
+    authPostureMismatchReason: service.authPostureMismatchReason,
     loginMethod: service.loginMethod,
     authPostureConfigPath: service.authPostureConfigPath,
     authPostureRationale: service.authPostureRationale,
@@ -2520,6 +2696,9 @@ function buildManifests(report) {
     finalAcceptanceBlocked: service.finalAcceptanceBlocked,
     nextSafeAction: service.nextSafeAction,
     humanReenactmentInstruction: service.humanReenactmentInstruction,
+    targetSystemObservation: service.targetSystemObservation,
+    targetSystemObservationRationale: service.targetSystemObservationRationale,
+    observationRationale: service.observationRationale,
     blockingGap: service.gaps?.length ? service.gaps.join("; ") : "",
   }));
   report.adapterManifest = report.composeServiceEvidence.services.map((service) => ({

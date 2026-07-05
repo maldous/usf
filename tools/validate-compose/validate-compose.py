@@ -67,6 +67,7 @@ RULES = {
     "USF-COMPOSE-035": "Data-bearing service lacks classification, tenant, backup/restore, retention, or failure metadata",
     "USF-COMPOSE-036": "External, cloud, deferred, or out-of-scope service lacks provider/deferred boundary or prohibited claims",
     "USF-COMPOSE-037": "Service-level metadata contradicts port-level metadata",
+    "USF-COMPOSE-SELFTEST": "planted Compose defect did not raise its expected rule",
 }
 
 REQUIRED_SERVICE_METADATA = {
@@ -182,6 +183,13 @@ def add(finding_list: list[dict[str, str]], rule_id: str, subject: str, message:
             "message": message or RULES[rule_id],
         }
     )
+
+
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def react_services(path: Path = REACT_COMPOSE_EVIDENCE_PATH) -> set[str]:
@@ -732,9 +740,34 @@ def apply_patch_defect(catalogue: dict[str, Any], defect: dict[str, Any]) -> dic
 
 
 def validate_selftest(base_catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
-    for path in sorted(PLANTED_DEFECT_DIR.glob("*.json")):
+    if not PLANTED_DEFECT_DIR.is_dir():
+        add(
+            findings,
+            "USF-COMPOSE-SELFTEST",
+            display_path(PLANTED_DEFECT_DIR),
+            "planted defect directory is missing",
+        )
+        return
+    paths = sorted(PLANTED_DEFECT_DIR.glob("*.json"))
+    if not paths:
+        add(
+            findings,
+            "USF-COMPOSE-SELFTEST",
+            display_path(PLANTED_DEFECT_DIR),
+            "planted defect directory is empty",
+        )
+        return
+    for path in paths:
         defect = load_json(path)
-        expected = defect["expectedRuleId"]
+        expected = defect.get("expectedRuleId")
+        if not expected:
+            add(
+                findings,
+                "USF-COMPOSE-SELFTEST",
+                str(path.relative_to(ROOT)),
+                "planted defect is missing expectedRuleId",
+            )
+            continue
         mutated = apply_patch_defect(base_catalogue, defect)
         local_findings: list[dict[str, str]] = []
         validate_catalogue(mutated, local_findings)
@@ -743,7 +776,7 @@ def validate_selftest(base_catalogue: dict[str, Any], findings: list[dict[str, s
         if expected not in {finding["ruleId"] for finding in local_findings}:
             add(
                 findings,
-                "USF-COMPOSE-016",
+                "USF-COMPOSE-SELFTEST",
                 str(path.relative_to(ROOT)),
                 f"planted defect did not raise {expected}",
             )

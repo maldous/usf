@@ -172,6 +172,7 @@
         "ordinary and CDN no-store headers for both proof surfaces",
         "Host-varying cache boundary for both proof surfaces",
         "required non-claims surfaced by both proof surfaces",
+        "self-hosted origin and Netlify function implementation equivalence for host map, non-claims, no-store headers, Vary Host, and JSON payload shape",
         "HEAD and OPTIONS safe-method boundary for both proof surfaces"
       ]
     },

@@ -1,0 +1,13 @@
+{
+  "id": "032-enterprise-iso-foundation-risk-evidence-source-missing",
+  "description": "Remove evidence source from one enterprise ISO-style foundation risk row.",
+  "enterpriseIsoRiskPatch": [
+    {
+      "riskId": "risk-isms-scope-context-risk",
+      "drop": [
+        "evidenceSource"
+      ]
+    }
+  ],
+  "expectedRule": "USF-ENTERPRISE-032"
+}

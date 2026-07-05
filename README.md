@@ -154,6 +154,7 @@ The supported local handover path is documented in [Dev Readiness Validation and
 - Node.js 24.16.0 or newer
 - Corepack with pnpm 11.9.0
 - Python 3
+- Python validator dependency: install the pinned `jsonschema` package from `tools/validate-spec/requirements.txt`
 - Docker with the Compose plugin (for composed-provider proofs)
 
 **One-command local validation**
@@ -173,7 +174,11 @@ make validate-assurance    # enterprise assurance evidence
 make validate-evidence     # repository evidence validators
 corepack pnpm dev:smoke    # developer smoke proof
 corepack pnpm runtime:proof
+corepack pnpm proof-cockpit:machine-qa
+corepack pnpm validate-bootstrap
 ```
+
+`corepack pnpm proof-cockpit:machine-qa` requires the Node/Corepack dependency set, read access to the committed proof-cockpit evidence store, and a local browser executable discovered by the machine-QA runner or supplied through the documented browser environment setting.
 
 Local proofs use synthetic tenants, actors, jobs, and browser telemetry against local composed services only. They require no real tenant data, no real secrets, and no live-provider, staging, or production access.
 

@@ -76,6 +76,27 @@ ENVELOPE = ["id", "title", "description", "authorityLevel", "lifecycleState",
 SCHEMA_TOP_KEYS = ["$schema", "$id", "title", "description", "type", "required", "properties"]
 CATALOGUE_SCHEMAS = {"schema-registry", "taxonomy", "vocabulary"}
 DIRTY_PATHS = ["spec", "tools", "docs", "evidence", ".github"]
+AUTHORITY_INDEX_PATH = "docs/architecture/current-state-foundation-authority-index.json"
+REQUIRED_USF292_SEAL_RECORDS = {
+    "docs/architecture/usf-current-state-foundation-closure-record.json",
+    "docs/architecture/usf-current-state-foundation-closure-report.md",
+    "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json",
+    "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.md",
+    "docs/architecture/superseded-lineage-closure-provenance.json",
+    "docs/architecture/superseded-lineage-closure-provenance.md",
+}
+AUTHORITY_INDEX_BOUNDARY_NON_CLAIMS = {
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-full-product-readiness",
+}
 REQUIRED_FIELD_GUARDS = {
     "command": ["inputs", "outputs", "environmentScope", "sideEffects"],
     "observability-signal": ["purpose"],
@@ -331,6 +352,7 @@ RULES = {
     "USF-REAL-004":     ("blocking", "Real ADR reference does not resolve"),
     "USF-REAL-005":     ("blocking", "Real validator-report instance invalid against validator-report schema"),
     "USF-REAL-006":     ("blocking", "Real ADR semantic reference is not a semantic artefact"),
+    "USF-AUTHORITY-001": ("blocking", "Current-state foundation authority index is incomplete"),
     "USF-IMPL-001":     ("blocking", "Implementation artefact is not authorised by an implementation directive"),
     "USF-IMPL-002":     ("blocking", "Implementation artefact has no source disposition coverage"),
     "USF-IMPL-003":     ("blocking", "Implementation artefact mirrors a historical source path"),
@@ -1629,6 +1651,116 @@ def validate_real_instance_inventory(F, category_paths):
     return states
 
 
+def _repo_dir_set():
+    try:
+        tracked = git_checked("ls-files", "--cached", "--others", "--exclude-standard")
+        dirs = set()
+        for path in tracked.splitlines():
+            while "/" in path:
+                path = path.rsplit("/", 1)[0]
+                dirs.add(path)
+        return dirs
+    except Exception:
+        return {
+            p[2:] if p.startswith("./") else p
+            for p in glob.glob("**", recursive=True)
+            if os.path.isdir(p)
+        }
+
+
+def validate_current_state_authority_index(F, record=None, existing_paths=None, existing_dirs=None, spec_instance_dirs=None):
+    existing_paths = _existing_repo_paths() if existing_paths is None else set(existing_paths)
+    existing_dirs = _repo_dir_set() if existing_dirs is None else set(existing_dirs)
+    spec_instance_dirs = (
+        sorted(os.path.basename(path) for path in glob.glob("spec/instances/*") if os.path.isdir(path))
+        if spec_instance_dirs is None
+        else sorted(spec_instance_dirs)
+    )
+    if record is None:
+        record = load_json(AUTHORITY_INDEX_PATH, F)
+    if not isinstance(record, dict):
+        F.add("USF-AUTHORITY-001", AUTHORITY_INDEX_PATH, "authority index JSON is missing or not an object")
+        return
+
+    coverage = record.get("specInstanceFamilyCoverage")
+    if not isinstance(coverage, list):
+        F.add("USF-AUTHORITY-001", AUTHORITY_INDEX_PATH, "specInstanceFamilyCoverage is missing")
+        coverage = []
+    coverage_by_family = {row.get("family"): row for row in coverage if isinstance(row, dict)}
+    missing = sorted(set(spec_instance_dirs) - set(coverage_by_family))
+    extra = sorted(set(coverage_by_family) - set(spec_instance_dirs))
+    if missing or extra:
+        F.add("USF-AUTHORITY-001", "specInstanceFamilyCoverage", f"family coverage mismatch missing={missing} extra={extra}")
+    for family in spec_instance_dirs:
+        row = coverage_by_family.get(family, {})
+        expected_path = f"spec/instances/{family}/"
+        if row.get("path") != expected_path:
+            F.add("USF-AUTHORITY-001", f"specInstanceFamilyCoverage.{family}.path", f"expected {expected_path}")
+        if row.get("activeAuthority") is not True:
+            F.add("USF-AUTHORITY-001", f"specInstanceFamilyCoverage.{family}.activeAuthority", "instance family must be active current authority")
+        if "validate-spec.py instances" not in str(row.get("validator", "")):
+            F.add("USF-AUTHORITY-001", f"specInstanceFamilyCoverage.{family}.validator", "instance family validator is missing")
+        if "superseded" not in str(row.get("stalenessPropagation", "")).lower():
+            F.add("USF-AUTHORITY-001", f"specInstanceFamilyCoverage.{family}.stalenessPropagation", "staleness propagation is missing")
+        if expected_path.rstrip("/") not in existing_dirs:
+            F.add("USF-AUTHORITY-001", expected_path, "covered instance family path does not exist")
+
+    seal_records = record.get("foundationSubstrateClosureSealRecords")
+    if not isinstance(seal_records, list):
+        F.add("USF-AUTHORITY-001", "foundationSubstrateClosureSealRecords", "USF-292 seal record list is missing")
+        seal_records = []
+    seal_paths = {row.get("path") for row in seal_records if isinstance(row, dict)}
+    missing_seals = sorted(REQUIRED_USF292_SEAL_RECORDS - seal_paths)
+    if missing_seals:
+        F.add("USF-AUTHORITY-001", "foundationSubstrateClosureSealRecords", f"missing USF-292 seal records: {missing_seals}")
+    for row in seal_records:
+        if not isinstance(row, dict):
+            continue
+        subject = row.get("path", "foundationSubstrateClosureSealRecords")
+        if row.get("issueId") != "USF-292":
+            F.add("USF-AUTHORITY-001", subject, "seal record must be linked to USF-292")
+        if row.get("activeAuthority") is not True:
+            F.add("USF-AUTHORITY-001", subject, "seal record must remain active closure authority")
+        if subject not in existing_paths:
+            F.add("USF-AUTHORITY-001", subject, "seal record path does not resolve")
+
+    staleness = record.get("stalenessPropagationPolicy")
+    required_staleness_fields = {
+        "appliesTo",
+        "changedSemanticDefinitionAction",
+        "changedProofOrEvidenceAction",
+        "generatedReportAction",
+        "humanDecisionAction",
+        "validatorFailureMode",
+    }
+    if not isinstance(staleness, dict):
+        F.add("USF-AUTHORITY-001", "stalenessPropagationPolicy", "staleness propagation policy is missing")
+    else:
+        for field in sorted(required_staleness_fields):
+            value = staleness.get(field)
+            if not value:
+                F.add("USF-AUTHORITY-001", f"stalenessPropagationPolicy.{field}", "field is missing")
+        staleness_text = json.dumps(staleness).lower()
+        for token in ("stale", "superseded", "fail closed"):
+            if token not in staleness_text:
+                F.add("USF-AUTHORITY-001", "stalenessPropagationPolicy", f"missing policy token: {token}")
+
+    boundary = record.get("aiUiCompositionBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-AUTHORITY-001", "aiUiCompositionBoundary", "AI/UI composition boundary is missing")
+    else:
+        for field in ("allowedConsumers", "allowedInputs", "requiredBoundary", "prohibitedInferences", "nonClaims"):
+            if not boundary.get(field):
+                F.add("USF-AUTHORITY-001", f"aiUiCompositionBoundary.{field}", "field is missing")
+        non_claims = set(boundary.get("nonClaims", [])) if isinstance(boundary.get("nonClaims"), list) else set()
+        missing_non_claims = sorted(AUTHORITY_INDEX_BOUNDARY_NON_CLAIMS - non_claims)
+        if missing_non_claims:
+            F.add("USF-AUTHORITY-001", "aiUiCompositionBoundary.nonClaims", f"missing non-claims: {missing_non_claims}")
+        boundary_text = json.dumps(boundary).lower()
+        if "proposal" not in boundary_text or "product ui readiness" not in boundary_text:
+            F.add("USF-AUTHORITY-001", "aiUiCompositionBoundary", "proposal/product UI readiness boundary is incomplete")
+
+
 REPORT_STATUS_TOKENS = {"pass", "green", "complete", "ready", "final", "stale", "unknown"}
 
 
@@ -1734,6 +1866,7 @@ def check_real_instances(ctx, F):
     check_evidence(ctx, F)
 
     existing_paths = _existing_repo_paths()
+    validate_current_state_authority_index(F, existing_paths=existing_paths)
     source_paths = _source_import_paths(F)
     source_allowlist = _source_reference_allowlist(F)
     proof_ids = set()
@@ -1807,6 +1940,9 @@ def check_selftest(ctx, F):
     """Apply each planted defect to an isolated copy of the corpus and assert the exact rule fires."""
     defects = sorted(glob.glob(f"{CORPUS}/planted-defects/*.json"))
     if not defects:
+        subject = f"{CORPUS}/planted-defects"
+        message = "planted defect directory is missing" if not os.path.isdir(subject) else "planted defect directory is empty"
+        F.add("USF-SELFTEST-001", subject, message)
         return "not-run"
     for df in defects:
         patch = load_json(df, F)                      # parse-safe (item 4): bad JSON -> USF-PARSE-001
@@ -1817,7 +1953,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -1968,6 +2104,18 @@ def check_selftest(ctx, F):
                 patch.get("subPath", "planted-source-import-manifest.json"),
                 entries,
                 set(instance_ids),
+            )
+        elif patch["target"] == "authority-index":
+            record = patch.get("record")
+            if not isinstance(record, dict):
+                F.add("USF-SELFTEST-001", df, "authority-index planted-defect needs a record object")
+                continue
+            validate_current_state_authority_index(
+                f2,
+                record=record,
+                existing_paths=set(patch.get("existingPaths", [])),
+                existing_dirs=set(patch.get("existingDirs", [])),
+                spec_instance_dirs=set(patch.get("specInstanceDirs", [])),
             )
         else:
             run_all_checks(sandbox, f2)
@@ -2480,12 +2628,17 @@ def check_bootstrap(F):
     cmd = [sys.executable, path, "all", "--json"]
     completed = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=False)
     if completed.returncode == 2:
-        F.add("USF-BOOTSTRAP-001", path, completed.stderr.strip() or "bootstrap validator internal error")
+        detail = completed.stderr.strip() or completed.stdout.strip() or "bootstrap validator internal error"
+        F.add("USF-BOOTSTRAP-001", path, detail)
         return "ran"
     try:
         payload = json.loads(completed.stdout or "{}")
     except json.JSONDecodeError:
-        F.add("USF-BOOTSTRAP-001", path, "bootstrap validator did not emit valid JSON")
+        detail = completed.stderr.strip() or completed.stdout.strip() or "bootstrap validator did not emit valid JSON"
+        F.add("USF-BOOTSTRAP-001", path, detail)
+        return "ran"
+    if not isinstance(payload, dict) or "findings" not in payload or not isinstance(payload.get("findings"), list):
+        F.add("USF-BOOTSTRAP-001", path, "bootstrap validator emitted invalid JSON shape")
         return "ran"
     for finding in payload.get("findings", []):
         subject = finding.get("subject", path)
@@ -2493,7 +2646,10 @@ def check_bootstrap(F):
         message = finding.get("message", "")
         F.add("USF-BOOTSTRAP-001", subject, f"{rule}: {message}")
     if completed.returncode not in (0, 1):
-        F.add("USF-BOOTSTRAP-001", path, completed.stderr.strip() or "bootstrap validator failed")
+        detail = completed.stderr.strip() or completed.stdout.strip() or "bootstrap validator failed"
+        F.add("USF-BOOTSTRAP-001", path, detail)
+    if completed.returncode == 1 and not payload.get("findings"):
+        F.add("USF-BOOTSTRAP-001", path, "bootstrap validator exited with findings status but emitted no findings")
     return "ran"
 
 

@@ -250,7 +250,9 @@
     "Use superseded external-lineage, source-use, parity, closure, and bootstrap artefacts only as lineage or audit inputs when explicitly needed.",
     "Do not infer readiness or source issue completion from wrapper, closure, or generated reports.",
     "Update semantic contracts, proofs, validators, planted defects, enterprise evidence, and Linear acceptance mapping together when behaviour or assurance posture changes.",
-    "Preserve explicit non-claims unless a later issue separately proves and authorises a stronger claim."
+    "Preserve explicit non-claims unless a later issue separately proves and authorises a stronger claim.",
+    "When any semantic instance family changes, propagate staleness to mapped proof evidence, generated reports, and human review decisions until refreshed evidence proves the changed state.",
+    "Future AI-agent UI-definition work may consume the semantic corpus and authority index as input only; it must not infer product UI readiness or browser E2E readiness from foundation closure evidence."
   ],
   "preservationCommitments": {
     "semanticAuthorityChanged": false,
@@ -277,5 +279,251 @@
     "no-browser-e2e-readiness",
     "no-full-product-readiness",
     "no-final-test-readiness"
-  ]
+  ],
+  "specInstanceFamilyCoverage": [
+    {
+      "family": "ai-governance",
+      "path": "spec/instances/ai-governance/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "audit-event",
+      "path": "spec/instances/audit-event/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "bootstrap-mapping",
+      "path": "spec/instances/bootstrap-mapping/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "command",
+      "path": "spec/instances/command/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "compose-service",
+      "path": "spec/instances/compose-service/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "configuration",
+      "path": "spec/instances/configuration/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "data-migration",
+      "path": "spec/instances/data-migration/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "enterprise-evidence",
+      "path": "spec/instances/enterprise-evidence/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "environment",
+      "path": "spec/instances/environment/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "environment-promotion",
+      "path": "spec/instances/environment-promotion/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "event-contract",
+      "path": "spec/instances/event-contract/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "interface-contract",
+      "path": "spec/instances/interface-contract/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "observability-signal",
+      "path": "spec/instances/observability-signal/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "provider-mode",
+      "path": "spec/instances/provider-mode/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "runtime-proof",
+      "path": "spec/instances/runtime-proof/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "semantic-contract",
+      "path": "spec/instances/semantic-contract/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "ui-semantic-model",
+      "path": "spec/instances/ui-semantic-model/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    },
+    {
+      "family": "workflow",
+      "path": "spec/instances/workflow/",
+      "classification": "canonical-current-semantic-instance-family",
+      "activeAuthority": true,
+      "validator": "python3 tools/validate-spec/validate-spec.py instances --json",
+      "stalenessPropagation": "Changes in this family require affected semantic, proof, enterprise evidence, generated report, and human review surfaces to mark prior evidence or decisions superseded until refreshed."
+    }
+  ],
+  "foundationSubstrateClosureSealRecords": [
+    {
+      "issueId": "USF-292",
+      "path": "docs/architecture/usf-current-state-foundation-closure-record.json",
+      "classification": "sealed-current-state-foundation-substrate-closure-record",
+      "activeAuthority": true,
+      "futureUse": "Use as the sealed current-state foundation substrate closure record; do not use it to claim staging, production, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness."
+    },
+    {
+      "issueId": "USF-292",
+      "path": "docs/architecture/usf-current-state-foundation-closure-report.md",
+      "classification": "sealed-current-state-foundation-substrate-closure-report",
+      "activeAuthority": true,
+      "futureUse": "Use as human-readable sealed closure evidence for USF-292; generated prose remains below raw evidence and validators in authority."
+    },
+    {
+      "issueId": "USF-292",
+      "path": "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json",
+      "classification": "sealed-current-state-foundation-retirement-scan",
+      "activeAuthority": true,
+      "futureUse": "Use to identify retained historical references and retirement posture without deleting lineage evidence."
+    },
+    {
+      "issueId": "USF-292",
+      "path": "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.md",
+      "classification": "sealed-current-state-foundation-retirement-scan-report",
+      "activeAuthority": true,
+      "futureUse": "Use as the human-readable retirement-scan companion; it does not create stronger readiness claims."
+    },
+    {
+      "issueId": "USF-292",
+      "path": "docs/architecture/superseded-lineage-closure-provenance.json",
+      "classification": "sealed-superseded-lineage-provenance",
+      "activeAuthority": true,
+      "futureUse": "Use as retained provenance for superseded lineage closure and source-retention audit support."
+    },
+    {
+      "issueId": "USF-292",
+      "path": "docs/architecture/superseded-lineage-closure-provenance.md",
+      "classification": "sealed-superseded-lineage-provenance-report",
+      "activeAuthority": true,
+      "futureUse": "Use as the human-readable provenance companion; it remains bounded by the non-claims in this index."
+    }
+  ],
+  "stalenessPropagationPolicy": {
+    "appliesTo": [
+      "spec/instances/**",
+      "docs/architecture/current-state-foundation-authority-index.*",
+      "docs/architecture/usf-current-state-foundation-closure-*",
+      "docs/architecture/superseded-lineage-closure-provenance.*",
+      "evidence/**",
+      "artifacts/**"
+    ],
+    "changedSemanticDefinitionAction": "Mark dependent proof evidence, generated reports, external-review cockpit views, and prior human decisions superseded until validators and evidence are refreshed against the changed commit.",
+    "changedProofOrEvidenceAction": "Mark generated reports and human review decisions stale when their source SHA, evidence hash, or chain-of-custody anchor no longer matches the current evidence record.",
+    "generatedReportAction": "Generated reports must not upgrade stale, unknown, missing, or superseded raw evidence to pass or current state.",
+    "humanDecisionAction": "Human review decisions remain visible for audit history but are superseded when mapped evidence, semantic definitions, or source SHA changes.",
+    "validatorFailureMode": "Fail closed when new or changed semantic definitions lack proof, evidence, classification, authority-index coverage, or review posture."
+  },
+  "aiUiCompositionBoundary": {
+    "purpose": "Define how future AI-agent UI-definition work may consume the current semantic corpus without converting foundation proof into product UI readiness.",
+    "allowedConsumers": [
+      "AI agents reading semantic definitions and authority index entries",
+      "future UI-definition generators using semantic contracts as input",
+      "human reviewers inspecting evidence and current-state routing"
+    ],
+    "allowedInputs": [
+      "spec/instances/**",
+      "docs/architecture/current-state-foundation-authority-index.*",
+      "accepted ADRs",
+      "validator results",
+      "runtime proof evidence",
+      "enterprise evidence mappings"
+    ],
+    "requiredBoundary": "AI-generated or UI-generated definitions must remain proposals until semantic definitions, validators, proof evidence, enterprise evidence, and human review are updated and accepted.",
+    "prohibitedInferences": [
+      "product UI readiness",
+      "browser E2E readiness",
+      "staging readiness",
+      "production readiness",
+      "deployment readiness",
+      "live-provider readiness",
+      "SOC readiness",
+      "ISO certification",
+      "enterprise production readiness",
+      "full product readiness"
+    ],
+    "nonClaims": [
+      "no-product-ui-readiness",
+      "no-browser-e2e-readiness",
+      "no-staging-readiness",
+      "no-production-readiness",
+      "no-deployment-readiness",
+      "no-live-provider-readiness",
+      "no-soc-readiness",
+      "no-iso27001-certification",
+      "no-enterprise-production-readiness",
+      "no-full-product-readiness"
+    ]
+  }
 }

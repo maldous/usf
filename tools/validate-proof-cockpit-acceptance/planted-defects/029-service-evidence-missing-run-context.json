@@ -1,0 +1,7 @@
+{
+  "id": "029-service-evidence-missing-run-context",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "service-evidence-missing-run-context"
+  }
+}

@@ -21,7 +21,7 @@ Future work should start with these current artefacts:
 | Constitutional and semantic authority | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `docs/architecture/standards-profile.md`, `docs/architecture/ontology.md` | Defines platform meaning and authority order. |
 | Governance standards | `docs/architecture/directory-and-file-naming-standard.md`, `docs/architecture/schema-authoring-standard.md`, `docs/architecture/git-practices-standard.md` | Defines naming, schema, and Git practice constraints. |
 | Machine-readable catalogues | `spec/taxonomies/taxonomy-catalog.json`, `spec/vocabularies/vocabulary-catalog.json`, `spec/registries/schema-registry.json` | Defines controlled classifications, values, and registered schema lifecycle. |
-| Semantic corpus | `spec/instances/semantic-contract/`, `spec/instances/compose-service/service-catalogue.json`, `spec/instances/environment-promotion/environment-promotion-enterprise-standard.json` | Defines current service, capability, provider, and environment semantics. |
+| Semantic corpus | `spec/instances/**`; see "Spec Instance Family Coverage" below | Defines current service, capability, provider, environment, command, workflow, UI-semantic, audit, observability, enterprise, and AI-governance semantics. |
 | Decisions | `docs/adr/` | Records accepted decisions and constraints. |
 | Validation | `tools/validate-spec/`, `tools/validate-bootstrap/`, `tools/validate-parity/`, `tools/validate-enterprise/`, `tools/validate-runtime/`, `tools/validate-compose/` | Enforces consistency and fail-closed boundaries. |
 | Proofs | `packages/proof/`, `spec/instances/runtime-proof/`, proof scripts in `package.json` and `Makefile` | Provides executable evidence for bounded local and composed foundation behaviour. |
@@ -29,6 +29,52 @@ Future work should start with these current artefacts:
 | Dev handover | `README.md#developer-quickstart`, `docs/architecture/dev-readiness-validation-and-handover.md`, `docs/architecture/dev-readiness-validation-and-handover.json` | Gives the current developer and AI-agent bootstrap, validation, and contribution path. |
 | Test-readiness command gate | `docs/architecture/test-readiness-command-surface-and-ci-gate.md`, `docs/architecture/test-readiness-command-surface-and-ci-gate.json`, `make test-ready` | Routes current test-readiness validation through composed semantic proof, deterministic fixture proof, and bounded assurance proof without replacing USF-234 final acceptance. |
 | Baseline evidence | `docs/architecture/dev-ready-foundation-baseline-tag.md`, `docs/architecture/dev-ready-foundation-baseline-tag.json` | Records the immutable `v2-foundation` baseline tag and its governance exception. |
+
+## Spec Instance Family Coverage
+
+The current authority index covers every committed `spec/instances` family. A new family MUST be added here and to `docs/architecture/current-state-foundation-authority-index.json` before it is treated as routed current-state authority.
+
+| Family | Current path | Validator |
+| ------ | ------------ | --------- |
+| AI governance | `spec/instances/ai-governance/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Audit events | `spec/instances/audit-event/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Bootstrap mappings | `spec/instances/bootstrap-mapping/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Commands | `spec/instances/command/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Compose services | `spec/instances/compose-service/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Configuration | `spec/instances/configuration/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Data migrations | `spec/instances/data-migration/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Enterprise evidence | `spec/instances/enterprise-evidence/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Environments | `spec/instances/environment/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Environment promotion | `spec/instances/environment-promotion/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Event contracts | `spec/instances/event-contract/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Interface contracts | `spec/instances/interface-contract/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Observability signals | `spec/instances/observability-signal/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Provider modes | `spec/instances/provider-mode/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Runtime proofs | `spec/instances/runtime-proof/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Semantic contracts | `spec/instances/semantic-contract/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| UI semantic models | `spec/instances/ui-semantic-model/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+| Workflows | `spec/instances/workflow/` | `python3 tools/validate-spec/validate-spec.py instances --json` |
+
+## USF-292 Closure Seal Records
+
+USF-292 sealed the current-state foundation substrate closure posture. These records are current closure evidence, not product, staging, production, SOC, ISO certification, enterprise production, browser E2E, or full-product readiness claims:
+
+| Seal record | Path |
+| ----------- | ---- |
+| Current-state closure record | `docs/architecture/usf-current-state-foundation-closure-record.json` |
+| Current-state closure report | `docs/architecture/usf-current-state-foundation-closure-report.md` |
+| Retirement scan | `docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json` |
+| Retirement scan report | `docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.md` |
+| Superseded lineage provenance | `docs/architecture/superseded-lineage-closure-provenance.json` |
+| Superseded lineage provenance report | `docs/architecture/superseded-lineage-closure-provenance.md` |
+
+## Staleness Propagation
+
+When a semantic instance family, closure seal record, proof, evidence item, or generated report changes, dependent proof evidence, generated reports, external review surfaces, and prior human decisions MUST be treated as superseded or stale until refreshed against the changed commit. Generated reports MUST NOT upgrade stale, unknown, missing, or superseded raw evidence to pass or current-state status.
+
+## AI/UI Composition Boundary
+
+Future AI-agent UI-definition work MAY consume the semantic corpus, accepted ADRs, validators, runtime proof evidence, enterprise evidence, and this authority index as inputs. It MUST remain proposal-level until semantic definitions, validators, proof evidence, enterprise evidence, and human review are updated and accepted. This index does not claim product UI readiness, browser E2E readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full product readiness.
 
 ## Reclassified Lineage And Scaffolding
 

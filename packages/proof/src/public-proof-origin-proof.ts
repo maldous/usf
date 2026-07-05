@@ -3,12 +3,29 @@ import { request as httpRequest } from "node:http";
 
 interface PublicProofOriginModule {
   readonly createPublicProofOriginServer: () => Server;
+  readonly DEFAULT_FQDN_MAP: Readonly<Record<string, string>>;
+  readonly NON_CLAIMS: readonly string[];
+  readonly NO_STORE_HEADERS: Readonly<Record<string, string>>;
+  readonly publicEdgePayload: (context: { readonly environment: string; readonly fqdn: string }) => Record<string, unknown>;
+}
+
+interface NetlifyPublicProofSharedModule {
+  readonly HOST_ENVIRONMENT: Readonly<Record<string, string>>;
+  readonly NON_CLAIMS: readonly string[];
+  readonly BASE_HEADERS: Readonly<Record<string, string>>;
+  readonly publicEdgePayload: (context: { readonly environment: string; readonly fqdn: string }) => Record<string, unknown>;
 }
 
 const publicProofOriginModulePath = "../../../apps/public-proof-origin/src/server.mjs";
-const { createPublicProofOriginServer } = (await import(
+const publicProofOrigin = (await import(
   publicProofOriginModulePath
 )) as PublicProofOriginModule;
+const { createPublicProofOriginServer } = publicProofOrigin;
+
+const netlifyPublicProofSharedModulePath = "../../../netlify/functions/public-proof-shared.js";
+const netlifyPublicProofShared = (await import(
+  netlifyPublicProofSharedModulePath
+)) as NetlifyPublicProofSharedModule;
 
 interface ProbeResult {
   readonly fqdn: string;
@@ -57,11 +74,65 @@ interface HttpProbeResponse {
   readonly body: string;
 }
 
+interface EquivalenceResult {
+  readonly hostMapMatched: boolean;
+  readonly nonClaimsMatched: boolean;
+  readonly noStoreHeadersMatched: boolean;
+  readonly varyHostMatched: boolean;
+  readonly jsonPayloadMatched: boolean;
+  readonly accepted: boolean;
+}
+
 function headerValue(value: string | string[] | undefined): string {
   if (Array.isArray(value)) {
     return value.join(", ");
   }
   return value ?? "";
+}
+
+function sameJson(left: unknown, right: unknown): boolean {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function publicOriginImplementationEquivalence(): EquivalenceResult {
+  const context = { environment: "staging", fqdn: "1e100.network" };
+  const hostMapMatched = sameJson(
+    publicProofOrigin.DEFAULT_FQDN_MAP,
+    netlifyPublicProofShared.HOST_ENVIRONMENT,
+  );
+  const nonClaimsMatched = sameJson(
+    publicProofOrigin.NON_CLAIMS,
+    netlifyPublicProofShared.NON_CLAIMS,
+  );
+  const requiredNoStoreHeaders = [
+    "Cache-Control",
+    "CDN-Cache-Control",
+    "Netlify-CDN-Cache-Control",
+  ] as const;
+  const noStoreHeadersMatched = requiredNoStoreHeaders.every(
+    (header) =>
+      publicProofOrigin.NO_STORE_HEADERS[header] === netlifyPublicProofShared.BASE_HEADERS[header],
+  );
+  const varyHostMatched =
+    publicProofOrigin.NO_STORE_HEADERS.Vary === "Host" &&
+    netlifyPublicProofShared.BASE_HEADERS.Vary === "Host";
+  const jsonPayloadMatched = sameJson(
+    publicProofOrigin.publicEdgePayload(context),
+    netlifyPublicProofShared.publicEdgePayload(context),
+  );
+  return {
+    hostMapMatched,
+    nonClaimsMatched,
+    noStoreHeadersMatched,
+    varyHostMatched,
+    jsonPayloadMatched,
+    accepted:
+      hostMapMatched &&
+      nonClaimsMatched &&
+      noStoreHeadersMatched &&
+      varyHostMatched &&
+      jsonPayloadMatched,
+  };
 }
 
 async function request(
@@ -234,7 +305,11 @@ async function main(): Promise<number> {
       throw new Error("public-proof-origin-missing-address");
     }
     const probes = await Promise.all(EXPECTED.map((row) => probe(address.port, row)));
-    const status = probes.every((row) => row.status === "pass") ? "pass" : "fail";
+    const implementationEquivalence = publicOriginImplementationEquivalence();
+    const status =
+      probes.every((row) => row.status === "pass") && implementationEquivalence.accepted
+        ? "pass"
+        : "fail";
     console.log(
       JSON.stringify(
         {
@@ -250,6 +325,7 @@ async function main(): Promise<number> {
           productUiReadinessClaim: false,
           browserE2eReadinessClaim: false,
           probes,
+          implementationEquivalence,
           nonClaims: [
             "no-staging-readiness",
             "no-production-readiness",

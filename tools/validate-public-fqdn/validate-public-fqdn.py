@@ -1351,8 +1351,9 @@ def check_public_proof_origin_service(
     elif not {
         "Host-varying cache boundary for both proof surfaces",
         "required non-claims surfaced by both proof surfaces",
+        "self-hosted origin and Netlify function implementation equivalence for host map, non-claims, no-store headers, Vary Host, and JSON payload shape",
     }.issubset(set(local_origin.get("checkedSurfaces", []))):
-        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.localOrigin.checkedSurfaces", "origin local proof must check Host variance and non-claim propagation")
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.localOrigin.checkedSurfaces", "origin local proof must check Host variance, non-claim propagation, and implementation equivalence")
     external = proof.get("externalPublicFqdn") if isinstance(proof, dict) else None
     if not isinstance(external, dict) or external.get("status") not in {"pass", "blocked"}:
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn", "external route proof evidence must record pass or blocked status")

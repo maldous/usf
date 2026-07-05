@@ -1135,24 +1135,35 @@ function buildClaims(capabilities, services, foundationClosure, store) {
 }
 
 function buildEnterpriseDomains(claims) {
-  return ENTERPRISE_TOPICS.map(([slug, title, purpose]) => ({
-    slug,
-    title,
-    purpose,
-    claimIds: claims
+  return ENTERPRISE_TOPICS.map(([slug, title, purpose]) => {
+    const claimIds = claims
       .filter((claim) =>
         [...(claim.enterpriseControlIds ?? []), ...(claim.riskIds ?? [])].some((id) => id.includes(slug) || id.includes(slug.replace(/-/g, ""))),
       )
       .slice(0, 20)
-      .map((claim) => claim.id),
-    owner: `${slug}-owner`,
-    validationMethod: "proof-cockpit-machine-qa plus human review",
-    result: "human-review-required",
-    residualRisk: "visible for human acceptance; not a readiness or certification claim",
-    reviewCadence: "before final acceptance and after source/deployment change",
-    humanReviewStatus: "human-review-required",
-    nonClaimBoundary: "ISO-style support only; no ISO certification, SOC readiness, enterprise production readiness, or staging readiness claim.",
-  }));
+      .map((claim) => claim.id);
+    const hasMappedEvidence = claimIds.length > 0;
+    return {
+      slug,
+      title,
+      purpose,
+      claimIds,
+      owner: hasMappedEvidence ? `${slug}-owner` : "Not evidenced - no mapped claim or control evidence in the current machine QA store.",
+      controlOwner: hasMappedEvidence ? `${slug}-control-owner` : "Not applicable until mapped evidence exists.",
+      validationMethod: hasMappedEvidence
+        ? "proof-cockpit-machine-qa plus human review"
+        : "Not evidenced - enterprise topic is present for future mapping but has no claim evidence in this run.",
+      result: hasMappedEvidence ? "human-review-required" : "not-evidenced-blocking-until-mapped",
+      residualRisk: hasMappedEvidence
+        ? "visible for human acceptance; not a readiness or certification claim"
+        : "Not evidenced - cannot support an enterprise assurance assertion until mapped evidence is added.",
+      reviewCadence: hasMappedEvidence
+        ? "before final acceptance and after source/deployment change"
+        : "Not applicable until mapped evidence exists; re-evaluate after semantic/control mapping changes.",
+      humanReviewStatus: hasMappedEvidence ? "human-review-required" : "not-ready-for-human-acceptance",
+      nonClaimBoundary: "ISO-style support only; no ISO certification, SOC readiness, enterprise production readiness, or staging readiness claim.",
+    };
+  });
 }
 
 function runFoundationClosureValidatorCheck() {
@@ -3175,23 +3186,38 @@ ${unorderedList(evidence.nonClaims)}
 }
 
 function routeToLink(route) {
+  if (route.includes(":claimId")) {
+    return `${escapeHtml(route)} - route pattern; open a concrete claim from <a href="/proof/claims">claim index</a>`;
+  }
+  if (route.includes(":actionId")) {
+    return `${escapeHtml(route)} - route pattern; open a concrete action from <a href="/proof/actions">action ledger</a>`;
+  }
+  if (route.includes(":definitionId")) {
+    return `${escapeHtml(route)} - route pattern; open a concrete definition from <a href="/proof/semantic-definitions">semantic definition index</a>`;
+  }
+  if (route.includes(":reviewId")) {
+    return `${escapeHtml(route)} - route pattern; open a concrete review decision from <a href="/proof/review">review queue</a>`;
+  }
   if (route.includes(":runId") && route.includes(":capabilityId")) {
-    return `${escapeHtml(route)} - dynamic capability import detail from <a href="/proof/import/latest-machine-qa">machine import</a>`;
+    return `${escapeHtml(route)} - route pattern; open a concrete capability import from <a href="/proof/import/latest-machine-qa">machine import</a>`;
   }
   if (route.includes(":runId")) {
-    return `${escapeHtml(route)} - dynamic machine run detail from <a href="/proof/machine-runs">machine runs</a>`;
+    return `${escapeHtml(route)} - route pattern; open a concrete machine run from <a href="/proof/machine-runs">machine runs</a>`;
   }
   if (route.includes(":capabilityId")) {
-    return `${escapeHtml(route)} - dynamic detail from <a href="/proof/capabilities">capability list</a>`;
+    return `${escapeHtml(route)} - route pattern; open a concrete capability from <a href="/proof/capabilities">capability list</a>`;
   }
   if (route.includes(":scenarioId")) {
-    return `${escapeHtml(route)} - dynamic scenario detail from capability pages`;
+    return `${escapeHtml(route)} - route pattern; open a concrete scenario from capability pages`;
   }
   if (route.includes(":evidenceId")) {
-    return `${escapeHtml(route)} - dynamic evidence detail from capability pages`;
+    return `${escapeHtml(route)} - route pattern; open a concrete evidence record from <a href="/proof/evidence">evidence catalogue</a>`;
   }
   if (route.includes(":serviceId")) {
-    return `${escapeHtml(route)} - dynamic service detail from <a href="/proof/services">service inventory</a>`;
+    return `${escapeHtml(route)} - route pattern; open a concrete service from <a href="/proof/services">service inventory</a>`;
+  }
+  if (route.includes(":screenshotId")) {
+    return `${escapeHtml(route)} - route pattern; open a concrete screenshot from <a href="/proof/screenshots">screenshot gallery</a>`;
   }
   return `<a href="${escapeHtml(route)}">${escapeHtml(route)}</a>`;
 }
@@ -4008,10 +4034,10 @@ function renderEnterpriseTopic(data, state, slug) {
 <table><tbody>
 <tr><th>Topic id</th><td>${escapeHtml(domain.slug)}</td></tr>
 <tr><th>Purpose</th><td>${escapeHtml(domain.purpose)}</td></tr>
-<tr><th>Mapped claims</th><td>${listLinks(domain.claimIds, "/proof/claims/")}</td></tr>
+<tr><th>Mapped claims</th><td>${domain.claimIds.length ? listLinks(domain.claimIds, "/proof/claims/") : "Not evidenced - no mapped claim or control evidence in the current machine QA store."}</td></tr>
 <tr><th>Evidence status</th><td>${escapeHtml(domain.result)}</td></tr>
 <tr><th>Evidence owner</th><td>${escapeHtml(domain.owner)}</td></tr>
-<tr><th>Control owner</th><td>${escapeHtml(domain.owner)}</td></tr>
+<tr><th>Control owner</th><td>${escapeHtml(domain.controlOwner ?? domain.owner)}</td></tr>
 <tr><th>Validation</th><td>${escapeHtml(domain.validationMethod)}</td></tr>
 <tr><th>Result</th><td>${escapeHtml(domain.result)}</td></tr>
 <tr><th>Residual risk</th><td>${escapeHtml(domain.residualRisk)}</td></tr>
