@@ -1,0 +1,56 @@
+{
+  "id": "dev-foundation-substrate-closure",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "environment": "dev",
+  "claim": "The Dev foundation substrate is closed against the current USF semantic contracts and capability registry, without requiring active external-lineage interpretation.",
+  "closureState": "complete",
+  "sourceAuthority": "USF semantic definitions, validators, runtime proof evidence, and source implementation",
+  "capabilityRegistry": {
+    "source": "docs/architecture/capability-source-coverage-matrix.md",
+    "expectedCapabilities": 75,
+    "state": "complete-current-state-registry"
+  },
+  "semanticContracts": {
+    "source": "spec/instances/semantic-contract/",
+    "state": "current-usf-authority"
+  },
+  "devModes": [
+    {
+      "id": "dev-in-memory",
+      "state": "bounded",
+      "boundary": "Valid only for local computation and development feedback. It does not satisfy service-backed Test or Staging claims."
+    },
+    {
+      "id": "dev-compose-backed",
+      "state": "closed",
+      "boundary": "Uses current composed backing services where a capability requires service-backed proof."
+    }
+  ],
+  "evidenceLinks": [
+    "docs/architecture/dev-readiness-validation-and-handover.md",
+    "docs/architecture/test-readiness-final-acceptance-gate.md",
+    "docs/architecture/usf-current-state-foundation-closure-record.json"
+  ],
+  "chainOfCustody": [
+    {
+      "id": "dev-foundation-current-capability-closure",
+      "claim": "Dev capability registry is complete for current USF foundation substrate work.",
+      "evidence": "docs/architecture/capability-source-coverage-matrix.md",
+      "validation": "corepack pnpm proof-cockpit:smoke",
+      "humanDecisionStatus": "not-required-for-registry-count"
+    }
+  ],
+  "nonClaims": [
+    "Product UI readiness",
+    "Staging readiness",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product readiness"
+  ]
+}

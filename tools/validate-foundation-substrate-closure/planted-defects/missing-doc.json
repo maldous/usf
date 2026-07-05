@@ -1,0 +1,7 @@
+{
+  "id": "foundation-closure-planted-missing-doc",
+  "ruleId": "USF-FOUNDATION-CLOSURE-001",
+  "fixture": {
+    "kind": "remove-doc"
+  }
+}

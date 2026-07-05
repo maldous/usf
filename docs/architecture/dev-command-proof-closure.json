@@ -1,0 +1,28 @@
+{
+  "id": "dev-command-proof-closure",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "environment": "dev",
+  "claim": "The Dev command and proof surface is closed against current USF-native validation and proof requirements.",
+  "closureState": "complete",
+  "canonicalCommands": [
+    "corepack pnpm install --frozen-lockfile",
+    "corepack pnpm verify",
+    "corepack pnpm parity",
+    "corepack pnpm test-readiness",
+    "corepack pnpm public-fqdn:validate",
+    "corepack pnpm proof-cockpit:smoke",
+    "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json"
+  ],
+  "proofBoundaries": [
+    "Dev commands prove Dev and local/composed substrate expectations only.",
+    "Public route and Staging proof commands remain separately bounded by their own gates.",
+    "Product UI readiness is not inferred from foundation closure."
+  ],
+  "nonClaims": [
+    "Product UI readiness",
+    "Staging readiness",
+    "Production readiness",
+    "browser E2E readiness"
+  ]
+}

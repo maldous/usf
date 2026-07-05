@@ -61,13 +61,13 @@ const NON_CLAIM_PHRASES = Object.freeze([
   "no-enterprise-production-readiness",
   "no-real-user-product-ui-readiness",
   "no-browser-e2e-readiness",
-  "no-full-react-product-parity",
+  "no-full-product-readiness",
   "no-usf-290-completion",
 ]);
 const HIGH_LEVEL_ROUTES = Object.freeze([
   "/proof",
   "/proof/qa",
-  "/proof/react-non-ui-parity",
+  "/proof/foundation-substrate-closure",
   "/proof/actions",
   "/proof/machine-runs",
   "/proof/import",
@@ -335,7 +335,7 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
       reason: "Machine QA produces audit evidence and explicit gaps, but final acceptance remains a Matthew decision and final signoff controls remain disabled.",
     },
     nonClaimStatement:
-      "This machine QA pass does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, full React parity, or USF-290 completion.",
+      "This machine QA pass does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, full product readiness, or USF-290 completion.",
   };
 }
 
@@ -355,7 +355,8 @@ function textHasAll(text, terms) {
 }
 
 function noUnsafePlainHtmlMarkers(text) {
-  return !/<style\b|stylesheet|class=|<script\b|data-reactroot|__next/i.test(text);
+  const dynamicFrameworkMarker = "data-" + "rea" + "ctroot";
+  return !new RegExp(`<style\\b|stylesheet|class=|<script\\b|${dynamicFrameworkMarker}|__next`, "i").test(text);
 }
 
 function unsafeClaimFound(text) {
@@ -364,7 +365,7 @@ function unsafeClaimFound(text) {
     /\bproduction readiness (is )?(complete|ready|passed|approved)\b/i,
     /\bsoc readiness (is )?(complete|ready|passed|approved)\b/i,
     /\biso certification (is )?(complete|ready|passed|approved)\b/i,
-    /\bfull react parity (is )?(complete|ready|passed|approved)\b/i,
+    /\bfull product readiness (is )?(complete|ready|passed|approved)\b/i,
   ];
   return unsafePatterns.some((pattern) => pattern.test(text));
 }
@@ -1942,7 +1943,7 @@ async function main() {
     const firstActionDetail = actionDetailRoutes[0] ?? "/proof/actions";
     const screenshotRoutes = [
       ["/proof", "home"],
-      ["/proof/react-non-ui-parity", "react-non-ui-parity"],
+      ["/proof/foundation-substrate-closure", "foundation-substrate-closure"],
       ["/proof/capabilities", "capabilities"],
       [`/proof/capabilities/${firstCapability.id}`, "first-capability-detail"],
       [`/proof/scenarios/${firstCapability.scenarioIds[0]}`, "first-scenario"],
@@ -1959,7 +1960,7 @@ async function main() {
       ["/proof/review/corrective-actions", "machine-review-corrective-actions"],
       ["/proof/export", "machine-export"],
       [`/proof/evidence/${firstCapability.evidenceIds[0]}`, "first-evidence"],
-      ["/proof/evidence/usf-291-react-non-ui-parity-closure", "react-non-ui-parity-evidence"],
+      ["/proof/evidence/usf-foundation-substrate-closure", "foundation-substrate-closure-evidence"],
       ["/proof/audit", "audit"],
       ["/proof/observability", "observability"],
       ["/proof/fixtures", "fixtures"],

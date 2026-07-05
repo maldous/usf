@@ -1,0 +1,43 @@
+{
+  "id": "superseded-lineage-closure-provenance",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "purpose": "Seal the completed external-lineage closure as provenance only, so current USF work uses USF-native closure artefacts.",
+  "activeAuthority": false,
+  "mayDefineCurrentSemantics": false,
+  "completedIssue": "USF-291",
+  "completedPullRequest": {
+    "number": 243,
+    "url": "https://github.com/maldous/usf/pull/243",
+    "mergeSha": "ec37409ddd779661569f8e5f8e4c835695efea96"
+  },
+  "provenanceOnlySources": [
+    "docs/architecture/react-non-ui-parity-test-closure-gate.json",
+    "docs/architecture/react-non-ui-baseline-inventory.json",
+    "docs/architecture/react-service-equivalence-matrix.json",
+    "docs/architecture/react-route-port-adapter-provider-equivalence.json",
+    "docs/architecture/react-test-proof-disposition-ledger.json",
+    "docs/architecture/react-ui-derived-foundation-behaviour-rewrite-ledger.json",
+    "docs/architecture/react-operator-admin-surface-equivalence.json",
+    "docs/architecture/react-parity-assurance-case.json",
+    "docs/architecture/react-non-ui-parity-gap-register.json",
+    "docs/architecture/react-non-ui-parity-external-review-report.md",
+    "tools/validate-react-non-ui-parity/"
+  ],
+  "currentStateReplacement": [
+    "docs/architecture/usf-current-state-foundation-closure-record.json",
+    "docs/architecture/dev-foundation-substrate-closure.json",
+    "docs/architecture/dev-compose-substrate-closure.json",
+    "docs/architecture/dev-command-proof-closure.json",
+    "docs/architecture/dev-to-test-closure-handoff.json",
+    "tools/validate-foundation-substrate-closure/"
+  ],
+  "nonClaims": [
+    "Product UI readiness",
+    "Staging readiness",
+    "Production readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness"
+  ]
+}

@@ -12,7 +12,7 @@ product readiness.
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
 | `apps/staging-proof-cockpit/package.json` | new-with-rationale | USF-290 proof cockpit acceptance scope, current USF capability registry, current service catalogue, and proof cockpit machine QA evidence model | Defines the isolated package command surface for the proof cockpit workbench without adding product UI dependencies. |
-| `apps/staging-proof-cockpit/src/server.mjs` | new-with-rationale | USF-290 plain HTML proof cockpit scope and USF-native closure evidence import requirements | Implements the server-rendered proof cockpit, evidence import pages, source viewer, action ledger, enterprise evidence pages, and current closure evidence route. |
+| `apps/staging-proof-cockpit/src/server.mjs` | new-with-rationale | USF-290 plain HTML proof cockpit scope and USF-native closure evidence import requirements | Implements the server-rendered proof cockpit, evidence import pages, source viewer, action ledger, enterprise evidence pages, and current foundation substrate closure route. |
 | `apps/staging-proof-cockpit/src/smoke.mjs` | new-with-rationale | USF-290 route coverage and cockpit integrity requirements | Provides fast route, capability-count, source-link, and non-claim smoke checks for the cockpit. |
 | `apps/staging-proof-cockpit/src/machine-qa.mjs` | new-with-rationale | USF-290 durable machine QA evidence architecture and external-review bundle requirements | Generates route, capability, service, evidence, action-ledger, screenshot, chain-of-custody, and gap-report evidence for later human review. |
 
