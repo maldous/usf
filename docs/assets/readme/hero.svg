@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 380" role="img" aria-label="Universal Service Foundation">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="0.55" stop-color="#111a37"/>
+      <stop offset="1" stop-color="#0a0f1f"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="0.5" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      text{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+      .t{font-size:66px;font-weight:800;letter-spacing:-1px;}
+      .s{font-size:24px;font-weight:600;fill:#e2e8f0;}
+      .m{font-size:18px;fill:#94a3b8;}
+      .k{font-size:30px;font-weight:800;fill:#e2e8f0;}
+      .kl{font-size:14px;font-weight:600;fill:#7dd3fc;letter-spacing:0.5px;}
+    </style>
+  </defs>
+  <rect width="1280" height="380" rx="18" fill="url(#bg)"/>
+  <circle cx="1050" cy="120" r="360" fill="url(#glow)"/>
+  <g opacity="0.16" stroke="#38bdf8" stroke-width="1">
+    <path d="M0 300 L1280 300" opacity="0.3"/>
+    <path d="M80 0 L80 380" opacity="0.2"/>
+  </g>
+  <text x="70" y="130" class="t" fill="url(#title)">Universal Service Foundation</text>
+  <text x="72" y="176" class="s">The semantic-first, evidence-backed platform foundation for service-heavy software.</text>
+  <text x="72" y="210" class="m">Define platform truth. Prove behaviour. Evolve without drift — with humans and AI agents working from the same authority model.</text>
+
+  <g transform="translate(72,250)">
+    <rect width="230" height="92" rx="12" fill="#0e1730" stroke="#1e293b"/>
+    <text x="20" y="52" class="k">39</text><text x="20" y="74" class="kl">COMPOSED SERVICES</text>
+  </g>
+  <g transform="translate(320,250)">
+    <rect width="230" height="92" rx="12" fill="#0e1730" stroke="#1e293b"/>
+    <text x="20" y="52" class="k">75</text><text x="20" y="74" class="kl">SEMANTIC CAPABILITIES</text>
+  </g>
+  <g transform="translate(568,250)">
+    <rect width="230" height="92" rx="12" fill="#0e1730" stroke="#1e293b"/>
+    <text x="20" y="52" class="k">12</text><text x="20" y="74" class="kl">VALIDATOR FAMILIES</text>
+  </g>
+  <g transform="translate(816,250)">
+    <rect width="230" height="92" rx="12" fill="#0e1730" stroke="#1e293b"/>
+    <text x="20" y="52" class="k">7-level</text><text x="20" y="74" class="kl">PROOF LADDER</text>
+  </g>
+  <g transform="translate(1064,250)">
+    <rect width="144" height="92" rx="12" fill="#0e1730" stroke="#1e293b"/>
+    <text x="20" y="52" class="k">100%</text><text x="20" y="74" class="kl">GOVERNED</text>
+  </g>
+</svg>

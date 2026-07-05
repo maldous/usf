@@ -1,25 +1,113 @@
-# Universal Service Foundation
+<div align="center">
 
-Universal Service Foundation (USF) is a governed enterprise platform foundation for service-heavy software. It helps your team define platform truth, prove behaviour, and evolve systems without letting architecture drift into source-level guesswork.
+![Universal Service Foundation](docs/assets/readme/hero.svg)
 
-USF treats semantics, decisions, validation, proof, and implementation as one operating model. Semantics define intent. ADRs constrain change. Validators enforce consistency. Evidence records what ran. Source code implements contracts instead of becoming the product authority.
+**Define platform truth. Prove behaviour. Evolve without drift.**
 
-You get a foundation built for human review and AI-assisted delivery. It gives your team clear authority, traceable proof, provider honesty, and clean implementation boundaries.
+![status](https://img.shields.io/badge/status-delivered-34d399?style=for-the-badge)
+![services](https://img.shields.io/badge/composed_services-39-38bdf8?style=for-the-badge)
+![capabilities](https://img.shields.io/badge/semantic_capabilities-75-a78bfa?style=for-the-badge)
+![proof](https://img.shields.io/badge/readiness-evidence--backed-0ea5e9?style=for-the-badge)
+![ai](https://img.shields.io/badge/AI-native_%26_AI--safe-6366f1?style=for-the-badge)
 
-![Universal Service Foundation overview](docs/assets/readme/image1.png)
+</div>
+
+---
+
+## Why teams keep rebuilding the same platform — and why that ends here
+
+Every serious product rebuilds the same foundation: identity, tenant isolation, authorization, audit, configuration, files, workflows, notifications, search, observability, provider adapters, and environment policy. Each rebuild pushes platform *truth* into scattered source files. Documentation drifts. Tests decay into partial memory. AI tools copy yesterday's patterns. "Ready" comes to mean "the checks are green" instead of "we can prove it."
+
+**The Universal Service Foundation (USF) ends that cycle.** USF is a governed, semantic-first platform foundation that treats meaning, decisions, validation, proof, and implementation as **one operating model** — engineered from the ground up so that both humans and AI agents build from the same authority, with the same evidence, under the same guardrails.
+
+It is not a scaffold, a template, or a framework wrapper. It is a **foundation with memory, enforcement, and proof.**
+
+---
+
+## What USF delivers
+
+USF turns architecture from tribal knowledge into a governed, machine-checkable corpus — and ships it as a complete, working foundation:
+
+- **A full enterprise platform surface** — 39 composed services and 75 semantic capabilities spanning identity, tenancy, authorization, audit, storage, workflow, search, observability, and operations.
+- **A living semantic corpus** — capabilities, interfaces, events, workflows, provider modes, environments, commands, configuration, audit, and observability are all first-class governed assets under `spec/`.
+- **An enforced authority model** — a strict, seven-rank hierarchy where semantics define intent, ADRs constrain change, validators enforce consistency, and evidence records what actually ran.
+- **A validator suite that fails closed** — 12 validator families with hundreds of rules and planted-defect regression coverage, so drift is a gate, not a surprise.
+- **An evidence-backed proof system** — a seven-level proof ladder that separates *claims* from *proof* and keeps provider modes honest.
+- **A staging proof cockpit** — a browser-based review surface that turns machine QA, screenshots, and chain-of-custody evidence into an auditable review experience.
+- **An ISO 27001-aligned evidence framework** — ISMS scope, risk register, Statement-of-Applicability-style control mapping, access review, secrets and crypto lifecycle, backup/DR, supplier and privacy posture.
+- **AI-native delivery rules** — an explicit operating model that lets AI agents read, reason, implement, prove, and stop safely.
+
+---
+
+## The authority model — truth with a hierarchy
+
+![USF authority model](docs/assets/readme/authority-model.svg)
+
+Most codebases resolve conflicts by "whoever edited last wins." USF resolves them by **authority and evidence.** Each artefact class owns a specific question, and a lower-ranked artefact can never silently override a higher-ranked one. When they disagree, that contradiction is a finding the validators surface — not a decision the freshest file gets to make.
+
+This is what makes USF safe to evolve at speed: intent is debated in the right place, decisions are recorded, consistency is enforced, and proof records reality.
+
+---
+
+## A complete platform surface, governed as one model
+
+![USF capability domains](docs/assets/readme/capabilities.svg)
+
+USF delivers the capabilities every enterprise platform needs — not as isolated services, but as a coherent, semantically-mapped whole. Identity and access, multi-tenancy, authorization, audit, storage, workflow, search, observability, configuration, data lifecycle, provider adapters, and operations are all visible as platform concerns and governed together.
+
+The payoff: you reason about the platform *before* reading code, you check readiness *instead of* trusting claims, and you evolve systems *without* losing behavioural intent.
+
+---
+
+## Readiness you can audit
+
+![USF proof ladder and provider modes](docs/assets/readme/proof-ladder.svg)
+
+USF's proof system is its trust engine. A proof records **provider mode, environment, observed level, emitted evidence, collected evidence, and freshness** — and the claim never outranks the artefacts behind it. Provider mode and environment are kept as independent dimensions, so a hermetic proof is never mistaken for live-provider evidence, and a production-shaped environment is never mistaken for production-live operation.
+
+- **Fail closed** on missing evidence, contradiction, or ambiguity.
+- **Stale is not pass.** Evidence that outlived its inputs is flagged, not trusted.
+- **Hermetic proof is complete and offline** — the foundation proves itself with no live external dependencies, then *adds* live readiness when evidence supports it.
+
+This is readiness a reviewer can defend line by line.
+
+---
+
+## Six differentiators, engineered to work together
+
+![USF differentiators](docs/assets/readme/differentiators.svg)
+
+These traits are not features bolted on — they reinforce each other. A provider-adapter change still respects contracts. A readiness statement still points to proof. An AI-assisted change still follows semantics, ADRs, validators, and stop rules. The value is difficult to copy because it lives in the semantic corpus, the authority model, the validators, the evidence posture, and the operating rules — not in any single file.
+
+---
+
+## AI-native and AI-safe by design
+
+USF was built for the era of AI-assisted engineering. Agents receive **explicit inputs** — semantic definitions, decision records, and validator expectations — instead of guessing from file shape. And they operate inside hard guardrails:
+
+1. Read the relevant **semantic definitions** first.
+2. Check the **ADR canon** for what is permitted and forbidden.
+3. Apply **source-lineage rules** — history is evidence, never a copy target.
+4. Implement **behind contracts**, never inventing new semantics.
+5. Run **validators** and **collect proof** before claiming progress.
+6. **Stop** on missing semantics, forbidden decisions, failing validators, stale proof, or any attempt to overclaim.
+
+The result is AI assistance that produces reviewable change with an evidence trail explaining *what* changed and *why it was allowed.*
+
+---
 
 ## Developer Quickstart
 
-The supported local handover path is documented in [Dev Readiness Validation and Handover](docs/architecture/dev-readiness-validation-and-handover.md). It is intended for a developer or AI agent starting from a fresh clone with no private local state.
+The supported local handover path is documented in [Dev Readiness Validation and Handover](docs/architecture/dev-readiness-validation-and-handover.md). It is designed for a developer — or an AI agent — starting from a fresh clone with no private local state.
 
-Prerequisites:
+**Prerequisites**
 
-- Node.js 24.16.0 or newer.
-- Corepack with pnpm 11.9.0.
-- Python 3.
-- Docker with the Compose plugin for composed-provider proof commands.
+- Node.js 24.16.0 or newer
+- Corepack with pnpm 11.9.0
+- Python 3
+- Docker with the Compose plugin (for composed-provider proofs)
 
-One-command local validation:
+**One-command local validation**
 
 ```bash
 make foundation
@@ -27,147 +115,56 @@ make foundation
 
 `make foundation` is the current-state alias for the compatibility-stable `make verify` gate.
 
-Useful shorter commands:
+**Useful shorter commands**
 
 ```bash
-make setup
-make validate-coverage
-make validate-assurance
-make validate-evidence
-make sonar-zero-issue-proof
-corepack pnpm dev:smoke
+make setup                 # frozen dependency install
+make validate-coverage     # foundation coverage validators
+make validate-assurance    # enterprise assurance evidence
+make validate-evidence     # repository evidence validators
+corepack pnpm dev:smoke    # developer smoke proof
 corepack pnpm runtime:proof
-corepack pnpm proof:observability:browser-telemetry
 ```
 
-Local proofs use synthetic tenants, actors, jobs, browser telemetry, and local composed services only. They do not require real tenant data, real secrets, live providers, staging, or production access.
+Local proofs use synthetic tenants, actors, jobs, and browser telemetry against local composed services only. They require no real tenant data, no real secrets, and no live-provider, staging, or production access.
 
-## Why USF Exists
+---
 
-![Why USF exists](docs/assets/readme/image2.png)
+## Repository orientation
 
-Enterprise teams keep paying the same platform tax. Identity, tenant isolation, authorization, audit, configuration, files, workflows, notifications, search, observability, operational proof, provider adapters, and environment policy appear in project after project.
+USF organizes everything around governed artefact homes, each with a clear authority role and lifecycle:
 
-A code-first foundation pushes truth into scattered files. Documentation drifts. Tests become partial memory. AI tools copy old patterns. Readiness claims rely on green checks instead of proof. Provider modes blur across mock, local, sandbox, and live operation.
+| Home | Holds | Authority role |
+|---|---|---|
+| `docs/architecture/` | Charter, Authority Model, standards, governance | Constitutional & architectural |
+| `docs/adr/` | Normative architecture decisions | What is permitted and why |
+| `spec/` | Schemas, registries, taxonomies, vocabularies, semantic instances | The canonical definition of behaviour |
+| `tools/` | Validators, generators, enforcement utilities | Consistency enforcement |
+| `evidence/` | Proof, runtime, validation, import, and generated evidence | What actually ran |
+| `apps/`, `packages/` | Implementation behind contracts | Current implementation state |
 
-USF replaces this pattern with governed foundation work. Your team defines meaning first, records decisions, validates consistency, and collects evidence. Delivery moves faster because authority is visible and review has better inputs.
+Humans and agents both know where to look, what to trust, and which checks apply.
 
-## Product Differentiators
+---
 
-![USF product differentiators](docs/assets/readme/image3.png)
+## Where USF fits
 
-USF combines six differentiators in one foundation. Semantic governance defines meaning before reliance. Evidence-backed readiness separates claims from proof. AI-safe rules bound agent behaviour. Provider portability keeps integrations honest. Validators expose drift. Source lineage preserves historical evidence without copying old structure.
+USF sits at the intersection of enterprise platform engineering, internal developer platforms, regulated software delivery, reusable service foundations, provider-portable architecture, and AI-assisted engineering governance. It is the **trust layer between code generation and enterprise delivery** — defining truth, proving behaviour, and constraining change so organizations ship foundation work with clearer risk, evidence, and ownership.
 
-These traits work together. A provider adapter change still respects contracts. A readiness statement still points to proof. An AI-assisted change still follows semantics, ADRs, validators, and stop rules.
+If your team needs identity, tenancy, authorization, audit, configuration, workflow, observability, provider adapters, environment policy, and operational proof to behave as **shared, provable platform capabilities** — USF is built for you.
 
-The result is a technical foundation with market value. Your team gets reason before code, evidence before trust, provider choice without confusion, and architecture with visible constraints.
+---
 
-### Semantic-First Platform Governance
+## Operating principle
 
-![Semantic-first platform governance](docs/assets/readme/image4.png)
+> Serious software needs governed generation. Faster output has limited value unless the foundation also defines truth, records decisions, validates consistency, and proves behaviour.
 
-USF treats platform meaning as a first-class product surface. Capabilities, interfaces, events, workflows, provider modes, environments, commands, configuration, audit, observability, evidence, and decision records are governed assets.
+Define semantic truth → authorize change through decisions and policy → implement within contracts → validate continuously → record evidence → evolve with proof and lineage intact.
 
-This changes how teams build. Implementation follows semantic contracts. UI and reports reflect defined behaviour. Validators check alignment across semantics, decisions, proof, and source. AI agents receive explicit inputs instead of copying file shape.
+USF tells people and machines what is true, why it is true, what proves it, what is allowed to change, and what must stop when the evidence is not enough.
 
-You get stable truth before code review starts. The team debates intent in the right place, then implements against a shared model. This reduces ambiguity, rework, and hidden behaviour.
+<div align="center">
 
-### Evidence-Backed Readiness
+**Universal Service Foundation** — reason before code, evidence before trust, proof before "done."
 
-![Evidence-backed readiness](docs/assets/readme/image5.png)
-
-USF separates readiness claims from proof. A proof records provider mode, environment, observed level, emitted evidence, collected evidence, and freshness assumptions. The claim never outranks the artefacts behind it.
-
-This matters for enterprise trust. Hermetic proof is useful for internal correctness. It is not live-provider evidence. A generated report helps explain a state. It is not the source of truth. Production-shaped environments also differ from production-live operation.
-
-Your team gets measurable readiness. Reviewers see what ran, where it ran, which proof level was reached, and which assumptions still apply. This makes go-live claims easier to audit.
-
-### AI-Safe by Design
-
-![AI-safe by design](docs/assets/readme/image6.png)
-
-USF gives AI agents a bounded operating model. Agents read semantic definitions first, check ADRs, apply source-lineage rules, implement behind contracts, run validators, and collect proof before claiming progress.
-
-The repository also gives clear stop conditions. Missing semantics, forbidden decisions, failing validators, stale proof, source-only behaviour, and provider overclaiming block progress. The right response is reconciliation, not pattern imitation.
-
-You get AI assistance with guardrails. Changes become easier to review because the agent follows the same authority model as the team. The evidence trail explains what changed and why it was allowed.
-
-### Provider-Portable Architecture
-
-![Provider-portable architecture](docs/assets/readme/image7.png)
-
-USF separates provider contracts from provider implementations. Ports define the boundary. Adapters implement the boundary. Provider modes describe how the implementation runs. Environments define context and constraints.
-
-This separation keeps portability honest. Hermetic, composed-local, sandbox-external, and live-external modes each support different claims. A proof has value only when the provider mode and observed level match the claim.
-
-Your team gets provider choice without weakening internal proof. You swap adapters behind stable contracts, add live readiness when evidence supports it, and keep mock, local, sandbox, and live claims distinct.
-
-### Validator-Enforced Drift Control
-
-![Validator-enforced drift control](docs/assets/readme/image8.png)
-
-USF uses validators as enforcement. Validators check schema validity, reference resolution, vocabulary usage, source disposition, provider-mode honesty, environment honesty, evidence completeness, and readiness overclaiming.
-
-The validator layer turns architecture rules into gates. It fails closed on contradiction or ambiguity. A stale report does not pass because it sounds convincing. A source change does not pass because it compiles. A readiness claim does not pass without proof.
-
-Your team gets drift control before drift compounds. Findings point to the artefact class with authority over the problem. Remediation updates the right source, then validation proves consistency.
-
-### Source-Aware Without Being Source-Subordinate
-
-![Source-aware extraction](docs/assets/readme/image9.png)
-
-USF preserves historical evidence without making old implementation structure the future authority. Historical evidence captures intent, contracts, rationale, proof signals, operational history, and lessons from prior work.
-
-Source-use gating decides how evidence enters USF. Some evidence is adopted. Some is adapted. Some is rejected. Some is deferred. Every path preserves intent through semantics, decisions, validators, and proof expectations.
-
-Your team keeps knowledge without inheriting old constraints. The new implementation follows promoted semantics and clean boundaries. AI agents also see lineage, so they use history as evidence instead of copying it blindly.
-
-## Strengths
-
-![USF strengths](docs/assets/readme/image10.png)
-
-USF draws strength from a coupled system. Authority order gives each artefact class a role. Semantic definitions own intended behaviour. ADRs own decisions. Validators own consistency. Proof owns what ran. Source owns current implementation state.
-
-The foundation also fits enterprise work. Tenant isolation, authorization, audit, configuration, workflows, provider adapters, observability, evidence, and operational commands stay visible as platform concerns. They are not hidden inside one service.
-
-You get repeatable proof, lower migration risk, and bounded AI assistance. The value is difficult to copy because it lives in the semantic corpus, authority model, validators, evidence posture, lineage, and operating rules.
-
-## What Makes USF Unique
-
-![What makes USF unique](docs/assets/readme/image11.png)
-
-USF is different from an application scaffold, service template, framework wrapper, generated app, or documentation set. Those approaches often start with structure or output. USF starts with governed product truth.
-
-The difference is practical. Semantics define behaviour. ADRs decide constraints. Validators enforce the rules. Proof records what ran. Source lineage preserves historical evidence. Implementation follows contracts. AI agents operate inside the same model.
-
-Your team gets a foundation with memory, enforcement, and proof. You reason about the platform before reading code. You check readiness instead of trusting claims. You evolve systems without losing behavioural intent.
-
-## Market Position
-
-![USF market position](docs/assets/readme/image12.png)
-
-USF fits the intersection of enterprise platform engineering, internal developer platforms, regulated software delivery, reusable service foundations, provider-portable architecture, and AI-assisted engineering governance.
-
-It serves teams with durable foundation needs. Those teams need identity, tenancy, authorization, audit, configuration, workflow, observability, provider adapters, environment policy, and operational proof to work as shared platform capabilities.
-
-You get a trust layer between code generation and enterprise delivery. USF defines truth, proves behaviour, and constrains change. It helps your organization ship foundation work with clearer risk, evidence, and ownership.
-
-## Repository Orientation
-
-![Repository orientation](docs/assets/readme/image13.png)
-
-USF organizes the repository around governed artefact homes. `docs/architecture/` holds constitutional and architecture governance. `docs/adr/` holds normative decisions. `spec/` holds schemas, registries, taxonomies, vocabularies, and semantic instances.
-
-`tools/` holds validators, generators, and enforcement utilities. `evidence/` holds proof, runtime, validation, import, and generated evidence. `apps/`, `capabilities/`, `adapters/`, and `packages/` hold implementation behind contracts.
-
-You get a repository map with purpose. Each artefact class has a home, authority role, and lifecycle. Humans and agents both know where to look, what to trust, and which checks apply.
-
-## Operating Principle
-
-![USF operating principle](docs/assets/readme/image14.png)
-
-USF makes one practical claim. Serious software needs governed generation. Faster output has limited value unless the foundation also defines truth, records decisions, validates consistency, and proves behaviour.
-
-The operating loop is simple. Define semantic truth. Authorize change through decisions and policy. Implement within contracts. Validate continuously. Record evidence. Evolve with proof and lineage intact.
-
-Your team gets a foundation built for safe change. It tells people and machines what is true, why it is true, what proves it, what is allowed to change, and what must stop when evidence is not enough.
+</div>
