@@ -1,0 +1,40 @@
+{
+  "commands": [
+    {
+      "command": "corepack pnpm proof-cockpit:machine-qa",
+      "purpose": "Generate or validate machine QA evidence for human review.",
+      "result": "run-or-alias-supported",
+      "sourceSha": "32203c0740fd792f2976ac20d72e6a0727f7361a"
+    },
+    {
+      "command": "corepack pnpm proof-cockpit:playwright",
+      "purpose": "Generate or validate machine QA evidence for human review.",
+      "result": "run-or-alias-supported",
+      "sourceSha": "32203c0740fd792f2976ac20d72e6a0727f7361a"
+    },
+    {
+      "command": "corepack pnpm proof-cockpit:evidence",
+      "purpose": "Generate or validate machine QA evidence for human review.",
+      "result": "run-or-alias-supported",
+      "sourceSha": "32203c0740fd792f2976ac20d72e6a0727f7361a"
+    },
+    {
+      "command": "corepack pnpm proof-cockpit:qa-report",
+      "purpose": "Generate or validate machine QA evidence for human review.",
+      "result": "run-or-alias-supported",
+      "sourceSha": "32203c0740fd792f2976ac20d72e6a0727f7361a"
+    },
+    {
+      "command": "corepack pnpm proof-cockpit:evidence-bundle",
+      "purpose": "Generate or validate machine QA evidence for human review.",
+      "result": "run-or-alias-supported",
+      "sourceSha": "32203c0740fd792f2976ac20d72e6a0727f7361a"
+    },
+    {
+      "command": "corepack pnpm proof-cockpit:import-check",
+      "purpose": "Generate or validate machine QA evidence for human review.",
+      "result": "run-or-alias-supported",
+      "sourceSha": "32203c0740fd792f2976ac20d72e6a0727f7361a"
+    }
+  ]
+}
