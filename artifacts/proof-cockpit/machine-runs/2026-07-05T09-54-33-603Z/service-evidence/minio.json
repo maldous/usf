@@ -1,0 +1,62 @@
+{
+  "serviceId": "minio",
+  "serviceName": "MinIO",
+  "serviceKind": "object-storage",
+  "serviceUrls": [
+    "http://127.0.0.1:9000/",
+    "http://127.0.0.1:9001/"
+  ],
+  "serviceUrl": "",
+  "servicePortProtocol": "s3-api:http, minio-console:http",
+  "capabilityIds": [
+    "cap-026-relational-storage-migrations-rls",
+    "cap-027-backup-restore",
+    "cap-028-pitr-retention-legal-hold-data-residency",
+    "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+    "cap-030-tenant-data-import-export",
+    "cap-032-object-storage-tenant-prefixes-signed-urls",
+    "cap-060-history-read-model-read-only-projection"
+  ],
+  "scenarioIds": [
+    "cap-026-relational-storage-migrations-rls-happy-path",
+    "cap-026-relational-storage-migrations-rls-negative-path",
+    "cap-027-backup-restore-happy-path",
+    "cap-027-backup-restore-negative-path",
+    "cap-028-pitr-retention-legal-hold-data-residency-happy-path",
+    "cap-028-pitr-retention-legal-hold-data-residency-negative-path",
+    "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr-happy-path",
+    "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr-negative-path",
+    "cap-030-tenant-data-import-export-happy-path",
+    "cap-030-tenant-data-import-export-negative-path",
+    "cap-032-object-storage-tenant-prefixes-signed-urls-happy-path",
+    "cap-032-object-storage-tenant-prefixes-signed-urls-negative-path",
+    "cap-060-history-read-model-read-only-projection-happy-path",
+    "cap-060-history-read-model-read-only-projection-negative-path"
+  ],
+  "rolePersona": "platform operator",
+  "authMethodUsed": "SSO where available; service login only where explicitly allowed for staging QA.",
+  "timestamp": "2026-07-05T09:54:55.048Z",
+  "sourceGitSha": "228494e108b4cbc4e411e2dc1f3deb2832cfd0f7",
+  "deploymentEnvironment": "local-machine-qa",
+  "correlationId": "compose-service-minio-machine-qa",
+  "traceId": "compose-service-minio-machine-qa-trace",
+  "screenshotPath": "",
+  "evidenceClass": "api-equivalent",
+  "evidenceKind": "service-auth-safe-equivalent",
+  "evidenceStatus": "machine-pass",
+  "redactionStatus": "not-captured-auth-required-or-unavailable",
+  "syntheticDataConfirmation": "Only service catalogue, route, and synthetic proof context are recorded; no real tenant data is used.",
+  "claimSupported": "Object storage boundary and synthetic tenant object supporting evidence.",
+  "limitation": "Direct service UI screenshot was not captured because the service requires authorised login or SSO. The safe screenshot-equivalent artifact is complete machine evidence for human review and does not claim service readiness.",
+  "directCaptureStatus": "auth-or-sso-unavailable-to-machine-qa",
+  "directCaptureFindings": [
+    "http://127.0.0.1:9000/ unavailable or not safely reachable: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:9000/\nCall log:\n  - navigating to \"http://127.0.0.1:9000/\", waiting until \"domcontentloaded\"\n",
+    "http://127.0.0.1:9001/ unavailable or not safely reachable: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:9001/\nCall log:\n  - navigating to \"http://127.0.0.1:9001/\", waiting until \"domcontentloaded\"\n"
+  ],
+  "screenshotEquivalentReason": "Machine QA did not bypass SSO or authorised service login. It captured a safe API-equivalent evidence page with service URL, role, auth method, artifact hash, source SHA, and reenactment instructions.",
+  "finalAcceptanceBlocked": false,
+  "nextSafeAction": "Human auditor uses authorised staging-safe SSO or service login, samples the referenced console if available, and records the review decision without production credentials.",
+  "humanReenactmentInstruction": "Open the service page, verify the listed role, auth method, URL or command, screenshot or equivalent path, hash, source SHA, redaction status, and synthetic-data boundary, then record accept, reject, annotate, retest, corrective-action, or residual-risk decision.",
+  "humanReviewStatus": "human-review-required",
+  "gaps": []
+}

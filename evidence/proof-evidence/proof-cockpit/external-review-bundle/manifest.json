@@ -6,8 +6,14 @@
   "files": [
     "../staging-evidence-store.json",
     "../final-external-review-report.md",
+    "../warning-inventory.json",
+    "../warning-inventory.md",
     "README.md",
-    "manifest.json"
+    "manifest.json",
+    "../../../../../artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z/external-review-bundle/external-review-report.md",
+    "../../../../../artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z/proof-cockpit-machine-qa-run.json",
+    "../../../../../artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z/service-evidence-manifest.json",
+    "../../../../../artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z/proof-cockpit-screenshot-manifest.json"
   ],
   "generatedReportsAreAuthority": false,
   "finalAcceptanceAutomatic": false,
@@ -23,5 +29,29 @@
     "no-browser-e2e-readiness",
     "no-full-product-readiness",
     "no-usf-290-completion"
-  ]
+  ],
+  "latestMachineRun": {
+    "runId": "qa-run-2026-07-05T09-54-33-633Z",
+    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z",
+    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z/proof-cockpit-machine-qa-run.json",
+    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-05T09-54-33-603Z/external-review-bundle",
+    "passCount": 1230,
+    "warnCount": 0,
+    "failCount": 0,
+    "unresolvedGapCount": 0,
+    "screenshotCount": 93,
+    "serviceEvidenceCount": 39,
+    "evidenceRecordCount": 1139,
+    "sourceSha": "228494e108b4cbc4e411e2dc1f3deb2832cfd0f7",
+    "deploymentSha": "228494e108b4cbc4e411e2dc1f3deb2832cfd0f7"
+  },
+  "warningResolution": {
+    "originalWarningCount": 68,
+    "finalWarningCount": 0,
+    "finalFailureCount": 0,
+    "finalUnresolvedGapCount": 0,
+    "hiddenWarningCount": 0,
+    "warningInventoryPath": "../warning-inventory.json",
+    "warningInventoryMarkdownPath": "../warning-inventory.md"
+  }
 }
