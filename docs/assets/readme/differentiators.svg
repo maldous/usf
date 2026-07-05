@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 430" role="img" aria-label="USF differentiators">
+  <defs>
+    <linearGradient id="dbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#0a0f1f"/>
+    </linearGradient>
+    <style>
+      text{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;fill:#e2e8f0;}
+      .h{font-size:30px;font-weight:800;}
+      .n{font-size:19px;font-weight:700;}
+      .d{font-size:13px;fill:#94a3b8;}
+      .ic{font-size:26px;}
+    </style>
+  </defs>
+  <rect width="1280" height="430" rx="18" fill="url(#dbg)"/>
+  <text x="60" y="66" class="h">Six differentiators, engineered to work together</text>
+
+  <g transform="translate(60,100)">
+    <g transform="translate(0,0)"><rect width="373" height="140" rx="12" fill="#0e1730" stroke="#38bdf8" stroke-opacity="0.35"/><text x="22" y="48" class="ic">🧭</text><text x="66" y="46" class="n">Semantic-first governance</text><text x="22" y="86" class="d">Meaning is a first-class product surface.</text><text x="22" y="106" class="d">Implementation follows contracts, not the</text><text x="22" y="126" class="d">other way around.</text></g>
+    <g transform="translate(393,0)"><rect width="373" height="140" rx="12" fill="#0e1730" stroke="#818cf8" stroke-opacity="0.35"/><text x="22" y="48" class="ic">🔬</text><text x="66" y="46" class="n">Evidence-backed readiness</text><text x="22" y="86" class="d">Every claim points to a proof that records</text><text x="22" y="106" class="d">provider mode, environment, level and</text><text x="22" y="126" class="d">freshness.</text></g>
+    <g transform="translate(786,0)"><rect width="373" height="140" rx="12" fill="#0e1730" stroke="#a78bfa" stroke-opacity="0.35"/><text x="22" y="48" class="ic">🤖</text><text x="66" y="46" class="n">AI-native &amp; AI-safe</text><text x="22" y="86" class="d">Agents read semantics, obey ADRs, run</text><text x="22" y="106" class="d">validators and stop on ambiguity — the</text><text x="22" y="126" class="d">same authority model as the team.</text></g>
+    <g transform="translate(0,160)"><rect width="373" height="140" rx="12" fill="#0e1730" stroke="#34d399" stroke-opacity="0.35"/><text x="22" y="48" class="ic">🔌</text><text x="66" y="46" class="n">Provider portability</text><text x="22" y="86" class="d">Ports and adapters keep integrations</text><text x="22" y="106" class="d">honest across hermetic, local, sandbox</text><text x="22" y="126" class="d">and live modes.</text></g>
+    <g transform="translate(393,160)"><rect width="373" height="140" rx="12" fill="#0e1730" stroke="#38bdf8" stroke-opacity="0.35"/><text x="22" y="48" class="ic">🛡️</text><text x="66" y="46" class="n">Validator-enforced</text><text x="22" y="86" class="d">Drift is a gate, not a guess. Validators fail</text><text x="22" y="106" class="d">closed on contradiction, staleness and</text><text x="22" y="126" class="d">readiness overclaiming.</text></g>
+    <g transform="translate(786,160)"><rect width="373" height="140" rx="12" fill="#0e1730" stroke="#818cf8" stroke-opacity="0.35"/><text x="22" y="48" class="ic">🧬</text><text x="66" y="46" class="n">Lineage without lock-in</text><text x="22" y="86" class="d">Historical evidence is preserved as</text><text x="22" y="106" class="d">lineage — never copied as future</text><text x="22" y="126" class="d">structure.</text></g>
+  </g>
+</svg>

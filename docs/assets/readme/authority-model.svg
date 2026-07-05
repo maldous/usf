@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 620" role="img" aria-label="USF authority model">
+  <defs>
+    <linearGradient id="abg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#0a0f1f"/>
+    </linearGradient>
+    <style>
+      text{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;fill:#e2e8f0;}
+      .h{font-size:30px;font-weight:800;}
+      .sub{font-size:17px;fill:#94a3b8;}
+      .rank{font-size:15px;font-weight:800;fill:#0b1020;}
+      .name{font-size:21px;font-weight:700;}
+      .q{font-size:15px;fill:#cbd5e1;}
+      .home{font-size:13px;font-weight:600;fill:#7dd3fc;}
+    </style>
+  </defs>
+  <rect width="1280" height="620" rx="18" fill="url(#abg)"/>
+  <text x="60" y="70" class="h">One authority model. Seven ranks. Higher ranks define; lower ranks implement and evidence.</text>
+  <text x="60" y="100" class="sub">Every artefact class owns a specific question. Validators fail closed when a lower rank contradicts a higher one.</text>
+
+  <!-- rows -->
+  <g transform="translate(60,130)">
+    <g transform="translate(0,0)">
+      <rect width="1160" height="58" rx="10" fill="#0e2a3f" stroke="#38bdf8" stroke-opacity="0.5"/>
+      <circle cx="34" cy="29" r="16" fill="#38bdf8"/><text x="29" y="34" class="rank">1</text>
+      <text x="70" y="35" class="name">Semantic definitions</text>
+      <text x="430" y="35" class="q">What is the intended behaviour and contract?</text>
+      <text x="980" y="34" class="home">spec/</text>
+    </g>
+    <g transform="translate(0,68)">
+      <rect width="1160" height="58" rx="10" fill="#122542" stroke="#818cf8" stroke-opacity="0.45"/>
+      <circle cx="34" cy="29" r="16" fill="#818cf8"/><text x="29" y="34" class="rank">2</text>
+      <text x="70" y="35" class="name">Architecture decisions (ADRs)</text>
+      <text x="430" y="35" class="q">What is permitted, decided and forbidden — and why?</text>
+      <text x="980" y="34" class="home">docs/adr/</text>
+    </g>
+    <g transform="translate(0,136)">
+      <rect width="1160" height="58" rx="10" fill="#0e2a3f" stroke="#a78bfa" stroke-opacity="0.45"/>
+      <circle cx="34" cy="29" r="16" fill="#a78bfa"/><text x="29" y="34" class="rank">3</text>
+      <text x="70" y="35" class="name">Validator rules</text>
+      <text x="430" y="35" class="q">Are the artefacts mutually consistent? Is a claim admissible?</text>
+      <text x="980" y="34" class="home">tools/</text>
+    </g>
+    <g transform="translate(0,204)">
+      <rect width="1160" height="58" rx="10" fill="#122e33" stroke="#34d399" stroke-opacity="0.5"/>
+      <circle cx="34" cy="29" r="16" fill="#34d399"/><text x="29" y="34" class="rank">4</text>
+      <text x="70" y="35" class="name">Runtime proof evidence</text>
+      <text x="430" y="35" class="q">Was the behaviour exercised — at what level, on what provider class?</text>
+      <text x="980" y="34" class="home">evidence/</text>
+    </g>
+    <g transform="translate(0,272)">
+      <rect width="1160" height="58" rx="10" fill="#1a2036" stroke="#64748b" stroke-opacity="0.5"/>
+      <circle cx="34" cy="29" r="16" fill="#94a3b8"/><text x="29" y="34" class="rank">5</text>
+      <text x="70" y="35" class="name">Source implementation</text>
+      <text x="430" y="35" class="q">What does the code currently do?</text>
+      <text x="980" y="34" class="home">apps/  packages/</text>
+    </g>
+    <g transform="translate(0,340)">
+      <rect width="1160" height="58" rx="10" fill="#1a2036" stroke="#64748b" stroke-opacity="0.4"/>
+      <circle cx="34" cy="29" r="16" fill="#64748b"/><text x="29" y="34" class="rank">6</text>
+      <text x="70" y="35" class="name">Historical lineage</text>
+      <text x="430" y="35" class="q">What was the prior intent, behaviour and operational knowledge?</text>
+      <text x="980" y="34" class="home">retained evidence</text>
+    </g>
+    <g transform="translate(0,408)">
+      <rect width="1160" height="58" rx="10" fill="#1a2036" stroke="#64748b" stroke-opacity="0.3"/>
+      <circle cx="34" cy="29" r="16" fill="#475569"/><text x="29" y="34" class="rank">7</text>
+      <text x="70" y="35" class="name">Generated reports</text>
+      <text x="430" y="35" class="q">What is the current summary of the above? (Never canonical.)</text>
+      <text x="980" y="34" class="home">generated</text>
+    </g>
+  </g>
+</svg>

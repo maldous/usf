@@ -100,7 +100,65 @@ try {
     if (/<script\b|data-reactroot|__next/i.test(text)) {
       throw new Error(`proof-cockpit-smoke-script-framework-marker-${route}`);
     }
+    if (
+      ["/proof", "/proof/review", "/proof/reports/final", "/proof/screenshots", "/proof/evidence", "/proof/signoff"].includes(
+        route,
+      ) &&
+      /<t[dh][^>]*>\s*<\/t[dh]>/i.test(text)
+    ) {
+      throw new Error(`proof-cockpit-smoke-blank-table-cell-${route}`);
+    }
     results.push({ route, status: response.status });
+  }
+  const home = await fetch(`${baseUrl}/proof`).then((response) => response.text());
+  for (const required of ["USF Proof Review", "Start review", "Open printable report", "Final signoff"]) {
+    if (!home.includes(required)) {
+      throw new Error(`proof-cockpit-smoke-home-missing-${required}`);
+    }
+  }
+  const review = await fetch(`${baseUrl}/proof/review`).then((response) => response.text());
+  for (const required of ["Accept", "Reject", "Request retest", "Inline screenshot evidence", "Machine QA conclusion"]) {
+    if (!review.includes(required)) {
+      throw new Error(`proof-cockpit-smoke-review-missing-${required}`);
+    }
+  }
+  for (const forbidden of [
+    'type="hidden" name="devEvidenceConfirmed"',
+    'type="hidden" name="testEvidenceConfirmed"',
+    'type="hidden" name="noRealTenantData"',
+    'type="hidden" name="nonClaimsConfirmed"',
+  ]) {
+    if (review.includes(forbidden)) {
+      throw new Error(`proof-cockpit-smoke-hidden-auto-confirmation-${forbidden}`);
+    }
+  }
+  if (!review.includes("<img src=\"/proof/image?path=")) {
+    throw new Error("proof-cockpit-smoke-review-inline-image-missing");
+  }
+  const screenshots = await fetch(`${baseUrl}/proof/screenshots`).then((response) => response.text());
+  if (!screenshots.includes("Visual evidence gallery") || !screenshots.includes("<img src=\"/proof/image?path=")) {
+    throw new Error("proof-cockpit-smoke-screenshot-gallery-inline-image-missing");
+  }
+  const firstImage = screenshots.match(/<img src="([^"]+)"/)?.[1];
+  if (!firstImage) {
+    throw new Error("proof-cockpit-smoke-image-src-missing");
+  }
+  const imageResponse = await fetch(`${baseUrl}${firstImage}`);
+  if (imageResponse.status !== 200 || !imageResponse.headers.get("content-type")?.includes("image/png")) {
+    throw new Error(`proof-cockpit-smoke-image-response-${imageResponse.status}`);
+  }
+  const finalReport = await fetch(`${baseUrl}/proof/reports/final`).then((response) => response.text());
+  for (const required of [
+    "print-report",
+    "USF-293 External Review Report",
+    "Scope and non-claims",
+    "Machine QA method and results",
+    "Inline Screenshot Evidence Sample",
+    "Signoff Section",
+  ]) {
+    if (!finalReport.includes(required)) {
+      throw new Error(`proof-cockpit-smoke-final-report-missing-${required}`);
+    }
   }
   const capabilities = await fetch(`${baseUrl}/proof/capabilities`).then((response) => response.text());
   const listed = new Set(
@@ -136,7 +194,6 @@ try {
       actionType: "capability-qa",
       capabilityId: "cap-001-tenant-identity-record-fqdn",
       role: "tenant admin",
-      actor: "smoke-auditor",
       tenant: "synthetic-smoke-tenant",
       actionName: "smoke QA action",
       outcome: "draft-performed",
@@ -150,12 +207,12 @@ try {
       returnTo: "/proof/actions",
     }),
   });
-  if (postResponse.status !== 303) {
-    throw new Error(`proof-cockpit-smoke-post-status-${postResponse.status}`);
+  if (postResponse.status !== 403) {
+    throw new Error(`proof-cockpit-smoke-unauthenticated-post-status-${postResponse.status}`);
   }
   const actions = await fetch(`${baseUrl}/proof/actions`).then((response) => response.text());
-  if (!actions.includes("smoke-auditor") || !actions.includes("cap-001-tenant-identity-record-fqdn")) {
-    throw new Error("proof-cockpit-smoke-action-not-recorded");
+  if (actions.includes("smoke QA action") || actions.includes("smoke-correlation")) {
+    throw new Error("proof-cockpit-smoke-unauthenticated-action-recorded");
   }
   console.log(JSON.stringify({ outcome: "pass", checkedRoutes: results.length, listedCapabilities: listed }));
 } finally {
