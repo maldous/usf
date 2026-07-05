@@ -1,0 +1,10 @@
+{
+  "id": "planted-defect-usf-react-non-ui-004",
+  "description": "Negative fixture for USF-REACT-NON-UI-004; validator selftest must prove this rule has distinct planted-defect coverage.",
+  "expectedRuleIds": [
+    "USF-REACT-NON-UI-004"
+  ],
+  "fixtureKind": "react-non-ui-parity-negative-fixture",
+  "mutationHint": "mutate artefact field set 4 so USF-REACT-NON-UI-004 fails",
+  "mustBeDistinct": true
+}
