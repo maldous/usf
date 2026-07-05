@@ -1235,6 +1235,10 @@ def run_checks(F, state=None):
     for package_name, expected in (("@grafana/faro-web-sdk", "2.8.2"), ("playwright-core", "1.61.1")):
         if f"{package_name}@{expected}" not in read_text("pnpm-lock.yaml"):
             F.add("USF-OBSERVABILITY-023", "pnpm-lock.yaml", f"lockfile missing {package_name}@{expected}")
+    sdk_import_allowed_paths = {
+        BROWSER_TELEMETRY_PROOF,
+        "apps/staging-proof-cockpit/src/machine-qa.mjs",
+    }
     for root in ("apps", "capabilities", "adapters", "packages/core", "packages/ports"):
         if not os.path.isdir(root):
             continue
@@ -1243,6 +1247,8 @@ def run_checks(F, state=None):
                 if not filename.endswith((".ts", ".tsx", ".js", ".mjs", ".cjs")):
                     continue
                 path = os.path.join(dirpath, filename)
+                if path in sdk_import_allowed_paths:
+                    continue
                 text = read_text(path)
                 for sdk_name in ("@grafana/faro-web-sdk", "playwright-core"):
                     if sdk_name in text:

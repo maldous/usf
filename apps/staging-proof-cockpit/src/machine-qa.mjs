@@ -344,7 +344,7 @@ function addCheck(report, status, category, target, message, gapType) {
   const check = { status, category, target, message };
   if (gapType) {
     check.gapType = gapType;
-    report.gaps.push({ status, category, target, message, gapType });
+    report.gaps.push({ status, category, target, message, gapType, classification: gapType });
   }
   report.checks.push(check);
   return check;
@@ -570,10 +570,142 @@ function serviceSensitiveFinding(text) {
   return match ? match.source : "";
 }
 
+function writeServiceEvidenceArtifact(report, evidence) {
+  const serviceEvidenceDir = ensureDir(join(report.artifactDir, "service-evidence"));
+  const filePath = join(serviceEvidenceDir, `${slugifyRoute(evidence.serviceId)}.json`);
+  const payload = {
+    serviceId: evidence.serviceId,
+    serviceName: evidence.serviceName,
+    serviceKind: evidence.serviceKind,
+    serviceUrls: evidence.serviceUrls,
+    serviceUrl: evidence.serviceUrl ?? "",
+    servicePortProtocol: evidence.servicePortProtocol,
+    capabilityIds: evidence.capabilityIds,
+    scenarioIds: evidence.scenarioIds,
+    rolePersona: evidence.rolePersona,
+    authMethodUsed: evidence.authMethodUsed,
+    timestamp: evidence.timestamp,
+    sourceGitSha: evidence.sourceGitSha,
+    deploymentEnvironment: evidence.deploymentEnvironment,
+    correlationId: evidence.correlationId,
+    traceId: evidence.traceId,
+    screenshotPath: evidence.screenshotPath,
+    evidenceClass: evidence.evidenceClass,
+    evidenceKind: evidence.evidenceKind,
+    evidenceStatus: evidence.evidenceStatus,
+    redactionStatus: evidence.redactionStatus,
+    syntheticDataConfirmation: evidence.syntheticDataConfirmation,
+    claimSupported: evidence.claimSupported,
+    limitation: evidence.limitation,
+    humanReviewStatus: evidence.humanReviewStatus,
+    gaps: evidence.gaps,
+  };
+  const content = `${JSON.stringify(payload, null, 2)}\n`;
+  writeFileSync(filePath, content);
+  evidence.apiCliArtifactPath = filePath;
+  evidence.artifactPath = filePath;
+  evidence.artifactHash = contentHash(content);
+  return evidence;
+}
+
+function serviceEvidenceHtml(evidence) {
+  const rows = [
+    ["Service ID", evidence.serviceId],
+    ["Service name", evidence.serviceName],
+    ["Evidence class", evidence.evidenceClass],
+    ["Evidence status", evidence.evidenceStatus],
+    ["Required role/persona", evidence.rolePersona],
+    ["Login/auth method used", evidence.authMethodUsed],
+    ["URL or evidence surface", evidence.serviceUrl || (evidence.serviceUrls ?? []).join(", ") || evidence.apiCliArtifactPath],
+    ["Capability IDs", (evidence.capabilityIds ?? []).join(", ")],
+    ["Scenario IDs", (evidence.scenarioIds ?? []).slice(0, 20).join(", ")],
+    ["Claim supported", evidence.claimSupported],
+    ["Limitation", evidence.limitation],
+    ["Required next action", (evidence.gaps ?? []).join("; ") || "Human review required before final acceptance."],
+    ["Source Git SHA", evidence.sourceGitSha],
+    ["Environment", evidence.deploymentEnvironment],
+    ["Timestamp", evidence.timestamp],
+    ["Correlation ID", evidence.correlationId],
+    ["Trace ID", evidence.traceId],
+    ["Artifact path", evidence.apiCliArtifactPath || evidence.artifactPath],
+    ["Artifact hash", evidence.artifactHash],
+    ["Redaction status", evidence.redactionStatus],
+    ["Synthetic data confirmation", evidence.syntheticDataConfirmation],
+    ["Human review status", evidence.humanReviewStatus],
+  ];
+  return `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>${escapeHtmlForReport(evidence.serviceName)} service evidence</title></head>
+<body>
+<h1>Composed Service Screenshot-Equivalent Evidence</h1>
+<p>This screenshot-equivalent page is generated for services where direct service UI capture is unavailable, unsafe, unauthenticated, or not applicable. It is not a readiness claim.</p>
+<table>
+<tbody>
+${rows.map(([key, value]) => `<tr><th>${escapeHtmlForReport(key)}</th><td>${escapeHtmlForReport(String(value ?? ""))}</td></tr>`).join("\n")}
+</tbody>
+</table>
+<h2>Blocking posture</h2>
+<p>No Composed Service may support a final claim unless this screenshot or a direct service UI screenshot is reviewed and accepted by the human auditor.</p>
+</body>
+</html>`;
+}
+
+function escapeHtmlForReport(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+async function captureGeneratedServiceEvidenceScreenshot(page, report, evidence) {
+  const evidencePage = await page.context().newPage();
+  try {
+    await evidencePage.setContent(serviceEvidenceHtml(evidence), { waitUntil: "domcontentloaded" });
+    const fileName = `compose-service-${slugifyRoute(evidence.serviceId)}-evidence-page.png`;
+    const filePath = join(report.screenshotDir, fileName);
+    await evidencePage.screenshot({ path: filePath, fullPage: true });
+    const screenshotHash = contentHash(readFileSync(filePath));
+    evidence.screenshotPath = filePath;
+    evidence.screenshotHash = screenshotHash;
+    const entry = {
+      kind: "compose-service-screenshot-equivalent",
+      route: evidence.apiCliArtifactPath || evidence.serviceUrl || evidence.serviceId,
+      serviceName: evidence.serviceName,
+      serviceId: evidence.serviceId,
+      serviceUrl: evidence.serviceUrl || "",
+      capabilityIds: evidence.capabilityIds,
+      scenarioIds: evidence.scenarioIds,
+      rolePersona: evidence.rolePersona,
+      authMethodUsed: evidence.authMethodUsed,
+      timestamp: new Date().toISOString(),
+      sourceSha: report.sourceSha,
+      deploymentEnvironment: report.environment,
+      correlationId: evidence.correlationId,
+      traceId: evidence.traceId,
+      filePath,
+      screenshotHash,
+      complianceClaimSupport: evidence.claimSupported,
+      evidenceKind: evidence.evidenceKind,
+      redactionStatus: evidence.redactionStatus,
+      syntheticDataConfirmation: evidence.syntheticDataConfirmation,
+      result: evidence.evidenceStatus === "machine-fail" ? "fail" : "warn",
+    };
+    report.screenshots.push(entry);
+    report.counts.screenshots = report.screenshots.length;
+    report.counts.serviceEvidenceScreenshots += 1;
+    report.composeServiceEvidence.summary.screenshotsCaptured += 1;
+    return entry;
+  } finally {
+    await evidencePage.close();
+  }
+}
+
 async function captureCurrentServicePageScreenshot(page, report, service, url, mappings, evidenceState) {
   const fileName = `compose-service-${slugifyRoute(service.serviceId)}.png`;
   const filePath = join(report.screenshotDir, fileName);
   await page.screenshot({ path: filePath, fullPage: true });
+  const screenshotHash = contentHash(readFileSync(filePath));
   const entry = {
     kind: "compose-service",
     route: url,
@@ -589,6 +721,7 @@ async function captureCurrentServicePageScreenshot(page, report, service, url, m
     correlationId: `compose-service-${service.serviceId}-machine-qa`,
     traceId: `compose-service-${service.serviceId}-machine-qa-trace`,
     filePath,
+    screenshotHash,
     complianceClaimSupport: serviceClaimSupport(service),
     evidenceKind: evidenceState,
     redactionStatus: "no raw secret marker detected by machine text scan",
@@ -621,25 +754,53 @@ async function verifyComposeServiceEvidence(page, data, report) {
       serviceId: service.serviceId,
       serviceName: service.displayName ?? service.serviceId,
       serviceKind: service.serviceKind ?? "missing",
+      servicePortProtocol: candidates.map((candidate) => `${candidate.portId}:${candidate.appProtocol}`).join(", ") || "no-http-or-https-candidate",
       capabilityIds: mappings.map((mapping) => mapping.capabilityId),
       scenarioIds: unique(mappings.flatMap((mapping) => mapping.scenarioIds ?? [])),
       rolePersona: serviceEvidenceRole(service),
+      authMethodUsed: requiresLogin
+        ? "SSO where available; service login only where explicitly allowed for staging QA."
+        : "No service login attempted or required by the catalogue candidate port.",
       authPath: requiresLogin
         ? "SSO where available; service login only where explicitly allowed for staging QA."
         : "No service login attempted or required by the catalogue candidate port.",
       serviceUrls: candidates.map((candidate) => candidate.url),
+      serviceUrl: "",
       screenshotPath: "",
+      apiCliArtifactPath: "",
+      artifactPath: "",
+      artifactHash: "",
       artifactConfirmed: false,
       redactionStatus: "not-visited",
+      evidenceClass: "unavailable",
       evidenceKind: "placeholder-gap",
+      evidenceStatus: "machine-gap",
+      timestamp: new Date().toISOString(),
+      sourceGitSha: report.sourceSha,
+      deploymentEnvironment: report.environment,
+      correlationId: `compose-service-${service.serviceId}-machine-qa`,
+      traceId: `compose-service-${service.serviceId}-machine-qa-trace`,
+      syntheticDataConfirmation: "Only service catalogue, route, and synthetic proof context are recorded; no real tenant data is used.",
       complianceClaimSupport: serviceClaimSupport(service),
+      claimSupported: serviceClaimSupport(service),
+      limitation: "Service screenshot or live API proof is required before final human acceptance unless this equivalent evidence is accepted by the human auditor.",
+      humanReviewStatus: "human-review-required",
       gaps: [],
     };
 
     if (!candidates.length) {
       evidence.gaps.push("No HTTP or HTTPS UI/API candidate was derivable from the service catalogue.");
+      evidence.evidenceClass = "cli-equivalent";
+      evidence.evidenceKind = "service-catalogue-cli-equivalent";
+      evidence.evidenceStatus = "machine-warn";
+      evidence.artifactConfirmed = true;
+      evidence.redactionStatus = "not-applicable-service-catalogue-only";
+      evidence.limitation = "No live UI/API candidate is available from the catalogue; the generated artifact records service catalogue evidence and an explicit human full-assurance screenshot gap.";
+      writeServiceEvidenceArtifact(report, evidence);
+      await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
       report.composeServiceEvidence.services.push(evidence);
       report.composeServiceEvidence.summary.gaps += 1;
+      report.composeServiceEvidence.summary.artifactsConfirmed += 1;
       addCheck(
         report,
         "warn",
@@ -688,9 +849,17 @@ async function verifyComposeServiceEvidence(page, data, report) {
         evidence.serviceUrl = candidate.url;
         evidence.status = status;
         evidence.screenshotPath = screenshotEntry.filePath;
+        evidence.screenshotHash = screenshotEntry.screenshotHash;
         evidence.artifactConfirmed = status >= 200 && status < 500;
+        evidence.evidenceClass = status >= 200 && status < 400 ? "direct-screenshot" : "unavailable";
         evidence.evidenceKind = status >= 200 && status < 400 ? "supporting-evidence" : "gap-evidence";
+        evidence.evidenceStatus = status >= 200 && status < 400 ? "machine-pass" : "machine-warn";
         evidence.redactionStatus = screenshotEntry.redactionStatus;
+        evidence.limitation =
+          status >= 200 && status < 400
+            ? "Screenshot is supporting service evidence only; human acceptance remains required."
+            : "Service returned a non-success page; screenshot is gap evidence for human follow-up.";
+        writeServiceEvidenceArtifact(report, evidence);
         report.composeServiceEvidence.summary.servicesVisited += 1;
         if (evidence.artifactConfirmed) {
           report.composeServiceEvidence.summary.artifactsConfirmed += 1;
@@ -718,6 +887,16 @@ async function verifyComposeServiceEvidence(page, data, report) {
 
     if (!captured && !evidence.redactionStatus.startsWith("blocked")) {
       report.composeServiceEvidence.summary.gaps += 1;
+      evidence.evidenceClass = requiresLogin ? "blocked" : "unavailable";
+      evidence.evidenceKind = requiresLogin ? "service-auth-unavailable" : "service-ui-unavailable";
+      evidence.evidenceStatus = "machine-warn";
+      evidence.redactionStatus = requiresLogin ? "not-captured-auth-required-or-unavailable" : "not-captured-service-unavailable";
+      evidence.limitation = requiresLogin
+        ? "Service requires authorised login or SSO evidence that was not available to this machine QA run."
+        : "Service UI/API candidate was not reachable from this machine QA run; generated artifact records the explicit gap.";
+      writeServiceEvidenceArtifact(report, evidence);
+      await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+      report.composeServiceEvidence.summary.artifactsConfirmed += 1;
       addCheck(
         report,
         "warn",
@@ -726,6 +905,13 @@ async function verifyComposeServiceEvidence(page, data, report) {
         "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
         requiresLogin ? "service-auth-unavailable" : "missing-compose-service-screenshot",
       );
+    } else if (!captured && evidence.redactionStatus.startsWith("blocked")) {
+      evidence.evidenceClass = "unsafe-to-screenshot";
+      evidence.evidenceKind = "redaction-blocked-gap-evidence";
+      evidence.evidenceStatus = "machine-fail";
+      evidence.limitation = "Machine QA refused to preserve a screenshot because secret-like material was detected.";
+      writeServiceEvidenceArtifact(report, evidence);
+      await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
     }
     report.composeServiceEvidence.services.push(evidence);
   }
@@ -1249,6 +1435,28 @@ function buildManifests(report) {
     gap: route.result === "pass" ? "" : "route did not pass machine QA",
   }));
   report.serviceManifest = report.composeServiceEvidence.services;
+  report.composedServiceScreenshotManifest = report.composeServiceEvidence.services.map((service) => ({
+    serviceId: service.serviceId,
+    serviceName: service.serviceName,
+    capabilityIds: service.capabilityIds ?? [],
+    scenarioIds: service.scenarioIds ?? [],
+    claimId: `claim-compose-service-${service.serviceId}`,
+    controlRiskMapping: service.complianceClaimSupport ?? service.claimSupported,
+    rolePersonaUsed: service.rolePersona,
+    loginAuthMethodUsed: service.authMethodUsed ?? service.authPath,
+    urlOrEvidenceSurface: service.serviceUrl || service.apiCliArtifactPath || (service.serviceUrls ?? []).join(", "),
+    screenshotPath: service.screenshotPath,
+    screenshotHash: service.screenshotHash || (service.screenshotPath && existsSync(service.screenshotPath) ? contentHash(readFileSync(service.screenshotPath)) : ""),
+    timestamp: service.timestamp,
+    sourceSha: service.sourceGitSha,
+    environment: service.deploymentEnvironment,
+    redactionStatus: service.redactionStatus,
+    syntheticDataConfirmation: service.syntheticDataConfirmation,
+    humanReviewStatus: service.humanReviewStatus,
+    evidenceClass: service.evidenceClass,
+    evidenceStatus: service.evidenceStatus,
+    blockingGap: service.gaps?.length ? service.gaps.join("; ") : "",
+  }));
   report.adapterManifest = report.composeServiceEvidence.services.map((service) => ({
     serviceId: service.serviceId,
     serviceName: service.serviceName,
@@ -1262,6 +1470,25 @@ function buildManifests(report) {
     expectedArtifacts: ["screenshot", "gap record", "chain-of-custody row"],
     failureClassification: service.gaps?.length ? "human-review-required" : "supporting-evidence",
     claimMapping: service.complianceClaimSupport,
+  }));
+  report.semanticCapabilityManifest = report.capabilityResults.map((capability) => ({
+    capabilityId: capability.capabilityId,
+    route: capability.route,
+    result: capability.result,
+    evidenceStatus: capability.result === "pass" ? "machine-pass" : "machine-gap",
+    humanReviewStatus: "human-review-required",
+  }));
+  report.auditObservabilityAlertManifest = {
+    audit: report.matrixResults.filter((row) => row.kind === "audit"),
+    observability: report.matrixResults.filter((row) => row.kind === "observability"),
+    alerts: report.matrixResults.filter((row) => row.kind === "alerts"),
+    result: "machine evidence only; human acceptance remains required",
+  };
+  report.sourceDocumentManifest = report.sourceResults.map((source) => ({
+    path: source.path,
+    route: source.route,
+    result: source.result,
+    readOnly: true,
   }));
   report.controlMap = [
     "ISMS scope/context",
@@ -1348,11 +1575,19 @@ function writeReports(report) {
   const chainPath = join(report.artifactDir, "chain-of-custody.json");
   const commandManifestPath = join(report.artifactDir, "command-manifest.json");
   const serviceManifestPath = join(report.artifactDir, "service-manifest.json");
+  const serviceEvidenceManifestPath = join(report.artifactDir, "service-evidence-manifest.json");
+  const composedServiceScreenshotManifestPath = join(report.artifactDir, "composed-service-screenshot-manifest.json");
   const adapterManifestPath = join(report.artifactDir, "adapter-manifest.json");
   const routeManifestPath = join(report.artifactDir, "route-manifest.json");
+  const routePortAdapterManifestPath = join(report.artifactDir, "route-port-adapter-manifest.json");
+  const semanticCapabilityManifestPath = join(report.artifactDir, "semantic-capability-manifest.json");
+  const auditObservabilityAlertManifestPath = join(report.artifactDir, "audit-observability-alert-manifest.json");
+  const sourceDocumentManifestPath = join(report.artifactDir, "source-document-manifest.json");
   const controlMapPath = join(report.artifactDir, "control-map.json");
   const gapRegisterPath = join(report.artifactDir, "gap-register.json");
+  const correctiveActionsJsonPath = join(report.artifactDir, "corrective-actions.json");
   const humanImportPath = join(report.artifactDir, "human-import-manifest.json");
+  const externalReviewReportPath = join(report.artifactDir, "external-review-report.md");
   writeFileSync(jsonPath, `${JSON.stringify(report, null, 2)}\n`);
   writeFileSync(screenshotManifestPath, `${JSON.stringify({ screenshots: report.screenshots }, null, 2)}\n`);
   writeFileSync(qaRunPath, `${JSON.stringify({
@@ -1378,10 +1613,37 @@ function writeReports(report) {
   writeFileSync(chainPath, `${JSON.stringify({ chainOfCustody: report.chainOfCustody }, null, 2)}\n`);
   writeFileSync(commandManifestPath, `${JSON.stringify({ commands: report.commandManifest }, null, 2)}\n`);
   writeFileSync(serviceManifestPath, `${JSON.stringify({ services: report.serviceManifest }, null, 2)}\n`);
+  writeFileSync(serviceEvidenceManifestPath, `${JSON.stringify({ services: report.serviceManifest }, null, 2)}\n`);
+  writeFileSync(
+    composedServiceScreenshotManifestPath,
+    `${JSON.stringify({ screenshots: report.composedServiceScreenshotManifest }, null, 2)}\n`,
+  );
   writeFileSync(adapterManifestPath, `${JSON.stringify({ adapters: report.adapterManifest }, null, 2)}\n`);
   writeFileSync(routeManifestPath, `${JSON.stringify({ routes: report.routeManifest }, null, 2)}\n`);
+  writeFileSync(
+    routePortAdapterManifestPath,
+    `${JSON.stringify({ routes: report.routeManifest, adapters: report.adapterManifest }, null, 2)}\n`,
+  );
+  writeFileSync(semanticCapabilityManifestPath, `${JSON.stringify({ capabilities: report.semanticCapabilityManifest }, null, 2)}\n`);
+  writeFileSync(
+    auditObservabilityAlertManifestPath,
+    `${JSON.stringify(report.auditObservabilityAlertManifest, null, 2)}\n`,
+  );
+  writeFileSync(sourceDocumentManifestPath, `${JSON.stringify({ sourceDocuments: report.sourceDocumentManifest }, null, 2)}\n`);
   writeFileSync(controlMapPath, `${JSON.stringify({ controls: report.controlMap }, null, 2)}\n`);
   writeFileSync(gapRegisterPath, `${JSON.stringify({ gaps: report.gaps }, null, 2)}\n`);
+  writeFileSync(
+    correctiveActionsJsonPath,
+    `${JSON.stringify({
+      correctiveActions: report.gaps.map((gap, index) => ({
+        id: `corrective-action-${String(index + 1).padStart(3, "0")}`,
+        sourceGapType: gap.gapType,
+        target: gap.target,
+        status: "human-review-required",
+        nextAction: gap.message,
+      })),
+    }, null, 2)}\n`,
+  );
   writeFileSync(humanImportPath, `${JSON.stringify(report.humanImportManifest, null, 2)}\n`);
   const statusRows = Object.entries(report.counts)
     .map(([key, value]) => `| ${key} | ${value} |`)
@@ -1393,7 +1655,10 @@ function writeReports(report) {
     .map((shot) => `| ${shot.route} | ${shot.filePath} | ${shot.timestamp} |`)
     .join("\n");
   const serviceRows = report.composeServiceEvidence.services
-    .map((service) => `| ${service.serviceId} | ${service.rolePersona} | ${(service.serviceUrls ?? []).join(", ")} | ${service.screenshotPath || "missing"} | ${(service.gaps ?? []).join("; ") || "none"} |`)
+    .map(
+      (service) =>
+        `| ${service.serviceId} | ${service.rolePersona} | ${service.evidenceClass} | ${(service.serviceUrls ?? []).join(", ")} | ${service.screenshotPath || service.apiCliArtifactPath || "missing"} | ${(service.gaps ?? []).join("; ") || "none"} |`,
+    )
     .join("\n");
   writeFileSync(
     markdownPath,
@@ -1431,8 +1696,8 @@ ${screenshotRows}
 
 ## Compose Service Evidence
 
-| Service | Role | URLs | Screenshot | Gaps |
-| --- | --- | --- | --- | --- |
+| Service | Role | Evidence class | URLs | Screenshot or artifact | Gaps |
+| --- | --- | --- | --- | --- | --- |
 ${serviceRows}
 
 ## Human Import
@@ -1443,6 +1708,99 @@ Machine acceptance is not automatic. Evidence can be accepted, rejected, annotat
 ## Non-claims
 
 ${report.nonClaimStatement}
+`,
+  );
+  writeFileSync(
+    externalReviewReportPath,
+    `# USF-290 External Review Report
+
+## 1. Executive summary
+
+Machine QA generated a human-reviewable evidence package for ${report.counts.capabilities} capabilities, ${report.counts.services} Compose services, and ${report.counts.testedRoutes} proof cockpit routes.
+
+## 2. Scope and non-claims
+
+${report.nonClaimStatement}
+
+## 3. Environment and deployment identity
+
+Environment: ${report.environment}
+Source Git SHA: ${report.sourceSha}
+Deployment SHA: ${report.deploymentSha}
+Base URL: ${report.baseUrl}
+
+## 4. Source Git SHA and PR chain
+
+Primary issue: ${report.issueId}
+Pull request: ${report.prNumber}
+
+## 5. Semantic and capability portfolio summary
+
+The semantic capability manifest records ${report.semanticCapabilityManifest.length} capability evidence rows.
+
+## 6. Service catalogue summary
+
+The service evidence manifest records ${report.serviceManifest.length} Compose-backed services with direct screenshot, API/CLI equivalent, unavailable, blocked, or unsafe-to-screenshot classifications.
+
+## 7. Route, port, adapter, and provider summary
+
+Route and adapter evidence is recorded in route-port-adapter-manifest.json. Providers and gateways are evidence sources only, not semantic authority.
+
+## 8. Compose service evidence summary
+
+Service UI screenshots captured: ${report.counts.serviceEvidenceScreenshots}
+Service artifacts confirmed: ${report.composeServiceEvidence.summary.artifactsConfirmed}
+Service evidence gaps: ${report.composeServiceEvidence.summary.gaps}
+Composed Service screenshot manifest: composed-service-screenshot-manifest.json
+
+## 9. Screenshots and service artifact inventory
+
+Screenshot manifest entries: ${report.screenshots.length}
+Service artifact rows: ${report.serviceManifest.length}
+
+## 10. Machine QA method
+
+Playwright visits proof routes, submits representative QA actions, checks source allow-list handling, generates screenshots, builds chain-of-custody records, and records explicit gaps.
+
+## 11. Human review method
+
+Machine evidence is imported through /proof/import and /proof/review. Matthew can accept, reject, annotate, request re-test, mark corrective action, or accept residual risk per evidence item.
+
+## 12. Chain of custody
+
+Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, redaction status, limitations, and human review status.
+
+## 13. Audit, log, metric, trace, and alert coverage
+
+Audit, observability, and alert rows are normalized in audit-observability-alert-manifest.json. Missing rows remain explicit gaps and do not become acceptance.
+
+## 14. Fixture, synthetic data, and reset coverage
+
+Fixture evidence remains synthetic-only and records no-real-tenant-data posture. No real tenant data is used.
+
+## 15. Enterprise and ISO-style support mapping
+
+Control support rows assist later ISO-style review but do not claim ISO certification, SOC readiness, or enterprise production readiness.
+
+## 16. Risk and control mapping
+
+The control map links machine evidence to control-support rows and residual gaps for human review.
+
+## 17. Known gaps and corrective actions
+
+Gap register entries: ${report.gaps.length}. Corrective actions are generated from gaps and require human review.
+
+## 18. Evidence freshness and re-test commands
+
+Primary re-test command: corepack pnpm proof-cockpit:machine-qa
+
+## 19. Human acceptance and import status
+
+Machine evidence is not automatically accepted. Final human acceptance remains disabled until a later authorised pass.
+
+## 20. Final handoff statement
+
+This bundle supports selective human reenactment and evidence acceptance. It does not claim readiness beyond the explicit non-claims above.
 `,
   );
   writeFileSync(
@@ -1473,8 +1831,10 @@ ${report.nonClaimStatement}
     ["README.md", `# USF-290 External Review Bundle\n\nThis bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.\n`],
     ["executive-summary.md", `# Executive Summary\n\nMachine QA generated evidence for ${report.counts.capabilities} capabilities, ${report.counts.services} services, and ${report.counts.testedRoutes} routes. Human acceptance remains required.\n`],
     ["detailed-report.md", readFileSync(markdownPath, "utf8")],
+    ["external-review-report.md", readFileSync(externalReviewReportPath, "utf8")],
     ["gap-register.md", report.gaps.map((gap) => `- ${gap.gapType}: ${gap.target} - ${gap.message}`).join("\n") || "No gaps recorded.\n"],
     ["corrective-actions.md", "Corrective actions are created by human import decisions and remain pending until recorded in /proof/review/corrective-actions.\n"],
+    ["corrective-actions.json", readFileSync(correctiveActionsJsonPath, "utf8")],
     ["non-claims.md", `${report.nonClaimStatement}\n`],
     ["human-import-summary.md", `Human import route: /proof/import/${report.qaRun}\nFinal acceptance automatic: false\n`],
     ["qa-run.json", readFileSync(qaRunPath, "utf8")],
@@ -1483,8 +1843,14 @@ ${report.nonClaimStatement}
     ["screenshot-manifest.json", readFileSync(screenshotManifestPath, "utf8")],
     ["command-manifest.json", readFileSync(commandManifestPath, "utf8")],
     ["service-manifest.json", readFileSync(serviceManifestPath, "utf8")],
+    ["service-evidence-manifest.json", readFileSync(serviceEvidenceManifestPath, "utf8")],
+    ["composed-service-screenshot-manifest.json", readFileSync(composedServiceScreenshotManifestPath, "utf8")],
     ["adapter-manifest.json", readFileSync(adapterManifestPath, "utf8")],
     ["route-manifest.json", readFileSync(routeManifestPath, "utf8")],
+    ["route-port-adapter-manifest.json", readFileSync(routePortAdapterManifestPath, "utf8")],
+    ["semantic-capability-manifest.json", readFileSync(semanticCapabilityManifestPath, "utf8")],
+    ["audit-observability-alert-manifest.json", readFileSync(auditObservabilityAlertManifestPath, "utf8")],
+    ["source-document-manifest.json", readFileSync(sourceDocumentManifestPath, "utf8")],
     ["control-map.json", readFileSync(controlMapPath, "utf8")],
     ["gap-register.json", readFileSync(gapRegisterPath, "utf8")],
     ["human-import-manifest.json", readFileSync(humanImportPath, "utf8")],
@@ -1493,6 +1859,14 @@ ${report.nonClaimStatement}
     const target = join(bundleDir, fileName);
     writeFileSync(target, content);
     report.externalReviewBundle.files.push(target);
+  }
+  for (const service of report.serviceManifest) {
+    if (service.apiCliArtifactPath && existsSync(service.apiCliArtifactPath)) {
+      const fileName = service.apiCliArtifactPath.split("/").pop();
+      const target = join(bundleDir, "service-evidence", fileName);
+      writeFileSync(target, readFileSync(service.apiCliArtifactPath, "utf8"));
+      report.externalReviewBundle.files.push(target);
+    }
   }
   report.externalReviewBundle.generated = true;
   writeFileSync(jsonPath, `${JSON.stringify(report, null, 2)}\n`);
@@ -1619,6 +1993,7 @@ async function main() {
       evidenceIndex: paths.evidenceIndexPath,
       chainOfCustody: paths.chainPath,
       serviceManifest: paths.serviceManifestPath,
+      serviceEvidenceManifest: join(paths.artifactDir ?? artifactDir, "service-evidence-manifest.json"),
       adapterManifest: paths.adapterManifestPath,
       externalReviewBundle: paths.bundleDir,
       routes: report.counts.testedRoutes,

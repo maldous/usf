@@ -819,6 +819,10 @@ function layout(title, body) {
 <main>
 ${body}
 </main>
+<footer>
+<h2>Global non-claim boundary</h2>
+<p>This proof cockpit does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, full React product parity, or USF-290 completion.</p>
+</footer>
 </body>
 </html>
 `;
