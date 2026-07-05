@@ -713,6 +713,18 @@ async function screenshot(page, baseUrl, report, route, label) {
     timestamp: new Date().toISOString(),
     sourceSha: report.sourceSha,
     result: "pass",
+    redactionStatus: "redaction-status-recorded-in-machine-qa",
+    syntheticDataConfirmation: "Synthetic-data posture is recorded in the machine QA manifest.",
+    humanReviewStatus: "human-review-required",
+    evidenceClass: "screenshot",
+    authPosture: "not-applicable",
+    loginMethod: "Not applicable - route screenshot",
+    credentialSourceRef: "Not applicable - no credential value recorded",
+    humanReenactmentInstruction:
+      "Open the related proof route or service evidence, verify the screenshot hash, source SHA, run ID, redaction posture, and synthetic-data boundary, then record accept, reject, annotate, retest, corrective-action, or note.",
+    finalAcceptanceBlocked: false,
+    nextSafeAction:
+      "Human reviewer samples the screenshot, related evidence, chain of custody, and non-claim boundary before recording a decision.",
   };
   report.screenshots.push(entry);
   report.counts.screenshots = report.screenshots.length;

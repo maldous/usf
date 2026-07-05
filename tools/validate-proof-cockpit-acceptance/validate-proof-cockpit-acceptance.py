@@ -876,8 +876,11 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["store"]["secretLeak"] = "API_TOKEN=abcdefghijklmnopqrstuvwxyz123456"
     elif kind == "chain-of-custody-hash-mismatch":
         rows = mutated.get("chainOfCustody", {}).get("chainOfCustody", [])
-        if rows:
-            rows[0]["artifactHash"] = "0" * 64
+        for row in rows:
+            path = resolve_artifact_path(row.get("evidenceArtifact", ""), mutated.get("artifactDir"))
+            if path and path.exists() and path.is_file() and row.get("artifactHash"):
+                row["artifactHash"] = "0" * 64
+                break
         else:
             mutated["finalReport"] = mutated["finalReport"].replace("content hash", "content digest")
     elif kind == "planted-defect-coverage-missing":
