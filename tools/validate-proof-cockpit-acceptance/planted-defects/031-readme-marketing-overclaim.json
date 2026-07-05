@@ -1,0 +1,7 @@
+{
+  "id": "031-readme-marketing-overclaim",
+  "expectedRule": "USF-PROOF-COCKPIT-004",
+  "fixture": {
+    "kind": "readme-marketing-overclaim"
+  }
+}

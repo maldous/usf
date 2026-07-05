@@ -15,6 +15,7 @@ product readiness.
 | `apps/staging-proof-cockpit/src/server.mjs` | new-with-rationale | USF-290 plain HTML proof cockpit scope and USF-native closure evidence import requirements | Implements the server-rendered proof cockpit, evidence import pages, source viewer, action ledger, enterprise evidence pages, and current foundation substrate closure route. |
 | `apps/staging-proof-cockpit/src/smoke.mjs` | new-with-rationale | USF-290 route coverage and cockpit integrity requirements | Provides fast route, capability-count, source-link, and non-claim smoke checks for the cockpit. |
 | `apps/staging-proof-cockpit/src/machine-qa.mjs` | new-with-rationale | USF-290 durable machine QA evidence architecture and external-review bundle requirements | Generates route, capability, service, evidence, action-ledger, screenshot, chain-of-custody, and gap-report evidence for later human review. |
+| `apps/staging-proof-cockpit/src/promote.mjs` | new-with-rationale | Incremental acceptance loop and automated evidence promotion requirements | Deterministically promotes a machine QA run into the durable evidence store (latestMachineRun, machineRunHistory, supersession) and repoints the external-review bundle, removing the previously by-hand promotion step. |
 
 ## Boundary Confirmation
 

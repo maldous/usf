@@ -1,0 +1,11 @@
+{
+  "expectedRuleId": "USF-COMPOSE-038",
+  "servicePatches": [
+    {
+      "serviceId": "public-proof-origin",
+      "values": {
+        "usfCapabilityRefs": ["semantic-contract.does-not-exist"]
+      }
+    }
+  ]
+}

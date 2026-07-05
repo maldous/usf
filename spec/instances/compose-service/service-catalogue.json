@@ -11572,7 +11572,7 @@
       ],
       "reactComposeServiceNames": [],
       "reactParityRows": [],
-      "usfCapabilityRefs": ["semantic-contract.public-fqdn-proof-origin"],
+      "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
           "environmentScope": "dev",

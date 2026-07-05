@@ -114,7 +114,8 @@
     "compose:ports:staging": "python3 tools/validate-compose/check-compose-ports.py staging --json",
     "compose:ports:profiles": "python3 tools/validate-compose/check-compose-ports.py profiles --json",
     "compose:hardening": "python3 tools/validate-compose/validate-compose.py hardening --json",
-    "compose:security": "python3 tools/validate-compose/validate-compose.py security --json"
+    "compose:security": "python3 tools/validate-compose/validate-compose.py security --json",
+    "proof-cockpit:promote": "node apps/staging-proof-cockpit/src/promote.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1077.0",
