@@ -174,6 +174,7 @@ REQUIRED_PLANTED_KINDS = [
     "auth-required-service-without-authenticated-screenshot",
     "service-missing-auth-posture",
     "openbao-credential-evidence-missing",
+    "secret-literal-value-exposed",
 ]
 
 AUTH_POSTURES = {
@@ -324,6 +325,33 @@ def text_blob(data: dict[str, Any]) -> str:
             data["finalReport"],
         ]
     )
+
+
+SECRET_ASSIGNMENT_RE = re.compile(
+    r"(?i)\b(?P<key>[A-Z0-9_]*TOKEN|password)\b\s*[:=]\s*(?P<quote>[\"']?)(?P<value>[A-Za-z0-9._~+/=-]{12,})(?P=quote)"
+)
+
+
+def is_symbolic_secret_reference(value: str) -> bool:
+    """Allow validator source identifiers while still blocking literal secrets."""
+    if not re.fullmatch(r"[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)*", value):
+        return False
+    lowered = value.lower()
+    if any(marker in lowered for marker in ["credential", "openbao", "operator", "password", "secret", "token"]):
+        return True
+    return bool(re.fullmatch(r"[A-Z0-9_]+", value))
+
+
+def secret_literal_markers(text: str) -> list[str]:
+    markers: list[str] = []
+    if re.search(r"-----BEGIN [A-Z ]*PRIVATE KEY-----", text):
+        markers.append("private-key-block")
+    for match in SECRET_ASSIGNMENT_RE.finditer(text):
+        value = match.group("value")
+        if not match.group("quote") and is_symbolic_secret_reference(value):
+            continue
+        markers.append(f"{match.group('key')} literal assignment")
+    return markers
 
 
 def rule_001_model(data: dict[str, Any]) -> list[dict[str, str]]:
@@ -594,15 +622,9 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
             for field in ["authPostureConfigPath", "authPostureRationale"]:
                 if not service.get(field):
                     failures.append(finding("USF-PROOF-COCKPIT-010", f"Anonymous/no-auth posture missing {field}", service_id))
-    secret_patterns = [
-        r"-----BEGIN [A-Z ]*PRIVATE KEY-----",
-        r"\b[A-Z0-9_]*TOKEN\s*[:=]\s*[A-Za-z0-9._~+/=-]{24,}",
-        r"\bpassword\s*[:=]\s*[A-Za-z0-9._~+/=-]{12,}",
-    ]
     text = text_blob(data)
-    for pattern in secret_patterns:
-        if re.search(pattern, text):
-            failures.append(finding("USF-PROOF-COCKPIT-010", f"Secret-like marker present in proof cockpit evidence: {pattern}"))
+    for marker in secret_literal_markers(text):
+        failures.append(finding("USF-PROOF-COCKPIT-010", f"Secret-like literal present in proof cockpit evidence: {marker}"))
     return failures
 
 
@@ -746,6 +768,8 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         service["credentialSourceRef"] = ""
         service["openBaoLogicalSecretRef"] = ""
         service["openBaoAuditEvidence"] = ""
+    elif kind == "secret-literal-value-exposed":
+        mutated["store"]["secretLeak"] = "API_TOKEN=abcdefghijklmnopqrstuvwxyz123456"
     return mutated
 
 
