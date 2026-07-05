@@ -415,7 +415,8 @@ async function visitRoute(page, baseUrl, report, route) {
       return result;
     }
     result.plainHtml = true;
-    result.text = text;
+    result.textLength = text.length;
+    result.textHash = contentHash(text);
     result.result = "pass";
     addCheck(report, "pass", "route", route, "Route returned semantic HTML without script/framework markers.");
     report.routeResults.push(result);
