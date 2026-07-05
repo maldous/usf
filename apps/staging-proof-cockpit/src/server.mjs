@@ -45,6 +45,16 @@ const ROUTES = Object.freeze([
   "/proof/qa",
   "/proof/actions",
   "/proof/actions/:actionId",
+  "/proof/machine-runs",
+  "/proof/machine-runs/:runId",
+  "/proof/import",
+  "/proof/import/:runId",
+  "/proof/import/:runId/capabilities/:capabilityId",
+  "/proof/review",
+  "/proof/review/gaps",
+  "/proof/review/nonconformities",
+  "/proof/review/corrective-actions",
+  "/proof/export",
   "/proof/capabilities",
   "/proof/capabilities/:capabilityId",
   "/proof/services",
@@ -97,6 +107,16 @@ const ROUTE_SUMMARIES = Object.freeze([
   ["/proof/qa", "Formal human QA workflow", "Follow the per-capability confirmation sequence and stop conditions before signoff.", "human action record, screenshot, correlation id, immutable artifact"],
   ["/proof/actions", "Recorded QA action ledger", "Review submitted browser QA actions, blockers, evidence links, and confirmation check states.", "file-backed local QA records; not immutable final evidence"],
   ["/proof/actions/:actionId", "QA action detail", "Review one submitted action and decide whether more evidence or correction is needed.", "operator-entered action fields, source SHA, timestamp"],
+  ["/proof/machine-runs", "Machine QA run index", "Import the latest machine evidence bundle, compare it with prior runs, and inspect run status.", "qa-run manifest, report links, import status"],
+  ["/proof/machine-runs/:runId", "Machine QA run detail", "Review machine coverage, evidence manifests, gaps, and chain of custody for a selected run.", "run metadata, manifests, screenshots, chain-of-custody"],
+  ["/proof/import", "Machine evidence import", "Load a machine QA run for human review without automatic acceptance.", "human import manifest, diff placeholder, action ledger"],
+  ["/proof/import/:runId", "Machine run import detail", "Accept, reject, annotate, defer, or request re-test for machine evidence.", "human import decision records"],
+  ["/proof/import/:runId/capabilities/:capabilityId", "Capability evidence import", "Review per-capability machine evidence and record Matthew's human decision.", "capability evidence, screenshots, gaps, decision form"],
+  ["/proof/review", "Human evidence review hub", "Triage machine gaps, nonconformities, corrective actions, stale evidence, and residual-risk decisions.", "gap register, nonconformity register, corrective action log"],
+  ["/proof/review/gaps", "Gap register", "Review machine-found gaps and decide whether to fix, defer, accept risk, or re-test.", "typed gap records"],
+  ["/proof/review/nonconformities", "Nonconformities", "Record evidence issues that prevent acceptance and require corrective action.", "nonconformity rows, owner, due date"],
+  ["/proof/review/corrective-actions", "Corrective actions", "Track fixes, re-test commands, and validation evidence for rejected or failed machine evidence.", "corrective action rows"],
+  ["/proof/export", "External-review export", "Prepare the portable evidence bundle for external reviewer consumption.", "README, executive summary, detailed report, manifests, screenshots"],
   ["/proof/capabilities", "All capability inventory", "Choose a capability, then open its service, scenario, evidence, audit, and observability links.", "75 capability rows, domain grouping, current prototype state"],
   ["/proof/capabilities/:capabilityId", "Capability detail", "Execute happy and negative path placeholders, verify services, and collect evidence.", "semantic contract, role, service, scenario, fixture, audit, alert, signoff placeholders"],
   ["/proof/services", "Compose service click-through inventory", "Open each required backing service page before a service-backed capability is accepted.", "service catalogue row, composed integration row, lifecycle command, proof command"],
@@ -300,7 +320,7 @@ const MACHINE_PROOF_WORK_MAP = Object.freeze([
   [
     "Enterprise control-support foundation",
     "USF-272",
-    "docs/architecture/enterprise-origin-server-semantics.json",
+    "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
     "Confirm ISMS-supporting control evidence exists where relevant, without treating it as ISO certification or SOC readiness.",
   ],
 ]);
@@ -357,6 +377,15 @@ const QA_ACTION_TYPES = Object.freeze([
   "enterprise-evidence-review",
   "source-document-review",
   "blocker-record",
+  "machine-run-viewed",
+  "machine-evidence-accepted",
+  "machine-evidence-rejected",
+  "human-note-added",
+  "retest-requested",
+  "residual-risk-accepted",
+  "corrective-action-created",
+  "report-exported",
+  "human-final-decision",
 ]);
 
 const QA_OUTCOMES = Object.freeze([
@@ -365,6 +394,11 @@ const QA_OUTCOMES = Object.freeze([
   "needs-review",
   "blocked",
   "not-applicable-with-rationale",
+  "human-accepted",
+  "human-rejected",
+  "corrective-action-required",
+  "retest-requested",
+  "residual-risk-accepted",
 ]);
 
 const SOURCE_DOCUMENTS = Object.freeze([
@@ -378,6 +412,8 @@ const SOURCE_DOCUMENTS = Object.freeze([
   ["Missing evidence planted defects gate", "docs/architecture/missing-evidence-planted-defects-regression-gate.json"],
   ["Test completion staging-entry gate", "docs/architecture/test-environment-completion-and-staging-entry-gate.json"],
   ["Pre-staging external HTTP gate", "docs/architecture/pre-staging-external-http-semantics-readiness-gate.json"],
+  ["Proof cockpit machine QA evidence model", "docs/architecture/proof-cockpit-machine-qa-evidence-model.json"],
+  ["Proof cockpit machine QA evidence model note", "docs/architecture/proof-cockpit-machine-qa-evidence-model.md"],
   ["Capability source coverage matrix", "docs/architecture/capability-source-coverage-matrix.md"],
   ["Composed service integration matrix", "docs/architecture/composed-service-integration-test-matrix.json"],
   ["Service catalogue", "spec/instances/compose-service/service-catalogue.json"],
@@ -553,7 +589,7 @@ function loadServices() {
   };
 }
 
-function buildData() {
+export function buildData() {
   const contracts = loadSemanticContracts();
   const serviceCatalogue = loadServices();
   const capabilities = parseMatrixCapabilities().map((capability) => {
@@ -608,6 +644,25 @@ function buildData() {
     });
   }
   return { capabilities, contracts, scenarios, evidence, ...serviceCatalogue };
+}
+
+export function getProofCockpitManifest() {
+  return {
+    issueId: LINEAR_ISSUE,
+    routes: [...ROUTES],
+    routeSummaries: ROUTE_SUMMARIES.map(([route, delivers, humanAction, evidence]) => ({
+      route,
+      delivers,
+      humanAction,
+      evidence,
+    })),
+    roles: [...ROLES],
+    nonClaims: [...NON_CLAIMS],
+    enterpriseTopics: ENTERPRISE_TOPICS.map(([slug, title, purpose]) => ({ slug, title, purpose })),
+    sourceDocuments: SOURCE_DOCUMENTS.map(([title, path]) => ({ title, path })),
+    actionTypes: [...QA_ACTION_TYPES],
+    qaOutcomes: [...QA_OUTCOMES],
+  };
 }
 
 function servicesForCapability(capability, servicesById) {
@@ -1032,7 +1087,295 @@ ${nonClaimsBlock()}`,
   );
 }
 
+function machineRunRows(state) {
+  const machineActions = state.actions.filter((action) =>
+    [
+      "machine-run-viewed",
+      "machine-evidence-accepted",
+      "machine-evidence-rejected",
+      "retest-requested",
+      "residual-risk-accepted",
+      "corrective-action-created",
+      "report-exported",
+    ].includes(action.actionType),
+  );
+  if (!machineActions.length) {
+    return [
+      `<tr><td>latest-machine-qa</td><td>not-imported</td><td>Use corepack pnpm proof-cockpit:machine-qa, then review the generated bundle.</td><td><a href="/proof/import/latest-machine-qa">import</a></td></tr>`,
+    ];
+  }
+  return machineActions.slice(0, 25).map((action) => `<tr>
+<td><a href="/proof/machine-runs/${escapeHtml(action.id)}">${escapeHtml(action.id)}</a></td>
+<td>${escapeHtml(action.createdAt)}</td>
+<td>${escapeHtml(action.actionType)}</td>
+<td>${escapeHtml(action.outcome)}</td>
+</tr>`);
+}
+
+function renderMachineRuns(state) {
+  return layout(
+    "Machine QA runs",
+    `<p>Machine QA runs are importable evidence packages. A run can pre-fill evidence and gaps, but it cannot complete Matthew's final acceptance automatically.</p>
+<section>
+<h2>Expected generated manifests</h2>
+${unorderedList([
+      "qa-run.json",
+      "evidence-index.json",
+      "screenshot-manifest.json",
+      "command-manifest.json",
+      "service-manifest.json",
+      "adapter-manifest.json",
+      "route-manifest.json",
+      "control-map.json",
+      "gap-register.json",
+      "human-import-manifest.json",
+      "chain-of-custody.json",
+    ])}
+</section>
+<section>
+<h2>Runs and import actions</h2>
+${table(["Run or action", "Created", "State", "Import/review"], machineRunRows(state))}
+</section>
+<section>
+<h2>Record machine run review</h2>
+${actionForm({
+      actionType: "machine-run-viewed",
+      actionName: "machine QA run viewed",
+      sourceUrl: "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+      returnTo: "/proof/machine-runs",
+    })}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderMachineRun(state, runId) {
+  const action = state.actions.find((candidate) => candidate.id === runId);
+  const importedState = action ? "ledger-action-found" : "generated-run-placeholder";
+  return layout(
+    `Machine QA run ${runId}`,
+    `<p><a href="/proof/machine-runs">Back to machine runs</a></p>
+<table><tbody>
+<tr><th>Run id</th><td>${escapeHtml(runId)}</td></tr>
+<tr><th>Import state</th><td>${escapeHtml(importedState)}</td></tr>
+<tr><th>Schema version</th><td>proof-cockpit-machine-qa-evidence-v1</td></tr>
+<tr><th>Human acceptance</th><td>not automatic; Matthew decision required per capability or residual risk</td></tr>
+<tr><th>Evidence model</th><td>${sourcePathCell("docs/architecture/proof-cockpit-machine-qa-evidence-model.json")}</td></tr>
+</tbody></table>
+<section>
+<h2>Chain of custody fields</h2>
+${unorderedList([
+      "claim text",
+      "semantic source",
+      "test or scenario used",
+      "actor/tool and role/persona",
+      "service, route, API, port, or adapter",
+      "artifact path and hash",
+      "timestamp, environment, source SHA, deployment SHA",
+      "validation result",
+      "human import or acceptance status",
+      "known limitations",
+    ])}
+</section>
+<section>
+<h2>Import this run</h2>
+<p><a href="/proof/import/${escapeHtml(runId)}">Open import workflow for ${escapeHtml(runId)}</a></p>
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderImportIndex(state) {
+  return layout(
+    "Machine evidence import",
+    `<p>Use this page to import a machine QA bundle into the human review workflow. Import records are audited separately from machine results.</p>
+<section>
+<h2>Import workflow</h2>
+${orderedList([
+      "Load the latest machine QA run and inspect summary counts.",
+      "Compare gaps and evidence with the previous accepted run where available.",
+      "Review per-capability evidence, screenshots, service evidence, and chain-of-custody rows.",
+      "Accept, reject, annotate, defer, accept residual risk, or request re-test.",
+      "Export a human-reviewed report only after the decisions are recorded.",
+    ])}
+</section>
+<section>
+<h2>Available run placeholder</h2>
+<p><a href="/proof/import/latest-machine-qa">Import latest-machine-qa</a></p>
+</section>
+<section>
+<h2>Recent import decisions</h2>
+${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 20))}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderImportRun(data, runId) {
+  const rows = data.capabilities.slice(0, 75).map((capability) => `<tr>
+<td><a href="/proof/import/${escapeHtml(runId)}/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.id)}</a></td>
+<td>${escapeHtml(capability.name)}</td>
+<td>${escapeHtml(capability.domain)}</td>
+<td>human-review-required</td>
+<td>${capability.serviceRefs.length}</td>
+<td>${capability.scenarioIds.length}</td>
+</tr>`);
+  return layout(
+    `Import run ${runId}`,
+    `<p><a href="/proof/import">Back to import index</a></p>
+<p>This run import view is a human decision surface. Machine evidence may be accepted only after capability-specific review.</p>
+<section>
+<h2>Capability import review</h2>
+${table(["Capability", "Name", "Domain", "Human import state", "Services", "Scenarios"], rows)}
+</section>
+<section>
+<h2>Bulk acceptance boundary</h2>
+<p><label><input type="checkbox" disabled> Bulk acceptance available only when all machine checks pass and no human decision, gap, stale evidence, or residual risk remains.</label></p>
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderImportCapability(data, runId, capabilityId) {
+  const capability = data.capabilities.find((candidate) => candidate.id === capabilityId);
+  if (!capability) {
+    return notFound(`Capability ${capabilityId} was not found for import.`);
+  }
+  const serviceRows = capability.serviceRefs.length
+    ? capability.serviceRefs.map((service) => `<tr>
+<td>${serviceLink(service)}</td>
+<td>serviceEvidence</td>
+<td>human-review-required</td>
+<td>machine screenshot or API evidence required before acceptance</td>
+</tr>`)
+    : [`<tr><td colspan="4">No mapped service evidence. This is a human-review gap.</td></tr>`];
+  return layout(
+    `Import ${capability.name}`,
+    `<p><a href="/proof/import/${escapeHtml(runId)}">Back to run import</a></p>
+<table><tbody>
+<tr><th>Run id</th><td>${escapeHtml(runId)}</td></tr>
+<tr><th>Capability id</th><td>${escapeHtml(capability.id)}</td></tr>
+<tr><th>Domain</th><td>${escapeHtml(capability.domain)}</td></tr>
+<tr><th>Semantic target</th><td>${escapeHtml(capability.semanticTarget)}</td></tr>
+<tr><th>Human import status</th><td>human-review-required</td></tr>
+</tbody></table>
+<section>
+<h2>Evidence decision table</h2>
+${table(["Target", "Evidence type", "Machine state", "Human decision needed"], [
+      `<tr><td>${escapeHtml(capability.id)}</td><td>capabilityEvidence</td><td>machine-generated or placeholder</td><td>accept, reject, annotate, defer, or request re-test</td></tr>`,
+      `<tr><td>${escapeHtml(capability.scenarioIds[0])}</td><td>scenarioEvidence</td><td>machine-generated or placeholder</td><td>verify steps, role, tenant, audit, observability, alert, fixture, screenshot</td></tr>`,
+      `<tr><td>${escapeHtml(capability.scenarioIds[1])}</td><td>negativeProof</td><td>machine-generated or placeholder</td><td>verify denial or failure path evidence</td></tr>`,
+      ...serviceRows,
+    ])}
+</section>
+<section>
+<h2>Record human import decision</h2>
+${actionForm({
+      actionType: "machine-evidence-accepted",
+      capabilityId: capability.id,
+      actionName: `review machine evidence for ${capability.name}`,
+      sourceUrl: "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+      evidenceUrl: `/proof/import/${runId}/capabilities/${capability.id}`,
+      returnTo: `/proof/import/${runId}/capabilities/${capability.id}`,
+    })}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function reviewRows(kind) {
+  const rows = {
+    gaps: [
+      ["missing-compose-service-screenshot", "Service console screenshot or API evidence is not captured.", "service owner", "run service adapter or record authorised manual evidence"],
+      ["human-decision-required", "Machine evidence cannot make final acceptance.", "Matthew", "accept, reject, annotate, defer, or request re-test"],
+      ["service-auth-unavailable", "Service requires SSO or authorised staging-safe service login.", "platform operator", "provide safe account or mark gap blocking acceptance"],
+    ],
+    nonconformities: [
+      ["machine-evidence-incomplete", "Evidence chain cannot support the claim.", "auditor", "create corrective action"],
+      ["stale-evidence", "Evidence captured after reviewAfter date or against old SHA.", "auditor", "request re-test"],
+    ],
+    correctiveActions: [
+      ["service-adapter-needed", "Implement or configure missing service adapter.", "platform operator", "re-run proof-cockpit:machine-qa"],
+      ["capability-evidence-needed", "Perform missing human QA action for capability.", "capability owner", "record action and attach evidence"],
+    ],
+  }[kind];
+  return rows.map(([id, description, owner, nextAction]) => `<tr>
+<td>${escapeHtml(id)}</td>
+<td>${escapeHtml(description)}</td>
+<td>${escapeHtml(owner)}</td>
+<td>${escapeHtml(nextAction)}</td>
+</tr>`);
+}
+
+function renderReview(kind = "index") {
+  if (kind === "gaps") {
+    return layout("Machine QA gap register", `${table(["Gap", "Description", "Owner", "Next action"], reviewRows("gaps"))}${nonClaimsBlock()}`);
+  }
+  if (kind === "nonconformities") {
+    return layout("Nonconformities", `${table(["Nonconformity", "Description", "Owner", "Next action"], reviewRows("nonconformities"))}${nonClaimsBlock()}`);
+  }
+  if (kind === "corrective-actions") {
+    return layout("Corrective actions", `${table(["Corrective action", "Description", "Owner", "Re-test"], reviewRows("correctiveActions"))}${nonClaimsBlock()}`);
+  }
+  return layout(
+    "Machine QA review",
+    `<p>Review machine evidence, gaps, nonconformities, corrective actions, stale evidence, and residual-risk decisions here.</p>
+<ul>
+<li><a href="/proof/review/gaps">Gap register</a></li>
+<li><a href="/proof/review/nonconformities">Nonconformities</a></li>
+<li><a href="/proof/review/corrective-actions">Corrective actions</a></li>
+<li><a href="/proof/export">External-review export</a></li>
+</ul>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderExport() {
+  return layout(
+    "External-review export",
+    `<p>The machine QA command produces a portable evidence bundle for external reviewers. Exporting from the browser records a human action but does not make final acceptance automatic.</p>
+<section>
+<h2>Bundle layout</h2>
+${unorderedList([
+      "README.md",
+      "executive-summary.md",
+      "detailed-report.md",
+      "qa-run.json",
+      "evidence-index.json",
+      "chain-of-custody.json",
+      "screenshots/",
+      "page-html/",
+      "network/",
+      "console/",
+      "commands/",
+      "service-evidence/",
+      "source-documents/",
+      "gap-register.md",
+      "corrective-actions.md",
+      "non-claims.md",
+      "human-import-summary.md",
+    ])}
+</section>
+<section>
+<h2>Record export review</h2>
+${actionForm({
+      actionType: "report-exported",
+      actionName: "external-review evidence bundle exported",
+      sourceUrl: "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+      returnTo: "/proof/export",
+    })}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
 function routeToLink(route) {
+  if (route.includes(":runId") && route.includes(":capabilityId")) {
+    return `${escapeHtml(route)} - dynamic capability import detail from <a href="/proof/import/latest-machine-qa">machine import</a>`;
+  }
+  if (route.includes(":runId")) {
+    return `${escapeHtml(route)} - dynamic machine run detail from <a href="/proof/machine-runs">machine runs</a>`;
+  }
   if (route.includes(":capabilityId")) {
     return `${escapeHtml(route)} - dynamic detail from <a href="/proof/capabilities">capability list</a>`;
   }
@@ -1798,6 +2141,38 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
   }
   if (routePath.startsWith("/proof/actions/")) {
     return page(renderAction(state, decodeURIComponent(routePath.slice("/proof/actions/".length))));
+  }
+  if (routePath === "/proof/machine-runs") {
+    return html(renderMachineRuns(state));
+  }
+  if (routePath.startsWith("/proof/machine-runs/")) {
+    return page(renderMachineRun(state, decodeURIComponent(routePath.slice("/proof/machine-runs/".length))));
+  }
+  if (routePath === "/proof/import") {
+    return html(renderImportIndex(state));
+  }
+  if (routePath.startsWith("/proof/import/")) {
+    const parts = routePath.slice("/proof/import/".length).split("/");
+    const runId = decodeURIComponent(parts[0] ?? "");
+    if (parts[1] === "capabilities" && parts[2]) {
+      return page(renderImportCapability(data, runId, decodeURIComponent(parts[2])));
+    }
+    return page(renderImportRun(data, runId));
+  }
+  if (routePath === "/proof/review") {
+    return html(renderReview());
+  }
+  if (routePath === "/proof/review/gaps") {
+    return html(renderReview("gaps"));
+  }
+  if (routePath === "/proof/review/nonconformities") {
+    return html(renderReview("nonconformities"));
+  }
+  if (routePath === "/proof/review/corrective-actions") {
+    return html(renderReview("corrective-actions"));
+  }
+  if (routePath === "/proof/export") {
+    return html(renderExport());
   }
   if (routePath === "/proof/capabilities") {
     return html(renderCapabilities(data));
