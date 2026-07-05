@@ -10,7 +10,7 @@
 //
 // Usage: node apps/staging-proof-cockpit/src/promote.mjs [--run-dir <path>]
 
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
 
 const ROOT = new URL("../../..", import.meta.url).pathname;
@@ -89,6 +89,15 @@ export function computePromotion(store, report, artifactDir) {
   if (!next.machineRunHistory.some((run) => run.runId === newLatest.runId)) {
     next.machineRunHistory.push(newLatest);
   }
+  // Retention: keep only the current and immediately-prior run payloads. Older
+  // runs remain in machineRunHistory (identity, source SHA, counts, supersession
+  // are preserved) but are marked payloadPruned so history never dangles.
+  const keepArtifactDirs = new Set(
+    [newLatest.artifactDir, prior?.artifactDir].filter(Boolean),
+  );
+  next.machineRunHistory = next.machineRunHistory.map((run) =>
+    keepArtifactDirs.has(run.artifactDir) ? { ...run, payloadPruned: false } : { ...run, payloadPruned: true },
+  );
   if (prior && prior.runId && prior.runId !== newLatest.runId) {
     next.supersessionHistory = [
       ...(store.supersessionHistory ?? []),
@@ -135,9 +144,21 @@ function main() {
     writeFileSync(BUNDLE_MANIFEST_PATH, manifest.split(priorArtifactTs).join(ts));
   }
 
+  // Retention: keep only the current and immediately-prior run payloads on disk.
+  const keep = new Set([ts, priorArtifactTs].filter(Boolean));
+  const pruned = [];
+  for (const name of readdirSync(MACHINE_RUNS_DIR)) {
+    if (keep.has(name)) continue;
+    const target = join(MACHINE_RUNS_DIR, name);
+    if (statSync(target).isDirectory()) {
+      rmSync(target, { recursive: true, force: true });
+      pruned.push(name);
+    }
+  }
+
   console.log(
     JSON.stringify(
-      { promoted: ts, artifactDir, sourceSha: report.sourceSha, counts: report.counts },
+      { promoted: ts, artifactDir, sourceSha: report.sourceSha, counts: report.counts, prunedPayloads: pruned },
       null,
       2,
     ),
