@@ -1,0 +1,487 @@
+{
+  "correctiveActions": [
+    {
+      "id": "corrective-action-001",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "postgres",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-002",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "keycloak-db",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-003",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "keycloak",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-004",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "nats",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-005",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "temporal",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-006",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "minio",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-007",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "openbao",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-008",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "otel-collector",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-009",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "prometheus",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-010",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "grafana",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-011",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "loki",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-012",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "tempo",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-013",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "mailpit",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-014",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "webhook-sink",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-015",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "redis",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-016",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "meilisearch",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-017",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "clickhouse",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-018",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "pgadmin",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-019",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "sonar-postgres",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-020",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "sonar-oidc-plugin",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-021",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "sonarqube",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-022",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "mock-oidc",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-023",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "localstack",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-024",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "wiremock",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-025",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "alertmanager",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-026",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "alloy",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-027",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "windmill-postgres",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-028",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "windmill-redis",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-029",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "windmill",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-030",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "windmill-worker",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-031",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "temporal-postgres",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-032",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "temporal-ui",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-033",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "pgbackrest",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-034",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "clamav",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-035",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "sentry",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-036",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "public-proof-origin",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-037",
+      "sourceGapType": "service-auth-unavailable",
+      "target": "caddy",
+      "status": "human-review-required",
+      "nextAction": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap."
+    },
+    {
+      "id": "corrective-action-038",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "platform-api",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-039",
+      "sourceGapType": "missing-compose-service-screenshot",
+      "target": "react-app",
+      "status": "human-review-required",
+      "nextAction": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA."
+    },
+    {
+      "id": "corrective-action-040",
+      "sourceGapType": "missing-alert",
+      "target": "/proof/alerts",
+      "status": "human-review-required",
+      "nextAction": "Alert page does not yet expose alert name/condition as dedicated fields."
+    },
+    {
+      "id": "corrective-action-041",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "isms-scope",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-042",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "risk-register",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-043",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "statement-of-applicability",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-044",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "assets",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-045",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "suppliers",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-046",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "access-review",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-047",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "secrets-crypto",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-048",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "audit-retention",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-049",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "backup-dr",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-050",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "change-release",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-051",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "supply-chain",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-052",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "privacy-data-protection",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-053",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "tenant-isolation",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-054",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "resilience-capacity",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-055",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "observability-runbooks",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-056",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "policy-governance",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-057",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "iso-control-support",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-058",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "internal-audit",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-059",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "legal-regulatory",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-060",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "security-objectives",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-061",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "document-control",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-062",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "competence-awareness",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-063",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "physical-environmental",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-064",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "secure-sdlc",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-065",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "evidence-integrity",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-066",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "nonconformity-corrective-action",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-067",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "management-review",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-068",
+      "sourceGapType": "missing-enterprise-control",
+      "target": "single-operator-risk",
+      "status": "human-review-required",
+      "nextAction": "Enterprise page missing Evidence status."
+    },
+    {
+      "id": "corrective-action-069",
+      "sourceGapType": "human-decision-required",
+      "target": "USF-293",
+      "status": "human-review-required",
+      "nextAction": "Machine QA can produce evidence, but Matthew must accept or reject it."
+    }
+  ]
+}

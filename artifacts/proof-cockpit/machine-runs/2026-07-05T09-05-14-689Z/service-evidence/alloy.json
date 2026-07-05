@@ -1,0 +1,54 @@
+{
+  "serviceId": "alloy",
+  "serviceName": "Grafana Alloy",
+  "serviceKind": "observability-collector",
+  "serviceUrls": [
+    "http://127.0.0.1:12345/"
+  ],
+  "serviceUrl": "",
+  "servicePortProtocol": "alloy-http:http",
+  "capabilityIds": [
+    "cap-040-logs-aggregation-tenant-scoped-search",
+    "cap-041-metrics-traces",
+    "cap-042-alerting-incident-management-on-call-status-page",
+    "cap-043-observability-built-in-alerting-incidents",
+    "cap-044-internal-service-catalog-readiness",
+    "cap-068-tenant-service-clickthrough-policy",
+    "cap-075-browser-telemetry-grafana-faro-rum-browser-to-bff-tracing"
+  ],
+  "scenarioIds": [
+    "cap-040-logs-aggregation-tenant-scoped-search-happy-path",
+    "cap-040-logs-aggregation-tenant-scoped-search-negative-path",
+    "cap-041-metrics-traces-happy-path",
+    "cap-041-metrics-traces-negative-path",
+    "cap-042-alerting-incident-management-on-call-status-page-happy-path",
+    "cap-042-alerting-incident-management-on-call-status-page-negative-path",
+    "cap-043-observability-built-in-alerting-incidents-happy-path",
+    "cap-043-observability-built-in-alerting-incidents-negative-path",
+    "cap-044-internal-service-catalog-readiness-happy-path",
+    "cap-044-internal-service-catalog-readiness-negative-path",
+    "cap-068-tenant-service-clickthrough-policy-happy-path",
+    "cap-068-tenant-service-clickthrough-policy-negative-path",
+    "cap-075-browser-telemetry-grafana-faro-rum-browser-to-bff-tracing-happy-path",
+    "cap-075-browser-telemetry-grafana-faro-rum-browser-to-bff-tracing-negative-path"
+  ],
+  "rolePersona": "auditor",
+  "authMethodUsed": "No service login attempted or required by the catalogue candidate port.",
+  "timestamp": "2026-07-05T09:05:37.905Z",
+  "sourceGitSha": "4f51c1a6ce92d3e4888e7869f59867612e9a4d47",
+  "deploymentEnvironment": "local-machine-qa",
+  "correlationId": "compose-service-alloy-machine-qa",
+  "traceId": "compose-service-alloy-machine-qa-trace",
+  "screenshotPath": "",
+  "evidenceClass": "unavailable",
+  "evidenceKind": "service-ui-unavailable",
+  "evidenceStatus": "machine-warn",
+  "redactionStatus": "not-captured-service-unavailable",
+  "syntheticDataConfirmation": "Only service catalogue, route, and synthetic proof context are recorded; no real tenant data is used.",
+  "claimSupported": "Observability logs, metrics, traces, targets, dashboards, and correlation supporting evidence.",
+  "limitation": "Service UI/API candidate was not reachable from this machine QA run; generated artifact records the explicit gap.",
+  "humanReviewStatus": "human-review-required",
+  "gaps": [
+    "http://127.0.0.1:12345/ unavailable or not safely reachable: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:12345/\nCall log:\n  - navigating to \"http://127.0.0.1:12345/\", waiting until \"domcontentloaded\"\n"
+  ]
+}

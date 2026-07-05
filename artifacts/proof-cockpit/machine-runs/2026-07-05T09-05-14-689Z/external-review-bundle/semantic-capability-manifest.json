@@ -1,0 +1,529 @@
+{
+  "capabilities": [
+    {
+      "capabilityId": "cap-001-tenant-identity-record-fqdn",
+      "route": "/proof/capabilities/cap-001-tenant-identity-record-fqdn",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-002-user-identity-tenant-membership",
+      "route": "/proof/capabilities/cap-002-user-identity-tenant-membership",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-003-end-user-profile-preferences-self-service",
+      "route": "/proof/capabilities/cap-003-end-user-profile-preferences-self-service",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-004-api-keys-personal-access-tokens",
+      "route": "/proof/capabilities/cap-004-api-keys-personal-access-tokens",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-005-tenant-groups",
+      "route": "/proof/capabilities/cap-005-tenant-groups",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-006-sub-organisations",
+      "route": "/proof/capabilities/cap-006-sub-organisations",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-007-rbac-roles-permissions",
+      "route": "/proof/capabilities/cap-007-rbac-roles-permissions",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-008-abac-policy-decision-point",
+      "route": "/proof/capabilities/cap-008-abac-policy-decision-point",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-009-delegated-administration-roles",
+      "route": "/proof/capabilities/cap-009-delegated-administration-roles",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-010-entitlement-engine",
+      "route": "/proof/capabilities/cap-010-entitlement-engine",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-011-support-mode-break-glass-access",
+      "route": "/proof/capabilities/cap-011-support-mode-break-glass-access",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-012-audit-of-privileged-access",
+      "route": "/proof/capabilities/cap-012-audit-of-privileged-access",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-013-platform-login-session",
+      "route": "/proof/capabilities/cap-013-platform-login-session",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-014-idp-brokering-oidc-provider-management",
+      "route": "/proof/capabilities/cap-014-idp-brokering-oidc-provider-management",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-015-claim-mapping-group-role-mapping",
+      "route": "/proof/capabilities/cap-015-claim-mapping-group-role-mapping",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-016-real-idp-login-simulation",
+      "route": "/proof/capabilities/cap-016-real-idp-login-simulation",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-017-mfa-session-policy-lockout",
+      "route": "/proof/capabilities/cap-017-mfa-session-policy-lockout",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-018-configuration-registry-history",
+      "route": "/proof/capabilities/cap-018-configuration-registry-history",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-019-branding-theming",
+      "route": "/proof/capabilities/cap-019-branding-theming",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-020-custom-domains-dns-ownership-tls-canonical",
+      "route": "/proof/capabilities/cap-020-custom-domains-dns-ownership-tls-canonical",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-021-write-only-secret-settings",
+      "route": "/proof/capabilities/cap-021-write-only-secret-settings",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-022-product-catalog-plans-prices",
+      "route": "/proof/capabilities/cap-022-product-catalog-plans-prices",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-023-subscriptions-invoices-payment-methods-dunning",
+      "route": "/proof/capabilities/cap-023-subscriptions-invoices-payment-methods-dunning",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-024-usage-metering-meter-event-ingestion",
+      "route": "/proof/capabilities/cap-024-usage-metering-meter-event-ingestion",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-025-quota-enforcement",
+      "route": "/proof/capabilities/cap-025-quota-enforcement",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-026-relational-storage-migrations-rls",
+      "route": "/proof/capabilities/cap-026-relational-storage-migrations-rls",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-027-backup-restore",
+      "route": "/proof/capabilities/cap-027-backup-restore",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-028-pitr-retention-legal-hold-data-residency",
+      "route": "/proof/capabilities/cap-028-pitr-retention-legal-hold-data-residency",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "route": "/proof/capabilities/cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-030-tenant-data-import-export",
+      "route": "/proof/capabilities/cap-030-tenant-data-import-export",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-031-search-indexing-product-search",
+      "route": "/proof/capabilities/cap-031-search-indexing-product-search",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-032-object-storage-tenant-prefixes-signed-urls",
+      "route": "/proof/capabilities/cap-032-object-storage-tenant-prefixes-signed-urls",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-033-event-bus-durable-queues-dlq-redrive",
+      "route": "/proof/capabilities/cap-033-event-bus-durable-queues-dlq-redrive",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-034-workflow-engine-scheduled-jobs-approvals",
+      "route": "/proof/capabilities/cap-034-workflow-engine-scheduled-jobs-approvals",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-035-scheduled-jobs-built-in-on-the-event-substrate",
+      "route": "/proof/capabilities/cap-035-scheduled-jobs-built-in-on-the-event-substrate",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-036-notification-delivery-preferences-channels",
+      "route": "/proof/capabilities/cap-036-notification-delivery-preferences-channels",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-037-background-workers-job-runner",
+      "route": "/proof/capabilities/cap-037-background-workers-job-runner",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-038-serverless-function-runtime",
+      "route": "/proof/capabilities/cap-038-serverless-function-runtime",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-039-runtime-secrets-management",
+      "route": "/proof/capabilities/cap-039-runtime-secrets-management",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-040-logs-aggregation-tenant-scoped-search",
+      "route": "/proof/capabilities/cap-040-logs-aggregation-tenant-scoped-search",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-041-metrics-traces",
+      "route": "/proof/capabilities/cap-041-metrics-traces",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-042-alerting-incident-management-on-call-status-page",
+      "route": "/proof/capabilities/cap-042-alerting-incident-management-on-call-status-page",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-043-observability-built-in-alerting-incidents",
+      "route": "/proof/capabilities/cap-043-observability-built-in-alerting-incidents",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-044-internal-service-catalog-readiness",
+      "route": "/proof/capabilities/cap-044-internal-service-catalog-readiness",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-045-code-quality-secret-dependency-scanning",
+      "route": "/proof/capabilities/cap-045-code-quality-secret-dependency-scanning",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-046-compliance-reports-access-reviews-evidence-packs",
+      "route": "/proof/capabilities/cap-046-compliance-reports-access-reviews-evidence-packs",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-047-tenant-isolation-proof",
+      "route": "/proof/capabilities/cap-047-tenant-isolation-proof",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-048-webhooks-developer-facing",
+      "route": "/proof/capabilities/cap-048-webhooks-developer-facing",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-049-api-docs-developer-portal-sdks-rate-limits",
+      "route": "/proof/capabilities/cap-049-api-docs-developer-portal-sdks-rate-limits",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-050-rate-limiting-api",
+      "route": "/proof/capabilities/cap-050-rate-limiting-api",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-051-mock-providers-dev-test",
+      "route": "/proof/capabilities/cap-051-mock-providers-dev-test",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-052-tenant-lifecycle-provision-suspend-delete-export",
+      "route": "/proof/capabilities/cap-052-tenant-lifecycle-provision-suspend-delete-export",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-053-support-tickets-customer-health-announcements",
+      "route": "/proof/capabilities/cap-053-support-tickets-customer-health-announcements",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-054-universal-service-foundation-scope-principles",
+      "route": "/proof/capabilities/cap-054-universal-service-foundation-scope-principles",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-055-build-versus-compose-decision-framework",
+      "route": "/proof/capabilities/cap-055-build-versus-compose-decision-framework",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-056-service-catalog-provider-integration-model",
+      "route": "/proof/capabilities/cap-056-service-catalog-provider-integration-model",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-057-environment-specific-vs-shared-service-model",
+      "route": "/proof/capabilities/cap-057-environment-specific-vs-shared-service-model",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-058-provider-configuration-plane",
+      "route": "/proof/capabilities/cap-058-provider-configuration-plane",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-059-composed-provider-readiness-spine",
+      "route": "/proof/capabilities/cap-059-composed-provider-readiness-spine",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-060-history-read-model-read-only-projection",
+      "route": "/proof/capabilities/cap-060-history-read-model-read-only-projection",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-061-oidc-discovery-issuer-jwks-validation",
+      "route": "/proof/capabilities/cap-061-oidc-discovery-issuer-jwks-validation",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-062-oidc-test-connection-callback-display",
+      "route": "/proof/capabilities/cap-062-oidc-test-connection-callback-display",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-063-oidc-login-simulation",
+      "route": "/proof/capabilities/cap-063-oidc-login-simulation",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-064-tenant-host-identity-resolution",
+      "route": "/proof/capabilities/cap-064-tenant-host-identity-resolution",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-065-tenant-domain-activation-auth-client",
+      "route": "/proof/capabilities/cap-065-tenant-domain-activation-auth-client",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-066-tenant-canonical-domain-set-unset",
+      "route": "/proof/capabilities/cap-066-tenant-canonical-domain-set-unset",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-067-tenant-custom-domain-auth-callback",
+      "route": "/proof/capabilities/cap-067-tenant-custom-domain-auth-callback",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-068-tenant-service-clickthrough-policy",
+      "route": "/proof/capabilities/cap-068-tenant-service-clickthrough-policy",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-069-environment-registry-bootstrap",
+      "route": "/proof/capabilities/cap-069-environment-registry-bootstrap",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-070-provider-environment-classification",
+      "route": "/proof/capabilities/cap-070-provider-environment-classification",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-071-e2e-confidence-ladder-stage-aware",
+      "route": "/proof/capabilities/cap-071-e2e-confidence-ladder-stage-aware",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-072-openapi-drift-hard-gate",
+      "route": "/proof/capabilities/cap-072-openapi-drift-hard-gate",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-073-i18n-runtime-validation",
+      "route": "/proof/capabilities/cap-073-i18n-runtime-validation",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-074-accessibility-a11y-gate",
+      "route": "/proof/capabilities/cap-074-accessibility-a11y-gate",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "capabilityId": "cap-075-browser-telemetry-grafana-faro-rum-browser-to-bff-tracing",
+      "route": "/proof/capabilities/cap-075-browser-telemetry-grafana-faro-rum-browser-to-bff-tracing",
+      "result": "pass",
+      "evidenceStatus": "machine-pass",
+      "humanReviewStatus": "human-review-required"
+    }
+  ]
+}
