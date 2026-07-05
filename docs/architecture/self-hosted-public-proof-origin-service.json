@@ -13,9 +13,9 @@
     "USF-271",
     "USF-272"
   ],
-  "status": "origin-configured-public-dns-cutover-blocked",
-  "checkedAt": "2026-07-04T23:17:50Z",
-  "checkedCommit": "28aa03456007e550f84d1b5128d9c0c5ef83a81b",
+  "status": "pass",
+  "checkedAt": "2026-07-05T02:26:30Z",
+  "checkedCommit": "cbe82ec4713317b148bf2198aaee2bd4b94e28d2",
   "semanticContract": "docs/architecture/public-fqdn-semantic-contract.json",
   "externalHttpContract": "docs/architecture/external-http-behaviour-contract.json",
   "publicProofOriginService": "docs/architecture/public-proof-origin-service.json",
@@ -39,53 +39,54 @@
         "fqdn": "1e100.network",
         "environment": "staging",
         "currentObservedARecords": [
-          "104.21.0.220",
-          "172.67.128.84"
+          "103.138.244.121"
         ],
-        "currentObservedAaaaRecords": [
-          "2606:4700:3031::ac43:8054",
-          "2606:4700:3032::6815:dc"
-        ],
+        "currentObservedAaaaRecords": [],
         "requiredARecord": "103.138.244.121",
-        "directDnsObserved": false,
-        "cloudflareProxyEvidenceObserved": true,
-        "netlifyLiveServingEvidenceObserved": true
+        "directDnsObserved": true,
+        "cloudflareProxyEvidenceObserved": false,
+        "netlifyLiveServingEvidenceObserved": false,
+        "publicHttpsFromSelfHostedOriginObserved": true,
+        "netlifyHeadersObserved": false,
+        "cloudflareHeadersObserved": false,
+        "providerCacheHitObserved": false
       },
       {
         "fqdn": "aldous.info",
         "environment": "production",
         "currentObservedARecords": [
-          "104.21.45.124",
-          "172.67.214.19"
+          "103.138.244.121"
         ],
-        "currentObservedAaaaRecords": [
-          "2606:4700:3030::6815:2d7c",
-          "2606:4700:3031::ac43:d613"
-        ],
+        "currentObservedAaaaRecords": [],
         "requiredARecord": "103.138.244.121",
-        "directDnsObserved": false,
-        "cloudflareProxyEvidenceObserved": true,
-        "netlifyLiveServingEvidenceObserved": true
+        "directDnsObserved": true,
+        "cloudflareProxyEvidenceObserved": false,
+        "netlifyLiveServingEvidenceObserved": false,
+        "publicHttpsFromSelfHostedOriginObserved": true,
+        "netlifyHeadersObserved": false,
+        "cloudflareHeadersObserved": false,
+        "providerCacheHitObserved": false
       }
     ],
     "requiredARecord": "103.138.244.121",
     "directToSelfHostedOriginRequired": true,
     "cloudflareProxyAllowedForProofRoutes": false,
     "netlifyLiveServingPathAllowed": false,
-    "cloudflareProxyCurrentlyObserved": true,
-    "netlifyLiveServingCurrentlyObserved": true,
-    "cutoverComplete": false,
-    "providerMutationAvailableFromThisSession": false,
-    "blockers": [
-      {
-        "id": "cloudflare-dns-only-cutover-unavailable",
-        "issueId": "USF-289",
-        "blocksPublicMigrationCompletion": true,
-        "requiredOperatorAction": "In Cloudflare DNS, change the apex records for 1e100.network and aldous.info to DNS-only A records pointing at 103.138.244.121, remove or disable any proxied CNAME or flattened CNAME to Netlify for those apex names, and leave ssh.aldous.info unchanged as DNS-only A 103.138.244.121.",
-        "verification": "After DNS propagation, the apex A records must resolve to 103.138.244.121, public HTTPS must be served by the self-hosted origin, Netlify headers must be absent, and the public external HTTP cache and pre-staging smoke proof commands must pass.",
-        "rollback": "Restore the previous Cloudflare DNS record values for the affected apex names only if the cutover fails; do not alter ssh.aldous.info."
-      }
-    ]
+    "cloudflareProxyCurrentlyObserved": false,
+    "netlifyLiveServingCurrentlyObserved": false,
+    "cutoverComplete": true,
+    "providerMutationAvailableFromThisSession": true,
+    "blockers": [],
+    "completedOperatorAction": "Cloudflare apex records for 1e100.network and aldous.info were changed to DNS-only A 103.138.244.121. Netlify apex routing is no longer observed on live proof/control routes. ssh.aldous.info remained DNS-only A 103.138.244.121.",
+    "completionEvidence": {
+      "dnsARecordsObserved": true,
+      "dnsAaaaRecordsAbsent": true,
+      "cloudflareProxyHeadersObserved": false,
+      "netlifyHeadersObserved": false,
+      "publicHttpsSelfHostedOriginObserved": true,
+      "externalHttpCacheProofPassed": true,
+      "preStagingExternalSmokeProofPassed": true
+    }
   },
   "selfHostedOrigin": {
     "hostAlias": "ssh.aldous.info",
@@ -108,7 +109,9 @@
     "caddyRequiredSemantically": false,
     "nginxRequiredSemantically": false,
     "netlifyRequiredSemantically": false,
-    "cloudflareRequiredSemantically": false
+    "cloudflareRequiredSemantically": false,
+    "publicTlsCertificatesObserved": true,
+    "tlsCertificateIssuerObserved": "Let's Encrypt"
   },
   "routeSemantics": {
     "jsonProofRoute": "/.well-known/usf-public-edge.json",
@@ -152,8 +155,8 @@
   "directOriginEvidence": {
     "caddyConfigValidation": "pass",
     "httpRedirectEvidencePass": true,
-    "publicHttpsEvidencePass": false,
-    "publicHttpsBlocker": "The self-hosted origin cannot obtain public certificates or satisfy public HTTPS proof until 1e100.network and aldous.info DNS are changed from Cloudflare-proxied Netlify serving to DNS-only A records for 103.138.244.121.",
+    "publicHttpsEvidencePass": true,
+    "publicHttpsBlocker": null,
     "directHttpChecks": [
       {
         "fqdn": "1e100.network",
@@ -177,6 +180,52 @@
         "resolveOverride": "example.invalid:80:103.138.244.121",
         "observedStatus": 404,
         "hostMismatchFailsSafely": true
+      }
+    ],
+    "publicHttpsChecks": [
+      {
+        "fqdn": "1e100.network",
+        "route": "/.well-known/usf-public-edge.json",
+        "observedStatus": 200,
+        "contentTypeObserved": "application/json; charset=utf-8",
+        "cacheControlObserved": "no-store, no-cache, max-age=0, must-revalidate",
+        "netlifyHeadersObserved": false,
+        "cloudflareHeadersObserved": false,
+        "ageHeaderObserved": false,
+        "providerCacheHitObserved": false
+      },
+      {
+        "fqdn": "aldous.info",
+        "route": "/.well-known/usf-public-edge.json",
+        "observedStatus": 200,
+        "contentTypeObserved": "application/json; charset=utf-8",
+        "cacheControlObserved": "no-store, no-cache, max-age=0, must-revalidate",
+        "netlifyHeadersObserved": false,
+        "cloudflareHeadersObserved": false,
+        "ageHeaderObserved": false,
+        "providerCacheHitObserved": false
+      },
+      {
+        "fqdn": "1e100.network",
+        "route": "/__proof/public-route/",
+        "observedStatus": 200,
+        "contentTypeObserved": "text/html; charset=utf-8",
+        "cacheControlObserved": "no-store, no-cache, max-age=0, must-revalidate",
+        "netlifyHeadersObserved": false,
+        "cloudflareHeadersObserved": false,
+        "ageHeaderObserved": false,
+        "providerCacheHitObserved": false
+      },
+      {
+        "fqdn": "aldous.info",
+        "route": "/__proof/public-route/",
+        "observedStatus": 200,
+        "contentTypeObserved": "text/html; charset=utf-8",
+        "cacheControlObserved": "no-store, no-cache, max-age=0, must-revalidate",
+        "netlifyHeadersObserved": false,
+        "cloudflareHeadersObserved": false,
+        "ageHeaderObserved": false,
+        "providerCacheHitObserved": false
       }
     ]
   },
@@ -373,5 +422,11 @@
     ],
     "command": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json",
     "selftestCommand": "python3 tools/validate-public-fqdn/validate-public-fqdn.py selftest --json"
+  },
+  "validationEvidence": {
+    "externalHttpCacheProof": "pass",
+    "preStagingExternalSmokeProof": "pass",
+    "publicFqdnValidation": "pass",
+    "publicFqdnSelftest": "pass"
   }
 }

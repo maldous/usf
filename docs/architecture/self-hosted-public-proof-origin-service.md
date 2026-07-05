@@ -31,4 +31,4 @@ Netlify remains historical implementation evidence from the previous public proo
 
 ## Validation
 
-Repository validation is enforced by USF-PUBLIC-FQDN-026 and USF-PUBLIC-FQDN-027 in the public FQDN validator. The validator allows the current state only as origin-configured-public-dns-cutover-blocked, with explicit operator action. It must fail if this state is represented as a completed migration while Netlify or Cloudflare proxy evidence remains.
+Repository validation is enforced by USF-PUBLIC-FQDN-026 and USF-PUBLIC-FQDN-027 in the public FQDN validator. The validator now records the current state as pass. It must fail if this state is represented as a completed migration while Netlify or Cloudflare proxy evidence remains.
