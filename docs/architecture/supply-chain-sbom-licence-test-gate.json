@@ -165,8 +165,8 @@
       "adapters/*",
       "packages/*"
     ],
-    "expectedPackageJsonCountIncludingRoot": 34,
-    "expectedWorkspacePackageCount": 33,
+    "expectedPackageJsonCountIncludingRoot": 35,
+    "expectedWorkspacePackageCount": 34,
     "workspacePackageNamePrefix": "@foundation/",
     "workspaceExternalDependencySectionsAllowed": false
   },

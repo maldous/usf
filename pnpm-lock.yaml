@@ -157,6 +157,8 @@ importers:
 
   apps/public-proof-origin: {}
 
+  apps/staging-proof-cockpit: {}
+
   apps/work: {}
 
   capabilities/audit: {}
