@@ -2446,7 +2446,11 @@ async function verifySignoff(page, baseUrl, report) {
     const { status, text } = await fetchText(page, baseUrl, route);
     const disabled = /disabled|unavailable|prototype/i.test(text);
     const forbiddenFinalClaimPattern = new RegExp(
-      ["final acceptance complete", "usf-290 complete", "staging readiness " + "complete"].join("|"),
+      [
+        "final\\s+acceptance\\s+complete",
+        "usf-290\\s+complete",
+        "staging\\s+readiness\\s+complete",
+      ].join("|"),
       "i",
     );
     const noFinalClaim = !forbiddenFinalClaimPattern.test(text);
