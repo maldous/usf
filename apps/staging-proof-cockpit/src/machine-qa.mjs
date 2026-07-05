@@ -162,7 +162,9 @@ function composeEnvironmentValue(serviceName, key) {
   const content = existsSync(COMPOSE_TARGET) ? readFileSync(COMPOSE_TARGET, "utf8") : "";
   const serviceMatch = content.match(new RegExp(`\\n  ${serviceName}:\\n(?<body>[\\s\\S]*?)(?=\\n  [a-zA-Z0-9_-]+:\\n|\\nvolumes:|$)`));
   const body = serviceMatch?.groups?.body ?? "";
-  const environmentMatch = body.match(/\n    environment:\n(?<environment>[\s\S]*?)(?=\n    [a-zA-Z_]+:|\n    ports:|\n    depends_on:|\n    profiles:|\n    healthcheck:|\n  [a-zA-Z0-9_-]+:|$)/);
+  const environmentMatch = body.match(
+    /\n {4}environment:\n(?<environment>[\s\S]*?)(?=\n {4}[a-zA-Z_]+:|\n {4}ports:|\n {4}depends_on:|\n {4}profiles:|\n {4}healthcheck:|\n {2}[a-zA-Z0-9_-]+:|$)/,
+  );
   const environment = environmentMatch?.groups?.environment ?? "";
   const line = environment
     .split("\n")
@@ -737,6 +739,9 @@ const SERVICE_DEFAULT_PATHS = Object.freeze({
 function authPostureForService(service) {
   const override = AUTH_POSTURE_OVERRIDES[service.serviceId] ?? {};
   if (override.authPosture) {
+    if (!AUTH_POSTURE_VALUES.includes(override.authPosture)) {
+      throw new Error(`unsupported-auth-posture-${service.serviceId}-${override.authPosture}`);
+    }
     return override;
   }
   const hasHttpUi = (service.ports ?? []).some((port) =>
@@ -1276,7 +1281,7 @@ async function performWindmillBrowserLogin(page, posture, credential) {
     };
   } catch (error) {
     const status = windmillApiErrorStatus(error);
-    throw new Error(status ? `windmill-browser-login-failed-${status}` : "windmill-browser-login-failed");
+    throw new Error(status ? `windmill-browser-login-failed-${status}` : "windmill-browser-login-failed", { cause: error });
   }
 }
 
