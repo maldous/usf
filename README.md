@@ -4,7 +4,7 @@
 
 **Define platform truth. Prove behaviour. Evolve without drift.**
 
-![status](https://img.shields.io/badge/status-delivered-34d399?style=for-the-badge)
+![status](https://img.shields.io/badge/status-active-34d399?style=for-the-badge)
 ![services](https://img.shields.io/badge/composed_services-39-38bdf8?style=for-the-badge)
 ![capabilities](https://img.shields.io/badge/semantic_capabilities-75-a78bfa?style=for-the-badge)
 ![proof](https://img.shields.io/badge/readiness-evidence--backed-0ea5e9?style=for-the-badge)
@@ -26,9 +26,9 @@ It is not a scaffold, a template, or a framework wrapper. It is a **foundation w
 
 ## What USF delivers
 
-USF turns architecture from tribal knowledge into a governed, machine-checkable corpus — and ships it as a complete, working foundation:
+USF turns architecture from tribal knowledge into a governed, machine-checkable corpus — a working, evidence-backed foundation:
 
-- **A full enterprise platform surface** — 39 composed services and 75 semantic capabilities spanning identity, tenancy, authorization, audit, storage, workflow, search, observability, and operations.
+- **A broad enterprise platform surface** — 39 composed services and 75 semantic capabilities spanning identity, tenancy, authorization, audit, storage, workflow, search, observability, and operations.
 - **A living semantic corpus** — capabilities, interfaces, events, workflows, provider modes, environments, commands, configuration, audit, and observability are all first-class governed assets under `spec/`.
 - **An enforced authority model** — a strict, seven-rank hierarchy where semantics define intent, ADRs constrain change, validators enforce consistency, and evidence records what actually ran.
 - **A validator suite that fails closed** — 12 validator families with hundreds of rules and planted-defect regression coverage, so drift is a gate, not a surprise.
@@ -49,11 +49,11 @@ This is what makes USF safe to evolve at speed: intent is debated in the right p
 
 ---
 
-## A complete platform surface, governed as one model
+## A broad platform surface, governed as one model
 
 ![USF capability domains](docs/assets/readme/capabilities.svg)
 
-USF delivers the capabilities every enterprise platform needs — not as isolated services, but as a coherent, semantically-mapped whole. Identity and access, multi-tenancy, authorization, audit, storage, workflow, search, observability, configuration, data lifecycle, provider adapters, and operations are all visible as platform concerns and governed together.
+USF governs the capabilities every enterprise platform needs — not as isolated services, but as a coherent, semantically-mapped whole. Identity and access, multi-tenancy, authorization, audit, storage, workflow, search, observability, configuration, data lifecycle, provider adapters, and operations are all visible as platform concerns and governed together.
 
 The payoff: you reason about the platform *before* reading code, you check readiness *instead of* trusting claims, and you evolve systems *without* losing behavioural intent.
 
@@ -100,7 +100,7 @@ The result is AI assistance that produces reviewable change with an evidence tra
 
 ![Worked example: tenant product search composition](docs/assets/readme/search-example.svg)
 
-Nothing shows the payoff better than the most ordinary feature in the platform. A user types a query and expects *"the documents in my tenant that match this, and only the ones I'm entitled to see."* In a code-first system that's one call to a search engine. In USF it is a single governed capability — `semantic-contract.search-and-indexing-product-search`, with ten formal facets — that **composes cleanly with the rest of the platform and proves every edge.** This is the reasoning and rigour, fully realised.
+Nothing shows the payoff better than the most ordinary feature in the platform. A user types a query and expects *"the documents in my tenant that match this, and only the ones I'm entitled to see."* In a code-first system that's one call to a search engine. In USF it is a single governed capability — `semantic-contract.search-and-indexing-product-search`, with ten formal facets — that **composes cleanly with the rest of the platform and governs every edge.** This is the reasoning and rigour, demonstrated end to end.
 
 ### It inherits from other capabilities — it never re-implements them
 
@@ -141,7 +141,7 @@ One user action, one capability contract, six services collaborating — every r
 - **Audit and telemetry can't be forgotten**, because they are contract obligations the validators check, not habits a developer might skip under deadline.
 - **AI agents extend it safely**, reading the contract's edges to identity, storage, RBAC, audit, and observability instead of guessing from the last query they saw.
 
-An auditor can trace one query from capability → sibling capabilities → composed services → recorded proof, and defend the isolation, authorization, and audit claims with **evidence, not assurances.** That is the whole point of USF, delivered.
+An auditor can trace one query from capability → sibling capabilities → composed services → recorded proof, and defend the isolation, authorization, and audit claims with **evidence, not assurances.** That is the whole point of USF.
 
 ---
 
