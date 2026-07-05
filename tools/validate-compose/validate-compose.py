@@ -67,8 +67,26 @@ RULES = {
     "USF-COMPOSE-035": "Data-bearing service lacks classification, tenant, backup/restore, retention, or failure metadata",
     "USF-COMPOSE-036": "External, cloud, deferred, or out-of-scope service lacks provider/deferred boundary or prohibited claims",
     "USF-COMPOSE-037": "Service-level metadata contradicts port-level metadata",
+    "USF-COMPOSE-038": "Service capability reference does not resolve to a declared semantic contract",
     "USF-COMPOSE-SELFTEST": "planted Compose defect did not raise its expected rule",
 }
+
+SEMANTIC_CONTRACT_DIR = ROOT / "spec/instances/semantic-contract"
+
+
+def declared_capability_ids() -> set[str]:
+    ids: set[str] = set()
+    if not SEMANTIC_CONTRACT_DIR.is_dir():
+        return ids
+    for path in SEMANTIC_CONTRACT_DIR.glob("*.json"):
+        try:
+            instance = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        identifier = instance.get("id")
+        if isinstance(identifier, str) and identifier:
+            ids.add(identifier)
+    return ids
 
 REQUIRED_SERVICE_METADATA = {
     "serviceOwner",
@@ -566,6 +584,13 @@ def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]
     for service in catalogue["services"]:
         for react_name in service["reactComposeServiceNames"]:
             classified.setdefault(react_name, []).append(service["serviceId"])
+
+    declared_ids = declared_capability_ids()
+    for service in catalogue["services"]:
+        service_id = service.get("serviceId", "unknown-service")
+        for ref in service.get("usfCapabilityRefs", []) or []:
+            if ref not in declared_ids:
+                add(findings, "USF-COMPOSE-038", f"{service_id}->{ref}")
 
     for react_name in sorted(react_services() - set(classified)):
         add(findings, "USF-COMPOSE-001", react_name)

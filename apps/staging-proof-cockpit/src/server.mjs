@@ -1969,12 +1969,27 @@ function actionMatchesReviewItem(action, item) {
   );
 }
 
-function reviewItemDecision(state, item) {
-  const action = state.actions.find((candidate) => actionMatchesReviewItem(candidate, item));
+export function reviewItemDecision(state, item) {
+  // Prefer an exact per-item match (evidenceId === item.id) so a per-item
+  // acceptance is authoritative; fall back to the looser capability/service
+  // match only when no exact per-item action exists.
+  const action =
+    state.actions.find((candidate) => candidate.evidenceId === item.id) ??
+    state.actions.find((candidate) => actionMatchesReviewItem(candidate, item));
   if (!action) {
     return { status: "human-review-required", tone: "review", action: null };
   }
   if (action.outcome === "human-accepted") {
+    // Delta acceptance: a recorded acceptance only stands while the item's
+    // evidence fingerprint is unchanged. If the evidence changed since the
+    // acceptance, the item must be re-reviewed rather than silently carried.
+    if (
+      item.acceptanceFingerprint &&
+      action.acceptanceFingerprint &&
+      action.acceptanceFingerprint !== item.acceptanceFingerprint
+    ) {
+      return { status: "re-review-required", tone: "review", action, changedSinceAcceptance: true };
+    }
     return { status: "accepted", tone: "accepted", action };
   }
   if (action.outcome === "human-rejected") {
@@ -1990,7 +2005,7 @@ function routeScreenshot(data, route) {
   return data.screenshots.find((screenshot) => screenshot.route === route);
 }
 
-function buildReviewItems(data) {
+export function buildReviewItems(data) {
   const latest = data.persistentEvidence.latestMachineRun;
   const items = [
     {
@@ -2086,7 +2101,27 @@ function buildReviewItems(data) {
       route: `/proof/screenshots/${screenshot.id}`,
     });
   }
-  return items;
+  return items.map((item) => ({ ...item, acceptanceFingerprint: reviewItemFingerprint(item) }));
+}
+
+// Delta acceptance: a stable fingerprint of an item's material evidence. When the
+// evidence behind an item changes, the fingerprint changes, so a prior human
+// acceptance no longer applies and the item returns to the pending queue. Items
+// whose evidence is unchanged keep their acceptance automatically, so re-running
+// the cockpit only re-presents changed or new items for approval.
+export function reviewItemFingerprint(item) {
+  const material = {
+    id: item.id,
+    conclusion: item.machineQaConclusion ?? "",
+    risk: item.riskPosture ?? "",
+    evidenceLinks: [...(item.evidenceLinks ?? [])].sort(),
+    screenshots: (item.screenshots ?? [])
+      .map((shot) => shot?.screenshotHash || shot?.contentHash || shot?.id || shot?.screenshotPath || "")
+      .sort(),
+    route: item.route ?? "",
+    sourceUrl: item.sourceUrl ?? "",
+  };
+  return contentHash(JSON.stringify(material)).slice(0, 32);
 }
 
 function currentReviewIndex(items, state, url, explicitId = "") {
@@ -2100,7 +2135,8 @@ function currentReviewIndex(items, state, url, explicitId = "") {
       return byId;
     }
   }
-  const firstOpen = items.findIndex((item) => reviewItemDecision(state, item).status === "human-review-required");
+  const openStatuses = new Set(["human-review-required", "re-review-required"]);
+  const firstOpen = items.findIndex((item) => openStatuses.has(reviewItemDecision(state, item).status));
   return firstOpen >= 0 ? firstOpen : 0;
 }
 
@@ -2119,6 +2155,7 @@ function reviewItemActionForms(item, returnTo) {
     role: "auditor",
     tenant: "synthetic-proof-review",
     itemTitle: item.title,
+    acceptanceFingerprint: item.acceptanceFingerprint ?? "",
   };
   return `<div class="review-actions" aria-label="Review actions">
 ${writePolicyNotice(policy)}
@@ -2193,6 +2230,7 @@ function normalizeAction(params, actor) {
     serviceUrl: String(params.get("serviceUrl") ?? "").slice(0, 500),
     screenshotUrl: String(params.get("screenshotUrl") ?? "").slice(0, 500),
     notes: String(params.get("notes") ?? "").slice(0, 4000),
+    acceptanceFingerprint: String(params.get("acceptanceFingerprint") ?? "").slice(0, 64),
     confirmations: {
       devEvidenceConfirmed: params.has("devEvidenceConfirmed"),
       testEvidenceConfirmed: params.has("testEvidenceConfirmed"),
