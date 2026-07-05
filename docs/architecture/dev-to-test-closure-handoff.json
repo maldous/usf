@@ -1,0 +1,28 @@
+{
+  "id": "dev-to-test-closure-handoff",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "claim": "Dev closure hands off to Test closure through USF-native evidence without reopening sealed transition analysis.",
+  "closureState": "complete",
+  "devClosureSources": [
+    "docs/architecture/dev-foundation-substrate-closure.json",
+    "docs/architecture/dev-compose-substrate-closure.json",
+    "docs/architecture/dev-command-proof-closure.json"
+  ],
+  "testClosureSources": [
+    "docs/architecture/test-readiness-final-acceptance-gate.json",
+    "docs/architecture/test-environment-completion-and-staging-entry-gate.json",
+    "docs/architecture/usf-current-state-foundation-closure-record.json"
+  ],
+  "handoffRules": [
+    "Dev in-memory evidence remains bounded and cannot satisfy service-backed Test claims.",
+    "Dev compose evidence may support Test only when backed by current service catalogue and validators.",
+    "Sealed provenance may explain transition history but cannot be the only active proof for a current closure claim."
+  ],
+  "nonClaims": [
+    "Staging readiness",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness"
+  ]
+}

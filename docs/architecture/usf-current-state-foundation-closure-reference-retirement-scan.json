@@ -1,0 +1,72 @@
+{
+  "id": "usf-current-state-foundation-closure-reference-retirement-scan",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "scanDate": "2026-07-05",
+  "fullRepositoryHistoricalPatternMatches": 9799,
+  "activeCurrentStateSurfaceMatches": 0,
+  "activeCurrentStatePathsChecked": [
+    "apps/staging-proof-cockpit/src/server.mjs",
+    "apps/staging-proof-cockpit/src/smoke.mjs",
+    "apps/staging-proof-cockpit/src/machine-qa.mjs",
+    "docs/architecture/dev-foundation-substrate-closure.json",
+    "docs/architecture/dev-compose-substrate-closure.json",
+    "docs/architecture/dev-command-proof-closure.json",
+    "docs/architecture/dev-to-test-closure-handoff.json",
+    "docs/architecture/usf-current-state-foundation-closure-record.json",
+    "docs/architecture/proof-cockpit-foundation-substrate-closure-import.json",
+    "package.json",
+    "tools/validate-foundation-substrate-closure/"
+  ],
+  "classifications": [
+    {
+      "classification": "sealed-provenance-only",
+      "paths": [
+        "docs/architecture/superseded-lineage-closure-provenance.json",
+        "docs/architecture/superseded-lineage-closure-provenance.md",
+        "docs/architecture/react-non-ui-parity-test-closure-gate.json",
+        "docs/architecture/react-non-ui-parity-external-review-report.md",
+        "tools/validate-react-non-ui-parity/"
+      ],
+      "activeAuthority": false
+    },
+    {
+      "classification": "source-disposition-history",
+      "paths": [
+        "spec/registries/source-import-manifest.json",
+        "spec/registries/authentication-slice-source-import-manifest.json",
+        "docs/architecture/source-import-coverage-plan.md",
+        "docs/architecture/*source-use-disposition-matrix*"
+      ],
+      "activeAuthority": false
+    },
+    {
+      "classification": "foundational-policy-or-naming-rule",
+      "paths": [
+        "AGENTS.md",
+        "docs/architecture/charter.md",
+        "docs/architecture/authority-model.md",
+        "docs/architecture/directory-and-file-naming-standard.md",
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "activeAuthority": "policy-context-only"
+    },
+    {
+      "classification": "validator-rule",
+      "paths": [
+        "tools/validate-foundation-substrate-closure/"
+      ],
+      "activeAuthority": "fail-closed-rule-only"
+    }
+  ],
+  "unexplainedMatches": [],
+  "humanDecisionRequired": [],
+  "nonClaims": [
+    "Product UI readiness",
+    "Staging readiness",
+    "Production readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness"
+  ]
+}

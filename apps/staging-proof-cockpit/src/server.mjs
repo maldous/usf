@@ -8,13 +8,12 @@ const MATRIX_PATH = join(ROOT, "docs/architecture/capability-source-coverage-mat
 const CONTRACT_DIR = join(ROOT, "spec/instances/semantic-contract");
 const SERVICE_CATALOGUE_PATH = join(ROOT, "spec/instances/compose-service/service-catalogue.json");
 const COMPOSED_SERVICE_MATRIX_PATH = join(ROOT, "docs/architecture/composed-service-integration-test-matrix.json");
-const REACT_PARITY_IMPORT_SOURCE = "docs/architecture/proof-cockpit-react-non-ui-parity-import.json";
-const REACT_PARITY_CLOSURE_SOURCE = "docs/architecture/react-non-ui-parity-test-closure-gate.json";
-const REACT_PARITY_ASSURANCE_SOURCE = "docs/architecture/react-parity-assurance-case.json";
-const REACT_PARITY_GAP_SOURCE = "docs/architecture/react-non-ui-parity-gap-register.json";
-const REACT_PARITY_VALIDATOR_COMMAND = Object.freeze([
+const FOUNDATION_CLOSURE_IMPORT_SOURCE = "docs/architecture/proof-cockpit-foundation-substrate-closure-import.json";
+const FOUNDATION_CLOSURE_RECORD_SOURCE = "docs/architecture/usf-current-state-foundation-closure-record.json";
+const FOUNDATION_CLOSURE_PROVENANCE_SOURCE = "docs/architecture/superseded-lineage-closure-provenance.json";
+const FOUNDATION_CLOSURE_VALIDATOR_COMMAND = Object.freeze([
   "python3",
-  "tools/validate-react-non-ui-parity/validate-react-non-ui-parity.py",
+  "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py",
   "all",
   "--json",
 ]);
@@ -31,7 +30,7 @@ const NON_CLAIMS = Object.freeze([
   "no-enterprise-production-readiness",
   "no-real-user-product-ui-readiness",
   "no-browser-e2e-readiness",
-  "no-full-react-product-parity",
+  "no-full-product-readiness",
   "no-usf-290-completion",
 ]);
 
@@ -53,7 +52,7 @@ const ROLES = Object.freeze([
 const ROUTES = Object.freeze([
   "/proof",
   "/proof/qa",
-  "/proof/react-non-ui-parity",
+  "/proof/foundation-substrate-closure",
   "/proof/actions",
   "/proof/actions/:actionId",
   "/proof/machine-runs",
@@ -116,7 +115,7 @@ const ROUTES = Object.freeze([
 const ROUTE_SUMMARIES = Object.freeze([
   ["/proof", "Cockpit landing page", "Confirm warnings, source SHA, environment metadata, and route map.", "source SHA, deployment metadata, visible non-claims"],
   ["/proof/qa", "Formal human QA workflow", "Follow the per-capability confirmation sequence and stop conditions before signoff.", "human action record, screenshot, correlation id, immutable artifact"],
-  ["/proof/react-non-ui-parity", "USF-291 React non-UI parity closure evidence", "Review the merged Test-layer React non-UI parity closure before accepting staging QA evidence.", "external-review report, assurance case, chain-of-custody rows, validator result, PR merge SHA"],
+  ["/proof/foundation-substrate-closure", "Foundation substrate closure evidence", "Review current Dev and Test closure before accepting staging QA evidence.", "current-state report, Dev closure artefacts, sealed provenance, validator result, PR merge SHA"],
   ["/proof/actions", "Recorded QA action ledger", "Review submitted browser QA actions, blockers, evidence links, and confirmation check states.", "file-backed local QA records; not immutable final evidence"],
   ["/proof/actions/:actionId", "QA action detail", "Review one submitted action and decide whether more evidence or correction is needed.", "operator-entered action fields, source SHA, timestamp"],
   ["/proof/machine-runs", "Machine QA run index", "Import the latest machine evidence bundle, compare it with prior runs, and inspect run status.", "qa-run manifest, report links, import status"],
@@ -244,7 +243,7 @@ const STOP_CONDITIONS = Object.freeze([
   "A service page is missing health, seed/reset, safe-operation, or teardown evidence needed by the capability.",
   "The scenario requires real tenant data, real secrets, private local state, or destructive persistent mutation.",
   "Audit, trace, log, metric, alert, screenshot, or immutable artifact evidence is fabricated or missing.",
-  "A route, service, or provider page claims staging, production, SOC, ISO, enterprise readiness, product UI readiness, browser E2E readiness, or full React parity.",
+  "A route, service, or provider page claims staging, production, SOC, ISO, enterprise readiness, product UI readiness, browser E2E readiness, or full Foundation closure.",
 ]);
 
 const PROOF_LADDER_LEVELS = Object.freeze([
@@ -261,9 +260,9 @@ const PROOF_LADDER_LEVELS = Object.freeze([
     "repository-prerequisite-reference",
   ],
   [
-    "React non-UI parity closure prerequisite",
-    "/proof/react-non-ui-parity",
-    "Machine-completed USF-291 evidence must be reviewed so the auditor can confirm no React-derived non-UI foundation or operational-substrate item was silently omitted before staging QA.",
+    "Foundation substrate closure prerequisite",
+    "/proof/foundation-substrate-closure",
+    "Machine-completed source-completion evidence must be reviewed so the auditor can confirm no current-state non-UI foundation or operational-substrate item was silently omitted before staging QA.",
     "repository-prerequisite-reference",
   ],
   [
@@ -330,10 +329,10 @@ const MACHINE_PROOF_WORK_MAP = Object.freeze([
     "Confirm Test completion is valid before staging-specific enablement or staging QA proceeds.",
   ],
   [
-    "React non-UI parity formal closure",
-    "USF-291",
-    "docs/architecture/proof-cockpit-react-non-ui-parity-import.json",
-    "Confirm PR 243, merge SHA, external-review report, assurance case, chain-of-custody rows, validator pass, and preserved non-claims before staging QA relies on React-derived non-UI closure.",
+    "Foundation substrate closure formal closure",
+    "USF-292",
+    "docs/architecture/proof-cockpit-foundation-substrate-closure-import.json",
+    "Confirm the current-state report, Dev closure artefacts, sealed provenance pointer, chain-of-custody rows, validator pass, and preserved non-claims before staging QA relies on current-state non-UI closure.",
   ],
   [
     "External HTTP semantics gate",
@@ -436,20 +435,17 @@ const SOURCE_DOCUMENTS = Object.freeze([
   ["Missing evidence planted defects gate", "docs/architecture/missing-evidence-planted-defects-regression-gate.json"],
   ["Test completion staging-entry gate", "docs/architecture/test-environment-completion-and-staging-entry-gate.json"],
   ["Pre-staging external HTTP gate", "docs/architecture/pre-staging-external-http-semantics-readiness-gate.json"],
-  ["Proof cockpit React non-UI parity import", "docs/architecture/proof-cockpit-react-non-ui-parity-import.json"],
-  ["Proof cockpit React non-UI parity import note", "docs/architecture/proof-cockpit-react-non-ui-parity-import.md"],
-  ["React non-UI parity external-review report", "docs/architecture/react-non-ui-parity-external-review-report.md"],
-  ["React non-UI parity closure gate", "docs/architecture/react-non-ui-parity-test-closure-gate.json"],
-  ["React non-UI parity closure gate note", "docs/architecture/react-non-ui-parity-test-closure-gate.md"],
-  ["React parity assurance case", "docs/architecture/react-parity-assurance-case.json"],
-  ["React parity assurance case note", "docs/architecture/react-parity-assurance-case.md"],
-  ["React non-UI baseline inventory", "docs/architecture/react-non-ui-baseline-inventory.json"],
-  ["React service equivalence matrix", "docs/architecture/react-service-equivalence-matrix.json"],
-  ["React route port adapter provider equivalence", "docs/architecture/react-route-port-adapter-provider-equivalence.json"],
-  ["React test proof disposition ledger", "docs/architecture/react-test-proof-disposition-ledger.json"],
-  ["React UI-derived foundation behaviour rewrite ledger", "docs/architecture/react-ui-derived-foundation-behaviour-rewrite-ledger.json"],
-  ["React operator admin surface equivalence", "docs/architecture/react-operator-admin-surface-equivalence.json"],
-  ["React non-UI parity gap register", "docs/architecture/react-non-ui-parity-gap-register.json"],
+  ["Proof cockpit foundation substrate closure import", "docs/architecture/proof-cockpit-foundation-substrate-closure-import.json"],
+  ["Proof cockpit foundation substrate closure import note", "docs/architecture/proof-cockpit-foundation-substrate-closure-import.md"],
+  ["USF current-state foundation closure record", "docs/architecture/usf-current-state-foundation-closure-record.json"],
+  ["USF current-state foundation closure report note", "docs/architecture/usf-current-state-foundation-closure-report.md"],
+  ["Dev foundation substrate closure", "docs/architecture/dev-foundation-substrate-closure.json"],
+  ["Dev foundation substrate closure note", "docs/architecture/dev-foundation-substrate-closure.md"],
+  ["Dev compose substrate closure", "docs/architecture/dev-compose-substrate-closure.json"],
+  ["Dev command proof closure", "docs/architecture/dev-command-proof-closure.json"],
+  ["Dev-to-Test closure handoff", "docs/architecture/dev-to-test-closure-handoff.json"],
+  ["Sealed closure provenance", "docs/architecture/superseded-lineage-closure-provenance.json"],
+  ["Sealed closure provenance note", "docs/architecture/superseded-lineage-closure-provenance.md"],
   ["Proof cockpit machine QA evidence model", "docs/architecture/proof-cockpit-machine-qa-evidence-model.json"],
   ["Proof cockpit machine QA evidence model note", "docs/architecture/proof-cockpit-machine-qa-evidence-model.md"],
   ["Capability source coverage matrix", "docs/architecture/capability-source-coverage-matrix.md"],
@@ -550,25 +546,23 @@ function sourceFilePath(sourcePath) {
   return join(ROOT, sourcePath);
 }
 
-function loadReactParityClosureEvidence() {
-  const importRecord = readJsonOrNull(sourceFilePath(REACT_PARITY_IMPORT_SOURCE)) ?? {};
-  const closure = readJsonOrNull(sourceFilePath(REACT_PARITY_CLOSURE_SOURCE)) ?? {};
-  const assurance = readJsonOrNull(sourceFilePath(REACT_PARITY_ASSURANCE_SOURCE)) ?? {};
-  const gapRegister = readJsonOrNull(sourceFilePath(REACT_PARITY_GAP_SOURCE)) ?? {};
+function loadFoundationClosureEvidence() {
+  const importRecord = readJsonOrNull(sourceFilePath(FOUNDATION_CLOSURE_IMPORT_SOURCE)) ?? {};
+  const report = readJsonOrNull(sourceFilePath(FOUNDATION_CLOSURE_RECORD_SOURCE)) ?? {};
+  const provenance = readJsonOrNull(sourceFilePath(FOUNDATION_CLOSURE_PROVENANCE_SOURCE)) ?? {};
   return {
     importRecord,
-    closure,
-    assurance,
-    gapRegister,
-    importedSummary: importRecord.importedEvidenceSummary ?? closure.evidenceSummary ?? {},
+    report,
+    provenance,
+    importedSummary: importRecord.importedEvidenceSummary ?? report.currentSurfaces ?? {},
     evidenceSources: importRecord.evidenceSources ?? [],
-    nonClaims: importRecord.nonClaims ?? closure.nonClaims ?? [],
+    nonClaims: importRecord.nonClaims ?? report.nonClaims ?? [],
   };
 }
 
-function runReactParityValidatorCheck() {
+function runFoundationClosureValidatorCheck() {
   try {
-    const output = execFileSync(REACT_PARITY_VALIDATOR_COMMAND[0], REACT_PARITY_VALIDATOR_COMMAND.slice(1), {
+    const output = execFileSync(FOUNDATION_CLOSURE_VALIDATOR_COMMAND[0], FOUNDATION_CLOSURE_VALIDATOR_COMMAND.slice(1), {
       cwd: ROOT,
       encoding: "utf8",
       maxBuffer: 1024 * 1024,
@@ -577,13 +571,13 @@ function runReactParityValidatorCheck() {
     });
     return {
       status: "pass",
-      command: REACT_PARITY_VALIDATOR_COMMAND.join(" "),
+      command: FOUNDATION_CLOSURE_VALIDATOR_COMMAND.join(" "),
       detail: output.trim(),
     };
   } catch (error) {
     return {
       status: "local-check-unavailable-or-fail",
-      command: REACT_PARITY_VALIDATOR_COMMAND.join(" "),
+      command: FOUNDATION_CLOSURE_VALIDATOR_COMMAND.join(" "),
       detail: String(error.stderr || error.stdout || error.message || "validator check unavailable").slice(0, 1200),
     };
   }
@@ -673,7 +667,7 @@ function loadServices() {
 export function buildData() {
   const contracts = loadSemanticContracts();
   const serviceCatalogue = loadServices();
-  const reactParity = loadReactParityClosureEvidence();
+  const foundationClosure = loadFoundationClosureEvidence();
   const capabilities = parseMatrixCapabilities().map((capability) => {
     const contract = contracts.get(capability.semanticContractId);
     const serviceRefs = servicesForCapability(capability, serviceCatalogue.servicesById);
@@ -725,15 +719,18 @@ export function buildData() {
       target: "runtime route/API, audit, logs, metrics, traces, alerts, screenshots, and immutable artifact are not wired in this first pass",
     });
   }
-  evidence.set("usf-291-react-non-ui-parity-closure", {
-    id: "usf-291-react-non-ui-parity-closure",
-    capabilityId: "aggregate-react-non-ui-parity",
-    title: "USF-291 React non-UI parity closure evidence",
-    status: reactParity.importRecord?.validatorEvidence?.allResult === "pass" ? "merged-validator-pass" : "available-repository-link",
-    target: REACT_PARITY_IMPORT_SOURCE,
-    proofRoute: "/proof/react-non-ui-parity",
+  evidence.set("usf-foundation-substrate-closure", {
+    id: "usf-foundation-substrate-closure",
+    capabilityId: "aggregate-foundation-substrate-closure",
+    title: "USF foundation substrate closure evidence",
+    status:
+      foundationClosure.importRecord?.validatorEvidence?.allResult === "pass"
+        ? "validator-pass"
+        : "available-repository-link",
+    target: FOUNDATION_CLOSURE_IMPORT_SOURCE,
+    proofRoute: "/proof/foundation-substrate-closure",
   });
-  return { capabilities, contracts, scenarios, evidence, reactParity, ...serviceCatalogue };
+  return { capabilities, contracts, scenarios, evidence, foundationClosure, ...serviceCatalogue };
 }
 
 export function getProofCockpitManifest() {
@@ -800,7 +797,7 @@ function layout(title, body) {
 <nav>
 <a href="/proof">Home</a> |
 <a href="/proof/qa">QA</a> |
-<a href="/proof/react-non-ui-parity">React non-UI parity</a> |
+<a href="/proof/foundation-substrate-closure">Foundation substrate closure</a> |
 <a href="/proof/actions">Actions</a> |
 <a href="/proof/capabilities">Capabilities</a> |
 <a href="/proof/services">Services</a> |
@@ -821,7 +818,7 @@ ${body}
 </main>
 <footer>
 <h2>Global non-claim boundary</h2>
-<p>This proof cockpit does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, full React product parity, or USF-290 completion.</p>
+<p>This proof cockpit does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, complete product parity, or USF-290 completion.</p>
 </footer>
 </body>
 </html>
@@ -912,7 +909,7 @@ ${textInput("screenshotUrl", "Screenshot or artifact URL", context.screenshotUrl
 ${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence.")}
 ${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence.")}
 ${checkboxInput("noRealTenantData", "This action used no real tenant data, real secrets, or private local state.")}
-${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full React parity claim.")}
+${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
 ${textArea("notes", "Notes, blockers, corrections, or human observation", context.notes ?? "")}
 <p><button type="submit">Record QA action</button></p>
 </form>`;
@@ -1464,78 +1461,75 @@ ${nonClaimsBlock()}`,
   );
 }
 
-function reactParitySummaryRows(summary = {}) {
+function foundationClosureSummaryRows(summary = {}) {
   return Object.entries(summary).map(
     ([key, value]) => `<tr><td>${escapeHtml(titleCase(key))}</td><td>${escapeHtml(typeof value === "object" ? JSON.stringify(value) : value)}</td></tr>`,
   );
 }
 
-function reactParitySourceRows(evidenceSources = []) {
+function foundationClosureSourceRows(evidenceSources = []) {
   return evidenceSources.map(
     (source) =>
       `<tr><td>${escapeHtml(source.title ?? source.id)}</td><td>${sourcePathCell(source.path)}</td><td>${escapeHtml(source.id ?? "")}</td></tr>`,
   );
 }
 
-function reactParityClaimRows(assurance = {}) {
-  return (assurance.claims ?? []).map(
-    (claim) => `<tr>
-<td>${escapeHtml(claim.id)}</td>
-<td>${escapeHtml(claim.claimText)}</td>
-<td>${escapeHtml(claim.humanDecisionStatus ?? "not-recorded")}</td>
-<td>${escapeHtml(claim.limitations ?? "")}</td>
+function foundationClosureChainRows(evidence = {}) {
+  const report = evidence.report ?? {};
+  const provenance = evidence.provenance ?? {};
+  return [
+    ["current-state-record", "USF-292", "foundation closure validator", FOUNDATION_CLOSURE_RECORD_SOURCE, report.id ?? "missing", report.closureState ?? "missing"],
+    ["dev-foundation", "USF-292", "Dev closure artefact", "docs/architecture/dev-foundation-substrate-closure.json", "current Dev substrate", "complete"],
+    ["dev-compose", "USF-292", "Dev compose artefact", "docs/architecture/dev-compose-substrate-closure.json", "current service catalogue", "complete"],
+    ["dev-command-proof", "USF-292", "Dev command artefact", "docs/architecture/dev-command-proof-closure.json", "current proof commands", "complete"],
+    ["dev-to-test-handoff", "USF-292", "Dev-to-Test artefact", "docs/architecture/dev-to-test-closure-handoff.json", "handoff boundary", "complete"],
+    ["sealed-provenance", provenance.completedIssue ?? "sealed", "PR 243 merge", FOUNDATION_CLOSURE_PROVENANCE_SOURCE, provenance.completedPullRequest?.mergeSha ?? "", "provenance-only"],
+  ].map(
+    ([chainId, claimId, method, artifactPath, artifactHash, status]) => `<tr>
+<td>${escapeHtml(chainId)}</td>
+<td>${escapeHtml(claimId)}</td>
+<td>${escapeHtml(method)}</td>
+<td>${sourcePathCell(artifactPath)}</td>
+<td>${escapeHtml(artifactHash)}</td>
+<td>${escapeHtml(status)}</td>
 </tr>`,
   );
 }
 
-function reactParityChainRows(assurance = {}) {
-  return (assurance.chainOfCustody ?? []).map(
-    (chain) => `<tr>
-<td>${escapeHtml(chain.id)}</td>
-<td>${escapeHtml(chain.claimId)}</td>
-<td>${escapeHtml(chain.testCommand)}</td>
-<td>${sourcePathCell(chain.artifactPath)}</td>
-<td>${escapeHtml(chain.artifactHash)}</td>
-<td>${escapeHtml(chain.sourceGitSha)}</td>
-<td>${escapeHtml(chain.humanDecisionStatus ?? "see assurance claim")}</td>
-</tr>`,
-  );
-}
-
-function renderReactNonUiParity(data, state) {
-  const evidence = data.reactParity ?? loadReactParityClosureEvidence();
+function renderFoundationSubstrateClosure(data, state) {
+  const evidence = data.foundationClosure ?? loadFoundationClosureEvidence();
   const importRecord = evidence.importRecord ?? {};
-  const closure = evidence.closure ?? {};
-  const assurance = evidence.assurance ?? {};
-  const gapSummary = evidence.gapRegister?.summary ?? {};
+  const report = evidence.report ?? {};
+  const provenance = evidence.provenance ?? {};
   const importedValidator = importRecord.validatorEvidence ?? {};
-  const liveValidator = runReactParityValidatorCheck();
+  const liveValidator = runFoundationClosureValidatorCheck();
   const recordedActions = recordedActionCountFor(
     state,
     (action) =>
-      action.sourceUrl === REACT_PARITY_IMPORT_SOURCE ||
-      action.evidenceId === "usf-291-react-non-ui-parity-closure" ||
-      action.actionName?.includes("React non-UI parity"),
+      action.sourceUrl === FOUNDATION_CLOSURE_IMPORT_SOURCE ||
+      action.evidenceId === "usf-foundation-substrate-closure" ||
+      action.actionName?.includes("Foundation substrate closure"),
   );
   return layout(
-    "USF-291 React non-UI parity closure evidence",
-    `<p>This page imports merged USF-291 evidence into the USF-290 staging proof cockpit so the auditor can verify prior Test-layer closure before staging capability QA. It does not complete USF-290 and it does not claim React UI parity.</p>
+    "USF foundation substrate closure evidence",
+    `<p>This page imports current-state USF foundation substrate closure evidence into the USF-290 staging proof cockpit so the auditor can verify Dev and Test closure before staging capability QA. It does not complete USF-290 and it does not claim product UI readiness.</p>
 <table><tbody>
-<tr><th>Imported issue</th><td>USF-291</td></tr>
-<tr><th>Source PR</th><td><a href="${escapeHtml(importRecord.sourcePullRequest?.url ?? "https://github.com/maldous/usf/pull/243")}">PR ${escapeHtml(importRecord.sourcePullRequest?.number ?? "243")}</a></td></tr>
+<tr><th>Current-state issue</th><td>${escapeHtml(importRecord.currentStateIssue ?? "USF-292")}</td></tr>
+<tr><th>Sealed source completion issue</th><td>${escapeHtml(importRecord.sourceCompletionIssue ?? provenance.completedIssue ?? "recorded in sealed provenance")}</td></tr>
+<tr><th>Source completion PR</th><td><a href="${escapeHtml(importRecord.sourcePullRequest?.url ?? "https://github.com/maldous/usf/pull/243")}">PR ${escapeHtml(importRecord.sourcePullRequest?.number ?? "243")}</a></td></tr>
 <tr><th>Merge SHA</th><td>${escapeHtml(importRecord.sourcePullRequest?.mergeSha ?? "ec37409ddd779661569f8e5f8e4c835695efea96")}</td></tr>
-<tr><th>Bounded claim imported for review</th><td>${escapeHtml(importRecord.boundedClaimImportedForReview ?? closure.boundedClaim ?? "missing")}</td></tr>
-<tr><th>Closure decision</th><td>${escapeHtml(closure.closureDecision ?? "missing")}</td></tr>
-<tr><th>Open gap count</th><td>${escapeHtml(gapSummary.openGapCount ?? evidence.importedSummary?.openGapCount ?? "missing")}</td></tr>
+<tr><th>Bounded claim imported for review</th><td>${escapeHtml(importRecord.boundedClaimImportedForReview ?? report.currentStateClaim ?? "missing")}</td></tr>
+<tr><th>Closure state</th><td>${escapeHtml(report.closureState ?? "missing")}</td></tr>
+<tr><th>Open gap count</th><td>${escapeHtml(evidence.importedSummary?.openGapCount ?? report.gaps?.length ?? "missing")}</td></tr>
 <tr><th>Recorded QA reviews</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section>
 <h2>Validator result</h2>
 <table><tbody>
-<tr><th>Merged validator command</th><td>${escapeHtml(importedValidator.allCommand ?? REACT_PARITY_VALIDATOR_COMMAND.join(" "))}</td></tr>
-<tr><th>Merged validator result</th><td>${escapeHtml(importedValidator.allResult ?? "missing")}</td></tr>
-<tr><th>Merged selftest command</th><td>${escapeHtml(importedValidator.selftestCommand ?? "missing")}</td></tr>
-<tr><th>Merged selftest result</th><td>${escapeHtml(importedValidator.selftestResult ?? "missing")}</td></tr>
+<tr><th>Validator command</th><td>${escapeHtml(importedValidator.allCommand ?? FOUNDATION_CLOSURE_VALIDATOR_COMMAND.join(" "))}</td></tr>
+<tr><th>Validator result</th><td>${escapeHtml(importedValidator.allResult ?? "missing")}</td></tr>
+<tr><th>Selftest command</th><td>${escapeHtml(importedValidator.selftestCommand ?? "missing")}</td></tr>
+<tr><th>Selftest result</th><td>${escapeHtml(importedValidator.selftestResult ?? "missing")}</td></tr>
 <tr><th>Local live-check status</th><td>${escapeHtml(liveValidator.status)}</td></tr>
 <tr><th>Local live-check command</th><td>${escapeHtml(liveValidator.command)}</td></tr>
 </tbody></table>
@@ -1544,34 +1538,30 @@ function renderReactNonUiParity(data, state) {
 </section>
 <section>
 <h2>Evidence summary</h2>
-${table(["Metric", "Value"], reactParitySummaryRows(evidence.importedSummary))}
+${table(["Metric", "Value"], foundationClosureSummaryRows(evidence.importedSummary))}
 </section>
 <section>
-<h2>External-review and source evidence</h2>
-${table(["Evidence", "Read-only source link", "Evidence id"], reactParitySourceRows(evidence.evidenceSources))}
-</section>
-<section>
-<h2>Assurance claims</h2>
-${table(["Claim id", "Claim", "Human decision status", "Limitations"], reactParityClaimRows(assurance))}
+<h2>Current-state source evidence</h2>
+${table(["Evidence", "Read-only source link", "Evidence id"], foundationClosureSourceRows(evidence.evidenceSources))}
 </section>
 <section>
 <h2>Chain of custody</h2>
-${table(["Chain id", "Claim id", "Validator or proof command", "Artifact", "Artifact hash", "Source SHA", "Human decision"], reactParityChainRows(assurance))}
+${table(["Chain id", "Claim id", "Method", "Artifact", "Evidence value", "Status"], foundationClosureChainRows(evidence))}
 </section>
 <section>
-<h2>Record React non-UI parity evidence review</h2>
+<h2>Record Foundation substrate closure evidence review</h2>
 ${actionForm({
       actionType: "evidence-review",
-      evidenceId: "usf-291-react-non-ui-parity-closure",
-      sourceUrl: REACT_PARITY_IMPORT_SOURCE,
-      evidenceUrl: "/proof/react-non-ui-parity",
-      actionName: "review USF-291 React non-UI parity closure evidence",
-      returnTo: "/proof/react-non-ui-parity",
+      evidenceId: "usf-foundation-substrate-closure",
+      sourceUrl: FOUNDATION_CLOSURE_IMPORT_SOURCE,
+      evidenceUrl: "/proof/foundation-substrate-closure",
+      actionName: "review USF foundation substrate closure evidence",
+      returnTo: "/proof/foundation-substrate-closure",
     })}
 </section>
 ${nonClaimsBlock()}
 <section>
-<h2>Preserved USF-291 non-claims</h2>
+<h2>Preserved non-claims</h2>
 ${unorderedList(evidence.nonClaims)}
 </section>`,
   );
@@ -1602,7 +1592,7 @@ function routeToLink(route) {
 function renderQa(data, state) {
   const artifactRows = [
     ["Capability evidence", "semantic contract, route/API proof, role/persona, happy path, negative path, screenshot", "/proof/capabilities"],
-    ["React non-UI parity evidence", "USF-291 external-review report, assurance case, chain-of-custody rows, validator result, and merge SHA", "/proof/react-non-ui-parity"],
+    ["Foundation substrate closure evidence", "current-state report, Dev closure artefacts, sealed provenance, validator result, and merge SHA", "/proof/foundation-substrate-closure"],
     ["Service evidence", "compose profile, health/readiness, seed/reset/cleanup, safe operation, proof command", "/proof/services"],
     ["Audit evidence", "actor, tenant, action, result, timestamp, correlation id, immutable link", "/proof/audit"],
     ["Observability evidence", "trace id, log line, metric/latency bucket, dashboard or runbook link", "/proof/observability"],
@@ -2349,8 +2339,8 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
   if (routePath === "/proof/qa") {
     return html(renderQa(data, state));
   }
-  if (routePath === "/proof/react-non-ui-parity") {
-    return html(renderReactNonUiParity(data, state));
+  if (routePath === "/proof/foundation-substrate-closure") {
+    return html(renderFoundationSubstrateClosure(data, state));
   }
   if (routePath === "/proof/actions") {
     return html(renderActions(state));

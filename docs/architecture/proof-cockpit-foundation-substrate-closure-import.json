@@ -1,0 +1,95 @@
+{
+  "id": "proof-cockpit-foundation-substrate-closure-import",
+  "schemaVersion": "1.0.0",
+  "linearIssue": "USF-290",
+  "currentStateIssue": "USF-292",
+  "sourceCompletionIssue": "see-sealed-provenance",
+  "purpose": "Import the completed foundation substrate closure evidence into the staging proof cockpit for human QA review without making final USF-290 or readiness claims.",
+  "sourcePullRequest": {
+    "number": 243,
+    "url": "https://github.com/maldous/usf/pull/243",
+    "mergeSha": "ec37409ddd779661569f8e5f8e4c835695efea96"
+  },
+  "boundedClaimImportedForReview": "USF Dev and Test foundation substrate closure is proven for non-product foundation and operational-substrate surfaces where evidenced by USF-native closure artefacts.",
+  "validatorEvidence": {
+    "allCommand": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json",
+    "allResult": "pass",
+    "selftestCommand": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py selftest --json",
+    "selftestResult": "pass",
+    "sourceCompletionValidatorResult": "pass",
+    "resultSource": "Sealed source-completion reconciliation plus USF-292 current-state closure validator",
+    "liveCheckNote": "The cockpit checks the USF-native closure validator. Sealed provenance is not active semantic authority."
+  },
+  "evidenceSources": [
+    {
+      "id": "current-state-report",
+      "title": "USF current-state foundation closure report",
+      "path": "docs/architecture/usf-current-state-foundation-closure-report.md"
+    },
+    {
+      "id": "current-state-record-json",
+      "title": "USF current-state foundation closure record JSON",
+      "path": "docs/architecture/usf-current-state-foundation-closure-record.json"
+    },
+    {
+      "id": "dev-foundation",
+      "title": "Dev foundation substrate closure",
+      "path": "docs/architecture/dev-foundation-substrate-closure.json"
+    },
+    {
+      "id": "dev-compose",
+      "title": "Dev compose substrate closure",
+      "path": "docs/architecture/dev-compose-substrate-closure.json"
+    },
+    {
+      "id": "dev-command-proof",
+      "title": "Dev command proof closure",
+      "path": "docs/architecture/dev-command-proof-closure.json"
+    },
+    {
+      "id": "dev-to-test-handoff",
+      "title": "Dev-to-Test closure handoff",
+      "path": "docs/architecture/dev-to-test-closure-handoff.json"
+    },
+    {
+      "id": "sealed-provenance",
+      "title": "Sealed closure provenance",
+      "path": "docs/architecture/superseded-lineage-closure-provenance.json"
+    },
+    {
+      "id": "reference-retirement-scan",
+      "title": "Reference retirement scan",
+      "path": "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json"
+    }
+  ],
+  "importedEvidenceSummary": {
+    "currentCapabilityRows": 75,
+    "currentServiceRows": 39,
+    "routePortAdapterProviderRows": 903,
+    "testProofRows": 230,
+    "operatorAdminSurfaces": 18,
+    "openGapCount": 0,
+    "unexplainedHistoricalReferenceMatches": 0
+  },
+  "cockpitDisplayRequirements": [
+    "Show the imported bounded claim as USF foundation substrate closure evidence only.",
+    "Show the current-state report, Dev closure artefacts, Dev-to-Test handoff, validator result, and sealed provenance reference.",
+    "Link every evidence source through the read-only source viewer.",
+    "Keep final USF-290 human acceptance disabled until the staging proof cockpit acceptance workflow is completed.",
+    "Preserve non-claims on the closure page and on high-level cockpit pages."
+  ],
+  "nonClaims": [
+    "Product UI readiness",
+    "Staging readiness",
+    "Staging readiness for real users",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product readiness",
+    "USF-290 completion"
+  ]
+}

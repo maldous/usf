@@ -1,0 +1,73 @@
+{
+  "id": "usf-current-state-foundation-closure-record",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "currentStateClaim": "USF Dev and Test foundation substrate closure is proven. Current capability, service, route, port, adapter, provider, job, workflow, command, schema, migration, operator/admin, audit, observability, and enterprise evidence surfaces are self-contained and do not require active external-lineage authority.",
+  "closureState": "complete",
+  "activeHistoricalExternalAuthority": false,
+  "sections": [
+    "Current USF foundation closure claim",
+    "Dev environment closure",
+    "Test environment closure",
+    "Staging proof consumption state",
+    "Current service catalogue",
+    "Current operational substrate",
+    "Route port adapter provider closure",
+    "Job workflow command proof closure",
+    "Schema migration config closure",
+    "Operator admin surface closure",
+    "Enterprise and ISO-style support mapping",
+    "Evidence chain of custody",
+    "Remaining non-claims",
+    "Reference retirement confirmation",
+    "Gaps and Linear carriers"
+  ],
+  "devClosure": {
+    "foundation": "docs/architecture/dev-foundation-substrate-closure.json",
+    "compose": "docs/architecture/dev-compose-substrate-closure.json",
+    "commandProof": "docs/architecture/dev-command-proof-closure.json",
+    "handoff": "docs/architecture/dev-to-test-closure-handoff.json"
+  },
+  "testClosure": {
+    "testReadiness": "docs/architecture/test-readiness-final-acceptance-gate.json",
+    "testCompletion": "docs/architecture/test-environment-completion-and-staging-entry-gate.json",
+    "sealedSourceCompletion": "docs/architecture/superseded-lineage-closure-provenance.json"
+  },
+  "stagingProofConsumption": {
+    "cockpitImport": "docs/architecture/proof-cockpit-foundation-substrate-closure-import.json",
+    "state": "available-for-human-review",
+    "finalAcceptance": "not-complete"
+  },
+  "currentSurfaces": {
+    "capabilityRows": 75,
+    "serviceRows": 39,
+    "routePortAdapterProviderRows": 903,
+    "testProofRows": 230,
+    "operatorAdminSurfaces": 18
+  },
+  "retirementScan": {
+    "artefact": "docs/architecture/usf-current-state-foundation-closure-reference-retirement-scan.json",
+    "command": "git grep with the historical-transition pattern set recorded in PR validation",
+    "unexplainedCount": 0,
+    "classificationRequired": true,
+    "classificationPolicy": "Matches are allowed only in sealed provenance, completed transition artefacts, third-party dependency names, false positives, or explicit human-decision-required rows."
+  },
+  "gaps": [],
+  "linearCarriers": [
+    "USF-290",
+    "USF-292"
+  ],
+  "nonClaims": [
+    "Product UI readiness",
+    "Staging readiness",
+    "Staging readiness for real users",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product readiness"
+  ]
+}

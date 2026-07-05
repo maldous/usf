@@ -1,0 +1,32 @@
+{
+  "id": "dev-compose-substrate-closure",
+  "schemaVersion": "1.0.0",
+  "issueId": "USF-292",
+  "environment": "dev",
+  "claim": "The Dev compose substrate is closed against the current USF service catalogue and generated compose definitions.",
+  "closureState": "complete",
+  "serviceCatalogue": {
+    "source": "spec/instances/compose-service/service-catalogue.json",
+    "state": "current-usf-authority"
+  },
+  "composeProfiles": [
+    "compose/compose.dev.generated.yaml",
+    "compose/compose.test.generated.yaml",
+    "compose/compose.staging.generated.yaml",
+    "compose/compose.production.generated.yaml"
+  ],
+  "serviceEvidencePosture": {
+    "operatorAdminSurfaceClosure": "covered-by-current-service-catalogue-and-USF-290-service-clickthrough-requirements",
+    "screenshotOrEquivalentEvidence": "required where safe for staging proof; CLI or API evidence allowed where UI screenshots would expose secrets"
+  },
+  "validation": [
+    "python3 tools/validate-compose/validate-compose.py all --json",
+    "corepack pnpm compose:check-generated"
+  ],
+  "nonClaims": [
+    "Staging readiness",
+    "Production readiness",
+    "live-provider readiness",
+    "enterprise production readiness"
+  ]
+}
