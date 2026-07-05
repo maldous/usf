@@ -162,7 +162,10 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
       status: jsonResponse.status,
       contentTypeMatched: jsonContentType.includes("application/json"),
       noStoreHeadersObserved: jsonNoStoreHeaders,
-      varyHostObserved: jsonResponse.vary.split(",").map((value) => value.trim().toLowerCase()).includes("host"),
+      varyHostObserved: jsonResponse.vary
+        .split(",")
+        .map((value) => value.trim().toLowerCase())
+        .includes("host"),
       markerObserved: jsonPayload.marker === "usf-public-edge",
       environmentMatched: jsonPayload.environment === row.environment,
       fqdnMatched: jsonPayload.fqdn === row.fqdn,
@@ -172,7 +175,10 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
       status: routeResponse.status,
       contentTypeMatched: routeContentType.includes("text/html"),
       noStoreHeadersObserved: routeNoStoreHeaders,
-      varyHostObserved: routeResponse.vary.split(",").map((value) => value.trim().toLowerCase()).includes("host"),
+      varyHostObserved: routeResponse.vary
+        .split(",")
+        .map((value) => value.trim().toLowerCase())
+        .includes("host"),
       markerObserved: routeBody.includes("usf-public-route"),
       telemetryBootstrapObserved: routeBody.includes("usf-public-route-telemetry-bootstrap"),
       nonClaimsObserved: routeNonClaimsObserved,
