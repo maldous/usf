@@ -17,16 +17,20 @@ interface ProbeResult {
     readonly status: number;
     readonly contentTypeMatched: boolean;
     readonly noStoreHeadersObserved: boolean;
+    readonly varyHostObserved: boolean;
     readonly markerObserved: boolean;
     readonly environmentMatched: boolean;
     readonly fqdnMatched: boolean;
+    readonly nonClaimsObserved: boolean;
   };
   readonly browserRoute: {
     readonly status: number;
     readonly contentTypeMatched: boolean;
     readonly noStoreHeadersObserved: boolean;
+    readonly varyHostObserved: boolean;
     readonly markerObserved: boolean;
     readonly telemetryBootstrapObserved: boolean;
+    readonly nonClaimsObserved: boolean;
   };
   readonly safeMethods: {
     readonly jsonHeadStatus: number;
@@ -49,6 +53,7 @@ interface HttpProbeResponse {
   readonly cacheControl: string;
   readonly cdnCacheControl: string;
   readonly netlifyCdnCacheControl: string;
+  readonly vary: string;
   readonly body: string;
 }
 
@@ -89,6 +94,7 @@ async function request(
             cacheControl: headerValue(response.headers["cache-control"]),
             cdnCacheControl: headerValue(response.headers["cdn-cache-control"]),
             netlifyCdnCacheControl: headerValue(response.headers["netlify-cdn-cache-control"]),
+            vary: headerValue(response.headers["vary"]),
             body,
           });
         });
@@ -118,6 +124,7 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
     readonly marker?: string;
     readonly environment?: string;
     readonly fqdn?: string;
+    readonly nonClaims?: readonly string[];
   };
   const routeResponse = await request(port, row.fqdn, "/__proof/public-route");
   const routeHeadResponse = await request(port, row.fqdn, "/__proof/public-route", "HEAD");
@@ -132,6 +139,22 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
     routeResponse.cacheControl.includes("no-store") &&
     routeResponse.cdnCacheControl.includes("no-store") &&
     routeResponse.netlifyCdnCacheControl.includes("no-store");
+  const requiredNonClaims = [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-product-readiness",
+    "no-v2-proof-tag-authorization",
+  ];
+  const jsonNonClaims = new Set(jsonPayload.nonClaims ?? []);
+  const jsonNonClaimsObserved = requiredNonClaims.every((claim) => jsonNonClaims.has(claim));
+  const routeNonClaimsObserved = requiredNonClaims.every((claim) => routeBody.includes(claim));
   const result = {
     fqdn: row.fqdn,
     environment: row.environment,
@@ -139,16 +162,20 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
       status: jsonResponse.status,
       contentTypeMatched: jsonContentType.includes("application/json"),
       noStoreHeadersObserved: jsonNoStoreHeaders,
+      varyHostObserved: jsonResponse.vary.split(",").map((value) => value.trim().toLowerCase()).includes("host"),
       markerObserved: jsonPayload.marker === "usf-public-edge",
       environmentMatched: jsonPayload.environment === row.environment,
       fqdnMatched: jsonPayload.fqdn === row.fqdn,
+      nonClaimsObserved: jsonNonClaimsObserved,
     },
     browserRoute: {
       status: routeResponse.status,
       contentTypeMatched: routeContentType.includes("text/html"),
       noStoreHeadersObserved: routeNoStoreHeaders,
+      varyHostObserved: routeResponse.vary.split(",").map((value) => value.trim().toLowerCase()).includes("host"),
       markerObserved: routeBody.includes("usf-public-route"),
       telemetryBootstrapObserved: routeBody.includes("usf-public-route-telemetry-bootstrap"),
+      nonClaimsObserved: routeNonClaimsObserved,
     },
     safeMethods: {
       jsonHeadStatus: jsonHeadResponse.status,
@@ -168,14 +195,18 @@ async function probe(port: number, row: (typeof EXPECTED)[number]): Promise<Prob
       result.jsonEndpoint.status === 200 &&
       result.jsonEndpoint.contentTypeMatched &&
       result.jsonEndpoint.noStoreHeadersObserved &&
+      result.jsonEndpoint.varyHostObserved &&
       result.jsonEndpoint.markerObserved &&
       result.jsonEndpoint.environmentMatched &&
       result.jsonEndpoint.fqdnMatched &&
+      result.jsonEndpoint.nonClaimsObserved &&
       result.browserRoute.status === 200 &&
       result.browserRoute.contentTypeMatched &&
       result.browserRoute.noStoreHeadersObserved &&
+      result.browserRoute.varyHostObserved &&
       result.browserRoute.markerObserved &&
       result.browserRoute.telemetryBootstrapObserved &&
+      result.browserRoute.nonClaimsObserved &&
       result.safeMethods.accepted
         ? "pass"
         : "fail",

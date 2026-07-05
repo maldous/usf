@@ -7,6 +7,7 @@ SHELL := /bin/bash
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
 	proof-cockpit-validate proof-cockpit-selftest \
+	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
@@ -113,6 +114,12 @@ proof-cockpit-validate:
 
 proof-cockpit-selftest:
 	corepack pnpm proof-cockpit:selftest
+
+foundation-substrate-closure-validate:
+	corepack pnpm foundation-substrate-closure:validate
+
+foundation-substrate-closure-selftest:
+	corepack pnpm foundation-substrate-closure:selftest
 
 public-fqdn-validate:
 	corepack pnpm public-fqdn:validate

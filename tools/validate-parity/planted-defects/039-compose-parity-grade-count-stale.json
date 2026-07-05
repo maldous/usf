@@ -1,0 +1,12 @@
+{
+  "id": "compose-parity-grade-count-stale",
+  "expectedRule": "USF-PARITY-039",
+  "mutation": {
+    "composeParityServicePatch": {
+      "react_service": "alertmanager",
+      "set": {
+        "evidence_grade": "A"
+      }
+    }
+  }
+}

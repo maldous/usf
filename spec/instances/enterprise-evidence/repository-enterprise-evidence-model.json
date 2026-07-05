@@ -9915,7 +9915,7 @@
       ],
       "failClosedBehaviour": "validate-observability and validate-enterprise fail when USF-222 proof artefact, execution markers, enterprise rows, service non-equivalence boundaries, or non-claims are missing or overclaimed.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, and value-free synthetic audit-linked signals only. Evidence artefact: docs/architecture/observability-alerting-dashboard-incident-execution-proof.json. Source issue USF-222.",
-      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; live provider, Sentry service, Grafana, Alertmanager, production incident response, and environment readiness remain non-claims. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-product-readiness,usf-133-closure,live-monitoring-readiness,alerting-readiness,dashboard-readiness,incident-response-readiness,sentry-service-readiness."
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; live provider, Sentry service, Grafana, Alertmanager, production incident response, and environment readiness remain non-claims. nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-product-readiness,usf-133-closure,live-monitoring-readiness,alerting-readiness,dashboard-readiness,incident-response-readiness,sentry-service-readiness. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-adapter-runtime-database-provider-binding",
@@ -9939,7 +9939,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-mailpit-notification-provider",
@@ -9963,7 +9963,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-nats-event-bus-provider",
@@ -9987,7 +9987,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-minio-object-storage-provider",
@@ -10011,7 +10011,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-keycloak-identity-provider",
@@ -10035,7 +10035,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-openbao-secret-provider",
@@ -10059,7 +10059,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-temporal-workflow-provider",
@@ -10083,7 +10083,7 @@
       ],
       "failClosedBehaviour": "adapter proof must deny or report unavailable state without broad readiness claim",
       "monitoringAuditEvidence": "structured local proof evidence must include correlation id, provider id, adapter id, outcome, retry count, duration bucket, and safe reason code",
-      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-185",
@@ -10107,7 +10107,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-186",
@@ -10131,7 +10131,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-187",
@@ -10155,7 +10155,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-188",
@@ -10179,7 +10179,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-189",
@@ -10203,7 +10203,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-190",
@@ -10227,7 +10227,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-lane-usf-191",
@@ -10251,7 +10251,7 @@
       ],
       "failClosedBehaviour": "leave the lane issue open and block Done until evidence and follow-up requirements are met",
       "monitoringAuditEvidence": "validator output and PR summary must record changed evidence model rows and non-claims",
-      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates"
+      "residualRisk": "lane-specific implementation evidence remains future until coordinator-approved work lands and validates; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-188-threat-observability-operations",
@@ -10277,7 +10277,7 @@
       ],
       "failClosedBehaviour": "validators fail when telemetry metadata, prohibited leakage fields, redaction tokens, or incident boundaries are missing",
       "monitoringAuditEvidence": "loggingPosture=defined-only; tracingPosture=defined-only; metricsPosture=defined-only; correlationIdPosture=defined-only; alertingWorkflow=deferred-with-owner; dashboardWorkflow=deferred-with-owner; incidentBoundary=explicit-local-evidence-only",
-      "residualRisk": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-product-readiness"
+      "residualRisk": "effectivenessState=deferred-with-owner; riskStatement=observability operations posture is defined but live alert delivery, dashboard runtime, and incident workflow evidence are not proven; threatFailureScenario=operator misses or misreads operational evidence because telemetry, alerting, dashboard, or incident boundary evidence is absent or unsafe; affectedAssetService=observability-operations; impact=medium; likelihood=medium; owner=platform-observability-foundation; treatment=defer-with-owner-and-validator-boundary; reviewDate=2026-09-30; followUpIssue=USF-159; nonClaims=full-dev-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-product-readiness; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-159-observability-operations-depth",
@@ -10301,7 +10301,7 @@
       ],
       "failClosedBehaviour": "validate-observability fails on missing USF-159 proof markers, matrix rows, enterprise evidence linkage, incomplete reclassification, and prohibited readiness claims",
       "monitoringAuditEvidence": "proof:observability emits value-free local telemetry, access audit posture, security signals, and explicit non-claims",
-      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-159; live observability backend, SIEM export, alert delivery, dashboard runtime, incident workflow, SLO operation, and cross-tenant aggregate analytics remain outside current claim; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30"
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-159; live observability backend, SIEM export, alert delivery, dashboard runtime, incident workflow, SLO operation, and cross-tenant aggregate analytics remain outside current claim; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "usf-190-threat-db-tenant-data-control",
@@ -10325,7 +10325,7 @@
       ],
       "failClosedBehaviour": "validate-db, proof:db, runtime:proof:compose, and USF-ENTERPRISE-011 must fail or preserve deferral before a stronger DB claim is made",
       "monitoringAuditEvidence": "Lane 6 evidence rows, parity validator output, and DB proof references must be reported in the PR validation summary",
-      "residualRisk": "USF-139 remains open for broader DB enterprise controls and backup readiness depth"
+      "residualRisk": "USF-139 remains open for broader DB enterprise controls and backup readiness depth; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-190-threat-authorization-pdp-control",
@@ -10349,7 +10349,7 @@
       ],
       "failClosedBehaviour": "validate-authz and USF-ENTERPRISE-011 must block unsafe authorization posture while USF-141 remains open",
       "monitoringAuditEvidence": "authorization.decision audit records and Lane 6 validator output are the bounded evidence surfaces",
-      "residualRisk": "USF-141 remains open for delegation, impersonation, token/session, cache, SoD, and ABAC depth"
+      "residualRisk": "USF-141 remains open for delegation, impersonation, token/session, cache, SoD, and ABAC depth; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-190-threat-audit-evidence-control",
@@ -10373,7 +10373,7 @@
       ],
       "failClosedBehaviour": "validate-audit, proof:audit, and USF-ENTERPRISE-011 must preserve local-only audit boundaries",
       "monitoringAuditEvidence": "tamper-evidence proof references, validator output, and PR non-claims must be retained",
-      "residualRisk": "USF-143 remains open for signing, export, SIEM, retention, disposal, and multi-version reader depth"
+      "residualRisk": "USF-143 remains open for signing, export, SIEM, retention, disposal, and multi-version reader depth; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-190-threat-config-secrets-control",
@@ -10397,7 +10397,7 @@
       ],
       "failClosedBehaviour": "validate-config, proof:config, runtime OpenBao binding evidence, and USF-ENTERPRISE-011 preserve deferred live-secret boundaries",
       "monitoringAuditEvidence": "secret access audit without values and Lane 6 validator output are retained as bounded evidence",
-      "residualRisk": "USF-145 remains open for rotation, provider config plane, KMS, schema migration, and live secret-manager depth"
+      "residualRisk": "USF-145 remains open for rotation, provider config plane, KMS, schema migration, and live secret-manager depth; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-190-threat-files-storage-control",
@@ -10421,7 +10421,7 @@
       ],
       "failClosedBehaviour": "validate-files, proof:files, runtime MinIO proof references, and USF-ENTERPRISE-011 preserve local-only and deferred boundaries",
       "monitoringAuditEvidence": "file action audit events and Lane 6 validator output are retained as bounded evidence",
-      "residualRisk": "USF-147 remains open for scanner, DB metadata adapter, object versioning, DLP, KMS, backup, object lock, and evidence export depth"
+      "residualRisk": "USF-147 remains open for scanner, DB metadata adapter, object versioning, DLP, KMS, backup, object lock, and evidence export depth; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-190-threat-backup-retention-legal-hold-control",
@@ -10445,7 +10445,7 @@
       ],
       "failClosedBehaviour": "USF-ENTERPRISE-011 must require owner, risk, treatment, review date, follow-up, exception expiry, and non-claims for the deferred boundary",
       "monitoringAuditEvidence": "Lane 6 evidence rows and planted defects record the deferred boundary until follow-up issues supply stronger proof",
-      "residualRisk": "USF-139 and USF-147 remain open for backup, restore, retention, purge, legal hold, and residency proof depth"
+      "residualRisk": "USF-139 and USF-147 remain open for backup, restore, retention, purge, legal hold, and residency proof depth; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-187-sentry-error-monitoring-threat",
@@ -10468,7 +10468,7 @@
       ],
       "failClosedBehaviour": "enterprise validator must block missing Lane 3 assurance rows, missing effectiveness state, missing risk treatment metadata, incomplete non-claims, and certification/readiness overclaims",
       "monitoringAuditEvidence": "model rows, closure-matrix links, planted defects, validator output, and PR validation summary only; no runtime monitoring evidence is claimed by this lane",
-      "residualRisk": "riskStatement=error telemetry or operator console access could leak tenant context, secrets, or raw exception details without redaction, tenant-safe labels, retention, alert handoff, and access proof; impact=high; likelihood=medium; owner=platform-observability-foundation; treatment=defer runtime proof and operator-access evidence under USF-196; keep Sentry semantics profile-gated and non-claiming; reviewDate=2026-09-30; followUpIssue=USF-196"
+      "residualRisk": "riskStatement=error telemetry or operator console access could leak tenant context, secrets, or raw exception details without redaction, tenant-safe labels, retention, alert handoff, and access proof; impact=high; likelihood=medium; owner=platform-observability-foundation; treatment=defer runtime proof and operator-access evidence under USF-196; keep Sentry semantics profile-gated and non-claiming; reviewDate=2026-09-30; followUpIssue=USF-196; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "usf-187-sonarqube-static-analysis-threat",
@@ -10491,7 +10491,7 @@
       ],
       "failClosedBehaviour": "enterprise validator must block missing Lane 3 assurance rows, missing effectiveness state, missing risk treatment metadata, incomplete non-claims, and certification/readiness overclaims",
       "monitoringAuditEvidence": "model rows, closure-matrix links, planted defects, validator output, and PR validation summary only; no runtime monitoring evidence is claimed by this lane",
-      "residualRisk": "riskStatement=local deterministic checks could be mistaken for SonarQube service semantics or an absolute-zero quality gate without composed service proof and explicit exceptions; impact=high; likelihood=medium; owner=platform-assurance-foundation; treatment=defer service-semantic proof under USF-195; keep local deterministic verification mandatory but non-equivalent to SonarQube service readiness; reviewDate=2026-09-30; followUpIssue=USF-195"
+      "residualRisk": "riskStatement=local deterministic checks could be mistaken for SonarQube service semantics or an absolute-zero quality gate without composed service proof and explicit exceptions; impact=high; likelihood=medium; owner=platform-assurance-foundation; treatment=defer service-semantic proof under USF-195; keep local deterministic verification mandatory but non-equivalent to SonarQube service readiness; reviewDate=2026-09-30; followUpIssue=USF-195; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "usf-171-threat-static-analysis-overclaim",
@@ -10620,7 +10620,7 @@
       ],
       "failClosedBehaviour": "enterprise validator must block missing Lane 3 assurance rows, missing effectiveness state, missing risk treatment metadata, incomplete non-claims, and certification/readiness overclaims",
       "monitoringAuditEvidence": "model rows, closure-matrix links, planted defects, validator output, and PR validation summary only; no runtime monitoring evidence is claimed by this lane",
-      "residualRisk": "riskStatement=security scanning posture could be implied by local validators or SonarQube catalogue rows without a defined scanner scope, exception process, incident handoff, and risk treatment boundary; impact=high; likelihood=medium; owner=platform-security-foundation; treatment=define posture and defer stronger scanner service claims to USF-195 and USF-187 follow-up evidence; keep compose security validation non-equivalent to certification or live scanning; reviewDate=2026-09-30; followUpIssue=USF-195"
+      "residualRisk": "riskStatement=security scanning posture could be implied by local validators or SonarQube catalogue rows without a defined scanner scope, exception process, incident handoff, and risk treatment boundary; impact=high; likelihood=medium; owner=platform-security-foundation; treatment=define posture and defer stronger scanner service claims to USF-195 and USF-187 follow-up evidence; keep compose security validation non-equivalent to certification or live scanning; reviewDate=2026-09-30; followUpIssue=USF-195; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "usf-186-threat-operator-access-gateway",
@@ -10646,7 +10646,7 @@
       ],
       "failClosedBehaviour": "USF-ENTERPRISE-014 fails on missing decisions, unsafe exposure, missing owner/auth/audit, deferred-risk gaps, or readiness overclaim; USF-186 remains open until merged evidence is reconciled",
       "monitoringAuditEvidence": "validator output, planted-defect self-tests, PR evidence summary, and committed access posture matrix",
-      "residualRisk": "runtime gateway route behaviour, operator clickthrough UX, executed access reviews, privileged-operation audit proof, and provider-console access evidence remain deferred to USF-169 and USF-180"
+      "residualRisk": "runtime gateway route behaviour, operator clickthrough UX, executed access reviews, privileged-operation audit proof, and provider-console access evidence remain deferred to USF-169 and USF-180; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-clickhouse-analytics-provider",
@@ -10668,7 +10668,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-172 disposition, USF-197 deferral, and non-claims",
-      "residualRisk": "ClickHouse adapter proof, supplier review, incident posture, privacy posture, and backup/resilience evidence remain deferred to USF-197 after USF-172 records the bounded disposition"
+      "residualRisk": "ClickHouse adapter proof, supplier review, incident posture, privacy posture, and backup/resilience evidence remain deferred to USF-197 after USF-172 records the bounded disposition; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-redis-cache-provider",
@@ -10690,7 +10690,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-173 deferral and non-claims",
-      "residualRisk": "Redis adapter proof, SDK/client rationale, incident posture, privacy posture, and resilience evidence remain deferred to USF-173"
+      "residualRisk": "Redis adapter proof, SDK/client rationale, incident posture, privacy posture, and resilience evidence remain deferred to USF-173; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-meilisearch-search-provider",
@@ -10770,7 +10770,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
-      "residualRisk": "Live cloud-provider compatibility, provider certification, stronger incident posture, stronger privacy posture, and environment promotion remain non-claimed; bounded local emulator proof and cleanup evidence are provided by USF-208."
+      "residualRisk": "Live cloud-provider compatibility, provider certification, stronger incident posture, stronger privacy posture, and environment promotion remain non-claimed; bounded local emulator proof and cleanup evidence are provided by USF-208. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-wiremock-http-mock-provider",
@@ -10792,7 +10792,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
-      "residualRisk": "WireMock proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
+      "residualRisk": "WireMock proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-webhook-sink-capture-provider",
@@ -10814,7 +10814,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-176 deferral and non-claims",
-      "residualRisk": "Webhook sink proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176"
+      "residualRisk": "Webhook sink proof, cleanup evidence, incident posture, and privacy posture remain deferred to USF-176; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-pgbackrest-backup-provider",
@@ -10836,7 +10836,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-177 deferral and non-claims",
-      "residualRisk": "Backup artifact, restore drill, retention, incident posture, and resilience evidence remain deferred to USF-177"
+      "residualRisk": "Backup artifact, restore drill, retention, incident posture, and resilience evidence remain deferred to USF-177; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-adapter-usf-189-windmill-automation-provider",
@@ -10858,7 +10858,7 @@
       ],
       "failClosedBehaviour": "validator blocks missing disposition, hidden fallback, unsafe readiness, and overclaim",
       "monitoringAuditEvidence": "runtime validator output and PR summary must record USF-178 bounded disposition, USF-203 deferral, and non-claims",
-      "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-203; USF-178 records bounded disposition only"
+      "residualRisk": "Windmill proof, access review, incident posture, privacy posture, and resilience evidence remain deferred to USF-203; USF-178 records bounded disposition only; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-191-threat-domain-deferred-depth-overclaim",
@@ -10884,7 +10884,7 @@
       ],
       "failClosedBehaviour": "validate-domain-depth blocks false closure, false Done, missing follow-up, missing proof, USF-153 reparent drift, USF-39 mutation, and readiness overclaims.",
       "monitoringAuditEvidence": "PR validation output must include validate-domain-depth, validate-enterprise, parity, planted defects, and the domain closure matrix evidence IDs.",
-      "residualRisk": "Live provider, production, gateway, distributed, legal/regulatory, supplier, resilience, and certification depth remains deferred to USF-151, USF-153, USF-155, USF-157, USF-161, and USF-163."
+      "residualRisk": "Live provider, production, gateway, distributed, legal/regulatory, supplier, resilience, and certification depth remains deferred to USF-151, USF-153, USF-155, USF-157, USF-161, and USF-163. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-166-threat-closure-tier-overclaim",
@@ -10910,7 +10910,7 @@
       ],
       "failClosedBehaviour": "validate-parity blocks missing gate evidence, missing service/capability mapping, false Done, USF-133 closure implication, missing non-equivalence boundary, stale proof command linkage, and prohibited readiness claims.",
       "monitoringAuditEvidence": "PR validation summary must include validate-parity, validate-enterprise, planted defects, and post-merge reconciliation before any Done decision.",
-      "residualRisk": "USF-167, USF-182, source/deferred service rows, and parent USF-133 acceptance remain open until separately proven and reconciled."
+      "residualRisk": "USF-167, USF-182, source/deferred service rows, and parent USF-133 acceptance remain open until separately proven and reconciled. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-193-threat-environment-promotion-overclaim",
@@ -10938,7 +10938,7 @@
       ],
       "failClosedBehaviour": "validate-enterprise blocks missing environment promotion rows, provider/environment mismatches, destructive staging or production posture, missing evidence metadata, missing non-claims, and readiness/certification overclaims.",
       "monitoringAuditEvidence": "PR validation summary must include validate-spec, validate-enterprise, planted defects, dashboard/coordinator updates, and post-merge Linear reconciliation before any Done decision.",
-      "residualRisk": "USF-167 and later source issues must still provide actual service, provider, operational, and environment-specific readiness evidence before any stronger readiness claim. It does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-product-readiness."
+      "residualRisk": "USF-167 and later source issues must still provide actual service, provider, operational, and environment-specific readiness evidence before any stronger readiness claim. It does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-product-readiness. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-169-threat-operator-api-access-proof",
@@ -10964,7 +10964,7 @@
       ],
       "failClosedBehaviour": "The proof asserts 400 or 403 safe-error responses for missing tenant, tenant mismatch, and unauthorized role paths, and validate-enterprise blocks missing proof wiring or readiness overclaim markers.",
       "monitoringAuditEvidence": "Proof verifies provider.readiness.checked, provider.health.checked, observability.readiness.read, and observability.signal.read audit actions plus an authorization.denied security signal. Source-use coverage is recorded in docs/architecture/operator-access-proof-source-use-disposition-matrix.md.",
-      "residualRisk": "Gateway route proof, clickthrough UX, composed service console login, executed access review, deprovisioning workflow, public exposure, staging, production, and live-provider access remain deferred."
+      "residualRisk": "Gateway route proof, clickthrough UX, composed service console login, executed access review, deprovisioning workflow, public exposure, staging, production, and live-provider access remain deferred. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-180-threat-gateway-clickthrough-overclaim",
@@ -10991,7 +10991,7 @@
       ],
       "failClosedBehaviour": "USF-ENTERPRISE-020 fails when the matrix is missing, gateway exposure is unsafe, direct-client forwarded headers are trusted, route/clickthrough deferrals are absent, enterprise evidence rows are missing, or readiness is overclaimed.",
       "monitoringAuditEvidence": "PR validation summary must include validate-enterprise and planted defects for USF-ENTERPRISE-020; future runtime route/clickthrough proof must add value-free audit evidence before stronger readiness.",
-      "residualRisk": "Gateway route proof, forward-auth implementation, clickthrough UI/runtime proof, service-console login, SSO session proof, trusted proxy allowlist proof, gateway-mediated audit evidence, public exposure review, and test-readiness evidence remain deferred to USF-155 or later source issues. This does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-product-readiness."
+      "residualRisk": "Gateway route proof, forward-auth implementation, clickthrough UI/runtime proof, service-console login, SSO session proof, trusted proxy allowlist proof, gateway-mediated audit evidence, public exposure review, and test-readiness evidence remain deferred to USF-155 or later source issues. This does not prove full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, or full-product-readiness. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-173-threat-redis-nats-overclaim",
@@ -11464,7 +11464,7 @@
       ],
       "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, matching, request journal evidence, cleanup, redaction, or unavailable fail-closed evidence is not proven.",
       "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw payloads.",
-      "residualRisk": "LocalStack and live external provider compatibility remain deferred/non-claimed; stronger environment promotion remains blocked by separate issues."
+      "residualRisk": "LocalStack and live external provider compatibility remain deferred/non-claimed; stronger environment promotion remains blocked by separate issues. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-209-threat-wiremock-overclaim",
@@ -11486,7 +11486,7 @@
       ],
       "failClosedBehaviour": "Runtime validator fails if proof markers, SDK boundary, non-claims, redaction posture, or stale deferral removal are missing.",
       "monitoringAuditEvidence": "Runtime proof records value-free structured log, trace, metric, and audit-shaped evidence plus validator and planted-defect coverage.",
-      "residualRisk": "LocalStack bounded local emulator proof is resolved separately by USF-208; all readiness/certification/live-provider claims remain prohibited."
+      "residualRisk": "LocalStack bounded local emulator proof is resolved separately by USF-208; all readiness/certification/live-provider claims remain prohibited. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-208-threat-localstack-overclaim",
@@ -11510,7 +11510,7 @@
       ],
       "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, SDK round trips, cleanup, redaction, no-egress, or unavailable fail-closed evidence is not proven.",
       "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw payloads.",
-      "residualRisk": "Live cloud-provider compatibility, supplier assurance, cloud IAM posture, API runtime binding, worker runtime binding, environment promotion, SOC readiness, ISO certification, and USF-133 closure remain non-claims."
+      "residualRisk": "Live cloud-provider compatibility, supplier assurance, cloud IAM posture, API runtime binding, worker runtime binding, environment promotion, SOC readiness, ISO certification, and USF-133 closure remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-206-threat-clickhouse-overclaim",
@@ -11537,7 +11537,7 @@
       ],
       "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, SDK round trip, tenant-safe query, invalid classification denial, retention deletion, cleanup, redaction, no-egress, or unavailable fail-closed evidence is not proven.",
       "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw ClickHouse payloads.",
-      "residualRisk": "API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, supplier assurance, environment promotion, backup/restore readiness, production alerting, SOC readiness, ISO certification, analytics readiness, event-store readiness, and USF-133 closure remain non-claims."
+      "residualRisk": "API runtime analytics binding, worker runtime analytics binding, live/provider-managed ClickHouse compatibility, supplier assurance, environment promotion, backup/restore readiness, production alerting, SOC readiness, ISO certification, analytics readiness, event-store readiness, and USF-133 closure remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-207-threat-redis-cache-overclaim",
@@ -11563,7 +11563,7 @@
       ],
       "failClosedBehaviour": "Readiness retry has bounded timeout; proof fails if readiness, SDK round trip, TTL expiration, cleanup, redaction, no-egress, tenant namespace, or unavailable fail-closed evidence is not proven.",
       "monitoringAuditEvidence": "Value-free structured log, trace, metric, and audit-shaped evidence is emitted with correlation id, service id, provider id, adapter id, retry count, duration bucket, safe reason code, and no raw Redis payloads.",
-      "residualRisk": "API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, supplier assurance, environment promotion, backup/restore readiness, production alerting, SOC readiness, ISO certification, and USF-133 closure remain non-claims."
+      "residualRisk": "API runtime cache binding, worker runtime cache binding, live/provider-managed Redis compatibility, supplier assurance, environment promotion, backup/restore readiness, production alerting, SOC readiness, ISO certification, and USF-133 closure remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "usf-204-threat-sonarqube-composed-proof",
@@ -11666,7 +11666,7 @@
       ],
       "failClosedBehaviour": "validate-providers and proof:providers fail when the USF-157 matrix, required controls, enterprise evidence references, non-claims, SDK boundary evidence, or prohibited claim boundaries are missing or contradictory.",
       "monitoringAuditEvidence": "PR validation output, validate-providers selftest, proof:providers output, planted defects, and Linear merge reconciliation only; no production incident or live monitoring evidence is claimed.",
-      "residualRisk": "Live-provider authority, supplier approval, production incident hooks, runtime drift, failover, DR, and promotion readiness remain deferred with owner and require later source issues before stronger claims."
+      "residualRisk": "Live-provider authority, supplier approval, production incident hooks, runtime drift, failover, DR, and promotion readiness remain deferred with owner and require later source issues before stronger claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-139-db-enterprise-depth",
@@ -11694,7 +11694,7 @@
       ],
       "failClosedBehaviour": "validate-db USF-DB-001 through USF-DB-016, proof:db, runtime validators, and enterprise validators must fail or preserve explicit deferral before any stronger DB claim is made.",
       "monitoringAuditEvidence": "proof:db emits value-free catalog and check-label evidence; PR validation summary records validator output and non-claims.",
-      "residualRisk": "Production operation, live-provider DB operation, backup/restore readiness, DR, RPO/RTO, export/legal-hold workflows, and environment promotion remain follow-up-scoped non-claims."
+      "residualRisk": "Production operation, live-provider DB operation, backup/restore readiness, DR, RPO/RTO, export/legal-hold workflows, and environment promotion remain follow-up-scoped non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-141-authz-enterprise-depth",
@@ -11721,7 +11721,7 @@
       ],
       "failClosedBehaviour": "validate-authz USF-AUTHZ-001 through USF-AUTHZ-013, make authz-proof, enterprise validators, and planted defects must fail or preserve explicit deferral before stronger authorization claims are made.",
       "monitoringAuditEvidence": "authorization.decision audit records, break_glass.used or break_glass.denied evidence, proof check labels, and PR validation summary are the bounded evidence surfaces.",
-      "residualRisk": "Delegation, impersonation, field-level policy, token/session runtime, distributed rate limits, workflow revalidation, gateway/browser-session authorization, and operator access remain linked source-issue work."
+      "residualRisk": "Delegation, impersonation, field-level policy, token/session runtime, distributed rate limits, workflow revalidation, gateway/browser-session authorization, and operator access remain linked source-issue work. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-143-audit-enterprise-depth",
@@ -11748,7 +11748,7 @@
       ],
       "failClosedBehaviour": "validate-audit USF-AUDIT-014 through USF-AUDIT-019 block missing matrix, missing proof coverage, missing evidence linkage, unsafe deferrals, and overclaims.",
       "monitoringAuditEvidence": "make audit-proof output and validator findings only; no live monitoring backend, no raw provider payload, no production incident claim.",
-      "residualRisk": "Live KMS/HSM custody, live SIEM integration, public export API, production retention operations, customer-facing evidence packages, and production incident handling remain non-claims."
+      "residualRisk": "Live KMS/HSM custody, live SIEM integration, public export API, production retention operations, customer-facing evidence packages, and production incident handling remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-145-config-secrets-enterprise-depth",
@@ -11776,7 +11776,7 @@
       ],
       "failClosedBehaviour": "validate-config USF-CONFIG-016 through USF-CONFIG-022 block missing matrix, missing proof coverage, missing enterprise linkage, unsafe OpenBao reconciliation, and readiness overclaims.",
       "monitoringAuditEvidence": "make config-proof output and validator findings only; no live monitoring backend, no raw secret values, no provider payload, no production incident claim.",
-      "residualRisk": "Live secret-manager operation, KMS custody, production DB-backed config store, distributed reload, production residency governance, production config migration, environment promotion, and live-provider operation remain non-claims."
+      "residualRisk": "Live secret-manager operation, KMS custody, production DB-backed config store, distributed reload, production residency governance, production config migration, environment promotion, and live-provider operation remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-147-files-storage-enterprise-depth",
@@ -11802,7 +11802,7 @@
       ],
       "failClosedBehaviour": "deny or quarantine unsafe file operations, return unavailable provider state, block purge on legal hold, and preserve non-claims until separate proof exists",
       "monitoringAuditEvidence": "files proof, files validator, file audit events, MinIO and ClamAV proof summaries, and enterprise evidence rows must remain value-free and redacted",
-      "residualRisk": "local composed proof does not prove live provider, staging, production, SOC, ISO, DLP, KMS, backup/DR, or enterprise production readiness"
+      "residualRisk": "local composed proof does not prove live provider, staging, production, SOC, ISO, DLP, KMS, backup/DR, or enterprise production readiness; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-149-auth-identity-enterprise-depth",
@@ -11829,7 +11829,7 @@
       ],
       "failClosedBehaviour": "validate-auth USF-AUTH-019 through USF-AUTH-023 block missing control plane, missing PDP actions, missing proof markers, unsafe readiness claims, and missing USF-149 evidence linkage.",
       "monitoringAuditEvidence": "make auth-proof output, auth validator findings, tenant_sso value-free audit events, authentication.identity events, and local security threat-signal audit events only; no live monitoring backend.",
-      "residualRisk": "Live Keycloak admin API, live external broker/upstream IdP, live DNS/HTTP verification, browser UI/callback/cookies, refresh-token runtime, email delivery, SCIM, live SIEM, environment promotion, and production operation remain non-claims."
+      "residualRisk": "Live Keycloak admin API, live external broker/upstream IdP, live DNS/HTTP verification, browser UI/callback/cookies, refresh-token runtime, email delivery, SCIM, live SIEM, environment promotion, and production operation remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-151-jobs-workflows-enterprise-depth",
@@ -11856,7 +11856,7 @@
       ],
       "failClosedBehaviour": "validate-jobs USF-JOBS-021 through USF-JOBS-025 block missing control-plane helper, missing proof markers, incomplete USF-151 matrix, missing enterprise evidence linkage, missing PDP/admin override coupling, and prohibited readiness claims.",
       "monitoringAuditEvidence": "make jobs-proof output, jobs validator findings, value-free job/workflow/control audit events, and local proof check labels only; no live monitoring backend.",
-      "residualRisk": "Live Temporal, live Windmill, external queue/scheduler/worker cluster, HTTP job API, operator UI, live metrics/alerting, backup/restore readiness, DR, environment promotion, and production operation remain non-claims."
+      "residualRisk": "Live Temporal, live Windmill, external queue/scheduler/worker cluster, HTTP job API, operator UI, live metrics/alerting, backup/restore readiness, DR, environment promotion, and production operation remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-153-notifications-messaging-enterprise-depth",
@@ -11883,7 +11883,7 @@
       ],
       "failClosedBehaviour": "validate-notify USF-NOTIFY-017 through USF-NOTIFY-021 block missing enterprise control plane, missing proof markers, incomplete USF-153 matrix, missing enterprise evidence linkage, and prohibited live/deliverability/readiness claims.",
       "monitoringAuditEvidence": "make notify-proof output, notify validator findings, value-free notification lifecycle, persistence, feedback, unsubscribe, bulk, retention, and audit events only; no live monitoring backend.",
-      "residualRisk": "Live delivery providers, deliverability, provider callback replay, public notification API, browser UI, distributed campaign/rate-limit operation, data residency, environment promotion, and production operation remain non-claims."
+      "residualRisk": "Live delivery providers, deliverability, provider callback replay, public notification API, browser UI, distributed campaign/rate-limit operation, data residency, environment promotion, and production operation remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-155-api-gateway-enterprise-depth",
@@ -11911,7 +11911,7 @@
       ],
       "failClosedBehaviour": "validate-api USF-API-015 through USF-API-019 block missing proof markers, incomplete USF-155 matrix, missing enterprise evidence linkage, incomplete deferred/reclassified boundaries, and prohibited API/gateway readiness claims.",
       "monitoringAuditEvidence": "make api-proof output, API validator findings, route metadata, OpenAPI checker output, safe API denial evidence, and value-free audit events only; no live monitoring backend.",
-      "residualRisk": "Public API readiness, generated clients, GraphQL/federation, browser-session runtime, live gateway/edge/TLS/WAF, broad bulk API, environment promotion, and production API operation remain non-claims."
+      "residualRisk": "Public API readiness, generated clients, GraphQL/federation, browser-session runtime, live gateway/edge/TLS/WAF, broad bulk API, environment promotion, and production API operation remain non-claims. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-161-guardrails-distributed-depth",
@@ -11937,7 +11937,7 @@
       ],
       "failClosedBehaviour": "validate-guardrails fails when USF-161 proof markers, depth matrix controls, enterprise rows, reclassified boundaries, or non-claim false fields are missing.",
       "monitoringAuditEvidence": "proof:guardrails emits value-free synthetic audit-shaped journal evidence, security signal evidence, cleanup evidence, retention-boundary evidence, and explicit non-claims.",
-      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-161; live edge, WAF, CDN, bot, fraud, gateway, customer traffic, production abuse-control operations, public guardrail APIs, admin UI, SIEM/DLP/UEBA operations, and environment promotion remain outside current claim; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; reviewDate=2026-09-30; followUpIssue=future live provider issue if separately authorised"
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-161; live edge, WAF, CDN, bot, fraud, gateway, customer traffic, production abuse-control operations, public guardrail APIs, admin UI, SIEM/DLP/UEBA operations, and environment promotion remain outside current claim; owner=platform-guardrails-foundation; riskOwner=platform-guardrails-risk-owner; reviewDate=2026-09-30; followUpIssue=future live provider issue if separately authorised; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-163-import-export-bulk-deep-runtime",
@@ -11962,7 +11962,7 @@
       ],
       "failClosedBehaviour": "validate-bulk fails when USF-163 proof markers, deep-runtime matrix controls, enterprise rows, boundary controls, or non-claim false fields are missing.",
       "monitoringAuditEvidence": "proof:bulk emits value-free audit and telemetry evidence for denied provider transfer, rollback, purge, legal-hold denial, guardrail denial, retry, and completion paths.",
-      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-163; broad HTTP routes, live transfer providers, full parser adapter suite, legal/eDiscovery/regulatory workflows, production migration, production retention services, live alerting, and environment promotion remain outside current claim; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-213 and future legal/provider/migration issues if separately authorised"
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-163; broad HTTP routes, live transfer providers, full parser adapter suite, legal/eDiscovery/regulatory workflows, production migration, production retention services, live alerting, and environment promotion remain outside current claim; owner=platform-import-export-foundation; riskOwner=platform-import-export-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-213 and future legal/provider/migration issues if separately authorised; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-213-public-api-compatibility-governance",
@@ -11988,7 +11988,7 @@
       ],
       "failClosedBehaviour": "validate-api USF-API-020 through USF-API-024 block missing USF-213 proof markers, incomplete matrix controls, missing enterprise rows, incomplete deferred boundaries, and public compatibility readiness overclaims.",
       "monitoringAuditEvidence": "make api-proof output, validate-api findings, local route snapshot hash, OpenAPI checker output, and value-free proof checks only; no live monitoring backend.",
-      "residualRisk": "Public API launch, consumer-driven contract operation, generated SDK/client distribution, GraphQL/federation, external developer platform, deployment, environment promotion, and production API operation remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-214 and future public API launch or consumer-contract issue if separately authorised"
+      "residualRisk": "Public API launch, consumer-driven contract operation, generated SDK/client distribution, GraphQL/federation, external developer platform, deployment, environment promotion, and production API operation remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-214 and future public API launch or consumer-contract issue if separately authorised; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-214-graphql-generated-client-disposition",
@@ -12014,7 +12014,7 @@
       ],
       "failClosedBehaviour": "validate-api USF-API-025 through USF-API-029 block missing USF-214 proof markers, incomplete matrix controls, missing enterprise rows, incomplete deferred boundaries, missing non-equivalence boundaries, and GraphQL/generated-client readiness overclaims.",
       "monitoringAuditEvidence": "make api-proof output, validate-api findings, disposition matrix, and value-free proof checks only; no live monitoring backend.",
-      "residualRisk": "GraphQL runtime, federation gateway, generated SDK/client distribution, external developer platform, deployment, environment promotion, and production API operation remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-224; sourceIssue=USF-220"
+      "residualRisk": "GraphQL runtime, federation gateway, generated SDK/client distribution, external developer platform, deployment, environment promotion, and production API operation remain non-claims; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-224; sourceIssue=USF-220; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-220-generated-client-graphql-overclaim",
@@ -12040,7 +12040,7 @@
       ],
       "failClosedBehaviour": "validate-enterprise USF-ENTERPRISE-028 and validate-parity USF-PARITY-039 block missing USF-220 artefact, missing USF-224 follow-up, missing enterprise rows, missing API matrix linkage, missing non-equivalence boundaries, or readiness overclaims.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, API proof predecessor references, and value-free disposition metadata only; no live monitoring backend or generated client artifact.",
-      "residualRisk": "Generated SDK/client creation, package publication, external developer platform, API key workflow, public documentation operation, GraphQL runtime, federation gateway, resolver authorization, persisted queries, subscriptions, environment promotion, and production API operation remain non-claims. This row does not claim full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-product-readiness, or USF-133 closure; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-224; evidenceSource=docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json"
+      "residualRisk": "Generated SDK/client creation, package publication, external developer platform, API key workflow, public documentation operation, GraphQL runtime, federation gateway, resolver authorization, persisted queries, subscriptions, environment promotion, and production API operation remain non-claims. This row does not claim full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-product-readiness, or USF-133 closure; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; followUpIssue=USF-224; evidenceSource=docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-218-observability-service-operations-overclaim",
@@ -12064,7 +12064,7 @@
       ],
       "failClosedBehaviour": "validate-observability and validate-enterprise fail when USF-218 artefact, follow-up boundary, enterprise rows, non-equivalence boundary, or prohibited non-claims are missing or overclaimed.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, USF-159 local proof, and USF-205 SDK-envelope proof references only; no live monitoring or incident operation evidence. Evidence artefact: docs/architecture/observability-service-alerting-dashboard-incident-proof-depth.json. Source issue USF-218; follow-up issue USF-222.",
-      "residualRisk": "effectivenessState=deferred-with-owner; sourceIssue=USF-218; followUpIssue=USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; execution proof remains future work before stronger readiness claims. Explicit non-claims: full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live provider readiness, soc readiness, iso27001 certification, enterprise production readiness, and full product readiness."
+      "residualRisk": "effectivenessState=deferred-with-owner; sourceIssue=USF-218; followUpIssue=USF-222; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; execution proof remains future work before stronger readiness claims. Explicit non-claims: full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live provider readiness, soc readiness, iso27001 certification, enterprise production readiness, and full product readiness. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-219-backup-dr-rpo-rto-overclaim",
@@ -12091,7 +12091,7 @@
       ],
       "failClosedBehaviour": "validators fail on missing USF-219 artefact, missing USF-223 follow-up, missing promotion impact, missing enterprise evidence, or readiness overclaim",
       "monitoringAuditEvidence": "value-free repository evidence only; operational alerting and incident workflow remain deferred to USF-223 or later environment-promotion issues",
-      "residualRisk": "future operational proof remains required before backup, restore, DR, PITR, RPO/RTO, environment readiness, live-provider, production, SOC, ISO, full-dev, full-parity, or USF-133 closure claims; nonClaims=backup-readiness,restore-readiness,backup-restore-readiness,disaster-recovery-readiness,dr-readiness,pitr-readiness,online-backup-readiness,scheduled-backup-readiness,rpo-readiness,rto-readiness,rpo-rto-readiness,pgbackrest-readiness,provider-compatibility-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-dev-readiness,full-product-readiness,usf-133-closure; sourceIssue=USF-219; followUpIssue=USF-223; evidenceSource=docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
+      "residualRisk": "future operational proof remains required before backup, restore, DR, PITR, RPO/RTO, environment readiness, live-provider, production, SOC, ISO, full-dev, full-parity, or USF-133 closure claims; nonClaims=backup-readiness,restore-readiness,backup-restore-readiness,disaster-recovery-readiness,dr-readiness,pitr-readiness,online-backup-readiness,scheduled-backup-readiness,rpo-readiness,rto-readiness,rpo-rto-readiness,pgbackrest-readiness,provider-compatibility-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-dev-readiness,full-product-readiness,usf-133-closure; sourceIssue=USF-219; followUpIssue=USF-223; evidenceSource=docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json; effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-221-operator-lifecycle-overclaim",
@@ -12116,7 +12116,7 @@
       ],
       "failClosedBehaviour": "USF-ENTERPRISE-029 fails on missing proof artifact, missing package script or Make target, missing service rows, missing enterprise rows, missing proof markers, unsafe output boundary, or readiness overclaim.",
       "monitoringAuditEvidence": "corepack pnpm proof:operator-lifecycle output, hash-chain verification, enterprise validator output, and planted-defect selftests only; no live monitoring backend or provider-console audit export.",
-      "residualRisk": "provider-console SSO, clickthrough, external IdP lifecycle integration, public gateway exposure, environment promotion, and production operator operations remain non-claims; sourceIssue=USF-221; reviewDate=2026-09-30; evidenceSource=docs/architecture/operator-access-review-deprovisioning-execution-proof.json Non-claims: full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-product-readiness, provider-console-readiness, identity-provider-lifecycle-readiness, operator-console-readiness, public-operator-exposure, and usf-133-closure."
+      "residualRisk": "provider-console SSO, clickthrough, external IdP lifecycle integration, public gateway exposure, environment promotion, and production operator operations remain non-claims; sourceIssue=USF-221; reviewDate=2026-09-30; evidenceSource=docs/architecture/operator-access-review-deprovisioning-execution-proof.json Non-claims: full-dev-readiness, test-readiness, staging-readiness, production-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, enterprise-production-readiness, full-product-readiness, provider-console-readiness, identity-provider-lifecycle-readiness, operator-console-readiness, public-operator-exposure, and usf-133-closure. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-223-backup-restore-overclaim",
@@ -12171,7 +12171,7 @@
       ],
       "failClosedBehaviour": "validate-api and validate-enterprise fail when USF-224 proof artefact, command wiring, execution matrix, enterprise rows, SDK governance, redaction boundary, deferred boundary, or non-claims are missing or overclaimed.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, and value-free synthetic audit events only. Evidence artefact: docs/architecture/generated-client-external-developer-graphql-federation-execution-proof.json. Source issue USF-224. Validator command: python3 tools/validate-parity/validate-api.py all --json and python3 tools/validate-enterprise/validate-enterprise.py all --json.",
-      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-224; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; public package, deployed GraphQL, federation, external developer platform, environment readiness, and USF-133 closure remain non-claims. nonClaims=generated-sdk-readiness,generated-client-readiness,external-developer-platform-readiness,public-api-readiness,graphql-runtime-readiness,federation-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-dev-readiness,full-product-readiness,usf-133-closure."
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-224; owner=platform-api-foundation; riskOwner=platform-api-risk-owner; reviewDate=2026-09-30; public package, deployed GraphQL, federation, external developer platform, environment readiness, and USF-133 closure remain non-claims. nonClaims=generated-sdk-readiness,generated-client-readiness,external-developer-platform-readiness,public-api-readiness,graphql-runtime-readiness,federation-readiness,test-readiness,staging-readiness,production-readiness,deployment-readiness,live-provider-readiness,soc-readiness,iso27001-certification,enterprise-production-readiness,full-dev-readiness,full-product-readiness,usf-133-closure. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-225-browser-telemetry-overclaim",
@@ -12198,7 +12198,7 @@
       ],
       "failClosedBehaviour": "validate-observability fails when USF-225 proof artefact, proof command, SDK pins, minimal UI boundary, enterprise evidence refs, redaction checks, or non-claims are missing or overclaimed.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, proof command output, synthetic audit/log/trace/metric evidence, and browser-telemetry-faro-foundation-proof artefact only.",
-      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-225; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; product UI, live Faro ingestion, live monitoring, environment promotion, and USF-133 closure remain non-claims.; faro-production-readiness=false; browser-e2e-readiness=false"
+      "residualRisk": "effectivenessState=proven-local; sourceIssue=USF-225; owner=platform-observability-foundation; riskOwner=platform-observability-risk-owner; reviewDate=2026-09-30; product UI, live Faro ingestion, live monitoring, environment promotion, and USF-133 closure remain non-claims.; faro-production-readiness=false; browser-e2e-readiness=false; riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-235-test-environment-service-contract",
@@ -12223,7 +12223,7 @@
       ],
       "failClosedBehaviour": "tools/validate-test-readiness/validate-test-readiness.py fails when the service contract is missing, incomplete, stale, overclaimed, or not wired into repo validation.",
       "monitoringAuditEvidence": "Repository validator findings, planted-defect selftests, PR validation summaries, and Linear reconciliation comments only.",
-      "residualRisk": "effectivenessState=defined-only; sourceIssue=USF-235; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test readiness remains blocked on USF-236, USF-237, USF-238, and USF-234."
+      "residualRisk": "effectivenessState=defined-only; sourceIssue=USF-235; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test readiness remains blocked on USF-236, USF-237, USF-238, and USF-234. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-236-composed-semantic-test-harness",
@@ -12248,7 +12248,7 @@
       ],
       "failClosedBehaviour": "The proof throws on wrong Compose target, in-memory provider mode, deferred provider boundary, missing composed provider evidence, missing audit evidence, or fail-closed path gaps. The validator fails missing harness metadata, command wiring, service coverage, enterprise refs, or overclaims.",
       "monitoringAuditEvidence": "Value-free proof summary, runtime audit event counts, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
-      "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-236; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; deterministic repeated fixture lifecycle remains owned by USF-237 and final gate remains owned by USF-234."
+      "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-236; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; deterministic repeated fixture lifecycle remains owned by USF-237 and final gate remains owned by USF-234. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-237-deterministic-test-fixture-lifecycle",
@@ -12273,7 +12273,7 @@
       ],
       "failClosedBehaviour": "The lifecycle proof throws when either composed harness run fails, provider mode is not local-composed-real-service, in-memory service substitutes are allowed, stable fingerprints differ, or Compose project cleanup is not proven. The validator fails missing lifecycle metadata, command wiring, repeatability fields, cleanup evidence, enterprise refs, or overclaims.",
       "monitoringAuditEvidence": "Value-free lifecycle proof summary, runtime audit event counts inherited from the composed harness, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
-      "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-237; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final CI/local command gate remains owned by USF-238 and final test-readiness acceptance remains owned by USF-234."
+      "residualRisk": "effectivenessState=integration-proven-after-command-pass; sourceIssue=USF-237; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final CI/local command gate remains owned by USF-238 and final test-readiness acceptance remains owned by USF-234. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-238-test-readiness-command-surface-ci-gate",
@@ -12300,7 +12300,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails when command surface evidence is missing, package scripts or Make targets drift, CI/local alignment is incomplete, Sonar preservation is missing, enterprise evidence is absent, in-memory substitution is allowed, or readiness is overclaimed.",
       "monitoringAuditEvidence": "Value-free command output, composed harness proof output, fixture lifecycle proof output, Sonar assurance proof output, validator findings, planted-defect selftests, PR validation, and Linear reconciliation comments.",
-      "residualRisk": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-238; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test-readiness acceptance remains owned by USF-234."
+      "residualRisk": "effectivenessState=implemented-after-command-pass; sourceIssue=USF-238; owner=platform-test-readiness-foundation; riskOwner=platform-test-readiness-risk-owner; reviewDate=2026-09-30; final test-readiness acceptance remains owned by USF-234. riskTreatment=defer-with-owner-and-review-date."
     },
     {
       "id": "threat-usf-239-semantic-service-test-obligation-manifest",
@@ -12328,7 +12328,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails when required service, semantic, profile, obligation, owner, validation, future-AI, enterprise evidence, or non-claim metadata is missing or overclaimed.",
       "monitoringAuditEvidence": "Validator findings, planted-defect selftests, manifest diff, PR validation, and Linear reconciliation comments.",
-      "residualRisk": "Child issues must still implement and prove the generated obligations before USF-234 final acceptance."
+      "residualRisk": "Child issues must still implement and prove the generated obligations before USF-234 final acceptance. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-248-synthetic-deterministic-fixture-corpus",
@@ -12352,7 +12352,7 @@
       ],
       "failClosedBehaviour": "Test-readiness validator and fixture corpus unit tests fail on missing rows, unsafe provenance, lifecycle mapping gaps, in-memory substitution, or overclaims.",
       "monitoringAuditEvidence": "Validator output, PR evidence, and proof summary only; no production monitoring claim.",
-      "residualRisk": "Downstream child issues still own execution of every composed service matrix, auth, data lifecycle, operational, design, coverage, and final acceptance obligation."
+      "residualRisk": "Downstream child issues still own execution of every composed service matrix, auth, data lifecycle, operational, design, coverage, and final acceptance obligation. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-242-composed-service-integration-overclaim",
@@ -12378,7 +12378,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing matrix, missing service or profile coverage, missing catalogue disposition, in-memory substitute allowance, stale command linkage, missing enterprise refs, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free validator findings, proof summary, PR validation output, and planted-defect selftest output only.",
-      "residualRisk": "USF-251 must still execute the every-service orchestration gate before final USF-234 acceptance; this row preserves that boundary."
+      "residualRisk": "USF-251 must still execute the every-service orchestration gate before final USF-234 acceptance; this row preserves that boundary. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-241-unit-test-overclaim",
@@ -12404,7 +12404,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing USF-241 inventory, missing per-contract mappings, missing mapped test files or test names, service-backed substitute allowance, missing LCOV contribution boundary, missing enterprise refs, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free unit test output, validator findings, PR validation output, and planted-defect selftest output only. Validation command: python3 tools/validate-test-readiness/validate-test-readiness.py all --json.",
-      "residualRisk": "riskStatement=USF-241 does not prove final coverage or service-backed test readiness; impact=final readiness could be overclaimed if USF-240 or composed child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final LCOV to USF-240; reviewDate=2026-09-30; followUpIssue=USF-240,USF-234."
+      "residualRisk": "riskStatement=USF-241 does not prove final coverage or service-backed test readiness; impact=final readiness could be overclaimed if USF-240 or composed child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final LCOV to USF-240; reviewDate=2026-09-30; followUpIssue=USF-240,USF-234. riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-244-functional-regression-suite",
@@ -12430,7 +12430,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing suite, stale semantic mapping, stale service mapping, missing behaviour cases, unsafe service-backed substitutes, missing enterprise refs, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free test output, validator findings, PR validation output, and planted-defect selftest output only. Validation command: python3 tools/validate-test-readiness/validate-test-readiness.py all --json.",
-      "residualRisk": "riskStatement=USF-244 does not prove final acceptance or operational resilience; impact=final readiness could be overclaimed if downstream child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final closure to USF-247 and USF-234; reviewDate=2026-09-30; followUpIssue=USF-247,USF-234."
+      "residualRisk": "riskStatement=USF-244 does not prove final acceptance or operational resilience; impact=final readiness could be overclaimed if downstream child issues remain incomplete; likelihood=medium until USF-234 final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer final closure to USF-247 and USF-234; reviewDate=2026-09-30; followUpIssue=USF-247,USF-234. riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-243-enterprise-control-evidence-test-suite",
@@ -12455,7 +12455,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing USF-243 suite evidence, missing enterprise model rows, stale row counts, unsafe service-backed substitute claims, or prohibited readiness and certification claims.",
       "monitoringAuditEvidence": "Value-free Vitest results, validator findings, planted-defect selftest results, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-247 owns final missing-evidence regression coverage and USF-234 owns final test-readiness acceptance; reviewDate=2026-09-30."
+      "residualRisk": "USF-247 owns final missing-evidence regression coverage and USF-234 owns final test-readiness acceptance; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-253-security-abuse-fuzzing",
@@ -12480,7 +12480,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-253 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+      "residualRisk": "USF-253 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-254-performance-concurrency-resource",
@@ -12505,7 +12505,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-254 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+      "residualRisk": "USF-254 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-255-supply-chain-sbom-licence",
@@ -12530,7 +12530,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-255 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+      "residualRisk": "USF-255 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-256-mutation-fault-injection",
@@ -12555,7 +12555,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-256 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+      "residualRisk": "USF-256 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-257-adversarial-semantic-testing",
@@ -12580,7 +12580,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-257 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+      "residualRisk": "USF-257 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-258-environment-tooling-governance",
@@ -12605,7 +12605,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing, stale, unlinked, under-evidenced, or overclaiming expanded category rows.",
       "monitoringAuditEvidence": "Value-free validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "USF-258 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30."
+      "residualRisk": "USF-258 owns category implementation and proof; USF-259 records mandatory gate evidence only; reviewDate=2026-09-30. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-245-operational-resilience-failure-mode-suite",
@@ -12632,7 +12632,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails when operational mappings, profile rows, fail-closed markers, cleanup evidence, incident/privacy evidence, or non-claims are missing or stale.",
       "monitoringAuditEvidence": "Value-free Vitest output, validator output, planted-defect selftest output, PR checks, and Linear reconciliation comments.",
-      "residualRisk": "Destructive chaos testing, live-provider incident response, staging/prod recovery, and final USF-234 acceptance remain outside USF-245."
+      "residualRisk": "Destructive chaos testing, live-provider incident response, staging/prod recovery, and final USF-234 acceptance remain outside USF-245. effectivenessState=deferred-with-owner; riskTreatment=defer-with-owner-and-review-date; owner=enterprise-threat-model-owner; riskOwner=enterprise-risk-owner; reviewDate=2026-09-30."
     },
     {
       "id": "threat-usf-240-coverage-overclaim",
@@ -12659,7 +12659,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails on missing coverage gate evidence, missing package or Make command wiring, downgraded thresholds, undocumented exclusions, stale Sonar LCOV import, stale command-surface rows, and prohibited claims.",
       "monitoringAuditEvidence": "Value-free coverage command output, validator findings, planted-defect selftest output, PR validation output, and bounded Sonar local synthetic proof output only.",
-      "residualRisk": "riskStatement=USF-240 does not prove repository-wide coverage or final USF-234 acceptance; impact=final readiness could be overclaimed if bounded coverage is treated as complete; likelihood=medium until USF-247, USF-260, and USF-234 reconcile final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer broad acceptance; reviewDate=2026-09-30; followUpIssue=USF-247,USF-260,USF-234."
+      "residualRisk": "riskStatement=USF-240 does not prove repository-wide coverage or final USF-234 acceptance; impact=final readiness could be overclaimed if bounded coverage is treated as complete; likelihood=medium until USF-247, USF-260, and USF-234 reconcile final acceptance; owner=platform-test-readiness-foundation; treatment=mitigate with validator gate and defer broad acceptance; reviewDate=2026-09-30; followUpIssue=USF-247,USF-260,USF-234. riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-247-missing-evidence-planted-defect-regression-gate",
@@ -12685,7 +12685,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails when the USF-247 evidence artefact is missing, stale, under-counted, missing dependency or failure-class coverage, missing the selftest command, or overclaiming readiness.",
       "monitoringAuditEvidence": "Value-free validator findings, selftest command output, planted defect inventory, PR validation output, and Linear post-merge reconciliation.",
-      "residualRisk": "riskStatement=USF-247 does not run final USF-234 acceptance; impact=final readiness could still be incomplete if later gates are skipped; likelihood=medium until USF-260 and USF-234 complete; owner=platform-test-readiness-foundation; treatment=mitigate with final gates; reviewDate=2026-09-30; followUpIssue=USF-260,USF-234"
+      "residualRisk": "riskStatement=USF-247 does not run final USF-234 acceptance; impact=final readiness could still be incomplete if later gates are skipped; likelihood=medium until USF-260 and USF-234 complete; owner=platform-test-readiness-foundation; treatment=mitigate with final gates; reviewDate=2026-09-30; followUpIssue=USF-260,USF-234; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-260-test-environment-completion-staging-entry-gate",
@@ -12711,7 +12711,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails when the USF-260 evidence artefact is missing, missing dependencies, missing evidence rows, missing evidence categories, missing command rows, missing enterprise refs, allowing substitutes, starting staging, or overclaiming readiness.",
       "monitoringAuditEvidence": "Value-free validator findings, PR validation output, post-merge validation output, open PR search, Linear readiness issue search, and final git status check.",
-      "residualRisk": "riskStatement=USF-260 does not close USF-234 by itself; impact=final test readiness could be overclaimed if USF-234 final acceptance is skipped; likelihood=medium until USF-234 closes; owner=platform-test-readiness-foundation; treatment=mitigate with USF-234 final acceptance gate; reviewDate=2026-09-30; followUpIssue=USF-234"
+      "residualRisk": "riskStatement=USF-260 does not close USF-234 by itself; impact=final test readiness could be overclaimed if USF-234 final acceptance is skipped; likelihood=medium until USF-234 closes; owner=platform-test-readiness-foundation; treatment=mitigate with USF-234 final acceptance gate; reviewDate=2026-09-30; followUpIssue=USF-234; riskOwner=enterprise-risk-owner."
     },
     {
       "id": "threat-usf-234-test-readiness-final-acceptance-overclaim",
@@ -12736,7 +12736,7 @@
       ],
       "failClosedBehaviour": "The test-readiness validator fails when the USF-234 final acceptance artefact is missing, missing dependencies, missing child evidence rows, missing final validation rows, missing enterprise refs, allowing substitutes, starting staging, or overclaiming readiness.",
       "monitoringAuditEvidence": "Value-free validator findings, PR validation output, post-merge validation output, open PR search, Linear readiness issue search, and final git status check.",
-      "residualRisk": "riskStatement=USF-234 does not authorize staging readiness or production readiness; impact=environment promotion could be overclaimed if a later gate skips staging authority; likelihood=medium; owner=platform-test-readiness-foundation; treatment=mitigate with separate staging gate; reviewDate=2026-09-30; followUpIssue=staging-track-not-started-here"
+      "residualRisk": "riskStatement=USF-234 does not authorize staging readiness or production readiness; impact=environment promotion could be overclaimed if a later gate skips staging authority; likelihood=medium; owner=platform-test-readiness-foundation; treatment=mitigate with separate staging gate; reviewDate=2026-09-30; followUpIssue=staging-track-not-started-here; riskOwner=enterprise-risk-owner."
     }
   ],
   "sdkDependencyGovernance": [

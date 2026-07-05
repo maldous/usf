@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import re
 import subprocess
@@ -28,6 +29,8 @@ MAKEFILE_PATH = ROOT / "Makefile"
 SERVER_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "server.mjs"
 SMOKE_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "smoke.mjs"
 MACHINE_QA_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "machine-qa.mjs"
+VALIDATE_SPEC_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "validate-spec.yml"
+PROOF_ANCHOR_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "proof-anchor.yml"
 
 RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 13)]
 
@@ -175,6 +178,7 @@ REQUIRED_PLANTED_KINDS = [
     "service-missing-auth-posture",
     "openbao-credential-evidence-missing",
     "secret-literal-value-exposed",
+    "artifact-hash-mismatch",
 ]
 
 AUTH_POSTURES = {
@@ -187,6 +191,8 @@ AUTH_POSTURES = {
     "unavailable",
 }
 
+HEX_SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
+
 
 def load_json(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
@@ -197,6 +203,49 @@ def load_optional_json(path: Path) -> Any:
     if not path.exists():
         return {}
     return load_json(path)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def resolve_artifact_path(value: str, artifact_dir: Path | None = None) -> Path | None:
+    if not value or re.match(r"^[a-z]+://", value) or value.startswith("/proof"):
+        return None
+    candidate = Path(value)
+    if candidate.is_absolute():
+        return candidate
+    if artifact_dir and (artifact_dir / candidate).exists():
+        return artifact_dir / candidate
+    return ROOT / candidate
+
+
+def verify_hash_for_path(
+    failures: list[dict[str, str]],
+    rule_id: str,
+    subject: str,
+    path_value: str,
+    expected_hash: str,
+    artifact_dir: Path | None = None,
+) -> None:
+    if not path_value:
+        return
+    if expected_hash and not HEX_SHA256_RE.fullmatch(str(expected_hash)):
+        failures.append(finding(rule_id, "Artifact hash is not a 64 character SHA-256 hex digest", subject))
+        return
+    path = resolve_artifact_path(path_value, artifact_dir)
+    if path is None:
+        return
+    if not path.exists() or not path.is_file():
+        failures.append(finding(rule_id, f"Hash-bearing artifact path is missing: {path_value}", subject))
+        return
+    actual = sha256_file(path)
+    if expected_hash != actual:
+        failures.append(finding(rule_id, f"Artifact hash mismatch for {path_value}", subject))
 
 
 def git_output(args: list[str]) -> str:
@@ -272,10 +321,14 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
             generated_screenshot_manifest = load_json(candidate)
     machine_run_report: dict[str, Any] = {}
     service_evidence_manifest: dict[str, Any] = {}
+    evidence_index: dict[str, Any] = {}
+    chain_of_custody: dict[str, Any] = {}
     gap_register: dict[str, Any] = {}
     if effective_artifact_dir:
         machine_run_report = load_optional_json(effective_artifact_dir / "proof-cockpit-machine-qa-run.json")
         service_evidence_manifest = load_optional_json(effective_artifact_dir / "service-evidence-manifest.json")
+        evidence_index = load_optional_json(effective_artifact_dir / "evidence-index.json")
+        chain_of_custody = load_optional_json(effective_artifact_dir / "chain-of-custody.json")
         gap_register = load_optional_json(effective_artifact_dir / "gap-register.json")
     data = {
         "model": load_json(MODEL_PATH),
@@ -287,12 +340,16 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "generatedScreenshotManifest": generated_screenshot_manifest,
         "machineRunReport": machine_run_report,
         "serviceEvidenceManifest": service_evidence_manifest,
+        "evidenceIndex": evidence_index,
+        "chainOfCustody": chain_of_custody,
         "gapRegister": gap_register,
         "package": load_json(PACKAGE_PATH),
         "makefile": MAKEFILE_PATH.read_text(encoding="utf-8"),
         "server": SERVER_PATH.read_text(encoding="utf-8"),
         "smoke": SMOKE_PATH.read_text(encoding="utf-8"),
         "machineQa": MACHINE_QA_PATH.read_text(encoding="utf-8"),
+        "validateSpecWorkflow": VALIDATE_SPEC_WORKFLOW_PATH.read_text(encoding="utf-8"),
+        "proofAnchorWorkflow": PROOF_ANCHOR_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "finalReport": FINAL_REPORT_PATH.read_text(encoding="utf-8"),
         "nodeData": node_data(),
         "artifactDir": effective_artifact_dir,
@@ -322,6 +379,8 @@ def text_blob(data: dict[str, Any]) -> str:
             data["server"],
             data["smoke"],
             data["machineQa"],
+            data["validateSpecWorkflow"],
+            data["proofAnchorWorkflow"],
             data["finalReport"],
         ]
     )
@@ -388,6 +447,26 @@ def rule_002_wiring(data: dict[str, Any]) -> list[dict[str, str]]:
     for target in ["proof-cockpit-validate", "proof-cockpit-selftest"]:
         if f"{target}:" not in data["makefile"]:
             failures.append(finding("USF-PROOF-COCKPIT-002", f"Make target missing: {target}", "Makefile"))
+    repo_validate = scripts.get("repo:validate", "")
+    for required in [
+        "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json",
+        "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json",
+    ]:
+        if required not in repo_validate:
+            failures.append(finding("USF-PROOF-COCKPIT-002", f"repo:validate missing required validator: {required}", "package.json"))
+    for target in ["foundation-substrate-closure-validate", "foundation-substrate-closure-selftest"]:
+        if f"{target}:" not in data["makefile"]:
+            failures.append(finding("USF-PROOF-COCKPIT-002", f"Make target missing: {target}", "Makefile"))
+    if 'python-version: "3.12"' not in data["validateSpecWorkflow"] or 'python-version: "3.12"' not in data["proofAnchorWorkflow"]:
+        failures.append(finding("USF-PROOF-COCKPIT-002", "CI Python version must be pinned to 3.12", ".github/workflows"))
+    for marker in [
+        "corepack pnpm foundation-substrate-closure:validate",
+        "corepack pnpm foundation-substrate-closure:selftest",
+        "corepack pnpm proof-cockpit:validate",
+        "corepack pnpm proof-cockpit:selftest",
+    ]:
+        if marker not in data["validateSpecWorkflow"]:
+            failures.append(finding("USF-PROOF-COCKPIT-002", f"validate-spec workflow missing acceptance gate: {marker}", str(VALIDATE_SPEC_WORKFLOW_PATH.relative_to(ROOT))))
     return failures
 
 
@@ -472,6 +551,7 @@ def rule_006_artifact_manifests(data: dict[str, Any]) -> list[dict[str, str]]:
 
 def rule_007_evidence_records(data: dict[str, Any]) -> list[dict[str, str]]:
     records = data["store"].get("evidenceRecords", [])
+    generated_records = data.get("evidenceIndex", {}).get("evidenceRecords", [])
     failures: list[dict[str, str]] = []
     ids: set[str] = set()
     for record in records:
@@ -482,6 +562,23 @@ def rule_007_evidence_records(data: dict[str, Any]) -> list[dict[str, str]]:
         for field in ["sourceSha", "runId", "timestamp", "humanReviewStatus"]:
             if not record.get(field):
                 failures.append(finding("USF-PROOF-COCKPIT-007", f"Evidence record missing {field}", record_id))
+    artifact_dir = data.get("artifactDir")
+    for record in [*records, *generated_records]:
+        record_id = record.get("id") or record.get("stableId") or "unknown-evidence-record"
+        for path_field, hash_field in [
+            ("rawArtifactPath", "artifactHash"),
+            ("screenshotPath", "screenshotHash"),
+        ]:
+            path_value = record.get(path_field, "")
+            path = resolve_artifact_path(path_value, artifact_dir)
+            if path_value and path and path.exists() and path.is_file():
+                expected_hash = record.get(hash_field) or (record.get("contentHash") if path_field == "rawArtifactPath" else "")
+                if not expected_hash:
+                    failures.append(finding("USF-PROOF-COCKPIT-007", f"Evidence record file-backed path lacks hash: {path_field}", record_id))
+                else:
+                    verify_hash_for_path(failures, "USF-PROOF-COCKPIT-007", record_id, path_value, expected_hash, artifact_dir)
+        if record.get("hashBasis") == "artifact-bytes-sha256" and not record.get("artifactHash"):
+            failures.append(finding("USF-PROOF-COCKPIT-007", "Evidence record claims artifact-byte hash basis without artifactHash", record_id))
     if data["nodeData"].get("claimsMissingEvidence"):
         failures.append(finding("USF-PROOF-COCKPIT-007", "Claim lacks what/why/when/where/how/evidence", ",".join(data["nodeData"]["claimsMissingEvidence"])))
     return failures
@@ -592,6 +689,7 @@ def rule_009_gaps_corrective_actions(data: dict[str, Any]) -> list[dict[str, str
 
 def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, str]]:
     failures: list[dict[str, str]] = []
+    artifact_dir = data.get("artifactDir")
     if data["store"].get("screenshotManifest", {}).get("serviceScreenshotEquivalentCount", 0) < data["nodeData"].get("serviceCount", 0):
         failures.append(finding("USF-PROOF-COCKPIT-010", "Service screenshot-equivalent count is below service count", str(STORE_PATH.relative_to(ROOT))))
     if data["nodeData"].get("serviceClaimsMissingScreenshots"):
@@ -605,6 +703,11 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
     ]
     if missing_hash:
         failures.append(finding("USF-PROOF-COCKPIT-010", "Generated screenshot manifest row lacks screenshot/artifact hash", ",".join(missing_hash[:10])))
+    for row in screenshots:
+        subject = row.get("id") or row.get("route") or row.get("filePath") or "unknown-screenshot"
+        path_value = row.get("filePath") or row.get("screenshotPath") or row.get("authenticatedUiScreenshotPath") or ""
+        expected_hash = row.get("screenshotHash") or row.get("artifactHash") or row.get("authenticatedUiScreenshotHash") or ""
+        verify_hash_for_path(failures, "USF-PROOF-COCKPIT-010", subject, path_value, expected_hash, artifact_dir)
     services = data.get("serviceEvidenceManifest", {}).get("services", [])
     if len(services) < data["nodeData"].get("serviceCount", 0):
         failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence manifest does not cover every service", str(data.get("artifactDir") or "")))
@@ -617,6 +720,8 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
         for field in ["screenshotPath", "screenshotHash", "artifactPath", "artifactHash", "humanReenactmentInstruction", "nextSafeAction"]:
             if not service.get(field):
                 failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence missing {field}", service_id))
+        verify_hash_for_path(failures, "USF-PROOF-COCKPIT-010", service_id, service.get("screenshotPath", ""), service.get("screenshotHash", ""), artifact_dir)
+        verify_hash_for_path(failures, "USF-PROOF-COCKPIT-010", service_id, service.get("artifactPath", ""), service.get("artifactHash", ""), artifact_dir)
         if service.get("evidenceClass") in {"api-equivalent", "cli-equivalent", "unsafe-to-screenshot", "unavailable", "blocked"} and not service.get("screenshotEquivalentReason"):
             failures.append(finding("USF-PROOF-COCKPIT-010", "Screenshot-equivalent service evidence missing reason", service_id))
         if service.get("actualAuthPosture") not in AUTH_POSTURES:
@@ -638,6 +743,14 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
             for field in ["authenticatedUiScreenshotPath", "authenticatedUiScreenshotHash"]:
                 if not service.get(field):
                     failures.append(finding("USF-PROOF-COCKPIT-010", f"Authenticated service evidence missing {field}", service_id))
+            verify_hash_for_path(
+                failures,
+                "USF-PROOF-COCKPIT-010",
+                service_id,
+                service.get("authenticatedUiScreenshotPath", ""),
+                service.get("authenticatedUiScreenshotHash", ""),
+                artifact_dir,
+            )
             if service.get("evidenceClass") in {"api-equivalent", "cli-equivalent", "unsafe-to-screenshot", "blocked", "unavailable"}:
                 failures.append(finding("USF-PROOF-COCKPIT-010", "Auth-required service cannot be satisfied by screenshot-equivalent evidence", service_id))
         if service.get("firstLoginPasswordRotationRequired") and service.get("firstLoginPasswordRotationCompleted") is not True:
@@ -654,6 +767,7 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
 
 def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     failures: list[dict[str, str]] = []
+    artifact_dir = data.get("artifactDir")
     report = data["finalReport"]
     for section in REQUIRED_FINAL_REPORT_SECTIONS:
         if section not in report:
@@ -686,6 +800,16 @@ def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     for phrase in ["source SHA", "deployment SHA", "run ID", "content hash", "screenshot hash"]:
         if phrase.lower() not in report.lower():
             failures.append(finding("USF-PROOF-COCKPIT-011", f"Chain-of-custody phrase missing from final report: {phrase}", str(FINAL_REPORT_PATH.relative_to(ROOT))))
+    chain_rows = data.get("chainOfCustody", {}).get("chainOfCustody", [])
+    for index, row in enumerate(chain_rows):
+        subject = f"chain-of-custody-row-{index + 1}"
+        path_value = row.get("evidenceArtifact", "")
+        path = resolve_artifact_path(path_value, artifact_dir)
+        if path and path.exists() and path.is_file():
+            if not row.get("artifactHash"):
+                failures.append(finding("USF-PROOF-COCKPIT-011", "Chain-of-custody file artifact lacks artifactHash", subject))
+            else:
+                verify_hash_for_path(failures, "USF-PROOF-COCKPIT-011", subject, path_value, row.get("artifactHash", ""), artifact_dir)
     return failures
 
 
@@ -751,7 +875,11 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
     elif kind == "secret-marker-not-blocked":
         mutated["store"]["secretLeak"] = "API_TOKEN=abcdefghijklmnopqrstuvwxyz123456"
     elif kind == "chain-of-custody-hash-mismatch":
-        mutated["finalReport"] = mutated["finalReport"].replace("content hash", "content digest")
+        rows = mutated.get("chainOfCustody", {}).get("chainOfCustody", [])
+        if rows:
+            rows[0]["artifactHash"] = "0" * 64
+        else:
+            mutated["finalReport"] = mutated["finalReport"].replace("content hash", "content digest")
     elif kind == "planted-defect-coverage-missing":
         mutated["planted"] = [item for item in mutated["planted"] if item.get("expectedRule") != "USF-PROOF-COCKPIT-001"]
     elif kind == "machine-run-warning-count-nonzero":
@@ -794,6 +922,10 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         service["openBaoAuditEvidence"] = ""
     elif kind == "secret-literal-value-exposed":
         mutated["store"]["secretLeak"] = "API_TOKEN=abcdefghijklmnopqrstuvwxyz123456"
+    elif kind == "artifact-hash-mismatch":
+        services = mutated.get("serviceEvidenceManifest", {}).get("services", [])
+        if services:
+            services[0]["artifactHash"] = "0" * 64
     return mutated
 
 

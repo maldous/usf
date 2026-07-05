@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
 import { createHash, timingSafeEqual } from "node:crypto";
@@ -3373,13 +3373,21 @@ function sourceLink(path, label = path) {
   return `<a href="/proof/source?path=${encodeURIComponent(path)}">${escapeHtml(label)}</a>`;
 }
 
+function isReviewableSourceFile(path) {
+  try {
+    return statSync(sourceFilePath(path)).isFile();
+  } catch {
+    return false;
+  }
+}
+
 function sourcePathCell(path) {
   const safePath = safeSourcePath(path);
   if (safePath.endsWith(".png")) {
     const safeImage = safeImagePath(safePath);
     return safeImage ? `<a href="/proof/image?path=${encodeURIComponent(safeImage)}">${escapeHtml(path)}</a>` : escapeHtml(path);
   }
-  return safePath ? sourceLink(safePath, path) : escapeHtml(path);
+  return safePath && isReviewableSourceFile(safePath) ? sourceLink(safePath, path) : escapeHtml(path);
 }
 
 function redactSourceContent(content) {
@@ -3848,7 +3856,7 @@ function renderSignoff(data, state) {
     "Proof signoff",
     `<section class="hero">
 <h2>Final signoff</h2>
-<p>Final human signoff is separate from machine QA and is not auto-completed. This page shows what remains before Matthew can make an explicit final decision for ${ACCEPTANCE_ISSUE}.</p>
+<p>Final human signoff is separate from machine QA, is not auto-completed, and final acceptance remains unavailable until Matthew makes an explicit final decision for ${ACCEPTANCE_ISSUE}. This page shows what remains before that decision.</p>
 </section>
 <section>
 <h2>Current signoff state</h2>

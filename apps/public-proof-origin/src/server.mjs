@@ -27,6 +27,7 @@ const NO_STORE_HEADERS = Object.freeze({
   "CDN-Cache-Control": "no-store",
   "Netlify-CDN-Cache-Control": "no-store",
   "X-Content-Type-Options": "nosniff",
+  "Vary": "Host",
 });
 
 function normaliseHost(hostHeader) {

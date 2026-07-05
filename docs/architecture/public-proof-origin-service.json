@@ -39,7 +39,8 @@
       "semanticRequirement": "proof-control-routes-must-not-be-served-from-provider-cache",
       "requiredResponseHeaders": {
         "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-        "CDN-Cache-Control": "no-store"
+        "CDN-Cache-Control": "no-store",
+        "Vary": "Host"
       },
       "providerImplementationHints": {
         "Netlify-CDN-Cache-Control": "no-store"
@@ -169,6 +170,8 @@
         "staging reserved browser route response",
         "production reserved browser route response",
         "ordinary and CDN no-store headers for both proof surfaces",
+        "Host-varying cache boundary for both proof surfaces",
+        "required non-claims surfaced by both proof surfaces",
         "HEAD and OPTIONS safe-method boundary for both proof surfaces"
       ]
     },

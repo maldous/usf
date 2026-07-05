@@ -14,10 +14,22 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: corepack enable
       - run: pip install -r tools/validate-spec/requirements.txt
       - name: Validate spec corpus (also exercises report emission + self-validation)
         run: python tools/validate-spec/validate-spec.py all --report /tmp/usf-validator-report.json
+      - name: Validate foundation substrate closure evidence
+        run: corepack pnpm foundation-substrate-closure:validate
+      - name: Selftest foundation substrate closure validator
+        run: corepack pnpm foundation-substrate-closure:selftest
+      - name: Validate proof cockpit acceptance evidence
+        run: corepack pnpm proof-cockpit:validate
+      - name: Selftest proof cockpit acceptance validator
+        run: corepack pnpm proof-cockpit:selftest
       - name: PR governance gate
         if: github.event_name == 'pull_request'
         env:

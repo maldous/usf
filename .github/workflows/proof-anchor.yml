@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
       - name: Install validator dependency
         run: pip install -r tools/validate-spec/requirements.txt
       - name: Emit deterministic anchor payload for the merge commit

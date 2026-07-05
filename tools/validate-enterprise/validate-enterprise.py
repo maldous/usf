@@ -1264,6 +1264,13 @@ def apply_model_defect(model: dict[str, Any], defect: dict[str, Any]) -> dict[st
                     row.pop(key, None)
                 for key, value in patch.get("set", {}).items():
                     row[key] = value
+    for patch in defect.get("threatPatch", []):
+        for row in out.get("threatModelAbuseCaseRegister", []):
+            if row.get("id") == patch.get("id"):
+                for key in patch.get("drop", []):
+                    row.pop(key, None)
+                for key, value in patch.get("set", {}).items():
+                    row[key] = value
     if defect.get("removeThreatModel"):
         out["threatModelAbuseCaseRegister"] = [
             row
@@ -1804,11 +1811,20 @@ def check_threat_posture(F: Findings, state: dict[str, Any]) -> None:
         if f"threat-lane-{lane.lower()}" not in threats:
             F.add("USF-ENTERPRISE-004", lane, "missing lane threat model row")
     for row in threats.values():
+        subject = row.get("id", "unknown")
         for field in ("abuseCases", "failureModes"):
             if not isinstance(row.get(field), list) or not row[field]:
-                F.add("USF-ENTERPRISE-004", row.get("id", "unknown"), f"{field} must be populated")
+                F.add("USF-ENTERPRISE-004", subject, f"{field} must be populated")
         if not row.get("failClosedBehaviour") or not row.get("monitoringAuditEvidence"):
-            F.add("USF-ENTERPRISE-004", row.get("id", "unknown"), "fail-closed and monitoring/audit evidence are required")
+            F.add("USF-ENTERPRISE-004", subject, "fail-closed and monitoring/audit evidence are required")
+        residual_risk = str(row.get("residualRisk", ""))
+        for token in ("owner=", "riskOwner=", "reviewDate="):
+            if token not in residual_risk:
+                F.add("USF-ENTERPRISE-004", subject, f"residualRisk lacks {token}")
+        if not re.search(r"\b(effectivenessState|riskTreatment|treatment)=", residual_risk):
+            F.add("USF-ENTERPRISE-004", subject, "residualRisk lacks treatment or effectiveness state")
+        if "reviewDate=" in residual_risk and not re.search(r"reviewDate=\d{4}-\d{2}-\d{2}", residual_risk):
+            F.add("USF-ENTERPRISE-004", subject, "residualRisk reviewDate must be ISO date shaped")
 
 
 def check_sdk_governance(F: Findings, state: dict[str, Any]) -> None:
@@ -5168,6 +5184,12 @@ def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str,
         ):
             if not row.get(field):
                 F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.{field}", "foundation domain field is missing")
+        evidence_source = str(row.get("evidenceSource", ""))
+        self_reference = f"docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.{row.get('domainId')}"
+        if "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#" not in evidence_source:
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.evidenceSource", "foundation domain evidence source must cite repository enterprise evidence model")
+        if evidence_source.strip() == self_reference:
+            F.add("USF-ENTERPRISE-032", f"domains.{issue_id}.evidenceSource", "foundation domain evidence source cannot be self-only")
         if row.get("scopeRecorded") is not True or row.get("evidenceModelDefined") is not True:
             F.add("USF-ENTERPRISE-032", f"domains.{issue_id}", "scope and evidence model must be defined")
         if row.get("validationExpectation") != "python3 tools/validate-enterprise/validate-enterprise.py all --json":

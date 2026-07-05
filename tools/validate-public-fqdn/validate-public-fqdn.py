@@ -1266,6 +1266,16 @@ def check_public_proof_origin_service(
     if not isinstance(response, dict):
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract", "origin response contract is missing")
         response = {}
+    cache_headers = response.get("cacheHeaders")
+    if not isinstance(cache_headers, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.cacheHeaders", "origin cache/header contract is missing")
+        cache_headers = {}
+    required_headers = cache_headers.get("requiredResponseHeaders")
+    if not isinstance(required_headers, dict):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.cacheHeaders.requiredResponseHeaders", "origin required response headers are missing")
+        required_headers = {}
+    if required_headers.get("Vary") != "Host":
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.cacheHeaders.requiredResponseHeaders.Vary", "origin proof responses must vary by Host")
     json_endpoint = response.get("jsonProofEndpoint")
     if not isinstance(json_endpoint, dict):
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#responseContract.jsonProofEndpoint", "JSON endpoint contract is missing")
@@ -1338,6 +1348,11 @@ def check_public_proof_origin_service(
     local_origin = proof.get("localOrigin") if isinstance(proof, dict) else None
     if not isinstance(local_origin, dict) or local_origin.get("status") != "pass" or local_origin.get("command") != "corepack pnpm proof:public-origin":
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.localOrigin", "origin local proof evidence is missing or stale")
+    elif not {
+        "Host-varying cache boundary for both proof surfaces",
+        "required non-claims surfaced by both proof surfaces",
+    }.issubset(set(local_origin.get("checkedSurfaces", []))):
+        F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.localOrigin.checkedSurfaces", "origin local proof must check Host variance and non-claim propagation")
     external = proof.get("externalPublicFqdn") if isinstance(proof, dict) else None
     if not isinstance(external, dict) or external.get("status") not in {"pass", "blocked"}:
         F.add("USF-PUBLIC-FQDN-013", f"{ORIGIN_SERVICE_PATH}#proofEvidence.externalPublicFqdn", "external route proof evidence must record pass or blocked status")

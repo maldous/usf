@@ -1,0 +1,13 @@
+{
+  "id": "004-threat-residual-risk-owner-missing",
+  "description": "Remove ownership and review tokens from one threat residual-risk row.",
+  "threatPatch": [
+    {
+      "id": "threat-adapter-runtime-database-provider-binding",
+      "set": {
+        "residualRisk": "local composed proof does not prove live-provider, staging, production, SOC, or ISO readiness"
+      }
+    }
+  ],
+  "expectedRule": "USF-ENTERPRISE-004"
+}

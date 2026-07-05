@@ -158,6 +158,8 @@ const AUTH_POSTURE_VALUES = Object.freeze([
 const OPENBAO_CREDENTIAL_ROOT = "secret/data/usf-proof-cockpit/screenshot";
 const OPENBAO_LOGICAL_ROOT = "openbao://secret/data/usf-proof-cockpit/screenshot";
 const OPENBAO_ENDPOINT = process.env.USF_PROOF_COCKPIT_OPENBAO_ADDR ?? "http://127.0.0.1:8200";
+const MACHINE_QA_REVIEW_ACTOR = process.env.USF_QA_ACTOR ?? "machine-qa-authenticated-operator";
+const MACHINE_QA_REVIEW_SECRET = "machine-qa-synthetic-proof-cockpit-review-secret";
 function composeEnvironmentValue(serviceName, key) {
   const content = existsSync(COMPOSE_TARGET) ? readFileSync(COMPOSE_TARGET, "utf8") : "";
   const serviceMatch = content.match(new RegExp(`\\n  ${serviceName}:\\n(?<body>[\\s\\S]*?)(?=\\n  [a-zA-Z0-9_-]+:\\n|\\nvolumes:|$)`));
@@ -446,6 +448,10 @@ function branchName() {
 
 function contentHash(value) {
   return createHash("sha256").update(value).digest("hex");
+}
+
+function artifactHashForPath(path) {
+  return path && existsSync(path) ? contentHash(readFileSync(path)) : "";
 }
 
 function chromiumExecutablePath() {
@@ -2007,7 +2013,6 @@ async function submitAction(page, baseUrl, report, targetRoute, context) {
   await page.selectOption('select[name="actionType"]', context.actionType);
   await page.selectOption('select[name="outcome"]', context.outcome ?? "draft-performed");
   await page.selectOption('select[name="role"]', context.role ?? "auditor");
-  await page.fill('input[name="actor"]', context.actor);
   await page.fill('input[name="tenant"]', context.tenant ?? "synthetic-machine-qa");
   await page.fill('input[name="actionName"]', context.actionName);
   await page.fill('input[name="correlationId"]', context.correlationId);
@@ -2021,18 +2026,18 @@ async function submitAction(page, baseUrl, report, targetRoute, context) {
   for (const checkbox of ["devEvidenceConfirmed", "testEvidenceConfirmed", "noRealTenantData", "nonClaimsConfirmed"]) {
     await page.check(`input[name="${checkbox}"]`);
   }
-  const [response] = await Promise.all([
-    page.waitForResponse((candidate) => candidate.url().endsWith("/proof/actions") && candidate.status() === 303),
+  const navigation = await Promise.all([
+    page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 10000 }).catch(() => null),
     page.click('button[type="submit"]'),
-  ]);
-  const ok = response.status() === 303;
-  if (!ok) {
-    addCheck(report, "fail", "action-ledger", context.actionType, `POST returned ${response.status()}.`, "form-submission-failure");
+  ]).then(([response]) => response);
+  if (navigation && navigation.status() >= 400) {
+    addCheck(report, "fail", "action-ledger", context.actionType, `POST navigation returned ${navigation.status()}.`, "form-submission-failure");
     return null;
   }
   await page.goto(`${baseUrl}/proof/actions`, { waitUntil: "domcontentloaded", timeout: 10000 });
   const actionsText = await page.content();
-  const visible = actionsText.includes(context.actor);
+  const expectedActor = context.expectedActor ?? MACHINE_QA_REVIEW_ACTOR;
+  const visible = actionsText.includes(expectedActor) && actionsText.includes(context.actionType);
   if (!visible) {
     addCheck(report, "fail", "action-ledger", context.actionType, "Submitted action is not visible in ledger.", "state-persistence-failure");
     return null;
@@ -2042,14 +2047,14 @@ async function submitAction(page, baseUrl, report, targetRoute, context) {
     .first()
     .getAttribute("href");
   const detail = actionHref ? await fetchText(page, baseUrl, actionHref) : { status: 0, text: "" };
-  if (!actionHref || detail.status !== 200 || !textHasAll(detail.text, [context.actor, context.actionName, context.correlationId, "nonClaimsConfirmed"])) {
+  if (!actionHref || detail.status !== 200 || !textHasAll(detail.text, [expectedActor, context.actionName, context.correlationId, "nonClaimsConfirmed"])) {
     addCheck(report, "fail", "action-ledger", context.actionType, "Action detail page is missing or incomplete.", "state-persistence-failure");
     return null;
   }
   report.counts.actionsSubmitted += 1;
-  const result = { actionType: context.actionType, actor: context.actor, route: targetRoute, detailRoute: actionHref, result: "pass" };
+  const result = { actionType: context.actionType, actor: expectedActor, route: targetRoute, detailRoute: actionHref, result: "pass" };
   report.actionResults.push(result);
-  addCheck(report, "pass", "action-ledger", context.actionType, `Submitted action and verified detail page ${actionHref}.`);
+  addCheck(report, "pass", "action-ledger", context.actionType, `Submitted authenticated action and verified detail page ${actionHref}.`);
   return actionHref;
 }
 
@@ -2127,6 +2132,43 @@ async function verifyActions(page, baseUrl, data, report) {
     }
   }
   return detailRoutes;
+}
+
+async function verifyDefaultMutationDenied(report) {
+  const statePath = join(report.artifactDir, "default-read-only-actions.json");
+  const server = await startProofCockpitServer({ host: "127.0.0.1", port: 0, statePath, allowWrites: false });
+  try {
+    const address = server.address();
+    if (!address || typeof address === "string") {
+      addCheck(report, "fail", "action-ledger", "default-read-only", "Default proof cockpit server address was unavailable.", "state-persistence-failure");
+      return;
+    }
+    const baseUrl = `http://127.0.0.1:${address.port}`;
+    const response = await fetch(`${baseUrl}/proof/actions`, {
+      method: "POST",
+      redirect: "manual",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        actionType: "capability-qa",
+        actionName: "unauthenticated mutation should fail",
+        outcome: "draft-performed",
+        role: "auditor",
+        tenant: "synthetic-machine-qa",
+        returnTo: "/proof/actions",
+      }),
+    });
+    if (response.status !== 403) {
+      addCheck(report, "fail", "action-ledger", "default-read-only", `Unauthenticated POST returned ${response.status}.`, "form-submission-failure");
+      return;
+    }
+    if (existsSync(statePath)) {
+      addCheck(report, "fail", "action-ledger", "default-read-only", "Default unauthenticated POST wrote a state file.", "state-persistence-failure");
+      return;
+    }
+    addCheck(report, "pass", "action-ledger", "default-read-only", "Default proof cockpit rejects unauthenticated POST writes with 403 and creates no state file.");
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
 }
 
 async function verifySourceViewer(page, baseUrl, manifest, report) {
@@ -2245,6 +2287,10 @@ function evidenceId(type, target, sourceShaValue) {
 function normalizeEvidenceRecord(report, type, target, sourceMethod, sourceUrlOrCommand, status, summary, options = {}) {
   const timestamp = options.timestamp ?? new Date().toISOString();
   const content = JSON.stringify({ type, target, sourceMethod, sourceUrlOrCommand, status, summary, timestamp });
+  const artifactPath = options.rawArtifactPath ?? options.screenshotPath ?? "";
+  const artifactHash = options.artifactHash ?? artifactHashForPath(artifactPath);
+  const screenshotHash = options.screenshotHash ?? artifactHashForPath(options.screenshotPath ?? "");
+  const metadataHash = contentHash(content);
   return {
     stableId: evidenceId(type, target, report.sourceSha),
     evidenceType: type,
@@ -2261,6 +2307,7 @@ function normalizeEvidenceRecord(report, type, target, sourceMethod, sourceUrlOr
     correlationId: options.correlationId ?? `${type}-${contentHash(target).slice(0, 12)}`,
     traceId: options.traceId ?? `${type}-trace-${contentHash(target).slice(0, 12)}`,
     screenshotPath: options.screenshotPath ?? "",
+    screenshotHash,
     rawArtifactPath: options.rawArtifactPath ?? "",
     normalizedSummary: summary,
     claimSupported: options.claimSupported ?? target,
@@ -2269,7 +2316,10 @@ function normalizeEvidenceRecord(report, type, target, sourceMethod, sourceUrlOr
     limitations: options.limitations ?? "Machine evidence requires human import and acceptance before it supports final USF-290 decisions.",
     sensitivityClassification: options.sensitivityClassification ?? "synthetic-or-redacted-qa-evidence",
     redactionStatus: options.redactionStatus ?? "no raw secret marker detected by machine text scan",
-    contentHash: contentHash(content),
+    contentHash: artifactHash || metadataHash,
+    metadataHash,
+    artifactHash,
+    hashBasis: artifactHash ? "artifact-bytes-sha256" : "normalized-metadata-sha256",
     previousEvidenceReference: options.previousEvidenceReference ?? "",
     retainedStatus: options.retainedStatus ?? "retained-in-local-artifact-bundle",
     humanAcceptanceStatus: options.humanAcceptanceStatus ?? "human-review-required",
@@ -2374,8 +2424,10 @@ function buildChainOfCustody(report) {
     serviceOrResourceUsed: record.sourceUrlOrCommand,
     routeApiPortOrAdapterUsed: record.sourceMethod,
     evidenceArtifact: record.rawArtifactPath || record.screenshotPath || record.sourceUrlOrCommand,
-    artifactHash: record.contentHash,
-    screenshotHash: record.screenshotPath && existsSync(record.screenshotPath) ? contentHash(readFileSync(record.screenshotPath)) : "",
+    artifactHash: record.artifactHash || (record.rawArtifactPath && existsSync(record.rawArtifactPath) ? contentHash(readFileSync(record.rawArtifactPath)) : ""),
+    metadataHash: record.metadataHash,
+    hashBasis: record.hashBasis,
+    screenshotHash: artifactHashForPath(record.screenshotPath),
     timestamp: record.timestamp,
     environment: record.environment,
     sourceSha: record.sourceSha,
@@ -2924,7 +2976,21 @@ async function main() {
   const statePath = join(artifactDir, "machine-qa-actions.json");
   const data = buildData();
   const manifest = getProofCockpitManifest();
-  const server = args.baseUrl ? null : await startProofCockpitServer({ host: "127.0.0.1", port: 0, statePath });
+  if (!args.baseUrl) {
+    process.env.USF_PROOF_COCKPIT_ALLOW_WRITES = "yes";
+    process.env.USF_PROOF_COCKPIT_REVIEW_SECRET = MACHINE_QA_REVIEW_SECRET;
+    process.env.USF_PROOF_COCKPIT_REVIEW_ACTOR = MACHINE_QA_REVIEW_ACTOR;
+  }
+  const server = args.baseUrl
+    ? null
+    : await startProofCockpitServer({
+        host: "127.0.0.1",
+        port: 0,
+        statePath,
+        allowWrites: true,
+        reviewSecret: MACHINE_QA_REVIEW_SECRET,
+        actor: MACHINE_QA_REVIEW_ACTOR,
+      });
   let browser;
   let context;
   try {
@@ -2959,6 +3025,7 @@ async function main() {
     await verifyCapabilities(page, baseUrl, data, report);
     await verifyScenarios(page, baseUrl, data, report);
     await verifyRoles(page, baseUrl, report);
+    await verifyDefaultMutationDenied(report);
     const actionDetailRoutes = await verifyActions(page, baseUrl, data, report);
     await verifySourceViewer(page, baseUrl, manifest, report);
     await verifyServices(page, baseUrl, data, report);

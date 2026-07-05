@@ -11,11 +11,11 @@ This matrix treats ../react as historical evidence only. It does not claim full 
 ## Summary
 
 React compose services discovered: 54.
-USF compose services discovered: 14.
-USF compose services: grafana, keycloak, keycloak-db, loki, mailpit, minio, nats, openbao, otel-collector, postgres, prometheus, tempo, temporal, webhook-sink.
+USF compose services discovered: 16.
+USF compose services: grafana, keycloak, keycloak-db, localstack, loki, mailpit, minio, nats, openbao, otel-collector, postgres, prometheus, tempo, temporal, webhook-sink, wiremock.
 
 Status counts: bounded-local-proof=1, covered-by-usf-runtime=4, deferred=25, implemented=11, implemented-equivalent=1, out-of-foundation-scope=1, profile-gated-bounded-proof=10, substituted-partial=1.
-Evidence grades: A=12, B=5, C=7, D=30.
+Evidence grades: A=12, B=7, C=7, D=28.
 
 ## Service Rows
 

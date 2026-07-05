@@ -1240,6 +1240,13 @@ def _check_counter(F, subject, rows, row_key, declared_counts):
         F.add("USF-PARITY-039", subject, f"declared status counts are stale; expected {actual}")
 
 
+def _check_sorted_list(F, subject, declared_values, expected_values):
+    declared = sorted(declared_values or [])
+    expected = sorted(expected_values)
+    if declared != expected:
+        F.add("USF-PARITY-039", subject, f"declared service list is stale; expected {expected}")
+
+
 def check_usf216_final_reconciliation(F, state):
     reconciliation = state.get("usf133FinalReconciliation")
     if reconciliation is None:
@@ -1354,6 +1361,28 @@ def check_usf216_final_reconciliation(F, state):
     else:
         service_rows = _rows_by_id(compose.get("services"), "react_service")
         _check_counter(F, f"{COMPOSE_PARITY_MATRIX_PATH}.status_counts", compose.get("services", []), "usf_accounting_status", compose.get("status_counts"))
+        _check_counter(F, f"{COMPOSE_PARITY_MATRIX_PATH}.evidence_grade_counts", compose.get("services", []), "evidence_grade", compose.get("evidence_grade_counts"))
+        _check_sorted_list(
+            F,
+            f"{COMPOSE_PARITY_MATRIX_PATH}.missing_or_decision_services",
+            compose.get("missing_or_decision_services"),
+            [
+                row.get("react_service")
+                for row in compose.get("services", [])
+                if row.get("usf_accounting_status") in {"deferred", "out-of-foundation-scope"}
+            ],
+        )
+        _check_sorted_list(
+            F,
+            f"{COMPOSE_PARITY_MATRIX_PATH}.weakly_classified_services",
+            compose.get("weakly_classified_services"),
+            [
+                row.get("react_service")
+                for row in compose.get("services", [])
+                if row.get("evidence_grade") in {"C", "D"}
+                and row.get("usf_accounting_status") not in {"deferred", "out-of-foundation-scope"}
+            ],
+        )
         for react_service in USF216_RECONCILED_COMPOSE_SERVICES:
             row = service_rows.get(react_service)
             if not row:

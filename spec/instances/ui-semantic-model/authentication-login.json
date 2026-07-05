@@ -2,7 +2,7 @@
   "id": "ui.authentication-login",
   "uiKind": "journey",
   "title": "Authentication Login UI Journey",
-  "description": "Draft UI semantic model instance for the login journey, separate from visual styling and source JSX structure. The first UI assurance slice governs login journey states, validation, explicit error handling, permission-gated surfaces, accessibility requirements, user actions, and semantic interface invocation before implementation extraction.",
+  "description": "Draft UI semantic model instance for the login journey, separate from visual styling, component composition, source JSX structure, screenshots, and generated reports. The first UI assurance slice governs login journey states, validation, explicit error handling, permission-gated surfaces, accessibility requirements, user actions, and semantic interface invocation before implementation extraction. This record is a semantic input for future UI generation only; it does not claim product UI readiness, browser E2E readiness, staging readiness, production readiness, or live-provider readiness.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -15,7 +15,7 @@
   "vocabularyRefs": [
     "ui-semantic-kinds"
   ],
-  "aiGuidance": "Regenerate UI from semantics; do not invent validation, permission, accessibility, or journey behaviour from visual design, JSX layout, component names, screenshots, or generated reports.",
+  "aiGuidance": "Regenerate UI from semantics; do not invent validation, permission, accessibility, composition, layout hierarchy, or journey behaviour from visual design, JSX layout, component names, screenshots, or generated reports. Preserve the non-claim boundary: this semantic model is not a product UI readiness, browser E2E readiness, staging readiness, production readiness, or live-provider readiness claim.",
   "surface": "authentication",
   "route": "/login",
   "journeys": [

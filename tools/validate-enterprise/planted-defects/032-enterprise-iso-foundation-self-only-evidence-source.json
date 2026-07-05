@@ -1,0 +1,13 @@
+{
+  "id": "032-enterprise-iso-foundation-self-only-evidence-source",
+  "description": "Make one enterprise ISO-style domain evidence source point only to itself.",
+  "enterpriseIsoDomainPatch": [
+    {
+      "issueId": "USF-273",
+      "set": {
+        "evidenceSource": "docs/architecture/enterprise-iso-style-evidence-foundation.json#domains.isms-scope-context-risk"
+      }
+    }
+  ],
+  "expectedRule": "USF-ENTERPRISE-032"
+}
