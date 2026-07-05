@@ -2,7 +2,7 @@
 
 ## 1. Executive summary
 
-USF-293 delivers the acceptance-grade proof cockpit and evidence portfolio for selective human review and external audit-style inspection. Latest machine QA run qa-run-2026-07-05T11-20-13-693Z records 1230 pass, 0 warnings, 0 failures, and 0 unresolved gaps across 781 proof routes, 75 capabilities, 39 services, 39 service screenshot or equivalent records, and 93 screenshot manifest entries. USF-290 remains a separate human acceptance issue.
+USF-293 delivers the acceptance-grade proof cockpit and evidence portfolio for selective human review and external audit-style inspection. Latest machine QA run qa-run-2026-07-05T14-08-54-626Z records 1278 pass, 0 warnings, 0 failures, and 0 unresolved gaps across 827 proof routes, 75 capabilities, 39 services, 39 service screenshot or equivalent records, and 93 screenshot manifest entries. USF-290 remains a separate human acceptance issue.
 
 ## 2. Scope and non-claims
 
@@ -10,7 +10,7 @@ Scope is the proof cockpit and evidence portfolio. It does not claim staging rea
 
 ## 3. Current USF foundation closure posture
 
-USF-292 current-state foundation substrate closure is imported for review through /proof/foundation-substrate-closure. The imported closure evidence is bounded by source SHA d2bf1eba9da1c89d9f0c688f5295df4eda6978b1, deployment SHA d2bf1eba9da1c89d9f0c688f5295df4eda6978b1, run ID qa-run-2026-07-05T11-20-13-693Z, and the explicit non-claim boundary.
+USF-292 current-state foundation substrate closure is imported for review through /proof/foundation-substrate-closure. The imported closure evidence is bounded by source SHA 8660e164f46a35a46245353c718e05248506a5ce, deployment SHA 8660e164f46a35a46245353c718e05248506a5ce, run ID qa-run-2026-07-05T14-08-54-626Z, and the explicit non-claim boundary.
 
 ## 4. Dev/Test/Staging proof ladder
 
@@ -26,7 +26,7 @@ The cockpit exposes all 75 capability rows with scenario, service, evidence, scr
 
 ## 7. Service catalogue and Compose evidence
 
-The cockpit exposes all 39 service catalogue rows with Compose evidence and direct screenshot or safe screenshot-equivalent records. Service evidence manifest artifacts/proof-cockpit/machine-runs/2026-07-05T11-20-13-660Z/service-evidence-manifest.json records 6 auth-required service UI captures, 0 unresolved service gaps, 0 missing screenshot paths, 0 missing screenshot hashes, 0 missing artifact hashes, and 0 missing reenactment instructions. Grafana is treated as auth-required unless repository configuration explicitly proves otherwise. Windmill authenticated UI evidence is captured through a generated synthetic QA superadmin account whose credential is available only through the logical OpenBao reference; no credential value is printed, committed, screenshotted, logged, or bundled.
+The cockpit exposes all 39 service catalogue rows with Compose evidence and direct screenshot or safe screenshot-equivalent records. Service evidence manifest artifacts/proof-cockpit/machine-runs/2026-07-05T14-08-54-587Z/service-evidence-manifest.json records 6 auth-required service UI captures, 0 unresolved service gaps, 0 missing screenshot paths, 0 missing screenshot hashes, 0 missing artifact hashes, and 0 missing reenactment instructions. Grafana is treated as auth-required unless repository configuration explicitly proves otherwise. Windmill authenticated UI evidence is captured through a generated synthetic QA superadmin account whose credential is available only through the logical OpenBao reference; no credential value is printed, committed, screenshotted, logged, or bundled.
 
 ## 8. Route/port/adapter/provider evidence
 
@@ -38,11 +38,11 @@ Machine QA, proof cockpit validation, foundation closure validation, spec valida
 
 ## 10. Screenshot inventory
 
-Screenshot manifest artifacts/proof-cockpit/machine-runs/2026-07-05T11-20-13-660Z/proof-cockpit-screenshot-manifest.json records 93 screenshots or safe equivalents. Missing screenshot paths: 0. Missing screenshot hashes: 0. Service screenshot or equivalent entries: 39.
+Screenshot manifest artifacts/proof-cockpit/machine-runs/2026-07-05T14-08-54-587Z/proof-cockpit-screenshot-manifest.json records 93 screenshots or safe equivalents. Missing screenshot paths: 0. Missing screenshot hashes: 0. Service screenshot or equivalent entries: 39.
 
 ## 11. Machine QA method and results
 
-Machine QA visits cockpit routes, checks route content, validates source links, submits representative human-review actions, captures screenshots or equivalents, builds chain-of-custody records, verifies OpenBao logical credential evidence for auth-required service captures, and fails closed on warnings, failures, unresolved gaps, missing hashes, missing service evidence, hidden warnings, stale current evidence, and readiness overclaims. Final machine QA result: 1230 pass, 0 warnings, 0 failures, 0 unresolved gaps, and 1 human decision required for final signoff.
+Machine QA visits cockpit routes, checks route content, validates source links, submits representative human-review actions, captures screenshots or equivalents, builds chain-of-custody records, verifies OpenBao logical credential evidence for auth-required service captures, and fails closed on warnings, failures, unresolved gaps, missing hashes, missing service evidence, hidden warnings, stale current evidence, and readiness overclaims. Final machine QA result: 1278 pass, 0 warnings, 0 failures, 0 unresolved gaps, and 1 human decision required for final signoff.
 
 ## 12. Human review method and status
 
@@ -54,7 +54,7 @@ Each claim page shows what, why, when, where, how, actor/tool, source SHA, deplo
 
 ## 14. Evidence chain of custody
 
-Evidence chain of custody requires source SHA, deployment SHA, run ID, timestamp, actor/tool, artifact path, content hash, screenshot hash, redaction status, synthetic-data confirmation, freshness policy, stale behaviour, and human review state. Chain-of-custody rows: 1139. Missing chain-of-custody mappings: 0.
+Evidence chain of custody requires source SHA, deployment SHA, run ID, timestamp, actor/tool, artifact path, content hash, screenshot hash, redaction status, synthetic-data confirmation, freshness policy, stale behaviour, and human review state. Chain-of-custody rows: 1185. Missing chain-of-custody mappings: 0.
 
 ## 15. Audit/log/metric/trace/alert coverage
 
@@ -86,7 +86,7 @@ Warning inventory path: evidence/proof-evidence/proof-cockpit/warning-inventory.
 
 Validation command: USF_PROOF_COCKPIT_ARTIFACT_DIR=artifacts/proof-cockpit/machine-runs corepack pnpm proof-cockpit:machine-qa.
 
-Proof: artifacts/proof-cockpit/machine-runs/2026-07-05T11-20-13-660Z/proof-cockpit-machine-qa-run.json records 0 warnings, 0 failures, and 0 unresolved gaps.
+Proof: artifacts/proof-cockpit/machine-runs/2026-07-05T14-08-54-587Z/proof-cockpit-machine-qa-run.json records 0 warnings, 0 failures, and 0 unresolved gaps.
 
 ## 21. Evidence freshness and historical audit artefact retention
 
