@@ -96,6 +96,55 @@ The result is AI assistance that produces reviewable change with an evidence tra
 
 ---
 
+## Worked example — one search query, formally composed
+
+![Worked example: tenant product search composition](docs/assets/readme/search-example.svg)
+
+Nothing shows the payoff better than the most ordinary feature in the platform. A user types a query and expects *"the documents in my tenant that match this, and only the ones I'm entitled to see."* In a code-first system that's one call to a search engine. In USF it is a single governed capability — `semantic-contract.search-and-indexing-product-search`, with ten formal facets — that **composes cleanly with the rest of the platform and proves every edge.** This is the reasoning and rigour, fully realised.
+
+### It inherits from other capabilities — it never re-implements them
+
+The search contract states plainly that results are *isolated by tenant under the canonical row-level-security predicate and further gated by an optional per-document permission key.* Search does not own isolation or authorization — it **inherits** them, so there is exactly one definition of each and it can never quietly diverge:
+
+- **Identity & tenant membership** and **Authentication** resolve *who* is asking and *which* tenant, before a single row is read.
+- **Relational storage & RLS** contributes the one canonical isolation predicate that search reuses verbatim.
+- **RBAC & permissions** supplies the per-document permission key that narrows results to the user's entitlements.
+- **Object storage** holds the tenant-prefixed documents each hit resolves back to.
+
+### Audit, logging, and observability are first-class, not afterthoughts
+
+Every search — and especially the privileged admin **reindex** operation — is fully instrumented, because these are governed capabilities in their own right that search composes with:
+
+- **Audit** — `audit-of-privileged-access` records the reindex and other privileged actions into a **tamper-evident trail** with full chain of custody. Who ran it, in which tenant, against which source SHA, is recorded and provable.
+- **Logging** — `logs-aggregation-and-tenant-scoped-search` aggregates query and adapter logs into **tenant-scoped** streams (via **Loki**), so operators diagnose one tenant without ever reading another's data. Log search is, itself, built on the very search capability described here — the dependency graph is a mesh, and USF models it exactly.
+- **Observability** — every query is **traced end-to-end** (via **Tempo**), its latency and health are **dashboarded** (via **Grafana**), and `observability-built-in-alerting-and-incidents` turns threshold breaches into alerts and incidents. Readiness is watched, not assumed.
+
+### It runs on composed services behind a stable port
+
+The capability is provider-agnostic; the work is done by real services bound through the **search repository / query port** and its full-text adapter:
+
+| The contract needs | Composed service | Role |
+|---|---|---|
+| full-text adapter | **Meilisearch** | index and execute the query |
+| authoritative rows + isolation | **Postgres** | source of truth, RLS predicate |
+| identity & tenant membership | **Keycloak** | who is asking, which tenant |
+| indexed documents | **MinIO** | tenant-prefixed object storage |
+| audit trail, logs, traces, dashboards, alerts | **Loki · Tempo · Grafana** | tamper-evident trail + telemetry |
+| adapter credentials | **OpenBao** | secret *references*, never values |
+
+One user action, one capability contract, six services collaborating — every relationship written down, enforced by validators, and demonstrated on the proof ladder.
+
+### Why the rigour pays for itself
+
+- **Swap the search engine** behind the port and tenant isolation, permissions, audit, logging, and the query contract are untouched — and the proof ladder tells you exactly which claims you have re-earned.
+- **A security-relevant regression is caught today, not in six months.** Skip the permission-key filter or bypass the RLS predicate and it is a validator failure against the `permissions` facet and the tenant-isolation proof — not a silent data leak.
+- **Audit and telemetry can't be forgotten**, because they are contract obligations the validators check, not habits a developer might skip under deadline.
+- **AI agents extend it safely**, reading the contract's edges to identity, storage, RBAC, audit, and observability instead of guessing from the last query they saw.
+
+An auditor can trace one query from capability → sibling capabilities → composed services → recorded proof, and defend the isolation, authorization, and audit claims with **evidence, not assurances.** That is the whole point of USF, delivered.
+
+---
+
 ## Developer Quickstart
 
 The supported local handover path is documented in [Dev Readiness Validation and Handover](docs/architecture/dev-readiness-validation-and-handover.md). It is designed for a developer — or an AI agent — starting from a fresh clone with no private local state.
