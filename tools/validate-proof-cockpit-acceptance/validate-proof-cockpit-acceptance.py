@@ -503,6 +503,30 @@ def rule_008_human_acceptance_separate(data: dict[str, Any]) -> list[dict[str, s
         failures.append(finding("USF-PROOF-COCKPIT-008", "External bundle must not make final acceptance automatic", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
     if "sufficientForHumanAcceptance: false" not in data["machineQa"]:
         failures.append(finding("USF-PROOF-COCKPIT-008", "Machine QA must expose non-automatic human acceptance state", str(MACHINE_QA_PATH.relative_to(ROOT))))
+    if 'DEFAULT_STATE_PATH =\n  process.env.USF_PROOF_COCKPIT_STATE_PATH ?? join(PERSISTENT_EVIDENCE_ROOT, "human-review-actions.json")' in data["server"]:
+        failures.append(finding("USF-PROOF-COCKPIT-008", "Default live write target must not be a committed evidence file", str(SERVER_PATH.relative_to(ROOT))))
+    for required in ["writePolicyFromOptions", "csrfValid", "csrfCookieHeader", "actorFromRequest"]:
+        if required not in data["server"]:
+            failures.append(finding("USF-PROOF-COCKPIT-008", f"Proof cockpit write security helper missing: {required}", str(SERVER_PATH.relative_to(ROOT))))
+    if "await handleProofPost(request, statePath)" in data["server"]:
+        failures.append(finding("USF-PROOF-COCKPIT-008", "POST handler must receive write policy and cannot run in unauthenticated default mode", str(SERVER_PATH.relative_to(ROOT))))
+    if 'actor: String(params.get("actor")' in data["server"] or "actor: String(params.get('actor')" in data["server"]:
+        failures.append(finding("USF-PROOF-COCKPIT-008", "Actor identity must be derived from authenticated operator context, not browser form text", str(SERVER_PATH.relative_to(ROOT))))
+    for auto_confirmation in [
+        'devEvidenceConfirmed: "yes"',
+        'testEvidenceConfirmed: "yes"',
+        'noRealTenantData: "yes"',
+        'nonClaimsConfirmed: "yes"',
+    ]:
+        if auto_confirmation in data["server"]:
+            failures.append(finding("USF-PROOF-COCKPIT-008", f"Review action auto-confirmation is hidden in server source: {auto_confirmation}", str(SERVER_PATH.relative_to(ROOT))))
+    for smoke_marker in [
+        "proof-cockpit-smoke-unauthenticated-post-status",
+        "proof-cockpit-smoke-unauthenticated-action-recorded",
+        "proof-cockpit-smoke-hidden-auto-confirmation",
+    ]:
+        if smoke_marker not in data["smoke"]:
+            failures.append(finding("USF-PROOF-COCKPIT-008", f"Smoke coverage missing secure mutation marker: {smoke_marker}", str(SMOKE_PATH.relative_to(ROOT))))
     return failures
 
 

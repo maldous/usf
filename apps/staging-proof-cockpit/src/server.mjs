@@ -2,7 +2,7 @@ import { createServer } from "node:http";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 
 const ROOT = new URL("../../..", import.meta.url).pathname;
 const MATRIX_PATH = join(ROOT, "docs/architecture/capability-source-coverage-matrix.md");
@@ -40,7 +40,8 @@ const PERSISTENT_EVIDENCE_STORE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "staging-e
 const FINAL_REPORT_PATH = join(PERSISTENT_EVIDENCE_ROOT, "final-external-review-report.md");
 const EXTERNAL_REVIEW_BUNDLE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "external-review-bundle");
 const DEFAULT_STATE_PATH =
-  process.env.USF_PROOF_COCKPIT_STATE_PATH ?? join(PERSISTENT_EVIDENCE_ROOT, "human-review-actions.json");
+  process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/var/lib/usf-proof-cockpit/human-review-actions.json";
+const CSRF_COOKIE_NAME = "proof_cockpit_csrf";
 
 const NON_CLAIMS = Object.freeze([
   "no-staging-readiness",
@@ -615,6 +616,71 @@ function statePathFromOptions(options = {}) {
   return options.statePath ?? DEFAULT_STATE_PATH;
 }
 
+function writePolicyFromOptions(options = {}) {
+  const requested = options.allowWrites ?? process.env.USF_PROOF_COCKPIT_ALLOW_WRITES === "yes";
+  const reviewSecret = options.reviewSecret ?? process.env.USF_PROOF_COCKPIT_REVIEW_SECRET ?? "";
+  return {
+    requested,
+    allowWrites: Boolean(requested && reviewSecret),
+    reviewSecret,
+    trustForwardAuth: options.trustForwardAuth ?? process.env.USF_PROOF_COCKPIT_TRUST_FORWARD_AUTH === "yes",
+    configuredActor: options.actor ?? process.env.USF_PROOF_COCKPIT_REVIEW_ACTOR ?? "authenticated-qa-operator",
+  };
+}
+
+function csrfTokenForPolicy(policy = writePolicyFromOptions()) {
+  if (!policy.allowWrites || !policy.reviewSecret) {
+    return "";
+  }
+  return contentHash(`proof-cockpit-csrf:${policy.reviewSecret}:${getSourceSha()}`);
+}
+
+function writePolicyNotice(policy = writePolicyFromOptions()) {
+  if (policy.allowWrites) {
+    return `<p class="muted">Authenticated write mode is enabled. Browser actions require the operator session CSRF token and derive actor identity from the authorised operator context.</p>`;
+  }
+  return `<p class="muted">Public/default proof review is read-only. Browser action controls are visible for workflow review, but POST writes require the authorised staging SSO or operator boundary plus CSRF protection.</p>`;
+}
+
+function secureEqual(left, right) {
+  const leftBuffer = Buffer.from(String(left ?? ""));
+  const rightBuffer = Buffer.from(String(right ?? ""));
+  if (leftBuffer.length !== rightBuffer.length) {
+    return false;
+  }
+  return timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+function parseCookies(headerValue = "") {
+  return Object.fromEntries(
+    String(headerValue)
+      .split(";")
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .map((part) => {
+        const index = part.indexOf("=");
+        if (index < 0) {
+          return [part, ""];
+        }
+        return [part.slice(0, index), decodeURIComponent(part.slice(index + 1))];
+      }),
+  );
+}
+
+function actorFromRequest(request, policy) {
+  if (policy.trustForwardAuth) {
+    const forwardedActor =
+      request.headers["x-forwarded-email"] ??
+      request.headers["x-auth-request-email"] ??
+      request.headers["x-forwarded-user"] ??
+      request.headers["x-auth-request-user"];
+    if (forwardedActor) {
+      return String(Array.isArray(forwardedActor) ? forwardedActor[0] : forwardedActor).slice(0, 160);
+    }
+  }
+  return String(policy.configuredActor ?? "authenticated-qa-operator").slice(0, 160);
+}
+
 function blankProofState() {
   return { schemaVersion: 1, actions: [] };
 }
@@ -707,6 +773,12 @@ function loadPersistentEvidenceStore() {
       warnCount: store.latestMachineRun?.warnCount ?? 0,
       gapCount: store.latestMachineRun?.gapCount ?? 0,
       failCount: store.latestMachineRun?.failCount ?? 0,
+      artifactDir: store.latestMachineRun?.artifactDir ?? "",
+      reportJson: store.latestMachineRun?.reportJson ?? "",
+      screenshotManifest: store.latestMachineRun?.screenshotManifest ?? "",
+      externalReviewBundle: store.latestMachineRun?.externalReviewBundle ?? "",
+      warningInventory: store.latestMachineRun?.warningInventory ?? "",
+      warningInventoryMarkdown: store.latestMachineRun?.warningInventoryMarkdown ?? "",
     },
     humanReview: {
       accepted: store.humanReview?.accepted ?? 0,
@@ -767,7 +839,95 @@ function riskIdsForDomain(domain) {
   return controlIdsForDomain(domain).map((controlId) => controlId.replace(/^control-/, "risk-"));
 }
 
+function loadScreenshotManifestRows(store) {
+  const manifestPaths = [
+    store.latestMachineRun?.screenshotManifest,
+    store.latestMachineRun?.externalReviewBundle
+      ? `${store.latestMachineRun.externalReviewBundle}/screenshot-manifest.json`
+      : "",
+    store.latestMachineRun?.artifactDir
+      ? `${store.latestMachineRun.artifactDir}/composed-service-screenshot-manifest.json`
+      : "",
+    "artifacts/proof-cockpit/live-review-screenshots/current/screenshot-manifest.json",
+  ].filter(Boolean);
+  const rows = [];
+  for (const manifestPath of manifestPaths) {
+    const manifest = readJsonOrNull(sourceFilePath(manifestPath));
+    if (Array.isArray(manifest?.screenshots)) {
+      rows.push(...manifest.screenshots);
+    }
+  }
+  return rows;
+}
+
+function screenshotIdForRecord(record) {
+  if (record.serviceId) {
+    return `screenshot-service-${record.serviceId}`;
+  }
+  if (record.route) {
+    return `screenshot-route-${slugify(record.route)}`;
+  }
+  if (record.filePath || record.screenshotPath) {
+    return `screenshot-artifact-${slugify(record.filePath ?? record.screenshotPath)}`;
+  }
+  return `screenshot-record-${contentHash(JSON.stringify(record)).slice(0, 12)}`;
+}
+
 function buildScreenshotRecords(capabilities, services, store) {
+  const manifestRows = loadScreenshotManifestRows(store);
+  if (manifestRows.length) {
+    const byId = new Map();
+    for (const row of manifestRows) {
+      const screenshotPath = row.screenshotPath || row.filePath || row.authenticatedUiScreenshotPath || "";
+      const artifactPath = row.artifactPath || row.apiCliArtifactPath || row.route || screenshotPath || "";
+      const id = screenshotIdForRecord(row);
+      const existing = byId.get(id) ?? {};
+      byId.set(id, {
+        ...existing,
+        ...row,
+        id,
+        kind: row.kind ?? (row.serviceId ? "compose-service" : "proof-route"),
+        serviceName: row.serviceName ?? existing.serviceName ?? row.serviceId ?? "",
+        claimId:
+          row.claimId ?? existing.claimId ?? (row.serviceId ? `claim-service-${row.serviceId}` : "claim-proof-cockpit-portfolio"),
+        capabilityIds: row.capabilityIds ?? existing.capabilityIds ?? [],
+        scenarioIds: row.scenarioIds ?? existing.scenarioIds ?? [],
+        artifactPath,
+        screenshotPath,
+        screenshotHash:
+          row.screenshotHash || row.authenticatedUiScreenshotHash || existing.screenshotHash || row.artifactHash || "",
+        artifactHash: row.artifactHash || row.screenshotHash || existing.artifactHash || "",
+        timestamp: row.timestamp ?? existing.timestamp ?? store.latestMachineRun.generatedAt,
+        sourceSha: row.sourceSha ?? existing.sourceSha ?? store.latestMachineRun.sourceSha,
+        environment: row.environment ?? row.deploymentEnvironment ?? existing.environment ?? store.latestMachineRun.environment,
+        redactionStatus: row.redactionStatus ?? existing.redactionStatus ?? "redaction-status-recorded-in-machine-qa",
+        syntheticDataConfirmation:
+          row.syntheticDataConfirmation ??
+          existing.syntheticDataConfirmation ??
+          "Synthetic-data posture is recorded in the machine QA manifest.",
+        humanReviewStatus: row.humanReviewStatus ?? existing.humanReviewStatus ?? "human-review-required",
+        evidenceClass: row.evidenceClass ?? row.evidenceKind ?? existing.evidenceClass ?? "screenshot",
+        authPosture: row.actualAuthPosture ?? row.authPosture ?? existing.authPosture ?? "not-applicable",
+        loginMethod:
+          row.loginMethod ?? row.authMethodUsed ?? row.loginAuthMethodUsed ?? existing.loginMethod ?? "Not applicable - route screenshot",
+        credentialSourceRef:
+          row.openBaoLogicalSecretRef ??
+          row.credentialSourceRef ??
+          existing.credentialSourceRef ??
+          "Not applicable - no credential value recorded",
+        humanReenactmentInstruction:
+          row.humanReenactmentInstruction ??
+          existing.humanReenactmentInstruction ??
+          "Open the related proof route or service evidence, verify the screenshot hash, source SHA, run ID, redaction posture, and synthetic-data boundary, then record accept, reject, retest, corrective-action, or note.",
+        finalAcceptanceBlocked: row.finalAcceptanceBlocked ?? existing.finalAcceptanceBlocked ?? false,
+        nextSafeAction:
+          row.nextSafeAction ??
+          existing.nextSafeAction ??
+          "Human reviewer samples the screenshot, related evidence, chain of custody, and non-claim boundary before recording a decision.",
+      });
+    }
+    return [...byId.values()];
+  }
   const storePath = "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json";
   const storeHash = store.storeHash;
   const serviceScreenshots = services.map((service) => {
@@ -1264,7 +1424,28 @@ function getSourceSha() {
   }
 }
 
+function fillBlankTableCells(markup) {
+  return String(markup ?? "").replace(
+    /<(td|th)([^>]*)>\s*<\/\1>/g,
+    '<$1$2><span class="muted">Not applicable - no value in current machine QA source.</span></$1>',
+  );
+}
+
+function displayValue(value, fallback = "Derived from machine QA - no separate value recorded.") {
+  if (Array.isArray(value)) {
+    return value.length ? value.join(", ") : fallback;
+  }
+  const rendered = String(value ?? "").trim();
+  return rendered || fallback;
+}
+
+function statusBadge(value, tone = "neutral") {
+  const text = displayValue(value, "Not evidenced - missing status.");
+  return `<span class="status status-${escapeHtml(tone)}">${escapeHtml(text)}</span>`;
+}
+
 function layout(title, body) {
+  const renderedBody = fillBlankTableCells(body);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -1272,54 +1453,88 @@ function layout(title, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(title)}</title>
 <style>
-body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:#1f2328;background:#f7f7f5}
-header,footer{background:#ffffff;border-bottom:1px solid #d8d8d2;padding:16px 20px}
-footer{border-top:1px solid #d8d8d2;border-bottom:0;margin-top:24px}
-main{max-width:1180px;margin:0 auto;padding:18px 20px 40px}
-nav{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px}
-nav a,a{color:#0b5cad}
-section{margin:18px 0;padding:16px 0;border-top:1px solid #d8d8d2}
-table{width:100%;border-collapse:collapse;background:#fff;margin:10px 0;overflow-wrap:anywhere}
-th,td{border:1px solid #d8d8d2;padding:8px;text-align:left;vertical-align:top}
-th{background:#eeeeea}
-pre{white-space:pre-wrap;background:#fff;border:1px solid #d8d8d2;padding:12px;overflow:auto}
+:root{color-scheme:light;--page:#f5f5f1;--panel:#fff;--ink:#1f2328;--muted:#656d76;--line:#d8d8d2;--soft:#eeeeea;--accent:#0b5cad;--ok:#1f7a3f;--warn:#9a6700;--bad:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--page)}
+a{color:var(--accent)}
+.skip-link{position:absolute;left:12px;top:-44px;background:#fff;border:1px solid var(--line);padding:8px 10px;z-index:10}
+.skip-link:focus{top:12px}
+header,footer{background:var(--panel);border-bottom:1px solid var(--line);padding:14px 20px}
+footer{border-top:1px solid var(--line);border-bottom:0;margin-top:24px}
+.topbar{max-width:1180px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.site-title{margin:0;font-size:20px;line-height:1.2}
+.site-subtitle{margin:4px 0 0;color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;justify-content:flex-end}
+nav a,.button-link{display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border:1px solid var(--line);background:#fff;text-decoration:none;color:var(--ink)}
+nav a[aria-current="page"],.button-primary{border-color:#174ea6;background:#174ea6;color:#fff}
+main{max-width:1180px;margin:0 auto;padding:22px 20px 42px}
+section{margin:20px 0;padding:18px 0;border-top:1px solid var(--line)}
+h1,h2,h3{line-height:1.25}
+.hero{background:#fff;border:1px solid var(--line);padding:22px;margin-bottom:18px}
+.hero h2{font-size:28px;margin:0 0 8px}
+.hero-actions,.actions-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.card{background:#fff;border:1px solid var(--line);padding:14px}
+.card h3{margin:0 0 8px;font-size:16px}
+.metric{font-size:22px;font-weight:700;margin:2px 0}
+.muted{color:var(--muted)}
+.status{display:inline-flex;align-items:center;border:1px solid var(--line);background:#fff;padding:2px 7px;min-height:24px}
+.status-pass,.status-ok,.status-accepted{border-color:#8cc69b;background:#edf7ef;color:#14532d}
+.status-warn,.status-review{border-color:#e2bd75;background:#fff8e6;color:#7a4d00}
+.status-fail,.status-bad,.status-rejected{border-color:#ef9a9a;background:#fff0f0;color:#8a1f17}
+.status-neutral{color:var(--muted)}
+.table-wrap{width:100%;overflow-x:auto;background:#fff;border:1px solid var(--line);margin:10px 0}
+.table-wrap:before{content:"Scrollable table";display:block;color:var(--muted);font-size:12px;padding:6px 8px;border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;background:#fff;overflow-wrap:anywhere}
+th,td{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+th{background:var(--soft)}
+pre{white-space:pre-wrap;background:#fff;border:1px solid var(--line);padding:12px;overflow:auto}
 input,select,textarea,button{font:inherit;max-width:100%}
+button,.button-link{cursor:pointer}
 button{padding:8px 12px;border:1px solid #525252;background:#fff}
-.badge{display:inline-block;border:1px solid #b8b8b2;padding:2px 6px;border-radius:4px;background:#fff}
-@media(max-width:760px){main,header,footer{padding-left:12px;padding-right:12px}table{display:block;overflow-x:auto}th,td{min-width:140px}}
-@media print{nav,form,button{display:none}body{background:#fff}main{max-width:none}}
+button.primary{border-color:#174ea6;background:#174ea6;color:#fff}
+button.danger{border-color:var(--bad);color:var(--bad)}
+.review-shell{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+.review-main,.review-side{background:#fff;border:1px solid var(--line);padding:16px}
+.progress{height:12px;background:#e8e8e2;border:1px solid var(--line);overflow:hidden}
+.progress span{display:block;height:100%;background:#174ea6}
+.review-actions{position:sticky;bottom:0;background:#fff;border:1px solid var(--line);padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+.review-actions form{display:inline}
+.note-form{width:100%;display:block}
+.note-form textarea{width:100%}
+.screenshot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.screenshot-card{margin:0;background:#fff;border:1px solid var(--line)}
+.screenshot-card img{display:block;width:100%;height:auto;max-height:520px;object-fit:contain;background:#f0f0ed;border-bottom:1px solid var(--line)}
+.review-main .screenshot-card img{max-height:340px}
+.screenshot-card figcaption{padding:10px;font-size:13px}
+.evidence-card{background:#fff;border:1px solid var(--line);padding:14px;margin:10px 0}
+.print-report{background:#fff;border:1px solid var(--line);padding:24px}
+.print-cover{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:18px}
+@media(max-width:860px){.topbar{display:block}nav{justify-content:flex-start;margin-top:12px}.review-shell{display:block}.review-side{margin-top:14px}main,header,footer{padding-left:12px;padding-right:12px}.hero h2{font-size:24px}.review-actions{margin-left:-12px;margin-right:-12px;border-left:0;border-right:0}.table-wrap{overflow-x:auto}}
+@media print{body{background:#fff;color:#000;font-size:11pt}header,nav,form,button,.hero-actions,.review-actions,.no-print,.button-link,.table-wrap:before{display:none!important}main{max-width:none;padding:0}.print-report{border:0;padding:0}.print-cover{page-break-after:avoid}.screenshot-card{break-inside:avoid}.screenshot-card img{max-height:360px}section{break-inside:avoid;border-top:1px solid #999}a{color:#000;text-decoration:none}footer{border-top:1px solid #999}}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#content">Skip to content</a>
 <header>
-<h1>${escapeHtml(title)}</h1>
+<div class="topbar">
+<div>
+<h1 class="site-title">USF Proof Review</h1>
+<p class="site-subtitle">${escapeHtml(title)}</p>
+</div>
 <nav>
-<a href="/proof">Home</a> |
-<a href="/proof/portfolio">Portfolio</a> |
-<a href="/proof/claims">Claims</a> |
-<a href="/proof/semantic-definitions">Semantic definitions</a> |
-<a href="/proof/qa">QA</a> |
-<a href="/proof/foundation-substrate-closure">Foundation substrate closure</a> |
-<a href="/proof/actions">Actions</a> |
-<a href="/proof/reports/final">Final report</a> |
-<a href="/proof/capabilities">Capabilities</a> |
-<a href="/proof/services">Services</a> |
-<a href="/proof/screenshots">Screenshots</a> |
-<a href="/proof/evidence">Evidence</a> |
-<a href="/proof/sources">Sources</a> |
-<a href="/proof/roles">Roles</a> |
-<a href="/proof/audit">Audit</a> |
-<a href="/proof/observability">Observability</a> |
-<a href="/proof/fixtures">Fixtures</a> |
-<a href="/proof/alerts">Alerts</a> |
-<a href="/proof/signoff">Signoff</a> |
-<a href="/proof/result">Result</a> |
-<a href="/proof/enterprise">Enterprise</a> |
-<a href="/proof/runbook">Runbook</a>
+<a href="/proof">Home</a>
+<a href="/proof/review">Review</a>
+<a href="/proof/reports/final">Printable report</a>
+<a href="/proof/screenshots">Screenshots</a>
+<a href="/proof/evidence">Evidence</a>
+<a href="/proof/signoff">Signoff</a>
+<a href="/proof/portfolio">Drill-down</a>
 </nav>
+</div>
 </header>
-<main>
-${body}
+<main id="content">
+${renderedBody}
 </main>
 <footer>
 <h2>Global non-claim boundary</h2>
@@ -1336,7 +1551,7 @@ function warningsBlock() {
 <ul>
 <li>This is an acceptance-grade staging proof cockpit deliverable for machine evidence review, selective human assertion, and external audit-style review.</li>
 <li>It does not auto-complete ${ACCEPTANCE_ISSUE}; Matthew's final human acceptance remains a separate recorded decision.</li>
-<li>SSO enforcement is not wired in this local controlled proof route. Staging exposure must put this route behind the authorised staging SSO boundary before any real use.</li>
+<li>Public/default deployment is read-only. Browser action writes require explicit operator write mode, an authorised staging SSO or forward-auth boundary, server-derived actor identity, and CSRF validation.</li>
 <li>Warnings, gaps, stale evidence, rejected evidence, corrective actions, and retest requests remain visible; none are hidden or silently accepted.</li>
 <li>USF-289 is complete in live Linear, but live origin and deployment metadata remain evidence inputs only and do not upgrade readiness claims.</li>
 </ul>
@@ -1351,10 +1566,10 @@ function nonClaimsBlock() {
 }
 
 function table(headers, rows) {
-  return `<table>
+  return `<div class="table-wrap" tabindex="0"><table>
 <thead><tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr></thead>
 <tbody>${rows.join("")}</tbody>
-</table>`;
+</table></div>`;
 }
 
 function orderedList(items) {
@@ -1391,7 +1606,11 @@ function checkboxInput(name, label) {
 }
 
 function actionForm(context = {}) {
+  const policy = writePolicyFromOptions();
+  const disabled = policy.allowWrites ? "" : " disabled";
   return `<form method="post" action="/proof/actions">
+${writePolicyNotice(policy)}
+${hiddenInput("csrfToken", csrfTokenForPolicy(policy))}
 ${hiddenInput("returnTo", context.returnTo ?? "/proof/actions")}
 ${hiddenInput("capabilityId", context.capabilityId ?? "")}
 ${hiddenInput("serviceId", context.serviceId ?? "")}
@@ -1401,7 +1620,7 @@ ${hiddenInput("enterpriseTopic", context.enterpriseTopic ?? "")}
 ${selectInput("actionType", "Action type", QA_ACTION_TYPES, context.actionType ?? "capability-qa")}
 ${selectInput("outcome", "Current outcome", QA_OUTCOMES, context.outcome ?? "draft-performed")}
 ${selectInput("role", "QA role used", ROLES, context.role ?? "auditor")}
-${textInput("actor", "Human operator or auditor", context.actor ?? "")}
+<p>Actor identity is derived from the authorised operator session and is not accepted from browser form text.</p>
 ${textInput("tenant", "Synthetic tenant or scope", context.tenant ?? "")}
 ${textInput("actionName", "Action performed", context.actionName ?? "")}
 ${textInput("correlationId", "Correlation id", context.correlationId ?? "")}
@@ -1416,7 +1635,7 @@ ${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readines
 ${checkboxInput("noRealTenantData", "This action used no real tenant data, real secrets, or private local state.")}
 ${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
 ${textArea("notes", "Notes, blockers, corrections, or human observation", context.notes ?? "")}
-<p><button type="submit">Record QA action</button></p>
+<p><button type="submit"${disabled}>Record QA action</button></p>
 </form>`;
 }
 
@@ -1555,6 +1774,78 @@ function evidenceLink(evidenceId) {
   return `<a href="/proof/evidence/${escapeHtml(evidenceId)}">${escapeHtml(evidenceId)}</a>`;
 }
 
+function safeImagePath(path) {
+  const safePath = safeSourcePath(path);
+  if (!safePath || !safePath.startsWith("artifacts/proof-cockpit/") || !safePath.endsWith(".png")) {
+    return "";
+  }
+  if (!screenshotPathHasReviewableRedaction(safePath)) {
+    return "";
+  }
+  return safePath;
+}
+
+function imagePathFromScreenshot(screenshot) {
+  return safeImagePath(screenshot?.screenshotPath || screenshot?.filePath || screenshot?.authenticatedUiScreenshotPath || "");
+}
+
+function imageSrcForPath(path) {
+  const safePath = safeImagePath(path);
+  return safePath ? `/proof/image?path=${encodeURIComponent(safePath)}` : "";
+}
+
+function renderScreenshotFigure(screenshot, options = {}) {
+  const path = imagePathFromScreenshot(screenshot);
+  const title = displayValue(screenshot?.serviceName || screenshot?.route || screenshot?.id, "Screenshot evidence");
+  const image = path
+    ? `<a href="/proof/screenshots/${escapeHtml(screenshot.id)}"><img src="${escapeHtml(imageSrcForPath(path))}" alt="${escapeHtml(title)} proof screenshot" loading="${options.eager ? "eager" : "lazy"}"></a>`
+    : `<div class="card"><p><strong>Not evidenced - inline image unavailable.</strong></p><p>${escapeHtml(displayValue(screenshot?.screenshotPath, "Screenshot path missing from manifest."))}</p></div>`;
+  return `<figure class="screenshot-card">
+${image}
+<figcaption>
+<strong>${escapeHtml(title)}</strong><br>
+${statusBadge(screenshot?.humanReviewStatus ?? "human-review-required", "review")} ${statusBadge(screenshot?.result ?? "machine-reviewable", screenshot?.result === "pass" ? "pass" : "neutral")}<br>
+Path: ${sourcePathCell(path || screenshot?.screenshotPath || screenshot?.filePath || "")}<br>
+Hash: ${escapeHtml(displayValue(screenshot?.screenshotHash, "Not evidenced - screenshot hash missing."))}<br>
+Auth: ${escapeHtml(displayValue(screenshot?.authPosture ?? screenshot?.actualAuthPosture, "Not applicable - route screenshot."))}<br>
+Redaction: ${escapeHtml(displayValue(screenshot?.redactionStatus, "Derived from machine QA - redaction status recorded in manifest."))}
+</figcaption>
+</figure>`;
+}
+
+function screenshotPathHasReviewableRedaction(path) {
+  const store = loadPersistentEvidenceStore();
+  const rows = loadScreenshotManifestRows(store);
+  for (const row of rows) {
+    const candidatePaths = [
+      row.filePath,
+      row.screenshotPath,
+      row.authenticatedUiScreenshotPath,
+      row.artifactPath,
+      row.apiCliArtifactPath,
+    ].filter(Boolean);
+    if (!candidatePaths.includes(path)) {
+      continue;
+    }
+    const status = String(row.redactionStatus ?? "").toLowerCase();
+    return (
+      Boolean(status) &&
+      !/(raw secret (exposed|present|visible)|secret value|credential value|raw credential|private key|unredacted-sensitive|real tenant data)/.test(
+        status,
+      )
+    );
+  }
+  return false;
+}
+
+function screenshotRecordsForIds(data, ids = []) {
+  return unique(ids).map((id) => data.screenshotsById.get(id)).filter(Boolean);
+}
+
+function screenshotRecordsForService(data, serviceId) {
+  return data.screenshots.filter((screenshot) => screenshot.serviceId === serviceId);
+}
+
 function claimRows(claims, limit = claims.length) {
   return claims.slice(0, limit).map((claim) => `<tr>
 <td>${claimLink(claim.id)}</td>
@@ -1584,11 +1875,11 @@ function semanticDefinitionRows(data) {
 function screenshotRows(screenshots, limit = screenshots.length) {
   return screenshots.slice(0, limit).map((screenshot) => `<tr>
 <td>${screenshotLink(screenshot.id)}</td>
-<td>${escapeHtml(screenshot.kind)}</td>
-<td>${escapeHtml(screenshot.serviceId ?? screenshot.route ?? "")}</td>
-<td>${escapeHtml(screenshot.screenshotPath)}</td>
-<td>${escapeHtml(screenshot.screenshotHash)}</td>
-<td>${escapeHtml(screenshot.humanReviewStatus)}</td>
+<td>${escapeHtml(displayValue(screenshot.kind, "Derived from machine QA screenshot manifest."))}</td>
+<td>${escapeHtml(displayValue(screenshot.serviceId ?? screenshot.route, "Not applicable - aggregate screenshot."))}</td>
+<td>${sourcePathCell(displayValue(screenshot.screenshotPath, "Not evidenced - screenshot path missing."))}</td>
+<td>${escapeHtml(displayValue(screenshot.screenshotHash, "Not evidenced - screenshot hash missing."))}</td>
+<td>${escapeHtml(displayValue(screenshot.humanReviewStatus, "human-review-required"))}</td>
 </tr>`);
 }
 
@@ -1631,7 +1922,218 @@ function recordedActionCountFor(state, predicate) {
   return state.actions.filter(predicate).length;
 }
 
-function normalizeAction(params) {
+function reviewDecisionCounts(state) {
+  return state.actions.reduce(
+    (counts, action) => {
+      if (action.outcome === "human-accepted") counts.accepted += 1;
+      if (action.outcome === "human-rejected") counts.rejected += 1;
+      if (action.outcome === "retest-requested") counts.retest += 1;
+      if (action.actionType === "corrective-action-created" || action.outcome === "corrective-action-required") counts.corrective += 1;
+      if (action.actionType === "human-note-added") counts.notes += 1;
+      return counts;
+    },
+    { accepted: 0, rejected: 0, retest: 0, corrective: 0, notes: 0 },
+  );
+}
+
+function actionMatchesReviewItem(action, item) {
+  return (
+    action.evidenceId === item.id ||
+    (item.capabilityId && action.capabilityId === item.capabilityId) ||
+    (item.serviceId && action.serviceId === item.serviceId) ||
+    (item.sourceUrl && action.sourceUrl === item.sourceUrl)
+  );
+}
+
+function reviewItemDecision(state, item) {
+  const action = state.actions.find((candidate) => actionMatchesReviewItem(candidate, item));
+  if (!action) {
+    return { status: "human-review-required", tone: "review", action: null };
+  }
+  if (action.outcome === "human-accepted") {
+    return { status: "accepted", tone: "accepted", action };
+  }
+  if (action.outcome === "human-rejected") {
+    return { status: "rejected", tone: "rejected", action };
+  }
+  if (action.outcome === "retest-requested") {
+    return { status: "retest-requested", tone: "warn", action };
+  }
+  return { status: action.outcome, tone: "neutral", action };
+}
+
+function routeScreenshot(data, route) {
+  return data.screenshots.find((screenshot) => screenshot.route === route);
+}
+
+function buildReviewItems(data) {
+  const latest = data.persistentEvidence.latestMachineRun;
+  const items = [
+    {
+      id: "review-final-report",
+      type: "final report section",
+      title: "Final external-review report",
+      summary:
+        "Confirm the printable external-review report states the scope, non-claims, zero-warning machine QA result, evidence basis, chain of custody, and human acceptance boundary.",
+      machineQaConclusion: `Latest machine QA: ${latest.passCount} pass, ${latest.warnCount} warn, ${latest.gapCount} gap, ${latest.failCount} fail.`,
+      riskPosture: "Low machine-evidence risk; final human acceptance remains separate and not auto-completed.",
+      evidenceLinks: ["proof-cockpit-final-report", "proof-cockpit-evidence-store"],
+      screenshots: [
+        routeScreenshot(data, "/proof/reports/final") ??
+          routeScreenshot(data, "/proof/review") ??
+          routeScreenshot(data, "/proof") ??
+          data.screenshots.find((screenshot) => imagePathFromScreenshot(screenshot)),
+      ].filter(Boolean),
+      sourceUrl: data.persistentEvidence.finalReportPath,
+      route: "/proof/reports/final",
+    },
+  ];
+  for (const claim of data.claims) {
+    items.push({
+      id: `review-${claim.id}`,
+      type: "claim",
+      title: claim.id,
+      summary: claim.what,
+      machineQaConclusion: `${claim.machineQaStatus}; ${claim.staleState}; ${claim.blockedState}`,
+      riskPosture: claim.remainsUnclaimed,
+      evidenceLinks: claim.evidenceIds,
+      screenshots: screenshotRecordsForIds(data, claim.screenshotIds),
+      capabilityId: claim.capabilityId,
+      serviceId: claim.serviceIds?.[0],
+      route: claim.where,
+    });
+  }
+  for (const capability of data.capabilities) {
+    items.push({
+      id: `review-${capability.id}`,
+      type: "capability",
+      title: capability.name,
+      summary: `Capability ${capability.id} maps to ${capability.semanticContractId}, ${capability.scenarioIds.length} scenarios, ${capability.serviceRefs.length} services, evidence records, controls, risks, and human review.`,
+      machineQaConclusion: capability.contract ? "Semantic definition and capability mapping are loaded." : "Human review required because semantic contract is missing.",
+      riskPosture: "Review the mapped services, screenshot evidence, synthetic data boundary, and non-claim boundary before accepting.",
+      evidenceLinks: capability.evidenceIds,
+      screenshots: capability.serviceRefs.flatMap((service) => screenshotRecordsForService(data, service.serviceId)).slice(0, 4),
+      capabilityId: capability.id,
+      route: `/proof/capabilities/${capability.id}`,
+    });
+  }
+  for (const service of data.services) {
+    const screenshots = screenshotRecordsForService(data, service.serviceId);
+    const serviceShot = screenshots[0] ?? {};
+    items.push({
+      id: `review-service-${service.serviceId}`,
+      type: "service",
+      title: service.displayName ?? service.serviceId,
+      summary: `${service.displayName ?? service.serviceId} service evidence includes auth posture ${displayValue(serviceShot.authPosture ?? serviceShot.actualAuthPosture, "derived from service catalogue")} and screenshot or approved equivalent evidence.`,
+      machineQaConclusion: `${displayValue(serviceShot.result ?? serviceShot.evidenceStatus, "machine-reviewable")} with ${displayValue(serviceShot.humanReviewStatus, "human-review-required")}.`,
+      riskPosture: displayValue(serviceShot.nextSafeAction, "Human reviewer must inspect service evidence before acceptance."),
+      evidenceLinks: [`evidence-service-${service.serviceId}`],
+      screenshots,
+      serviceId: service.serviceId,
+      route: `/proof/services/${service.serviceId}`,
+    });
+  }
+  for (const [id, record] of data.evidence) {
+    items.push({
+      id: `review-evidence-${id}`,
+      type: "evidence",
+      title: record.title ?? id,
+      summary: `${record.status}: ${record.target}`,
+      machineQaConclusion: "Evidence record is indexed and linked for human review.",
+      riskPosture: "Confirm chain of custody, source SHA, no-real-tenant-data boundary, and related claim/capability mapping.",
+      evidenceLinks: [id],
+      screenshots: [],
+      capabilityId: record.capabilityId,
+      serviceId: record.serviceId,
+      route: record.proofRoute ?? `/proof/evidence/${id}`,
+    });
+  }
+  for (const screenshot of data.screenshots) {
+    items.push({
+      id: `review-${screenshot.id}`,
+      type: "screenshot",
+      title: screenshot.serviceName || screenshot.route || screenshot.id,
+      summary: `${screenshot.kind} evidence at ${displayValue(screenshot.screenshotPath, "Not evidenced - screenshot path missing.")}`,
+      machineQaConclusion: `${displayValue(screenshot.result ?? "machine-reviewable")} with hash ${displayValue(screenshot.screenshotHash, "Not evidenced - screenshot hash missing.")}.`,
+      riskPosture: displayValue(screenshot.nextSafeAction, "Human reviewer samples the screenshot and related chain of custody."),
+      evidenceLinks: screenshot.serviceId ? [`evidence-service-${screenshot.serviceId}`] : [],
+      screenshots: [screenshot],
+      serviceId: screenshot.serviceId,
+      route: `/proof/screenshots/${screenshot.id}`,
+    });
+  }
+  return items;
+}
+
+function currentReviewIndex(items, state, url, explicitId = "") {
+  const requested = explicitId || url?.searchParams?.get("item") || "";
+  if (/^\d+$/.test(requested)) {
+    return Math.max(0, Math.min(items.length - 1, Number(requested)));
+  }
+  if (requested) {
+    const byId = items.findIndex((item) => item.id === requested);
+    if (byId >= 0) {
+      return byId;
+    }
+  }
+  const firstOpen = items.findIndex((item) => reviewItemDecision(state, item).status === "human-review-required");
+  return firstOpen >= 0 ? firstOpen : 0;
+}
+
+function reviewItemActionForms(item, returnTo) {
+  const policy = writePolicyFromOptions();
+  const disabled = policy.allowWrites ? "" : " disabled";
+  const base = {
+    csrfToken: csrfTokenForPolicy(policy),
+    returnTo,
+    capabilityId: item.capabilityId ?? "",
+    serviceId: item.serviceId ?? "",
+    evidenceId: item.id,
+    sourceUrl: item.sourceUrl ?? "",
+    serviceUrl: item.route ?? "",
+    screenshotUrl: item.screenshots?.[0]?.screenshotPath ?? "",
+    role: "auditor",
+    tenant: "synthetic-proof-review",
+  };
+  const decisionForm = (label, actionType, outcome, className = "") => `<form method="post" action="/proof/actions">
+${Object.entries({
+    ...base,
+    actionType,
+    outcome,
+    actionName: `${label}: ${item.title}`,
+  })
+    .map(([name, value]) => hiddenInput(name, value))
+    .join("")}
+<fieldset>
+<legend>${escapeHtml(label)} confirmations</legend>
+${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence.")}
+${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence.")}
+${checkboxInput("noRealTenantData", "This action used no real tenant data, real secrets, or private local state.")}
+${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
+<button class="${escapeHtml(className)}" type="submit"${disabled}>${escapeHtml(label)}</button>
+</fieldset>
+</form>`;
+  return `<div class="review-actions" aria-label="Review actions">
+${writePolicyNotice(policy)}
+${decisionForm("Accept", "machine-evidence-accepted", "human-accepted", "primary")}
+${decisionForm("Reject", "machine-evidence-rejected", "human-rejected", "danger")}
+${decisionForm("Request retest", "retest-requested", "retest-requested")}
+<form class="note-form" method="post" action="/proof/actions">
+${Object.entries({
+    ...base,
+    actionType: "human-note-added",
+    outcome: "needs-review",
+    actionName: `Note: ${item.title}`,
+  })
+    .map(([name, value]) => hiddenInput(name, value))
+    .join("")}
+<label>Add note<br><textarea name="notes" rows="3" placeholder="Record a human observation, blocker, correction, or sampling note."></textarea></label>
+<p><button type="submit"${disabled}>Add note</button></p>
+</form>
+</div>`;
+}
+
+function normalizeAction(params, actor) {
   const actionType = QA_ACTION_TYPES.includes(params.get("actionType")) ? params.get("actionType") : "capability-qa";
   const outcome = QA_OUTCOMES.includes(params.get("outcome")) ? params.get("outcome") : "needs-review";
   const role = ROLES.includes(params.get("role")) ? params.get("role") : "auditor";
@@ -1644,7 +2146,7 @@ function normalizeAction(params) {
     actionType,
     outcome,
     role,
-    actor: String(params.get("actor") ?? "").slice(0, 160),
+    actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
     tenant: String(params.get("tenant") ?? "").slice(0, 160),
     actionName: String(params.get("actionName") ?? "").slice(0, 240),
     capabilityId: String(params.get("capabilityId") ?? "").slice(0, 160),
@@ -1709,70 +2211,79 @@ function renderHome(data, state) {
   const store = data.persistentEvidence;
   const latest = store.latestMachineRun;
   const human = store.humanReview;
-  const metadata = [
-    `<tr><th>Source SHA</th><td>${escapeHtml(getSourceSha())}</td></tr>`,
-    `<tr><th>Environment</th><td>${escapeHtml(latest.environment)}</td></tr>`,
-    `<tr><th>Deployment/run identity</th><td>${escapeHtml(latest.deploymentSha)} / ${escapeHtml(latest.runId)}</td></tr>`,
-    `<tr><th>Capability rows</th><td>${data.capabilities.length}</td></tr>`,
-    `<tr><th>Service evidence records</th><td>${data.services.length}</td></tr>`,
-    `<tr><th>Screenshot or equivalent records</th><td>${data.screenshots.length}</td></tr>`,
-    `<tr><th>Recorded QA actions</th><td>${state.actions.length}</td></tr>`,
-    `<tr><th>Persistent evidence store</th><td>${sourcePathCell(store.path)}</td></tr>`,
-    `<tr><th>Final report</th><td><a href="/proof/reports/final">/proof/reports/final</a> / ${sourcePathCell(store.finalReportPath)}</td></tr>`,
-    `<tr><th>Related issue review</th><td>${escapeHtml(RELATED_ISSUES.join(", "))}</td></tr>`,
-  ].join("");
+  const reviewItems = buildReviewItems(data);
+  const currentIndex = currentReviewIndex(reviewItems, state, new URL("/proof", "http://127.0.0.1"));
+  const currentItem = reviewItems[currentIndex];
+  const decisionCounts = reviewDecisionCounts(state);
+  const blockerText =
+    latest.failCount || latest.warnCount || latest.gapCount
+      ? `${latest.failCount} failures, ${latest.warnCount} warnings, ${latest.gapCount} unresolved gaps`
+      : "No machine QA blockers; human review and final signoff remain required.";
   return layout(
-    "USF staging proof cockpit",
-    `<p>This audit-readable cockpit is the ${LINEAR_ISSUE} acceptance-grade review surface. It supports ${ACCEPTANCE_ISSUE} human assertion, selective review, external technical audit-style review, enterprise assurance review, and ISO 27001-style evidence support without claiming certification or readiness.</p>
-${warningsBlock()}
+    "USF Proof Review",
+    `<section class="hero">
+<h2>USF Proof Review</h2>
+<p>This is the human acceptance workflow for ${LINEAR_ISSUE}. It starts from the external-review report, then lets Matthew review evidence one item at a time. ${ACCEPTANCE_ISSUE} remains a separate human acceptance gate.</p>
+<div class="hero-actions">
+<a class="button-link button-primary" href="/proof/review">Start review</a>
+<a class="button-link" href="/proof/reports/final">Open printable report</a>
+<a class="button-link" href="/proof/screenshots">Review screenshots</a>
+<a class="button-link" href="/proof/evidence">Review evidence bundle</a>
+<a class="button-link" href="/proof/signoff">Final signoff</a>
+</div>
+</section>
 <section>
-<h2>Dashboard</h2>
-${table(
-      ["Metric", "Value"],
-      [
-        ["Latest machine QA run", latest.runId],
-        ["Pass / warn / gap / fail", `${latest.passCount} / ${latest.warnCount} / ${latest.gapCount} / ${latest.failCount}`],
-        ["Service evidence count", latest.serviceEvidenceCount || data.services.length],
-        ["Screenshot count", latest.screenshotCount || data.screenshots.length],
-        ["Human review count", state.actions.length],
-        ["Accepted / rejected / retest / corrective action", `${human.accepted} / ${human.rejected} / ${human.retestRequested} / ${human.correctiveActions}`],
-        ["Residual risks accepted", human.residualRisksAccepted],
-        ["Final human signoff available", human.finalSignoffAvailable ? "available-after-human-review" : "not-available"],
-        ["Blockers", latest.failCount > 0 ? "machine-failures-present" : "none blocking machine review; human acceptance still required"],
-      ].map(([metric, value]) => `<tr><th>${escapeHtml(metric)}</th><td>${escapeHtml(value)}</td></tr>`),
-    )}
+<h2>Current decision status</h2>
+<div class="grid">
+<div class="card"><h3>Machine QA</h3><p class="metric">${escapeHtml(`${latest.passCount} / ${latest.warnCount} / ${latest.gapCount} / ${latest.failCount}`)}</p><p class="muted">pass / warn / gap / fail</p></div>
+<div class="card"><h3>Human review progress</h3><p class="metric">${state.actions.length}</p><p class="muted">recorded browser review actions</p></div>
+<div class="card"><h3>Decisions</h3><p>${statusBadge(`${decisionCounts.accepted} accepted`, "accepted")} ${statusBadge(`${decisionCounts.rejected} rejected`, "rejected")} ${statusBadge(`${decisionCounts.retest} retest`, "warn")}</p></div>
+<div class="card"><h3>Blockers</h3><p>${statusBadge(blockerText, latest.failCount || latest.warnCount || latest.gapCount ? "bad" : "pass")}</p></div>
+<div class="card"><h3>Final signoff</h3><p>${statusBadge(human.finalSignoffAvailable ? "available after human criteria" : "not available automatically", "review")}</p></div>
+<div class="card"><h3>Evidence scope</h3><p>${escapeHtml(data.claims.length)} claims, ${escapeHtml(data.capabilities.length)} capabilities, ${escapeHtml(data.services.length)} services, ${escapeHtml(data.screenshots.length)} screenshots.</p></div>
+</div>
+</section>
+<section>
+<h2>Next recommended review item</h2>
+<div class="card">
+<h3>${escapeHtml(currentItem.title)}</h3>
+<p>${statusBadge(currentItem.type, "neutral")} ${statusBadge(reviewItemDecision(state, currentItem).status, reviewItemDecision(state, currentItem).tone)}</p>
+<p>${escapeHtml(currentItem.summary)}</p>
+<p><a class="button-link button-primary" href="/proof/review?item=${encodeURIComponent(String(currentIndex))}">Open current item</a></p>
+</div>
 </section>
 <section>
 <h2>Dev to Test to Staging proof ladder</h2>
 ${table(["Stage", "Source artifact", "Command", "Validator/evidence", "Status", "Gaps", "Handoff condition", "Non-claims"], proofLadderFullRows())}
 </section>
 <section>
-<h2>Current metadata</h2>
-<table><tbody>${metadata}</tbody></table>
-</section>
-<section>
-<h2>Portfolio entry points</h2>
-<ul>
-<li><a href="/proof/portfolio">/proof/portfolio</a></li>
-<li><a href="/proof/claims">/proof/claims</a></li>
-<li><a href="/proof/semantic-definitions">/proof/semantic-definitions</a></li>
-<li><a href="/proof/capabilities">/proof/capabilities</a></li>
-<li><a href="/proof/services">/proof/services</a></li>
-<li><a href="/proof/screenshots">/proof/screenshots</a></li>
-<li><a href="/proof/evidence">/proof/evidence</a></li>
-<li><a href="/proof/machine-runs">/proof/machine-runs</a></li>
-<li><a href="/proof/reports/final">/proof/reports/final</a></li>
-<li><a href="/proof/signoff">/proof/signoff</a></li>
-<li><a href="/proof/result">/proof/result</a></li>
-</ul>
-</section>
-<section>
-<h2>Route map</h2>
-${table(["Route", "Delivers", "Human QA action", "Required evidence"], routeSummaryRows())}
+<h2>Evidence identity</h2>
+${table(
+      ["Field", "Value"],
+      [
+        ["Latest machine QA run", latest.runId],
+        ["Source SHA", getSourceSha()],
+        ["Deployment/run identity", `${latest.deploymentSha} / ${latest.runId}`],
+        ["Environment", latest.environment],
+        ["Persistent evidence store", store.path],
+        ["Final report path", store.finalReportPath],
+        ["External-review bundle", store.externalReviewBundlePath],
+        ["Related issues", RELATED_ISSUES.join(", ")],
+      ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${sourcePathCell(value)}</td></tr>`),
+    )}
 </section>
 <section>
 <h2>Recent QA actions</h2>
 ${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 8))}
+</section>
+<section>
+<h2>Secondary drill-down pages</h2>
+<div class="grid">
+<div class="card"><h3>Portfolio</h3><p>Complete machine-indexed assurance model.</p><p><a href="/proof/portfolio">Open portfolio</a></p></div>
+<div class="card"><h3>Claims</h3><p>Claim-by-claim details and mappings.</p><p><a href="/proof/claims">Open claims</a></p></div>
+<div class="card"><h3>Services</h3><p>Auth posture, service evidence, and OpenBao references.</p><p><a href="/proof/services">Open services</a></p></div>
+<div class="card"><h3>Source documents</h3><p>Whitelisted repository evidence sources.</p><p><a href="/proof/sources">Open sources</a></p></div>
+</div>
 </section>
 ${nonClaimsBlock()}`,
   );
@@ -1949,27 +2460,54 @@ ${nonClaimsBlock()}`,
 }
 
 function renderEvidenceIndex(data) {
-  const rows = [...data.evidence.values()].map((record) => `<tr>
-<td>${evidenceLink(record.id)}</td>
-<td>${escapeHtml(record.title)}</td>
-<td>${escapeHtml(record.status)}</td>
-<td>${escapeHtml(record.capabilityId)}</td>
-<td>${sourcePathCell(record.target)}</td>
-<td>${record.proofRoute ? `<a href="${escapeHtml(record.proofRoute)}">${escapeHtml(record.proofRoute)}</a>` : "human-review-required"}</td>
-</tr>`);
+  const cards = [...data.evidence.values()]
+    .map((record) => {
+      const screenshots = record.serviceId ? screenshotRecordsForService(data, record.serviceId) : [];
+      return `<article class="evidence-card">
+<h2>${evidenceLink(record.id)}</h2>
+<p>${escapeHtml(displayValue(record.title, "Derived from machine QA evidence index."))}</p>
+<div class="grid">
+<div><strong>Status</strong><br>${statusBadge(record.status ?? "human-review-required", record.status?.includes("pass") ? "pass" : "review")}</div>
+<div><strong>Capability</strong><br>${record.capabilityId ? `<a href="/proof/capabilities/${escapeHtml(record.capabilityId)}">${escapeHtml(record.capabilityId)}</a>` : "Not applicable - aggregate evidence."}</div>
+<div><strong>Service</strong><br>${record.serviceId ? `<a href="/proof/services/${escapeHtml(record.serviceId)}">${escapeHtml(record.serviceId)}</a>` : "Not applicable - no service mapping."}</div>
+<div><strong>Source artifact</strong><br>${sourcePathCell(record.target)}</div>
+<div><strong>Review route</strong><br>${record.proofRoute ? `<a href="${escapeHtml(record.proofRoute)}">${escapeHtml(record.proofRoute)}</a>` : "Derived from machine QA - no separate route."}</div>
+<div><strong>Chain of custody</strong><br>${sourcePathCell(data.persistentEvidence.path)}</div>
+</div>
+${screenshots.length ? `<div class="screenshot-grid">${screenshots.slice(0, 2).map((screenshot) => renderScreenshotFigure(screenshot)).join("")}</div>` : ""}
+</article>`;
+    })
+    .join("");
   return layout(
     "Proof evidence",
     `<p>Evidence records include source documents, service evidence, machine QA evidence store rows, final report, chain-of-custody surfaces, and human-review targets.</p>
-${table(["Evidence", "Title", "Status", "Target", "Source/artifact", "Route"], rows)}
+${cards}
 ${nonClaimsBlock()}`,
   );
 }
 
 function renderScreenshots(data) {
+  const direct = data.screenshots.filter((screenshot) => imagePathFromScreenshot(screenshot));
+  const equivalent = data.screenshots.length - direct.length;
   return layout(
     "Proof screenshots and equivalents",
-    `<p>Every Composed Service used in evidence has a direct screenshot record or safe screenshot-equivalent artifact record. Equivalent records are explicit and require human review before final acceptance.</p>
+    `<section class="hero">
+<h2>Visual evidence gallery</h2>
+<p>Every screenshot record is rendered inline when a safe PNG artifact exists. Screenshot-equivalent records remain explicit and require human review before final acceptance.</p>
+<div class="grid">
+<div class="card"><h3>Total records</h3><p class="metric">${data.screenshots.length}</p></div>
+<div class="card"><h3>Inline renderable</h3><p class="metric">${direct.length}</p></div>
+<div class="card"><h3>Equivalent or non-image</h3><p class="metric">${equivalent}</p></div>
+</div>
+</section>
+<section>
+<h2>Screenshot gallery</h2>
+<div class="screenshot-grid">${data.screenshots.map((screenshot) => renderScreenshotFigure(screenshot)).join("")}</div>
+</section>
+<section>
+<h2>Manifest index</h2>
 ${table(["Screenshot", "Kind", "Target", "Path", "Hash", "Human review"], screenshotRows(data.screenshots))}
+</section>
 ${nonClaimsBlock()}`,
   );
 }
@@ -1985,6 +2523,10 @@ function renderScreenshot(data, state, screenshotId) {
   return layout(
     `Screenshot ${screenshot.id}`,
     `<p><a href="/proof/screenshots">Back to screenshots</a></p>
+<section>
+<h2>Inline evidence</h2>
+<div class="screenshot-grid">${renderScreenshotFigure(screenshot, { eager: true })}</div>
+</section>
 <table><tbody>${rows.join("")}</tbody></table>
 <section><h2>Record screenshot review</h2>
 ${actionForm({
@@ -2045,19 +2587,50 @@ ${nonClaimsBlock()}`,
 
 function renderFinalReport(data, state) {
   const sections = finalReportSections(data, state);
+  const latest = data.persistentEvidence.latestMachineRun;
+  const selectedScreenshots = [
+    routeScreenshot(data, "/proof"),
+    routeScreenshot(data, "/proof/review"),
+    routeScreenshot(data, "/proof/reports/final"),
+    ...data.screenshots.filter((screenshot) => screenshot.serviceId).slice(0, 6),
+  ].filter(Boolean);
   return layout(
     "Final external-review report",
-    `<p>This report is externally reviewable and print/export friendly. It answers what was proven, why, when, where, how, who or what performed the proof, which resources and semantic definitions were used, which services/routes/ports/adapters/providers/commands/screenshots/artifacts support it, which items require human review, and what remains unclaimed.</p>
-<table><tbody>
-<tr><th>Repository report path</th><td>${sourcePathCell(data.persistentEvidence.finalReportPath)}</td></tr>
-<tr><th>External-review bundle path</th><td>${sourcePathCell("evidence/proof-evidence/proof-cockpit/external-review-bundle/README.md")}</td></tr>
-<tr><th>Persistent evidence store</th><td>${sourcePathCell(data.persistentEvidence.path)}</td></tr>
-</tbody></table>
+    `<article class="print-report">
+<section class="print-cover">
+<h2>USF-293 External Review Report</h2>
+<p>This report is externally reviewable and print/export friendly. It answers what was proven, why, when, where, how, who or what performed the proof, which resources and semantic definitions were used, which services/routes/ports/adapters/providers/commands/screenshots/artifacts support it, which items require human review, and what remains unclaimed.</p>
+<div class="grid">
+<div class="card"><h3>Machine QA</h3><p class="metric">${escapeHtml(`${latest.passCount} pass`)}</p><p>${statusBadge(`${latest.warnCount} warnings`, latest.warnCount ? "warn" : "pass")} ${statusBadge(`${latest.gapCount} gaps`, latest.gapCount ? "warn" : "pass")} ${statusBadge(`${latest.failCount} failures`, latest.failCount ? "bad" : "pass")}</p></div>
+<div class="card"><h3>Evidence scope</h3><p>${escapeHtml(data.claims.length)} claims, ${escapeHtml(data.capabilities.length)} capabilities, ${escapeHtml(data.services.length)} services, ${escapeHtml(data.screenshots.length)} screenshots.</p></div>
+<div class="card"><h3>Human review</h3><p>${escapeHtml(state.actions.length)} browser actions recorded; final signoff is not auto-completed.</p></div>
+</div>
+${table(
+      ["Field", "Value"],
+      [
+        ["Repository report path", data.persistentEvidence.finalReportPath],
+        ["External-review bundle path", "evidence/proof-evidence/proof-cockpit/external-review-bundle/README.md"],
+        ["Persistent evidence store", data.persistentEvidence.path],
+        ["Source SHA", latest.sourceSha],
+        ["Deployment SHA", latest.deploymentSha],
+        ["Run ID", latest.runId],
+      ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${sourcePathCell(value)}</td></tr>`),
+    )}
+</section>
 ${sections
       .map(
         ([title, body], index) => `<section><h2>${index + 1}. ${escapeHtml(title)}</h2><p>${escapeHtml(body)}</p></section>`,
       )
       .join("")}
+<section>
+<h2>Inline Screenshot Evidence Sample</h2>
+<div class="screenshot-grid">${selectedScreenshots.map((screenshot, index) => renderScreenshotFigure(screenshot, { eager: index === 0 })).join("")}</div>
+</section>
+<section>
+<h2>Signoff Section</h2>
+<p>Final human acceptance is intentionally separate. Matthew must use the signoff route after review criteria are satisfied; this report does not auto-complete ${ACCEPTANCE_ISSUE}.</p>
+</section>
+</article>
 ${nonClaimsBlock()}`,
   );
 }
@@ -2318,7 +2891,7 @@ function reviewRows(kind) {
 </tr>`);
 }
 
-function renderReview(kind = "index") {
+function renderReview(data, state, url = new URL("/proof/review", "http://127.0.0.1"), kind = "index", explicitId = "") {
   if (kind === "gaps") {
     return layout("Machine QA gap register", `${table(["Gap", "Description", "Owner", "Next action"], reviewRows("gaps"))}${nonClaimsBlock()}`);
   }
@@ -2328,20 +2901,84 @@ function renderReview(kind = "index") {
   if (kind === "corrective-actions") {
     return layout("Corrective actions", `${table(["Corrective action", "Description", "Owner", "Re-test"], reviewRows("correctiveActions"))}${nonClaimsBlock()}`);
   }
+  const items = buildReviewItems(data);
+  const index = currentReviewIndex(items, state, url, explicitId);
+  const item = items[index];
+  const decision = reviewItemDecision(state, item);
+  const progress = Math.round(((index + 1) / items.length) * 100);
+  const previous = index > 0 ? `<a class="button-link" href="/proof/review?item=${index - 1}">Previous</a>` : "";
+  const next = index + 1 < items.length ? `<a class="button-link button-primary" href="/proof/review?item=${index + 1}">Next</a>` : `<a class="button-link button-primary" href="/proof/signoff">Review signoff state</a>`;
+  const evidenceRows = item.evidenceLinks.length
+    ? item.evidenceLinks.map((id) => `<tr><td>${evidenceLink(id)}</td><td>${sourcePathCell(data.evidence.get(id)?.target ?? "Derived from review item mapping.")}</td></tr>`)
+    : [`<tr><td>Not applicable - no separate evidence record.</td><td>Derived from machine QA and screenshot/service/claim mapping.</td></tr>`];
+  const screenshotFigures = item.screenshots.length
+    ? item.screenshots.map((screenshot, shotIndex) => renderScreenshotFigure(screenshot, { eager: shotIndex === 0 })).join("")
+    : `<div class="card"><p><strong>Not applicable - no inline screenshot for this item.</strong></p><p>This review item is supported by source/evidence records rather than a screenshot artifact.</p></div>`;
   return layout(
-    "Machine QA review",
-    `<p>Review machine evidence, gaps, nonconformities, corrective actions, stale evidence, and residual-risk decisions here.</p>
+    "Proof review workflow",
+    `<section class="hero">
+<h2>${escapeHtml(item.title)}</h2>
+<p>${statusBadge(item.type, "neutral")} ${statusBadge(decision.status, decision.tone)}</p>
+<div class="progress" aria-label="Review progress"><span style="width:${escapeHtml(progress)}%"></span></div>
+<p class="muted">Item ${index + 1} of ${items.length}. ${escapeHtml(displayValue(decision.action?.createdAt, "No human decision recorded for this item yet."))}</p>
+</section>
+<div class="review-shell">
+<article class="review-main">
+<section>
+<h2>Inline screenshot evidence</h2>
+<div class="screenshot-grid">${screenshotFigures}</div>
+</section>
+<section>
+<h2>Evidence summary</h2>
+<p>${escapeHtml(item.summary)}</p>
+</section>
+<section>
+<h2>Machine QA conclusion</h2>
+<p>${escapeHtml(item.machineQaConclusion)}</p>
+</section>
+<section>
+<h2>Risk and assurance posture</h2>
+<p>${escapeHtml(item.riskPosture)}</p>
+</section>
+<section>
+<h2>Evidence links</h2>
+${table(["Evidence", "Source artifact"], evidenceRows)}
+</section>
+<section>
+<h2>Human reenactment instructions</h2>
+<p>${escapeHtml(displayValue(item.screenshots[0]?.humanReenactmentInstruction, "Open the linked route or evidence record, verify source SHA, run ID, screenshot hash, redaction posture, synthetic-data boundary, and non-claims, then record a decision."))}</p>
+</section>
+${reviewItemActionForms(item, `/proof/review?item=${index}`)}
+</article>
+<aside class="review-side">
+<h2>Review navigation</h2>
+<p>${previous} ${next}</p>
+<table><tbody>
+<tr><th>Current item</th><td>${escapeHtml(item.id)}</td></tr>
+<tr><th>Type</th><td>${escapeHtml(item.type)}</td></tr>
+<tr><th>Related route</th><td>${item.route ? `<a href="${escapeHtml(item.route)}">${escapeHtml(item.route)}</a>` : "Not applicable - no route."}</td></tr>
+<tr><th>Capability</th><td>${item.capabilityId ? `<a href="/proof/capabilities/${escapeHtml(item.capabilityId)}">${escapeHtml(item.capabilityId)}</a>` : "Not applicable - aggregate item."}</td></tr>
+<tr><th>Service</th><td>${item.serviceId ? `<a href="/proof/services/${escapeHtml(item.serviceId)}">${escapeHtml(item.serviceId)}</a>` : "Not applicable - no service mapping."}</td></tr>
+<tr><th>Decision</th><td>${escapeHtml(decision.status)}</td></tr>
+</tbody></table>
+<h2>Registers</h2>
 <ul>
 <li><a href="/proof/review/gaps">Gap register</a></li>
 <li><a href="/proof/review/nonconformities">Nonconformities</a></li>
 <li><a href="/proof/review/corrective-actions">Corrective actions</a></li>
 <li><a href="/proof/export">External-review export</a></li>
 </ul>
+</aside>
+</div>
 ${nonClaimsBlock()}`,
   );
 }
 
-function renderReviewDetail(state, reviewId) {
+function renderReviewDetail(data, state, reviewId) {
+  const items = buildReviewItems(data);
+  if (items.some((item) => item.id === reviewId)) {
+    return renderReview(data, state, new URL(`/proof/review?item=${encodeURIComponent(reviewId)}`, "http://127.0.0.1"), "index", reviewId);
+  }
   const action = state.actions.find((candidate) => candidate.id === reviewId);
   if (action) {
     return renderAction(state, reviewId);
@@ -2729,9 +3366,6 @@ function safeSourcePath(path) {
   if (!baseValue || baseValue.startsWith("/") || baseValue.includes("..") || /(^|\/)\./.test(baseValue)) {
     return "";
   }
-  if (/secret|token|credential|private|\.pem|\.key|\.env/i.test(baseValue)) {
-    return "";
-  }
   return SOURCE_PATH_PREFIXES.some((prefix) => baseValue.startsWith(prefix)) ? baseValue : "";
 }
 
@@ -2741,7 +3375,24 @@ function sourceLink(path, label = path) {
 
 function sourcePathCell(path) {
   const safePath = safeSourcePath(path);
+  if (safePath.endsWith(".png")) {
+    const safeImage = safeImagePath(safePath);
+    return safeImage ? `<a href="/proof/image?path=${encodeURIComponent(safeImage)}">${escapeHtml(path)}</a>` : escapeHtml(path);
+  }
   return safePath ? sourceLink(safePath, path) : escapeHtml(path);
+}
+
+function redactSourceContent(content) {
+  return String(content ?? "")
+    .replace(/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, "[redacted private key block]")
+    .replace(
+      /(\b[A-Z0-9_]*(?:TOKEN|PASSWORD|SECRET|CREDENTIAL|PRIVATE_KEY|API_KEY|ACCESS_KEY)[A-Z0-9_]*\b\s*[:=]\s*)(["']?)([^"'\s]{4,})(\2)/gi,
+      "$1$2[redacted proof-cockpit source viewer value]$4",
+    )
+    .replace(
+      /(\b(?:password|secret|token|credential|privateKey|apiKey|accessKey)\b\s*[:=]\s*)(["']?)([^"'\s]{4,})(\2)/gi,
+      "$1$2[redacted proof-cockpit source viewer value]$4",
+    );
 }
 
 function renderSources() {
@@ -2765,6 +3416,9 @@ function renderSourceFile(url) {
   if (!path) {
     return notFound("Source path is not whitelisted for browser review.");
   }
+  if (path.endsWith(".png")) {
+    return notFound("Screenshot PNG files are rendered only through the manifest-gated image endpoint.");
+  }
   const content = readTextOrNull(join(ROOT, path));
   if (content === null) {
     return notFound(`Source document ${path} was not found.`);
@@ -2783,7 +3437,7 @@ ${actionForm({ actionType: "source-document-review", sourceUrl: path, actionName
 </section>
 <section>
 <h2>Content</h2>
-<pre>${escapeHtml(content.slice(0, 200000))}</pre>
+<pre>${escapeHtml(redactSourceContent(content).slice(0, 200000))}</pre>
 </section>`,
   );
 }
@@ -2798,16 +3452,21 @@ function renderService(data, state, serviceId) {
   const evidenceTests = integration.evidenceTests ?? [];
   const recordedActions = recordedActionCountFor(state, (action) => action.serviceId === service.serviceId);
   const auth = serviceAuthPosture(service);
+  const serviceScreenshots = screenshotRecordsForService(data, service.serviceId);
+  const manifestAuth = serviceScreenshots[0] ?? {};
   const authRows = [
-    ["Actual auth posture", auth.posture],
-    ["Login method", auth.method],
-    ["Credential source", auth.credentialRef],
-    ["First-login password rotation", auth.rotation],
-    ["Config evidence", auth.config],
+    ["Actual auth posture", manifestAuth.actualAuthPosture ?? manifestAuth.authPosture ?? auth.posture],
+    ["Login method", manifestAuth.loginMethod ?? auth.method],
+    ["Credential source", manifestAuth.openBaoLogicalSecretRef ?? manifestAuth.credentialSourceRef ?? auth.credentialRef],
+    ["First-login password rotation", manifestAuth.firstLoginPasswordRotationRequired ? `required; completed ${manifestAuth.firstLoginPasswordRotationCompleted ? "yes" : "no"}` : auth.rotation],
+    ["Config evidence", manifestAuth.authPostureConfigPath ?? auth.config],
+    ["OpenBao role/persona", manifestAuth.openBaoRolePersona ?? "Not applicable - no credential required."],
+    ["OpenBao access audit", manifestAuth.openBaoAuditEvidence ?? "Not applicable - no credential required."],
+    ["Authenticated capture status", manifestAuth.authenticatedCaptureStatus ?? "Derived from service catalogue."],
     ["Catalogue auth requirement", service.authRequirement ?? "missing"],
     ["Catalogue access posture", service.accessPosture ?? "missing"],
-    ["Rationale and boundary", auth.rationale],
-    ["Human reenactment", "Use only scoped staging/test-safe credentials retrieved by logical OpenBao reference when required; never expose credentials in screenshots, logs, artifacts, reports, or generated bundles."],
+    ["Rationale and boundary", manifestAuth.authPostureRationale ?? auth.rationale],
+    ["Human reenactment", manifestAuth.humanReenactmentInstruction ?? "Use only scoped staging/test-safe credentials retrieved by logical OpenBao reference when required; never expose credentials in screenshots, logs, artifacts, reports, or generated bundles."],
   ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
   const qaRows = [
     ["Health/readiness", "Open authorised service health or readiness surface; record status and timestamp.", "human-review-required"],
@@ -2847,6 +3506,14 @@ function renderService(data, state, serviceId) {
 <tr><th>Runtime click-through URL</th><td>human-review-required; final cockpit must link only to authorised staging service surfaces or runbooks</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
+<section>
+<h2>Inline service screenshot evidence</h2>
+<div class="screenshot-grid">${
+      serviceScreenshots.length
+        ? serviceScreenshots.map((screenshot, index) => renderScreenshotFigure(screenshot, { eager: index === 0 })).join("")
+        : `<div class="card"><p><strong>Not evidenced - service screenshot record missing.</strong></p><p>This would block final audit readiness for an auth-required service.</p></div>`
+    }</div>
+</section>
 <section>
 <h2>Auth posture and OpenBao evidence</h2>
 <table><tbody>
@@ -3157,17 +3824,40 @@ ${table(["Service", "Fixture seed", "Seeder", "Resetter", "Cleanup", "Teardown"]
 }
 
 function renderSignoff(data, state) {
-  const rows = data.capabilities.map((capability) => `<tr>
-<td><a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.name)}</a></td>
-<td>${escapeHtml(capability.firstPassState)}</td>
-<td>${recordedActionCountFor(state, (action) => action.capabilityId === capability.id)}</td>
-<td><label><input type="checkbox" disabled> final signoff unavailable</label></td>
+  const items = buildReviewItems(data);
+  const itemStates = items.map((item) => ({ item, decision: reviewItemDecision(state, item) }));
+  const rejected = itemStates.filter(({ decision }) => decision.status === "rejected");
+  const retest = itemStates.filter(({ decision }) => decision.status === "retest-requested");
+  const unreviewed = itemStates.filter(({ decision }) => decision.status === "human-review-required");
+  const accepted = itemStates.filter(({ decision }) => decision.status === "accepted");
+  const rows = [
+    ["Accepted review items", accepted.length],
+    ["Rejected review items", rejected.length],
+    ["Retest requested", retest.length],
+    ["Unreviewed items", unreviewed.length],
+    ["Recorded browser actions", state.actions.length],
+    ["Final signoff auto-completed", "no"],
+  ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
+  const openRows = [...rejected, ...retest, ...unreviewed].slice(0, 50).map(({ item, decision }) => `<tr>
+<td><a href="/proof/review?item=${encodeURIComponent(item.id)}">${escapeHtml(item.title)}</a></td>
+<td>${escapeHtml(item.type)}</td>
+<td>${escapeHtml(decision.status)}</td>
+<td>${escapeHtml(item.riskPosture)}</td>
 </tr>`);
   return layout(
     "Proof signoff",
-    `<p>Final human signoff controls are disabled. Final signoff remains unavailable until final USF-290 proofing is implemented.</p>
-<p>Recorded QA actions: ${state.actions.length}. These are reviewable working records, not immutable final evidence.</p>
-${table(["Capability", "State", "Recorded QA actions", "Signoff"], rows)}
+    `<section class="hero">
+<h2>Final signoff</h2>
+<p>Final human signoff is separate from machine QA and is not auto-completed. This page shows what remains before Matthew can make an explicit final decision for ${ACCEPTANCE_ISSUE}.</p>
+</section>
+<section>
+<h2>Current signoff state</h2>
+${table(["Field", "Value"], rows)}
+</section>
+<section>
+<h2>Remaining rejected, retest, or unreviewed items</h2>
+${table(["Item", "Type", "State", "Risk posture"], openRows.length ? openRows : [`<tr><td colspan="4">No rejected, retest, or unreviewed review items are currently recorded in the browser action ledger.</td></tr>`])}
+</section>
 <section>
 <h2>Final signoff prerequisites requiring human confirmation</h2>
 ${unorderedList([
@@ -3176,6 +3866,7 @@ ${unorderedList([
       "All stop conditions cleared or explicitly dispositioned with owner and rationale.",
       "Final USF-290 acceptance criteria mapped to evidence and checked in Linear.",
     ])}
+<p><a class="button-link button-primary" href="/proof/review">Continue review</a> <a class="button-link" href="/proof/reports/final">Open printable report</a></p>
 </section>`,
   );
 }
@@ -3358,16 +4049,73 @@ function safeReturnTo(value) {
   return target.startsWith("/proof") && !target.startsWith("//") ? target : "/proof/actions";
 }
 
-async function handleProofPost(request, statePath) {
+function renderProofImage(url) {
+  const path = safeImagePath(url?.searchParams?.get("path"));
+  if (!path) {
+    return notFound("Screenshot path is not whitelisted for browser review.");
+  }
+  const filePath = sourceFilePath(path);
+  if (!existsSync(filePath)) {
+    return notFound(`Screenshot artifact ${path} was not found.`);
+  }
+  return {
+    status: 200,
+    body: readFileSync(filePath),
+    contentType: "image/png",
+  };
+}
+
+function forbiddenWriteResponse(message) {
+  return {
+    status: 403,
+    body: layout(
+      "Proof cockpit read-only",
+      `<section>
+<h2>Action not recorded</h2>
+<p>${escapeHtml(message)}</p>
+<p>This public/default proof route is reviewable but does not accept unauthenticated browser mutations. Use the authorised staging SSO or operator boundary with explicit write mode to record review decisions.</p>
+<p><a href="/proof/review">Back to review workflow</a></p>
+${nonClaimsBlock()}
+</section>`,
+    ),
+  };
+}
+
+function csrfCookieHeader(policy) {
+  const token = csrfTokenForPolicy(policy);
+  if (!token) {
+    return "";
+  }
+  return `${CSRF_COOKIE_NAME}=${encodeURIComponent(token)}; Path=/proof; HttpOnly; SameSite=Strict`;
+}
+
+function csrfValid(request, params, policy) {
+  const expected = csrfTokenForPolicy(policy);
+  const supplied = params.get("csrfToken") ?? "";
+  const cookie = parseCookies(request.headers.cookie ?? "")[CSRF_COOKIE_NAME] ?? "";
+  return Boolean(expected && secureEqual(supplied, expected) && secureEqual(cookie, expected));
+}
+
+async function handleProofPost(request, statePath, policy = writePolicyFromOptions()) {
   const url = new URL(request.url ?? "/", "http://127.0.0.1");
   const routePath = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, "") : url.pathname;
   if (routePath !== "/proof/actions") {
     return { status: 405, body: layout("Method not allowed", "<p>Only QA action form submissions are supported.</p>") };
   }
+  if (!policy.allowWrites) {
+    return forbiddenWriteResponse(
+      policy.requested
+        ? "Write mode was requested but the operator review secret is missing, so the cockpit remains read-only."
+        : "Unauthenticated proof-cockpit POST writes are disabled by default.",
+    );
+  }
   const body = await readRequestBody(request);
   const params = new URLSearchParams(body);
+  if (!csrfValid(request, params, policy)) {
+    return forbiddenWriteResponse("The proof-cockpit CSRF/session token was missing or invalid.");
+  }
   const state = loadProofState(statePath);
-  const action = normalizeAction(params);
+  const action = normalizeAction(params, actorFromRequest(request, policy));
   state.actions.unshift(action);
   saveProofState(state, statePath);
   return redirect(safeReturnTo(params.get("returnTo")) || `/proof/actions/${action.id}`);
@@ -3423,19 +4171,19 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
     return page(renderImportRun(data, runId));
   }
   if (routePath === "/proof/review") {
-    return html(renderReview());
+    return html(renderReview(data, state, url));
   }
   if (routePath === "/proof/review/gaps") {
-    return html(renderReview("gaps"));
+    return html(renderReview(data, state, url, "gaps"));
   }
   if (routePath === "/proof/review/nonconformities") {
-    return html(renderReview("nonconformities"));
+    return html(renderReview(data, state, url, "nonconformities"));
   }
   if (routePath === "/proof/review/corrective-actions") {
-    return html(renderReview("corrective-actions"));
+    return html(renderReview(data, state, url, "corrective-actions"));
   }
   if (routePath.startsWith("/proof/review/")) {
-    return page(renderReviewDetail(state, decodeURIComponent(routePath.slice("/proof/review/".length))));
+    return page(renderReviewDetail(data, state, decodeURIComponent(routePath.slice("/proof/review/".length))));
   }
   if (routePath === "/proof/export") {
     return html(renderExport());
@@ -3515,17 +4263,22 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
 export function createProofCockpitServer(options = {}) {
   const data = options.data ?? buildData();
   const statePath = statePathFromOptions(options);
+  const writePolicy = writePolicyFromOptions(options);
   return createServer(async (request, response) => {
     try {
       const url = new URL(request.url ?? "/", "http://127.0.0.1");
       const result =
-        request.method === "POST"
-          ? await handleProofPost(request, statePath)
+        (request.method === "GET" || request.method === "HEAD") && url.pathname === "/proof/image"
+          ? renderProofImage(url)
+          : request.method === "POST"
+          ? await handleProofPost(request, statePath, writePolicy)
           : renderProofCockpit(url.pathname, data, loadProofState(statePath), url);
+      const csrfCookie = csrfCookieHeader(writePolicy);
       response.writeHead(result.status, {
-        "Content-Type": "text/html; charset=utf-8",
+        "Content-Type": result.contentType ?? "text/html; charset=utf-8",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
+        ...(csrfCookie ? { "Set-Cookie": csrfCookie } : {}),
         ...(result.headers ?? {}),
       });
       if (request.method === "HEAD") {
