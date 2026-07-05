@@ -49,7 +49,8 @@
       "warnCount": 68,
       "gapCount": 69,
       "failCount": 0,
-      "humanDecisionRequired": 1
+      "humanDecisionRequired": 1,
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T09-54-33-633Z",
@@ -72,7 +73,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T11-00-49-538Z",
@@ -95,7 +97,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T11-10-36-906Z",
@@ -118,7 +121,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T11-20-13-693Z",
@@ -141,7 +145,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T13-55-31-993Z",
@@ -164,7 +169,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T14-03-29-536Z",
@@ -187,7 +193,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T14-08-54-626Z",
@@ -210,7 +217,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T14-19-59-404Z",
@@ -233,7 +241,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T14-47-28-467Z",
@@ -256,7 +265,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T15-06-18-038Z",
@@ -279,7 +289,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-05T16-11-10-705Z",
@@ -302,7 +313,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": false
     },
     {
       "runId": "qa-run-2026-07-05T16-28-26-360Z",
@@ -325,7 +337,8 @@
       "failCount": 0,
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
-      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md"
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": false
     }
   ],
   "evidenceRecords": [
