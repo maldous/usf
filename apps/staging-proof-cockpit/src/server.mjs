@@ -8,6 +8,16 @@ const MATRIX_PATH = join(ROOT, "docs/architecture/capability-source-coverage-mat
 const CONTRACT_DIR = join(ROOT, "spec/instances/semantic-contract");
 const SERVICE_CATALOGUE_PATH = join(ROOT, "spec/instances/compose-service/service-catalogue.json");
 const COMPOSED_SERVICE_MATRIX_PATH = join(ROOT, "docs/architecture/composed-service-integration-test-matrix.json");
+const REACT_PARITY_IMPORT_SOURCE = "docs/architecture/proof-cockpit-react-non-ui-parity-import.json";
+const REACT_PARITY_CLOSURE_SOURCE = "docs/architecture/react-non-ui-parity-test-closure-gate.json";
+const REACT_PARITY_ASSURANCE_SOURCE = "docs/architecture/react-parity-assurance-case.json";
+const REACT_PARITY_GAP_SOURCE = "docs/architecture/react-non-ui-parity-gap-register.json";
+const REACT_PARITY_VALIDATOR_COMMAND = Object.freeze([
+  "python3",
+  "tools/validate-react-non-ui-parity/validate-react-non-ui-parity.py",
+  "all",
+  "--json",
+]);
 const LINEAR_ISSUE = "USF-290";
 const DEFAULT_STATE_PATH = process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/tmp/usf-proof-cockpit-actions.json";
 
@@ -43,6 +53,7 @@ const ROLES = Object.freeze([
 const ROUTES = Object.freeze([
   "/proof",
   "/proof/qa",
+  "/proof/react-non-ui-parity",
   "/proof/actions",
   "/proof/actions/:actionId",
   "/proof/machine-runs",
@@ -105,6 +116,7 @@ const ROUTES = Object.freeze([
 const ROUTE_SUMMARIES = Object.freeze([
   ["/proof", "Cockpit landing page", "Confirm warnings, source SHA, environment metadata, and route map.", "source SHA, deployment metadata, visible non-claims"],
   ["/proof/qa", "Formal human QA workflow", "Follow the per-capability confirmation sequence and stop conditions before signoff.", "human action record, screenshot, correlation id, immutable artifact"],
+  ["/proof/react-non-ui-parity", "USF-291 React non-UI parity closure evidence", "Review the merged Test-layer React non-UI parity closure before accepting staging QA evidence.", "external-review report, assurance case, chain-of-custody rows, validator result, PR merge SHA"],
   ["/proof/actions", "Recorded QA action ledger", "Review submitted browser QA actions, blockers, evidence links, and confirmation check states.", "file-backed local QA records; not immutable final evidence"],
   ["/proof/actions/:actionId", "QA action detail", "Review one submitted action and decide whether more evidence or correction is needed.", "operator-entered action fields, source SHA, timestamp"],
   ["/proof/machine-runs", "Machine QA run index", "Import the latest machine evidence bundle, compare it with prior runs, and inspect run status.", "qa-run manifest, report links, import status"],
@@ -249,6 +261,12 @@ const PROOF_LADDER_LEVELS = Object.freeze([
     "repository-prerequisite-reference",
   ],
   [
+    "React non-UI parity closure prerequisite",
+    "/proof/react-non-ui-parity",
+    "Machine-completed USF-291 evidence must be reviewed so the auditor can confirm no React-derived non-UI foundation or operational-substrate item was silently omitted before staging QA.",
+    "repository-prerequisite-reference",
+  ],
+  [
     "Staging QA exercise",
     "/proof/capabilities/:capabilityId",
     "Human auditor performs role-specific happy path, negative path, service click-through, audit, observability, alert, fixture, screenshot, and signoff actions.",
@@ -310,6 +328,12 @@ const MACHINE_PROOF_WORK_MAP = Object.freeze([
     "USF-260",
     "docs/architecture/test-environment-completion-and-staging-entry-gate.json",
     "Confirm Test completion is valid before staging-specific enablement or staging QA proceeds.",
+  ],
+  [
+    "React non-UI parity formal closure",
+    "USF-291",
+    "docs/architecture/proof-cockpit-react-non-ui-parity-import.json",
+    "Confirm PR 243, merge SHA, external-review report, assurance case, chain-of-custody rows, validator pass, and preserved non-claims before staging QA relies on React-derived non-UI closure.",
   ],
   [
     "External HTTP semantics gate",
@@ -412,6 +436,20 @@ const SOURCE_DOCUMENTS = Object.freeze([
   ["Missing evidence planted defects gate", "docs/architecture/missing-evidence-planted-defects-regression-gate.json"],
   ["Test completion staging-entry gate", "docs/architecture/test-environment-completion-and-staging-entry-gate.json"],
   ["Pre-staging external HTTP gate", "docs/architecture/pre-staging-external-http-semantics-readiness-gate.json"],
+  ["Proof cockpit React non-UI parity import", "docs/architecture/proof-cockpit-react-non-ui-parity-import.json"],
+  ["Proof cockpit React non-UI parity import note", "docs/architecture/proof-cockpit-react-non-ui-parity-import.md"],
+  ["React non-UI parity external-review report", "docs/architecture/react-non-ui-parity-external-review-report.md"],
+  ["React non-UI parity closure gate", "docs/architecture/react-non-ui-parity-test-closure-gate.json"],
+  ["React non-UI parity closure gate note", "docs/architecture/react-non-ui-parity-test-closure-gate.md"],
+  ["React parity assurance case", "docs/architecture/react-parity-assurance-case.json"],
+  ["React parity assurance case note", "docs/architecture/react-parity-assurance-case.md"],
+  ["React non-UI baseline inventory", "docs/architecture/react-non-ui-baseline-inventory.json"],
+  ["React service equivalence matrix", "docs/architecture/react-service-equivalence-matrix.json"],
+  ["React route port adapter provider equivalence", "docs/architecture/react-route-port-adapter-provider-equivalence.json"],
+  ["React test proof disposition ledger", "docs/architecture/react-test-proof-disposition-ledger.json"],
+  ["React UI-derived foundation behaviour rewrite ledger", "docs/architecture/react-ui-derived-foundation-behaviour-rewrite-ledger.json"],
+  ["React operator admin surface equivalence", "docs/architecture/react-operator-admin-surface-equivalence.json"],
+  ["React non-UI parity gap register", "docs/architecture/react-non-ui-parity-gap-register.json"],
   ["Proof cockpit machine QA evidence model", "docs/architecture/proof-cockpit-machine-qa-evidence-model.json"],
   ["Proof cockpit machine QA evidence model note", "docs/architecture/proof-cockpit-machine-qa-evidence-model.md"],
   ["Capability source coverage matrix", "docs/architecture/capability-source-coverage-matrix.md"],
@@ -508,6 +546,49 @@ function readTextOrNull(path) {
   }
 }
 
+function sourceFilePath(sourcePath) {
+  return join(ROOT, sourcePath);
+}
+
+function loadReactParityClosureEvidence() {
+  const importRecord = readJsonOrNull(sourceFilePath(REACT_PARITY_IMPORT_SOURCE)) ?? {};
+  const closure = readJsonOrNull(sourceFilePath(REACT_PARITY_CLOSURE_SOURCE)) ?? {};
+  const assurance = readJsonOrNull(sourceFilePath(REACT_PARITY_ASSURANCE_SOURCE)) ?? {};
+  const gapRegister = readJsonOrNull(sourceFilePath(REACT_PARITY_GAP_SOURCE)) ?? {};
+  return {
+    importRecord,
+    closure,
+    assurance,
+    gapRegister,
+    importedSummary: importRecord.importedEvidenceSummary ?? closure.evidenceSummary ?? {},
+    evidenceSources: importRecord.evidenceSources ?? [],
+    nonClaims: importRecord.nonClaims ?? closure.nonClaims ?? [],
+  };
+}
+
+function runReactParityValidatorCheck() {
+  try {
+    const output = execFileSync(REACT_PARITY_VALIDATOR_COMMAND[0], REACT_PARITY_VALIDATOR_COMMAND.slice(1), {
+      cwd: ROOT,
+      encoding: "utf8",
+      maxBuffer: 1024 * 1024,
+      timeout: 20000,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    return {
+      status: "pass",
+      command: REACT_PARITY_VALIDATOR_COMMAND.join(" "),
+      detail: output.trim(),
+    };
+  } catch (error) {
+    return {
+      status: "local-check-unavailable-or-fail",
+      command: REACT_PARITY_VALIDATOR_COMMAND.join(" "),
+      detail: String(error.stderr || error.stdout || error.message || "validator check unavailable").slice(0, 1200),
+    };
+  }
+}
+
 function parseMatrixCapabilities() {
   const matrix = readFileSync(MATRIX_PATH, "utf8");
   const capabilitySection = matrix
@@ -592,6 +673,7 @@ function loadServices() {
 export function buildData() {
   const contracts = loadSemanticContracts();
   const serviceCatalogue = loadServices();
+  const reactParity = loadReactParityClosureEvidence();
   const capabilities = parseMatrixCapabilities().map((capability) => {
     const contract = contracts.get(capability.semanticContractId);
     const serviceRefs = servicesForCapability(capability, serviceCatalogue.servicesById);
@@ -643,7 +725,15 @@ export function buildData() {
       target: "runtime route/API, audit, logs, metrics, traces, alerts, screenshots, and immutable artifact are not wired in this first pass",
     });
   }
-  return { capabilities, contracts, scenarios, evidence, ...serviceCatalogue };
+  evidence.set("usf-291-react-non-ui-parity-closure", {
+    id: "usf-291-react-non-ui-parity-closure",
+    capabilityId: "aggregate-react-non-ui-parity",
+    title: "USF-291 React non-UI parity closure evidence",
+    status: reactParity.importRecord?.validatorEvidence?.allResult === "pass" ? "merged-validator-pass" : "available-repository-link",
+    target: REACT_PARITY_IMPORT_SOURCE,
+    proofRoute: "/proof/react-non-ui-parity",
+  });
+  return { capabilities, contracts, scenarios, evidence, reactParity, ...serviceCatalogue };
 }
 
 export function getProofCockpitManifest() {
@@ -710,6 +800,7 @@ function layout(title, body) {
 <nav>
 <a href="/proof">Home</a> |
 <a href="/proof/qa">QA</a> |
+<a href="/proof/react-non-ui-parity">React non-UI parity</a> |
 <a href="/proof/actions">Actions</a> |
 <a href="/proof/capabilities">Capabilities</a> |
 <a href="/proof/services">Services</a> |
@@ -1369,6 +1460,119 @@ ${nonClaimsBlock()}`,
   );
 }
 
+function reactParitySummaryRows(summary = {}) {
+  return Object.entries(summary).map(
+    ([key, value]) => `<tr><td>${escapeHtml(titleCase(key))}</td><td>${escapeHtml(typeof value === "object" ? JSON.stringify(value) : value)}</td></tr>`,
+  );
+}
+
+function reactParitySourceRows(evidenceSources = []) {
+  return evidenceSources.map(
+    (source) =>
+      `<tr><td>${escapeHtml(source.title ?? source.id)}</td><td>${sourcePathCell(source.path)}</td><td>${escapeHtml(source.id ?? "")}</td></tr>`,
+  );
+}
+
+function reactParityClaimRows(assurance = {}) {
+  return (assurance.claims ?? []).map(
+    (claim) => `<tr>
+<td>${escapeHtml(claim.id)}</td>
+<td>${escapeHtml(claim.claimText)}</td>
+<td>${escapeHtml(claim.humanDecisionStatus ?? "not-recorded")}</td>
+<td>${escapeHtml(claim.limitations ?? "")}</td>
+</tr>`,
+  );
+}
+
+function reactParityChainRows(assurance = {}) {
+  return (assurance.chainOfCustody ?? []).map(
+    (chain) => `<tr>
+<td>${escapeHtml(chain.id)}</td>
+<td>${escapeHtml(chain.claimId)}</td>
+<td>${escapeHtml(chain.testCommand)}</td>
+<td>${sourcePathCell(chain.artifactPath)}</td>
+<td>${escapeHtml(chain.artifactHash)}</td>
+<td>${escapeHtml(chain.sourceGitSha)}</td>
+<td>${escapeHtml(chain.humanDecisionStatus ?? "see assurance claim")}</td>
+</tr>`,
+  );
+}
+
+function renderReactNonUiParity(data, state) {
+  const evidence = data.reactParity ?? loadReactParityClosureEvidence();
+  const importRecord = evidence.importRecord ?? {};
+  const closure = evidence.closure ?? {};
+  const assurance = evidence.assurance ?? {};
+  const gapSummary = evidence.gapRegister?.summary ?? {};
+  const importedValidator = importRecord.validatorEvidence ?? {};
+  const liveValidator = runReactParityValidatorCheck();
+  const recordedActions = recordedActionCountFor(
+    state,
+    (action) =>
+      action.sourceUrl === REACT_PARITY_IMPORT_SOURCE ||
+      action.evidenceId === "usf-291-react-non-ui-parity-closure" ||
+      action.actionName?.includes("React non-UI parity"),
+  );
+  return layout(
+    "USF-291 React non-UI parity closure evidence",
+    `<p>This page imports merged USF-291 evidence into the USF-290 staging proof cockpit so the auditor can verify prior Test-layer closure before staging capability QA. It does not complete USF-290 and it does not claim React UI parity.</p>
+<table><tbody>
+<tr><th>Imported issue</th><td>USF-291</td></tr>
+<tr><th>Source PR</th><td><a href="${escapeHtml(importRecord.sourcePullRequest?.url ?? "https://github.com/maldous/usf/pull/243")}">PR ${escapeHtml(importRecord.sourcePullRequest?.number ?? "243")}</a></td></tr>
+<tr><th>Merge SHA</th><td>${escapeHtml(importRecord.sourcePullRequest?.mergeSha ?? "ec37409ddd779661569f8e5f8e4c835695efea96")}</td></tr>
+<tr><th>Bounded claim imported for review</th><td>${escapeHtml(importRecord.boundedClaimImportedForReview ?? closure.boundedClaim ?? "missing")}</td></tr>
+<tr><th>Closure decision</th><td>${escapeHtml(closure.closureDecision ?? "missing")}</td></tr>
+<tr><th>Open gap count</th><td>${escapeHtml(gapSummary.openGapCount ?? evidence.importedSummary?.openGapCount ?? "missing")}</td></tr>
+<tr><th>Recorded QA reviews</th><td>${recordedActions}</td></tr>
+</tbody></table>
+<section>
+<h2>Validator result</h2>
+<table><tbody>
+<tr><th>Merged validator command</th><td>${escapeHtml(importedValidator.allCommand ?? REACT_PARITY_VALIDATOR_COMMAND.join(" "))}</td></tr>
+<tr><th>Merged validator result</th><td>${escapeHtml(importedValidator.allResult ?? "missing")}</td></tr>
+<tr><th>Merged selftest command</th><td>${escapeHtml(importedValidator.selftestCommand ?? "missing")}</td></tr>
+<tr><th>Merged selftest result</th><td>${escapeHtml(importedValidator.selftestResult ?? "missing")}</td></tr>
+<tr><th>Local live-check status</th><td>${escapeHtml(liveValidator.status)}</td></tr>
+<tr><th>Local live-check command</th><td>${escapeHtml(liveValidator.command)}</td></tr>
+</tbody></table>
+<p>${escapeHtml(importedValidator.liveCheckNote ?? "Local live checks are diagnostic only for this cockpit page.")}</p>
+<pre>${escapeHtml(liveValidator.detail)}</pre>
+</section>
+<section>
+<h2>Evidence summary</h2>
+${table(["Metric", "Value"], reactParitySummaryRows(evidence.importedSummary))}
+</section>
+<section>
+<h2>External-review and source evidence</h2>
+${table(["Evidence", "Read-only source link", "Evidence id"], reactParitySourceRows(evidence.evidenceSources))}
+</section>
+<section>
+<h2>Assurance claims</h2>
+${table(["Claim id", "Claim", "Human decision status", "Limitations"], reactParityClaimRows(assurance))}
+</section>
+<section>
+<h2>Chain of custody</h2>
+${table(["Chain id", "Claim id", "Validator or proof command", "Artifact", "Artifact hash", "Source SHA", "Human decision"], reactParityChainRows(assurance))}
+</section>
+<section>
+<h2>Record React non-UI parity evidence review</h2>
+${actionForm({
+      actionType: "evidence-review",
+      evidenceId: "usf-291-react-non-ui-parity-closure",
+      sourceUrl: REACT_PARITY_IMPORT_SOURCE,
+      evidenceUrl: "/proof/react-non-ui-parity",
+      actionName: "review USF-291 React non-UI parity closure evidence",
+      returnTo: "/proof/react-non-ui-parity",
+    })}
+</section>
+${nonClaimsBlock()}
+<section>
+<h2>Preserved USF-291 non-claims</h2>
+${unorderedList(evidence.nonClaims)}
+</section>`,
+  );
+}
+
 function routeToLink(route) {
   if (route.includes(":runId") && route.includes(":capabilityId")) {
     return `${escapeHtml(route)} - dynamic capability import detail from <a href="/proof/import/latest-machine-qa">machine import</a>`;
@@ -1394,6 +1598,7 @@ function routeToLink(route) {
 function renderQa(data, state) {
   const artifactRows = [
     ["Capability evidence", "semantic contract, route/API proof, role/persona, happy path, negative path, screenshot", "/proof/capabilities"],
+    ["React non-UI parity evidence", "USF-291 external-review report, assurance case, chain-of-custody rows, validator result, and merge SHA", "/proof/react-non-ui-parity"],
     ["Service evidence", "compose profile, health/readiness, seed/reset/cleanup, safe operation, proof command", "/proof/services"],
     ["Audit evidence", "actor, tenant, action, result, timestamp, correlation id, immutable link", "/proof/audit"],
     ["Observability evidence", "trace id, log line, metric/latency bucket, dashboard or runbook link", "/proof/observability"],
@@ -1830,14 +2035,18 @@ function renderEvidence(data, state, evidenceId) {
   if (!record) {
     return notFound(`Evidence record ${evidenceId} was not found.`);
   }
+  const backHref = record.capabilityId?.startsWith("cap-") ? `/proof/capabilities/${record.capabilityId}` : (record.proofRoute ?? "/proof");
+  const backLabel = record.capabilityId?.startsWith("cap-") ? "Back to capability" : "Back to aggregate evidence";
   const recordedActions = recordedActionCountFor(state, (action) => action.evidenceId === record.id);
   return layout(
     record.title,
-    `<p><a href="/proof/capabilities/${escapeHtml(record.capabilityId)}">Back to capability</a></p>
+    `<p><a href="${escapeHtml(backHref)}">${escapeHtml(backLabel)}</a></p>
 <table><tbody>
 <tr><th>Evidence id</th><td>${escapeHtml(record.id)}</td></tr>
 <tr><th>Status</th><td>${escapeHtml(record.status)}</td></tr>
+<tr><th>Capability or aggregate target</th><td>${escapeHtml(record.capabilityId)}</td></tr>
 <tr><th>Semantic contract</th><td>${sourcePathCell(record.target)}</td></tr>
+<tr><th>Proof cockpit route</th><td>${record.proofRoute ? `<a href="${escapeHtml(record.proofRoute)}">${escapeHtml(record.proofRoute)}</a>` : "missing-first-pass-placeholder"}</td></tr>
 <tr><th>Route/API proof</th><td>missing-first-pass-placeholder</td></tr>
 <tr><th>Human QA action record</th><td>missing-first-pass-placeholder</td></tr>
 <tr><th>Service click-through evidence</th><td>missing-first-pass-placeholder</td></tr>
@@ -2135,6 +2344,9 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
   }
   if (routePath === "/proof/qa") {
     return html(renderQa(data, state));
+  }
+  if (routePath === "/proof/react-non-ui-parity") {
+    return html(renderReactNonUiParity(data, state));
   }
   if (routePath === "/proof/actions") {
     return html(renderActions(state));

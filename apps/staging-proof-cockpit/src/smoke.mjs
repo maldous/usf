@@ -4,6 +4,7 @@ const ROUTES = Object.freeze([
   "/proof",
   "/proof/",
   "/proof/qa",
+  "/proof/react-non-ui-parity",
   "/proof/actions",
   "/proof/capabilities",
   "/proof/capabilities/cap-001-tenant-identity-record-fqdn",
@@ -11,8 +12,12 @@ const ROUTES = Object.freeze([
   "/proof/services/postgres",
   "/proof/sources",
   "/proof/source?path=docs/architecture/dev-readiness-validation-and-handover.md",
+  "/proof/source?path=docs/architecture/proof-cockpit-react-non-ui-parity-import.json",
+  "/proof/source?path=docs/architecture/react-non-ui-parity-external-review-report.md",
+  "/proof/source?path=docs/architecture/react-parity-assurance-case.json",
   "/proof/scenarios/cap-001-tenant-identity-record-fqdn-happy-path",
   "/proof/evidence/cap-001-tenant-identity-record-fqdn-semantic-contract",
+  "/proof/evidence/usf-291-react-non-ui-parity-closure",
   "/proof/roles",
   "/proof/audit",
   "/proof/observability",
@@ -80,6 +85,21 @@ try {
   const services = await fetch(`${baseUrl}/proof/services`).then((response) => response.text());
   if (!services.includes("/proof/services/postgres")) {
     throw new Error("proof-cockpit-smoke-service-link-missing");
+  }
+  const reactParity = await fetch(`${baseUrl}/proof/react-non-ui-parity`).then((response) => response.text());
+  for (const required of [
+    "USF-291",
+    "ec37409ddd779661569f8e5f8e4c835695efea96",
+    "React non-UI parity external-review report",
+    "React parity assurance case",
+    "Chain of custody",
+    "Merged validator result",
+    "no-iso-certification",
+    "no-full-react-product-parity",
+  ]) {
+    if (!reactParity.includes(required)) {
+      throw new Error(`proof-cockpit-smoke-react-parity-missing-${required}`);
+    }
   }
   const postResponse = await fetch(`${baseUrl}/proof/actions`, {
     method: "POST",

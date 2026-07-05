@@ -1,0 +1,119 @@
+{
+  "id": "proof-cockpit-react-non-ui-parity-import",
+  "schemaVersion": "1.0.0",
+  "linearIssue": "USF-290",
+  "importsLinearIssue": "USF-291",
+  "purpose": "Import the merged USF-291 React non-UI parity closure evidence into the staging proof cockpit for human QA review without claiming final USF-290 acceptance.",
+  "sourcePullRequest": {
+    "number": 243,
+    "url": "https://github.com/maldous/usf/pull/243",
+    "mergeSha": "ec37409ddd779661569f8e5f8e4c835695efea96"
+  },
+  "boundedClaimImportedForReview": "Full React non-UI foundation and operational-substrate parity is proven in the Test environment, with React UI/UX explicitly excluded.",
+  "validatorEvidence": {
+    "allCommand": "python3 tools/validate-react-non-ui-parity/validate-react-non-ui-parity.py all --json",
+    "allResult": "pass",
+    "selftestCommand": "python3 tools/validate-react-non-ui-parity/validate-react-non-ui-parity.py selftest --json",
+    "selftestResult": "pass",
+    "resultSource": "USF-291 merged PR 243 reconciliation",
+    "liveCheckNote": "The proof cockpit may attempt a local validator check when the sibling historical React repository is present. A missing local sibling checkout is displayed as an environment prerequisite gap, not as a failure of the merged USF-291 evidence."
+  },
+  "evidenceSources": [
+    {
+      "id": "external-review-report",
+      "title": "React non-UI parity external-review report",
+      "path": "docs/architecture/react-non-ui-parity-external-review-report.md"
+    },
+    {
+      "id": "closure-gate-json",
+      "title": "React non-UI parity closure gate JSON",
+      "path": "docs/architecture/react-non-ui-parity-test-closure-gate.json"
+    },
+    {
+      "id": "closure-gate-note",
+      "title": "React non-UI parity closure gate note",
+      "path": "docs/architecture/react-non-ui-parity-test-closure-gate.md"
+    },
+    {
+      "id": "assurance-case-json",
+      "title": "React parity assurance case JSON",
+      "path": "docs/architecture/react-parity-assurance-case.json"
+    },
+    {
+      "id": "assurance-case-note",
+      "title": "React parity assurance case note",
+      "path": "docs/architecture/react-parity-assurance-case.md"
+    },
+    {
+      "id": "baseline-inventory",
+      "title": "React non-UI baseline inventory",
+      "path": "docs/architecture/react-non-ui-baseline-inventory.json"
+    },
+    {
+      "id": "service-equivalence",
+      "title": "React service equivalence matrix",
+      "path": "docs/architecture/react-service-equivalence-matrix.json"
+    },
+    {
+      "id": "route-port-adapter-provider-equivalence",
+      "title": "React route port adapter provider equivalence",
+      "path": "docs/architecture/react-route-port-adapter-provider-equivalence.json"
+    },
+    {
+      "id": "test-proof-disposition",
+      "title": "React test proof disposition ledger",
+      "path": "docs/architecture/react-test-proof-disposition-ledger.json"
+    },
+    {
+      "id": "ui-derived-foundation-behaviour",
+      "title": "React UI-derived foundation behaviour rewrite ledger",
+      "path": "docs/architecture/react-ui-derived-foundation-behaviour-rewrite-ledger.json"
+    },
+    {
+      "id": "operator-admin-surface",
+      "title": "React operator admin surface equivalence",
+      "path": "docs/architecture/react-operator-admin-surface-equivalence.json"
+    },
+    {
+      "id": "gap-register",
+      "title": "React non-UI parity gap register",
+      "path": "docs/architecture/react-non-ui-parity-gap-register.json"
+    }
+  ],
+  "importedEvidenceSummary": {
+    "reactTrackedFiles": 2346,
+    "serviceRows": 54,
+    "routePortAdapterProviderRows": 903,
+    "testProofRows": 230,
+    "uiDerivedRows": 230,
+    "operatorAdminSurfaces": 18,
+    "assuranceClaims": 7,
+    "chainOfCustodyRows": 7,
+    "openGapCount": 0
+  },
+  "cockpitDisplayRequirements": [
+    "Show the imported bounded claim as Test-environment React non-UI parity evidence only.",
+    "Show the external-review report, assurance case, chain-of-custody rows, validator commands, validator result, and merge SHA.",
+    "Link every evidence source through the read-only source viewer.",
+    "Keep final USF-290 human acceptance disabled until the staging proof cockpit acceptance workflow is completed.",
+    "Preserve non-claims on the React parity page and on high-level cockpit pages."
+  ],
+  "nonClaims": [
+    "React UI parity",
+    "visual parity",
+    "UX parity",
+    "product UI readiness",
+    "Staging readiness for real users",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product parity",
+    "USF-290 completion",
+    "Staging readiness",
+    "Production readiness"
+  ]
+}

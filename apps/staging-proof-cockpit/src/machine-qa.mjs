@@ -67,6 +67,7 @@ const NON_CLAIM_PHRASES = Object.freeze([
 const HIGH_LEVEL_ROUTES = Object.freeze([
   "/proof",
   "/proof/qa",
+  "/proof/react-non-ui-parity",
   "/proof/actions",
   "/proof/machine-runs",
   "/proof/import",
@@ -1567,6 +1568,7 @@ async function main() {
     const firstActionDetail = actionDetailRoutes[0] ?? "/proof/actions";
     const screenshotRoutes = [
       ["/proof", "home"],
+      ["/proof/react-non-ui-parity", "react-non-ui-parity"],
       ["/proof/capabilities", "capabilities"],
       [`/proof/capabilities/${firstCapability.id}`, "first-capability-detail"],
       [`/proof/scenarios/${firstCapability.scenarioIds[0]}`, "first-scenario"],
@@ -1583,6 +1585,7 @@ async function main() {
       ["/proof/review/corrective-actions", "machine-review-corrective-actions"],
       ["/proof/export", "machine-export"],
       [`/proof/evidence/${firstCapability.evidenceIds[0]}`, "first-evidence"],
+      ["/proof/evidence/usf-291-react-non-ui-parity-closure", "react-non-ui-parity-evidence"],
       ["/proof/audit", "audit"],
       ["/proof/observability", "observability"],
       ["/proof/fixtures", "fixtures"],
