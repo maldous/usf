@@ -1,0 +1,3141 @@
+{
+  "id": "react-service-equivalence-matrix",
+  "issueId": "USF-291",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-05T04:50:58Z",
+  "sourceGitSha": "775650cc2387091a89fdf82c5f63eff937c6028c",
+  "reactGitSha": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+  "sourceInputs": [
+    "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+    "spec/instances/compose-service/service-catalogue.json"
+  ],
+  "serviceCount": 54,
+  "allowedDispositions": [
+    "implemented-and-proven",
+    "covered-by-existing-usf-proof",
+    "replaced-by-equivalent-and-proven",
+    "replaced-by-better-service-and-proven",
+    "deprecated-with-rationale",
+    "not-applicable-with-rationale",
+    "blocked-with-linear-carrier",
+    "requires-human-decision"
+  ],
+  "rows": [
+    {
+      "id": "react-service-9fe84adc4eb8",
+      "reactService": "alertmanager",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${ALERTMANAGER_PORT:-9093}:9093"
+      ],
+      "reactDashboardOrAdminSurface": "alertmanager",
+      "usfServiceOrReplacement": "observability alert posture only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "alert routing posture",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF defines alert posture without live/local alert routing service."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-133 follow-up or human decision before USF-133 closure",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-8d809cbaa085",
+      "reactService": "alloy",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${ALLOY_PORT:-12345}:12345"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "otel-collector direct config",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "log/metric/trace collection agent",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes OTEL but no Grafana Alloy agent equivalent."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-133 follow-up or human decision before USF-133 closure",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-11b9636f3692",
+      "reactService": "clamav",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${CLAMAV_PORT:-3310}:3310"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "ClamAV local Compose proof plus deterministic scan non-equivalence boundary",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "antivirus scan provider",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-200 proves bounded SDK-backed local Compose ClamAV scan semantics for synthetic clean/infected outcomes, readiness retry, fail-closed quarantine routing, deletion, audit, redaction, and teardown. Live scanner readiness, DLP, signature freshness readiness, API/worker runtime binding, and environment readiness remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-175/USF-200",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-ce66b7447d6f",
+      "reactService": "clickhouse",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${CLICKHOUSE_HTTP_PORT:-8124}:8123",
+        "${CLICKHOUSE_NATIVE_PORT:-9002}:9000"
+      ],
+      "reactDashboardOrAdminSurface": "clickhouse",
+      "usfServiceOrReplacement": "ClickHouse local Compose proof plus explicit remaining non-equivalence boundaries",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "analytics and Sentry column store",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-206 proves bounded SDK-backed local Compose ClickHouse analytics event-store semantics for synthetic ingestion, tenant-safe query, aggregation, invalid-classification denial, retention deletion, audit-shaped evidence, readiness retry, redaction, teardown, and unavailable-provider fail-closed behaviour. API/worker analytics binding, live/provider-managed ClickHouse, environment readiness, provider compatibility, and analytics/event-store readiness remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-172/USF-197/USF-206",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-a656a0b92420",
+      "reactService": "external-caddy",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "API security posture only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "reverse proxy and forward-auth clickthrough",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF does not compose Caddy/forward-auth operator gateway. USF-169 records bounded operator access posture, USF-180 tracks gateway/clickthrough substrate proof, and USF-217 records current disposition evidence and USF-221 owns future execution proof depth."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-180 and USF-217 disposition evidence are present; USF-221 owns future operator access-review/deprovisioning execution before any gateway/clickthrough, operator-console, public exposure, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-f519bce8b0ae",
+      "reactService": "grafana",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${GRAFANA_PORT:-3200}:3000"
+      ],
+      "reactDashboardOrAdminSurface": "grafana",
+      "usfServiceOrReplacement": "grafana",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local dashboard surface",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Grafana; dashboard readiness is not claimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-d1081e351fbe",
+      "reactService": "keycloak",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${KEYCLOAK_PORT:-8090}:8080"
+      ],
+      "reactDashboardOrAdminSurface": "keycloak",
+      "usfServiceOrReplacement": "keycloak",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "brokered identity and issuer",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Keycloak and has auth proof."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-d5c4bf2ab392",
+      "reactService": "keycloak-postgres",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "keycloak-postgres",
+      "usfServiceOrReplacement": "keycloak-db",
+      "disposition": "replaced-by-equivalent-and-proven",
+      "sourceStatus": "implemented-equivalent",
+      "capabilityCoverage": "Keycloak local database",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes a Keycloak database as keycloak-db."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-f6ea57052eeb",
+      "reactService": "localstack",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${LOCALSTACK_PORT:-4566}:4566"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "LocalStack composed-test proof plus USF-208 non-equivalence boundary",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "covered-by-usf-runtime",
+      "capabilityCoverage": "AWS-compatible local mocks",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients against local Compose. This is not live cloud-provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full React parity, or USF-133 closure."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-208 bounded service proof merged; any live cloud-provider compatibility, provider contract certification, or environment-promotion readiness claim remains separate.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-a5b23f338648",
+      "reactService": "loki",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${LOKI_PORT:-3100}:3100"
+      ],
+      "reactDashboardOrAdminSurface": "loki",
+      "usfServiceOrReplacement": "loki",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local log backend",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Loki; live log readiness is not claimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-b3283d686c21",
+      "reactService": "mailpit",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${MAILPIT_SMTP_PORT:-1025}:1025",
+        "${MAILPIT_UI_PORT:-8025}:8025"
+      ],
+      "reactDashboardOrAdminSurface": "mailpit",
+      "usfServiceOrReplacement": "mailpit",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local SMTP and message capture",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Mailpit and USF-183 proves bounded SDK-backed Mailpit notification provider binding for API/worker runtime proof; local/test only."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered for bounded Mailpit runtime provider binding; broader notification/live provider posture remains non-claimed",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-46005c7d19bb",
+      "reactService": "meilisearch",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${MEILISEARCH_PORT:-7700}:7700"
+      ],
+      "reactDashboardOrAdminSurface": "meilisearch",
+      "usfServiceOrReplacement": "Meilisearch local Compose proof plus in-memory non-equivalence boundary",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "full-text search provider",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-199 proves bounded SDK-backed local Compose Meilisearch service semantics for synthetic adapter-level indexing, tenant-filtered query, async task visibility, update/reindex boundary, deletion, cleanup, readiness retry, and redaction. API/worker runtime binding, ranking equivalence, vector search, AI/RAG, live-provider, environment readiness, provider-compatibility readiness, and broader search readiness remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-174/USF-199; future explicit runtime binding issue required before API or worker runtime search-binding claims",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-30747605e1f6",
+      "reactService": "minio",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${MINIO_API_PORT:-9000}:9000",
+        "${MINIO_CONSOLE_PORT:-9001}:9001"
+      ],
+      "reactDashboardOrAdminSurface": "minio",
+      "usfServiceOrReplacement": "minio",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local S3-compatible object storage and console",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes MinIO; console access posture still needs operator-surface review."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-d45a1aca32a9",
+      "reactService": "mock-oidc",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${MOCK_OIDC_PORT:-9080}:8080"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "adapters/idp",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "covered-by-usf-runtime",
+      "capabilityCoverage": "hermetic mock issuer",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF has hermetic IDP tests and Keycloak-brokered auth proof. USF-210 records that the historical mock OIDC service is superseded for the selected closure tier, without claiming mock OIDC service equivalence, live IdP compatibility, or SSO readiness."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by authorised foundation proof only for hermetic identity semantics and composed Keycloak proof; future mock OIDC service-equivalence proof requires a new source issue if scope changes",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-ba2d2bfc8327",
+      "reactService": "openbao",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${OPENBAO_PORT:-8200}:8200"
+      ],
+      "reactDashboardOrAdminSurface": "openbao",
+      "usfServiceOrReplacement": "openbao",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local secret manager posture",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes OpenBao but does not claim live secret-manager readiness."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-2f89797f95bf",
+      "reactService": "otel-collector",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${OTEL_GRPC_PORT:-4317}:4317",
+        "${OTEL_HTTP_PORT:-4318}:4318",
+        "${OTEL_HEALTH_PORT:-13133}:13133"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "otel-collector",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local telemetry collector",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes OTEL collector and keeps live monitoring deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-43784e464f66",
+      "reactService": "pgadmin",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${PGADMIN_PORT:-5050}:80"
+      ],
+      "reactDashboardOrAdminSurface": "pgadmin",
+      "usfServiceOrReplacement": "none",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Postgres operator UI",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF has DB proof and bounded operator access posture, but no pgAdmin operator/admin console access-review, deprovisioning, SSO/clickthrough, or privileged-operation proof. USF-217 records current disposition evidence; USF-221 owns future execution depth."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-169 plus USF-217 disposition evidence are present; USF-221 owns future pgAdmin operator-console access-review, deprovisioning, public exposure, environment-readiness, or stronger readiness proof",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-cc7e58382b20",
+      "reactService": "pgbackrest",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "pgBackRest configured local cold backup/restore proof plus explicit deferred provider class",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "bounded-local-proof",
+      "capabilityCoverage": "Postgres backup and restore substrate",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-177 records a bounded backup/restore disposition and keeps DB/RLS/files proof non-equivalent; USF-202 records the historical image/configuration blocker; USF-211 records a maintained digest-pinned pgBackRest image and a bounded profile-gated local Compose cold backup/restore proof with configured repository, stanza, Postgres linkage, readiness retry, timeout, cleanup, and fail-closed evidence. Online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery, API/worker runtime binding, provider-managed operation, and environment readiness remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "Keep online backup, PITR, RPO/RTO, disaster recovery, staging, production, live-provider, API runtime, and worker runtime backup claims deferred until separate source issues prove them.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-41d963db60cc",
+      "reactService": "platform-api",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${PLATFORM_API_PORT:-3001}:3001"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "apps/api",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "covered-by-usf-runtime",
+      "capabilityCoverage": "React historical platform API process",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for Postgres, NATS, MinIO, and Keycloak composed provider bindings without copying React runtime code or claiming service/container equivalence."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-afc848c316af",
+      "reactService": "postgres",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${POSTGRES_PORT:-5433}:5432"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "postgres",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "system-of-record relational database",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF compose includes PostgreSQL, DB/RLS proofs, and USF-183 bounded SDK-backed runtime tenant-membership provider evidence."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-aad8f23c2fa0",
+      "reactService": "prometheus",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${PROMETHEUS_PORT:-9090}:9090"
+      ],
+      "reactDashboardOrAdminSurface": "prometheus",
+      "usfServiceOrReplacement": "prometheus",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local metrics backend",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Prometheus for local proof posture only."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-8e3b08350689",
+      "reactService": "react-app",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${WEB_HTTP_PORT:-80}:80"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "USF-134 future UI",
+      "disposition": "not-applicable-with-rationale",
+      "sourceStatus": "out-of-foundation-scope",
+      "capabilityCoverage": "React SPA runtime",
+      "operationalEquivalence": "future-ui",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "UI/UX remains future and non-foundation-blocking."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-133 follow-up or human decision before USF-133 closure",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-b840fc02d524",
+      "reactService": "redis",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${REDIS_PORT:-6379}:6379"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "Redis local Compose SDK-backed proof plus NATS event-bus proof; non-equivalence boundary retained",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "cache/session/queue local dependency",
+      "operationalEquivalence": "profile-gated-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-173 records cache and eventing as separate semantic roles. USF-207 now proves bounded SDK-backed local Compose Redis cache semantics for synthetic tenant-safe write/read/delete, TTL expiration, readiness retry, timeout, cleanup, unavailable fail-closed behaviour, redaction, metrics/tracing, and audit-shaped evidence. NATS event-bus proof and in-memory proof remain non-equivalent, and API/worker runtime cache binding, live/provider-managed Redis, environment readiness, and provider-compatibility readiness remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-173/USF-198/USF-207",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-9cee99b66a56",
+      "reactService": "sentry-cleanup",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-cleanup",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-51631665e717",
+      "reactService": "sentry-clickhouse",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-clickhouse",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry analytics column store",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-476a7cf30d1d",
+      "reactService": "sentry-events-consumer",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-events-consumer",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-adae9c249802",
+      "reactService": "sentry-kafka",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-kafka",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry event bus",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-83291f993602",
+      "reactService": "sentry-kafka-init",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-kafka-init",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry event bus",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-19bfc8eb9add",
+      "reactService": "sentry-memcached",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-memcached",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-847db439f0a5",
+      "reactService": "sentry-migrate",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-migrate",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-b46b7d724efe",
+      "reactService": "sentry-post-process-forwarder",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-post-process-forwarder",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-c7a5ad4eec66",
+      "reactService": "sentry-postgres",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-postgres",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry relational store",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-4b35e306ab24",
+      "reactService": "sentry-redis",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-redis",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry cache/queue store",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-187f48745bc5",
+      "reactService": "sentry-relay",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-relay",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry ingest/UI edge",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-7ed3aa8256df",
+      "reactService": "sentry-snuba-api",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-snuba-api",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry query/analytics component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-2229c3e03726",
+      "reactService": "sentry-snuba-errors",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-snuba-errors",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry query/analytics component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-b099f56328ff",
+      "reactService": "sentry-snuba-migrate",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-snuba-migrate",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry query/analytics component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-598417728553",
+      "reactService": "sentry-snuba-replacer",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-snuba-replacer",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry query/analytics component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-8083b2fba48f",
+      "reactService": "sentry-taskbroker",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-taskbroker",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-d1b132d784b4",
+      "reactService": "sentry-taskscheduler",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-taskscheduler",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-939e2d2f0141",
+      "reactService": "sentry-taskworker",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sentry-taskworker",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry error-monitoring component",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-f62d33291cd3",
+      "reactService": "sentry-web",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "9060:9000"
+      ],
+      "reactDashboardOrAdminSurface": "sentry-web",
+      "usfServiceOrReplacement": "observability telemetry only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Sentry ingest/UI edge",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-196 records local observability proof as non-equivalent to Sentry service proof. USF-205 records accepted official Sentry Node SDK envelope proof for local event-shape capture, redaction, tenant-safe labels, value-free retention posture, and unavailable-transport fail-closed behaviour. Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier/live-provider, and environment promotion proof remain deferred."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-159, USF-169, and USF-193 before any Sentry service-readiness, live monitoring, operator-console, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-c5f575f03ba9",
+      "reactService": "sonar-oidc-plugin",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sonar-oidc-plugin",
+      "usfServiceOrReplacement": "none",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "SonarQube OIDC plugin installer posture",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-204 does not exercise sonar-oidc-plugin bootstrap or brokered identity integration; residual plugin depth remains an explicit deferral."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-204 before any SonarQube service-readiness, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-b1fd382e74ee",
+      "reactService": "sonar-postgres",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "sonar-postgres",
+      "usfServiceOrReplacement": "make verify only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "SonarQube database",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-204 exercises sonar-postgres as the local Compose backing service for bounded SonarQube scan proof; no production database, backup, or environment readiness claim."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-204 before any SonarQube service-readiness, environment-readiness, or USF-133 closure claim",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-68b3ab5f7810",
+      "reactService": "sonarqube",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${SONAR_PORT:-9064}:9000"
+      ],
+      "reactDashboardOrAdminSurface": "sonarqube",
+      "usfServiceOrReplacement": "make verify",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "static analysis and quality gate service",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-204 proves bounded local Compose SonarQube scan submission, quality-gate readback, unresolved issue and hotspot query paths, authenticated local API access, cleanup, redaction, and unavailable-provider fail-closed behaviour. UI clickthrough, policy administration, human hotspot workflow, OIDC plugin depth, live-provider, and environment readiness remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-204 bounded proof merged; residual operator/gateway and environment promotion boundaries remain USF-169/USF-193 or later source issues.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-65e336e20c50",
+      "reactService": "tempo",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${TEMPO_HTTP_PORT:-3201}:3200"
+      ],
+      "reactDashboardOrAdminSurface": "tempo",
+      "usfServiceOrReplacement": "tempo",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local trace backend",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Tempo; live trace readiness is not claimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-42d9d2622f86",
+      "reactService": "temporal",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${TEMPORAL_PORT:-7233}:7233"
+      ],
+      "reactDashboardOrAdminSurface": "temporal",
+      "usfServiceOrReplacement": "temporal",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "implemented",
+      "capabilityCoverage": "local workflow engine",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Temporal and jobs proof is local/dev/test."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-d1dd7807b634",
+      "reactService": "temporal-postgres",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "temporal-postgres",
+      "usfServiceOrReplacement": "postgres",
+      "disposition": "replaced-by-better-service-and-proven",
+      "sourceStatus": "substituted-partial",
+      "capabilityCoverage": "Temporal persistence database",
+      "operationalEquivalence": "selected",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF uses shared Postgres for Temporal; not a separate parity service."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "covered by existing authorised foundation slice evidence",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-6094d44af8f8",
+      "reactService": "temporal-ui",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${TEMPORAL_UI_PORT:-8088}:8080"
+      ],
+      "reactDashboardOrAdminSurface": "temporal-ui",
+      "usfServiceOrReplacement": "temporal service only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "deferred",
+      "capabilityCoverage": "Temporal operator UI",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF composes Temporal and has bounded jobs/workflow proof, but Temporal UI operator console access-review, deprovisioning, SSO/clickthrough, and privileged-operation proof remain deferred to USF-221 after USF-217 disposition evidence."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-178 plus USF-217 disposition evidence are present; USF-221 owns future Temporal UI operator-console access-review, deprovisioning, public exposure, environment-readiness, or stronger readiness proof",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-512c585ec88c",
+      "reactService": "windmill",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${WINDMILL_PORT:-8000}:8000"
+      ],
+      "reactDashboardOrAdminSurface": "windmill",
+      "usfServiceOrReplacement": "bounded local Compose Windmill configured proof plus explicit non-equivalence boundaries",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "operator workflow automation UI/API",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-212 proves bounded local Windmill bootstrap, official SDK client use, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown. Temporal/jobs proof remains non-equivalent outside this bounded proof."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-212 bounded local configured proof present; broader readiness and live/provider-managed claims remain deferred before USF-133 closure.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-90f4ea92727a",
+      "reactService": "windmill-postgres",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "windmill-postgres",
+      "usfServiceOrReplacement": "bounded local Compose Windmill backing store proof boundary only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "Windmill persistence",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-212 proves configured local Windmill bootstrap depends on a healthy Windmill Postgres service, but independent persistence, backup, restore, PITR, and production resilience remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-212 bounded local configured proof present; broader readiness and live/provider-managed claims remain deferred before USF-133 closure.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-97c4d029f95a",
+      "reactService": "windmill-redis",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "windmill-redis",
+      "usfServiceOrReplacement": "bounded local Compose Windmill queue/cache proof boundary only",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "Windmill queue/cache",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-212 proves configured local Windmill bootstrap depends on a healthy Windmill Redis service and worker execution path, but independent queue/cache durability and production operation remain unclaimed."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-212 bounded local configured proof present; broader readiness and live/provider-managed claims remain deferred before USF-133 closure.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-32870f764c33",
+      "reactService": "windmill-worker",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [],
+      "reactDashboardOrAdminSurface": "windmill-worker",
+      "usfServiceOrReplacement": "bounded local Compose Windmill worker execution proof with explicit non-equivalence",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "profile-gated-bounded-proof",
+      "capabilityCoverage": "Windmill worker execution",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-212 proves bounded synthetic script execution through the composed Windmill worker path, but does not prove USF worker runtime integration, environment promotion, or live/provider-managed worker operation."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-212 bounded local configured proof present; broader readiness and live/provider-managed claims remain deferred before USF-133 closure.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    },
+    {
+      "id": "react-service-bfc63c07f74f",
+      "reactService": "wiremock",
+      "reactSourcePaths": [
+        "../react/compose.yaml"
+      ],
+      "reactPorts": [
+        "${WIREMOCK_PORT:-8089}:8080"
+      ],
+      "reactDashboardOrAdminSurface": "",
+      "usfServiceOrReplacement": "WireMock composed-test proof plus USF-209 non-equivalence boundary",
+      "disposition": "covered-by-existing-usf-proof",
+      "sourceStatus": "covered-by-usf-runtime",
+      "capabilityCoverage": "deterministic external HTTP mocks",
+      "operationalEquivalence": "optional-proven",
+      "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
+      "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
+      "observabilityEquivalence": "covered by Grafana/Prometheus/Loki/Tempo/Alertmanager-equivalent evidence where applicable",
+      "dataLifecycleEquivalence": "covered by USF data lifecycle and backup/restore evidence where applicable",
+      "backupRestoreOrDrEquivalence": "covered where service stores state; not applicable for stateless proof/control surfaces",
+      "adminOperatorEquivalence": "covered by operator/admin surface matrix or explicit not-applicable rationale",
+      "tests": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "proofs": [
+        "corepack pnpm test-readiness",
+        "python3 tools/validate-parity/validate-parity.py all --json",
+        "python3 tools/validate-compose/validate-compose.py all --json",
+        "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      ],
+      "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
+      "residualGaps": [
+        "USF-209 proves bounded WireMock configured HTTP mock semantics through wiremock-captain against local Compose. This is not live external provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full React parity, or USF-133 closure."
+      ],
+      "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
+      "linearCarrier": "USF-209 bounded service proof merged; USF-208 bounded LocalStack proof now records the remaining local cloud-emulator service-semantic evidence without any live-provider or readiness claim.",
+      "owner": "USF repository maintainers",
+      "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
+      "reviewCadence": "before Staging handoff and on service-catalogue change",
+      "nonClaims": [
+        "React UI parity",
+        "visual parity",
+        "UX parity",
+        "product UI readiness",
+        "Staging readiness for real users",
+        "Production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "SOC readiness",
+        "ISO certification",
+        "enterprise production readiness",
+        "browser E2E readiness",
+        "full product parity"
+      ]
+    }
+  ],
+  "summary": {
+    "byDisposition": {
+      "covered-by-existing-usf-proof": 51,
+      "replaced-by-equivalent-and-proven": 1,
+      "not-applicable-with-rationale": 1,
+      "replaced-by-better-service-and-proven": 1
+    },
+    "bySourceStatus": {
+      "deferred": 25,
+      "profile-gated-bounded-proof": 10,
+      "implemented": 11,
+      "implemented-equivalent": 1,
+      "covered-by-usf-runtime": 4,
+      "bounded-local-proof": 1,
+      "out-of-foundation-scope": 1,
+      "substituted-partial": 1
+    }
+  },
+  "nonClaims": [
+    "React UI parity",
+    "visual parity",
+    "UX parity",
+    "product UI readiness",
+    "Staging readiness for real users",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product parity"
+  ]
+}
