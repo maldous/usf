@@ -31,6 +31,7 @@ SMOKE_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "smoke.mjs"
 MACHINE_QA_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "machine-qa.mjs"
 VALIDATE_SPEC_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "validate-spec.yml"
 PROOF_ANCHOR_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "proof-anchor.yml"
+README_PATH = ROOT / "README.md"
 
 RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 13)]
 
@@ -195,6 +196,7 @@ REQUIRED_PLANTED_KINDS = [
     "service-evidence-missing-target-observation",
     "secret-literal-value-exposed",
     "artifact-hash-mismatch",
+    "readme-marketing-overclaim",
 ]
 
 AUTH_POSTURES = {
@@ -384,6 +386,7 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "validateSpecWorkflow": VALIDATE_SPEC_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "proofAnchorWorkflow": PROOF_ANCHOR_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "finalReport": FINAL_REPORT_PATH.read_text(encoding="utf-8"),
+        "readme": README_PATH.read_text(encoding="utf-8") if README_PATH.exists() else "",
         "nodeData": node_data(),
         "artifactDir": effective_artifact_dir,
         "currentHead": current_head(),
@@ -447,6 +450,7 @@ def text_blob(data: dict[str, Any]) -> str:
         data["validateSpecWorkflow"],
         data["proofAnchorWorkflow"],
         data["finalReport"],
+        data.get("readme", ""),
     ]
     strings: list[str] = []
     for root in scan_roots:
@@ -570,15 +574,24 @@ def rule_004_nonclaims(data: dict[str, Any]) -> list[dict[str, str]]:
         r"staging readiness (is )?(complete|ready|approved|passed)",
         r"production readiness (is )?(complete|ready|approved|passed)",
         r"deployment readiness (is )?(complete|ready|approved|passed)",
-        r"live-provider readiness (is )?(complete|ready|approved|passed)",
+        r"live provider readiness (is )?(complete|ready|approved|passed)",
         r"soc readiness (is )?(complete|ready|approved|passed)",
         r"iso certification (is )?(complete|ready|approved|passed)",
         r"enterprise production readiness (is )?(complete|ready|approved|passed)",
         r"product ui readiness (is )?(complete|ready|approved|passed)",
         r"browser e2e readiness (is )?(complete|ready|approved|passed)",
         r"full product readiness (is )?(complete|ready|approved|passed)",
-        r"usf-290 (is )?(complete|done|closed|automatically complete)\b(?![\"'])",
+        r"usf 290 (is )?(complete|done|closed|automatically complete)",
         r"final acceptance automatic true",
+        # Bare marketing-readiness overclaims (README and public-facing prose).
+        # The normalizer lowercases, strips markup, and collapses separators, so
+        # a status-delivered badge becomes "status delivered", etc.
+        r"status delivered",
+        r"complete working foundation",
+        r"fully realis(e|ed|ing)",
+        r"fully realiz(e|ed|ing)",
+        r"full enterprise platform surface",
+        r"whole point of usf delivered",
     ]
     for pattern in overclaim_patterns:
         if re.search(pattern, normalized_text):
@@ -996,6 +1009,8 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["finalReport"] += "\n<span>Staging</span>/readiness is COMPLETE.\n"
     elif kind == "nested-readiness-overclaim":
         mutated["bundleManifest"].setdefault("plantedNestedOverclaim", {})["status"] = "<span>Production</span>/readiness is APPROVED"
+    elif kind == "readme-marketing-overclaim":
+        mutated["readme"] += "\n\n![status](https://img.shields.io/badge/status-delivered-34d399)\nThis is the reasoning and rigour, fully realised.\n"
     elif kind == "foundation-closure-validator-stale":
         mutated["foundationImport"]["validatorEvidence"]["allResult"] = "stale"
     elif kind == "artifact-manifest-missing":
