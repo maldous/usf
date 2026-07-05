@@ -8,6 +8,8 @@ The gate passes. Public reachability works, the earlier `1e100.network` same-hos
 
 The external provider evidence was reclassified after the repo-owned Netlify Function route source commit and must be paired with passing external cache and smoke proof commands before PR #240 is merged.
 
+USF-289 is the successor migration track for removing Netlify from the intended live serving path. This evidence pack remains the PR #240 pre-Staging HTTP gate record. It is not authority to keep Netlify as the long-term origin for proof/control routes.
+
 - HTTPS proof/control routes for `1e100.network` and `aldous.info` show dynamic Function-route evidence with `Netlify Durable` bypass and `Netlify Edge` miss on the canonical routes. Low nonzero `Age` on those dynamic no-store responses is accepted only as provider metadata when no cache hit or stale directive is present.
 
 Both root FQDNs now redirect HTTP to the same HTTPS host for the JSON proof endpoint. Cloudflare reports dynamic handling for the blocked cache observations, so the current evidence points to Netlify provider Age behaviour on dynamic no-store responses rather than Cloudflare edge cache as the cache source.
@@ -42,6 +44,7 @@ Rollback is provider scoped:
 
 - Disable or remove only the redirect setting added for `1e100.network` if it causes unintended behaviour.
 - Restore the prior Netlify deploy or route header configuration if Function-backed proof-route delivery regresses.
+- For the USF-289 migration, roll back only the self-hosted DNS or Caddy configuration that was changed for the cutover, and keep `ssh.aldous.info` unchanged.
 - Re-run the same proof commands after rollback and keep `ssh.aldous.info` unchanged.
 
 ## Non-Claims

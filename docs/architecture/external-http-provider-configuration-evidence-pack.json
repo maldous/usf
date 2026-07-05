@@ -19,6 +19,8 @@
     "freshnessBoundary": "The checkedCommit records the PR head before the final cache semantics reclassification patch. The final PR head must rerun the external cache and smoke proof commands; those command outputs are the authoritative current proof for this PR."
   },
   "status": "pass-with-provider-age-metadata-boundary",
+  "successorMigrationIssueId": "USF-289",
+  "successorMigrationBoundary": "USF-289 records that Netlify Function-backed proof/control routes are historical implementation evidence and not the intended long-term live serving path. The target path is DNS-only apex records to the self-hosted origin at 103.138.244.121.",
   "semanticBoundary": {
     "semanticRequirement": "ExternalHttpCapability with gateway-neutral public proof/control routes.",
     "providersAreSemanticAuthority": false,

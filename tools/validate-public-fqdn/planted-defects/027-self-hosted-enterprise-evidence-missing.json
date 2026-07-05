@@ -1,0 +1,5 @@
+{
+  "id": "027-self-hosted-enterprise-evidence-missing",
+  "expectedRule": "USF-PUBLIC-FQDN-027",
+  "removeSelfHostedEnterpriseSection": "backupAndRecovery"
+}

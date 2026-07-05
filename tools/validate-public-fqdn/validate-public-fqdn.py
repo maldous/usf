@@ -35,6 +35,9 @@ PRE_STAGING_SMOKE_PATH = Path("docs/architecture/pre-staging-external-smoke-proo
 PRE_STAGING_GATE_PATH = Path(
     "docs/architecture/pre-staging-external-http-semantics-readiness-gate.json"
 )
+SELF_HOSTED_ORIGIN_PATH = Path(
+    "docs/architecture/self-hosted-public-proof-origin-service.json"
+)
 COMPOSE_CATALOGUE_PATH = Path("spec/instances/compose-service/service-catalogue.json")
 PACKAGE_PATH = Path("package.json")
 MAKEFILE_PATH = Path("Makefile")
@@ -66,6 +69,8 @@ RULES = {
     "USF-PUBLIC-FQDN-023": ("blocking", "external HTTP observability proof command wiring is missing stale or no-op"),
     "USF-PUBLIC-FQDN-024": ("blocking", "pre-staging external smoke gate is missing destructive or overclaimed"),
     "USF-PUBLIC-FQDN-025": ("blocking", "pre-staging external smoke proof command wiring is missing stale or no-op"),
+    "USF-PUBLIC-FQDN-026": ("blocking", "self-hosted public proof origin cutover evidence is missing incomplete or unsafe"),
+    "USF-PUBLIC-FQDN-027": ("blocking", "enterprise origin-server semantics evidence is missing incomplete or overclaimed"),
     "USF-PUBLIC-FQDN-SELFTEST": ("blocking", "planted public FQDN defect did not raise its expected rule"),
 }
 
@@ -227,6 +232,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         "externalHttpObservability": load_optional_json(EXTERNAL_HTTP_OBSERVABILITY_PATH),
         "preStagingSmoke": load_optional_json(PRE_STAGING_SMOKE_PATH),
         "preStagingGate": load_optional_json(PRE_STAGING_GATE_PATH),
+        "selfHostedOrigin": load_optional_json(SELF_HOSTED_ORIGIN_PATH),
         "composeCatalogue": load_optional_json(COMPOSE_CATALOGUE_PATH),
         "package": load_json(PACKAGE_PATH),
         "makefile": (ROOT / MAKEFILE_PATH).read_text(encoding="utf-8"),
@@ -588,6 +594,60 @@ def apply_defect(state: dict[str, Any], defect: dict[str, Any]) -> dict[str, Any
         if "removePreStagingGateNonClaim" in defect:
             gate["nonClaims"] = [
                 claim for claim in gate.get("nonClaims", []) if claim != defect["removePreStagingGateNonClaim"]
+            ]
+    self_hosted = mutated.get("selfHostedOrigin")
+    if defect.get("dropSelfHostedOrigin"):
+        mutated["selfHostedOrigin"] = None
+        self_hosted = None
+    if isinstance(self_hosted, dict):
+        if "setSelfHostedStatus" in defect:
+            self_hosted["status"] = defect["setSelfHostedStatus"]
+        if "setSelfHostedNetlifyLivePath" in defect:
+            self_hosted.setdefault("dnsCutover", {})["netlifyLiveServingCurrentlyObserved"] = defect[
+                "setSelfHostedNetlifyLivePath"
+            ]
+        if "setSelfHostedCloudflareProxyObserved" in defect:
+            self_hosted.setdefault("dnsCutover", {})["cloudflareProxyCurrentlyObserved"] = defect[
+                "setSelfHostedCloudflareProxyObserved"
+            ]
+        if "setSelfHostedCloudflareProxyAllowed" in defect:
+            self_hosted.setdefault("dnsCutover", {})["cloudflareProxyAllowedForProofRoutes"] = defect[
+                "setSelfHostedCloudflareProxyAllowed"
+            ]
+        if "setSelfHostedCutoverComplete" in defect:
+            self_hosted.setdefault("dnsCutover", {})["cutoverComplete"] = defect[
+                "setSelfHostedCutoverComplete"
+            ]
+        if "setSelfHostedNoStore" in defect:
+            self_hosted.setdefault("headerSemantics", {})["noStoreRequired"] = defect[
+                "setSelfHostedNoStore"
+            ]
+        if "setSelfHostedUnsupportedMethodSafe" in defect:
+            self_hosted.setdefault("routeSemantics", {})["unsupportedMethodsFailSafely"] = defect[
+                "setSelfHostedUnsupportedMethodSafe"
+            ]
+        if "removeSelfHostedOriginOwnership" in defect:
+            self_hosted.setdefault("enterpriseOriginSemantics", {}).pop("assetOwnership", None)
+        if "removeSelfHostedEnterpriseSection" in defect:
+            self_hosted.setdefault("enterpriseOriginSemantics", {}).pop(
+                defect["removeSelfHostedEnterpriseSection"], None
+            )
+        if "setSelfHostedRequiredProvider" in defect:
+            self_hosted.setdefault("providerIndependence", {})["requiredProvider"] = defect[
+                "setSelfHostedRequiredProvider"
+            ]
+        if "setSelfHostedRequiredGateway" in defect:
+            self_hosted.setdefault("providerIndependence", {})["requiredGateway"] = defect[
+                "setSelfHostedRequiredGateway"
+            ]
+        if "setSelfHostedReadinessClaim" in defect:
+            patch = defect["setSelfHostedReadinessClaim"]
+            self_hosted.setdefault("claims", {})[patch["field"]] = patch["value"]
+        if "removeSelfHostedNonClaim" in defect:
+            self_hosted["nonClaims"] = [
+                claim
+                for claim in self_hosted.get("nonClaims", [])
+                if claim != defect["removeSelfHostedNonClaim"]
             ]
     compose_catalogue = mutated.get("composeCatalogue")
     if defect.get("dropOriginCatalogueService") and isinstance(compose_catalogue, dict):
@@ -1996,6 +2056,154 @@ def check_pre_staging_gate(F: Findings, gate: Any, smoke: Any) -> None:
     check_external_http_non_claims(F, "USF-PUBLIC-FQDN-024", PRE_STAGING_GATE_PATH, gate)
 
 
+def check_self_hosted_origin_evidence(F: Findings, evidence: Any) -> None:
+    if not isinstance(evidence, dict):
+        F.add("USF-PUBLIC-FQDN-026", str(SELF_HOSTED_ORIGIN_PATH), "self-hosted origin evidence is missing")
+        return
+    if evidence.get("issueId") != "USF-289":
+        F.add("USF-PUBLIC-FQDN-026", str(SELF_HOSTED_ORIGIN_PATH), "issue linkage is stale")
+    status = evidence.get("status")
+    if status not in {"pass", "origin-configured-public-dns-cutover-blocked"}:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#status", "self-hosted origin status is invalid")
+
+    protected = evidence.get("protectedOperationalRecords", {})
+    ssh_record = protected.get("sshAldousInfo") if isinstance(protected, dict) else None
+    if not isinstance(ssh_record, dict):
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#protectedOperationalRecords.sshAldousInfo", "protected SSH record evidence is missing")
+    else:
+        if ssh_record.get("expectedARecord") != "103.138.244.121":
+            F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#protectedOperationalRecords.sshAldousInfo.expectedARecord", "protected SSH A record is stale")
+        if ssh_record.get("mustRemainDnsOnly") is not True or ssh_record.get("mutatedByThisWork") is not False:
+            F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#protectedOperationalRecords.sshAldousInfo", "protected SSH record boundary is unsafe")
+
+    dns = evidence.get("dnsCutover", {})
+    if not isinstance(dns, dict):
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover", "DNS cutover evidence is missing")
+        dns = {}
+    if dns.get("requiredARecord") != "103.138.244.121":
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.requiredARecord", "required self-hosted origin A record is stale")
+    if dns.get("directToSelfHostedOriginRequired") is not True:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.directToSelfHostedOriginRequired", "direct self-hosted origin DNS requirement is missing")
+    if dns.get("cloudflareProxyAllowedForProofRoutes") is not False:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.cloudflareProxyAllowedForProofRoutes", "Cloudflare proxy/cache is allowed for proof routes")
+    if dns.get("netlifyLiveServingPathAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.netlifyLiveServingPathAllowed", "Netlify live serving path is allowed")
+    cutover_complete = dns.get("cutoverComplete") is True
+    netlify_observed = dns.get("netlifyLiveServingCurrentlyObserved") is True
+    cloudflare_proxy_observed = dns.get("cloudflareProxyCurrentlyObserved") is True
+    if cutover_complete and (netlify_observed or cloudflare_proxy_observed):
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover", "completed cutover still records Netlify or Cloudflare proxy evidence")
+    if not cutover_complete:
+        blockers = dns.get("blockers")
+        if not isinstance(blockers, list) or not blockers:
+            F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.blockers", "incomplete cutover lacks explicit blocker evidence")
+        else:
+            for blocker in blockers:
+                if not isinstance(blocker, dict):
+                    F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.blockers", "DNS cutover blocker is invalid")
+                    continue
+                if blocker.get("issueId") != "USF-289" or blocker.get("blocksPublicMigrationCompletion") is not True:
+                    F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.blockers", "DNS cutover blocker linkage or impact is missing")
+                if not is_non_empty_string(blocker.get("requiredOperatorAction")):
+                    F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#dnsCutover.blockers", "DNS cutover blocker lacks operator action")
+
+    origin = evidence.get("selfHostedOrigin", {})
+    if not isinstance(origin, dict):
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#selfHostedOrigin", "self-hosted origin state is missing")
+        origin = {}
+    if origin.get("publicIpv4") != "103.138.244.121":
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#selfHostedOrigin.publicIpv4", "self-hosted origin IP is stale")
+    if origin.get("serviceManager") != "systemd" or origin.get("serviceActive") is not True:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#selfHostedOrigin.serviceActive", "self-hosted service is not active")
+    if origin.get("caddyConfigValidated") is not True:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#selfHostedOrigin.caddyConfigValidated", "origin server configuration is not validated")
+    listening = origin.get("listeningPorts", {})
+    if not isinstance(listening, dict) or listening.get("80") is not True or listening.get("443") is not True:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#selfHostedOrigin.listeningPorts", "origin does not record listeners for ports 80 and 443")
+
+    routes = evidence.get("routeSemantics", {})
+    if not isinstance(routes, dict):
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#routeSemantics", "route semantics are missing")
+        routes = {}
+    if routes.get("jsonProofRoute") != "/.well-known/usf-public-edge.json":
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#routeSemantics.jsonProofRoute", "JSON proof route is stale")
+    browser_routes = set(routes.get("browserProofRoutes", []))
+    if browser_routes != {"/__proof/public-route", "/__proof/public-route/"}:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#routeSemantics.browserProofRoutes", "browser proof route inventory is stale")
+    if set(routes.get("safeMethods", [])) != {"GET", "HEAD", "OPTIONS"}:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#routeSemantics.safeMethods", "safe method boundary is stale")
+    if routes.get("unsupportedMethodsFailSafely") is not True or routes.get("persistentMutationAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#routeSemantics", "unsafe method or mutation semantics are allowed")
+    if routes.get("hostMismatchFailsSafely") is not True or routes.get("missingRoutesFailSafely") is not True:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#routeSemantics", "host mismatch or missing route safety is not recorded")
+
+    headers = evidence.get("headerSemantics", {})
+    if not isinstance(headers, dict):
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#headerSemantics", "header semantics are missing")
+        headers = {}
+    for key in ("noStoreRequired", "contentTypeNosniffRequired", "referrerPolicyRequired"):
+        if headers.get(key) is not True:
+            F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#headerSemantics.{key}", "required header semantic is missing")
+    if headers.get("providerCacheStatusAllowed") is not False or headers.get("netlifyHeadersAllowed") is not False:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#headerSemantics", "provider cache or Netlify headers are allowed")
+
+    direct = evidence.get("directOriginEvidence", {})
+    if not isinstance(direct, dict) or direct.get("httpRedirectEvidencePass") is not True:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#directOriginEvidence", "direct origin HTTP redirect evidence is missing")
+    if isinstance(direct, dict) and direct.get("publicHttpsEvidencePass") is True and not cutover_complete:
+        F.add("USF-PUBLIC-FQDN-026", f"{SELF_HOSTED_ORIGIN_PATH}#directOriginEvidence.publicHttpsEvidencePass", "public HTTPS evidence cannot pass before DNS cutover")
+
+    provider = evidence.get("providerIndependence", {})
+    if not isinstance(provider, dict):
+        F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#providerIndependence", "provider independence evidence is missing")
+        provider = {}
+    if provider.get("repositoryContractSemanticAuthority") is not True:
+        F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#providerIndependence.repositoryContractSemanticAuthority", "repository contract is not recorded as semantic authority")
+    if provider.get("providerHeadersEvidenceOnly") is not True:
+        F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#providerIndependence.providerHeadersEvidenceOnly", "provider headers are not evidence-only")
+    if provider.get("requiredProvider") != "none" or provider.get("requiredGateway") != "none":
+        F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#providerIndependence", "provider or gateway is treated as required semantic authority")
+
+    enterprise = evidence.get("enterpriseOriginSemantics", {})
+    required_sections = {
+        "assetOwnership",
+        "availability",
+        "tls",
+        "accessControl",
+        "changeControl",
+        "loggingAndPrivacy",
+        "monitoring",
+        "backupAndRecovery",
+        "securityHardening",
+        "supplyChain",
+        "incidentResponse",
+        "tenantAndDataBoundary",
+        "providerIndependence",
+        "iso27001StyleControlSupport",
+    }
+    if not isinstance(enterprise, dict):
+        F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#enterpriseOriginSemantics", "enterprise origin semantics are missing")
+        enterprise = {}
+    missing_sections = required_sections - set(enterprise)
+    if missing_sections:
+        F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#enterpriseOriginSemantics", f"enterprise origin sections are missing: {sorted(missing_sections)}")
+    for section_id in sorted(required_sections & set(enterprise)):
+        section = enterprise.get(section_id)
+        if not isinstance(section, dict):
+            F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#enterpriseOriginSemantics.{section_id}", "enterprise origin section is invalid")
+            continue
+        for owner_key in ("owner", "riskOwner", "controlOwner", "evidenceOwner"):
+            if not is_non_empty_string(section.get(owner_key)):
+                F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#enterpriseOriginSemantics.{section_id}.{owner_key}", "enterprise origin section owner is missing")
+        if not is_non_empty_string(section.get("evidenceSource")):
+            F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#enterpriseOriginSemantics.{section_id}.evidenceSource", "enterprise origin section evidence source is missing")
+        if not is_non_empty_string(section.get("riskTreatment")):
+            F.add("USF-PUBLIC-FQDN-027", f"{SELF_HOSTED_ORIGIN_PATH}#enterpriseOriginSemantics.{section_id}.riskTreatment", "enterprise origin section risk treatment is missing")
+
+    check_false_claims(F, "USF-PUBLIC-FQDN-027", SELF_HOSTED_ORIGIN_PATH, evidence)
+    check_external_http_non_claims(F, "USF-PUBLIC-FQDN-027", SELF_HOSTED_ORIGIN_PATH, evidence)
+
+
 def run_checks(state: dict[str, Any]) -> Findings:
     F = Findings()
     contract = state.get("contract")
@@ -2049,6 +2257,7 @@ def run_checks(state: dict[str, Any]) -> Findings:
     pre_staging_smoke = state.get("preStagingSmoke")
     check_pre_staging_smoke_gate(F, pre_staging_smoke, state["package"], state["makefile"])
     check_pre_staging_gate(F, state.get("preStagingGate"), pre_staging_smoke)
+    check_self_hosted_origin_evidence(F, state.get("selfHostedOrigin"))
     return F
 
 

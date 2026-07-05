@@ -1,0 +1,5 @@
+{
+  "id": "027-self-hosted-provider-required",
+  "expectedRule": "USF-PUBLIC-FQDN-027",
+  "setSelfHostedRequiredProvider": "netlify"
+}

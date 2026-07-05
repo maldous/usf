@@ -1,0 +1,8 @@
+{
+  "id": "027-self-hosted-readiness-overclaim",
+  "expectedRule": "USF-PUBLIC-FQDN-027",
+  "setSelfHostedReadinessClaim": {
+    "field": "productionReadinessClaim",
+    "value": true
+  }
+}
