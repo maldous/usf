@@ -263,8 +263,8 @@ const PROHIBITED_CLAIMS = new Set([
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
-  "full-react-parity-readiness",
+  "full-product-readiness",
+  "full-product-readiness",
   "final-usf-234-acceptance",
 ]);
 
@@ -771,7 +771,7 @@ describe("security abuse and fuzzing regression suite", () => {
           (claim) =>
             claim !== "penetration-test-completion" &&
             claim !== "final-usf-234-acceptance" &&
-            claim !== "full-react-parity-readiness",
+            claim !== "full-product-readiness",
         ),
       ),
     );

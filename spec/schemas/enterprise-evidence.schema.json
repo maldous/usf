@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:enterprise-evidence",
   "title": "USF Enterprise Evidence Model Schema",
-  "description": "Draft JSON Schema for repository-level enterprise evidence organisation. It validates Statement of Applicability support mappings, proof evidence register rows, threat and abuse-case posture, SDK dependency governance, observability evidence standards, access review posture, backup and restore posture, incident and vulnerability evidence posture, privacy and data minimisation posture, done-state governance, lane evidence requirements, and explicit non-claims. This is evidence organisation only and does not claim ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, or full React parity.",
+  "description": "Draft JSON Schema for repository-level enterprise evidence organisation. It validates Statement of Applicability support mappings, proof evidence register rows, threat and abuse-case posture, SDK dependency governance, observability evidence standards, access review posture, backup and restore posture, incident and vulnerability evidence posture, privacy and data minimisation posture, done-state governance, lane evidence requirements, and explicit non-claims. This is evidence organisation only and does not claim ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, or full product readiness.",
   "type": "object",
   "additionalProperties": false,
   "required": [

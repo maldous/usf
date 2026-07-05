@@ -91,7 +91,7 @@ interface PublicFqdnProofResult {
   readonly enterpriseProductionReadinessClaim: false;
   readonly productUiReadinessClaim: false;
   readonly browserE2eReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly hostEvidence: readonly HostProofEvidence[];
   readonly failureReasons: readonly string[];
   readonly checks: readonly string[];
@@ -112,7 +112,7 @@ const NON_CLAIMS = Object.freeze([
   "no-enterprise-production-readiness",
   "no-product-ui-readiness",
   "no-browser-e2e-readiness",
-  "no-full-react-product-parity",
+  "no-full-product-readiness",
   "no-v2-proof-tag-authorization",
 ] as const);
 
@@ -389,7 +389,7 @@ export async function runPublicFqdnProof(
     enterpriseProductionReadinessClaim: false,
     productUiReadinessClaim: false,
     browserE2eReadinessClaim: false,
-    fullReactParityClaim: false,
+    fullProductReadinessClaim: false,
     hostEvidence,
     failureReasons,
     checks: [
@@ -398,7 +398,7 @@ export async function runPublicFqdnProof(
       "HTTPS proof routes attempted without Cloudflare API secrets",
       "proof evidence records status redirect canonical host content-type marker and Cloudflare edge observation",
       "proof remains gateway neutral and does not require Caddy",
-      "no staging production deployment live-provider SOC ISO enterprise production product UI browser E2E full React parity or v2-proof tag authorization claim emitted",
+      "no staging production deployment live-provider SOC ISO enterprise production product UI browser E2E full product readiness or v2-proof tag authorization claim emitted",
     ],
     nonClaims: NON_CLAIMS,
   };

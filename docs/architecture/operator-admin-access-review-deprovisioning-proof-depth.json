@@ -36,7 +36,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ],
   "nonClaims": [
     "full-dev-readiness",
@@ -48,7 +48,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ],
   "requiredServiceIds": [
     "keycloak",
@@ -146,7 +146,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -226,7 +226,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -306,7 +306,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -386,7 +386,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -466,7 +466,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -546,7 +546,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -626,7 +626,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -706,7 +706,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -786,7 +786,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -866,7 +866,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -946,7 +946,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -1026,7 +1026,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -1106,7 +1106,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -1186,7 +1186,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -1266,7 +1266,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     }
   ],

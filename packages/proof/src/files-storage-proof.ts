@@ -56,7 +56,7 @@ const USF147_NON_CLAIMS = Object.freeze([
   "soc-readiness",
   "iso27001-certification",
   "enterprise-production-readiness",
-  "full-react-parity-readiness",
+  "full-product-readiness",
   "usf-133-closure",
 ] as const);
 
@@ -348,7 +348,7 @@ function proveEnterpriseStorageDepthReclassification(): Readonly<Record<string, 
     iso27001CertificationClaim: false,
     enterpriseProductionReadinessClaim: false,
     fullDevReadinessClaim: false,
-    fullReactParityClaim: false,
+    fullProductReadinessClaim: false,
     usf133ClosureClaim: false,
   });
 }

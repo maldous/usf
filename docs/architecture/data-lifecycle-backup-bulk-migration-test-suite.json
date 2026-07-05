@@ -5,7 +5,7 @@
   "parentIssueId": "USF-234",
   "lifecycleState": "implemented-owned-scope",
   "authorityLevel": "semantic-definition",
-  "authorityBoundary": "This issue-scoped suite records deterministic synthetic test coverage and composed-service evidence references for data lifecycle, backup restore, bulk import export, migration, retention, privacy, and adjacent data-bearing service flows. It does not claim final USF-234 acceptance, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React parity readiness.",
+  "authorityBoundary": "This issue-scoped suite records deterministic synthetic test coverage and composed-service evidence references for data lifecycle, backup restore, bulk import export, migration, retention, privacy, and adjacent data-bearing service flows. It does not claim final USF-234 acceptance, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
   "sourceAuthorities": {
     "obligationManifest": "docs/architecture/semantic-service-test-obligation-manifest.json",
     "composedIntegrationMatrix": "docs/architecture/composed-service-integration-test-matrix.json",
@@ -402,6 +402,6 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ]
 }

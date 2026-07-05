@@ -237,7 +237,7 @@ const requiredNonClaims = [
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
+  "full-product-readiness",
   "final-usf-234-acceptance",
   "regulatory-compliance",
 ];
@@ -253,8 +253,8 @@ const prohibitedAllowedClaims = new Set([
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
-  "full-react-parity-readiness",
+  "full-product-readiness",
+  "full-product-readiness",
   "final-usf-234-acceptance",
   "regulatory-compliance",
 ]);
@@ -781,7 +781,7 @@ describe("environment tooling governance test gate", () => {
       expect(gate.nonClaims).toContain(claim);
     }
     for (const claim of commandSurface.nonClaims) {
-      if (claim !== "full-react-product-parity") {
+      if (claim !== "full-product-readiness") {
         expect(gate.nonClaims).toContain(claim);
       }
     }

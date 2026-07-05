@@ -34,7 +34,7 @@ The proof covers Keycloak, MinIO, OpenBao, Prometheus, Grafana, Loki, Tempo, Mai
 - ISO 27001 certification
 - enterprise production readiness
 - full dev readiness
-- full React parity
+- full product readiness
 - USF-133 closure
 
 ## Validation

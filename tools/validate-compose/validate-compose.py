@@ -102,7 +102,7 @@ REQUIRED_SERVICE_METADATA = {
 }
 
 PROHIBITED_READINESS_CLAIMS = {
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "full-dev-readiness",
     "test-readiness",
     "staging-readiness",

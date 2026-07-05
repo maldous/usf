@@ -5,7 +5,7 @@
 // local Chromium executable, and captures value-free browser telemetry through
 // an in-page transport. It is not product UI, broad browser E2E, live Faro,
 // live monitoring, deployment, staging, production, SOC, ISO, full dev
-// readiness, full React parity, or USF-133 closure evidence.
+// readiness, full product readiness, or USF-133 closure evidence.
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
@@ -50,7 +50,7 @@ const NON_CLAIMS = Object.freeze([
   "iso27001-certification-not-claimed",
   "enterprise-production-readiness-not-claimed",
   "full-dev-readiness-not-claimed",
-  "full-react-parity-not-claimed",
+  "full-product-readiness-not-claimed",
   "usf-133-closure-not-claimed",
 ] as const);
 
@@ -112,7 +112,7 @@ interface BrowserTelemetryFaroProofResult {
   readonly iso27001CertificationClaim: false;
   readonly enterpriseProductionReadinessClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
   readonly evidence: {
     readonly itemCount: number;
@@ -321,7 +321,7 @@ export async function runBrowserTelemetryFaroProof(): Promise<BrowserTelemetryFa
       iso27001CertificationClaim: false,
       enterpriseProductionReadinessClaim: false,
       fullDevReadinessClaim: false,
-      fullReactParityClaim: false,
+      fullProductReadinessClaim: false,
       usf133ClosureClaim: false,
       evidence: {
         itemCount: payload.items.length,
@@ -349,7 +349,7 @@ export async function runBrowserTelemetryFaroProof(): Promise<BrowserTelemetryFa
       },
       deferredBoundaries: [
         "no-product-ui",
-        "no-react-application-delivery",
+        "no-product-application-delivery",
         "no-page-component-route-architecture",
         "no-visual-snapshot-or-accessibility-journey-proof",
         "no-broad-browser-e2e-readiness",
@@ -361,11 +361,11 @@ export async function runBrowserTelemetryFaroProof(): Promise<BrowserTelemetryFa
       checks: [
         "transient loopback-only browser page served for proof and removed after execution",
         "official Grafana Faro browser SDK initialized in browser proof boundary",
-        "Playwright Core drove local Chromium without adding product UI or React runtime",
+        "Playwright Core drove local Chromium without adding product UI or product runtime",
         "synthetic Faro event log exception trace measurement and session evidence captured",
         "bounded backend root-cause correlation endpoint returned value-free evidence",
         "tenant actor token endpoint stack and raw provider payload markers were redacted",
-        "no UI browser E2E live monitoring staging production SOC ISO full dev full React or USF-133 closure claim emitted",
+        "no UI browser E2E live monitoring staging production SOC ISO full dev full product readiness or USF-133 closure claim emitted",
       ],
     };
     return Object.freeze(result);

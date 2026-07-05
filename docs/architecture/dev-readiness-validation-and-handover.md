@@ -8,7 +8,7 @@
 | **Authority level** | Developer handover evidence and process guidance; subordinate to semantic definitions, ADRs, validators, proof evidence, and source implementation |
 | **Evidence report** | `docs/architecture/dev-readiness-validation-and-handover.json`                                                                                     |
 
-This guide defines the USF local developer and AI-agent handover path after foundation-readiness closure. It does not reopen foundation parity scope and does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+This guide defines the USF local developer and AI-agent handover path after foundation-readiness closure. It does not reopen foundation parity scope and does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.
 
 ## Dev-Ready Definition
 
@@ -23,7 +23,7 @@ After the `v2-foundation` baseline, future developer and AI-agent work should st
 
 The index routes future work to the current semantic corpus, accepted ADRs, validators, proof evidence, enterprise evidence, and this handover path. Historical `../react` source, source-use matrices, parity migration matrices, closure-tier artefacts, and bootstrap mapping remain available as retained lineage and audit evidence, but they are not active future authority.
 
-Do not infer implementation shape, readiness state, or full React product parity from historical lineage or closure scaffolding. Use current semantic contracts, proof commands, validators, and enterprise evidence first, then inspect lineage only when the current issue explicitly requires it.
+Do not infer implementation shape, readiness state, or full product readiness from historical lineage or closure scaffolding. Use current semantic contracts, proof commands, validators, and enterprise evidence first, then inspect lineage only when the current issue explicitly requires it.
 
 ## Prerequisites
 
@@ -124,7 +124,7 @@ These commands are documented in
 retroactively change the USF-226 dev-readiness claim, and they do not claim
 staging readiness, production readiness, deployment readiness, live-provider
 readiness, SOC readiness, ISO certification, enterprise production readiness,
-product UI readiness, browser E2E readiness, or full React product parity.
+product UI readiness, browser E2E readiness, or full product readiness.
 
 ## Safe Local Configuration
 
@@ -277,4 +277,4 @@ The report records PR #193 and PR #194 merge SHAs and a post-merge validation ro
 
 ## Non-Claims
 
-USF-226 may support a bounded dev-readiness handover claim only after its evidence passes. It does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+USF-226 may support a bounded dev-readiness handover claim only after its evidence passes. It does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

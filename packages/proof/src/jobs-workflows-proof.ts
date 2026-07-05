@@ -812,7 +812,7 @@ async function main() {
     iso27001CertificationClaim: false,
     enterpriseProductionReadinessClaim: false,
     fullDevReadinessClaim: false,
-    fullReactParityClaim: false,
+    fullProductReadinessClaim: false,
     usf133ClosureClaim: false,
     enterpriseWorkflowEvidence: enterpriseEvidence,
     checks: checks.length,

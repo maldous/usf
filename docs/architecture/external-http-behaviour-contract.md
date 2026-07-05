@@ -11,4 +11,4 @@ The semantic requirement is public HTTP and HTTPS edge behaviour for declared FQ
 
 The Test environment remains local, composed, and synthetic. It does not depend on public DNS, public TLS, public HTTPS, or the public internet.
 
-Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or v2-proof tag authorisation.
+Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorisation.

@@ -92,7 +92,7 @@ const REQUIRED_PROVIDER_NON_CLAIMS = Object.freeze([
   "soc-readiness",
   "iso27001-certification",
   "enterprise-production-readiness",
-  "full-react-parity-readiness",
+  "full-product-readiness",
   "usf-133-closure",
 ] as const);
 
@@ -310,7 +310,7 @@ function assertProviderRiskResilienceMatrix(root: string): void {
     "deployment-readiness",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "usf-133-closure",
   ]) {
     assert(

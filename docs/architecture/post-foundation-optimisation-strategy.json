@@ -233,13 +233,13 @@
       "safetyRequirement": "Do not remove artefacts during this strategy-only issue."
     }
   ],
-  "legacyAndEvolutionDependencyFindings": [
+  "supersededLineageAndEvolutionDependencyFindings": [
     {
       "id": "historical-react-lineage-references",
-      "marker": "../react",
+      "marker": "superseded-external-lineage",
       "classification": "historical-lineage",
-      "finding": "Historical React references remain widespread as source lineage and evidence citations.",
-      "activeAuthorityBoundary": "../react must remain lineage only and must not be a future live authority.",
+      "finding": "Superseded external-lineage references remain widespread as source lineage and evidence citations.",
+      "activeAuthorityBoundary": "Superseded external source lineage must remain provenance only and must not be a future live authority.",
       "usf230Action": "Add current authority index and update future workflow docs to use current semantic contracts first."
     },
     {
@@ -260,10 +260,10 @@
     },
     {
       "id": "historical-parity-migration-language",
-      "marker": "React parity and complete-react-to-usf",
+      "marker": "superseded parity wording and complete-react-to-usf",
       "classification": "historical-lineage",
       "finding": "Parity matrices and review docs document how foundation evidence was reconciled from historical source.",
-      "activeAuthorityBoundary": "They are not full React product parity claims and must not drive future implementation by source resemblance.",
+      "activeAuthorityBoundary": "They are not full product readiness product parity claims and must not drive future implementation by source resemblance.",
       "usf230Action": "Create an as-now capability and proof index so future work starts from current contracts and validators."
     }
   ],
@@ -320,7 +320,7 @@
       "rank": 6,
       "name": "historical-lineage",
       "currentSources": [
-        "../react",
+        "superseded-external-lineage",
         "source-use matrices",
         "parity migration matrices"
       ],
@@ -407,7 +407,7 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity"
+    "no-full-product-readiness"
   ],
   "acceptanceCriteriaMapping": [
     {
@@ -426,8 +426,8 @@
       "status": "satisfied"
     },
     {
-      "criterion": "Legacy ../react and v2-bootstrap/evolution dependencies are identified.",
-      "evidence": "legacyAndEvolutionDependencyFindings",
+      "criterion": "Superseded external-lineage and bootstrap/evolution dependencies are identified.",
+      "evidence": "supersededLineageAndEvolutionDependencyFindings",
       "status": "satisfied"
     },
     {

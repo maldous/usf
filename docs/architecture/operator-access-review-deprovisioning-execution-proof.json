@@ -62,7 +62,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "executionSemantics": {
@@ -357,7 +357,7 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "USF-133-closure"
   ]
 }

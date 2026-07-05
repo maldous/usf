@@ -12,7 +12,7 @@ access, resilience, incident, and non-claim controls.
 The suite supports ISO-style evidence organisation only. It does not claim
 ISO/IEC 27001 certification, SOC readiness, staging readiness, production
 readiness, deployment readiness, live-provider readiness, enterprise production
-readiness, product UI readiness, browser E2E readiness, full React product
+readiness, product UI readiness, browser E2E readiness, full product readiness product
 parity, or final USF-234 acceptance.
 
 Evidence added:

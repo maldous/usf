@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:environment-promotion",
   "title": "USF Environment Promotion Schema",
-  "description": "Draft JSON Schema for environment promotion and readiness gate definitions. It records dev, test, staging, and production as distinct promotion stages; separates environment classes from provider modes; captures data and destructive/non-destructive posture, proof gates, enterprise evidence requirements, allowed and prohibited claims, promotion prerequisites, negative assurance, and non-claim boundaries. It is ISO/IEC 27001-supporting evidence organisation only and does not claim certification, SOC readiness, production readiness, staging readiness, test readiness, full dev readiness, live-provider readiness, enterprise production readiness, full React parity, or USF-133 closure. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance.",
+  "description": "Draft JSON Schema for environment promotion and readiness gate definitions. It records dev, test, staging, and production as distinct promotion stages; separates environment classes from provider modes; captures data and destructive/non-destructive posture, proof gates, enterprise evidence requirements, allowed and prohibited claims, promotion prerequisites, negative assurance, and non-claim boundaries. It is ISO/IEC 27001-supporting evidence organisation only and does not claim certification, SOC readiness, production readiness, staging readiness, test readiness, full dev readiness, live-provider readiness, enterprise production readiness, full product readiness, or USF-133 closure. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -102,7 +102,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },

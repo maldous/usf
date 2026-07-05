@@ -4,7 +4,7 @@
   "name": "runtime-proof-output",
   "source": "semantic-contract.observability-built-in-alerting-and-incidents",
   "title": "Observability Operations Posture Metadata",
-  "description": "Lane 4 and USF-159 metadata for logging, tracing, metrics, correlation identifiers, alerting posture, dashboard posture, incident evidence posture, and tenant-safe redaction. This metadata uses the existing observability-signal schema and records explicit source-issue boundaries with enterprise evidence rows usf-188-evidence-observability-operations-posture and evidence-usf-159-observability-operations-depth, without claiming live alerting, dashboard, incident-response, SIEM, staging, production, SOC, ISO, full dev, or full React parity readiness.",
+  "description": "Lane 4 and USF-159 metadata for logging, tracing, metrics, correlation identifiers, alerting posture, dashboard posture, incident evidence posture, and tenant-safe redaction. This metadata uses the existing observability-signal schema and records explicit source-issue boundaries with enterprise evidence rows usf-188-evidence-observability-operations-posture and evidence-usf-159-observability-operations-depth, without claiming live alerting, dashboard, incident-response, SIEM, staging, production, SOC, ISO, full dev, or full product readiness.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -20,7 +20,7 @@
     "observability-signal-names",
     "observability-attribute-names"
   ],
-  "aiGuidance": "Treat this as Lane 4 evidence metadata only. Do not infer live monitoring, alert delivery, dashboard runtime, incident-response readiness, production readiness, SOC readiness, ISO certification, full dev readiness, or full React parity from this instance.",
+  "aiGuidance": "Treat this as Lane 4 evidence metadata only. Do not infer live monitoring, alert delivery, dashboard runtime, incident-response readiness, production readiness, SOC readiness, ISO certification, full dev readiness, or full product readiness from this instance.",
   "purpose": "Record validator-checkable posture for logging, tracing, metrics, correlation id propagation, tenant-safe redaction, alerting reclassification, dashboard reclassification, and incident evidence boundaries under USF-188 and USF-159.",
   "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
   "evidenceRefs": [

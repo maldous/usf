@@ -40,5 +40,5 @@ acceptance.
 USF-235 does not claim final test readiness, staging readiness, production
 readiness, deployment readiness, live-provider readiness, SOC readiness,
 ISO/IEC 27001 certification, enterprise production readiness, product UI
-readiness, browser E2E readiness, full React product parity, or USF-133
+readiness, browser E2E readiness, full product readiness, or USF-133
 closure.

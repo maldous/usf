@@ -13,7 +13,7 @@ export const NON_CLAIMS = Object.freeze([
   "no-enterprise-production-readiness",
   "no-product-ui-readiness",
   "no-browser-e2e-readiness",
-  "no-full-react-product-parity",
+  "no-full-product-readiness",
   "no-caddy-semantic-requirement",
   "no-netlify-semantic-requirement",
   "no-cloudflare-worker-semantic-requirement",

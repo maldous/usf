@@ -10,4 +10,4 @@ Owned executable coverage:
 - `tests/packages/auth/authn-authz-tenant-role-permission-integration.test.ts`
 - `tests/packages/auth/authn-authz-tenant-role-permission-regression.test.ts`
 
-Non-claims preserved: no final USF-234 acceptance, test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React parity claim.
+Non-claims preserved: no final USF-234 acceptance, test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness claim.

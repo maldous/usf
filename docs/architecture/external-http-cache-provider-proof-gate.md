@@ -17,4 +17,4 @@ Provider or CDN headers such as cache status, age, etag, vary, and content encod
 
 Future static, API-like, and app route classes are classified but not proven as staging-ready by this gate. They require separate staging-specific route contracts and evidence before any staging readiness claim.
 
-Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or v2-proof tag authorisation.
+Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorisation.

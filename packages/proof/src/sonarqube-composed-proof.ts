@@ -64,7 +64,7 @@ interface SonarQubeComposedProofResult {
     "no-soc-readiness",
     "no-iso27001-certification",
     "no-enterprise-production-readiness",
-    "no-full-react-parity",
+    "no-full-product-readiness",
     "no-usf-133-closure",
   ];
 }
@@ -86,7 +86,7 @@ const NON_CLAIMS = [
   "no-soc-readiness",
   "no-iso27001-certification",
   "no-enterprise-production-readiness",
-  "no-full-react-parity",
+  "no-full-product-readiness",
   "no-usf-133-closure",
 ] as const;
 

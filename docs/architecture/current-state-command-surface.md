@@ -21,7 +21,7 @@ This document records the current-state command surface introduced by USF-232. I
 | `make test-composed` | `corepack pnpm test-readiness:composed` | Run the composed semantic harness and deterministic fixture lifecycle proof. |
 | `make test-assurance` | `corepack pnpm test-readiness:assurance` | Run the bounded local SonarQube zero-open-issue proof. |
 | `make validate-foundation` | `make verify` | Compatibility-stable full local foundation validation. |
-| `make validate-coverage` | `make parity` | Run the foundation coverage validator suite without implying full React parity. |
+| `make validate-coverage` | `make parity` | Run the foundation coverage validator suite without implying full product readiness. |
 | `make validate-assurance` | `make enterprise-validate` | Run the enterprise assurance and evidence validator. |
 | `make validate-evidence` | `corepack pnpm repo:validate` | Run repository evidence and governance validators. |
 | `make sonar-zero-issue-proof` | `make sonarqube-assurance-proof` | Run the bounded local SonarQube zero-open-issue proof for the supported synthetic scan scope. |
@@ -47,7 +47,7 @@ The following existing names remain valid and intentionally unchanged:
 - `make sonarqube-assurance-proof`
 - package scripts including `verify`, `parity`, `repo:validate`, `test-readiness`, `test-readiness:composed`, `test-readiness:assurance`, `proof:bootstrap`, and `proof:assurance:sonarqube`
 
-These names are compatibility entry points. They do not imply full React parity, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or broader readiness than the merged evidence supports.
+These names are compatibility entry points. They do not imply full product readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or broader readiness than the merged evidence supports.
 
 ## Preservation Commitments
 
@@ -74,4 +74,4 @@ broader SonarQube readiness.
 
 ## Non-Claims
 
-This command-surface optimisation does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or any readiness beyond the already evidenced bounded dev-readiness baseline.
+This command-surface optimisation does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or any readiness beyond the already evidenced bounded dev-readiness baseline.

@@ -8,4 +8,4 @@ The final validation rows must match the declared command suite exactly, use the
 
 The gate preserves the hard service-backed boundary: required service-backed Test claims must use composed backing services and must not be satisfied by in-memory, process-local, hermetic, or mock substitutes. Semantic definitions and the service catalogue remain authority; generated Compose and reports remain derivative evidence.
 
-The gate does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+The gate does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

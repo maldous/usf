@@ -16,7 +16,7 @@
     "spec/instances/compose-service/service-catalogue.json#keycloak"
   ],
   "nonClaims": [
-    "No live IdP, live broker, browser UI, SIEM forwarding, production, staging, deployment, SOC, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure claim is made.",
+    "No live IdP, live broker, browser UI, SIEM forwarding, production, staging, deployment, SOC, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure claim is made.",
     "Hermetic Keycloak-equivalent proof does not prove live external identity provider readiness.",
     "Local browser-flow semantic checks do not prove browser UI or real cookie issuance readiness.",
     "Local audit threat signals do not prove live SIEM forwarding or incident readiness."

@@ -6,7 +6,7 @@
   "capabilityId": "observability-operations-enterprise-depth",
   "proofCommand": "make observability-proof",
   "rawProofCommand": "corepack pnpm proof:observability",
-  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises USF local observability operations evidence with synthetic tenants, value-free telemetry, tenant-safe labels, redaction, PDP-protected operator surfaces, provider-mode posture, and explicit reclassification of live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure claims.",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises USF local observability operations evidence with synthetic tenants, value-free telemetry, tenant-safe labels, redaction, PDP-protected operator surfaces, provider-mode posture, and explicit reclassification of live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, staging, production, SOC, ISO certification, full dev readiness, full product readiness, and USF-133 closure claims.",
   "validatorCommand": "python3 tools/validate-parity/validate-observability.py all --json",
   "proofFile": "packages/proof/src/observability-telemetry-proof.ts",
   "validatorFile": "tools/validate-parity/validate-observability.py",
@@ -63,11 +63,11 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
-    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full product readiness, or USF-133 closure claim is made.",
     "Hermetic observability proof does not prove live telemetry backends, live monitoring backends, SIEM export, alert delivery, dashboard runtime, incident workflow operation, on-call process, status-page operation, SLO operation, or production monitoring.",
     "Local tenant-safe telemetry and operator API proof does not prove Grafana, Prometheus, Loki, Tempo, Alertmanager, Alloy, Sentry, or external observability provider readiness.",
     "USF-159 reclassifies live/deep observability operations as outside the current dev-foundation source-issue acceptance unless a future issue explicitly authorises and proves them."

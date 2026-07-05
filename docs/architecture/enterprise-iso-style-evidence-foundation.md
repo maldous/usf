@@ -4,7 +4,7 @@ Issue: USF-272
 
 The machine-readable foundation is `docs/architecture/enterprise-iso-style-evidence-foundation.json`.
 
-This foundation creates ISO/IEC 27001-style control-support organisation for future enterprise readiness work. It is not ISO/IEC 27001 certification, SOC readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React parity.
+This foundation creates ISO/IEC 27001-style control-support organisation for future enterprise readiness work. It is not ISO/IEC 27001 certification, SOC readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.
 
 The track does not block Staging-specific enablement by default. A later explicit risk decision may make one or more domains block a future promotion or enterprise readiness assessment.
 
@@ -38,4 +38,4 @@ Each domain has an owner, risk owner, control owner, evidence owner, review cade
 
 ## Non-Claims
 
-No ISO certification, SOC readiness, Staging readiness, Production readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React parity is claimed.
+No ISO certification, SOC readiness, Staging readiness, Production readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness is claimed.

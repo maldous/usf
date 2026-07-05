@@ -27,4 +27,4 @@ Every implementation target file added by the parity-db slice is listed here wit
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No backup readiness, restore readiness, disaster recovery readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure claim. No real customer/tenant data; fixtures are deterministic synthetic only.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No backup readiness, restore readiness, disaster recovery readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim. No real customer/tenant data; fixtures are deterministic synthetic only.

@@ -30,4 +30,4 @@ Post-merge validation passed on the target commit before the tag was created:
 
 This tag is not a general exception for arbitrary `v2-*` tags, branches, paths, file names, package names, schema IDs, taxonomy IDs, vocabulary IDs, implementation names, or local value IDs.
 
-This tag does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+This tag does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification readiness, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

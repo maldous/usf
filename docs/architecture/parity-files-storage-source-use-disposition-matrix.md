@@ -7,7 +7,7 @@
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-146 under USF-133; deferred depth tracked in USF-147 |
 | Source row basis | `docs/architecture/files-and-object-storage-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), the audit-evidence and config-and-secrets standards, and historical `../react` files/storage behaviour as lineage only |
-| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; bounded local MinIO and ClamAV composed-test proof/reconciliation only; no live S3/object-store, live scanner, KMS, DLP, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim |
+| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; bounded local MinIO and ClamAV composed-test proof/reconciliation only; no live S3/object-store, live scanner, KMS, DLP, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim |
 
 ## Treatment Rules
 
@@ -22,7 +22,7 @@
 | `capabilities/files/src/file-service.ts` | source-derived-rewrite | React upload/download/scan/quarantine/delete lineage | PDP-protected, tenant-scoped upload/download/get/list/delete/restore/purge/verify with scan gate, legal-hold purge-block, integrity verify, and value-free file audit. |
 | `packages/proof/src/files-storage-proof.ts` | evidence-only-support | File RLS + legal-hold proof requirement | Composed-Postgres proof: files RLS isolation, FORCE RLS, legal-hold purge-block, object-key uniqueness. `make files-proof`. |
 | `docs/architecture/files-storage-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-147 source-depth closure requirement | Machine-readable evidence matrix mapping USF-147 controls, MinIO and ClamAV composed-test reconciliation, explicit reclassifications, enterprise evidence refs, validator command, proof command, and non-claims. |
-| `packages/proof/src/clamav-composed-proof.ts` | evidence-only-support | USF-200 bounded local Compose ClamAV proof requirement; no React runtime/application code copied | Profile-gated proof for SDK-backed local ClamAV clean/infected scans, provider-unavailable fail-closed quarantine routing, quarantined download denial, deletion, tenant isolation, value-free audit evidence, redaction, and teardown. No live scanner, DLP, staging, production, SOC, ISO, full dev, or full React parity claim. |
+| `packages/proof/src/clamav-composed-proof.ts` | evidence-only-support | USF-200 bounded local Compose ClamAV proof requirement; no React runtime/application code copied | Profile-gated proof for SDK-backed local ClamAV clean/infected scans, provider-unavailable fail-closed quarantine routing, quarantined download denial, deletion, tenant isolation, value-free audit evidence, redaction, and teardown. No live scanner, DLP, staging, production, SOC, ISO, full dev, or full product readiness claim. |
 | `tests/capabilities/files-storage.test.ts` | evidence-only-support | Files/storage behaviour proof requirement | Hermetic object-key-safety, upload-validation, isolation, scan/quarantine, lifecycle, legal-hold, integrity-tamper tests. |
 | `tests/apps/files-api.test.ts` | evidence-only-support | File surface proof requirement | API tests: upload/list/get/download/verify; redacted views (no object key); quarantine download 403; tenant mismatch; PDP deny. |
 
@@ -55,4 +55,4 @@ The historical `../react` files/storage inventory (`.claude/runs/.../react-files
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live S3/object-store, live ClamAV/antivirus/DLP, presigned URL runtime, KMS, backup/restore readiness, object-lock/WORM, storage quota runtime, staging, production, deployment, production-live, SOC, ISO certification, full dev readiness, full React functional parity readiness, enterprise production readiness, or USF-133 closure claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live S3/object-store, live ClamAV/antivirus/DLP, presigned URL runtime, KMS, backup/restore readiness, object-lock/WORM, storage quota runtime, staging, production, deployment, production-live, SOC, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure claim.

@@ -67,7 +67,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "acceptanceCriteriaMapping": [
@@ -225,8 +225,8 @@
     }
   ],
   "nonClaims": [
-    "No GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, client distribution readiness, public API launch readiness, public API readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure claim is made.",
-    "No full dev readiness, full React parity, USF-133 closure, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, or enterprise production readiness claim is made.",
+    "No GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, client distribution readiness, public API launch readiness, public API readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure claim is made.",
+    "No full dev readiness, full product readiness, USF-133 closure, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, or enterprise production readiness claim is made.",
     "USF-214 does not implement GraphQL runtime, GraphQL federation, GraphQL gateway, schema stitching, subscriptions, persisted queries, generated SDKs, generated clients, package publishing, public developer portal, API key issuance, public documentation operation, staging deployment, production deployment, live gateway, WAF, TLS termination, or edge operation."
   ],
   "successorExecutionProof": {
@@ -249,6 +249,6 @@
       "federation-style gateway/schema stitching local proof",
       "persisted-query and subscription local proof"
     ],
-    "nonEquivalenceBoundary": "USF-224 does not change USF-214 disposition semantics into public package publication, deployed GraphQL service, deployed federation gateway, external developer platform readiness, public API readiness, environment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure."
+    "nonEquivalenceBoundary": "USF-224 does not change USF-214 disposition semantics into public package publication, deployed GraphQL service, deployed federation gateway, external developer platform readiness, public API readiness, environment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure."
   }
 }

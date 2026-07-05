@@ -10,7 +10,7 @@ The inventory is derived from `docs/architecture/semantic-service-test-obligatio
 
 - Pure/local unit tests only.
 - Core semantic helpers, capability decisions, process-local stores, adapter-safe mappings, and manifest-derived inventory checks.
-- No composed-service, live-provider, final test-readiness, staging, production, deployment, SOC, ISO certification, enterprise-production, product UI, browser E2E, or full React product parity claim.
+- No composed-service, live-provider, final test-readiness, staging, production, deployment, SOC, ISO certification, enterprise-production, product UI, browser E2E, or full product readiness claim.
 
 ## Service-Backed Boundary
 

@@ -47,7 +47,7 @@ The repository keeps the full historical evolution record available, but future 
 Historical and transitional artefacts are reconciled by classification rather than deletion:
 
 - source-use and parity matrices remain historical-lineage evidence;
-- complete React-to-USF reviews remain historical-lineage evidence and do not imply full React product parity;
+- complete React-to-USF reviews remain historical-lineage evidence and do not imply full product readiness;
 - USF-133 closure and lane orchestration artefacts remain transitional scaffolding and audit evidence;
 - bootstrap mapping remains lineage for foundation ancestry;
 - generated Compose outputs remain derivative projections;
@@ -72,4 +72,4 @@ Post-merge reconciliation must record the PR URL, merge SHA, validation result o
 
 ## Non-Claims
 
-USF-230 does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+USF-230 does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

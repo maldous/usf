@@ -23,7 +23,7 @@ After DNS cutover, Caddy should be able to issue public certificates and serve H
 
 The self-hosted origin evidence covers ownership, availability, TLS lifecycle, privileged access, change control, logging and privacy, monitoring, backup and recovery, security hardening, supply chain, incident response, tenant/data boundaries, provider independence, and ISO/IEC 27001-style control-support themes.
 
-This is control-support evidence only. It does not claim ISO/IEC 27001 certification, SOC readiness, enterprise production readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, product UI readiness, browser E2E readiness, or full React parity.
+This is control-support evidence only. It does not claim ISO/IEC 27001 certification, SOC readiness, enterprise production readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, product UI readiness, browser E2E readiness, or full product readiness.
 
 ## Netlify Boundary
 

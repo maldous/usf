@@ -6,6 +6,7 @@ from __future__ import annotations
 import copy
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -15,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs" / "architecture"
 PLANTED = Path(__file__).resolve().parent / "planted-defects"
 
-RULE_IDS = [f"USF-FOUNDATION-CLOSURE-{index:03d}" for index in range(1, 9)]
+RULE_IDS = [f"USF-FOUNDATION-CLOSURE-{index:03d}" for index in range(1, 10)]
 
 JSON_DOCS = {
     "devFoundation": DOCS / "dev-foundation-substrate-closure.json",
@@ -60,6 +61,43 @@ FORBIDDEN_ACTIVE_PATTERNS = [
     r"former react",
 ]
 
+FORBIDDEN_REACT_PRODUCT_PARITY_TOKEN = "no-full-" + "react-product-" + "parity"
+
+ALLOWED_FORBIDDEN_TOKEN_PATH_PREFIXES = (
+    "docs/architecture/react-",
+    "docs/architecture/superseded-lineage-closure-provenance.",
+    "tools/validate-react-non-ui-parity/",
+    "tools/validate-parity/",
+)
+
+ALLOWED_FORBIDDEN_TOKEN_PATH_PARTS = (
+    "/planted-defects/",
+    "/fixtures/",
+)
+
+ACTIVE_NONCLAIM_TOKEN_PATHS = [
+    "apps/public-proof-origin/src/server.mjs",
+    "netlify/functions/public-proof-shared.js",
+    "packages/proof/src/external-http-cache-proof.ts",
+    "packages/proof/src/external-http-observability-proof.ts",
+    "packages/proof/src/pre-staging-external-smoke-proof.ts",
+    "packages/proof/src/public-fqdn-proof.ts",
+    "packages/proof/src/public-proof-origin-proof.ts",
+    "packages/proof/src/public-route-telemetry-proof.ts",
+    "docs/architecture/current-state-command-surface.json",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/current-state-terminology-normalisation-audit.json",
+    "docs/architecture/dev-ready-foundation-baseline-tag.json",
+    "docs/architecture/foundation-optimisation-evidence.json",
+    "docs/architecture/post-foundation-optimisation-strategy.json",
+    "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+]
+
+REQUIRED_ACTIVE_NATIVE_NONCLAIM_TOKENS = (
+    "no-full-product-readiness",
+    "no-product-ui-readiness",
+)
+
 READINESS_OVERCLAIMS = [
     "Staging readiness is claimed",
     "Production readiness is claimed",
@@ -91,6 +129,33 @@ def load_data() -> dict[str, Any]:
 
 def fail(rule_id: str, message: str, path: str = "") -> dict[str, str]:
     return {"ruleId": rule_id, "message": message, "path": path}
+
+
+def tracked_file_texts(data: dict[str, Any]) -> list[tuple[str, str]]:
+    overrides: dict[str, str] = data.get("_trackedFileOverrides", {})
+    result = subprocess.run(["git", "ls-files"], cwd=ROOT, check=True, capture_output=True, text=True)
+    texts: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for rel_path in result.stdout.splitlines():
+        seen.add(rel_path)
+        if rel_path in overrides:
+            texts.append((rel_path, overrides[rel_path]))
+            continue
+        path = ROOT / rel_path
+        try:
+            texts.append((rel_path, path.read_text(encoding="utf-8")))
+        except UnicodeDecodeError:
+            continue
+    for rel_path, text in overrides.items():
+        if rel_path not in seen:
+            texts.append((rel_path, text))
+    return texts
+
+
+def forbidden_token_allowed_path(rel_path: str) -> bool:
+    return rel_path.startswith(ALLOWED_FORBIDDEN_TOKEN_PATH_PREFIXES) or any(
+        part in f"/{rel_path}" for part in ALLOWED_FORBIDDEN_TOKEN_PATH_PARTS
+    )
 
 
 def rule_001_required_docs(data: dict[str, Any]) -> list[dict[str, str]]:
@@ -183,6 +248,29 @@ def rule_008_scan_classified(data: dict[str, Any]) -> list[dict[str, str]]:
     return failures
 
 
+def rule_009_no_active_react_product_parity_nonclaim(data: dict[str, Any]) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    for rel_path, text in tracked_file_texts(data):
+        if FORBIDDEN_REACT_PRODUCT_PARITY_TOKEN in text and not forbidden_token_allowed_path(rel_path):
+            failures.append(
+                fail(
+                    "USF-FOUNDATION-CLOSURE-009",
+                    "Forbidden active React-specific product parity non-claim token present",
+                    rel_path,
+                )
+            )
+    file_texts = dict(tracked_file_texts(data))
+    for rel_path in ACTIVE_NONCLAIM_TOKEN_PATHS:
+        text = file_texts.get(rel_path, "")
+        if not text:
+            failures.append(fail("USF-FOUNDATION-CLOSURE-009", "Active non-claim surface missing from tracked files", rel_path))
+            continue
+        for token in REQUIRED_ACTIVE_NATIVE_NONCLAIM_TOKENS:
+            if token not in text:
+                failures.append(fail("USF-FOUNDATION-CLOSURE-009", f"Required USF-native non-claim token missing: {token}", rel_path))
+    return failures
+
+
 RULES = {
     "USF-FOUNDATION-CLOSURE-001": rule_001_required_docs,
     "USF-FOUNDATION-CLOSURE-002": rule_002_dev_closure_complete,
@@ -192,6 +280,7 @@ RULES = {
     "USF-FOUNDATION-CLOSURE-006": rule_006_nonclaims_preserved,
     "USF-FOUNDATION-CLOSURE-007": rule_007_cockpit_current_route,
     "USF-FOUNDATION-CLOSURE-008": rule_008_scan_classified,
+    "USF-FOUNDATION-CLOSURE-009": rule_009_no_active_react_product_parity_nonclaim,
 }
 
 
@@ -222,6 +311,10 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated.setdefault("_serverOverride", server_path.read_text(encoding="utf-8") + "\n/proof/react-non-ui-parity\n")
     elif kind == "unexplained-scan":
         mutated["json"]["report"]["retirementScan"]["unexplainedCount"] = 1
+    elif kind == "active-react-product-parity-nonclaim":
+        mutated.setdefault("_trackedFileOverrides", {})[
+            "apps/public-proof-origin/src/server.mjs"
+        ] = f'const nonClaims = ["{FORBIDDEN_REACT_PRODUCT_PARITY_TOKEN}"];'
     return mutated
 
 

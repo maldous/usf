@@ -72,7 +72,7 @@ const USF145_NON_CLAIMS = Object.freeze([
   "soc-readiness",
   "iso27001-certification",
   "enterprise-production-readiness",
-  "full-react-parity-readiness",
+  "full-product-readiness",
   "usf-133-closure",
 ] as const);
 
@@ -328,7 +328,7 @@ function proveConfigSchemaMigrationTooling(): Readonly<Record<string, unknown>> 
   const migrated = migration({ schemaVersion: "config-0", value: " local-composed-test " });
   assert(
     migrated.schemaVersion === CONFIG_SCHEMA_VERSION,
-    "legacy config fixture must migrate to current schema",
+    "superseded config fixture must migrate to current schema",
   );
   assert(migrated.value === "local-composed-test", "migration must be deterministic");
   let futureDenied = false;
@@ -340,7 +340,7 @@ function proveConfigSchemaMigrationTooling(): Readonly<Record<string, unknown>> 
   assert(futureDenied, "unknown future config schema must fail closed");
   return Object.freeze({
     currentSchemaVersion: CONFIG_SCHEMA_VERSION,
-    legacyMigrationChecked: true,
+    supersededMigrationChecked: true,
     unknownFutureVersionFailedClosed: true,
   });
 }
@@ -638,7 +638,7 @@ async function main(): Promise<void> {
         iso27001CertificationClaim: false,
         enterpriseProductionReadinessClaim: false,
         fullDevReadinessClaim: false,
-        fullReactParityClaim: false,
+        fullProductReadinessClaim: false,
         usf133ClosureClaim: false,
         nonClaims: USF145_NON_CLAIMS,
         productionLiveClaim: false,

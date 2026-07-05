@@ -65,7 +65,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "boundaries": [
@@ -81,7 +81,7 @@
         "packages/proof/src/pgbackrest-configured-proof.ts",
         "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#usf-211-evidence-pgbackrest-configured-proof"
       ],
-      "nonEquivalenceBoundary": "USF-211 proves a profile-gated local cold backup and restore readback with synthetic data only. It is not online backup, WAL archive, PITR, scheduled backup operation, DR rehearsal, RPO/RTO achievement, environment promotion, provider-managed backup, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure.",
+      "nonEquivalenceBoundary": "USF-211 proves a profile-gated local cold backup and restore readback with synthetic data only. It is not online backup, WAL archive, PITR, scheduled backup operation, DR rehearsal, RPO/RTO achievement, environment promotion, provider-managed backup, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure.",
       "nonClaimBoundary": "Only bounded local cold backup/restore proof is accepted."
     },
     {
@@ -239,7 +239,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "keycloak-db",
@@ -264,7 +264,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "minio",
@@ -289,7 +289,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "openbao",
@@ -313,7 +313,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "redis",
@@ -338,7 +338,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "meilisearch",
@@ -363,7 +363,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "clickhouse",
@@ -388,7 +388,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "sonar-postgres",
@@ -413,7 +413,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "sonar-oidc-plugin",
@@ -438,7 +438,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "windmill-postgres",
@@ -463,7 +463,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "windmill-redis",
@@ -488,7 +488,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "temporal-postgres",
@@ -513,7 +513,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "serviceId": "pgbackrest",
@@ -538,7 +538,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 records backup/restore promotion impact and deferral only. It does not prove backup readiness, restore readiness, backup-restore readiness, DR readiness, PITR, online backup, scheduled backup, RPO/RTO, pgBackRest readiness, provider compatibility readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     }
   ],
   "sourceEvidenceDisposition": {
@@ -564,7 +564,7 @@
       "environment promotion backup gates"
     ],
     "outOfScopeWithRationale": [
-      "live-provider backup operation, production backup operation, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, and USF-133 closure require separate authority and proof."
+      "live-provider backup operation, production backup operation, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, and USF-133 closure require separate authority and proof."
     ]
   },
   "nonClaims": [
@@ -590,9 +590,8 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity-readiness",
-    "usf-133-closure",
-    "full-react-parity"
+    "full-product-readiness",
+    "usf-133-closure"
   ],
   "evidenceFreshness": {
     "pr": "pending-USF-219-pr",

@@ -24,7 +24,7 @@ interface ApiContractsProofResult {
   readonly socReadinessClaim: false;
   readonly iso27001CertificationClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
   readonly enterpriseApiGatewayDepthProven: true;
   readonly apiGatewayDepthEvidence: ApiGatewayDepthEvidence;
@@ -60,7 +60,7 @@ interface ApiGatewayDepthEvidence {
   readonly socReadinessClaim: false;
   readonly iso27001CertificationClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
 }
 
@@ -86,7 +86,7 @@ interface PublicApiCompatibilityGovernanceEvidence {
   readonly socReadinessClaim: false;
   readonly iso27001CertificationClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
 }
 
@@ -119,7 +119,7 @@ interface GraphqlGeneratedClientDispositionEvidence {
   readonly socReadinessClaim: false;
   readonly iso27001CertificationClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
 }
 
@@ -271,7 +271,7 @@ function assertGraphqlGeneratedClientDisposition(
     socReadinessClaim: false,
     iso27001CertificationClaim: false,
     fullDevReadinessClaim: false,
-    fullReactParityClaim: false,
+    fullProductReadinessClaim: false,
     usf133ClosureClaim: false,
   };
 }
@@ -509,7 +509,7 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
       socReadinessClaim: false,
       iso27001CertificationClaim: false,
       fullDevReadinessClaim: false,
-      fullReactParityClaim: false,
+      fullProductReadinessClaim: false,
       usf133ClosureClaim: false,
       enterpriseApiGatewayDepthProven: true,
       apiGatewayDepthEvidence: {
@@ -535,7 +535,7 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
         socReadinessClaim: false,
         iso27001CertificationClaim: false,
         fullDevReadinessClaim: false,
-        fullReactParityClaim: false,
+        fullProductReadinessClaim: false,
         usf133ClosureClaim: false,
       },
       publicApiCompatibilityGovernanceProven: true,
@@ -561,7 +561,7 @@ export async function runApiContractsProof(): Promise<ApiContractsProofResult> {
         socReadinessClaim: false,
         iso27001CertificationClaim: false,
         fullDevReadinessClaim: false,
-        fullReactParityClaim: false,
+        fullProductReadinessClaim: false,
         usf133ClosureClaim: false,
       },
       graphqlGeneratedClientDispositionProven: true,

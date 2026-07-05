@@ -86,7 +86,7 @@ The Lane 3 validator coverage is:
   evidence linkage.
 - USF-ENTERPRISE-012: unsupported assurance readiness, implementation, operating-evidence,
   SOC, ISO/IEC 27001 certification, live-provider, deployment, production, test, full-dev,
-  enterprise-production, or full React parity overclaim.
+  enterprise-production, or full product readiness overclaim.
 
 The model remains evidence organisation only. USF-205 records accepted local Sentry SDK-envelope
 proof for event-shape capture, redaction, tenant-safe labels, value-free retention posture, and
@@ -101,4 +101,4 @@ scanner operating evidence remains bounded by its source issue scope.
 This model supports future enterprise evidence organisation and ISO/IEC 27001-style Statement of
 Applicability support only. It does not claim ISO/IEC 27001 certification, SOC readiness,
 production readiness, staging readiness, deployment readiness, live-provider readiness, full dev
-readiness, enterprise production readiness, or full React parity.
+readiness, enterprise production readiness, or full product readiness.

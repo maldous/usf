@@ -22,7 +22,7 @@ These fields make the catalogue usable as a CMDB-style foundation asset. They do
 
 The catalogue may support bounded dev-foundation service disposition and generated Compose derivation.
 
-It does not claim full React parity readiness, full dev readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, legal readiness, or regulatory readiness.
+It does not claim full product readiness, full dev readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, legal readiness, or regulatory readiness.
 
 Evidence grades C, D, or F require explicit missing-evidence or deferred-boundary metadata before a service can carry a stronger catalogue tier.
 

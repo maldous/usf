@@ -28,7 +28,7 @@
   ],
   "humanDecision": {
     "decisionState": "accepted",
-    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate, USF-197 records the ClickHouse proof boundary, and USF-206 proves bounded local Compose ClickHouse analytics event-store semantics. This does not claim analytics readiness, event-store readiness, live provider readiness, environment promotion readiness, full dev readiness, full React parity, or USF-133 closure.",
+    "summary": "Analytics/event-store decision is not completion evidence. USF-172 records a bounded disposition gate, USF-197 records the ClickHouse proof boundary, and USF-206 proves bounded local Compose ClickHouse analytics event-store semantics. This does not claim analytics readiness, event-store readiness, live provider readiness, environment promotion readiness, full dev readiness, full product readiness, or USF-133 closure.",
     "decisionIsWorkComplete": false
   },
   "analyticsEventStoreDisposition": {
@@ -157,7 +157,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ],
   "nonClaims": [
     "full-dev-readiness",
@@ -169,6 +169,6 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ]
 }

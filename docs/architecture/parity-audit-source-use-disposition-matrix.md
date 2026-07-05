@@ -55,4 +55,4 @@ The historical `../react` audit/evidence inventory (`.claude/runs/...react-audit
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live KMS/HSM/external signing. No live SIEM integration. No public audit export API readiness. No staging/production/deployment/live-external-provider/production-live claim. No full React functional parity readiness claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live KMS/HSM/external signing. No live SIEM integration. No public audit export API readiness. No staging/production/deployment/live-external-provider/production-live claim. No full product readiness claim.

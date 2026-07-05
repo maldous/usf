@@ -6,7 +6,7 @@ USF-223 follows USF-219 and USF-211. USF-219 records the selected backup/restore
 
 The proof command is corepack pnpm proof:backup:operations. It uses the canonical test Compose target with the backup-restore profile, a temporary Compose override, synthetic Postgres data, the official pgBackRest CLI boundary, bounded readiness retry, timeouts, isolated Compose project names, isolated volumes, and guaranteed teardown.
 
-The proof remains local and bounded. It does not prove backup readiness, restore readiness, disaster recovery readiness, PITR readiness, RPO or RTO target achievement, environment-promotion backup gates, provider-managed backup operation, live-provider readiness, staging readiness, production readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.
+The proof remains local and bounded. It does not prove backup readiness, restore readiness, disaster recovery readiness, PITR readiness, RPO or RTO target achievement, environment-promotion backup gates, provider-managed backup operation, live-provider readiness, staging readiness, production readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure.
 
 Enterprise evidence posture is recorded in spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json. The SoA-support and evidence rows organize future assurance evidence only; they do not claim compliance or certification.
 

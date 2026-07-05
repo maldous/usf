@@ -23,7 +23,7 @@
     "environment-classes",
     "evidence-kinds"
   ],
-  "aiGuidance": "This manifest supports bounded USF-183 runtime provider-binding proof only. It does not claim full dev readiness, full React parity, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, or ISO/IEC 27001 certification.",
+  "aiGuidance": "This manifest supports bounded USF-183 runtime provider-binding proof only. It does not claim full dev readiness, full product readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, or ISO/IEC 27001 certification.",
   "issueId": "USF-183",
   "parentIssueId": "USF-133",
   "previousIssueId": "USF-181",
@@ -97,7 +97,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ],
       "deferredBoundaryRefs": [],
@@ -190,7 +190,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ],
       "deferredBoundaryRefs": [
@@ -408,7 +408,7 @@
         "USF-206",
         "USF-189"
       ],
-      "claimBoundary": "USF-206 bounded local Compose ClickHouse proof only; no analytics-readiness, event-store-readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-206 bounded local Compose ClickHouse proof only; no analytics-readiness, event-store-readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, or test-readiness claim.",
       "bindingId": "usf-189-clickhouse-analytics-provider",
       "serviceCatalogueServiceIds": [
         "clickhouse"
@@ -441,7 +441,7 @@
         "USF-207",
         "USF-189"
       ],
-      "claimBoundary": "USF-207 bounded local Compose proof only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-207 bounded local Compose proof only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, or test-readiness claim.",
       "bindingId": "usf-189-redis-cache-provider",
       "serviceCatalogueServiceIds": [
         "redis"
@@ -473,7 +473,7 @@
         "USF-199",
         "USF-189"
       ],
-      "claimBoundary": "USF-199 profile-gated local composed proof only; no API runtime binding, worker runtime binding, ranking equivalence, vector search readiness, AI search readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-199 profile-gated local composed proof only; no API runtime binding, worker runtime binding, ranking equivalence, vector search readiness, AI search readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, or test-readiness claim.",
       "bindingId": "usf-189-meilisearch-search-provider",
       "serviceCatalogueServiceIds": [
         "meilisearch"
@@ -506,7 +506,7 @@
         "USF-147",
         "USF-189"
       ],
-      "claimBoundary": "USF-200 profile-gated local composed ClamAV proof only; no API runtime binding, worker runtime binding, quarantine release workflow, signature database freshness readiness, DLP readiness, vulnerability-clearance readiness, scanner-readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-200 profile-gated local composed ClamAV proof only; no API runtime binding, worker runtime binding, quarantine release workflow, signature database freshness readiness, DLP readiness, vulnerability-clearance readiness, scanner-readiness, production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, or test-readiness claim.",
       "bindingId": "usf-189-clamav-scanner-provider",
       "serviceCatalogueServiceIds": [
         "clamav"
@@ -541,7 +541,7 @@
         "USF-210",
         "USF-189"
       ],
-      "claimBoundary": "USF-208 proves bounded profile-gated local LocalStack emulator semantics only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, test-readiness, provider certification, or cloud-provider compatibility claim.",
+      "claimBoundary": "USF-208 proves bounded profile-gated local LocalStack emulator semantics only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, test-readiness, provider certification, or cloud-provider compatibility claim.",
       "bindingId": "usf-189-localstack-cloud-mock-provider",
       "serviceCatalogueServiceIds": [
         "localstack"
@@ -575,7 +575,7 @@
         "USF-208",
         "USF-189"
       ],
-      "claimBoundary": "USF-209 profile-gated local composed WireMock proof only; configured request matching, response templating, negative matching, request journal, cleanup, unavailable fail-closed, no-egress, redaction, audit-shaped evidence, and SDK-backed admin-client evidence are proven. Prohibited claims: production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, test-readiness, deployment-readiness, enterprise-production-readiness, provider contract certification, live external provider compatibility, and USF-133 closure. This is not live external provider compatibility.",
+      "claimBoundary": "USF-209 profile-gated local composed WireMock proof only; configured request matching, response templating, negative matching, request journal, cleanup, unavailable fail-closed, no-egress, redaction, audit-shaped evidence, and SDK-backed admin-client evidence are proven. Prohibited claims: production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, test-readiness, deployment-readiness, enterprise-production-readiness, provider contract certification, live external provider compatibility, and USF-133 closure. This is not live external provider compatibility.",
       "bindingId": "usf-209-wiremock-http-mock-provider",
       "serviceCatalogueServiceIds": [
         "wiremock"
@@ -608,7 +608,7 @@
         "USF-153",
         "USF-189"
       ],
-      "claimBoundary": "USF-201 profile-gated local Compose webhook-sink capture proof only; not delivery, not callback/replay, not live webhook compatibility, no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, test-readiness, deployment-readiness, enterprise-production-readiness, or USF-133 closure claim.",
+      "claimBoundary": "USF-201 profile-gated local Compose webhook-sink capture proof only; not delivery, not callback/replay, not live webhook compatibility, no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, test-readiness, deployment-readiness, enterprise-production-readiness, or USF-133 closure claim.",
       "bindingId": "usf-189-webhook-sink-capture-provider",
       "serviceCatalogueServiceIds": [
         "webhook-sink"
@@ -641,7 +641,7 @@
         "USF-211",
         "USF-189"
       ],
-      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, or test-readiness claim.",
+      "claimBoundary": "USF-189 explicit deferral only; no production-readiness, staging-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, or test-readiness claim.",
       "bindingId": "usf-189-pgbackrest-backup-provider",
       "serviceCatalogueServiceIds": [
         "pgbackrest"
@@ -674,7 +674,7 @@
         "USF-212",
         "USF-189"
       ],
-      "claimBoundary": "USF-212 bounded local Compose proof only; USF-203 remains the historical blocked reclassification and non-equivalence context; Temporal application workflow proof remains non-equivalent to Windmill operator automation proof; Windmill local proof is not production-readiness, staging-readiness, test-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-react-parity, operator-automation-readiness, Windmill-readiness, or USF-133 closure.",
+      "claimBoundary": "USF-212 bounded local Compose proof only; USF-203 remains the historical blocked reclassification and non-equivalence context; Temporal application workflow proof remains non-equivalent to Windmill operator automation proof; Windmill local proof is not production-readiness, staging-readiness, test-readiness, deployment-readiness, live-provider-readiness, soc-readiness, iso27001-certification, full-dev-readiness, full-product-readiness, operator-automation-readiness, Windmill-readiness, or USF-133 closure.",
       "bindingId": "usf-189-windmill-automation-provider",
       "serviceCatalogueServiceIds": [
         "windmill",
@@ -908,7 +908,7 @@
     "soc-readiness",
     "iso27001-certification",
     "full-dev-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "test-readiness"
   ],
   "deferredBoundaries": [
@@ -929,7 +929,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ]
     },
@@ -950,7 +950,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ]
     },
@@ -970,7 +970,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness",
         "api-runtime-search-binding-readiness",
         "worker-runtime-search-binding-readiness",
@@ -995,7 +995,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ]
     },
@@ -1014,7 +1014,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ]
     },
@@ -1035,14 +1035,14 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ]
     },
     {
       "id": "usf-189-workflow-automation-provider-deferred",
       "mode": "dev-compose-backed",
-      "boundary": "USF-212 resolves the bounded local Compose Windmill configured bootstrap and SDK proof for synthetic workspace, variable, script seed, deployment history update, script execution by hash/path, audit, tenant, secret, privileged operation, readiness retry, invalid credential fail-closed behaviour, and teardown. Remaining boundary is no Windmill readiness, operator automation readiness, API runtime Windmill binding, worker runtime Windmill binding, live/provider-managed Windmill supplier evidence, environment promotion readiness, production/staging/test readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure; owner platform-workflow-foundation; review date 2026-09-30.",
+      "boundary": "USF-212 resolves the bounded local Compose Windmill configured bootstrap and SDK proof for synthetic workspace, variable, script seed, deployment history update, script execution by hash/path, audit, tenant, secret, privileged operation, readiness retry, invalid credential fail-closed behaviour, and teardown. Remaining boundary is no Windmill readiness, operator automation readiness, API runtime Windmill binding, worker runtime Windmill binding, live/provider-managed Windmill supplier evidence, environment promotion readiness, production/staging/test readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure; owner platform-workflow-foundation; review date 2026-09-30.",
       "followUpIssueRefs": [
         "USF-178",
         "USF-203",
@@ -1056,7 +1056,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness"
       ]
     }
@@ -1083,7 +1083,7 @@
     "soc-readiness",
     "iso27001-certification",
     "full-dev-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "test-readiness"
   ]
 }

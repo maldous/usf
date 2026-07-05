@@ -6,7 +6,7 @@
   "capabilityId": "notifications-messaging-enterprise-depth",
   "proofCommand": "make notify-proof",
   "rawProofCommand": "corepack pnpm proof:notify",
-  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF notification capability, local enterprise notification control plane, synthetic tenants, synchronous PDP decisions, value-free audit evidence, and no live email, SMS, push, webhook, SMTP, provider deliverability, UI, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim.",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF notification capability, local enterprise notification control plane, synthetic tenants, synchronous PDP decisions, value-free audit evidence, and no live email, SMS, push, webhook, SMTP, provider deliverability, UI, staging, production, SOC, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim.",
   "validatorCommand": "python3 tools/validate-parity/validate-notify.py all --json",
   "proofFile": "packages/proof/src/notifications-messaging-proof.ts",
   "validatorFile": "tools/validate-parity/validate-notify.py",
@@ -47,11 +47,11 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
-    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full product readiness, or USF-133 closure claim is made.",
     "Hermetic notifications proof does not prove live email, SMS, push, webhook, SMTP, Brevo, Mailpit-as-deliverability-provider, or external provider readiness.",
     "Bounded local feedback and unsubscribe ingestion proof does not prove live webhook callback compatibility, provider replay, provider SLA, bounce/complaint deliverability, or external suppression-list readiness.",
     "Local API contract and capability proof does not prove public notification API readiness, browser UI readiness, customer messaging workflows, environment promotion, or production notification operation."

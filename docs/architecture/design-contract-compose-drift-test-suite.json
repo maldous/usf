@@ -72,7 +72,7 @@
     },
     {
       "id": "readiness-non-claim-boundary",
-      "description": "Design, command, integration, and generated Compose evidence must not allow final test readiness, staging, production, deployment, live-provider, SOC, ISO, enterprise production, product UI, browser E2E, or full React product parity claims.",
+      "description": "Design, command, integration, and generated Compose evidence must not allow final test readiness, staging, production, deployment, live-provider, SOC, ISO, enterprise production, product UI, browser E2E, or full product readiness claims.",
       "findingCode": "readiness-overclaim"
     }
   ],
@@ -121,7 +121,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ],
   "requiredNonClaims": [
     "final-test-readiness",
@@ -135,6 +135,6 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ]
 }

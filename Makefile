@@ -65,7 +65,7 @@ help:
 		'  make sonar-zero-issue-proof  Bounded local SonarQube zero-open-issue proof' \
 		'  make sonarqube-assurance-proof  Bounded local SonarQube assurance proof' \
 		'' \
-		'Compatibility targets remain valid. Historical names do not imply React parity, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, or browser E2E readiness.'
+		'Compatibility targets remain valid. Historical names do not imply product readiness, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, or browser E2E readiness.'
 
 commands: help
 

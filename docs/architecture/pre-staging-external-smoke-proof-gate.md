@@ -19,4 +19,4 @@ Cache/provider boundary:
 - Low nonzero Netlify `Age` is accepted only as provider metadata when no cache hit or stale directive is present and provider evidence shows miss, bypass, or dynamic handling.
 - Cache hit, stale evidence, missing no-store, cacheable proof/control routes, or unknown provider status with Age still fail closed.
 
-Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or v2-proof tag authorisation.
+Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorisation.

@@ -12,7 +12,7 @@ and branch coverage for the declared in-scope implementation files.
 The gate is intentionally bounded. It does not claim repository-wide coverage,
 final USF-234 acceptance, test readiness by itself, or any staging, production,
 deployment, live-provider, SOC, ISO certification, enterprise production,
-product UI, browser E2E, or full React product parity readiness. Broad source
+product UI, browser E2E, or full product readiness. Broad source
 trees that require composed-service execution or later acceptance ownership are
 recorded as bounded deferred coverage scope in the JSON evidence.
 

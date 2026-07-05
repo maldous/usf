@@ -75,7 +75,7 @@ export interface NotificationEnterpriseEvidence {
   readonly socReadinessClaim: false;
   readonly iso27001CertificationClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
 }
 
@@ -416,7 +416,7 @@ export class EnterpriseNotificationControlPlane {
       socReadinessClaim: false,
       iso27001CertificationClaim: false,
       fullDevReadinessClaim: false,
-      fullReactParityClaim: false,
+      fullProductReadinessClaim: false,
       usf133ClosureClaim: false,
     });
   }

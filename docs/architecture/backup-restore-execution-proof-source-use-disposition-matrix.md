@@ -44,4 +44,4 @@ readiness, RPO/RTO target achievement, environment promotion backup gates,
 provider-managed backup service operation, test readiness, staging readiness,
 production readiness, deployment readiness, live-provider readiness, SOC
 readiness, ISO/IEC 27001 certification, enterprise production readiness, full
-dev readiness, full React parity, or USF-133 closure.
+dev readiness, full product readiness, or USF-133 closure.
