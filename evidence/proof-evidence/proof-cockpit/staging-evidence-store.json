@@ -1,0 +1,155 @@
+{
+  "id": "proof-cockpit-staging-evidence-store",
+  "schemaVersion": "proof-cockpit-staging-evidence-store-v1",
+  "linearIssue": "USF-293",
+  "acceptanceIssue": "USF-290",
+  "purpose": "Durable staging proof cockpit evidence store for machine QA history, screenshot-equivalent manifests, human review decisions, final reports, exported bundles, supersession history, and non-claim preservation.",
+  "sourceSha": "pending-final-usf-293-commit",
+  "deploymentSha": "pending-staging-deployment-identity",
+  "latestMachineRun": {
+    "runId": "latest-machine-qa-pending-final-run",
+    "sourceSha": "pending-final-usf-293-commit",
+    "deploymentSha": "pending-staging-deployment-identity",
+    "environment": "local-machine-qa",
+    "generatedAt": "2026-07-05T00:00:00.000Z",
+    "routeCount": 71,
+    "capabilityCount": 75,
+    "serviceCount": 39,
+    "screenshotCount": 48,
+    "serviceEvidenceCount": 39,
+    "passCount": 0,
+    "warnCount": 0,
+    "gapCount": 0,
+    "failCount": 0
+  },
+  "machineRunHistory": [],
+  "evidenceRecords": [
+    {
+      "id": "proof-cockpit-evidence-store",
+      "type": "persistent-evidence-store",
+      "path": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+      "sourceSha": "pending-final-usf-293-commit",
+      "runId": "latest-machine-qa-pending-final-run",
+      "timestamp": "2026-07-05T00:00:00.000Z",
+      "hashStatus": "validated-by-proof-cockpit-acceptance-validator",
+      "humanReviewStatus": "human-review-required"
+    },
+    {
+      "id": "proof-cockpit-final-report",
+      "type": "final-report",
+      "path": "evidence/proof-evidence/proof-cockpit/final-external-review-report.md",
+      "sourceSha": "pending-final-usf-293-commit",
+      "runId": "latest-machine-qa-pending-final-run",
+      "timestamp": "2026-07-05T00:00:00.000Z",
+      "hashStatus": "validated-by-proof-cockpit-acceptance-validator",
+      "humanReviewStatus": "human-review-required"
+    }
+  ],
+  "screenshotManifest": {
+    "manifestPath": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json#screenshotManifest",
+    "hashPolicy": "each screenshot or screenshot-equivalent must carry a non-empty artifact hash or store hash",
+    "serviceScreenshotEquivalentCount": 39,
+    "routeScreenshotEquivalentCount": 9,
+    "missingScreenshotPolicy": "a service claim with no direct screenshot or safe screenshot-equivalent fails validation"
+  },
+  "serviceEvidenceManifest": {
+    "serviceCount": 39,
+    "requiredFields": [
+      "serviceId",
+      "serviceName",
+      "capabilityIds",
+      "scenarioIds",
+      "claimId",
+      "controlRiskMapping",
+      "rolePersonaUsed",
+      "loginAuthMethodUsed",
+      "urlOrEvidenceSurface",
+      "screenshotPath",
+      "screenshotHash",
+      "timestamp",
+      "sourceSha",
+      "environment",
+      "redactionStatus",
+      "syntheticDataConfirmation",
+      "humanReviewStatus"
+    ],
+    "directScreenshotFallbackClasses": [
+      "api-equivalent",
+      "cli-equivalent",
+      "unsafe-to-screenshot",
+      "unavailable",
+      "blocked"
+    ]
+  },
+  "humanReview": {
+    "accepted": 0,
+    "rejected": 0,
+    "retestRequested": 0,
+    "correctiveActions": 0,
+    "residualRisksAccepted": 0,
+    "finalSignoffAvailable": false,
+    "finalSignoffCompleted": false,
+    "actionsPath": "evidence/proof-evidence/proof-cockpit/human-review-actions.json",
+    "supportedActions": [
+      "accept machine evidence",
+      "reject machine evidence",
+      "annotate evidence",
+      "request retest",
+      "create corrective action",
+      "accept residual risk",
+      "record final human signoff when criteria are satisfied"
+    ]
+  },
+  "storageModel": {
+    "pathOrService": "repository path evidence/proof-evidence/proof-cockpit plus generated external-review bundle",
+    "retentionPosture": "retained as repository evidence and superseded by source SHA and run ID",
+    "backupPosture": "covered by Git repository backup and PR review retention",
+    "privacyBoundary": "synthetic or redacted staging QA data only",
+    "noRealTenantDataBoundary": "real tenant data is forbidden in proof cockpit evidence",
+    "redactionBoundary": "secret, token, private key, password, and raw credential markers fail validation",
+    "integrityTamperPosture": "source SHA, content hash, artifact hash, and chain-of-custody rows are required",
+    "cleanupRules": "generated bundles may be regenerated; reviewed actions remain auditable with supersession",
+    "freshnessPolicy": "evidence is stale after source/deployment change or explicit reviewAfter",
+    "staleEvidenceBehaviour": "stale evidence remains visible but cannot satisfy current acceptance"
+  },
+  "supersessionHistory": [],
+  "relatedIssueReview": [
+    {
+      "issue": "USF-290",
+      "state": "In Progress",
+      "relationship": "primary human acceptance issue remains open until Matthew accepts",
+      "blocksUsf293": false
+    },
+    {
+      "issue": "USF-291",
+      "state": "Done",
+      "relationship": "sealed provenance only",
+      "blocksUsf293": false
+    },
+    {
+      "issue": "USF-292",
+      "state": "Done",
+      "relationship": "current-state foundation substrate closure imported",
+      "blocksUsf293": false
+    },
+    {
+      "issue": "USF-294",
+      "state": "absorbed",
+      "relationship": "active historical product-readiness wording cleanup cherry-picked into USF-293 branch",
+      "blocksUsf293": false
+    }
+  ],
+  "nonClaims": [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso-certification",
+    "no-enterprise-production-readiness",
+    "no-real-user-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-product-readiness",
+    "no-usf-290-completion"
+  ]
+}

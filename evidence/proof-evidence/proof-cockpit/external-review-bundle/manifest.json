@@ -1,0 +1,27 @@
+{
+  "id": "proof-cockpit-external-review-bundle",
+  "schemaVersion": "1.0.0",
+  "linearIssue": "USF-293",
+  "acceptanceIssue": "USF-290",
+  "files": [
+    "../staging-evidence-store.json",
+    "../final-external-review-report.md",
+    "README.md",
+    "manifest.json"
+  ],
+  "generatedReportsAreAuthority": false,
+  "finalAcceptanceAutomatic": false,
+  "nonClaims": [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso-certification",
+    "no-enterprise-production-readiness",
+    "no-real-user-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-product-readiness",
+    "no-usf-290-completion"
+  ]
+}

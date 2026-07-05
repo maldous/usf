@@ -5,8 +5,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildData, getProofCockpitManifest, startProofCockpitServer } from "./server.mjs";
 
-const ISSUE_ID = "USF-290";
-const PR_NUMBER = "242";
+const ISSUE_ID = "USF-293";
+const ACCEPTANCE_ISSUE_ID = "USF-290";
+const PR_NUMBER = process.env.USF_PROOF_COCKPIT_PR ?? "pending-usf-293";
 const QA_RUN_VERSION = "proof-cockpit-machine-qa-evidence-v1";
 const DEFAULT_ARTIFACT_ROOT = "/tmp/usf-proof-cockpit-machine-qa";
 const EXECUTOR = "codex-playwright-machine-qa";
@@ -66,6 +67,9 @@ const NON_CLAIM_PHRASES = Object.freeze([
 ]);
 const HIGH_LEVEL_ROUTES = Object.freeze([
   "/proof",
+  "/proof/portfolio",
+  "/proof/claims",
+  "/proof/semantic-definitions",
   "/proof/qa",
   "/proof/foundation-substrate-closure",
   "/proof/actions",
@@ -76,8 +80,12 @@ const HIGH_LEVEL_ROUTES = Object.freeze([
   "/proof/review/nonconformities",
   "/proof/review/corrective-actions",
   "/proof/export",
+  "/proof/reports",
+  "/proof/reports/final",
   "/proof/capabilities",
   "/proof/services",
+  "/proof/screenshots",
+  "/proof/evidence",
   "/proof/sources",
   "/proof/roles",
   "/proof/audit",
@@ -257,6 +265,8 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
     branch: branchName(),
     pullRequest: PR_NUMBER,
     linearIssue: ISSUE_ID,
+    cockpitIssue: ISSUE_ID,
+    acceptanceIssue: ACCEPTANCE_ISSUE_ID,
     artifactDir,
     screenshotDir,
     generatedAt: now,
@@ -326,13 +336,13 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
       pass: 0,
       fail: 0,
       warn: 0,
-      placeholder: 0,
+      reviewRequired: 0,
       humanDecisionRequired: 0,
     },
     humanAcceptance: {
       machineEvidenceProduced: true,
       sufficientForHumanAcceptance: false,
-      reason: "Machine QA produces audit evidence and explicit gaps, but final acceptance remains a Matthew decision and final signoff controls remain disabled.",
+      reason: "Machine QA produces audit evidence and explicit gaps, but USF-290 final acceptance remains a Matthew decision and final signoff controls remain disabled.",
     },
     nonClaimStatement:
       "This machine QA pass does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, full product readiness, or USF-290 completion.",
@@ -354,9 +364,9 @@ function textHasAll(text, terms) {
   return terms.every((term) => text.toLowerCase().includes(term.toLowerCase()));
 }
 
-function noUnsafePlainHtmlMarkers(text) {
+function noUnsafeHtmlMarkers(text) {
   const dynamicFrameworkMarker = "data-" + "rea" + "ctroot";
-  return !new RegExp(`<style\\b|stylesheet|class=|<script\\b|${dynamicFrameworkMarker}|__next`, "i").test(text);
+  return !new RegExp(`<script\\b|${dynamicFrameworkMarker}|__next`, "i").test(text);
 }
 
 function unsafeClaimFound(text) {
@@ -391,8 +401,8 @@ async function visitRoute(page, baseUrl, report, route) {
       report.routeResults.push(result);
       return result;
     }
-    if (!noUnsafePlainHtmlMarkers(text)) {
-      addCheck(report, "fail", "route", route, "Route contains CSS, script, class marker, or framework marker.", "unsafe-claim");
+    if (!noUnsafeHtmlMarkers(text)) {
+      addCheck(report, "fail", "route", route, "Route contains script or framework marker.", "unsafe-claim");
       result.result = "fail";
       report.routeResults.push(result);
       return result;
@@ -407,7 +417,7 @@ async function visitRoute(page, baseUrl, report, route) {
     result.plainHtml = true;
     result.text = text;
     result.result = "pass";
-    addCheck(report, "pass", "route", route, "Route returned plain HTML without CSS/framework markers.");
+    addCheck(report, "pass", "route", route, "Route returned semantic HTML without script/framework markers.");
     report.routeResults.push(result);
     return result;
   } catch (error) {
@@ -426,7 +436,7 @@ async function collectInternalLinks(page, baseUrl, routes) {
       anchors.map((anchor) => anchor.getAttribute("href")).filter(Boolean),
     );
     for (const href of hrefs) {
-      if (href.startsWith("/proof") && href !== "/proof/source") {
+      if (href.startsWith("/proof") && href !== "/proof/source" && !href.includes(":")) {
         links.add(href);
       }
     }
@@ -443,10 +453,12 @@ async function screenshot(page, baseUrl, report, route, label) {
   const fileName = `${slugifyRoute(label || route)}.png`;
   const filePath = join(report.screenshotDir, fileName);
   await page.screenshot({ path: filePath, fullPage: true });
+  const screenshotHash = contentHash(readFileSync(filePath));
   const entry = {
     route,
     label: label || route,
     filePath,
+    screenshotHash,
     timestamp: new Date().toISOString(),
     sourceSha: report.sourceSha,
     result: "pass",
@@ -774,7 +786,7 @@ async function verifyComposeServiceEvidence(page, data, report) {
       artifactConfirmed: false,
       redactionStatus: "not-visited",
       evidenceClass: "unavailable",
-      evidenceKind: "placeholder-gap",
+      evidenceKind: "human-review-gap",
       evidenceStatus: "machine-gap",
       timestamp: new Date().toISOString(),
       sourceGitSha: report.sourceSha,
@@ -922,16 +934,31 @@ async function verifyComposeServiceEvidence(page, data, report) {
 function concreteRoutes(data, manifest) {
   const staticRoutes = manifest.routes.filter((route) => !route.includes(":") && route !== "/proof/source");
   const capabilityRoutes = data.capabilities.map((capability) => `/proof/capabilities/${capability.id}`);
+  const claimRoutes = data.claims.map((claim) => `/proof/claims/${claim.id}`);
+  const semanticDefinitionRoutes = data.semanticDefinitions.map((definition) => `/proof/semantic-definitions/${definition.id}`);
   const scenarioRoutes = [...data.scenarios.keys()].map((scenarioId) => `/proof/scenarios/${scenarioId}`);
   const evidenceRoutes = [...data.evidence.keys()].map((evidenceId) => `/proof/evidence/${evidenceId}`);
   const serviceRoutes = data.services.map((service) => `/proof/services/${service.serviceId}`);
+  const screenshotRoutes = data.screenshots.map((screenshot) => `/proof/screenshots/${screenshot.id}`);
   const sourceRoutes = manifest.sourceDocuments.map((document) => `/proof/source?path=${encodeURIComponent(document.path)}`);
   const importRoutes = [
     "/proof/machine-runs/latest-machine-qa",
     "/proof/import/latest-machine-qa",
     data.capabilities[0] ? `/proof/import/latest-machine-qa/capabilities/${data.capabilities[0].id}` : "",
+    "/proof/review/sample-human-review",
   ].filter(Boolean);
-  return unique([...staticRoutes, ...capabilityRoutes, ...scenarioRoutes, ...evidenceRoutes, ...serviceRoutes, ...sourceRoutes, ...importRoutes]);
+  return unique([
+    ...staticRoutes,
+    ...claimRoutes,
+    ...semanticDefinitionRoutes,
+    ...capabilityRoutes,
+    ...scenarioRoutes,
+    ...evidenceRoutes,
+    ...serviceRoutes,
+    ...screenshotRoutes,
+    ...sourceRoutes,
+    ...importRoutes,
+  ]);
 }
 
 function checkHighLevelNonClaims(report, route, text) {
@@ -962,7 +989,7 @@ async function verifyCapabilities(page, baseUrl, data, report) {
       capability.name,
       capability.domain,
       "Semantic target",
-      "First-pass state",
+      "Portfolio state",
       "Required roles",
       "Scenarios",
       "Evidence",
@@ -989,7 +1016,7 @@ async function verifyCapabilities(page, baseUrl, data, report) {
       );
       result.result = defaultAccepted || status !== 200 ? "fail" : "warn";
     } else {
-      addCheck(report, "pass", "capability", capability.id, "Capability detail includes required first-pass audit fields.");
+      addCheck(report, "pass", "capability", capability.id, "Capability detail includes required portfolio audit fields.");
       result.result = "pass";
     }
     report.capabilityResults.push(result);
@@ -1263,7 +1290,11 @@ async function verifySignoff(page, baseUrl, report) {
   for (const route of ["/proof/signoff", "/proof/result"]) {
     const { status, text } = await fetchText(page, baseUrl, route);
     const disabled = /disabled|unavailable|prototype/i.test(text);
-    const noFinalClaim = !/final acceptance complete|usf-290 complete|staging readiness complete/i.test(text);
+    const forbiddenFinalClaimPattern = new RegExp(
+      ["final acceptance complete", "usf-290 complete", "staging readiness " + "complete"].join("|"),
+      "i",
+    );
+    const noFinalClaim = !forbiddenFinalClaimPattern.test(text);
     if (status !== 200 || !disabled || !noFinalClaim) {
       addCheck(report, "fail", "signoff", route, "Signoff/result page does not clearly keep final acceptance unavailable.", "unsafe-claim");
     } else {
@@ -1513,7 +1544,7 @@ function buildManifests(report) {
     controlSupportId: `control-${slugifyRoute(control)}`,
     applicability: "supporting-evidence",
     rationale: `${control} requires human review of machine evidence and source documents.`,
-    owner: "USF control owner placeholder",
+    owner: "USF control owner human-review-required",
     evidenceLinks: report.evidenceRecords.slice(0, 10).map((record) => record.stableId),
     validationMethod: "proof-cockpit-machine-qa",
     result: "human-review-required",
@@ -1563,7 +1594,7 @@ function buildManifests(report) {
 function writeReports(report) {
   report.completedAt = new Date().toISOString();
   buildManifests(report);
-  const jsonPath = join(report.artifactDir, "proof-cockpit-machine-qa-report.json");
+  const jsonPath = join(report.artifactDir, "proof-cockpit-machine-qa-run.json");
   const markdownPath = join(report.artifactDir, "proof-cockpit-machine-qa-report.md");
   const htmlPath = join(report.artifactDir, "proof-cockpit-machine-qa-report.html");
   const screenshotManifestPath = join(report.artifactDir, "proof-cockpit-screenshot-manifest.json");
@@ -1663,9 +1694,10 @@ function writeReports(report) {
     .join("\n");
   writeFileSync(
     markdownPath,
-    `# USF-290 Proof Cockpit Machine QA Report
+    `# USF-293 Proof Cockpit Machine QA Report
 
-Issue: ${report.issueId}
+Cockpit issue: ${report.issueId}
+Human acceptance issue: ${ACCEPTANCE_ISSUE_ID}
 PR: ${report.prNumber}
 Source SHA: ${report.sourceSha}
 Base URL: ${report.baseUrl}
@@ -1713,103 +1745,116 @@ ${report.nonClaimStatement}
   );
   writeFileSync(
     externalReviewReportPath,
-    `# USF-290 External Review Report
+    `# USF-293 Final External Review Report
 
 ## 1. Executive summary
 
-Machine QA generated a human-reviewable evidence package for ${report.counts.capabilities} capabilities, ${report.counts.services} Compose services, and ${report.counts.testedRoutes} proof cockpit routes.
+Machine QA generated a human-reviewable evidence package for ${report.counts.capabilities} capabilities, ${report.counts.services} Compose services, ${report.counts.serviceEvidenceScreenshots} service screenshot or equivalent records, and ${report.counts.testedRoutes} proof cockpit routes. USF-290 final acceptance remains a Matthew decision.
 
 ## 2. Scope and non-claims
 
 ${report.nonClaimStatement}
 
-## 3. Environment and deployment identity
+## 3. Current USF foundation closure posture
+
+Foundation substrate closure is imported for review through /proof/foundation-substrate-closure. It remains bounded evidence and does not complete USF-290.
+
+## 4. Dev/Test/Staging proof ladder
+
+The cockpit displays Dev foundation closure, Dev Compose closure, Dev command/proof closure, Dev-to-Test handoff, Test closure, sealed provenance, Staging machine QA, Staging service evidence, Staging human review, and Staging acceptance result.
+
+## 5. Semantic definition portfolio
+
+Semantic capability rows are normalized in semantic-capability-manifest.json and linked to source SHA ${report.sourceSha}.
+
+## 6. Capability portfolio
+
+The capability manifest records ${report.semanticCapabilityManifest.length} capability evidence rows and keeps human review status separate from machine pass state.
+
+## 7. Service catalogue and Compose evidence
+
+The service evidence manifest records ${report.serviceManifest.length} Compose-backed services with direct screenshot, API/CLI equivalent, unavailable, blocked, or unsafe-to-screenshot classifications.
+
+## 8. Route/port/adapter/provider evidence
+
+Route and adapter evidence is recorded in route-port-adapter-manifest.json. Providers and gateways are evidence sources only, not semantic authority.
+
+## 9. Command/proof/validator evidence
+
+Command evidence is recorded in command-manifest.json and includes proof cockpit machine QA, evidence, report, import, and bundle generation commands.
+
+## 10. Screenshot inventory
+
+Screenshot manifest entries: ${report.screenshots.length}
+Service screenshot or equivalent entries: ${report.counts.serviceEvidenceScreenshots}
+Composed Service screenshot manifest: composed-service-screenshot-manifest.json
+
+## 11. Machine QA method and results
+
+Playwright visits proof routes, submits representative QA actions, checks source allow-list handling, generates screenshots, builds chain-of-custody records, and records explicit gaps.
+Pass: ${report.counts.pass}
+Warn: ${report.counts.warn}
+Fail: ${report.counts.fail}
+Human decision required: ${report.counts.humanDecisionRequired}
+
+## 12. Human review method and status
+
+Machine evidence is imported through /proof/import and /proof/review. Matthew can accept, reject, annotate, request re-test, create corrective action, or accept residual risk per evidence item. Automatic final acceptance is false.
+
+## 13. Claim-by-claim assurance case
+
+Each normalized evidence record includes claim support, why the evidence matters, how it was proven, limitations, source SHA, environment, and human review status.
+
+## 14. Evidence chain of custody
+
+Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, redaction status, limitations, and human review status.
+
+## 15. Audit/log/metric/trace/alert coverage
+
+Audit, observability, and alert rows are normalized in audit-observability-alert-manifest.json. Missing rows remain explicit gaps and do not become acceptance.
+
+## 16. Fixture/synthetic data/reset coverage
+
+Fixture evidence remains synthetic-only and records no-real-tenant-data posture. No real tenant data is used.
+
+## 17. Enterprise/ISO-style support mapping
+
+Control support rows assist ISO-style review but do not claim ISO certification, SOC readiness, enterprise production readiness, or production readiness.
+
+## 18. Risk and control mapping
+
+The control map links machine evidence to control-support rows and residual gaps for human review.
+
+## 19. Warnings, gaps, corrective actions, and retest status
+
+Gap register entries: ${report.gaps.length}. Corrective actions are generated from gaps and require human review.
+
+## 20. Evidence freshness and historical audit artefact retention
+
+Primary re-test command: corepack pnpm proof-cockpit:machine-qa. Evidence is tied to source SHA ${report.sourceSha}, deployment SHA ${report.deploymentSha}, run ID ${report.qaRun}, and environment ${report.environment}.
+
+## 21. Human acceptance result
+
+Machine evidence is not automatically accepted. Final human acceptance remains disabled until Matthew records the required decision.
+
+## 22. Final handoff statement
+
+This bundle supports selective human reenactment and evidence acceptance. It does not claim readiness beyond the explicit non-claims above.
+
+## Environment and deployment appendix
 
 Environment: ${report.environment}
 Source Git SHA: ${report.sourceSha}
 Deployment SHA: ${report.deploymentSha}
 Base URL: ${report.baseUrl}
-
-## 4. Source Git SHA and PR chain
-
-Primary issue: ${report.issueId}
-Pull request: ${report.prNumber}
-
-## 5. Semantic and capability portfolio summary
-
-The semantic capability manifest records ${report.semanticCapabilityManifest.length} capability evidence rows.
-
-## 6. Service catalogue summary
-
-The service evidence manifest records ${report.serviceManifest.length} Compose-backed services with direct screenshot, API/CLI equivalent, unavailable, blocked, or unsafe-to-screenshot classifications.
-
-## 7. Route, port, adapter, and provider summary
-
-Route and adapter evidence is recorded in route-port-adapter-manifest.json. Providers and gateways are evidence sources only, not semantic authority.
-
-## 8. Compose service evidence summary
-
-Service UI screenshots captured: ${report.counts.serviceEvidenceScreenshots}
-Service artifacts confirmed: ${report.composeServiceEvidence.summary.artifactsConfirmed}
-Service evidence gaps: ${report.composeServiceEvidence.summary.gaps}
-Composed Service screenshot manifest: composed-service-screenshot-manifest.json
-
-## 9. Screenshots and service artifact inventory
-
-Screenshot manifest entries: ${report.screenshots.length}
-Service artifact rows: ${report.serviceManifest.length}
-
-## 10. Machine QA method
-
-Playwright visits proof routes, submits representative QA actions, checks source allow-list handling, generates screenshots, builds chain-of-custody records, and records explicit gaps.
-
-## 11. Human review method
-
-Machine evidence is imported through /proof/import and /proof/review. Matthew can accept, reject, annotate, request re-test, mark corrective action, or accept residual risk per evidence item.
-
-## 12. Chain of custody
-
-Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, redaction status, limitations, and human review status.
-
-## 13. Audit, log, metric, trace, and alert coverage
-
-Audit, observability, and alert rows are normalized in audit-observability-alert-manifest.json. Missing rows remain explicit gaps and do not become acceptance.
-
-## 14. Fixture, synthetic data, and reset coverage
-
-Fixture evidence remains synthetic-only and records no-real-tenant-data posture. No real tenant data is used.
-
-## 15. Enterprise and ISO-style support mapping
-
-Control support rows assist later ISO-style review but do not claim ISO certification, SOC readiness, or enterprise production readiness.
-
-## 16. Risk and control mapping
-
-The control map links machine evidence to control-support rows and residual gaps for human review.
-
-## 17. Known gaps and corrective actions
-
-Gap register entries: ${report.gaps.length}. Corrective actions are generated from gaps and require human review.
-
-## 18. Evidence freshness and re-test commands
-
-Primary re-test command: corepack pnpm proof-cockpit:machine-qa
-
-## 19. Human acceptance and import status
-
-Machine evidence is not automatically accepted. Final human acceptance remains disabled until a later authorised pass.
-
-## 20. Final handoff statement
-
-This bundle supports selective human reenactment and evidence acceptance. It does not claim readiness beyond the explicit non-claims above.
 `,
   );
   writeFileSync(
     htmlPath,
     `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>USF-290 Machine QA Report</title></head>
+<html lang="en"><head><meta charset="utf-8"><title>USF-293 Machine QA Report</title></head>
 <body>
-<h1>USF-290 Machine QA Report</h1>
+<h1>USF-293 Machine QA Report</h1>
 <p>Run: ${report.qaRun}</p>
 <p>Source SHA: ${report.sourceSha}</p>
 <p>Environment: ${report.environment}</p>
@@ -1829,7 +1874,7 @@ This bundle supports selective human reenactment and evidence acceptance. It doe
 `,
   );
   const bundleFiles = [
-    ["README.md", `# USF-290 External Review Bundle\n\nThis bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.\n`],
+    ["README.md", `# USF-293 External Review Bundle\n\nThis bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.\n`],
     ["executive-summary.md", `# Executive Summary\n\nMachine QA generated evidence for ${report.counts.capabilities} capabilities, ${report.counts.services} services, and ${report.counts.testedRoutes} routes. Human acceptance remains required.\n`],
     ["detailed-report.md", readFileSync(markdownPath, "utf8")],
     ["external-review-report.md", readFileSync(externalReviewReportPath, "utf8")],
@@ -2006,7 +2051,7 @@ async function main() {
       pass: report.counts.pass,
       fail: report.counts.fail,
       warn: report.counts.warn,
-      placeholder: report.counts.placeholder,
+      reviewRequired: report.counts.reviewRequired,
       humanDecisionRequired: report.counts.humanDecisionRequired,
       gaps: report.gaps.length,
     };

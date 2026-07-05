@@ -1,0 +1,7 @@
+{
+  "id": "006-artifact-manifest-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-006",
+  "fixture": {
+    "kind": "artifact-manifest-missing"
+  }
+}

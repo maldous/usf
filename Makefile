@@ -6,6 +6,7 @@ SHELL := /bin/bash
 	help commands setup foundation dev-ready test-ready test test-composed test-coverage test-assurance \
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
+	proof-cockpit-validate proof-cockpit-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
@@ -106,6 +107,12 @@ test-readiness-coverage:
 
 test-readiness-selftest:
 	corepack pnpm test-readiness:selftest
+
+proof-cockpit-validate:
+	corepack pnpm proof-cockpit:validate
+
+proof-cockpit-selftest:
+	corepack pnpm proof-cockpit:selftest
 
 public-fqdn-validate:
 	corepack pnpm public-fqdn:validate

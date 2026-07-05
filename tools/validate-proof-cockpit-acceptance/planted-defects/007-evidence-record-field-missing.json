@@ -1,0 +1,7 @@
+{
+  "id": "007-evidence-record-field-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-007",
+  "fixture": {
+    "kind": "evidence-record-field-missing"
+  }
+}

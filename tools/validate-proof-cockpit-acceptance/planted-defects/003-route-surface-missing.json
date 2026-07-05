@@ -1,0 +1,7 @@
+{
+  "id": "003-route-surface-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-003",
+  "fixture": {
+    "kind": "route-surface-missing"
+  }
+}
