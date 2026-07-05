@@ -6,20 +6,24 @@ interface PublicProofOriginModule {
   readonly DEFAULT_FQDN_MAP: Readonly<Record<string, string>>;
   readonly NON_CLAIMS: readonly string[];
   readonly NO_STORE_HEADERS: Readonly<Record<string, string>>;
-  readonly publicEdgePayload: (context: { readonly environment: string; readonly fqdn: string }) => Record<string, unknown>;
+  readonly publicEdgePayload: (context: {
+    readonly environment: string;
+    readonly fqdn: string;
+  }) => Record<string, unknown>;
 }
 
 interface NetlifyPublicProofSharedModule {
   readonly HOST_ENVIRONMENT: Readonly<Record<string, string>>;
   readonly NON_CLAIMS: readonly string[];
   readonly BASE_HEADERS: Readonly<Record<string, string>>;
-  readonly publicEdgePayload: (context: { readonly environment: string; readonly fqdn: string }) => Record<string, unknown>;
+  readonly publicEdgePayload: (context: {
+    readonly environment: string;
+    readonly fqdn: string;
+  }) => Record<string, unknown>;
 }
 
 const publicProofOriginModulePath = "../../../apps/public-proof-origin/src/server.mjs";
-const publicProofOrigin = (await import(
-  publicProofOriginModulePath
-)) as PublicProofOriginModule;
+const publicProofOrigin = (await import(publicProofOriginModulePath)) as PublicProofOriginModule;
 const { createPublicProofOriginServer } = publicProofOrigin;
 
 const netlifyPublicProofSharedModulePath = "../../../netlify/functions/public-proof-shared.js";
