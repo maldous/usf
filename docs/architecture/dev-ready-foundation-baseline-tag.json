@@ -45,7 +45,7 @@
   "baselinePurpose": {
     "purpose": "Immutable dev-ready foundation baseline for post-foundation optimisation and minimalisation.",
     "optimisationBoundary": "Later optimisation may reduce historical and transitional scaffolding only when validators, planted defects, proofs, evidence, semantic confidence, and dev-readiness guidance remain same-or-stronger.",
-    "legacyReactAuthorityBoundary": "../react remains historical semantic and source lineage evidence only, not active future authority."
+    "supersededLineageAuthorityBoundary": "Superseded external source lineage remains provenance evidence only, not active future authority."
   },
   "claims": {
     "devReadyFoundationBaselineTagged": true,
@@ -62,6 +62,6 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity"
+    "no-full-product-readiness"
   ]
 }

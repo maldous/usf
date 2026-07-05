@@ -13,6 +13,6 @@ The machine-readable companion is `docs/architecture/compose-profile-orchestrati
 
 ## Boundaries
 
-The proof is local test evidence only. It does not claim final USF-234 acceptance, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+The proof is local test evidence only. It does not claim final USF-234 acceptance, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.
 
 The enterprise evidence model is coordinator-locked during this work. Required follow-up rows are listed in the JSON under `enterpriseEvidenceModelRowsDeferredByCoordinatorLock` and are not applied here.

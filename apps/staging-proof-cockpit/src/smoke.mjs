@@ -3,16 +3,38 @@ import { startProofCockpitServer } from "./server.mjs";
 const ROUTES = Object.freeze([
   "/proof",
   "/proof/",
+  "/proof/portfolio",
+  "/proof/claims",
+  "/proof/claims/claim-proof-cockpit-portfolio",
+  "/proof/semantic-definitions",
+  "/proof/semantic-definitions/semantic-contract.tenant-identity-record-and-fqdn",
   "/proof/qa",
   "/proof/foundation-substrate-closure",
   "/proof/actions",
+  "/proof/machine-runs",
+  "/proof/machine-runs/latest-machine-qa",
+  "/proof/import",
+  "/proof/import/latest-machine-qa",
+  "/proof/review",
+  "/proof/review/sample-human-review",
+  "/proof/review/gaps",
+  "/proof/review/nonconformities",
+  "/proof/review/corrective-actions",
+  "/proof/export",
+  "/proof/reports",
+  "/proof/reports/final",
   "/proof/capabilities",
   "/proof/capabilities/cap-001-tenant-identity-record-fqdn",
   "/proof/services",
   "/proof/services/postgres",
+  "/proof/screenshots",
+  "/proof/screenshots/screenshot-service-postgres",
+  "/proof/evidence",
   "/proof/sources",
   "/proof/source?path=docs/architecture/dev-readiness-validation-and-handover.md",
   "/proof/source?path=docs/architecture/proof-cockpit-foundation-substrate-closure-import.json",
+  "/proof/source?path=evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+  "/proof/source?path=evidence/proof-evidence/proof-cockpit/final-external-review-report.md",
   "/proof/source?path=docs/architecture/usf-current-state-foundation-closure-report.md",
   "/proof/source?path=docs/architecture/dev-foundation-substrate-closure.json",
   "/proof/scenarios/cap-001-tenant-identity-record-fqdn-happy-path",
@@ -44,6 +66,11 @@ const ROUTES = Object.freeze([
   "/proof/enterprise/policy-governance",
   "/proof/enterprise/iso-control-support",
   "/proof/enterprise/internal-audit",
+  "/proof/enterprise/legal-regulatory",
+  "/proof/enterprise/security-objectives",
+  "/proof/enterprise/document-control",
+  "/proof/enterprise/competence-awareness",
+  "/proof/enterprise/physical-environmental",
   "/proof/enterprise/secure-sdlc",
   "/proof/enterprise/evidence-integrity",
   "/proof/enterprise/nonconformity-corrective-action",
@@ -70,8 +97,8 @@ try {
     if (!text.includes("<!doctype html>")) {
       throw new Error(`proof-cockpit-smoke-non-html-${route}`);
     }
-    if (/<style\b|stylesheet|class="/i.test(text)) {
-      throw new Error(`proof-cockpit-smoke-css-marker-${route}`);
+    if (/<script\b|data-reactroot|__next/i.test(text)) {
+      throw new Error(`proof-cockpit-smoke-script-framework-marker-${route}`);
     }
     results.push({ route, status: response.status });
   }

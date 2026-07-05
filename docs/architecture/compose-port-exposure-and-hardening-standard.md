@@ -127,7 +127,7 @@ readiness.
 
 ## Non-Claims
 
-This standard does not claim full React parity.
+This standard does not claim full product readiness.
 
 This standard does not claim dev-universal readiness.
 

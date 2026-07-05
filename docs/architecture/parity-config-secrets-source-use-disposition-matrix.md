@@ -55,4 +55,4 @@ The historical `../react` config/secrets inventory (`.claude/runs/.../react-conf
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live external Vault/Key Vault/KMS/OpenBao/secret-manager. No live-external-provider. No staging/production/deployment/production-live claim. No SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React functional parity readiness, or USF-133 closure claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live external Vault/Key Vault/KMS/OpenBao/secret-manager. No live-external-provider. No staging/production/deployment/production-live claim. No SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure claim.

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "actions": [],
+  "updatedAt": "2026-07-05T00:00:00.000Z",
+  "finalAcceptanceClaimed": false,
+  "nonClaims": [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso-certification",
+    "no-enterprise-production-readiness",
+    "no-real-user-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-product-readiness",
+    "no-usf-290-completion"
+  ]
+}

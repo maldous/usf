@@ -463,7 +463,7 @@ def run_checks(F, state=None):
         "stagingReadinessClaim: false",
         "socReadinessClaim: false",
         "fullDevReadinessClaim: false",
-        "fullReactParityClaim: false",
+        "fullProductReadinessClaim: false",
         "usf133ClosureClaim: false",
     ):
         if token not in proof:
@@ -522,7 +522,7 @@ def run_checks(F, state=None):
             "socReadinessClaim",
             "iso27001CertificationClaim",
             "fullDevReadinessClaim",
-            "fullReactParityClaim",
+            "fullProductReadinessClaim",
             "usf133ClosureClaim",
         ):
             if claims.get(key) is not False:
@@ -555,7 +555,7 @@ def run_checks(F, state=None):
         "socReadinessClaim: true",
         "iso27001CertificationClaim: true",
         "fullDevReadinessClaim: true",
-        "fullReactParityClaim: true",
+        "fullProductReadinessClaim: true",
         "usf133ClosureClaim: true",
         "liveProviderReadinessClaim\": true",
         "deliverabilityReadinessClaim\": true",
@@ -564,7 +564,7 @@ def run_checks(F, state=None):
         "socReadinessClaim\": true",
         "iso27001CertificationClaim\": true",
         "fullDevReadinessClaim\": true",
-        "fullReactParityClaim\": true",
+        "fullProductReadinessClaim\": true",
         "usf133ClosureClaim\": true",
     )
     overclaim_text = proof + "\n" + files.get(DEPTH_MATRIX_PATH, "")

@@ -8,7 +8,7 @@
 | **Evidence report** | `docs/architecture/foundation-optimisation-evidence.json` |
 | **Status**          | Current-state routing index for future developer and AI work    |
 
-This index is the current-state routing layer created after the `v2-foundation` baseline. It keeps historical foundation and React-parity evidence available for lineage, but directs future developer and AI-agent work toward the current semantic corpus, accepted decisions, validators, proofs, evidence, and handover artefacts.
+This index is the current-state routing layer created after the `v2-foundation` baseline. It keeps superseded parity evidence available for lineage, but directs future developer and AI-agent work toward the current semantic corpus, accepted decisions, validators, proofs, evidence, and handover artefacts.
 
 This document does not remove historical evidence, change runtime behaviour, weaken validators, or create a readiness claim beyond the bounded dev-readiness baseline already evidenced by USF-226 through USF-228.
 
@@ -36,9 +36,9 @@ The following artefacts remain retained evidence, but are not future active auth
 
 | Artefact group | Current posture | Future-use rule |
 | -------------- | --------------- | --------------- |
-| Historical React source and references | Historical lineage and source evidence | Inspect only when a current issue or authority artefact requires source lineage; do not copy or mirror runtime/application paths. |
+| Superseded external-lineage source and references | Historical lineage and source evidence | Inspect only when a current issue or authority artefact requires source lineage; do not copy or mirror runtime/application paths. |
 | Source-use and parity matrices | Historical-lineage evidence | Use for audit traceability and source disposition, not as a direct implementation recipe. |
-| Complete React-to-USF parity reviews | Historical-lineage evidence | Use to understand completed reconciliation; do not infer full React product parity. |
+| Complete React-to-USF parity reviews | Historical-lineage evidence | Use to understand completed reconciliation; do not infer full product readiness. |
 | USF-133 closure-tier and lane orchestration artefacts | Transitional scaffolding and audit evidence | Use for audit trail only; do not treat wrapper completion as source issue completion or future readiness authority. |
 | Bootstrap mapping and bootstrap-readiness artefacts | Lineage and foundation ancestry | Use to preserve ancestry and source coverage, not to drive future implementation naming or readiness claims. |
 | Generated Compose outputs | Generated projections | Regenerate from the service catalogue and generator; do not treat generated files as semantic authority. |
@@ -51,7 +51,7 @@ Future changes should follow this current-state path:
 
 1. Read the current agent directive and foundational artefacts from disk.
 2. Read the relevant current semantic instance, schema, ADR, validator, proof manifest, and enterprise evidence row.
-3. Use historical React, source-use, parity, closure, and bootstrap artefacts only as lineage or audit inputs when the current issue explicitly needs them.
+3. Use superseded external-lineage, source-use, parity, closure, and bootstrap artefacts only as lineage or audit inputs when the current issue explicitly needs them.
 4. Update semantic contracts, proofs, validators, planted defects, and enterprise evidence together when behaviour or assurance posture changes.
 5. Run targeted validation during development and the issue-required full gate before PR ready state.
 6. Record PR, merge SHA, validation, Linear acceptance mapping, and non-claims before Done.
@@ -71,4 +71,4 @@ USF-230 preserves or improves assurance by making the active path clearer withou
 
 ## Non-Claims
 
-This current-state index does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+This current-state index does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

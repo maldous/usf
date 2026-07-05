@@ -1,0 +1,556 @@
+{
+  "gaps": [
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "postgres",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "keycloak-db",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "keycloak",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "nats",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "temporal",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "minio",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "openbao",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "otel-collector",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "prometheus",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "grafana",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "loki",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "tempo",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "mailpit",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "webhook-sink",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "redis",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "meilisearch",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "clickhouse",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "pgadmin",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "sonar-postgres",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "sonar-oidc-plugin",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "sonarqube",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "mock-oidc",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "localstack",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "wiremock",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "alertmanager",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "alloy",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "windmill-postgres",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "windmill-redis",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "windmill",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "windmill-worker",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "temporal-postgres",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "temporal-ui",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "pgbackrest",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "clamav",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "sentry",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "public-proof-origin",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "caddy",
+      "message": "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
+      "gapType": "service-auth-unavailable",
+      "classification": "service-auth-unavailable"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "platform-api",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "compose-service-evidence",
+      "target": "react-app",
+      "message": "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
+      "gapType": "missing-compose-service-screenshot",
+      "classification": "missing-compose-service-screenshot"
+    },
+    {
+      "status": "warn",
+      "category": "matrix",
+      "target": "/proof/alerts",
+      "message": "Alert page does not yet expose alert name/condition as dedicated fields.",
+      "gapType": "missing-alert",
+      "classification": "missing-alert"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "isms-scope",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "risk-register",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "statement-of-applicability",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "assets",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "suppliers",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "access-review",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "secrets-crypto",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "audit-retention",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "backup-dr",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "change-release",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "supply-chain",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "privacy-data-protection",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "tenant-isolation",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "resilience-capacity",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "observability-runbooks",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "policy-governance",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "iso-control-support",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "internal-audit",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "legal-regulatory",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "security-objectives",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "document-control",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "competence-awareness",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "physical-environmental",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "secure-sdlc",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "evidence-integrity",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "nonconformity-corrective-action",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "management-review",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "warn",
+      "category": "enterprise",
+      "target": "single-operator-risk",
+      "message": "Enterprise page missing Evidence status.",
+      "gapType": "missing-enterprise-control",
+      "classification": "missing-enterprise-control"
+    },
+    {
+      "status": "human-decision-required",
+      "category": "signoff",
+      "target": "USF-293",
+      "message": "Machine QA can produce evidence, but Matthew must accept or reject it.",
+      "gapType": "human-decision-required",
+      "classification": "human-decision-required"
+    }
+  ]
+}

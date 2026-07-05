@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:runtime-proof",
   "title": "USF Runtime Proof Manifest Schema",
-  "description": "Draft JSON Schema for bounded runtime proof manifests. Runtime proof manifests record executable API and worker proof modes, service-catalogue linkage, proof commands, teardown obligations, evidence boundaries, deferred boundaries, and explicit non-claims. They support runtime-proof evidence organisation without claiming staging, production, live-provider, SOC, ISO/IEC 27001 certification, full dev readiness, or full React parity.",
+  "description": "Draft JSON Schema for bounded runtime proof manifests. Runtime proof manifests record executable API and worker proof modes, service-catalogue linkage, proof commands, teardown obligations, evidence boundaries, deferred boundaries, and explicit non-claims. They support runtime-proof evidence organisation without claiming staging, production, live-provider, SOC, ISO/IEC 27001 certification, full dev readiness, or full product readiness.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -75,7 +75,7 @@
         "soc-readiness",
         "iso27001-certification",
         "full-dev-readiness",
-        "full-react-parity",
+        "full-product-readiness",
         "test-readiness",
         "api-runtime-search-binding-readiness",
         "worker-runtime-search-binding-readiness",

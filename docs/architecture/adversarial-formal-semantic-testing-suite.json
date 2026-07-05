@@ -3,7 +3,10 @@
   "title": "Adversarial Formal Semantic Testing Suite",
   "issueId": "USF-257",
   "parentIssueId": "USF-234",
-  "dependsOnIssueIds": ["USF-259", "USF-252"],
+  "dependsOnIssueIds": [
+    "USF-259",
+    "USF-252"
+  ],
   "lifecycleState": "issue-scoped-draft",
   "authorityBoundary": "This issue-scoped suite records adversarial formal-style semantic test coverage only. It does not modify shared validators, manifests, schemas, Compose, package commands, Make targets, enterprise evidence rows, or implementation/runtime code. It is not formal verification and does not claim mathematical proof.",
   "sourceAuthorities": {
@@ -29,7 +32,11 @@
   "issueOwnership": {
     "obligationClassId": "adversarial-semantic-testing",
     "ownerIssueId": "USF-257",
-    "blockingIssues": ["USF-247", "USF-260", "USF-234"],
+    "blockingIssues": [
+      "USF-247",
+      "USF-260",
+      "USF-234"
+    ],
     "linearAuthorityBoundary": "Linear tracks work only. Repository artefacts and validators define USF truth."
   },
   "scope": {
@@ -165,35 +172,53 @@
   "coverageByAdversarialClass": [
     {
       "adversarialClass": "contradiction",
-      "caseIds": ["semantic-facet-contradiction"]
+      "caseIds": [
+        "semantic-facet-contradiction"
+      ]
     },
     {
       "adversarialClass": "ambiguity",
-      "caseIds": ["duplicate-service-id-conflicting-owner", "same-behaviour-different-name"]
+      "caseIds": [
+        "duplicate-service-id-conflicting-owner",
+        "same-behaviour-different-name"
+      ]
     },
     {
       "adversarialClass": "incompleteness",
-      "caseIds": ["complete-facet-without-authority-link"]
+      "caseIds": [
+        "complete-facet-without-authority-link"
+      ]
     },
     {
       "adversarialClass": "unsafe-equivalence",
-      "caseIds": ["same-name-changed-behaviour"]
+      "caseIds": [
+        "same-name-changed-behaviour"
+      ]
     },
     {
       "adversarialClass": "authority-inversion",
-      "caseIds": ["deferred-work-marked-complete-without-proof", "non-claim-removed"]
+      "caseIds": [
+        "deferred-work-marked-complete-without-proof",
+        "non-claim-removed"
+      ]
     },
     {
       "adversarialClass": "generated-authority-inversion",
-      "caseIds": ["generated-compose-treated-as-authority"]
+      "caseIds": [
+        "generated-compose-treated-as-authority"
+      ]
     },
     {
       "adversarialClass": "stale-evidence-pass",
-      "caseIds": ["stale-evidence-pass-accepted"]
+      "caseIds": [
+        "stale-evidence-pass-accepted"
+      ]
     },
     {
       "adversarialClass": "in-memory-substitute-overclaim",
-      "caseIds": ["in-memory-service-substitute-overclaim"]
+      "caseIds": [
+        "in-memory-service-substitute-overclaim"
+      ]
     },
     {
       "adversarialClass": "future-ai-drift",
@@ -204,7 +229,9 @@
       ]
     }
   ],
-  "allowedClaims": ["issue-owned-adversarial-suite-defined"],
+  "allowedClaims": [
+    "issue-owned-adversarial-suite-defined"
+  ],
   "nonClaims": [
     "formal-verification",
     "mathematical-proof",
@@ -219,8 +246,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "final-usf-234-acceptance"
   ]
 }

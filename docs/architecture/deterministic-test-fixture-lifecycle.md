@@ -43,4 +43,4 @@ raw SDK errors, provider payloads, or production data are used or retained.
 Non-claims preserved: final test readiness, staging readiness, production
 readiness, deployment readiness, live-provider readiness, SOC readiness, ISO
 certification, enterprise production readiness, product UI readiness, browser
-E2E readiness, and full React product parity.
+E2E readiness, and full product readiness.

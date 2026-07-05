@@ -1,0 +1,7 @@
+{
+  "id": "017-missing-warning-fixed-artifact",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "missing-warning-fixed-artifact"
+  }
+}

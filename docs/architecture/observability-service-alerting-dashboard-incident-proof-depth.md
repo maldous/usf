@@ -43,4 +43,4 @@ For USF-218, each row is machine-checkable as bounded-disposition-recorded with 
 
 ## Non-Claims
 
-This evidence does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full React parity, observability service readiness, alerting readiness, dashboard readiness, incident response readiness, live monitoring readiness, or USF-133 closure.
+This evidence does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full product readiness, observability service readiness, alerting readiness, dashboard readiness, incident response readiness, live monitoring readiness, or USF-133 closure.

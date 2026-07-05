@@ -631,7 +631,7 @@
       ],
       "fixtureSeedId": "fixture.alertmanager",
       "evidenceId": "evidence.usf-239.service.alertmanager",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -697,7 +697,7 @@
       ],
       "fixtureSeedId": "fixture.alloy",
       "evidenceId": "evidence.usf-239.service.alloy",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -765,7 +765,7 @@
       ],
       "fixtureSeedId": "fixture.caddy",
       "evidenceId": "evidence.usf-239.service.caddy",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -834,7 +834,7 @@
       ],
       "fixtureSeedId": "fixture.clamav",
       "evidenceId": "evidence.usf-239.service.clamav",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -903,7 +903,7 @@
       ],
       "fixtureSeedId": "fixture.clickhouse",
       "evidenceId": "evidence.usf-239.service.clickhouse",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -969,7 +969,7 @@
       ],
       "fixtureSeedId": "fixture.grafana",
       "evidenceId": "evidence.usf-239.service.grafana",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1035,7 +1035,7 @@
       ],
       "fixtureSeedId": "fixture.keycloak",
       "evidenceId": "evidence.usf-239.service.keycloak",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1104,7 +1104,7 @@
       ],
       "fixtureSeedId": "fixture.keycloak-db",
       "evidenceId": "evidence.usf-239.service.keycloak-db",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1173,7 +1173,7 @@
       ],
       "fixtureSeedId": "fixture.localstack",
       "evidenceId": "evidence.usf-239.service.localstack",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1239,7 +1239,7 @@
       ],
       "fixtureSeedId": "fixture.loki",
       "evidenceId": "evidence.usf-239.service.loki",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1303,7 +1303,7 @@
       ],
       "fixtureSeedId": "fixture.mailpit",
       "evidenceId": "evidence.usf-239.service.mailpit",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1372,7 +1372,7 @@
       ],
       "fixtureSeedId": "fixture.meilisearch",
       "evidenceId": "evidence.usf-239.service.meilisearch",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1439,7 +1439,7 @@
       ],
       "fixtureSeedId": "fixture.minio",
       "evidenceId": "evidence.usf-239.service.minio",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1498,7 +1498,7 @@
       ],
       "fixtureSeedId": "not-applicable",
       "evidenceId": "evidence.usf-239.service.mock-oidc",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "historical or out-of-scope row retained for non-test disposition only"
     },
@@ -1562,7 +1562,7 @@
       ],
       "fixtureSeedId": "fixture.nats",
       "evidenceId": "evidence.usf-239.service.nats",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1631,7 +1631,7 @@
       ],
       "fixtureSeedId": "fixture.openbao",
       "evidenceId": "evidence.usf-239.service.openbao",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1695,7 +1695,7 @@
       ],
       "fixtureSeedId": "fixture.otel-collector",
       "evidenceId": "evidence.usf-239.service.otel-collector",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1763,7 +1763,7 @@
       ],
       "fixtureSeedId": "fixture.pgadmin",
       "evidenceId": "evidence.usf-239.service.pgadmin",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1832,7 +1832,7 @@
       ],
       "fixtureSeedId": "fixture.pgbackrest",
       "evidenceId": "evidence.usf-239.service.pgbackrest",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -1891,7 +1891,7 @@
       ],
       "fixtureSeedId": "not-applicable",
       "evidenceId": "evidence.usf-239.service.platform-api",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "historical or out-of-scope row retained for non-test disposition only"
     },
@@ -1960,7 +1960,7 @@
       ],
       "fixtureSeedId": "fixture.postgres",
       "evidenceId": "evidence.usf-239.service.postgres",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2026,7 +2026,7 @@
       ],
       "fixtureSeedId": "fixture.prometheus",
       "evidenceId": "evidence.usf-239.service.prometheus",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2085,7 +2085,7 @@
       ],
       "fixtureSeedId": "not-applicable",
       "evidenceId": "evidence.usf-266.service.public-proof-origin",
-      "nonClaimBoundary": "This row is a post-Test public FQDN proof-origin disposition only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row is a post-Test public FQDN proof-origin disposition only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "post-Test public FQDN proof-origin row retained as non-test disposition; USF-263 and USF-266 own public proof evidence outside Test readiness."
     },
@@ -2144,7 +2144,7 @@
       ],
       "fixtureSeedId": "not-applicable",
       "evidenceId": "evidence.usf-239.service.react-app",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "historical or out-of-scope row retained for non-test disposition only"
     },
@@ -2213,7 +2213,7 @@
       ],
       "fixtureSeedId": "fixture.redis",
       "evidenceId": "evidence.usf-239.service.redis",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2274,7 +2274,7 @@
       ],
       "fixtureSeedId": "not-applicable",
       "evidenceId": "evidence.usf-239.service.sentry",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "required service is catalogue-only, deferred, or not generated in test Compose and must be explicitly handled by its owner issue"
     },
@@ -2336,7 +2336,7 @@
       ],
       "fixtureSeedId": "not-applicable",
       "evidenceId": "evidence.usf-239.service.sonar-oidc-plugin",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "required service is catalogue-only, deferred, or not generated in test Compose and must be explicitly handled by its owner issue"
     },
@@ -2405,7 +2405,7 @@
       ],
       "fixtureSeedId": "fixture.sonar-postgres",
       "evidenceId": "evidence.usf-239.service.sonar-postgres",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2473,7 +2473,7 @@
       ],
       "fixtureSeedId": "fixture.sonarqube",
       "evidenceId": "evidence.usf-239.service.sonarqube",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2539,7 +2539,7 @@
       ],
       "fixtureSeedId": "fixture.tempo",
       "evidenceId": "evidence.usf-239.service.tempo",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2603,7 +2603,7 @@
       ],
       "fixtureSeedId": "fixture.temporal",
       "evidenceId": "evidence.usf-239.service.temporal",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2672,7 +2672,7 @@
       ],
       "fixtureSeedId": "fixture.temporal-postgres",
       "evidenceId": "evidence.usf-239.service.temporal-postgres",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2740,7 +2740,7 @@
       ],
       "fixtureSeedId": "fixture.temporal-ui",
       "evidenceId": "evidence.usf-239.service.temporal-ui",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2804,7 +2804,7 @@
       ],
       "fixtureSeedId": "fixture.webhook-sink",
       "evidenceId": "evidence.usf-239.service.webhook-sink",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2872,7 +2872,7 @@
       ],
       "fixtureSeedId": "fixture.windmill",
       "evidenceId": "evidence.usf-239.service.windmill",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -2941,7 +2941,7 @@
       ],
       "fixtureSeedId": "fixture.windmill-postgres",
       "evidenceId": "evidence.usf-239.service.windmill-postgres",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -3010,7 +3010,7 @@
       ],
       "fixtureSeedId": "fixture.windmill-redis",
       "evidenceId": "evidence.usf-239.service.windmill-redis",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -3076,7 +3076,7 @@
       ],
       "fixtureSeedId": "fixture.windmill-worker",
       "evidenceId": "evidence.usf-239.service.windmill-worker",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     },
@@ -3142,7 +3142,7 @@
       ],
       "fixtureSeedId": "fixture.wiremock",
       "evidenceId": "evidence.usf-239.service.wiremock",
-      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness.",
+      "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": false,
       "boundedDisposition": null
     }
@@ -6172,8 +6172,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ],
   "expandedCategoryObligations": [
     {
@@ -6273,8 +6272,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -6374,8 +6372,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -6475,8 +6472,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -6576,8 +6572,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -6677,8 +6672,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     },
     {
@@ -6778,8 +6772,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
-        "full-react-parity-readiness"
+        "full-product-readiness"
       ]
     }
   ]

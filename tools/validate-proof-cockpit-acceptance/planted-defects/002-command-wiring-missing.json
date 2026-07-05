@@ -1,0 +1,7 @@
+{
+  "id": "002-command-wiring-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-002",
+  "fixture": {
+    "kind": "command-wiring-missing"
+  }
+}

@@ -3,7 +3,7 @@
 
 Governance tooling only. It creates no implementation/runtime files, imports no
 React source, and publishes no evidence. It fails closed on the parity-matrix
-invariants that keep a full React functional parity foundation-readiness claim
+invariants that keep a foundation-readiness claim
 honest: the machine-readable matrix
 (docs/architecture/react-parity-scope-classification-matrix.json) must exist and
 match its shape; every status must be canonical; every partial/missing/deferred/
@@ -173,7 +173,7 @@ COMPOSE_NON_EQUIVALENT_DISPOSITIONS = {
     "out-of-foundation-scope",
 }
 PROHIBITED_READINESS_CLAIMS = {
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "full-dev-readiness",
     "test-readiness",
     "staging-readiness",

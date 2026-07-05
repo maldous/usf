@@ -102,4 +102,4 @@ The manifest supports future enterprise evidence organisation for:
 
 This is support for future evidence organisation only. It is not ISO/IEC 27001
 certification, SOC readiness, enterprise production readiness, live-provider readiness,
-staging readiness, production readiness, full dev readiness, or full React parity.
+staging readiness, production readiness, full dev readiness, or full product readiness.

@@ -40,11 +40,11 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
-    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full product readiness, or USF-133 closure claim is made.",
     "Hermetic jobs/workflows proof does not prove live Temporal, live Windmill, external queue, scheduler, worker cluster, operator automation readiness, or production automation readiness.",
     "Local workflow-control evidence does not prove API/HTTP job surfaces, operator console UI, live metrics/alerting, production incident response, or environment promotion.",
     "Temporal and Windmill remain provider/substitute boundaries behind USF ports; no capability imports provider SDKs."

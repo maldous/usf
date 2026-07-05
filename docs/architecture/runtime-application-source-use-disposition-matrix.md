@@ -13,7 +13,7 @@ runtime proof. It is a source-use gate for validator coverage. It does not defin
 runtime semantics beyond the committed USF artefacts and validators.
 
 No React runtime/application code is copied. No React path is mirrored. No full dev
-readiness, full React parity, test readiness, staging readiness, production readiness,
+readiness, full product readiness, test readiness, staging readiness, production readiness,
 live-provider readiness, SOC readiness, or ISO/IEC 27001 certification is claimed.
 
 ## Implementation Target Files

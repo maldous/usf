@@ -128,7 +128,7 @@ USF145_PROHIBITED_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure",
 }
 PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented", "implemented-bounded"}
@@ -334,7 +334,7 @@ def check_usf145_enterprise_depth(F, state, proof):
         "socReadinessClaim: false",
         "iso27001CertificationClaim: false",
         "fullDevReadinessClaim: false",
-        "fullReactParityClaim: false",
+        "fullProductReadinessClaim: false",
         "usf133ClosureClaim: false",
     ):
         if token not in proof:

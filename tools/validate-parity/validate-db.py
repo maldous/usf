@@ -94,7 +94,7 @@ USF139_PROHIBITED_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure",
 }
 PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented-bounded"}

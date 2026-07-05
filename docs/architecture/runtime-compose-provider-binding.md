@@ -72,4 +72,4 @@ support fields only.
 
 It does not claim ISO/IEC 27001 certification, SOC readiness, enterprise production readiness,
 staging readiness, production readiness, live-provider readiness, full dev readiness, test
-readiness, or full React parity.
+readiness, or full product readiness.

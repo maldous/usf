@@ -1572,7 +1572,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ],
   "plantedDefectRequirements": [
@@ -1610,7 +1610,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1637,7 +1637,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1664,7 +1664,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1691,7 +1691,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     }
@@ -1726,7 +1726,7 @@
       "soc-readiness",
       "iso27001-certification",
       "enterprise-production-readiness",
-      "full-react-parity-readiness",
+      "full-product-readiness",
       "usf-133-closure"
     ]
   },
@@ -1750,7 +1750,7 @@
       "soc-readiness",
       "iso27001-certification",
       "enterprise-production-readiness",
-      "full-react-parity-readiness",
+      "full-product-readiness",
       "usf-133-closure"
     ]
   },
@@ -1794,7 +1794,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1837,7 +1837,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1880,7 +1880,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1923,7 +1923,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -1932,7 +1932,7 @@
       "targetType": "service",
       "targetId": "sonar-postgres",
       "disposition": "profile-gated-bounded-proof",
-      "reason": "USF-204 records bounded local Compose SonarQube proof that exercises SonarQube with sonar-postgres backing storage for synthetic data only. This is not test, staging, production, live-provider, SOC, ISO, enterprise production, full dev readiness, full React parity, or USF-133 closure evidence.",
+      "reason": "USF-204 records bounded local Compose SonarQube proof that exercises SonarQube with sonar-postgres backing storage for synthetic data only. This is not test, staging, production, live-provider, SOC, ISO, enterprise production, full dev readiness, full product readiness, or USF-133 closure evidence.",
       "owner": "platform-assurance-foundation",
       "riskOwner": "platform-assurance-risk-owner",
       "controlOwner": "platform-assurance-control-owner",
@@ -1966,7 +1966,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2009,7 +2009,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2052,7 +2052,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2087,7 +2087,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2130,7 +2130,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2171,7 +2171,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2214,7 +2214,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2257,7 +2257,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2300,7 +2300,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2343,7 +2343,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2386,7 +2386,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2429,7 +2429,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2472,7 +2472,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2515,7 +2515,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2558,7 +2558,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2601,7 +2601,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2644,7 +2644,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2687,7 +2687,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2722,7 +2722,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2757,7 +2757,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2800,7 +2800,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2843,7 +2843,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2886,7 +2886,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2929,7 +2929,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -2968,7 +2968,7 @@
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "v2-proof-tag-authorization",
         "usf-133-closure",
         "full-dev-readiness",
@@ -2993,7 +2993,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3013,7 +3013,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3033,7 +3033,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3053,7 +3053,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3073,7 +3073,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3093,7 +3093,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3113,7 +3113,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3133,7 +3133,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3153,7 +3153,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3173,7 +3173,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     }
@@ -3195,7 +3195,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3215,7 +3215,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3235,7 +3235,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3255,7 +3255,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3275,7 +3275,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3295,7 +3295,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3315,7 +3315,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3335,7 +3335,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3355,7 +3355,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3375,7 +3375,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     }
@@ -3397,7 +3397,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3417,7 +3417,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3437,7 +3437,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3457,7 +3457,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3477,7 +3477,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3497,7 +3497,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3517,7 +3517,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3537,7 +3537,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3557,7 +3557,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3577,7 +3577,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3597,7 +3597,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3617,7 +3617,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     }
@@ -3644,7 +3644,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3669,7 +3669,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3694,7 +3694,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3719,7 +3719,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3744,7 +3744,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3769,7 +3769,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3794,7 +3794,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3819,7 +3819,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3844,7 +3844,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3869,7 +3869,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3894,7 +3894,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -3919,7 +3919,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     }
@@ -3955,7 +3955,7 @@
       "SOC readiness",
       "ISO/IEC 27001 certification",
       "enterprise production readiness",
-      "full React parity",
+      "full product readiness",
       "OWASP ASVS conformance",
       "NIST CSF compliance",
       "NIST SSDF conformance"
@@ -3971,7 +3971,7 @@
       "soc-readiness",
       "iso27001-certification",
       "enterprise-production-readiness",
-      "full-react-parity-readiness",
+      "full-product-readiness",
       "asvs-conformance",
       "nist-csf-compliance",
       "nist-ssdf-conformance"

@@ -7,7 +7,7 @@ code, does not mirror React paths, and does not claim public exposure, gateway
 clickthrough readiness, service console login readiness, live-provider
 readiness, test readiness, staging readiness, production readiness, SOC
 readiness, ISO/IEC 27001 certification, enterprise production readiness, full
-dev readiness, full React parity, or USF-133 closure.
+dev readiness, full product readiness, or USF-133 closure.
 
 Linear source issues: USF-169 and USF-221.
 
@@ -38,5 +38,5 @@ console login, gateway route proof, clickthrough UX, executed periodic access
 reviews, deprovisioning workflow evidence, public exposure, LAN exposure, test
 readiness, staging readiness, production readiness, deployment readiness,
 live-provider readiness, SOC readiness, ISO certification, enterprise
-production readiness, full dev readiness, full React parity, or USF-133
+production readiness, full dev readiness, full product readiness, or USF-133
 closure.

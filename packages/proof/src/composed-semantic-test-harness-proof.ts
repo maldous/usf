@@ -157,7 +157,7 @@ export async function runComposedSemanticTestHarnessProof(): Promise<ComposedSem
       "enterprise-production-readiness",
       "product-ui-readiness",
       "browser-e2e-readiness",
-      "full-react-product-parity",
+      "full-product-readiness",
     ],
   };
 }

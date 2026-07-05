@@ -39,7 +39,7 @@ export class InMemoryTelemetryCollector implements ObservabilitySink {
     this.recordOperationalEvent({
       eventName: input.signal,
       severity: "info",
-      reasonCode: "legacy-observability-record",
+      reasonCode: "superseded-observability-record",
       safeSummary: input.signal,
       attributes: input.attributes,
       context: {
@@ -411,7 +411,7 @@ const NON_CLAIMS = Object.freeze([
   "iso27001-certification-not-claimed",
   "enterprise-production-readiness-not-claimed",
   "full-dev-readiness-not-claimed",
-  "full-react-parity-not-claimed",
+  "full-product-readiness-not-claimed",
   "usf-133-closure-not-claimed",
 ] as const);
 

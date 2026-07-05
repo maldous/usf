@@ -446,7 +446,7 @@
       "effectivenessState": "implemented-bounded",
       "implementationStatus": "implemented-bounded-and-explicitly-reclassified",
       "riskStatement": "Aggregating many composed-provider proofs could imply universal dev readiness or USF-133 closure.",
-      "threatFailureScenario": "All local provider proof commands passing is treated as full dev readiness, test readiness, or full React parity.",
+      "threatFailureScenario": "All local provider proof commands passing is treated as full dev readiness, test readiness, or full product readiness.",
       "affectedAssetService": "USF-133 provider proof set",
       "owner": "platform-provider-foundation",
       "riskOwner": "platform-provider-risk-owner",
@@ -516,7 +516,7 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "usf-133-closure"
   ],
   "nonClaims": [
@@ -529,7 +529,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ],
   "statusIntegrity": {

@@ -41,5 +41,5 @@ This matrix authorises target-file source-disposition coverage for bounded
 test-readiness evidence only. It does not claim final USF-234 test readiness,
 staging readiness, production readiness, deployment readiness, live-provider
 readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production
-readiness, product UI readiness, browser E2E readiness, full React product
+readiness, product UI readiness, browser E2E readiness, full product readiness product
 parity, or USF-234 closure.

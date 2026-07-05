@@ -1,0 +1,7 @@
+{
+  "id": "008-human-acceptance-automatic",
+  "expectedRule": "USF-PROOF-COCKPIT-008",
+  "fixture": {
+    "kind": "human-acceptance-automatic"
+  }
+}

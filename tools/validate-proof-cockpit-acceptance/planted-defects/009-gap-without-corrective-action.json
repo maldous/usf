@@ -1,0 +1,7 @@
+{
+  "id": "009-gap-without-corrective-action",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "gap-without-corrective-action"
+  }
+}

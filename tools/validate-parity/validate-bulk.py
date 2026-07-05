@@ -476,7 +476,7 @@ def run_checks(F, state=None):
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(false_claim) is not False:

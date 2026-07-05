@@ -20,4 +20,4 @@ The fixture lifecycle proof also reads the corpus during `corepack pnpm test-rea
 
 All fixture rows are synthetic and value-free. The corpus does not permit real tenant data, real user data, production-derived data, real secrets, private local state, live provider payloads, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, or provider payloads.
 
-The corpus does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or final USF-234 acceptance.
+The corpus does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or final USF-234 acceptance.

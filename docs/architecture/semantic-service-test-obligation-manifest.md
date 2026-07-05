@@ -6,7 +6,7 @@ This document describes the machine-readable test obligation manifest in docs/ar
 
 USF-259 expands this manifest so USF-253 through USF-258 are repository-enforced prerequisites before USF-247, USF-260, or final USF-234 acceptance can close. USF-259 does not implement those suites. It records owner, risk owner, control owner, review date, promotion impact, command mapping, enterprise evidence refs, deferred boundary, and non-claims for each expanded category.
 
-The manifest is a gate, not a final readiness claim. It does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or USF-234 closure.
+The manifest is a gate, not a final readiness claim. It does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or USF-234 closure.
 
 ## Coverage Summary
 
@@ -68,5 +68,5 @@ Every service-backed test-readiness claim must use the canonical generated test 
 - enterprise-production-readiness
 - product-ui-readiness
 - browser-e2e-readiness
-- full-react-product-parity
-- full-react-parity-readiness
+- full-product-readiness
+- full-product-readiness

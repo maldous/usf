@@ -206,7 +206,7 @@
       "proposedId": "soa-usf-249-authn-authz-tenant-role-permission-suite",
       "evidencePath": "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
       "ownerIssueId": "USF-249",
-      "nonClaimBoundary": "Tracks authn authz tenant role permission test evidence only; does not define SOC, ISO, production, live-provider, staging, deployment, product UI, browser E2E, full React parity, final test readiness, or USF-234 acceptance."
+      "nonClaimBoundary": "Tracks authn authz tenant role permission test evidence only; does not define SOC, ISO, production, live-provider, staging, deployment, product UI, browser E2E, full product readiness, final test readiness, or USF-234 acceptance."
     },
     {
       "section": "evidenceRegister",
@@ -254,8 +254,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "USF-234-acceptance"
   ]
 }

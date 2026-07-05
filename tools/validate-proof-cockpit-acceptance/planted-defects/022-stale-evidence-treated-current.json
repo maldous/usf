@@ -1,0 +1,7 @@
+{
+  "id": "022-stale-evidence-treated-current",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "stale-evidence-treated-current"
+  }
+}

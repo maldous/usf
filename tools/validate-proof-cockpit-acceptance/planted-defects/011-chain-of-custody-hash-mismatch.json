@@ -1,0 +1,7 @@
+{
+  "id": "011-chain-of-custody-hash-mismatch",
+  "expectedRule": "USF-PROOF-COCKPIT-011",
+  "fixture": {
+    "kind": "chain-of-custody-hash-mismatch"
+  }
+}

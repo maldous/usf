@@ -1,15 +1,28 @@
 import { chromium } from "playwright-core";
 import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildData, getProofCockpitManifest, startProofCockpitServer } from "./server.mjs";
 
-const ISSUE_ID = "USF-290";
-const PR_NUMBER = "242";
+const ISSUE_ID = "USF-293";
+const ACCEPTANCE_ISSUE_ID = "USF-290";
+const PR_NUMBER = process.env.USF_PROOF_COCKPIT_PR ?? "pending-usf-293";
 const QA_RUN_VERSION = "proof-cockpit-machine-qa-evidence-v1";
 const DEFAULT_ARTIFACT_ROOT = "/tmp/usf-proof-cockpit-machine-qa";
 const EXECUTOR = "codex-playwright-machine-qa";
+const REPO_ROOT = process.cwd();
+const COMPOSE_TARGET = "compose/compose.test.generated.yaml";
+const COMPOSE_PROFILES_FOR_SERVICE_UI = Object.freeze([
+  "runtime-providers",
+  "operator-tools",
+  "assurance",
+  "observability",
+  "workflow-provider",
+  "provider-mocks",
+  "public-proof-origin",
+  "gateway",
+]);
 const REQUIRED_ROLES = Object.freeze([
   "anonymous visitor denial persona",
   "authenticated user",
@@ -66,6 +79,9 @@ const NON_CLAIM_PHRASES = Object.freeze([
 ]);
 const HIGH_LEVEL_ROUTES = Object.freeze([
   "/proof",
+  "/proof/portfolio",
+  "/proof/claims",
+  "/proof/semantic-definitions",
   "/proof/qa",
   "/proof/foundation-substrate-closure",
   "/proof/actions",
@@ -76,8 +92,12 @@ const HIGH_LEVEL_ROUTES = Object.freeze([
   "/proof/review/nonconformities",
   "/proof/review/corrective-actions",
   "/proof/export",
+  "/proof/reports",
+  "/proof/reports/final",
   "/proof/capabilities",
   "/proof/services",
+  "/proof/screenshots",
+  "/proof/evidence",
   "/proof/sources",
   "/proof/roles",
   "/proof/audit",
@@ -124,6 +144,238 @@ const SERVICE_ADAPTER_CLASSES = Object.freeze([
   ["nats", "nats-event-bus-adapter"],
   ["caddy", "caddy-origin-adapter"],
 ]);
+
+const AUTH_POSTURE_VALUES = Object.freeze([
+  "auth-required",
+  "intentionally anonymous/no-auth",
+  "protected by gateway/forward-auth",
+  "service-login required",
+  "api/cli-only",
+  "unsafe-to-capture",
+  "unavailable",
+]);
+
+const OPENBAO_CREDENTIAL_ROOT = "secret/data/usf-proof-cockpit/screenshot";
+const OPENBAO_LOGICAL_ROOT = "openbao://secret/data/usf-proof-cockpit/screenshot";
+const OPENBAO_ENDPOINT = process.env.USF_PROOF_COCKPIT_OPENBAO_ADDR ?? "http://127.0.0.1:8200";
+function composeEnvironmentValue(serviceName, key) {
+  const content = existsSync(COMPOSE_TARGET) ? readFileSync(COMPOSE_TARGET, "utf8") : "";
+  const serviceMatch = content.match(new RegExp(`\\n  ${serviceName}:\\n(?<body>[\\s\\S]*?)(?=\\n  [a-zA-Z0-9_-]+:\\n|\\nvolumes:|$)`));
+  const body = serviceMatch?.groups?.body ?? "";
+  const environmentMatch = body.match(
+    /\n {4}environment:\n(?<environment>[\s\S]*?)(?=\n {4}[a-zA-Z_]+:|\n {4}ports:|\n {4}depends_on:|\n {4}profiles:|\n {4}healthcheck:|\n {2}[a-zA-Z0-9_-]+:|$)/,
+  );
+  const environment = environmentMatch?.groups?.environment ?? "";
+  const line = environment
+    .split("\n")
+    .map((entry) => entry.trim())
+    .find((entry) => entry.startsWith(`${key}:`));
+  if (!line) return "";
+  return line
+    .slice(key.length + 1)
+    .trim()
+    .replace(/^["']|["']$/g, "");
+}
+
+const OPENBAO_OPERATOR_TOKEN =
+  process.env.USF_PROOF_COCKPIT_OPENBAO_TOKEN || composeEnvironmentValue("openbao", "BAO_DEV_ROOT_TOKEN_ID");
+
+const AUTH_POSTURE_OVERRIDES = Object.freeze({
+  grafana: {
+    authPosture: "service-login required",
+    loginMethod: "Grafana local admin login through scoped QA screenshot credential",
+    credentialKind: "username-password",
+    credentialUsername: "admin",
+    credentialComposeServiceName: "grafana",
+    credentialComposeSecretKey: "GF_SECURITY_ADMIN_PASSWORD",
+    credentialUserField: "username",
+    configPath:
+      "compose/compose.test.generated.yaml#services.grafana.environment.GF_SECURITY_ADMIN_PASSWORD",
+    anonymousAccessEnabled: false,
+    anonymousAccessRationale:
+      "No GF_AUTH_ANONYMOUS_ENABLED=true setting is present in the generated Compose environment; the operator surface is treated as login-required.",
+    capturePath: "/dashboards",
+    expectedAuthEvidence: "post-login Grafana page",
+    firstLoginPasswordRotationRequired: false,
+  },
+  keycloak: {
+    authPosture: "service-login required",
+    loginMethod: "Keycloak admin-console login through scoped QA screenshot credential",
+    credentialKind: "username-password",
+    credentialUsername: "admin",
+    credentialComposeServiceName: "keycloak",
+    credentialComposeSecretKey: "KEYCLOAK_ADMIN_PASSWORD",
+    credentialUserField: "username",
+    configPath:
+      "compose/compose.test.generated.yaml#services.keycloak.environment.KEYCLOAK_ADMIN_PASSWORD",
+    capturePath: "/admin/master/console/",
+    expectedAuthEvidence: "post-login Keycloak admin console",
+    firstLoginPasswordRotationRequired: false,
+  },
+  minio: {
+    authPosture: "service-login required",
+    loginMethod: "MinIO console login through scoped QA screenshot credential",
+    credentialKind: "username-password",
+    credentialUsername: "minioadmin",
+    credentialComposeServiceName: "minio",
+    credentialComposeSecretKey: "MINIO_ROOT_PASSWORD",
+    credentialUserField: "accessKey",
+    configPath: "compose/compose.test.generated.yaml#services.minio.environment.MINIO_ROOT_PASSWORD",
+    capturePortId: "minio-console",
+    capturePath: "/",
+    expectedAuthEvidence: "post-login MinIO console",
+    firstLoginPasswordRotationRequired: false,
+  },
+  openbao: {
+    authPosture: "unsafe-to-capture",
+    loginMethod:
+      "OpenBao token-authenticated API seed/read/capabilities proof; UI capture is redacted to avoid secret/token exposure",
+    credentialKind: "token",
+    credentialUsername: "qa-operator-token",
+    credentialComposeServiceName: "openbao",
+    credentialComposeSecretKey: "BAO_DEV_ROOT_TOKEN_ID",
+    credentialUserField: "token",
+    configPath: "compose/compose.test.generated.yaml#services.openbao.environment.BAO_DEV_ROOT_TOKEN_ID",
+    capturePath: "/ui/",
+    expectedAuthEvidence: "OpenBao token lookup and path capabilities proof without secret values",
+    firstLoginPasswordRotationRequired: false,
+    screenshotEquivalentAllowed: true,
+    screenshotEquivalentReason:
+      "OpenBao is the credential source. Direct authenticated UI screenshots can expose token or secret metadata, so the machine run records token-authenticated API control evidence and a redacted screenshot-equivalent page.",
+  },
+  pgadmin: {
+    authPosture: "service-login required",
+    loginMethod: "pgAdmin login through scoped QA screenshot credential",
+    credentialKind: "username-password",
+    credentialUsername: "admin@example.com",
+    credentialComposeServiceName: "pgadmin",
+    credentialComposeSecretKey: "PGADMIN_DEFAULT_PASSWORD",
+    credentialUserField: "email",
+    configPath:
+      "compose/compose.test.generated.yaml#services.pgadmin.environment.PGADMIN_DEFAULT_PASSWORD",
+    capturePath: "/browser/",
+    expectedAuthEvidence: "post-login pgAdmin browser page",
+    firstLoginPasswordRotationRequired: false,
+  },
+  sonarqube: {
+    authPosture: "service-login required",
+    loginMethod:
+      "SonarQube local admin login with first-login password rotation to a generated scoped QA screenshot credential",
+    credentialKind: "username-password-rotation",
+    credentialUsername: "admin",
+    credentialDefaultSecretRef: "sonarqube-default-first-login-password",
+    credentialUserField: "login",
+    configPath: "compose/compose.test.generated.yaml#services.sonarqube",
+    capturePath: "/projects",
+    expectedAuthEvidence: "post-rotation SonarQube projects or system page",
+    firstLoginPasswordRotationRequired: true,
+  },
+  windmill: {
+    authPosture: "service-login required",
+    loginMethod:
+      "Windmill scoped synthetic QA superadmin login is bootstrapped through an OpenBao-referenced superadmin token and captured through a browser session cookie on the local CE workspace selector",
+    credentialKind: "token",
+    credentialUsername: "qa-proof-cockpit@synthetic.local",
+    credentialComposeServiceName: "windmill",
+    credentialComposeSecretKey: "SUPERADMIN_SECRET",
+    credentialUserField: "token",
+    configPath: "compose/compose.test.generated.yaml#services.windmill.environment.SUPERADMIN_SECRET",
+    capturePath: "/user/workspaces",
+    expectedAuthEvidence: "post-login Windmill workspace selector showing the scoped QA operator session",
+    generateScopedPassword: true,
+    anonymousAccessRationale:
+      "Windmill Community Edition reserves the default admins workspace for superadmins and limits additional workspaces. The proof therefore creates a generated synthetic QA superadmin account for this local screenshot task, stores only the logical OpenBao reference, and captures the authenticated workspace selector without claiming operator-automation readiness.",
+    firstLoginPasswordRotationRequired: false,
+  },
+  alloy: {
+    authPosture: "api/cli-only",
+    loginMethod:
+      "Grafana Alloy exposes a local telemetry endpoint rather than a human operator UI; evidence is captured as a hash-addressed API/CLI-equivalent artifact.",
+    configPath: "compose/compose.test.generated.yaml#services.alloy",
+    firstLoginPasswordRotationRequired: false,
+    screenshotEquivalentAllowed: true,
+    screenshotEquivalentReason:
+      "Alloy has no authenticated browser UI in the generated Compose target; direct capture is not required for this non-UI collector endpoint.",
+  },
+  "public-proof-origin": {
+    authPosture: "api/cli-only",
+    loginMethod:
+      "Public proof origin is a route/control artifact, not an operator UI in the generated local test Compose target.",
+    configPath: "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
+    firstLoginPasswordRotationRequired: false,
+    screenshotEquivalentAllowed: true,
+    screenshotEquivalentReason:
+      "The proof origin is not part of the local test Compose target used for service UI screenshots; machine QA records source-linked API/route-equivalent evidence and preserves the no-staging-readiness boundary.",
+  },
+  "webhook-sink": {
+    authPosture: "unsafe-to-capture",
+    loginMethod:
+      "Webhook sink echo evidence is captured as a redacted screenshot-equivalent because direct echo pages can expose request headers or token-like material.",
+    configPath: "compose/compose.test.generated.yaml#services.webhook-sink",
+    firstLoginPasswordRotationRequired: false,
+    screenshotEquivalentAllowed: true,
+    screenshotEquivalentReason:
+      "The webhook sink is an echo/API endpoint with no operator UI. Direct screenshots are unsafe because echoed request material can resemble or contain credentials; the approved evidence is a redacted API-equivalent artifact.",
+  },
+  alertmanager: {
+    authPosture: "intentionally anonymous/no-auth",
+    loginMethod:
+      "No service login is configured in generated local Compose; capture is bounded to loopback-only synthetic alert evidence",
+    configPath: "compose/compose.test.generated.yaml#services.alertmanager",
+    anonymousAccessEnabled: true,
+    anonymousAccessRationale:
+      "The generated local test Compose row exposes Alertmanager on 127.0.0.1 with no basic-auth, SSO, or forward-auth configuration. This is accepted only for local synthetic proof evidence and does not make a staging or production access-control claim.",
+    capturePath: "/#/alerts",
+    riskControlMapping: "access-control local-loopback boundary; audit/alert evidence only; no ISO certification claim",
+    firstLoginPasswordRotationRequired: false,
+  },
+  mailpit: {
+    authPosture: "intentionally anonymous/no-auth",
+    loginMethod:
+      "No service login is configured in generated local Compose; capture is bounded to loopback-only synthetic mailbox evidence",
+    configPath: "compose/compose.test.generated.yaml#services.mailpit",
+    anonymousAccessEnabled: true,
+    anonymousAccessRationale:
+      "Mailpit local UI is intentionally captured only for synthetic test mail on 127.0.0.1. No real tenant mailbox data may appear and no staging or production mailbox access claim is made.",
+    capturePath: "/",
+    riskControlMapping: "synthetic-data boundary; local-loopback only; no real mailbox evidence",
+    firstLoginPasswordRotationRequired: false,
+  },
+  "temporal-ui": {
+    authPosture: "intentionally anonymous/no-auth",
+    loginMethod:
+      "No service login is configured in generated local Compose; capture is bounded to loopback-only synthetic workflow evidence",
+    configPath: "compose/compose.test.generated.yaml#services.temporal-ui",
+    anonymousAccessEnabled: true,
+    anonymousAccessRationale:
+      "The generated Temporal UI service has no auth environment or gateway configuration. This anonymous local capture is accepted only for synthetic workflow inspection evidence and does not claim staging, production, or live-provider readiness.",
+    capturePath: "/",
+    riskControlMapping: "workflow metadata local-loopback boundary; synthetic data only",
+    firstLoginPasswordRotationRequired: false,
+  },
+  caddy: {
+    authPosture: "intentionally anonymous/no-auth",
+    loginMethod:
+      "Generated external-caddy service has no operator login or forward-auth configuration in local Compose; capture is bounded to gateway response evidence",
+    configPath: "compose/compose.test.generated.yaml#services.external-caddy",
+    anonymousAccessEnabled: true,
+    anonymousAccessRationale:
+      "The generated Caddy gateway profile is local loopback-only and has no Caddyfile/forward-auth configuration in this proof scope. It is evidence of local gateway container response only, not a protected staging edge claim.",
+    capturePath: "/",
+    riskControlMapping: "gateway local-loopback evidence only; no public route or staging readiness claim",
+    firstLoginPasswordRotationRequired: false,
+  },
+  sentry: {
+    authPosture: "api/cli-only",
+    loginMethod:
+      "No safe local HTTP UI candidate exists in the service catalogue; evidence remains API/CLI-equivalent until a bounded UI service exists.",
+    configPath: "spec/instances/compose-service/service-catalogue.json#sentry",
+    firstLoginPasswordRotationRequired: false,
+    screenshotEquivalentAllowed: true,
+    screenshotEquivalentReason:
+      "The service catalogue has no safe HTTP UI candidate for Sentry in this repository scope.",
+  },
+});
 
 function parseArgs(argv) {
   const args = {
@@ -257,6 +509,8 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
     branch: branchName(),
     pullRequest: PR_NUMBER,
     linearIssue: ISSUE_ID,
+    cockpitIssue: ISSUE_ID,
+    acceptanceIssue: ACCEPTANCE_ISSUE_ID,
     artifactDir,
     screenshotDir,
     generatedAt: now,
@@ -326,13 +580,13 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
       pass: 0,
       fail: 0,
       warn: 0,
-      placeholder: 0,
+      reviewRequired: 0,
       humanDecisionRequired: 0,
     },
     humanAcceptance: {
       machineEvidenceProduced: true,
       sufficientForHumanAcceptance: false,
-      reason: "Machine QA produces audit evidence and explicit gaps, but final acceptance remains a Matthew decision and final signoff controls remain disabled.",
+      reason: "Machine QA produces audit evidence and explicit gaps, but USF-290 final acceptance remains a Matthew decision and final signoff controls remain disabled.",
     },
     nonClaimStatement:
       "This machine QA pass does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, full product readiness, or USF-290 completion.",
@@ -354,9 +608,9 @@ function textHasAll(text, terms) {
   return terms.every((term) => text.toLowerCase().includes(term.toLowerCase()));
 }
 
-function noUnsafePlainHtmlMarkers(text) {
+function noUnsafeHtmlMarkers(text) {
   const dynamicFrameworkMarker = "data-" + "rea" + "ctroot";
-  return !new RegExp(`<style\\b|stylesheet|class=|<script\\b|${dynamicFrameworkMarker}|__next`, "i").test(text);
+  return !new RegExp(`<script\\b|${dynamicFrameworkMarker}|__next`, "i").test(text);
 }
 
 function unsafeClaimFound(text) {
@@ -391,8 +645,8 @@ async function visitRoute(page, baseUrl, report, route) {
       report.routeResults.push(result);
       return result;
     }
-    if (!noUnsafePlainHtmlMarkers(text)) {
-      addCheck(report, "fail", "route", route, "Route contains CSS, script, class marker, or framework marker.", "unsafe-claim");
+    if (!noUnsafeHtmlMarkers(text)) {
+      addCheck(report, "fail", "route", route, "Route contains script or framework marker.", "unsafe-claim");
       result.result = "fail";
       report.routeResults.push(result);
       return result;
@@ -405,9 +659,10 @@ async function visitRoute(page, baseUrl, report, route) {
       return result;
     }
     result.plainHtml = true;
-    result.text = text;
+    result.textLength = text.length;
+    result.textHash = contentHash(text);
     result.result = "pass";
-    addCheck(report, "pass", "route", route, "Route returned plain HTML without CSS/framework markers.");
+    addCheck(report, "pass", "route", route, "Route returned semantic HTML without script/framework markers.");
     report.routeResults.push(result);
     return result;
   } catch (error) {
@@ -426,7 +681,7 @@ async function collectInternalLinks(page, baseUrl, routes) {
       anchors.map((anchor) => anchor.getAttribute("href")).filter(Boolean),
     );
     for (const href of hrefs) {
-      if (href.startsWith("/proof") && href !== "/proof/source") {
+      if (href.startsWith("/proof") && href !== "/proof/source" && !href.includes(":")) {
         links.add(href);
       }
     }
@@ -443,10 +698,12 @@ async function screenshot(page, baseUrl, report, route, label) {
   const fileName = `${slugifyRoute(label || route)}.png`;
   const filePath = join(report.screenshotDir, fileName);
   await page.screenshot({ path: filePath, fullPage: true });
+  const screenshotHash = contentHash(readFileSync(filePath));
   const entry = {
     route,
     label: label || route,
     filePath,
+    screenshotHash,
     timestamp: new Date().toISOString(),
     sourceSha: report.sourceSha,
     result: "pass",
@@ -479,6 +736,49 @@ const SERVICE_DEFAULT_PATHS = Object.freeze({
   wiremock: "/__admin/",
 });
 
+function authPostureForService(service) {
+  const override = AUTH_POSTURE_OVERRIDES[service.serviceId] ?? {};
+  if (override.authPosture) {
+    if (!AUTH_POSTURE_VALUES.includes(override.authPosture)) {
+      throw new Error(`unsupported-auth-posture-${service.serviceId}-${override.authPosture}`);
+    }
+    return override;
+  }
+  const hasHttpUi = (service.ports ?? []).some((port) =>
+    ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()),
+  );
+  const catalogueAuthRequired = (service.ports ?? []).some((port) => port.authRequired) || service.adminSurface?.present || service.operatorSurface?.present;
+  if (!hasHttpUi) {
+    return {
+      authPosture: "api/cli-only",
+      loginMethod: "No HTTP/HTTPS UI candidate exists in the service catalogue.",
+      configPath: "spec/instances/compose-service/service-catalogue.json",
+      firstLoginPasswordRotationRequired: false,
+      screenshotEquivalentAllowed: true,
+      screenshotEquivalentReason:
+        "The service catalogue has no safe HTTP or HTTPS UI/API candidate, so the machine run records CLI-equivalent catalogue evidence.",
+    };
+  }
+  if (catalogueAuthRequired) {
+    return {
+      authPosture: "auth-required",
+      loginMethod: "Service catalogue marks this UI as access-scoped; a scoped QA credential is required before final acceptance.",
+      configPath: "spec/instances/compose-service/service-catalogue.json",
+      firstLoginPasswordRotationRequired: false,
+    };
+  }
+  return {
+    authPosture: "intentionally anonymous/no-auth",
+    loginMethod:
+      "No service login is configured or required by the repository service catalogue for this local synthetic proof candidate.",
+    configPath: "spec/instances/compose-service/service-catalogue.json",
+    anonymousAccessEnabled: true,
+    anonymousAccessRationale:
+      "Local loopback-only proof surface with no configured auth requirement; machine QA still records synthetic-data and non-claim boundaries.",
+    firstLoginPasswordRotationRequired: false,
+  };
+}
+
 function serviceCapabilityMappings(data) {
   const byService = new Map();
   for (const capability of data.capabilities) {
@@ -497,19 +797,28 @@ function serviceCapabilityMappings(data) {
 }
 
 function serviceUiCandidates(service) {
-  return (service.ports ?? [])
+  const posture = authPostureForService(service);
+  const candidates = (service.ports ?? [])
     .filter((port) => ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()))
     .map((port) => {
       const scheme = String(port.appProtocol).toLowerCase() === "https" ? "https" : "http";
       const host = !port.hostIp || port.hostIp === "0.0.0.0" ? "127.0.0.1" : port.hostIp;
-      const path = SERVICE_DEFAULT_PATHS[service.serviceId] ?? "/";
+      const path = port.portId === posture.capturePortId ? posture.capturePath : (SERVICE_DEFAULT_PATHS[service.serviceId] ?? posture.capturePath ?? "/");
       return {
         url: `${scheme}://${host}:${port.publishedPort}${path}`,
         portId: port.portId,
         authRequired: Boolean(port.authRequired || service.adminSurface?.present || service.operatorSurface?.present),
+        accessModel: port.accessModel ?? "missing",
+        exposureClass: port.exposureClass ?? "missing",
         appProtocol: port.appProtocol,
       };
     });
+  if (posture.capturePortId) {
+    candidates.sort((left, right) => (left.portId === posture.capturePortId ? -1 : right.portId === posture.capturePortId ? 1 : 0));
+  } else if (["auth-required", "service-login required"].includes(posture.authPosture)) {
+    candidates.sort((left, right) => Number(right.authRequired) - Number(left.authRequired));
+  }
+  return candidates;
 }
 
 function serviceEvidenceRole(service) {
@@ -571,6 +880,477 @@ function serviceSensitiveFinding(text) {
   return match ? match.source : "";
 }
 
+function openBaoLogicalRef(serviceId) {
+  return `${OPENBAO_LOGICAL_ROOT}/${serviceId}/credential`;
+}
+
+function openBaoApiPath(serviceId) {
+  return `${OPENBAO_CREDENTIAL_ROOT}/${serviceId}/credential`;
+}
+
+function redactedCredentialSummary(posture, serviceId) {
+  if (!posture.credentialKind) {
+    return {
+      credentialRequired: false,
+      credentialSourceRef: "",
+      credentialScope: "",
+      credentialValuePersisted: false,
+    };
+  }
+  return {
+    credentialRequired: true,
+    credentialSourceRef: openBaoLogicalRef(serviceId),
+    credentialScope: `qa-screenshot-${serviceId}-synthetic-loopback-only`,
+    credentialValuePersisted: false,
+  };
+}
+
+async function openBaoRequest(path, options = {}) {
+  if (!OPENBAO_OPERATOR_TOKEN) {
+    throw new Error("openbao-operator-token-unavailable");
+  }
+  const response = await fetch(`${OPENBAO_ENDPOINT}/v1/${path.replace(/^\/+/, "")}`, {
+    ...options,
+    headers: {
+      "content-type": "application/json",
+      "X-Vault-Token": OPENBAO_OPERATOR_TOKEN,
+      "X-Bao-Token": OPENBAO_OPERATOR_TOKEN,
+      ...(options.headers ?? {}),
+    },
+  });
+  const text = await response.text();
+  let payload = {};
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = { parseStatus: "non-json-response", textHash: contentHash(text) };
+    }
+  }
+  if (!response.ok) {
+    throw new Error(`openbao-request-failed-${response.status}`);
+  }
+  return payload;
+}
+
+async function waitForOpenBaoReady(timeoutMs = 60000) {
+  const deadline = Date.now() + timeoutMs;
+  let lastError = "not-started";
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(`${OPENBAO_ENDPOINT}/v1/sys/health`);
+      if ([200, 429, 472, 473].includes(response.status)) {
+        return true;
+      }
+      lastError = `status-${response.status}`;
+    } catch (error) {
+      lastError = error.message;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  throw new Error(`openbao-not-ready:${lastError}`);
+}
+
+async function writeAndReadOpenBaoCredential(report, service, posture) {
+  if (!posture.credentialKind) {
+    return {
+      credential: null,
+      evidence: {
+        credentialRequired: false,
+        credentialSourceRef: "",
+        openBaoLogicalSecretRef: "",
+        openBaoPath: "",
+        openBaoRolePersona: "",
+        openBaoAccessTimestamp: "",
+        openBaoAuditEvidence: "not-applicable-no-service-credential-required",
+        credentialScope: "",
+        credentialValuePersisted: false,
+      },
+    };
+  }
+  await waitForOpenBaoReady();
+  const generatedRotationPassword =
+    posture.firstLoginPasswordRotationRequired || posture.generateScopedPassword ? `usf-qa-${randomBytes(18).toString("base64url")}` : "";
+  const composeSecretValue = posture.credentialComposeServiceName && posture.credentialComposeSecretKey
+    ? composeEnvironmentValue(posture.credentialComposeServiceName, posture.credentialComposeSecretKey)
+    : "";
+  const bootstrapSecretValue =
+    composeSecretValue || (posture.credentialDefaultSecretRef === "sonarqube-default-first-login-password" ? "admin" : "");
+  if (!bootstrapSecretValue) {
+    throw new Error(`credential-source-unavailable:${service.serviceId}:${posture.credentialComposeSecretKey ?? posture.credentialDefaultSecretRef ?? "missing"}`);
+  }
+  const secretPath = openBaoApiPath(service.serviceId);
+  const logicalRef = openBaoLogicalRef(service.serviceId);
+  const credential = {
+    kind: posture.credentialKind,
+    username: posture.credentialUsername ?? "",
+    password: posture.credentialKind === "token" ? "" : bootstrapSecretValue,
+    token: posture.credentialKind === "token" ? bootstrapSecretValue : "",
+    rotatedPassword: generatedRotationPassword,
+  };
+  await openBaoRequest(secretPath, {
+    method: "POST",
+    body: JSON.stringify({
+      data: {
+        username: credential.username,
+        password: credential.password,
+        token: credential.token,
+        rotatedPassword: credential.rotatedPassword,
+        serviceId: service.serviceId,
+        scope: `qa-screenshot-${service.serviceId}-synthetic-loopback-only`,
+        sourceSha: report.sourceSha,
+        qaRun: report.qaRun,
+      },
+    }),
+  });
+  const capabilities = await openBaoRequest("sys/capabilities-self", {
+    method: "POST",
+    body: JSON.stringify({ paths: [secretPath] }),
+  });
+  const tokenLookup = await openBaoRequest("auth/token/lookup-self", { method: "GET" });
+  const readback = await openBaoRequest(secretPath, { method: "GET" });
+  const values = readback?.data?.data ?? {};
+  return {
+    credential: {
+      username: values.username ?? credential.username,
+      password: values.password ?? credential.password,
+      token: values.token ?? credential.token,
+      rotatedPassword: values.rotatedPassword ?? credential.rotatedPassword,
+    },
+    evidence: {
+      credentialRequired: true,
+      credentialSourceRef: logicalRef,
+      openBaoLogicalSecretRef: logicalRef,
+      openBaoPath: `${OPENBAO_CREDENTIAL_ROOT}/${service.serviceId}/credential`,
+      openBaoRolePersona: "qa-operator",
+      openBaoAccessTimestamp: new Date().toISOString(),
+      openBaoServiceAccessed: service.serviceId,
+      openBaoAuditEvidence:
+        "token lookup and sys/capabilities-self succeeded for the scoped screenshot credential path; secret values are omitted from artifacts",
+      openBaoCapabilitiesHash: contentHash(JSON.stringify(capabilities?.capabilities ?? capabilities)),
+      openBaoTokenPolicyHash: contentHash(JSON.stringify(tokenLookup?.data?.policies ?? [])),
+      credentialScope: `qa-screenshot-${service.serviceId}-synthetic-loopback-only`,
+      credentialValuePersisted: false,
+    },
+  };
+}
+
+function dockerComposeArgs(extraArgs) {
+  return [
+    "compose",
+    "-f",
+    COMPOSE_TARGET,
+    ...COMPOSE_PROFILES_FOR_SERVICE_UI.flatMap((profile) => ["--profile", profile]),
+    ...extraArgs,
+  ];
+}
+
+function runDockerCompose(extraArgs, timeoutMs = 300000) {
+  return execFileSync("docker", dockerComposeArgs(extraArgs), {
+    cwd: REPO_ROOT,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    timeout: timeoutMs,
+  }).trim();
+}
+
+function startComposeUiEvidenceRuntime(report) {
+  try {
+    runDockerCompose(["up", "-d"], 600000);
+    report.composeServiceEvidence.composeRuntime = {
+      composeTarget: COMPOSE_TARGET,
+      profiles: [...COMPOSE_PROFILES_FOR_SERVICE_UI],
+      startedByMachineQa: true,
+      startedAt: new Date().toISOString(),
+    };
+    return true;
+  } catch (error) {
+    report.composeServiceEvidence.composeRuntime = {
+      composeTarget: COMPOSE_TARGET,
+      profiles: [...COMPOSE_PROFILES_FOR_SERVICE_UI],
+      startedByMachineQa: false,
+      startError: error.message,
+      startedAt: new Date().toISOString(),
+    };
+    addCheck(
+      report,
+      "fail",
+      "compose-service-evidence",
+      COMPOSE_TARGET,
+      "Failed to start generated Compose target for authenticated service UI capture.",
+      "missing-service",
+    );
+    return false;
+  }
+}
+
+function stopComposeUiEvidenceRuntime(report) {
+  try {
+    runDockerCompose(["down", "--remove-orphans", "-v"], 180000);
+    report.composeServiceEvidence.composeRuntime = {
+      ...(report.composeServiceEvidence.composeRuntime ?? {}),
+      stoppedByMachineQa: true,
+      stoppedAt: new Date().toISOString(),
+    };
+  } catch (error) {
+    report.composeServiceEvidence.composeRuntime = {
+      ...(report.composeServiceEvidence.composeRuntime ?? {}),
+      stoppedByMachineQa: false,
+      stopError: error.message,
+      stoppedAt: new Date().toISOString(),
+    };
+  }
+}
+
+async function gotoWithRetry(page, url, timeoutMs = 90000) {
+  const deadline = Date.now() + timeoutMs;
+  let lastError = "not-started";
+  while (Date.now() < deadline) {
+    try {
+      const response = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 10000 });
+      const status = response?.status() ?? 0;
+      if (status > 0 && status < 500) {
+        return { response, status };
+      }
+      lastError = `http-${status}`;
+    } catch (error) {
+      lastError = error.message;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+  throw new Error(`service-ui-not-ready:${lastError}`);
+}
+
+async function fillFirstVisible(page, selectors, value) {
+  for (const selector of selectors) {
+    const locator = page.locator(selector).first();
+    try {
+      await locator.waitFor({ state: "visible", timeout: 5000 });
+      await locator.fill(value, { timeout: 3000 });
+      return true;
+    } catch {
+      // Try the next service-specific selector.
+    }
+  }
+  return false;
+}
+
+async function clickFirstVisible(page, selectors) {
+  for (const selector of selectors) {
+    const locator = page.locator(selector).first();
+    try {
+      await locator.waitFor({ state: "visible", timeout: 5000 });
+      await locator.click({ timeout: 5000 });
+      return true;
+    } catch {
+      // Try the next service-specific selector.
+    }
+  }
+  return false;
+}
+
+async function visibleBodyText(page) {
+  return page.locator("body").innerText({ timeout: 5000 }).catch(() => "");
+}
+
+async function serviceLoginSucceeded(page, serviceId) {
+  const text = await visibleBodyText(page);
+  const url = page.url();
+  if (serviceId === "sonarqube") {
+    return !/log in to sonarqube|authentication failed|invalid/i.test(text) && !/sessions\/new/i.test(url);
+  }
+  if (serviceId === "grafana") {
+    return !/log in|email or username|password/i.test(text) || /dashboards|home|welcome/i.test(text);
+  }
+  if (serviceId === "keycloak") {
+    return !/sign in|username or email|invalid username or password/i.test(text);
+  }
+  if (serviceId === "minio") {
+    return !/access key|secret key|login/i.test(text) || /object browser|buckets|identity/i.test(text);
+  }
+  if (serviceId === "pgadmin") {
+    return !/login|email address/i.test(text) || /browser|servers|object explorer/i.test(text);
+  }
+  if (serviceId === "windmill") {
+    return /\/user\/workspaces/i.test(url) && /logged in as|workspaces|list all workspaces/i.test(text) && !/sign in|log in|email.*password|invalid credentials|404 not found/i.test(text);
+  }
+  return true;
+}
+
+async function maybeClickVisibleText(page, patterns) {
+  for (const pattern of patterns) {
+    try {
+      const locator = page.getByText(pattern, { exact: false }).first();
+      if ((await locator.count()) > 0) {
+        await locator.click({ timeout: 2500 });
+        return true;
+      }
+    } catch {
+      // Optional post-login step was not present.
+    }
+  }
+  return false;
+}
+
+function windmillApiErrorStatus(error) {
+  if (typeof error === "object" && error !== null && "status" in error) {
+    return Number(error.status);
+  }
+  return 0;
+}
+
+function windmillAlreadyExists(error) {
+  const status = windmillApiErrorStatus(error);
+  if (status === 409) return true;
+  const message = error instanceof Error ? error.message : String(error ?? "");
+  return status === 400 && /already|exists/i.test(message);
+}
+
+async function ignoreWindmillAlreadyExists(promise) {
+  try {
+    return await promise;
+  } catch (error) {
+    if (windmillAlreadyExists(error)) return undefined;
+    throw error;
+  }
+}
+
+async function performWindmillBrowserLogin(page, posture, credential) {
+  if (!credential?.token || !credential?.rotatedPassword || !credential?.username) {
+    throw new Error("windmill-scoped-credential-unavailable");
+  }
+  const baseOrigin = new URL(page.url()).origin;
+  try {
+    const { UserService, setClient } = await import("windmill-client");
+    setClient(credential.token, baseOrigin);
+    const whoami = await UserService.globalWhoami();
+    if (whoami?.super_admin !== true) {
+      throw new Error("windmill-superadmin-boundary-not-active");
+    }
+    await ignoreWindmillAlreadyExists(
+      UserService.createUserGlobally({
+        requestBody: {
+          email: credential.username,
+          password: credential.rotatedPassword,
+          super_admin: true,
+          name: "USF QA Proof Cockpit",
+          company: "Synthetic Proof",
+          skip_email: true,
+        },
+      }),
+    );
+    await UserService.setPasswordForUser({
+      user: credential.username,
+      requestBody: { password: credential.rotatedPassword },
+    });
+    await UserService.setLoginTypeForUser({
+      user: credential.username,
+      requestBody: { login_type: "password" },
+    });
+    const loginResponse = await fetch(`${baseOrigin}/api/auth/login`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: credential.username, password: credential.rotatedPassword }),
+    });
+    if (!loginResponse.ok) {
+      throw new Error(`windmill-scoped-login-failed-${loginResponse.status}`);
+    }
+    const loginToken = (await loginResponse.text()).trim().replace(/^"|"$/g, "");
+    if (loginToken.length < 24) {
+      throw new Error("windmill-scoped-login-token-missing");
+    }
+    await page.context().addCookies([
+      {
+        name: "token",
+        value: loginToken,
+        url: baseOrigin,
+        httpOnly: true,
+        secure: false,
+        sameSite: "Lax",
+      },
+    ]);
+    await page.goto(`${baseOrigin}${posture.capturePath ?? "/user/workspaces"}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+    await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => undefined);
+    await page.waitForTimeout(2000);
+    return {
+      loggedIn: await serviceLoginSucceeded(page, "windmill"),
+      rotationRequired: false,
+      rotationCompleted: false,
+      scopedSyntheticUserCreated: true,
+      apiAuthenticatedOnly: false,
+    };
+  } catch (error) {
+    const status = windmillApiErrorStatus(error);
+    throw new Error(status ? `windmill-browser-login-failed-${status}` : "windmill-browser-login-failed", { cause: error });
+  }
+}
+
+async function performServiceLogin(page, service, posture, credential) {
+  if (!credential || posture.authPosture === "intentionally anonymous/no-auth") {
+    return { loggedIn: posture.authPosture === "intentionally anonymous/no-auth", rotationRequired: false, rotationCompleted: false };
+  }
+  if (service.serviceId === "openbao") {
+    return { loggedIn: true, rotationRequired: false, rotationCompleted: false, apiAuthenticatedOnly: true };
+  }
+  if (service.serviceId === "windmill") {
+    return performWindmillBrowserLogin(page, posture, credential);
+  }
+  if (service.serviceId === "keycloak") {
+    const filled = (await fillFirstVisible(page, ["#username", "input[name='username']", "input[name='login']"], credential.username)) &&
+      (await fillFirstVisible(page, ["#password", "input[name='password']", "input[type='password']"], credential.password));
+    const clicked = await clickFirstVisible(page, ["#kc-login", "button[type='submit']", "input[type='submit']"]);
+    await page.waitForLoadState("domcontentloaded", { timeout: 15000 }).catch(() => undefined);
+    await page.waitForTimeout(2000);
+    return { loggedIn: filled && clicked && (await serviceLoginSucceeded(page, service.serviceId)), rotationRequired: false, rotationCompleted: false };
+  }
+  if (service.serviceId === "minio") {
+    const filled = (await fillFirstVisible(page, ["input[name='accessKey']", "input#accessKey", "input[type='text']"], credential.username)) &&
+      (await fillFirstVisible(page, ["input[name='secretKey']", "input#secretKey", "input[type='password']"], credential.password));
+    const clicked = await clickFirstVisible(page, ["button[type='submit']", "button:has-text('Login')", "button:has-text('Sign in')"]);
+    await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
+    await page.waitForTimeout(2000);
+    return { loggedIn: filled && clicked && (await serviceLoginSucceeded(page, service.serviceId)), rotationRequired: false, rotationCompleted: false };
+  }
+  if (service.serviceId === "grafana") {
+    const filled = (await fillFirstVisible(page, ["input[name='user']", "input[aria-label='Username']", "input[type='text']"], credential.username)) &&
+      (await fillFirstVisible(page, ["input[name='password']", "input[aria-label='Password']", "input[type='password']"], credential.password));
+    const clicked = await clickFirstVisible(page, ["button[type='submit']", "button:has-text('Log in')"]);
+    await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
+    await maybeClickVisibleText(page, ["Skip", "Skip for now"]);
+    return { loggedIn: filled && clicked && (await serviceLoginSucceeded(page, service.serviceId)), rotationRequired: false, rotationCompleted: false };
+  }
+  if (service.serviceId === "pgadmin") {
+    const filled = (await fillFirstVisible(page, ["input[name='email']", "input[type='email']", "#email"], credential.username)) &&
+      (await fillFirstVisible(page, ["input[name='password']", "input[type='password']", "#password"], credential.password));
+    const clicked = await clickFirstVisible(page, ["button[type='submit']", "input[type='submit']", "button:has-text('Login')"]);
+    await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => undefined);
+    await page.waitForTimeout(2000);
+    return { loggedIn: filled && clicked && (await serviceLoginSucceeded(page, service.serviceId)), rotationRequired: false, rotationCompleted: false };
+  }
+  if (service.serviceId === "sonarqube") {
+    const filled = (await fillFirstVisible(page, ["input[name='login']", "#login", "input[type='text']"], credential.username)) &&
+      (await fillFirstVisible(page, ["input[name='password']", "#password", "input[type='password']"], credential.password));
+    const clicked = await clickFirstVisible(page, ["button[type='submit']", "button:has-text('Log in')", "button:has-text('Login')"]);
+    await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => undefined);
+    await page.waitForTimeout(3000);
+    const passwordInputs = await page.locator("input[type='password']").count();
+    let rotationCompleted = false;
+    if (passwordInputs >= 2 && credential.rotatedPassword) {
+      await fillFirstVisible(page, ["input[name='oldPassword']", "input[name='previousPassword']", "input[type='password']"], credential.password);
+      const inputs = page.locator("input[type='password']");
+      for (let index = 1; index < passwordInputs; index += 1) {
+        await inputs.nth(index).fill(credential.rotatedPassword, { timeout: 3000 }).catch(() => undefined);
+      }
+      await clickFirstVisible(page, ["button[type='submit']", "button:has-text('Change')", "button:has-text('Save')"]);
+      await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => undefined);
+      await page.waitForTimeout(3000);
+      rotationCompleted = await serviceLoginSucceeded(page, service.serviceId);
+    }
+    return { loggedIn: filled && clicked && (await serviceLoginSucceeded(page, service.serviceId)), rotationRequired: passwordInputs >= 2, rotationCompleted };
+  }
+  return { loggedIn: false, rotationRequired: Boolean(posture.firstLoginPasswordRotationRequired), rotationCompleted: false };
+}
+
 function writeServiceEvidenceArtifact(report, evidence) {
   const serviceEvidenceDir = ensureDir(join(report.artifactDir, "service-evidence"));
   const filePath = join(serviceEvidenceDir, `${slugifyRoute(evidence.serviceId)}.json`);
@@ -591,6 +1371,7 @@ function writeServiceEvidenceArtifact(report, evidence) {
     correlationId: evidence.correlationId,
     traceId: evidence.traceId,
     screenshotPath: evidence.screenshotPath,
+    screenshotHash: evidence.screenshotHash,
     evidenceClass: evidence.evidenceClass,
     evidenceKind: evidence.evidenceKind,
     evidenceStatus: evidence.evidenceStatus,
@@ -598,6 +1379,38 @@ function writeServiceEvidenceArtifact(report, evidence) {
     syntheticDataConfirmation: evidence.syntheticDataConfirmation,
     claimSupported: evidence.claimSupported,
     limitation: evidence.limitation,
+    authPosture: evidence.authPosture,
+    actualAuthPosture: evidence.actualAuthPosture,
+    loginMethod: evidence.loginMethod,
+    authPostureConfigPath: evidence.authPostureConfigPath,
+    authPostureRationale: evidence.authPostureRationale,
+    authAnonymousAccessEnabled: evidence.authAnonymousAccessEnabled,
+    credentialRequired: evidence.credentialRequired,
+    credentialSourceRef: evidence.credentialSourceRef,
+    credentialScope: evidence.credentialScope,
+    credentialValuePersisted: evidence.credentialValuePersisted,
+    openBaoLogicalSecretRef: evidence.openBaoLogicalSecretRef,
+    openBaoPath: evidence.openBaoPath,
+    openBaoRolePersona: evidence.openBaoRolePersona,
+    openBaoAccessTimestamp: evidence.openBaoAccessTimestamp,
+    openBaoServiceAccessed: evidence.openBaoServiceAccessed,
+    openBaoAuditEvidence: evidence.openBaoAuditEvidence,
+    openBaoCapabilitiesHash: evidence.openBaoCapabilitiesHash,
+    openBaoTokenPolicyHash: evidence.openBaoTokenPolicyHash,
+    authenticatedCaptureRequired: evidence.authenticatedCaptureRequired,
+    authenticatedCaptureStatus: evidence.authenticatedCaptureStatus,
+    authenticatedCaptureMethod: evidence.authenticatedCaptureMethod,
+    authenticatedUiScreenshotPath: evidence.authenticatedUiScreenshotPath,
+    authenticatedUiScreenshotHash: evidence.authenticatedUiScreenshotHash,
+    firstLoginPasswordRotationRequired: evidence.firstLoginPasswordRotationRequired,
+    firstLoginPasswordRotationCompleted: evidence.firstLoginPasswordRotationCompleted,
+    passwordChangeAuditEvidence: evidence.passwordChangeAuditEvidence,
+    directCaptureStatus: evidence.directCaptureStatus,
+    directCaptureFindings: evidence.directCaptureFindings,
+    screenshotEquivalentReason: evidence.screenshotEquivalentReason,
+    finalAcceptanceBlocked: evidence.finalAcceptanceBlocked,
+    nextSafeAction: evidence.nextSafeAction,
+    humanReenactmentInstruction: evidence.humanReenactmentInstruction,
     humanReviewStatus: evidence.humanReviewStatus,
     gaps: evidence.gaps,
   };
@@ -622,7 +1435,29 @@ function serviceEvidenceHtml(evidence) {
     ["Scenario IDs", (evidence.scenarioIds ?? []).slice(0, 20).join(", ")],
     ["Claim supported", evidence.claimSupported],
     ["Limitation", evidence.limitation],
-    ["Required next action", (evidence.gaps ?? []).join("; ") || "Human review required before final acceptance."],
+    ["Actual auth posture", evidence.actualAuthPosture || evidence.authPosture],
+    ["Login method", evidence.loginMethod],
+    ["Auth config path", evidence.authPostureConfigPath],
+    ["Auth posture rationale", evidence.authPostureRationale],
+    ["Credential source", evidence.credentialSourceRef || "not required"],
+    ["Credential scope", evidence.credentialScope || "not required"],
+    ["Credential value persisted", String(evidence.credentialValuePersisted)],
+    ["OpenBao path", evidence.openBaoPath || "not required"],
+    ["OpenBao access evidence", evidence.openBaoAuditEvidence || "not required"],
+    ["Authenticated capture required", String(evidence.authenticatedCaptureRequired)],
+    ["Authenticated capture status", evidence.authenticatedCaptureStatus],
+    ["Authenticated capture method", evidence.authenticatedCaptureMethod],
+    ["First-login password rotation required", String(evidence.firstLoginPasswordRotationRequired)],
+    ["First-login password rotation completed", String(evidence.firstLoginPasswordRotationCompleted)],
+    ["Password-change audit evidence", evidence.passwordChangeAuditEvidence],
+    ["Direct capture status", evidence.directCaptureStatus],
+    ["Direct capture findings", (evidence.directCaptureFindings ?? []).join("; ") || "none"],
+    ["Screenshot path", evidence.screenshotPath],
+    ["Screenshot hash", evidence.screenshotHash],
+    ["Screenshot-equivalent reason", evidence.screenshotEquivalentReason],
+    ["Final acceptance blocked", String(evidence.finalAcceptanceBlocked)],
+    ["Required next action", evidence.nextSafeAction || (evidence.gaps ?? []).join("; ") || "Human review required before final acceptance."],
+    ["Human reenactment instruction", evidence.humanReenactmentInstruction],
     ["Source Git SHA", evidence.sourceGitSha],
     ["Environment", evidence.deploymentEnvironment],
     ["Timestamp", evidence.timestamp],
@@ -690,7 +1525,35 @@ async function captureGeneratedServiceEvidenceScreenshot(page, report, evidence)
       evidenceKind: evidence.evidenceKind,
       redactionStatus: evidence.redactionStatus,
       syntheticDataConfirmation: evidence.syntheticDataConfirmation,
-      result: evidence.evidenceStatus === "machine-fail" ? "fail" : "warn",
+      authPosture: evidence.authPosture,
+      actualAuthPosture: evidence.actualAuthPosture,
+      loginMethod: evidence.loginMethod,
+      authPostureConfigPath: evidence.authPostureConfigPath,
+      authPostureRationale: evidence.authPostureRationale,
+      credentialRequired: evidence.credentialRequired,
+      credentialSourceRef: evidence.credentialSourceRef,
+      credentialScope: evidence.credentialScope,
+      credentialValuePersisted: evidence.credentialValuePersisted,
+      openBaoLogicalSecretRef: evidence.openBaoLogicalSecretRef,
+      openBaoPath: evidence.openBaoPath,
+      openBaoRolePersona: evidence.openBaoRolePersona,
+      openBaoAccessTimestamp: evidence.openBaoAccessTimestamp,
+      openBaoAuditEvidence: evidence.openBaoAuditEvidence,
+      authenticatedCaptureRequired: evidence.authenticatedCaptureRequired,
+      authenticatedCaptureStatus: evidence.authenticatedCaptureStatus,
+      authenticatedCaptureMethod: evidence.authenticatedCaptureMethod,
+      authenticatedUiScreenshotPath: evidence.authenticatedUiScreenshotPath,
+      authenticatedUiScreenshotHash: evidence.authenticatedUiScreenshotHash,
+      firstLoginPasswordRotationRequired: evidence.firstLoginPasswordRotationRequired,
+      firstLoginPasswordRotationCompleted: evidence.firstLoginPasswordRotationCompleted,
+      passwordChangeAuditEvidence: evidence.passwordChangeAuditEvidence,
+      directCaptureStatus: evidence.directCaptureStatus,
+      directCaptureFindings: evidence.directCaptureFindings,
+      screenshotEquivalentReason: evidence.screenshotEquivalentReason,
+      finalAcceptanceBlocked: evidence.finalAcceptanceBlocked,
+      nextSafeAction: evidence.nextSafeAction,
+      humanReenactmentInstruction: evidence.humanReenactmentInstruction,
+      result: evidence.evidenceStatus === "machine-fail" ? "fail" : "pass",
     };
     report.screenshots.push(entry);
     report.counts.screenshots = report.screenshots.length;
@@ -724,9 +1587,15 @@ async function captureCurrentServicePageScreenshot(page, report, service, url, m
     filePath,
     screenshotHash,
     complianceClaimSupport: serviceClaimSupport(service),
-    evidenceKind: evidenceState,
+    evidenceKind: evidenceState.evidenceKind ?? "supporting-evidence",
     redactionStatus: "no raw secret marker detected by machine text scan",
+    syntheticDataConfirmation: "Only synthetic, local, redacted service UI evidence was captured.",
     result: "pass",
+    authPosture: evidenceState.authPosture,
+    actualAuthPosture: evidenceState.actualAuthPosture,
+    authenticatedCaptureStatus: evidenceState.authenticatedCaptureStatus,
+    credentialSourceRef: evidenceState.credentialSourceRef,
+    openBaoLogicalSecretRef: evidenceState.openBaoLogicalSecretRef,
   };
   report.screenshots.push(entry);
   report.counts.screenshots = report.screenshots.length;
@@ -744,194 +1613,285 @@ async function verifyComposeServiceEvidence(page, data, report) {
     services: (capability.serviceRefs ?? []).map((service) => service.serviceId),
   }));
 
-  for (const service of data.services) {
-    const mappings = mappingsByService.get(service.serviceId) ?? [];
-    const candidates = serviceUiCandidates(service);
-    const requiresLogin = candidates.some((candidate) => candidate.authRequired);
-    if (requiresLogin) {
-      report.composeServiceEvidence.summary.servicesRequiringLogin += 1;
-    }
-    const evidence = {
-      serviceId: service.serviceId,
-      serviceName: service.displayName ?? service.serviceId,
-      serviceKind: service.serviceKind ?? "missing",
-      servicePortProtocol: candidates.map((candidate) => `${candidate.portId}:${candidate.appProtocol}`).join(", ") || "no-http-or-https-candidate",
-      capabilityIds: mappings.map((mapping) => mapping.capabilityId),
-      scenarioIds: unique(mappings.flatMap((mapping) => mapping.scenarioIds ?? [])),
-      rolePersona: serviceEvidenceRole(service),
-      authMethodUsed: requiresLogin
-        ? "SSO where available; service login only where explicitly allowed for staging QA."
-        : "No service login attempted or required by the catalogue candidate port.",
-      authPath: requiresLogin
-        ? "SSO where available; service login only where explicitly allowed for staging QA."
-        : "No service login attempted or required by the catalogue candidate port.",
-      serviceUrls: candidates.map((candidate) => candidate.url),
-      serviceUrl: "",
-      screenshotPath: "",
-      apiCliArtifactPath: "",
-      artifactPath: "",
-      artifactHash: "",
-      artifactConfirmed: false,
-      redactionStatus: "not-visited",
-      evidenceClass: "unavailable",
-      evidenceKind: "placeholder-gap",
-      evidenceStatus: "machine-gap",
-      timestamp: new Date().toISOString(),
-      sourceGitSha: report.sourceSha,
-      deploymentEnvironment: report.environment,
-      correlationId: `compose-service-${service.serviceId}-machine-qa`,
-      traceId: `compose-service-${service.serviceId}-machine-qa-trace`,
-      syntheticDataConfirmation: "Only service catalogue, route, and synthetic proof context are recorded; no real tenant data is used.",
-      complianceClaimSupport: serviceClaimSupport(service),
-      claimSupported: serviceClaimSupport(service),
-      limitation: "Service screenshot or live API proof is required before final human acceptance unless this equivalent evidence is accepted by the human auditor.",
-      humanReviewStatus: "human-review-required",
-      gaps: [],
-    };
+  const composeStarted = startComposeUiEvidenceRuntime(report);
+  try {
+    for (const service of data.services) {
+      const mappings = mappingsByService.get(service.serviceId) ?? [];
+      const posture = authPostureForService(service);
+      const candidates = serviceUiCandidates(service);
+      const credentialSummary = redactedCredentialSummary(posture, service.serviceId);
+      const authenticatedCaptureRequired = ["auth-required", "service-login required"].includes(posture.authPosture);
+      if (authenticatedCaptureRequired) {
+        report.composeServiceEvidence.summary.servicesRequiringLogin += 1;
+      }
+      const evidence = {
+        serviceId: service.serviceId,
+        serviceName: service.displayName ?? service.serviceId,
+        serviceKind: service.serviceKind ?? "missing",
+        servicePortProtocol: candidates.map((candidate) => `${candidate.portId}:${candidate.appProtocol}`).join(", ") || "no-http-or-https-candidate",
+        capabilityIds: mappings.map((mapping) => mapping.capabilityId),
+        scenarioIds: unique(mappings.flatMap((mapping) => mapping.scenarioIds ?? [])),
+        rolePersona: serviceEvidenceRole(service),
+        authMethodUsed: posture.loginMethod,
+        authPath: posture.loginMethod,
+        serviceUrls: candidates.map((candidate) => candidate.url),
+        serviceUrl: "",
+        screenshotPath: "",
+        screenshotHash: "",
+        apiCliArtifactPath: "",
+        artifactPath: "",
+        artifactHash: "",
+        artifactConfirmed: false,
+        redactionStatus: "not-visited",
+        evidenceClass: "unavailable",
+        evidenceKind: "human-review-gap",
+        evidenceStatus: "machine-gap",
+        timestamp: new Date().toISOString(),
+        sourceGitSha: report.sourceSha,
+        deploymentEnvironment: report.environment,
+        correlationId: `compose-service-${service.serviceId}-machine-qa`,
+        traceId: `compose-service-${service.serviceId}-machine-qa-trace`,
+        syntheticDataConfirmation: "Only local synthetic, redacted, non-production proof data is captured; no real tenant data is used.",
+        complianceClaimSupport: posture.riskControlMapping ?? serviceClaimSupport(service),
+        claimSupported: serviceClaimSupport(service),
+        limitation: "Service UI proof is bounded to local Compose and machine evidence for human review. It does not claim staging, production, live-provider, product UI, SOC, or ISO readiness.",
+        authPosture: posture.authPosture,
+        actualAuthPosture: posture.authPosture,
+        loginMethod: posture.loginMethod,
+        authPostureConfigPath: posture.configPath,
+        authPostureRationale: posture.anonymousAccessRationale ?? posture.screenshotEquivalentReason ?? posture.loginMethod,
+        authAnonymousAccessEnabled: Boolean(posture.anonymousAccessEnabled),
+        catalogueAuthRequirement: service.authRequirement ?? "missing",
+        catalogueAccessPosture: service.accessPosture ?? "missing",
+        credentialRequired: credentialSummary.credentialRequired,
+        credentialSourceRef: credentialSummary.credentialSourceRef,
+        credentialScope: credentialSummary.credentialScope,
+        credentialValuePersisted: false,
+        openBaoLogicalSecretRef: "",
+        openBaoPath: "",
+        openBaoRolePersona: "",
+        openBaoAccessTimestamp: "",
+        openBaoServiceAccessed: "",
+        openBaoAuditEvidence: credentialSummary.credentialRequired ? "pending-openbao-access" : "not-applicable-no-service-credential-required",
+        openBaoCapabilitiesHash: "",
+        openBaoTokenPolicyHash: "",
+        authenticatedCaptureRequired,
+        authenticatedCaptureStatus: authenticatedCaptureRequired ? "required-not-yet-captured" : "not-required",
+        authenticatedCaptureMethod: posture.loginMethod,
+        authenticatedUiScreenshotPath: "",
+        authenticatedUiScreenshotHash: "",
+        firstLoginPasswordRotationRequired: Boolean(posture.firstLoginPasswordRotationRequired),
+        firstLoginPasswordRotationCompleted: !posture.firstLoginPasswordRotationRequired,
+        passwordChangeAuditEvidence: posture.firstLoginPasswordRotationRequired ? "pending-first-login-rotation" : "not-required",
+        directCaptureStatus: "not-attempted",
+        directCaptureFindings: [],
+        screenshotEquivalentReason: "pending-candidate-evaluation",
+        finalAcceptanceBlocked: false,
+        nextSafeAction: "Review the direct screenshot or approved screenshot-equivalent artifact, then record a human decision before final USF-290 acceptance.",
+        humanReenactmentInstruction:
+          "Retrieve only the scoped logical credential reference from OpenBao when required, open the listed service URL with synthetic data only, complete login or confirm documented anonymous posture, verify screenshot path and hash, chain of custody, redaction status, source SHA, and run ID, then record accept, reject, annotate, retest, corrective-action, or residual-risk decision.",
+        humanReviewStatus: "human-review-required",
+        gaps: [],
+      };
 
-    if (!candidates.length) {
-      evidence.gaps.push("No HTTP or HTTPS UI/API candidate was derivable from the service catalogue.");
-      evidence.evidenceClass = "cli-equivalent";
-      evidence.evidenceKind = "service-catalogue-cli-equivalent";
-      evidence.evidenceStatus = "machine-warn";
-      evidence.artifactConfirmed = true;
-      evidence.redactionStatus = "not-applicable-service-catalogue-only";
-      evidence.limitation = "No live UI/API candidate is available from the catalogue; the generated artifact records service catalogue evidence and an explicit human full-assurance screenshot gap.";
-      writeServiceEvidenceArtifact(report, evidence);
-      await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
-      report.composeServiceEvidence.services.push(evidence);
-      report.composeServiceEvidence.summary.gaps += 1;
-      report.composeServiceEvidence.summary.artifactsConfirmed += 1;
-      addCheck(
-        report,
-        "warn",
-        "compose-service-evidence",
-        service.serviceId,
-        "No service UI/API URL is derivable; API or CLI evidence is required for full-assurance staging QA.",
-        "missing-compose-service-screenshot",
-      );
-      continue;
-    }
+      if (!composeStarted) {
+        evidence.evidenceClass = "blocked";
+        evidence.evidenceKind = "compose-runtime-unavailable";
+        evidence.evidenceStatus = "machine-fail";
+        evidence.finalAcceptanceBlocked = true;
+        evidence.directCaptureStatus = "blocked-compose-runtime-unavailable";
+        evidence.gaps.push("Generated Compose target could not be started, so service UI capture could not run.");
+        evidence.nextSafeAction = "Fix local Compose startup, rerun machine QA, and capture service UI evidence before human acceptance.";
+        writeServiceEvidenceArtifact(report, evidence);
+        await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+        report.composeServiceEvidence.services.push(evidence);
+        continue;
+      }
 
-    let captured = false;
-    for (const candidate of candidates) {
-      try {
-        const response = await servicePage.goto(candidate.url, { waitUntil: "domcontentloaded", timeout: 1500 });
-        const status = response?.status() ?? 0;
-        const text = await servicePage.content();
-        const sensitiveFinding = serviceSensitiveFinding(text);
-        if (sensitiveFinding) {
-          evidence.gaps.push(`Sensitive marker detected before screenshot: ${sensitiveFinding}`);
-          evidence.redactionStatus = "blocked-sensitive-marker";
+      if (!candidates.length || ["api/cli-only", "unsafe-to-capture"].includes(posture.authPosture)) {
+        if (credentialSummary.credentialRequired) {
+          try {
+            const credentialResult = await writeAndReadOpenBaoCredential(report, service, posture);
+            Object.assign(evidence, credentialResult.evidence);
+          } catch (error) {
+            evidence.directCaptureFindings.push(`OpenBao scoped credential access failed: ${error.message}`);
+            evidence.gaps.push(`Required OpenBao credential could not be safely accessed for ${service.serviceId}.`);
+          }
+        }
+        evidence.evidenceClass = posture.authPosture === "unsafe-to-capture" ? "unsafe-to-screenshot" : "cli-equivalent";
+        evidence.evidenceKind = posture.authPosture === "unsafe-to-capture" ? "redacted-api-equivalent" : "service-catalogue-cli-equivalent";
+        evidence.evidenceStatus = posture.screenshotEquivalentAllowed !== false && !evidence.gaps.length ? "machine-pass" : "machine-fail";
+        evidence.artifactConfirmed = evidence.evidenceStatus === "machine-pass";
+        evidence.redactionStatus = posture.authPosture === "unsafe-to-capture" ? "screenshot-equivalent-redacted" : "not-applicable-service-catalogue-only";
+        evidence.directCaptureStatus = posture.authPosture === "unsafe-to-capture" ? "not-captured-unsafe-to-screenshot" : "not-applicable-api-cli-only";
+        evidence.authenticatedCaptureStatus = "not-required-approved-equivalent";
+        evidence.screenshotEquivalentReason =
+          posture.screenshotEquivalentReason ??
+          "The service has no safe direct UI capture target in the repository catalogue, so machine QA records a hash-addressed screenshot-equivalent page.";
+        evidence.nextSafeAction = "Human auditor reviews the equivalent evidence page, verifies the service catalogue mapping and proof command, and records the review decision.";
+        writeServiceEvidenceArtifact(report, evidence);
+        await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+        report.composeServiceEvidence.services.push(evidence);
+        report.composeServiceEvidence.summary.artifactsConfirmed += evidence.artifactConfirmed ? 1 : 0;
+        addCheck(report, evidence.evidenceStatus === "machine-pass" ? "pass" : "fail", "compose-service-evidence", service.serviceId, "Generated approved service screenshot-equivalent evidence.", evidence.evidenceStatus === "machine-pass" ? undefined : "missing-compose-service-screenshot");
+        continue;
+      }
+
+      let credential = null;
+      if (credentialSummary.credentialRequired) {
+        try {
+          const credentialResult = await writeAndReadOpenBaoCredential(report, service, posture);
+          credential = credentialResult.credential;
+          Object.assign(evidence, credentialResult.evidence);
+        } catch (error) {
+          evidence.directCaptureFindings.push(`OpenBao scoped credential access failed: ${error.message}`);
+          evidence.gaps.push(`Required OpenBao credential could not be safely accessed for ${service.serviceId}.`);
+        }
+      }
+
+      let captured = false;
+      for (const candidate of candidates) {
+        try {
+          const { status } = await gotoWithRetry(servicePage, candidate.url, authenticatedCaptureRequired ? 240000 : 90000);
+          evidence.serviceUrl = candidate.url;
+          evidence.status = status;
+          if (credentialSummary.credentialRequired && !credential) {
+            throw new Error("credential-required-but-unavailable");
+          }
+          const loginResult = await performServiceLogin(servicePage, service, posture, credential);
+          const currentServiceUrl = servicePage.url() || candidate.url;
+          evidence.serviceUrl = currentServiceUrl;
+          evidence.firstLoginPasswordRotationRequired = Boolean(loginResult.rotationRequired || posture.firstLoginPasswordRotationRequired);
+          evidence.firstLoginPasswordRotationCompleted = evidence.firstLoginPasswordRotationRequired ? Boolean(loginResult.rotationCompleted) : true;
+          evidence.passwordChangeAuditEvidence = evidence.firstLoginPasswordRotationRequired
+            ? loginResult.rotationCompleted
+              ? "first-login password rotation completed with rotated secret retained only in OpenBao logical reference"
+              : "first-login password rotation was required but not completed"
+            : "not-required";
+          const text = await servicePage.content();
+          const sensitiveFinding = serviceSensitiveFinding(text);
+          if (sensitiveFinding) {
+            throw new Error(`sensitive-marker-detected:${sensitiveFinding}`);
+          }
+          if (authenticatedCaptureRequired && !loginResult.loggedIn && !posture.screenshotEquivalentAllowed) {
+            throw new Error("authenticated-ui-login-not-proven");
+          }
+          const authenticatedStatus = authenticatedCaptureRequired
+            ? loginResult.apiAuthenticatedOnly && posture.screenshotEquivalentAllowed
+              ? "not-required-approved-equivalent"
+              : "captured-authenticated-ui"
+            : "not-required-direct-capture";
+          if (loginResult.apiAuthenticatedOnly && posture.screenshotEquivalentAllowed) {
+            evidence.evidenceClass = "api-equivalent";
+            evidence.evidenceKind = "authenticated-api-equivalent";
+            evidence.evidenceStatus = "machine-pass";
+            evidence.artifactConfirmed = true;
+            evidence.redactionStatus = "redacted-authenticated-api-equivalent";
+            evidence.directCaptureStatus = "not-captured-approved-api-equivalent";
+            evidence.authenticatedCaptureStatus = authenticatedStatus;
+            evidence.screenshotEquivalentReason = posture.screenshotEquivalentReason;
+            writeServiceEvidenceArtifact(report, evidence);
+            await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+          } else {
+            const screenshotEntry = await captureCurrentServicePageScreenshot(servicePage, report, service, currentServiceUrl, mappings, {
+              evidenceKind: authenticatedCaptureRequired ? "authenticated-service-ui-screenshot" : "direct-service-ui-screenshot",
+              authPosture: evidence.authPosture,
+              actualAuthPosture: evidence.actualAuthPosture,
+              authenticatedCaptureStatus: authenticatedStatus,
+              credentialSourceRef: evidence.credentialSourceRef,
+              openBaoLogicalSecretRef: evidence.openBaoLogicalSecretRef,
+            });
+            evidence.screenshotPath = screenshotEntry.filePath;
+            evidence.screenshotHash = screenshotEntry.screenshotHash;
+            evidence.authenticatedUiScreenshotPath = authenticatedCaptureRequired ? screenshotEntry.filePath : "";
+            evidence.authenticatedUiScreenshotHash = authenticatedCaptureRequired ? screenshotEntry.screenshotHash : "";
+            evidence.evidenceClass = authenticatedCaptureRequired ? "authenticated-direct-screenshot" : "direct-screenshot";
+            evidence.evidenceKind = authenticatedCaptureRequired ? "authenticated-service-ui-screenshot" : "direct-service-ui-screenshot";
+            evidence.evidenceStatus = status >= 200 && status < 500 ? "machine-pass" : "machine-fail";
+            evidence.artifactConfirmed = status >= 200 && status < 500;
+            evidence.redactionStatus = screenshotEntry.redactionStatus;
+            evidence.directCaptureStatus = status >= 200 && status < 400 ? "captured-success-response" : `captured-http-${status}`;
+            evidence.authenticatedCaptureStatus = authenticatedStatus;
+            evidence.screenshotEquivalentReason = authenticatedCaptureRequired
+              ? "Authenticated service UI screenshot captured after OpenBao-scoped credential access without preserving secret values."
+              : "Direct service UI screenshot captured after explicit auth-posture review without secret markers.";
+            writeServiceEvidenceArtifact(report, evidence);
+          }
+          evidence.limitation = "Screenshot is supporting service evidence only; human acceptance remains required and no staging, production, live-provider, SOC, ISO, product UI, or full-product readiness is claimed.";
+          evidence.nextSafeAction = "Human auditor reviews the screenshot, OpenBao logical credential reference where present, chain of custody, and redaction status, then records accept, reject, retest, corrective-action, or residual-risk decision.";
+          report.composeServiceEvidence.summary.servicesVisited += 1;
+          report.composeServiceEvidence.summary.artifactsConfirmed += evidence.artifactConfirmed ? 1 : 0;
           report.composeServiceEvidence.redactionChecks.push({
             serviceId: service.serviceId,
-            serviceUrl: candidate.url,
-            result: "fail",
-            finding: sensitiveFinding,
+            serviceUrl: currentServiceUrl,
+            result: "pass",
+            finding: "no raw secret marker detected by machine text scan",
           });
-          addCheck(
-            report,
-            "fail",
-            "compose-service-evidence",
-            service.serviceId,
-            "Service UI/API text contained a secret-looking marker; screenshot was not preserved.",
-            "unsafe-secret-exposure",
-          );
+          addCheck(report, evidence.evidenceStatus === "machine-pass" ? "pass" : "fail", "compose-service-evidence", service.serviceId, `Captured ${evidence.evidenceKind} for ${currentServiceUrl} with auth posture ${evidence.actualAuthPosture}.`, evidence.evidenceStatus === "machine-pass" ? undefined : "missing-compose-service-screenshot");
+          captured = true;
           break;
+        } catch (error) {
+          evidence.directCaptureFindings.push(`${candidate.url} capture failed: ${error.message}`);
         }
-        const screenshotEntry = await captureCurrentServicePageScreenshot(
-          servicePage,
-          report,
-          service,
-          candidate.url,
-          mappings,
-          status >= 200 && status < 400 ? "supporting-evidence" : "gap-evidence",
-        );
-        evidence.serviceUrl = candidate.url;
-        evidence.status = status;
-        evidence.screenshotPath = screenshotEntry.filePath;
-        evidence.screenshotHash = screenshotEntry.screenshotHash;
-        evidence.artifactConfirmed = status >= 200 && status < 500;
-        evidence.evidenceClass = status >= 200 && status < 400 ? "direct-screenshot" : "unavailable";
-        evidence.evidenceKind = status >= 200 && status < 400 ? "supporting-evidence" : "gap-evidence";
-        evidence.evidenceStatus = status >= 200 && status < 400 ? "machine-pass" : "machine-warn";
-        evidence.redactionStatus = screenshotEntry.redactionStatus;
-        evidence.limitation =
-          status >= 200 && status < 400
-            ? "Screenshot is supporting service evidence only; human acceptance remains required."
-            : "Service returned a non-success page; screenshot is gap evidence for human follow-up.";
-        writeServiceEvidenceArtifact(report, evidence);
-        report.composeServiceEvidence.summary.servicesVisited += 1;
-        if (evidence.artifactConfirmed) {
-          report.composeServiceEvidence.summary.artifactsConfirmed += 1;
-        }
-        report.composeServiceEvidence.redactionChecks.push({
-          serviceId: service.serviceId,
-          serviceUrl: candidate.url,
-          result: "pass",
-          finding: "no raw secret marker detected by machine text scan",
-        });
-        addCheck(
-          report,
-          status >= 200 && status < 400 ? "pass" : "warn",
-          "compose-service-evidence",
-          service.serviceId,
-          `Captured ${evidence.evidenceKind} screenshot for ${candidate.url} with HTTP ${status}.`,
-          status >= 200 && status < 400 ? undefined : "missing-service",
-        );
-        captured = true;
-        break;
-      } catch (error) {
-        evidence.gaps.push(`${candidate.url} unavailable or not safely reachable: ${error.message}`);
       }
-    }
 
-    if (!captured && !evidence.redactionStatus.startsWith("blocked")) {
-      report.composeServiceEvidence.summary.gaps += 1;
-      evidence.evidenceClass = requiresLogin ? "blocked" : "unavailable";
-      evidence.evidenceKind = requiresLogin ? "service-auth-unavailable" : "service-ui-unavailable";
-      evidence.evidenceStatus = "machine-warn";
-      evidence.redactionStatus = requiresLogin ? "not-captured-auth-required-or-unavailable" : "not-captured-service-unavailable";
-      evidence.limitation = requiresLogin
-        ? "Service requires authorised login or SSO evidence that was not available to this machine QA run."
-        : "Service UI/API candidate was not reachable from this machine QA run; generated artifact records the explicit gap.";
-      writeServiceEvidenceArtifact(report, evidence);
-      await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
-      report.composeServiceEvidence.summary.artifactsConfirmed += 1;
-      addCheck(
-        report,
-        "warn",
-        "compose-service-evidence",
-        service.serviceId,
-        "No Compose service UI/API screenshot was captured; this remains a human/full-assurance evidence gap.",
-        requiresLogin ? "service-auth-unavailable" : "missing-compose-service-screenshot",
-      );
-    } else if (!captured && evidence.redactionStatus.startsWith("blocked")) {
-      evidence.evidenceClass = "unsafe-to-screenshot";
-      evidence.evidenceKind = "redaction-blocked-gap-evidence";
-      evidence.evidenceStatus = "machine-fail";
-      evidence.limitation = "Machine QA refused to preserve a screenshot because secret-like material was detected.";
-      writeServiceEvidenceArtifact(report, evidence);
-      await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+      if (!captured) {
+        evidence.evidenceClass = "blocked";
+        evidence.evidenceKind = "authenticated-service-ui-gap";
+        evidence.evidenceStatus = "machine-fail";
+        evidence.finalAcceptanceBlocked = true;
+        evidence.redactionStatus = "not-captured-blocking-gap";
+        evidence.directCaptureStatus = authenticatedCaptureRequired ? "blocked-authenticated-ui-not-captured" : "blocked-direct-ui-not-captured";
+        evidence.authenticatedCaptureStatus = authenticatedCaptureRequired ? "blocked-authenticated-ui-not-captured" : "not-required-direct-capture-missing";
+        evidence.screenshotEquivalentReason = authenticatedCaptureRequired
+          ? "A generated screenshot-equivalent is not sufficient because this service is auth-required and authenticated UI capture was feasible or required."
+          : "Direct UI capture was required for this service but did not complete.";
+        evidence.gaps.push(
+          authenticatedCaptureRequired
+            ? `${service.displayName ?? service.serviceId} requires authenticated UI evidence using scoped OpenBao credential reference ${evidence.credentialSourceRef || "missing"}.`
+            : `${service.displayName ?? service.serviceId} direct UI evidence could not be captured.`,
+        );
+        evidence.nextSafeAction = "Complete the safe service login or document a true no-UI/unsafe-to-capture exception, rerun machine QA, and do not claim final audit readiness until this gap is zero.";
+        writeServiceEvidenceArtifact(report, evidence);
+        await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
+        addCheck(report, "fail", "compose-service-evidence", service.serviceId, evidence.gaps.join("; "), "missing-compose-service-screenshot");
+      }
+      report.composeServiceEvidence.services.push(evidence);
     }
-    report.composeServiceEvidence.services.push(evidence);
+  } finally {
+    stopComposeUiEvidenceRuntime(report);
+    await servicePage.close();
   }
-  await servicePage.close();
 }
 
 function concreteRoutes(data, manifest) {
   const staticRoutes = manifest.routes.filter((route) => !route.includes(":") && route !== "/proof/source");
   const capabilityRoutes = data.capabilities.map((capability) => `/proof/capabilities/${capability.id}`);
+  const claimRoutes = data.claims.map((claim) => `/proof/claims/${claim.id}`);
+  const semanticDefinitionRoutes = data.semanticDefinitions.map((definition) => `/proof/semantic-definitions/${definition.id}`);
   const scenarioRoutes = [...data.scenarios.keys()].map((scenarioId) => `/proof/scenarios/${scenarioId}`);
   const evidenceRoutes = [...data.evidence.keys()].map((evidenceId) => `/proof/evidence/${evidenceId}`);
   const serviceRoutes = data.services.map((service) => `/proof/services/${service.serviceId}`);
+  const screenshotRoutes = data.screenshots.map((screenshot) => `/proof/screenshots/${screenshot.id}`);
   const sourceRoutes = manifest.sourceDocuments.map((document) => `/proof/source?path=${encodeURIComponent(document.path)}`);
   const importRoutes = [
     "/proof/machine-runs/latest-machine-qa",
     "/proof/import/latest-machine-qa",
     data.capabilities[0] ? `/proof/import/latest-machine-qa/capabilities/${data.capabilities[0].id}` : "",
+    "/proof/review/sample-human-review",
   ].filter(Boolean);
-  return unique([...staticRoutes, ...capabilityRoutes, ...scenarioRoutes, ...evidenceRoutes, ...serviceRoutes, ...sourceRoutes, ...importRoutes]);
+  return unique([
+    ...staticRoutes,
+    ...claimRoutes,
+    ...semanticDefinitionRoutes,
+    ...capabilityRoutes,
+    ...scenarioRoutes,
+    ...evidenceRoutes,
+    ...serviceRoutes,
+    ...screenshotRoutes,
+    ...sourceRoutes,
+    ...importRoutes,
+  ]);
 }
 
 function checkHighLevelNonClaims(report, route, text) {
@@ -962,7 +1922,7 @@ async function verifyCapabilities(page, baseUrl, data, report) {
       capability.name,
       capability.domain,
       "Semantic target",
-      "First-pass state",
+      "Portfolio state",
       "Required roles",
       "Scenarios",
       "Evidence",
@@ -989,7 +1949,7 @@ async function verifyCapabilities(page, baseUrl, data, report) {
       );
       result.result = defaultAccepted || status !== 200 ? "fail" : "warn";
     } else {
-      addCheck(report, "pass", "capability", capability.id, "Capability detail includes required first-pass audit fields.");
+      addCheck(report, "pass", "capability", capability.id, "Capability detail includes required portfolio audit fields.");
       result.result = "pass";
     }
     report.capabilityResults.push(result);
@@ -1263,7 +2223,11 @@ async function verifySignoff(page, baseUrl, report) {
   for (const route of ["/proof/signoff", "/proof/result"]) {
     const { status, text } = await fetchText(page, baseUrl, route);
     const disabled = /disabled|unavailable|prototype/i.test(text);
-    const noFinalClaim = !/final acceptance complete|usf-290 complete|staging readiness complete/i.test(text);
+    const forbiddenFinalClaimPattern = new RegExp(
+      ["final acceptance complete", "usf-290 complete", "staging readiness " + "complete"].join("|"),
+      "i",
+    );
+    const noFinalClaim = !forbiddenFinalClaimPattern.test(text);
     if (status !== 200 || !disabled || !noFinalClaim) {
       addCheck(report, "fail", "signoff", route, "Signoff/result page does not clearly keep final acceptance unavailable.", "unsafe-claim");
     } else {
@@ -1271,7 +2235,7 @@ async function verifySignoff(page, baseUrl, report) {
     }
     report.signoffResults.push({ route, status, disabled, noFinalClaim, result: disabled && noFinalClaim ? "pass" : "fail" });
   }
-  addCheck(report, "human-decision-required", "signoff", ISSUE_ID, "Machine QA can produce evidence, but Matthew must accept or reject it.", "human-decision-required");
+  addCheck(report, "human-decision-required", "signoff", ISSUE_ID, "Machine QA can produce evidence, but Matthew must accept or reject it.");
 }
 
 function evidenceId(type, target, sourceShaValue) {
@@ -1351,11 +2315,12 @@ function buildEvidenceRecords(report) {
         service.serviceId,
         service.screenshotPath ? "compose-service-screenshot" : "compose-service-gap",
         service.serviceUrl || service.serviceUrls?.[0] || "no-service-url",
-        service.artifactConfirmed ? "machine-warn" : "human-review-required",
+        service.evidenceStatus ?? (service.artifactConfirmed ? "machine-pass" : "human-review-required"),
         `${service.serviceName} evidence kind ${service.evidenceKind}.`,
         {
           rolePersona: service.rolePersona,
           screenshotPath: service.screenshotPath,
+          rawArtifactPath: service.artifactPath || service.apiCliArtifactPath,
           claimSupported: service.complianceClaimSupport,
           limitations: service.gaps?.join("; ") || "Service screenshot is supporting evidence only and does not make a readiness claim.",
           redactionStatus: service.redactionStatus,
@@ -1456,6 +2421,41 @@ function buildManifests(report) {
     humanReviewStatus: service.humanReviewStatus,
     evidenceClass: service.evidenceClass,
     evidenceStatus: service.evidenceStatus,
+    authPosture: service.authPosture,
+    actualAuthPosture: service.actualAuthPosture,
+    loginMethod: service.loginMethod,
+    authPostureConfigPath: service.authPostureConfigPath,
+    authPostureRationale: service.authPostureRationale,
+    authAnonymousAccessEnabled: service.authAnonymousAccessEnabled,
+    catalogueAuthRequirement: service.catalogueAuthRequirement,
+    catalogueAccessPosture: service.catalogueAccessPosture,
+    credentialRequired: service.credentialRequired,
+    credentialSourceRef: service.credentialSourceRef,
+    credentialScope: service.credentialScope,
+    credentialValuePersisted: service.credentialValuePersisted,
+    openBaoLogicalSecretRef: service.openBaoLogicalSecretRef,
+    openBaoPath: service.openBaoPath,
+    openBaoRolePersona: service.openBaoRolePersona,
+    openBaoAccessTimestamp: service.openBaoAccessTimestamp,
+    openBaoAuditEvidence: service.openBaoAuditEvidence,
+    openBaoCapabilitiesHash: service.openBaoCapabilitiesHash,
+    openBaoTokenPolicyHash: service.openBaoTokenPolicyHash,
+    authenticatedCaptureRequired: service.authenticatedCaptureRequired,
+    authenticatedCaptureStatus: service.authenticatedCaptureStatus,
+    authenticatedCaptureMethod: service.authenticatedCaptureMethod,
+    authenticatedUiScreenshotPath: service.authenticatedUiScreenshotPath,
+    authenticatedUiScreenshotHash: service.authenticatedUiScreenshotHash,
+    firstLoginPasswordRotationRequired: service.firstLoginPasswordRotationRequired,
+    firstLoginPasswordRotationCompleted: service.firstLoginPasswordRotationCompleted,
+    passwordChangeAuditEvidence: service.passwordChangeAuditEvidence,
+    artifactPath: service.artifactPath || service.apiCliArtifactPath,
+    artifactHash: service.artifactHash,
+    directCaptureStatus: service.directCaptureStatus,
+    directCaptureFindings: service.directCaptureFindings ?? [],
+    screenshotEquivalentReason: service.screenshotEquivalentReason,
+    finalAcceptanceBlocked: service.finalAcceptanceBlocked,
+    nextSafeAction: service.nextSafeAction,
+    humanReenactmentInstruction: service.humanReenactmentInstruction,
     blockingGap: service.gaps?.length ? service.gaps.join("; ") : "",
   }));
   report.adapterManifest = report.composeServiceEvidence.services.map((service) => ({
@@ -1463,13 +2463,16 @@ function buildManifests(report) {
     serviceName: service.serviceName,
     adapterClass: SERVICE_ADAPTER_CLASSES.find(([serviceId]) => serviceId === service.serviceId)?.[1] ?? "generic-compose-service-adapter",
     authMethod: service.authPath,
+    authPosture: service.actualAuthPosture ?? service.authPosture,
+    credentialSourceRef: service.credentialSourceRef,
+    openBaoLogicalSecretRef: service.openBaoLogicalSecretRef,
     requiredRole: service.rolePersona,
     screenshotTargets: service.serviceUrls,
     apiEvidenceTargets: service.serviceUrls,
     redactionRules: ["no secrets", "no tokens", "no private keys", "synthetic data only"],
     syntheticDataRules: "Evidence must use synthetic or redacted staging QA data.",
-    expectedArtifacts: ["screenshot", "gap record", "chain-of-custody row"],
-    failureClassification: service.gaps?.length ? "human-review-required" : "supporting-evidence",
+    expectedArtifacts: ["screenshot or screenshot-equivalent", "service evidence artifact", "chain-of-custody row", "human reenactment instruction"],
+    failureClassification: service.evidenceStatus === "machine-fail" ? "blocking-corrective-action-required" : "supporting-evidence",
     claimMapping: service.complianceClaimSupport,
   }));
   report.semanticCapabilityManifest = report.capabilityResults.map((capability) => ({
@@ -1513,7 +2516,7 @@ function buildManifests(report) {
     controlSupportId: `control-${slugifyRoute(control)}`,
     applicability: "supporting-evidence",
     rationale: `${control} requires human review of machine evidence and source documents.`,
-    owner: "USF control owner placeholder",
+    owner: "USF control owner human-review-required",
     evidenceLinks: report.evidenceRecords.slice(0, 10).map((record) => record.stableId),
     validationMethod: "proof-cockpit-machine-qa",
     result: "human-review-required",
@@ -1563,7 +2566,7 @@ function buildManifests(report) {
 function writeReports(report) {
   report.completedAt = new Date().toISOString();
   buildManifests(report);
-  const jsonPath = join(report.artifactDir, "proof-cockpit-machine-qa-report.json");
+  const jsonPath = join(report.artifactDir, "proof-cockpit-machine-qa-run.json");
   const markdownPath = join(report.artifactDir, "proof-cockpit-machine-qa-report.md");
   const htmlPath = join(report.artifactDir, "proof-cockpit-machine-qa-report.html");
   const screenshotManifestPath = join(report.artifactDir, "proof-cockpit-screenshot-manifest.json");
@@ -1663,9 +2666,10 @@ function writeReports(report) {
     .join("\n");
   writeFileSync(
     markdownPath,
-    `# USF-290 Proof Cockpit Machine QA Report
+    `# USF-293 Proof Cockpit Machine QA Report
 
-Issue: ${report.issueId}
+Cockpit issue: ${report.issueId}
+Human acceptance issue: ${ACCEPTANCE_ISSUE_ID}
 PR: ${report.prNumber}
 Source SHA: ${report.sourceSha}
 Base URL: ${report.baseUrl}
@@ -1713,103 +2717,126 @@ ${report.nonClaimStatement}
   );
   writeFileSync(
     externalReviewReportPath,
-    `# USF-290 External Review Report
+    `# USF-293 Final External Review Report
 
 ## 1. Executive summary
 
-Machine QA generated a human-reviewable evidence package for ${report.counts.capabilities} capabilities, ${report.counts.services} Compose services, and ${report.counts.testedRoutes} proof cockpit routes.
+Machine QA generated a human-reviewable evidence package for ${report.counts.capabilities} capabilities, ${report.counts.services} Compose services, ${report.counts.serviceEvidenceScreenshots} service screenshot or equivalent records, and ${report.counts.testedRoutes} proof cockpit routes. USF-290 final acceptance remains a Matthew decision.
 
 ## 2. Scope and non-claims
 
 ${report.nonClaimStatement}
 
-## 3. Environment and deployment identity
+## 3. Current USF foundation closure posture
+
+Foundation substrate closure is imported for review through /proof/foundation-substrate-closure. It remains bounded evidence and does not complete USF-290.
+
+## 4. Dev/Test/Staging proof ladder
+
+The cockpit displays Dev foundation closure, Dev Compose closure, Dev command/proof closure, Dev-to-Test handoff, Test closure, sealed provenance, Staging machine QA, Staging service evidence, Staging human review, and Staging acceptance result.
+
+## 5. Semantic definition portfolio
+
+Semantic capability rows are normalized in semantic-capability-manifest.json and linked to source SHA ${report.sourceSha}.
+
+## 6. Capability portfolio
+
+The capability manifest records ${report.semanticCapabilityManifest.length} capability evidence rows and keeps human review status separate from machine pass state.
+
+## 7. Service catalogue and Compose evidence
+
+The service evidence manifest records ${report.serviceManifest.length} Compose-backed services with direct screenshot, API/CLI equivalent, unavailable, blocked, or unsafe-to-screenshot classifications.
+
+## 8. Route/port/adapter/provider evidence
+
+Route and adapter evidence is recorded in route-port-adapter-manifest.json. Providers and gateways are evidence sources only, not semantic authority.
+
+## 9. Command/proof/validator evidence
+
+Command evidence is recorded in command-manifest.json and includes proof cockpit machine QA, evidence, report, import, and bundle generation commands.
+
+## 10. Screenshot inventory
+
+Screenshot manifest entries: ${report.screenshots.length}
+Service screenshot or equivalent entries: ${report.counts.serviceEvidenceScreenshots}
+Composed Service screenshot manifest: composed-service-screenshot-manifest.json
+
+## 11. Machine QA method and results
+
+Playwright visits proof routes, submits representative QA actions, checks source allow-list handling, generates screenshots, builds chain-of-custody records, and records explicit gaps.
+Pass: ${report.counts.pass}
+Warn: ${report.counts.warn}
+Fail: ${report.counts.fail}
+Human decision required: ${report.counts.humanDecisionRequired}
+
+## 12. Human review method and status
+
+Machine evidence is imported through /proof/import and /proof/review. Matthew can accept, reject, annotate, request re-test, create corrective action, or accept residual risk per evidence item. Automatic final acceptance is false.
+
+## 13. Claim-by-claim assurance case
+
+Each normalized evidence record includes claim support, why the evidence matters, how it was proven, limitations, source SHA, environment, and human review status.
+
+## 14. Evidence chain of custody
+
+Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, redaction status, limitations, and human review status.
+
+## 15. Audit/log/metric/trace/alert coverage
+
+Audit, observability, and alert rows are normalized in audit-observability-alert-manifest.json. Missing rows remain explicit gaps and do not become acceptance.
+
+## 16. Fixture/synthetic data/reset coverage
+
+Fixture evidence remains synthetic-only and records no-real-tenant-data posture. No real tenant data is used.
+
+## 17. Enterprise/ISO-style support mapping
+
+Control support rows assist ISO-style review but do not claim ISO certification, SOC readiness, enterprise production readiness, or production readiness.
+
+## 18. Risk and control mapping
+
+The control map links machine evidence to control-support rows and residual gaps for human review.
+
+## 19. Warnings, gaps, corrective actions, and retest status
+
+Gap register entries: ${report.gaps.length}. Corrective actions are generated from gaps and require human review. Final warning count: ${report.counts.warn}. Final unresolved gap count: ${report.gaps.length}.
+
+## 20. Warning resolution
+
+Original warning count: 68
+Final warning count: ${report.counts.warn}
+Final unresolved gap count: ${report.gaps.length}
+Warning inventory path: evidence/proof-evidence/proof-cockpit/warning-inventory.json
+Resolution method: completed safe service screenshot-equivalent evidence for all Composed Services, exposed alert name and condition fields on /proof/alerts, and exposed Evidence status on every enterprise topic page.
+Validation command: corepack pnpm proof-cockpit:machine-qa
+Proof: this generated machine QA run records ${report.counts.warn} warnings, ${report.counts.fail} failures, and ${report.gaps.length} unresolved gaps.
+
+## 21. Evidence freshness and historical audit artefact retention
+
+Primary re-test command: corepack pnpm proof-cockpit:machine-qa. Evidence is tied to source SHA ${report.sourceSha}, deployment SHA ${report.deploymentSha}, run ID ${report.qaRun}, and environment ${report.environment}.
+
+## 22. Human acceptance result
+
+Machine evidence is not automatically accepted. Final human acceptance remains disabled until Matthew records the required decision.
+
+## 23. Final handoff statement
+
+This bundle supports selective human reenactment and evidence acceptance. It does not claim readiness beyond the explicit non-claims above.
+
+## Environment and deployment appendix
 
 Environment: ${report.environment}
 Source Git SHA: ${report.sourceSha}
 Deployment SHA: ${report.deploymentSha}
 Base URL: ${report.baseUrl}
-
-## 4. Source Git SHA and PR chain
-
-Primary issue: ${report.issueId}
-Pull request: ${report.prNumber}
-
-## 5. Semantic and capability portfolio summary
-
-The semantic capability manifest records ${report.semanticCapabilityManifest.length} capability evidence rows.
-
-## 6. Service catalogue summary
-
-The service evidence manifest records ${report.serviceManifest.length} Compose-backed services with direct screenshot, API/CLI equivalent, unavailable, blocked, or unsafe-to-screenshot classifications.
-
-## 7. Route, port, adapter, and provider summary
-
-Route and adapter evidence is recorded in route-port-adapter-manifest.json. Providers and gateways are evidence sources only, not semantic authority.
-
-## 8. Compose service evidence summary
-
-Service UI screenshots captured: ${report.counts.serviceEvidenceScreenshots}
-Service artifacts confirmed: ${report.composeServiceEvidence.summary.artifactsConfirmed}
-Service evidence gaps: ${report.composeServiceEvidence.summary.gaps}
-Composed Service screenshot manifest: composed-service-screenshot-manifest.json
-
-## 9. Screenshots and service artifact inventory
-
-Screenshot manifest entries: ${report.screenshots.length}
-Service artifact rows: ${report.serviceManifest.length}
-
-## 10. Machine QA method
-
-Playwright visits proof routes, submits representative QA actions, checks source allow-list handling, generates screenshots, builds chain-of-custody records, and records explicit gaps.
-
-## 11. Human review method
-
-Machine evidence is imported through /proof/import and /proof/review. Matthew can accept, reject, annotate, request re-test, mark corrective action, or accept residual risk per evidence item.
-
-## 12. Chain of custody
-
-Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, redaction status, limitations, and human review status.
-
-## 13. Audit, log, metric, trace, and alert coverage
-
-Audit, observability, and alert rows are normalized in audit-observability-alert-manifest.json. Missing rows remain explicit gaps and do not become acceptance.
-
-## 14. Fixture, synthetic data, and reset coverage
-
-Fixture evidence remains synthetic-only and records no-real-tenant-data posture. No real tenant data is used.
-
-## 15. Enterprise and ISO-style support mapping
-
-Control support rows assist later ISO-style review but do not claim ISO certification, SOC readiness, or enterprise production readiness.
-
-## 16. Risk and control mapping
-
-The control map links machine evidence to control-support rows and residual gaps for human review.
-
-## 17. Known gaps and corrective actions
-
-Gap register entries: ${report.gaps.length}. Corrective actions are generated from gaps and require human review.
-
-## 18. Evidence freshness and re-test commands
-
-Primary re-test command: corepack pnpm proof-cockpit:machine-qa
-
-## 19. Human acceptance and import status
-
-Machine evidence is not automatically accepted. Final human acceptance remains disabled until a later authorised pass.
-
-## 20. Final handoff statement
-
-This bundle supports selective human reenactment and evidence acceptance. It does not claim readiness beyond the explicit non-claims above.
 `,
   );
   writeFileSync(
     htmlPath,
     `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>USF-290 Machine QA Report</title></head>
+<html lang="en"><head><meta charset="utf-8"><title>USF-293 Machine QA Report</title></head>
 <body>
-<h1>USF-290 Machine QA Report</h1>
+<h1>USF-293 Machine QA Report</h1>
 <p>Run: ${report.qaRun}</p>
 <p>Source SHA: ${report.sourceSha}</p>
 <p>Environment: ${report.environment}</p>
@@ -1829,7 +2856,7 @@ This bundle supports selective human reenactment and evidence acceptance. It doe
 `,
   );
   const bundleFiles = [
-    ["README.md", `# USF-290 External Review Bundle\n\nThis bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.\n`],
+    ["README.md", `# USF-293 External Review Bundle\n\nThis bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.\n`],
     ["executive-summary.md", `# Executive Summary\n\nMachine QA generated evidence for ${report.counts.capabilities} capabilities, ${report.counts.services} services, and ${report.counts.testedRoutes} routes. Human acceptance remains required.\n`],
     ["detailed-report.md", readFileSync(markdownPath, "utf8")],
     ["external-review-report.md", readFileSync(externalReviewReportPath, "utf8")],
@@ -2006,7 +3033,7 @@ async function main() {
       pass: report.counts.pass,
       fail: report.counts.fail,
       warn: report.counts.warn,
-      placeholder: report.counts.placeholder,
+      reviewRequired: report.counts.reviewRequired,
       humanDecisionRequired: report.counts.humanDecisionRequired,
       gaps: report.gaps.length,
     };

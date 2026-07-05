@@ -28,4 +28,4 @@ The machine-readable boundary is `docs/architecture/pgbackrest-configured-proof-
 
 ## Non-Claims
 
-This note does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full React parity, backup readiness, restore readiness, disaster recovery readiness, RPO/RTO readiness, or USF-133 closure.
+This note does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full product readiness, backup readiness, restore readiness, disaster recovery readiness, RPO/RTO readiness, or USF-133 closure.

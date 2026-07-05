@@ -76,7 +76,7 @@ This standard explicitly does not prove:
 - SOC readiness;
 - ISO/IEC 27001 certification;
 - enterprise production readiness;
-- full React parity;
+- full product readiness;
 - USF-133 closure.
 
 Validation passing for this standard means the gate is represented and enforceable. It does not

@@ -27,4 +27,4 @@
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No full authorization parity, full dev readiness, full React parity, SOC readiness, ISO certification, enterprise production readiness, or USF-133 closure claim.
+No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No full authorization parity, full dev readiness, full product readiness, SOC readiness, ISO certification, enterprise production readiness, or USF-133 closure claim.

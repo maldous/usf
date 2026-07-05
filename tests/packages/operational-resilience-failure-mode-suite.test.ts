@@ -154,7 +154,7 @@ const requiredNonClaims = [
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
+  "full-product-readiness",
 ];
 
 describe("operational resilience failure-mode suite", () => {

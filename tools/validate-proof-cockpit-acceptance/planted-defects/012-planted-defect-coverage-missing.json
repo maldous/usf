@@ -1,0 +1,7 @@
+{
+  "id": "012-planted-defect-coverage-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-012",
+  "fixture": {
+    "kind": "planted-defect-coverage-missing"
+  }
+}

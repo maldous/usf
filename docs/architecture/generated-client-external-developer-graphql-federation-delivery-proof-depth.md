@@ -2,7 +2,7 @@
 
 USF-220 records the selected closure-tier disposition for generated SDKs, generated clients, external developer platform surfaces, client distribution, GraphQL runtime, and federation runtime.
 
-This is repository evidence for a bounded disposition gate. It does not implement or prove a generated SDK, generated client, GraphQL runtime, federation gateway, developer portal, package publication path, public API launch, staging environment, production environment, live provider, SOC readiness, ISO/IEC 27001 certification, full dev readiness, full React parity, or USF-133 closure.
+This is repository evidence for a bounded disposition gate. It does not implement or prove a generated SDK, generated client, GraphQL runtime, federation gateway, developer portal, package publication path, public API launch, staging environment, production environment, live provider, SOC readiness, ISO/IEC 27001 certification, full dev readiness, full product readiness, or USF-133 closure.
 
 ## Boundary
 

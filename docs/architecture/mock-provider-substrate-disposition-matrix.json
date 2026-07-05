@@ -86,7 +86,7 @@
     "reviewDate": "2026-09-30",
     "riskStatement": "Local mock, fixture, webhook capture, or emulator evidence could be mistaken for live external provider compatibility, cloud-provider parity, notification delivery proof, or complete local mock substrate readiness.",
     "treatment": "USF-201 proves bounded webhook-sink capture semantics with deterministic local Compose proof, no external egress, synthetic data, redaction, audit-shaped evidence, timeout and fail-closed unavailable handling, and teardown. USF-209 proves bounded WireMock configured HTTP mock semantics through the adapter-contained wiremock-captain SDK boundary. USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients inside adapters/resources, including readiness retry, synthetic round trips, cleanup, unavailable fail-closed evidence, no-egress posture, redaction, and audit-shaped evidence. USF-210 records that historical mock OIDC service operation is superseded for the selected closure tier by existing hermetic identity and composed Keycloak proof evidence. Remaining provider delivery and live compatibility boundaries remain non-claims.",
-    "deferredEvidence": "USF-201, USF-208, and USF-209 do not prove notification delivery, provider callback/replay, live external provider compatibility, live cloud-provider compatibility, provider contract certification, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure. USF-210 does not prove mock OIDC service startup, issuer compatibility as a standalone service, live IdP compatibility, SSO readiness, or production identity-provider readiness."
+    "deferredEvidence": "USF-201, USF-208, and USF-209 do not prove notification delivery, provider callback/replay, live external provider compatibility, live cloud-provider compatibility, provider contract certification, staging, production, SOC, ISO certification, full dev readiness, full product readiness, or USF-133 closure. USF-210 does not prove mock OIDC service startup, issuer compatibility as a standalone service, live IdP compatibility, SSO readiness, or production identity-provider readiness."
   },
   "mockSubstrateClassifications": [
     {
@@ -181,7 +181,7 @@
       "does not prove mock OIDC service startup, standalone issuer compatibility, or service operation; USF-210 records selected-tier supersession only",
       "does not prove no external egress for mock substrates",
       "does not prove tenant isolation, cleanup, retry, timeout, audit operation evidence, supplier posture, incident posture, vulnerability posture, or privacy posture for local mock substrates",
-      "does not prove local mock completeness, live-provider, test, staging, production, SOC, ISO, full dev, or full React parity readiness"
+      "does not prove local mock completeness, live-provider, test, staging, production, SOC, ISO, full dev, or full product readiness"
     ]
   },
   "providerBoundaries": [
@@ -349,7 +349,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ],
   "nonClaims": [
     "full-dev-readiness",
@@ -361,6 +361,6 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ]
 }

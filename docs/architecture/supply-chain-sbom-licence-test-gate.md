@@ -36,4 +36,4 @@ The gate is deliberately bounded. It records what the current repository can pro
 
 ## Non-claims
 
-This gate does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, production supply-chain maturity, or final USF-234 acceptance.
+This gate does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, production supply-chain maturity, or final USF-234 acceptance.

@@ -156,7 +156,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "usf-133-closure"
   ],
   "nonClaims": [
@@ -169,7 +169,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ],
   "operationalEvidencePosture": {
     "readinessRetry": "bounded-exponential-backoff-90s-proven-by-USF-206",

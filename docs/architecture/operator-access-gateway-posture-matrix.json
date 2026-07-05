@@ -61,7 +61,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ],
   "nonClaims": [
     "full-dev-readiness",
@@ -73,7 +73,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ],
   "adminSurfaceExposurePolicy": "No public or LAN exposure is authorised by this lane. Local host-published operator/admin/control-plane surfaces remain loopback-only, and provider consoles remain external-provider-managed unless a later accepted authority changes the boundary.",
   "authnAuthzPosture": "Each operator/admin/gateway/provider-console surface requires an explicit service-catalogue access decision, owner, auth requirement, authorization boundary, audit requirement, break-glass relevance, and non-claim boundary before stronger readiness.",

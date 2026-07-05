@@ -21,4 +21,4 @@ The tests use deterministic synthetic/static fixtures only. Service-backed claim
 
 ## Non-Claims
 
-This suite does not claim final USF-234 acceptance, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+This suite does not claim final USF-234 acceptance, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

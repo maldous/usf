@@ -1,0 +1,7 @@
+{
+  "id": "005-foundation-closure-validator-stale",
+  "expectedRule": "USF-PROOF-COCKPIT-005",
+  "fixture": {
+    "kind": "foundation-closure-validator-stale"
+  }
+}

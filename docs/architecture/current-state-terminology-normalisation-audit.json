@@ -122,7 +122,7 @@
       "term": "parity",
       "classification": "compatibility-alias",
       "activeAuthority": false,
-      "decision": "Keep existing validators and scripts, but describe as foundation coverage validation rather than full React parity.",
+      "decision": "Keep existing validators and scripts, but describe as foundation coverage validation rather than full product readiness.",
       "recommendedAliases": [
         "validate-coverage"
       ]
@@ -151,14 +151,14 @@
       "recommendedAliases": []
     },
     {
-      "term": "React parity",
+      "term": "superseded parity wording",
       "classification": "historical-lineage",
       "activeAuthority": false,
       "decision": "Retain in historical matrices and non-claims. Do not present as current product parity.",
       "recommendedAliases": []
     },
     {
-      "term": "../react",
+      "term": "superseded-external-lineage",
       "classification": "historical-lineage",
       "activeAuthority": false,
       "decision": "Retain as historical source evidence only. Do not copy or mirror runtime/application paths.",
@@ -219,7 +219,7 @@
       {
         "alias": "validate-coverage",
         "existingTargetOrScript": "parity",
-        "purpose": "Foundation coverage validator suite without implying full React parity."
+        "purpose": "Foundation coverage validator suite without implying full product readiness."
       },
       {
         "alias": "validate-assurance",
@@ -275,6 +275,6 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity"
+    "no-full-product-readiness"
   ]
 }

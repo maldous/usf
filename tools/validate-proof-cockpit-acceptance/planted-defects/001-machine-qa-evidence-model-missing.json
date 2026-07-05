@@ -1,0 +1,7 @@
+{
+  "id": "001-machine-qa-evidence-model-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-001",
+  "fixture": {
+    "kind": "machine-qa-evidence-model-missing"
+  }
+}

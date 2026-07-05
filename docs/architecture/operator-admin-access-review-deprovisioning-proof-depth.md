@@ -41,7 +41,7 @@ USF-217 records the current selected-closure-tier disposition for operator and a
 - soc-readiness
 - iso27001-certification
 - enterprise-production-readiness
-- full-react-parity-readiness
+- full-product-readiness
 - public-operator-exposure
 - operator-console-readiness
 - USF-133-closure

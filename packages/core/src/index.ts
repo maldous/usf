@@ -4297,7 +4297,7 @@ export function assertSchedule(spec: ScheduleSpec): ScheduleSpec {
 }
 
 /** Which scheduled window `nowSec` falls in. The same window yields the same key, so a
- *  double tick never double-enqueues (idempotent scheduling; ../react lineage). */
+ *  double tick never double-enqueues (idempotent scheduling; superseded external-lineage). */
 export function scheduleWindow(spec: ScheduleSpec, nowSec: number): number {
   return Math.floor((nowSec - spec.anchorEpochSeconds) / spec.intervalSeconds);
 }

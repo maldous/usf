@@ -280,7 +280,7 @@
     "socReadinessClaim": false,
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
-    "fullReactParityReadinessClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
@@ -296,7 +296,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ]
 }

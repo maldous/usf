@@ -13780,7 +13780,7 @@
       "serviceBackedClaimRequiresComposedService": false,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Public proof-origin functional mapping records a bounded post-Test disposition only. Local proof-origin response-contract evidence is not external public route proof, not final Test acceptance, and not staging, production, deployment, live-provider, SOC, ISO, product UI, browser E2E, full React product parity, or v2-proof authorization.",
+      "nonClaimBoundary": "Public proof-origin functional mapping records a bounded post-Test disposition only. Local proof-origin response-contract evidence is not external public route proof, not final Test acceptance, and not staging, production, deployment, live-provider, SOC, ISO, product UI, browser E2E, full product readiness, or v2-proof authorization.",
       "serviceCatalogueDisposition": "deferred-with-follow-up"
     },
     {
@@ -15385,6 +15385,6 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ]
 }

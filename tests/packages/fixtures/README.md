@@ -6,4 +6,4 @@ The corpus is repository evidence for seed, reset, cleanup, teardown, repeatabil
 
 Use `tests/packages/fixtures/synthetic-fixture-corpus.ts` to load the corpus in tests and proof code. Fixture rows must remain synthetic, value-free, deterministic, and linked back to the semantic service test obligation manifest.
 
-Non-claims: this corpus does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or final USF-234 acceptance.
+Non-claims: this corpus does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or final USF-234 acceptance.

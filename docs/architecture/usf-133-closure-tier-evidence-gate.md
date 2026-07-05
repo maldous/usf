@@ -44,7 +44,7 @@ The JSON gate records PR and merge-SHA inputs for PR #124 through PR #132. The U
 
 The gate links service and capability rows to SoA-support evidence. This is evidence organization only. It supports future Statement of Applicability work by recording control purpose, risk, owner/risk-owner/control-owner, evidence source, validation command, implementation status, deferred boundary, and non-claims.
 
-This does not claim ISO/IEC 27001 certification, SOC readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, full dev readiness, test readiness, enterprise production readiness, or full React parity.
+This does not claim ISO/IEC 27001 certification, SOC readiness, production readiness, staging readiness, deployment readiness, live-provider readiness, full dev readiness, test readiness, enterprise production readiness, or full product readiness.
 
 ## Enterprise Assurance Addendum
 
@@ -87,4 +87,4 @@ Planted defects under `tools/validate-parity/planted-defects/` exercise each new
 
 ## Non-Claims
 
-This gate does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full React parity, or USF-133 closure.
+This gate does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full product readiness, or USF-133 closure.

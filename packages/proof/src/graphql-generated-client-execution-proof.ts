@@ -91,7 +91,7 @@ interface GraphqlGeneratedClientExecutionProofResult {
   readonly iso27001CertificationClaim: false;
   readonly enterpriseProductionReadinessClaim: false;
   readonly fullDevReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly usf133ClosureClaim: false;
   readonly evidence: {
     readonly generatedClientSha256: string;
@@ -620,7 +620,7 @@ export async function runGraphqlGeneratedClientExecutionProof(): Promise<Graphql
       iso27001CertificationClaim: false,
       enterpriseProductionReadinessClaim: false,
       fullDevReadinessClaim: false,
-      fullReactParityClaim: false,
+      fullProductReadinessClaim: false,
       usf133ClosureClaim: false,
       evidence: {
         generatedClientSha256: generatedClientHash,

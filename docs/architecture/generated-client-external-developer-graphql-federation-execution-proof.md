@@ -26,4 +26,4 @@ The machine-readable deferred boundaries keep owner, risk owner, control owner, 
 
 ## Non-Claims
 
-This proof does not claim generated SDK readiness, generated client readiness, external developer platform readiness, public API readiness, GraphQL runtime readiness, federation readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.
+This proof does not claim generated SDK readiness, generated client readiness, external developer platform readiness, public API readiness, GraphQL runtime readiness, federation readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure.

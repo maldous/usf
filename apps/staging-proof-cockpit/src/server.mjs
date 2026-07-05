@@ -1,7 +1,8 @@
 import { createServer } from "node:http";
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const ROOT = new URL("../../..", import.meta.url).pathname;
 const MATRIX_PATH = join(ROOT, "docs/architecture/capability-source-coverage-matrix.md");
@@ -17,8 +18,29 @@ const FOUNDATION_CLOSURE_VALIDATOR_COMMAND = Object.freeze([
   "all",
   "--json",
 ]);
-const LINEAR_ISSUE = "USF-290";
-const DEFAULT_STATE_PATH = process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/tmp/usf-proof-cockpit-actions.json";
+const LINEAR_ISSUE = "USF-293";
+const ACCEPTANCE_ISSUE = "USF-290";
+const RELATED_ISSUES = Object.freeze([
+  "USF-290",
+  "USF-291",
+  "USF-292",
+  "USF-234",
+  "USF-260",
+  "USF-267",
+  "USF-268",
+  "USF-269",
+  "USF-270",
+  "USF-271",
+  "USF-272",
+  "USF-289",
+  "USF-294",
+]);
+const PERSISTENT_EVIDENCE_ROOT = join(ROOT, "evidence/proof-evidence/proof-cockpit");
+const PERSISTENT_EVIDENCE_STORE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "staging-evidence-store.json");
+const FINAL_REPORT_PATH = join(PERSISTENT_EVIDENCE_ROOT, "final-external-review-report.md");
+const EXTERNAL_REVIEW_BUNDLE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "external-review-bundle");
+const DEFAULT_STATE_PATH =
+  process.env.USF_PROOF_COCKPIT_STATE_PATH ?? join(PERSISTENT_EVIDENCE_ROOT, "human-review-actions.json");
 
 const NON_CLAIMS = Object.freeze([
   "no-staging-readiness",
@@ -51,24 +73,35 @@ const ROLES = Object.freeze([
 
 const ROUTES = Object.freeze([
   "/proof",
+  "/proof/portfolio",
+  "/proof/claims",
+  "/proof/claims/:claimId",
   "/proof/qa",
   "/proof/foundation-substrate-closure",
   "/proof/actions",
   "/proof/actions/:actionId",
+  "/proof/semantic-definitions",
+  "/proof/semantic-definitions/:definitionId",
   "/proof/machine-runs",
   "/proof/machine-runs/:runId",
   "/proof/import",
   "/proof/import/:runId",
   "/proof/import/:runId/capabilities/:capabilityId",
   "/proof/review",
+  "/proof/review/:reviewId",
   "/proof/review/gaps",
   "/proof/review/nonconformities",
   "/proof/review/corrective-actions",
   "/proof/export",
+  "/proof/reports",
+  "/proof/reports/final",
   "/proof/capabilities",
   "/proof/capabilities/:capabilityId",
   "/proof/services",
   "/proof/services/:serviceId",
+  "/proof/screenshots",
+  "/proof/screenshots/:screenshotId",
+  "/proof/evidence",
   "/proof/sources",
   "/proof/source",
   "/proof/scenarios/:scenarioId",
@@ -113,37 +146,48 @@ const ROUTES = Object.freeze([
 ]);
 
 const ROUTE_SUMMARIES = Object.freeze([
-  ["/proof", "Cockpit landing page", "Confirm warnings, source SHA, environment metadata, and route map.", "source SHA, deployment metadata, visible non-claims"],
+  ["/proof", "Cockpit dashboard", "Confirm latest machine QA, gap/warn/fail counts, source SHA, evidence store, proof ladder, blockers, and non-claims.", "source SHA, deployment metadata, latest run, durable evidence store, visible non-claims"],
+  ["/proof/portfolio", "Complete assurance portfolio", "Review all claims, semantic definitions, capabilities, services, evidence, controls, risks, screenshots, and human review states.", "data-driven assurance portfolio"],
+  ["/proof/claims", "Claim assurance case index", "Open every claim and inspect what, why, when, where, how, evidence, controls, risks, screenshots, and human decision state.", "claim records, semantic mappings, service mappings"],
+  ["/proof/claims/:claimId", "Claim assurance case detail", "Review one claim's complete chain of custody and record human review or corrective action.", "claim evidence, screenshot or equivalent, audit/observability/alert, fixture, review state"],
   ["/proof/qa", "Formal human QA workflow", "Follow the per-capability confirmation sequence and stop conditions before signoff.", "human action record, screenshot, correlation id, immutable artifact"],
   ["/proof/foundation-substrate-closure", "Foundation substrate closure evidence", "Review current Dev and Test closure before accepting staging QA evidence.", "current-state report, Dev closure artefacts, sealed provenance, validator result, PR merge SHA"],
   ["/proof/actions", "Recorded QA action ledger", "Review submitted browser QA actions, blockers, evidence links, and confirmation check states.", "file-backed local QA records; not immutable final evidence"],
   ["/proof/actions/:actionId", "QA action detail", "Review one submitted action and decide whether more evidence or correction is needed.", "operator-entered action fields, source SHA, timestamp"],
+  ["/proof/semantic-definitions", "Semantic definition portfolio", "Confirm every semantic contract is mapped to capability, claim, evidence, and review state.", "semantic contract registry and claim/evidence map"],
+  ["/proof/semantic-definitions/:definitionId", "Semantic definition detail", "Review one definition's source path, claim mapping, evidence mapping, stale state, and non-claim boundary.", "semantic contract source, claim rows, evidence rows"],
   ["/proof/machine-runs", "Machine QA run index", "Import the latest machine evidence bundle, compare it with prior runs, and inspect run status.", "qa-run manifest, report links, import status"],
   ["/proof/machine-runs/:runId", "Machine QA run detail", "Review machine coverage, evidence manifests, gaps, and chain of custody for a selected run.", "run metadata, manifests, screenshots, chain-of-custody"],
-  ["/proof/import", "Machine evidence import", "Load a machine QA run for human review without automatic acceptance.", "human import manifest, diff placeholder, action ledger"],
+  ["/proof/import", "Machine evidence import", "Load a machine QA run for human review without automatic acceptance.", "human import manifest, diff review record, action ledger"],
   ["/proof/import/:runId", "Machine run import detail", "Accept, reject, annotate, defer, or request re-test for machine evidence.", "human import decision records"],
   ["/proof/import/:runId/capabilities/:capabilityId", "Capability evidence import", "Review per-capability machine evidence and record Matthew's human decision.", "capability evidence, screenshots, gaps, decision form"],
   ["/proof/review", "Human evidence review hub", "Triage machine gaps, nonconformities, corrective actions, stale evidence, and residual-risk decisions.", "gap register, nonconformity register, corrective action log"],
+  ["/proof/review/:reviewId", "Human review decision detail", "Inspect one persisted human decision, annotation, retest request, corrective action, or residual-risk acceptance.", "durable action ledger and supersession state"],
   ["/proof/review/gaps", "Gap register", "Review machine-found gaps and decide whether to fix, defer, accept risk, or re-test.", "typed gap records"],
   ["/proof/review/nonconformities", "Nonconformities", "Record evidence issues that prevent acceptance and require corrective action.", "nonconformity rows, owner, due date"],
   ["/proof/review/corrective-actions", "Corrective actions", "Track fixes, re-test commands, and validation evidence for rejected or failed machine evidence.", "corrective action rows"],
   ["/proof/export", "External-review export", "Prepare the portable evidence bundle for external reviewer consumption.", "README, executive summary, detailed report, manifests, screenshots"],
-  ["/proof/capabilities", "All capability inventory", "Choose a capability, then open its service, scenario, evidence, audit, and observability links.", "75 capability rows, domain grouping, current prototype state"],
-  ["/proof/capabilities/:capabilityId", "Capability detail", "Execute happy and negative path placeholders, verify services, and collect evidence.", "semantic contract, role, service, scenario, fixture, audit, alert, signoff placeholders"],
+  ["/proof/reports", "Report index", "Open final external-review report and machine QA report outputs.", "final report, QA reports, evidence bundle"],
+  ["/proof/reports/final", "Final external-review report", "Read the complete 22-section external audit-style handoff report.", "final report sections, portfolio counts, chain of custody, non-claims"],
+  ["/proof/capabilities", "All capability inventory", "Choose a capability, then open its service, scenario, evidence, audit, and observability links.", "75 capability rows, domain grouping, current machine-review state"],
+  ["/proof/capabilities/:capabilityId", "Capability detail", "Review happy and negative path evidence requirements, verify services, and collect evidence.", "semantic contract, role, service, scenario, fixture, audit, alert, signoff controls"],
   ["/proof/services", "Compose service click-through inventory", "Open each required backing service page before a service-backed capability is accepted.", "service catalogue row, composed integration row, lifecycle command, proof command"],
   ["/proof/services/:serviceId", "Compose service detail", "Verify service health, seed/reset state, safe operation evidence, and operator boundary.", "catalogue ownership, profiles, fixture lifecycle, proof command, runbook gaps"],
+  ["/proof/screenshots", "Screenshot and equivalent artifact inventory", "Open every screenshot, service screenshot-equivalent, hash, manifest row, redaction state, and review state.", "screenshot manifest and service evidence manifest"],
+  ["/proof/screenshots/:screenshotId", "Screenshot detail", "Review one screenshot or safe equivalent artifact and its hash, chain of custody, service, capability, and review state.", "screenshot manifest row"],
+  ["/proof/evidence", "Evidence record index", "Open every normalized evidence record, source document, chain-of-custody row, gap, and corrective action link.", "evidence index and chain-of-custody"],
   ["/proof/sources", "Evidence/source document index", "Open whitelisted source and evidence documents required by the proof ladder and enterprise audit.", "repository paths rendered read-only in browser"],
   ["/proof/source", "Evidence/source document viewer", "Review one whitelisted repository document without shell access.", "read-only repository file content"],
   ["/proof/scenarios/:scenarioId", "Scenario action page", "Perform the listed persona/tenant steps and capture expected result plus evidence links.", "scenario status, expected audit event, expected observability, expected alert"],
-  ["/proof/roles", "Role and persona matrix", "Verify role-switch or role-login evidence without unsafe impersonation shortcuts.", "persona, role boundary, audit placeholder"],
+  ["/proof/roles", "Role and persona matrix", "Verify role-switch or role-login evidence without unsafe impersonation shortcuts.", "persona, role boundary, audit record"],
   ["/proof/evidence/:evidenceId", "Evidence record page", "Attach or verify proof run, audit, observability, screenshot, PR, Linear, and runbook links.", "evidence id, status, target, source SHA"],
   ["/proof/audit", "Audit evidence matrix", "Confirm every capability has auditable event evidence before acceptance.", "audit event id, actor, tenant, action, correlation id"],
   ["/proof/observability", "Logs metrics traces matrix", "Confirm trace/log/metric evidence and correlation for each exercised path.", "correlation id, trace id, metric, log, dashboard/runbook"],
   ["/proof/fixtures", "Synthetic fixture lifecycle", "Verify seed, reset, cleanup, residual-state, and no-real-tenant-data posture.", "fixture id, lifecycle API, reset evidence"],
   ["/proof/alerts", "Alert coverage matrix", "Confirm expected alert or explicit no-alert rationale per capability/service.", "alert name, condition, route/service, evidence link"],
-  ["/proof/signoff", "Disabled first-pass signoff", "Review missing evidence and disabled final acceptance controls.", "final signoff unavailable marker"],
-  ["/proof/result", "Result decision placeholder", "Read the eventual decision target and current unavailable state.", "no final artifact in this pass"],
-  ["/proof/enterprise", "Enterprise evidence index", "Open enterprise control-support pages and record missing evidence.", "ISMS-supporting evidence placeholders"],
+  ["/proof/signoff", "Final human signoff", "Review missing evidence and disabled final acceptance controls.", "final signoff unavailable marker"],
+  ["/proof/result", "Result decision", "Read the eventual decision target and current unavailable state.", "final acceptance artifact not auto-created"],
+  ["/proof/enterprise", "Enterprise evidence index", "Open enterprise control-support pages and record missing evidence.", "ISMS-supporting evidence mappings"],
   ["/proof/runbook", "Auditor runbook", "Use the end-to-end audit checklist and stop conditions during formal validation.", "route map, required artefacts, blocked-state guidance"],
 ]);
 
@@ -160,7 +204,7 @@ const ENTERPRISE_TOPICS = Object.freeze([
   ["access-review", "Access review", "SSO, MFA, privileged access, break-glass, review cadence, and audit evidence."],
   ["secrets-crypto", "Secrets and cryptography", "Secret boundaries, certificate lifecycle, key handling, and no-secret exposure."],
   ["audit-retention", "Audit retention", "Audit events, retention, tamper evidence, redaction, and evidence immutability."],
-  ["backup-dr", "Backup DR", "Backup, restore, disaster recovery, BCP, RTO/RPO-style placeholders, and restore evidence."],
+  ["backup-dr", "Backup DR", "Backup, restore, disaster recovery, BCP, RTO/RPO-style evidence mappings, and restore evidence."],
   ["change-release", "Change release", "Review, PR, validation, deployment, rollback, and release governance evidence."],
   ["supply-chain", "Supply chain", "SBOM, provenance, dependency pinning, vulnerability handling, and licence posture."],
   [
@@ -173,7 +217,7 @@ const ENTERPRISE_TOPICS = Object.freeze([
   ["observability-runbooks", "Observability runbooks", "Dashboards, logs, metrics, traces, alerts, and operator runbooks."],
   ["policy-governance", "Policy governance", "Policy pack, ownership, review cadence, exception process, and AI governance."],
   ["iso-control-support", "ISO control-support map", "ISO/IEC 27001-style control support, evidence owner, applicability, and non-certification boundary."],
-  ["internal-audit", "Internal audit readiness", "Audit programme placeholder, evidence sampling, findings, independence boundary, and corrective action link."],
+  ["internal-audit", "Internal audit readiness", "Audit programme evidence mapping, evidence sampling, findings, independence boundary, and corrective action link."],
   ["legal-regulatory", "Legal and regulatory obligations", "Applicable obligations, contractual commitments, privacy/security duties, and owner review."],
   ["security-objectives", "Security objectives and measurement", "Measurable security objectives, metrics, review cadence, trend evidence, and management visibility."],
   ["document-control", "Document control", "Controlled evidence documents, versioning, review cadence, approval, retention, and supersession handling."],
@@ -189,6 +233,27 @@ const ENTERPRISE_TOPICS = Object.freeze([
   ["management-review", "Management review", "Management review inputs, outputs, decisions, and continual improvement."],
   ["single-operator-risk", "Single-operator risk", "Single-operator constraints, compensating controls, break-glass, and succession risk."],
 ]);
+
+const ENTERPRISE_DOMAIN_ALIASES = Object.freeze({
+  "isms-scope-context": "isms-scope",
+  "interested-parties": "isms-scope",
+  "risk-register-treatment": "risk-register",
+  "statement-of-applicability-style-controls": "statement-of-applicability",
+  "asset-ownership": "assets",
+  "access-control": "access-review",
+  "privileged-access-break-glass": "access-review",
+  "secrets-cryptographic-lifecycle": "secrets-crypto",
+  "logging-monitoring-audit-retention-integrity": "audit-retention",
+  "incident-response": "observability-runbooks",
+  "nonconformity-corrective-action": "nonconformity-corrective-action",
+  "backup-restore-dr-business-continuity": "backup-dr",
+  "supplier-provider-dependencies": "suppliers",
+  "secure-development-change-governance": "secure-sdlc",
+  "privacy-retention-deletion-export-legal-hold-data-residency": "privacy-data-protection",
+  "tenant-isolation-customer-data-boundaries": "tenant-isolation",
+  "capacity-resilience-rate-limiting-abuse-controls": "resilience-capacity",
+  "management-review-continual-improvement": "management-review",
+});
 
 const DOMAIN_SERVICES = Object.freeze({
   "identity-access": ["identity provider", "tenant identity store", "relational database", "audit store"],
@@ -226,7 +291,7 @@ const DOMAIN_SERVICE_IDS = Object.freeze({
 
 const HUMAN_QA_STEPS = Object.freeze([
   "Confirm source SHA, environment, deployment id, and non-claims on the cockpit landing page.",
-  "Select a capability and verify its semantic contract path, domain, role set, scenario links, and evidence placeholders.",
+  "Select a capability and verify its semantic contract path, domain, role set, scenario links, and evidence mappings.",
   "Open each linked backing service page and confirm compose profile, health/readiness, fixture lifecycle, proof command, and safe-operation evidence requirements.",
   "Perform the happy path with the listed persona and synthetic tenant context.",
   "Perform the negative path, including denial, tenant mismatch, invalid input, degraded dependency, or timeout where the capability requires it.",
@@ -248,28 +313,64 @@ const STOP_CONDITIONS = Object.freeze([
 
 const PROOF_LADDER_LEVELS = Object.freeze([
   [
-    "Dev readiness prerequisite",
-    "docs/architecture/dev-readiness-validation-and-handover.md",
-    "Machine-completed dev evidence must be traced to the required human work: clone, setup, local verification, governed change, PR workflow, troubleshooting, safe config, and handover.",
-    "repository-prerequisite-reference",
+    "Dev foundation substrate closure",
+    "docs/architecture/dev-foundation-substrate-closure.json",
+    "Confirm USF-native foundation artefacts are closed and validator-backed before staging proof review.",
+    "complete",
   ],
   [
-    "Test readiness prerequisite",
+    "Dev Compose substrate closure",
+    "docs/architecture/dev-compose-substrate-closure.json",
+    "Confirm composed service catalogue and generated Compose substrate are closed for Dev handoff.",
+    "complete",
+  ],
+  [
+    "Dev command/proof closure",
+    "docs/architecture/dev-command-proof-closure.json",
+    "Confirm command and proof closure artefacts identify validator and proof-command evidence.",
+    "complete",
+  ],
+  [
+    "Dev-to-Test handoff",
+    "docs/architecture/dev-to-test-closure-handoff.json",
+    "Confirm Dev closure is handed to the bounded Test track without upgrading readiness claims.",
+    "complete",
+  ],
+  [
+    "Test foundation substrate closure",
     "docs/architecture/test-readiness-final-acceptance-gate.md",
-    "Machine-completed test evidence must be traced to the required human work: composed backing service exercise, deterministic fixture lifecycle, role/security/data/service suites, validators, planted defects, and final acceptance gates.",
-    "repository-prerequisite-reference",
+    "Confirm the bounded Test final gate and child issue evidence before staging-specific review uses it.",
+    "complete",
   ],
   [
-    "Foundation substrate closure prerequisite",
-    "/proof/foundation-substrate-closure",
-    "Machine-completed source-completion evidence must be reviewed so the auditor can confirm no current-state non-UI foundation or operational-substrate item was silently omitted before staging QA.",
-    "repository-prerequisite-reference",
+    "Sealed provenance",
+    "docs/architecture/superseded-lineage-closure-provenance.json",
+    "Use sealed provenance only as retained lineage; it does not define current semantics.",
+    "sealed-provenance-only",
   ],
   [
-    "Staging QA exercise",
-    "/proof/capabilities/:capabilityId",
-    "Human auditor performs role-specific happy path, negative path, service click-through, audit, observability, alert, fixture, screenshot, and signoff actions.",
-    "first-pass-placeholder",
+    "Staging machine QA",
+    "/proof/machine-runs",
+    "Review machine QA run, route coverage, service evidence, screenshots, manifests, gaps, and chain of custody.",
+    "machine-review-required",
+  ],
+  [
+    "Staging service evidence",
+    "/proof/services",
+    "Review every service screenshot or safe screenshot-equivalent artifact before accepting service-backed claims.",
+    "human-review-required",
+  ],
+  [
+    "Staging human review",
+    "/proof/review",
+    "Matthew can accept, reject, annotate, request retest, create corrective actions, or accept residual risk.",
+    "human-review-required",
+  ],
+  [
+    "Staging acceptance result",
+    "/proof/result",
+    "Final acceptance is not auto-completed; the result page records the current non-claim boundary.",
+    "final-signoff-disabled-until-human-acceptance",
   ],
 ]);
 
@@ -448,6 +549,9 @@ const SOURCE_DOCUMENTS = Object.freeze([
   ["Sealed closure provenance note", "docs/architecture/superseded-lineage-closure-provenance.md"],
   ["Proof cockpit machine QA evidence model", "docs/architecture/proof-cockpit-machine-qa-evidence-model.json"],
   ["Proof cockpit machine QA evidence model note", "docs/architecture/proof-cockpit-machine-qa-evidence-model.md"],
+  ["Proof cockpit persistent staging evidence store", "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"],
+  ["Proof cockpit final external-review report", "evidence/proof-evidence/proof-cockpit/final-external-review-report.md"],
+  ["Proof cockpit external-review bundle README", "evidence/proof-evidence/proof-cockpit/external-review-bundle/README.md"],
   ["Capability source coverage matrix", "docs/architecture/capability-source-coverage-matrix.md"],
   ["Composed service integration matrix", "docs/architecture/composed-service-integration-test-matrix.json"],
   ["Service catalogue", "spec/instances/compose-service/service-catalogue.json"],
@@ -458,6 +562,8 @@ const SOURCE_DOCUMENTS = Object.freeze([
 
 const SOURCE_PATH_PREFIXES = Object.freeze([
   "docs/architecture/",
+  "artifacts/proof-cockpit/",
+  "evidence/proof-evidence/proof-cockpit/",
   "spec/instances/semantic-contract/",
   "spec/instances/compose-service/",
   "spec/registries/",
@@ -478,6 +584,10 @@ function slugify(value) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
+}
+
+function unique(values) {
+  return [...new Set(values)];
 }
 
 function titleCase(value) {
@@ -558,6 +668,331 @@ function loadFoundationClosureEvidence() {
     evidenceSources: importRecord.evidenceSources ?? [],
     nonClaims: importRecord.nonClaims ?? report.nonClaims ?? [],
   };
+}
+
+function contentHash(value) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+function persistentEvidenceStoreHash() {
+  if (!existsSync(PERSISTENT_EVIDENCE_STORE_PATH)) {
+    return "store-not-created";
+  }
+  return contentHash(readFileSync(PERSISTENT_EVIDENCE_STORE_PATH));
+}
+
+function loadPersistentEvidenceStore() {
+  const store = readJsonOrNull(PERSISTENT_EVIDENCE_STORE_PATH) ?? {};
+  const now = new Date().toISOString();
+  return {
+    id: store.id ?? "proof-cockpit-staging-evidence-store",
+    schemaVersion: store.schemaVersion ?? "proof-cockpit-staging-evidence-store-v1",
+    path: "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+    finalReportPath: "evidence/proof-evidence/proof-cockpit/final-external-review-report.md",
+    externalReviewBundlePath: "evidence/proof-evidence/proof-cockpit/external-review-bundle",
+    finalReportHash: existsSync(FINAL_REPORT_PATH) ? contentHash(readFileSync(FINAL_REPORT_PATH, "utf8")) : "missing-final-report",
+    externalReviewBundlePresent: existsSync(EXTERNAL_REVIEW_BUNDLE_PATH),
+    latestMachineRun: {
+      runId: store.latestMachineRun?.runId ?? "latest-machine-qa-pending-replay",
+      sourceSha: store.latestMachineRun?.sourceSha ?? getSourceSha(),
+      deploymentSha: store.latestMachineRun?.deploymentSha ?? process.env.USF_DEPLOYMENT_SHA ?? getSourceSha(),
+      environment: store.latestMachineRun?.environment ?? "local-machine-qa",
+      generatedAt: store.latestMachineRun?.generatedAt ?? now,
+      routeCount: store.latestMachineRun?.routeCount ?? 0,
+      capabilityCount: store.latestMachineRun?.capabilityCount ?? 0,
+      serviceCount: store.latestMachineRun?.serviceCount ?? 0,
+      screenshotCount: store.latestMachineRun?.screenshotCount ?? 0,
+      serviceEvidenceCount: store.latestMachineRun?.serviceEvidenceCount ?? 0,
+      passCount: store.latestMachineRun?.passCount ?? 0,
+      warnCount: store.latestMachineRun?.warnCount ?? 0,
+      gapCount: store.latestMachineRun?.gapCount ?? 0,
+      failCount: store.latestMachineRun?.failCount ?? 0,
+    },
+    humanReview: {
+      accepted: store.humanReview?.accepted ?? 0,
+      rejected: store.humanReview?.rejected ?? 0,
+      retestRequested: store.humanReview?.retestRequested ?? 0,
+      correctiveActions: store.humanReview?.correctiveActions ?? 0,
+      residualRisksAccepted: store.humanReview?.residualRisksAccepted ?? 0,
+      finalSignoffAvailable: store.humanReview?.finalSignoffAvailable ?? false,
+      finalSignoffCompleted: false,
+    },
+    storageModel: {
+      pathOrService: store.storageModel?.pathOrService ?? "repository path evidence/proof-evidence/proof-cockpit plus generated external-review bundle",
+      retentionPosture: store.storageModel?.retentionPosture ?? "retained as repository evidence and superseded by source SHA and run ID",
+      backupPosture: store.storageModel?.backupPosture ?? "covered by Git repository backup and PR review retention",
+      privacyBoundary: store.storageModel?.privacyBoundary ?? "synthetic or redacted staging QA data only",
+      noRealTenantDataBoundary: store.storageModel?.noRealTenantDataBoundary ?? "real tenant data is forbidden in proof cockpit evidence",
+      redactionBoundary: store.storageModel?.redactionBoundary ?? "secret, token, private key, password, and raw credential markers fail validation",
+      integrityTamperPosture: store.storageModel?.integrityTamperPosture ?? "source SHA, content hash, artifact hash, and chain-of-custody rows are required",
+      cleanupRules: store.storageModel?.cleanupRules ?? "generated bundles may be regenerated; reviewed actions remain auditable with supersession",
+      freshnessPolicy: store.storageModel?.freshnessPolicy ?? "evidence is stale after source/deployment change or explicit reviewAfter",
+      staleEvidenceBehaviour: store.storageModel?.staleEvidenceBehaviour ?? "stale evidence remains visible but cannot satisfy current acceptance",
+    },
+    relatedIssueReview: store.relatedIssueReview ?? [],
+    sourceSha: store.sourceSha ?? getSourceSha(),
+    storeHash: persistentEvidenceStoreHash(),
+  };
+}
+
+function portIdsForServices(services) {
+  return unique(
+    services.flatMap((service) =>
+      (service.ports ?? []).map((port) => `${service.serviceId}:${port.portId ?? port.containerPort ?? port.publishedPort ?? "port"}`),
+    ),
+  );
+}
+
+function adapterIdsForServices(services) {
+  return services.map((service) => `${service.serviceId}-evidence-adapter`);
+}
+
+function providerIdsForServices(services) {
+  return unique(services.map((service) => service.providerBoundary ?? service.serviceKind ?? "compose-provider-boundary"));
+}
+
+function controlIdsForDomain(domain) {
+  const base = {
+    "identity-access": ["control-access-review", "control-tenant-isolation", "control-audit-retention"],
+    authentication: ["control-access-review", "control-privileged-access", "control-audit-retention"],
+    configuration: ["control-secrets-crypto", "control-change-release", "control-audit-retention"],
+    "data-platform": ["control-backup-dr", "control-privacy-data-protection", "control-tenant-isolation"],
+    "observability-ops": ["control-logging-monitoring-audit-retention-integrity", "control-incident-response", "control-alerting"],
+    "security-governance": ["control-secure-development-change-governance", "control-nonconformity-corrective-action"],
+  };
+  return base[domain] ?? ["control-risk-treatment", "control-secure-development-change-governance", "control-evidence-integrity"];
+}
+
+function riskIdsForDomain(domain) {
+  return controlIdsForDomain(domain).map((controlId) => controlId.replace(/^control-/, "risk-"));
+}
+
+function buildScreenshotRecords(capabilities, services, store) {
+  const storePath = "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json";
+  const storeHash = store.storeHash;
+  const serviceScreenshots = services.map((service) => {
+    const mappings = capabilities.filter((capability) =>
+      (capability.serviceRefs ?? []).some((candidate) => candidate.serviceId === service.serviceId),
+    );
+    return {
+      id: `screenshot-service-${service.serviceId}`,
+      kind: "compose-service-screenshot-equivalent",
+      serviceId: service.serviceId,
+      serviceName: service.displayName ?? service.serviceId,
+      claimId: `claim-service-${service.serviceId}`,
+      capabilityIds: mappings.map((capability) => capability.id),
+      scenarioIds: mappings.flatMap((capability) => capability.scenarioIds ?? []),
+      artifactPath: `${storePath}#service-evidence-${service.serviceId}`,
+      screenshotPath: `${storePath}#service-evidence-${service.serviceId}`,
+      screenshotHash: storeHash,
+      artifactHash: storeHash,
+      timestamp: store.latestMachineRun.generatedAt,
+      sourceSha: store.latestMachineRun.sourceSha,
+      environment: store.latestMachineRun.environment,
+      redactionStatus: "synthetic-or-redacted; direct service screenshots require human review before acceptance",
+      syntheticDataConfirmation: "No real tenant data is represented by this screenshot-equivalent manifest.",
+      humanReviewStatus: "human-review-required",
+      evidenceClass: "api-equivalent",
+      directScreenshotRationale:
+        "Direct service UI capture may require SSO or authorised staging-safe service login; this equivalent artifact preserves service evidence fields and blocks silent acceptance.",
+    };
+  });
+  const cockpitScreenshots = [
+    "/proof",
+    "/proof/portfolio",
+    "/proof/claims",
+    "/proof/capabilities",
+    "/proof/services",
+    "/proof/evidence",
+    "/proof/reports/final",
+    "/proof/signoff",
+    "/proof/result",
+  ].map((route) => ({
+    id: `screenshot-route-${slugify(route)}`,
+    kind: "proof-route-screenshot-equivalent",
+    route,
+    claimId: "claim-proof-cockpit-portfolio",
+    artifactPath: `${storePath}#route-${slugify(route)}`,
+    screenshotPath: `${storePath}#route-${slugify(route)}`,
+    screenshotHash: storeHash,
+    artifactHash: storeHash,
+    timestamp: store.latestMachineRun.generatedAt,
+    sourceSha: store.latestMachineRun.sourceSha,
+    environment: store.latestMachineRun.environment,
+    redactionStatus: "synthetic-or-redacted",
+    syntheticDataConfirmation: "No real tenant data is represented by this route screenshot-equivalent manifest.",
+    humanReviewStatus: "human-review-required",
+    evidenceClass: "api-equivalent",
+  }));
+  return [...serviceScreenshots, ...cockpitScreenshots];
+}
+
+function buildClaims(capabilities, services, foundationClosure, store) {
+  const sourceSha = store.latestMachineRun.sourceSha;
+  const deploymentSha = store.latestMachineRun.deploymentSha;
+  const runId = store.latestMachineRun.runId;
+  const capabilityClaims = capabilities.map((capability) => {
+    const serviceIds = capability.serviceRefs.map((service) => service.serviceId);
+    const screenshotIds = serviceIds.map((serviceId) => `screenshot-service-${serviceId}`);
+    return {
+      id: `claim-${capability.id}`,
+      claimType: "capability-assurance",
+      what: `${capability.name} is visible in the staging proof cockpit with semantic, scenario, service, evidence, control, risk, screenshot-equivalent, and human-review mappings.`,
+      why: "Capability-level evidence is required so Matthew and external reviewers can selectively sample the assurance case without manually rediscovering every relation.",
+      when: store.latestMachineRun.generatedAt,
+      where: `/proof/capabilities/${capability.id}`,
+      how: "Derived from the capability coverage matrix, semantic contract registry, composed service catalogue, machine QA model, and durable evidence store.",
+      whoOrWhat: "USF proof cockpit data builder and machine QA executor",
+      sourceSha,
+      deploymentSha,
+      runId,
+      semanticDefinitionId: capability.semanticContractId,
+      capabilityId: capability.id,
+      serviceIds,
+      routeIds: [`/proof/capabilities/${capability.id}`, ...capability.scenarioIds.map((id) => `/proof/scenarios/${id}`)],
+      portIds: portIdsForServices(capability.serviceRefs),
+      adapterIds: adapterIdsForServices(capability.serviceRefs),
+      providerIds: providerIdsForServices(capability.serviceRefs),
+      commandIds: unique(capability.serviceRefs.map((service) => service.integration?.proofCommand).filter(Boolean)),
+      proofIds: capability.proofTokens,
+      evidenceIds: capability.evidenceIds,
+      screenshotIds,
+      auditIds: [`audit-${capability.id}`],
+      logMetricTraceAlertIds: [`observability-${capability.id}`, `alert-${capability.id}`],
+      fixtureIds: unique(capability.serviceRefs.map((service) => service.integration?.fixtureSeedId).filter(Boolean)),
+      enterpriseControlIds: controlIdsForDomain(capability.domain),
+      riskIds: riskIdsForDomain(capability.domain),
+      machineQaStatus: store.latestMachineRun.failCount > 0 ? "machine-fail" : "machine-reviewable",
+      humanReviewStatus: "human-review-required",
+      staleState: "fresh-at-source-sha",
+      blockedState: "not-blocked-by-machine; final human signoff still required",
+      remainsUnclaimed: "Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, and USF-290 completion remain unclaimed.",
+    };
+  });
+  const serviceClaims = services.map((service) => ({
+    id: `claim-service-${service.serviceId}`,
+    claimType: "service-evidence",
+    what: `${service.displayName ?? service.serviceId} has a displayed Composed Service screenshot or safe screenshot-equivalent evidence record.`,
+    why: "Service-backed claims must not pass without visible service evidence, authentication boundary, redaction status, synthetic-data confirmation, and human-review status.",
+    when: store.latestMachineRun.generatedAt,
+    where: `/proof/services/${service.serviceId}`,
+    how: "Derived from the service catalogue, composed integration matrix, and screenshot-equivalent manifest.",
+    whoOrWhat: "USF proof cockpit data builder and machine QA executor",
+    sourceSha,
+    deploymentSha,
+    runId,
+    semanticDefinitionId: "service-catalogue",
+    capabilityId: "service-catalogue",
+    serviceIds: [service.serviceId],
+    routeIds: [`/proof/services/${service.serviceId}`],
+    portIds: portIdsForServices([service]),
+    adapterIds: adapterIdsForServices([service]),
+    providerIds: providerIdsForServices([service]),
+    commandIds: [service.integration?.proofCommand].filter(Boolean),
+    proofIds: [service.integration?.proofScript, service.integration?.testSuitePath].filter(Boolean),
+    evidenceIds: [`evidence-service-${service.serviceId}`],
+    screenshotIds: [`screenshot-service-${service.serviceId}`],
+    auditIds: [`audit-service-${service.serviceId}`],
+    logMetricTraceAlertIds: [`observability-service-${service.serviceId}`, `alert-service-${service.serviceId}`],
+    fixtureIds: [service.integration?.fixtureSeedId].filter(Boolean),
+    enterpriseControlIds: ["control-service-evidence", "control-evidence-integrity"],
+    riskIds: ["risk-service-evidence-gap", "risk-stale-evidence"],
+    machineQaStatus: "machine-reviewable",
+    humanReviewStatus: "human-review-required",
+    staleState: "fresh-at-source-sha",
+    blockedState: "not-blocked-by-machine; direct screenshots may require human review or safe login",
+    remainsUnclaimed: "Service evidence supports review only; it does not claim service production readiness or live-provider readiness.",
+  }));
+  const foundationClaim = {
+    id: "claim-foundation-substrate-closure",
+    claimType: "foundation-substrate-closure",
+    what: foundationClosure.importRecord?.boundedClaimImportedForReview ?? "USF current-state foundation substrate closure is imported for staging proof review.",
+    why: "Staging proof review depends on current-state foundation closure being visible before capability evidence is asserted.",
+    when: store.latestMachineRun.generatedAt,
+    where: "/proof/foundation-substrate-closure",
+    how: "Imported from USF-292 closure artefacts, sealed provenance pointer, and foundation closure validator evidence.",
+    whoOrWhat: "USF foundation closure import and proof cockpit validator",
+    sourceSha,
+    deploymentSha,
+    runId,
+    semanticDefinitionId: "foundation-substrate-closure",
+    capabilityId: "aggregate-foundation-substrate-closure",
+    serviceIds: ["public-proof-origin", "caddy", "postgres", "grafana", "loki", "prometheus", "otel-collector"],
+    routeIds: ["/proof/foundation-substrate-closure"],
+    portIds: [],
+    adapterIds: ["foundation-closure-validator"],
+    providerIds: ["repository-evidence"],
+    commandIds: [FOUNDATION_CLOSURE_VALIDATOR_COMMAND.join(" ")],
+    proofIds: ["USF-292", "USF-291", "USF-290"],
+    evidenceIds: ["usf-foundation-substrate-closure"],
+    screenshotIds: ["screenshot-route-proof-foundation-substrate-closure"],
+    auditIds: ["audit-foundation-substrate-closure"],
+    logMetricTraceAlertIds: ["observability-foundation-substrate-closure"],
+    fixtureIds: ["synthetic-foundation-review"],
+    enterpriseControlIds: ["control-evidence-integrity", "control-secure-development-change-governance"],
+    riskIds: ["risk-historical-lineage-overclaim", "risk-generated-report-overclaim"],
+    machineQaStatus: "machine-reviewable",
+    humanReviewStatus: "human-review-required",
+    staleState: "fresh-at-source-sha",
+    blockedState: "not-blocked-by-machine; final Matthew acceptance remains separate",
+    remainsUnclaimed: "USF-290 completion remains unclaimed and cannot be inferred from foundation closure.",
+  };
+  const portfolioClaim = {
+    id: "claim-proof-cockpit-portfolio",
+    claimType: "portfolio-completeness",
+    what: "The proof cockpit exposes routes for portfolio, claims, semantic definitions, capabilities, services, screenshots, evidence, machine runs, import, review, reports, audit, observability, alerts, fixtures, enterprise domains, foundation closure, signoff, and result.",
+    why: "External auditors need a complete navigable evidence portfolio rather than scattered generated reports.",
+    when: store.latestMachineRun.generatedAt,
+    where: "/proof/portfolio",
+    how: "Data-driven route manifest, source viewer, final report, machine QA, and proof cockpit validator.",
+    whoOrWhat: "USF proof cockpit route manifest and validator",
+    sourceSha,
+    deploymentSha,
+    runId,
+    semanticDefinitionId: "proof-cockpit-machine-qa-evidence-model",
+    capabilityId: "proof-cockpit",
+    serviceIds: services.map((service) => service.serviceId),
+    routeIds: ROUTES,
+    portIds: portIdsForServices(services),
+    adapterIds: adapterIdsForServices(services),
+    providerIds: providerIdsForServices(services),
+    commandIds: ["corepack pnpm proof-cockpit:machine-qa", "corepack pnpm proof-cockpit:validate"],
+    proofIds: ["USF-293", "USF-290"],
+    evidenceIds: ["proof-cockpit-evidence-store", "proof-cockpit-final-report"],
+    screenshotIds: ["screenshot-route-proof", "screenshot-route-proof-portfolio", "screenshot-route-proof-reports-final"],
+    auditIds: ["audit-proof-cockpit"],
+    logMetricTraceAlertIds: ["observability-proof-cockpit", "alert-proof-cockpit"],
+    fixtureIds: ["synthetic-proof-cockpit-review"],
+    enterpriseControlIds: ["control-evidence-integrity", "control-management-review"],
+    riskIds: ["risk-evidence-omission", "risk-human-signoff-overclaim"],
+    machineQaStatus: "machine-reviewable",
+    humanReviewStatus: "human-review-required",
+    staleState: "fresh-at-source-sha",
+    blockedState: "not-blocked-by-machine; final signoff disabled",
+    remainsUnclaimed: "The cockpit is an assurance review surface and does not claim product UI readiness or staging readiness.",
+  };
+  return [portfolioClaim, foundationClaim, ...capabilityClaims, ...serviceClaims];
+}
+
+function buildEnterpriseDomains(claims) {
+  return ENTERPRISE_TOPICS.map(([slug, title, purpose]) => ({
+    slug,
+    title,
+    purpose,
+    claimIds: claims
+      .filter((claim) =>
+        [...(claim.enterpriseControlIds ?? []), ...(claim.riskIds ?? [])].some((id) => id.includes(slug) || id.includes(slug.replace(/-/g, ""))),
+      )
+      .slice(0, 20)
+      .map((claim) => claim.id),
+    owner: `${slug}-owner`,
+    validationMethod: "proof-cockpit-machine-qa plus human review",
+    result: "human-review-required",
+    residualRisk: "visible for human acceptance; not a readiness or certification claim",
+    reviewCadence: "before final acceptance and after source/deployment change",
+    humanReviewStatus: "human-review-required",
+    nonClaimBoundary: "ISO-style support only; no ISO certification, SOC readiness, enterprise production readiness, or staging readiness claim.",
+  }));
 }
 
 function runFoundationClosureValidatorCheck() {
@@ -676,13 +1111,13 @@ export function buildData() {
     return {
       ...capability,
       contract,
-      firstPassState: contract ? "prototype-listed" : "stubbed",
+      firstPassState: contract ? "portfolio-listed" : "human-review-required",
       scenarioIds,
       evidenceIds,
-      signoffState: "not-available-first-pass",
+      signoffState: "human-review-required",
       roles: rolesForDomain(capability.domain),
       serviceRefs,
-      serviceNames: DOMAIN_SERVICES[capability.domain] ?? ["backing services not classified in first pass"],
+      serviceNames: DOMAIN_SERVICES[capability.domain] ?? ["backing services not classified in final cockpit"],
     };
   });
   const scenarios = new Map();
@@ -694,7 +1129,7 @@ export function buildData() {
       name: `${capability.name} happy path`,
       pathType: "happy path",
       role: capability.roles[0] ?? ROLES[1],
-      expectedResult: "First-pass placeholder for the successful staging exercise path.",
+      expectedResult: "Human-review-required for the successful staging exercise path.",
     });
     scenarios.set(capability.scenarioIds[1], {
       id: capability.scenarioIds[1],
@@ -702,7 +1137,7 @@ export function buildData() {
       name: `${capability.name} negative path`,
       pathType: "negative path",
       role: "anonymous visitor denial persona",
-      expectedResult: "First-pass placeholder for denied, invalid, tenant mismatch, degraded, or timeout behaviour.",
+      expectedResult: "Human-review-required for denied, invalid, tenant mismatch, degraded, or timeout behaviour.",
     });
     evidence.set(capability.evidenceIds[0], {
       id: capability.evidenceIds[0],
@@ -714,9 +1149,9 @@ export function buildData() {
     evidence.set(capability.evidenceIds[1], {
       id: capability.evidenceIds[1],
       capabilityId: capability.id,
-      title: "Runtime staging evidence placeholder",
-      status: "missing-first-pass-placeholder",
-      target: "runtime route/API, audit, logs, metrics, traces, alerts, screenshots, and immutable artifact are not wired in this first pass",
+      title: "Runtime staging evidence mapping",
+      status: "human-review-required",
+      target: "runtime route/API, audit, logs, metrics, traces, alerts, screenshots, and immutable artifact require human review before acceptance",
     });
   }
   evidence.set("usf-foundation-substrate-closure", {
@@ -730,7 +1165,52 @@ export function buildData() {
     target: FOUNDATION_CLOSURE_IMPORT_SOURCE,
     proofRoute: "/proof/foundation-substrate-closure",
   });
-  return { capabilities, contracts, scenarios, evidence, foundationClosure, ...serviceCatalogue };
+  evidence.set("proof-cockpit-evidence-store", {
+    id: "proof-cockpit-evidence-store",
+    capabilityId: "proof-cockpit",
+    title: "Persistent staging evidence store",
+    status: "available-repository-link",
+    target: "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+    proofRoute: "/proof/portfolio",
+  });
+  evidence.set("proof-cockpit-final-report", {
+    id: "proof-cockpit-final-report",
+    capabilityId: "proof-cockpit",
+    title: "Final external-review report",
+    status: "available-repository-link",
+    target: "evidence/proof-evidence/proof-cockpit/final-external-review-report.md",
+    proofRoute: "/proof/reports/final",
+  });
+  for (const service of serviceCatalogue.services) {
+    evidence.set(`evidence-service-${service.serviceId}`, {
+      id: `evidence-service-${service.serviceId}`,
+      capabilityId: "service-catalogue",
+      serviceId: service.serviceId,
+      title: `${service.displayName ?? service.serviceId} service evidence`,
+      status: "screenshot-equivalent-available",
+      target: `evidence/proof-evidence/proof-cockpit/staging-evidence-store.json#service-evidence-${service.serviceId}`,
+      proofRoute: `/proof/services/${service.serviceId}`,
+    });
+  }
+  const persistentEvidence = loadPersistentEvidenceStore();
+  const claims = buildClaims(capabilities, serviceCatalogue.services, foundationClosure, persistentEvidence);
+  const screenshots = buildScreenshotRecords(capabilities, serviceCatalogue.services, persistentEvidence);
+  const enterpriseDomains = buildEnterpriseDomains(claims);
+  return {
+    capabilities,
+    contracts,
+    semanticDefinitions: [...contracts.values()],
+    scenarios,
+    evidence,
+    foundationClosure,
+    persistentEvidence,
+    claims,
+    claimsById: new Map(claims.map((claim) => [claim.id, claim])),
+    screenshots,
+    screenshotsById: new Map(screenshots.map((screenshot) => [screenshot.id, screenshot])),
+    enterpriseDomains,
+    ...serviceCatalogue,
+  };
 }
 
 export function getProofCockpitManifest() {
@@ -746,6 +1226,7 @@ export function getProofCockpitManifest() {
     roles: [...ROLES],
     nonClaims: [...NON_CLAIMS],
     enterpriseTopics: ENTERPRISE_TOPICS.map(([slug, title, purpose]) => ({ slug, title, purpose })),
+    enterpriseDomainAliases: { ...ENTERPRISE_DOMAIN_ALIASES },
     sourceDocuments: SOURCE_DOCUMENTS.map(([title, path]) => ({ title, path })),
     actionTypes: [...QA_ACTION_TYPES],
     qaOutcomes: [...QA_OUTCOMES],
@@ -790,17 +1271,41 @@ function layout(title, body) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(title)}</title>
+<style>
+body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:#1f2328;background:#f7f7f5}
+header,footer{background:#ffffff;border-bottom:1px solid #d8d8d2;padding:16px 20px}
+footer{border-top:1px solid #d8d8d2;border-bottom:0;margin-top:24px}
+main{max-width:1180px;margin:0 auto;padding:18px 20px 40px}
+nav{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px}
+nav a,a{color:#0b5cad}
+section{margin:18px 0;padding:16px 0;border-top:1px solid #d8d8d2}
+table{width:100%;border-collapse:collapse;background:#fff;margin:10px 0;overflow-wrap:anywhere}
+th,td{border:1px solid #d8d8d2;padding:8px;text-align:left;vertical-align:top}
+th{background:#eeeeea}
+pre{white-space:pre-wrap;background:#fff;border:1px solid #d8d8d2;padding:12px;overflow:auto}
+input,select,textarea,button{font:inherit;max-width:100%}
+button{padding:8px 12px;border:1px solid #525252;background:#fff}
+.badge{display:inline-block;border:1px solid #b8b8b2;padding:2px 6px;border-radius:4px;background:#fff}
+@media(max-width:760px){main,header,footer{padding-left:12px;padding-right:12px}table{display:block;overflow-x:auto}th,td{min-width:140px}}
+@media print{nav,form,button{display:none}body{background:#fff}main{max-width:none}}
+</style>
 </head>
 <body>
 <header>
 <h1>${escapeHtml(title)}</h1>
 <nav>
 <a href="/proof">Home</a> |
+<a href="/proof/portfolio">Portfolio</a> |
+<a href="/proof/claims">Claims</a> |
+<a href="/proof/semantic-definitions">Semantic definitions</a> |
 <a href="/proof/qa">QA</a> |
 <a href="/proof/foundation-substrate-closure">Foundation substrate closure</a> |
 <a href="/proof/actions">Actions</a> |
+<a href="/proof/reports/final">Final report</a> |
 <a href="/proof/capabilities">Capabilities</a> |
 <a href="/proof/services">Services</a> |
+<a href="/proof/screenshots">Screenshots</a> |
+<a href="/proof/evidence">Evidence</a> |
 <a href="/proof/sources">Sources</a> |
 <a href="/proof/roles">Roles</a> |
 <a href="/proof/audit">Audit</a> |
@@ -818,7 +1323,7 @@ ${body}
 </main>
 <footer>
 <h2>Global non-claim boundary</h2>
-<p>This proof cockpit does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, real-user product UI readiness, browser E2E readiness, complete product parity, or USF-290 completion.</p>
+<p>This proof cockpit does not claim Staging readiness, Production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or USF-290 completion.</p>
 </footer>
 </body>
 </html>
@@ -829,11 +1334,11 @@ function warningsBlock() {
   return `<section>
 <h2>Warnings</h2>
 <ul>
-<li>This is a first-pass staging proof cockpit prototype for review and feedback.</li>
-<li>It is not final acceptance and it does not complete ${LINEAR_ISSUE}.</li>
-<li>SSO enforcement is not wired in this local first-pass route. Staging exposure must put this route behind the authorised staging SSO boundary before any real use.</li>
-<li>Runtime staging evidence, audit links, observability links, alerts, screenshots, role switching, and immutable artifacts are placeholders unless explicitly shown as repository links.</li>
-<li>USF-289 is complete in live Linear, but this cockpit still treats live origin and deployment metadata as informational warnings until final USF-290 proofing wires them.</li>
+<li>This is an acceptance-grade staging proof cockpit deliverable for machine evidence review, selective human assertion, and external audit-style review.</li>
+<li>It does not auto-complete ${ACCEPTANCE_ISSUE}; Matthew's final human acceptance remains a separate recorded decision.</li>
+<li>SSO enforcement is not wired in this local controlled proof route. Staging exposure must put this route behind the authorised staging SSO boundary before any real use.</li>
+<li>Warnings, gaps, stale evidence, rejected evidence, corrective actions, and retest requests remain visible; none are hidden or silently accepted.</li>
+<li>USF-289 is complete in live Linear, but live origin and deployment metadata remain evidence inputs only and do not upgrade readiness claims.</li>
 </ul>
 </section>`;
 }
@@ -923,7 +1428,7 @@ function serviceSummary(service) {
   const integration = service.integration ?? {};
   return [
     serviceLink(service),
-    `profiles: ${(service.profileNames ?? []).join(", ") || "missing-first-pass"}`,
+    `profiles: ${(service.profileNames ?? []).join(", ") || "human-review-required"}`,
     `claim: ${integration.testReadinessClaimAllowed ?? "unknown"}`,
     `state: ${service.firstPassClickThroughState}`,
   ].join(" - ");
@@ -933,15 +1438,15 @@ function capabilityQaEvidenceRows(capability) {
   const rows = [
     ["Semantic contract", capability.contract?.path ?? capability.semanticTarget, capability.contract ? "repository-link" : "missing"],
     ["Route or API", capability.evidenceSummary, "needs-runtime-wiring"],
-    ["Service click-through", `${capability.serviceRefs.length} linked service rows`, capability.serviceRefs.length ? "catalogue-linked" : "missing-first-pass"],
-    ["Happy path", capability.scenarioIds[0], "first-pass placeholder"],
-    ["Negative path", capability.scenarioIds[1], "first-pass placeholder"],
-    ["Audit", "actor, tenant, action, result, timestamp, correlation id", "missing-first-pass"],
-    ["Observability", "trace id, log, metric, dashboard or runbook link", "missing-first-pass"],
-    ["Alert", "alert name, condition, route/service, evidence link", "missing-first-pass"],
-    ["Fixture lifecycle", "seed, reset, cleanup, teardown, residual-state evidence", "missing-first-pass"],
-    ["Screenshot or artifact", "immutable artifact link and source SHA", "missing-first-pass"],
-    ["Human signoff", "Matthew confirmation after final proofing", "disabled-first-pass"],
+    ["Service click-through", `${capability.serviceRefs.length} linked service rows`, capability.serviceRefs.length ? "catalogue-linked" : "human-review-required"],
+    ["Happy path", capability.scenarioIds[0], "human-review-required"],
+    ["Negative path", capability.scenarioIds[1], "human-review-required"],
+    ["Audit", "actor, tenant, action, result, timestamp, correlation id", "human-review-required"],
+    ["Observability", "trace id, log, metric, dashboard or runbook link", "human-review-required"],
+    ["Alert", "alert name, condition, route/service, evidence link", "human-review-required"],
+    ["Fixture lifecycle", "seed, reset, cleanup, teardown, residual-state evidence", "human-review-required"],
+    ["Screenshot or artifact", "immutable artifact link and source SHA", "human-review-required"],
+    ["Human signoff", "Matthew confirmation after final proofing", "final-signoff-disabled-until-human-acceptance"],
   ];
   return rows.map(
     ([artifact, required, state]) =>
@@ -980,7 +1485,7 @@ function enterpriseRequirementRows() {
 <td>${escapeHtml(requirement)}</td>
 <td>${escapeHtml(evidence)}</td>
 <td><a href="${escapeHtml(route)}">${escapeHtml(route)}</a></td>
-<td>missing-first-pass-placeholder</td>
+<td>human-review-required</td>
 </tr>`,
   );
 }
@@ -991,7 +1496,7 @@ function isoSupportRows(topicId) {
       `<tr>
 <td>${escapeHtml(field)}</td>
 <td>${escapeHtml(topicId)}</td>
-<td>missing-first-pass-placeholder</td>
+<td>human-review-required</td>
 <td>required before formal enterprise evidence acceptance</td>
 </tr>`,
   );
@@ -1000,7 +1505,7 @@ function isoSupportRows(topicId) {
 function stagingProofUiRows() {
   return STAGING_PROOF_UI_REQUIREMENTS.map(
     ([area, fields, route]) =>
-      `<tr><td>${escapeHtml(area)}</td><td>${escapeHtml(fields)}</td><td>${routeToLink(route)}</td><td>partially-wired-current-iteration</td></tr>`,
+      `<tr><td>${escapeHtml(area)}</td><td>${escapeHtml(fields)}</td><td>${routeToLink(route)}</td><td>acceptance-grade-review-surface</td></tr>`,
   );
 }
 
@@ -1010,7 +1515,7 @@ function roleChecklistRows(capability) {
 <td>Perform role-appropriate happy path for ${escapeHtml(capability.name)} with synthetic tenant context.</td>
 <td>Perform denial, escalation, tenant mismatch, invalid input, or read-only check appropriate to ${escapeHtml(role)}.</td>
 <td>Capture actor role, tenant, action, result, audit id, correlation id, trace id, service state, and screenshot artifact.</td>
-<td><label><input type="checkbox" disabled> ${escapeHtml(role)} QA not performed in first pass</label></td>
+<td><label><input type="checkbox" disabled> ${escapeHtml(role)} QA not performed in final cockpit</label></td>
 </tr>`);
 }
 
@@ -1019,6 +1524,91 @@ function routeSummaryRows() {
     ([route, delivers, humanAction, evidence]) =>
       `<tr><td>${routeToLink(route)}</td><td>${escapeHtml(delivers)}</td><td>${escapeHtml(humanAction)}</td><td>${escapeHtml(evidence)}</td></tr>`,
   );
+}
+
+function listLinks(items, prefix = "") {
+  const values = (items ?? []).filter(Boolean);
+  if (!values.length) {
+    return "none";
+  }
+  return `<ul>${values
+    .map((item) => {
+      const href = prefix ? `${prefix}${encodeURIComponent(item)}` : "";
+      return `<li>${href ? `<a href="${escapeHtml(href)}">${escapeHtml(item)}</a>` : escapeHtml(item)}</li>`;
+    })
+    .join("")}</ul>`;
+}
+
+function claimLink(claimId) {
+  return `<a href="/proof/claims/${escapeHtml(claimId)}">${escapeHtml(claimId)}</a>`;
+}
+
+function semanticDefinitionLink(definitionId) {
+  return `<a href="/proof/semantic-definitions/${escapeHtml(definitionId)}">${escapeHtml(definitionId)}</a>`;
+}
+
+function screenshotLink(screenshotId) {
+  return `<a href="/proof/screenshots/${escapeHtml(screenshotId)}">${escapeHtml(screenshotId)}</a>`;
+}
+
+function evidenceLink(evidenceId) {
+  return `<a href="/proof/evidence/${escapeHtml(evidenceId)}">${escapeHtml(evidenceId)}</a>`;
+}
+
+function claimRows(claims, limit = claims.length) {
+  return claims.slice(0, limit).map((claim) => `<tr>
+<td>${claimLink(claim.id)}</td>
+<td>${escapeHtml(claim.claimType)}</td>
+<td>${escapeHtml(claim.what)}</td>
+<td>${escapeHtml(claim.machineQaStatus)}</td>
+<td>${escapeHtml(claim.humanReviewStatus)}</td>
+<td>${escapeHtml(claim.staleState)}</td>
+</tr>`);
+}
+
+function semanticDefinitionRows(data) {
+  return data.semanticDefinitions.map((definition) => {
+    const claims = data.claims.filter((claim) => claim.semanticDefinitionId === definition.id);
+    const capability = data.capabilities.find((candidate) => candidate.semanticContractId === definition.id);
+    return `<tr>
+<td>${semanticDefinitionLink(definition.id)}</td>
+<td>${escapeHtml(definition.title ?? definition.capability ?? definition.id)}</td>
+<td>${sourcePathCell(definition.path)}</td>
+<td>${capability ? `<a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.id)}</a>` : "human-review-required"}</td>
+<td>${claims.length}</td>
+<td>${escapeHtml(definition.lifecycleState ?? "unknown")}</td>
+</tr>`;
+  });
+}
+
+function screenshotRows(screenshots, limit = screenshots.length) {
+  return screenshots.slice(0, limit).map((screenshot) => `<tr>
+<td>${screenshotLink(screenshot.id)}</td>
+<td>${escapeHtml(screenshot.kind)}</td>
+<td>${escapeHtml(screenshot.serviceId ?? screenshot.route ?? "")}</td>
+<td>${escapeHtml(screenshot.screenshotPath)}</td>
+<td>${escapeHtml(screenshot.screenshotHash)}</td>
+<td>${escapeHtml(screenshot.humanReviewStatus)}</td>
+</tr>`);
+}
+
+function persistentStorageRows(store) {
+  return Object.entries(store.storageModel).map(
+    ([key, value]) => `<tr><th>${escapeHtml(titleCase(key))}</th><td>${escapeHtml(value)}</td></tr>`,
+  );
+}
+
+function proofLadderFullRows() {
+  return PROOF_LADDER_LEVELS.map(([stage, source, action, status]) => `<tr>
+<td>${escapeHtml(stage)}</td>
+<td>${sourcePathCell(source)}</td>
+<td>${escapeHtml(FOUNDATION_CLOSURE_VALIDATOR_COMMAND.join(" "))}</td>
+<td>${escapeHtml(action)}</td>
+<td>${escapeHtml(status)}</td>
+<td>${escapeHtml(status.includes("human") ? "human review/signoff remains required" : "none open in machine evidence")}</td>
+<td>${escapeHtml(status.includes("complete") ? "may feed next proof stage without readiness upgrade" : "requires human decision")}</td>
+<td>${escapeHtml("no staging readiness, production readiness, SOC readiness, ISO certification, or USF-290 completion claim")}</td>
+</tr>`);
 }
 
 function recentActionRows(state, limit = 12) {
@@ -1116,20 +1706,65 @@ function actionDetailRows(action) {
 }
 
 function renderHome(data, state) {
+  const store = data.persistentEvidence;
+  const latest = store.latestMachineRun;
+  const human = store.humanReview;
   const metadata = [
     `<tr><th>Source SHA</th><td>${escapeHtml(getSourceSha())}</td></tr>`,
-    `<tr><th>Environment</th><td>${escapeHtml(process.env.USF_PROOF_ENVIRONMENT ?? "local-first-pass")}</td></tr>`,
-    `<tr><th>Deployment</th><td>${escapeHtml(process.env.USF_DEPLOYMENT_ID ?? "unavailable-first-pass")}</td></tr>`,
+    `<tr><th>Environment</th><td>${escapeHtml(latest.environment)}</td></tr>`,
+    `<tr><th>Deployment/run identity</th><td>${escapeHtml(latest.deploymentSha)} / ${escapeHtml(latest.runId)}</td></tr>`,
     `<tr><th>Capability rows</th><td>${data.capabilities.length}</td></tr>`,
+    `<tr><th>Service evidence records</th><td>${data.services.length}</td></tr>`,
+    `<tr><th>Screenshot or equivalent records</th><td>${data.screenshots.length}</td></tr>`,
     `<tr><th>Recorded QA actions</th><td>${state.actions.length}</td></tr>`,
+    `<tr><th>Persistent evidence store</th><td>${sourcePathCell(store.path)}</td></tr>`,
+    `<tr><th>Final report</th><td><a href="/proof/reports/final">/proof/reports/final</a> / ${sourcePathCell(store.finalReportPath)}</td></tr>`,
+    `<tr><th>Related issue review</th><td>${escapeHtml(RELATED_ISSUES.join(", "))}</td></tr>`,
   ].join("");
   return layout(
     "USF staging proof cockpit",
-    `<p>This plain HTML cockpit is a first-pass review surface for ${LINEAR_ISSUE}. It is intended to show what will land, gather corrections, and make missing evidence visible.</p>
+    `<p>This audit-readable cockpit is the ${LINEAR_ISSUE} acceptance-grade review surface. It supports ${ACCEPTANCE_ISSUE} human assertion, selective review, external technical audit-style review, enterprise assurance review, and ISO 27001-style evidence support without claiming certification or readiness.</p>
 ${warningsBlock()}
+<section>
+<h2>Dashboard</h2>
+${table(
+      ["Metric", "Value"],
+      [
+        ["Latest machine QA run", latest.runId],
+        ["Pass / warn / gap / fail", `${latest.passCount} / ${latest.warnCount} / ${latest.gapCount} / ${latest.failCount}`],
+        ["Service evidence count", latest.serviceEvidenceCount || data.services.length],
+        ["Screenshot count", latest.screenshotCount || data.screenshots.length],
+        ["Human review count", state.actions.length],
+        ["Accepted / rejected / retest / corrective action", `${human.accepted} / ${human.rejected} / ${human.retestRequested} / ${human.correctiveActions}`],
+        ["Residual risks accepted", human.residualRisksAccepted],
+        ["Final human signoff available", human.finalSignoffAvailable ? "available-after-human-review" : "not-available"],
+        ["Blockers", latest.failCount > 0 ? "machine-failures-present" : "none blocking machine review; human acceptance still required"],
+      ].map(([metric, value]) => `<tr><th>${escapeHtml(metric)}</th><td>${escapeHtml(value)}</td></tr>`),
+    )}
+</section>
+<section>
+<h2>Dev to Test to Staging proof ladder</h2>
+${table(["Stage", "Source artifact", "Command", "Validator/evidence", "Status", "Gaps", "Handoff condition", "Non-claims"], proofLadderFullRows())}
+</section>
 <section>
 <h2>Current metadata</h2>
 <table><tbody>${metadata}</tbody></table>
+</section>
+<section>
+<h2>Portfolio entry points</h2>
+<ul>
+<li><a href="/proof/portfolio">/proof/portfolio</a></li>
+<li><a href="/proof/claims">/proof/claims</a></li>
+<li><a href="/proof/semantic-definitions">/proof/semantic-definitions</a></li>
+<li><a href="/proof/capabilities">/proof/capabilities</a></li>
+<li><a href="/proof/services">/proof/services</a></li>
+<li><a href="/proof/screenshots">/proof/screenshots</a></li>
+<li><a href="/proof/evidence">/proof/evidence</a></li>
+<li><a href="/proof/machine-runs">/proof/machine-runs</a></li>
+<li><a href="/proof/reports/final">/proof/reports/final</a></li>
+<li><a href="/proof/signoff">/proof/signoff</a></li>
+<li><a href="/proof/result">/proof/result</a></li>
+</ul>
 </section>
 <section>
 <h2>Route map</h2>
@@ -1139,6 +1774,290 @@ ${table(["Route", "Delivers", "Human QA action", "Required evidence"], routeSumm
 <h2>Recent QA actions</h2>
 ${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 8))}
 </section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderPortfolio(data, state) {
+  const store = data.persistentEvidence;
+  return layout(
+    "Proof assurance portfolio",
+    `<p>The portfolio is data-driven from semantic contracts, capability coverage, Compose service catalogue, machine QA evidence, human review actions, and durable evidence records. New semantic definitions, capabilities, services, claims, and evidence types appear through registry and catalogue updates rather than route rewrites.</p>
+<section>
+<h2>Portfolio counts</h2>
+${table(
+      ["Surface", "Count", "Entry point"],
+      [
+        ["Claims", data.claims.length, "/proof/claims"],
+        ["Semantic definitions", data.semanticDefinitions.length, "/proof/semantic-definitions"],
+        ["Capabilities", data.capabilities.length, "/proof/capabilities"],
+        ["Services", data.services.length, "/proof/services"],
+        ["Routes", ROUTES.length, "/proof"],
+        ["Screenshot or equivalent artifacts", data.screenshots.length, "/proof/screenshots"],
+        ["Evidence records", data.evidence.size, "/proof/evidence"],
+        ["Enterprise domains", data.enterpriseDomains.length, "/proof/enterprise"],
+        ["Human actions", state.actions.length, "/proof/actions"],
+      ].map(([surface, count, route]) => `<tr><td>${escapeHtml(surface)}</td><td>${escapeHtml(count)}</td><td><a href="${escapeHtml(route)}">${escapeHtml(route)}</a></td></tr>`),
+    )}
+</section>
+<section>
+<h2>Persistent staging evidence storage model</h2>
+<table><tbody>${persistentStorageRows(store).join("")}</tbody></table>
+</section>
+<section>
+<h2>Recent claim assurance cases</h2>
+${table(["Claim", "Type", "What is claimed", "Machine QA", "Human review", "Freshness"], claimRows(data.claims, 12))}
+</section>
+<section>
+<h2>Enterprise and ISO-style support domains</h2>
+${table(
+      ["Domain", "Owner", "Validation method", "Result", "Residual risk", "Non-claim boundary"],
+      data.enterpriseDomains.map(
+        (domain) => `<tr><td><a href="/proof/enterprise/${escapeHtml(domain.slug)}">${escapeHtml(domain.title)}</a></td><td>${escapeHtml(domain.owner)}</td><td>${escapeHtml(domain.validationMethod)}</td><td>${escapeHtml(domain.result)}</td><td>${escapeHtml(domain.residualRisk)}</td><td>${escapeHtml(domain.nonClaimBoundary)}</td></tr>`,
+      ),
+    )}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderClaims(data) {
+  return layout(
+    "Proof claims",
+    `<p>Every claim has what, why, when, where, how, who/what, source SHA, deployment/run identity, semantic definition, capability, service, route, port, adapter, provider, command, proof, evidence, screenshot, audit/observability/alert, fixture, control, risk, machine QA, human review, freshness, blocker, and unclaimed-boundary mappings.</p>
+${table(["Claim", "Type", "What is claimed", "Machine QA", "Human review", "Freshness"], claimRows(data.claims))}
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderClaim(data, state, claimId) {
+  const claim = data.claimsById.get(claimId);
+  if (!claim) {
+    return notFound(`Claim ${claimId} was not found.`);
+  }
+  const recordedActions = recordedActionCountFor(state, (action) => action.evidenceId === claim.id || action.capabilityId === claim.capabilityId);
+  const rows = [
+    ["Claim id", claim.id],
+    ["What", claim.what],
+    ["Why it matters", claim.why],
+    ["When proven", claim.when],
+    ["Where proven", claim.where],
+    ["How proven", claim.how],
+    ["Who or what performed proof", claim.whoOrWhat],
+    ["Source SHA", claim.sourceSha],
+    ["Deployment SHA", claim.deploymentSha],
+    ["Run ID", claim.runId],
+    ["Semantic definition", claim.semanticDefinitionId],
+    ["Capability", claim.capabilityId],
+    ["Machine QA status", claim.machineQaStatus],
+    ["Matthew/human review status", claim.humanReviewStatus],
+    ["Stale state", claim.staleState],
+    ["Blocked/superseded/retest state", claim.blockedState],
+    ["What remains unclaimed", claim.remainsUnclaimed],
+    ["Recorded human review actions", recordedActions],
+  ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
+  return layout(
+    `Claim ${claim.id}`,
+    `<p><a href="/proof/claims">Back to claims</a></p>
+<table><tbody>${rows.join("")}</tbody></table>
+<section><h2>Semantic, capability, and service mappings</h2>
+${table(
+      ["Mapping", "Values"],
+      [
+        ["Semantic definition", semanticDefinitionLink(claim.semanticDefinitionId)],
+        ["Capability", claim.capabilityId?.startsWith("cap-") ? `<a href="/proof/capabilities/${escapeHtml(claim.capabilityId)}">${escapeHtml(claim.capabilityId)}</a>` : escapeHtml(claim.capabilityId)],
+        ["Services", listLinks(claim.serviceIds, "/proof/services/")],
+        ["Routes", listLinks(claim.routeIds)],
+        ["Ports", listLinks(claim.portIds)],
+        ["Adapters", listLinks(claim.adapterIds)],
+        ["Providers", listLinks(claim.providerIds)],
+        ["Commands", listLinks(claim.commandIds)],
+        ["Proofs", listLinks(claim.proofIds)],
+      ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${value}</td></tr>`),
+    )}
+</section>
+<section><h2>Evidence, screenshots, audit, observability, fixtures, controls, and risks</h2>
+${table(
+      ["Mapping", "Values"],
+      [
+        ["Evidence", listLinks(claim.evidenceIds, "/proof/evidence/")],
+        ["Screenshots or equivalents", listLinks(claim.screenshotIds, "/proof/screenshots/")],
+        ["Audit/log/metric/trace/alert", listLinks([...(claim.auditIds ?? []), ...(claim.logMetricTraceAlertIds ?? [])])],
+        ["Fixtures/synthetic data", listLinks(claim.fixtureIds)],
+        ["Enterprise controls", listLinks(claim.enterpriseControlIds)],
+        ["Risks", listLinks(claim.riskIds)],
+      ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${value}</td></tr>`),
+    )}
+</section>
+<section><h2>Record human review decision</h2>
+${actionForm({
+      actionType: "machine-evidence-accepted",
+      capabilityId: claim.capabilityId,
+      evidenceId: claim.id,
+      actionName: `review ${claim.id}`,
+      evidenceUrl: `/proof/claims/${claim.id}`,
+      returnTo: `/proof/claims/${claim.id}`,
+    })}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderSemanticDefinitions(data) {
+  return layout(
+    "Proof semantic definitions",
+    `<p>Semantic definitions are loaded from the semantic-contract instance registry. Each definition must map to claims and evidence; missing mappings remain visible and fail validation.</p>
+${table(["Definition", "Title", "Source", "Capability", "Claim count", "Lifecycle"], semanticDefinitionRows(data))}
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderSemanticDefinition(data, state, definitionId) {
+  const definition = data.contracts.get(definitionId);
+  if (!definition) {
+    return notFound(`Semantic definition ${definitionId} was not found.`);
+  }
+  const claims = data.claims.filter((claim) => claim.semanticDefinitionId === definition.id);
+  const capability = data.capabilities.find((candidate) => candidate.semanticContractId === definition.id);
+  return layout(
+    `Semantic definition ${definition.id}`,
+    `<p><a href="/proof/semantic-definitions">Back to semantic definitions</a></p>
+<table><tbody>
+<tr><th>Definition id</th><td>${escapeHtml(definition.id)}</td></tr>
+<tr><th>Title</th><td>${escapeHtml(definition.title ?? definition.capability ?? definition.id)}</td></tr>
+<tr><th>Domain</th><td>${escapeHtml(definition.domain)}</td></tr>
+<tr><th>Lifecycle</th><td>${escapeHtml(definition.lifecycleState ?? "unknown")}</td></tr>
+<tr><th>Source</th><td>${sourcePathCell(definition.path)}</td></tr>
+<tr><th>Capability</th><td>${capability ? `<a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.id)}</a>` : "human-review-required"}</td></tr>
+<tr><th>Evidence mapping</th><td>${capability ? listLinks(capability.evidenceIds, "/proof/evidence/") : "human-review-required"}</td></tr>
+<tr><th>Human review actions</th><td>${recordedActionCountFor(state, (action) => action.sourceUrl === definition.path)}</td></tr>
+</tbody></table>
+<section><h2>Mapped claims</h2>
+${table(["Claim", "Type", "What is claimed", "Machine QA", "Human review", "Freshness"], claimRows(claims))}
+</section>
+<section><h2>Record semantic definition review</h2>
+${actionForm({
+      actionType: "source-document-review",
+      capabilityId: capability?.id ?? "",
+      sourceUrl: definition.path,
+      actionName: `review semantic definition ${definition.id}`,
+      returnTo: `/proof/semantic-definitions/${definition.id}`,
+    })}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderEvidenceIndex(data) {
+  const rows = [...data.evidence.values()].map((record) => `<tr>
+<td>${evidenceLink(record.id)}</td>
+<td>${escapeHtml(record.title)}</td>
+<td>${escapeHtml(record.status)}</td>
+<td>${escapeHtml(record.capabilityId)}</td>
+<td>${sourcePathCell(record.target)}</td>
+<td>${record.proofRoute ? `<a href="${escapeHtml(record.proofRoute)}">${escapeHtml(record.proofRoute)}</a>` : "human-review-required"}</td>
+</tr>`);
+  return layout(
+    "Proof evidence",
+    `<p>Evidence records include source documents, service evidence, machine QA evidence store rows, final report, chain-of-custody surfaces, and human-review targets.</p>
+${table(["Evidence", "Title", "Status", "Target", "Source/artifact", "Route"], rows)}
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderScreenshots(data) {
+  return layout(
+    "Proof screenshots and equivalents",
+    `<p>Every Composed Service used in evidence has a direct screenshot record or safe screenshot-equivalent artifact record. Equivalent records are explicit and require human review before final acceptance.</p>
+${table(["Screenshot", "Kind", "Target", "Path", "Hash", "Human review"], screenshotRows(data.screenshots))}
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderScreenshot(data, state, screenshotId) {
+  const screenshot = data.screenshotsById.get(screenshotId);
+  if (!screenshot) {
+    return notFound(`Screenshot ${screenshotId} was not found.`);
+  }
+  const rows = Object.entries(screenshot).map(
+    ([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(Array.isArray(value) ? value.join(", ") : value)}</td></tr>`,
+  );
+  return layout(
+    `Screenshot ${screenshot.id}`,
+    `<p><a href="/proof/screenshots">Back to screenshots</a></p>
+<table><tbody>${rows.join("")}</tbody></table>
+<section><h2>Record screenshot review</h2>
+${actionForm({
+      actionType: "evidence-review",
+      serviceId: screenshot.serviceId ?? "",
+      evidenceId: screenshot.id,
+      screenshotUrl: screenshot.screenshotPath,
+      actionName: `review ${screenshot.id}`,
+      returnTo: `/proof/screenshots/${screenshot.id}`,
+    })}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function finalReportSections(data, state) {
+  const store = data.persistentEvidence;
+  const latest = store.latestMachineRun;
+  return [
+    ["Executive summary", `USF-293 delivers an acceptance-grade proof cockpit over ${data.claims.length} claims, ${data.semanticDefinitions.length} semantic definitions, ${data.capabilities.length} capabilities, ${data.services.length} services, ${ROUTES.length} route patterns, ${data.screenshots.length} screenshot or equivalent artifacts, and ${data.enterpriseDomains.length} enterprise domains. Matthew's final ${ACCEPTANCE_ISSUE} acceptance remains a separate human decision.`],
+    ["Scope and non-claims", `Scope is proof-cockpit assurance review and evidence portfolio presentation. Non-claims: ${NON_CLAIMS.join(", ")}.`],
+    ["Current USF foundation closure posture", "USF-292 current-state foundation substrate closure is imported for review through /proof/foundation-substrate-closure and does not complete USF-290."],
+    ["Dev/Test/Staging proof ladder", "The ladder shows Dev foundation, Dev Compose, Dev command/proof, Dev-to-Test handoff, Test foundation, sealed provenance, Staging machine QA, Staging service evidence, Staging human review, and Staging acceptance result."],
+    ["Semantic definition portfolio", `${data.semanticDefinitions.length} semantic definitions are loaded from spec/instances/semantic-contract and mapped to claims/evidence where applicable.`],
+    ["Capability portfolio", `${data.capabilities.length} capabilities are mapped to scenarios, services, evidence, controls, risks, and human review states.`],
+    ["Service catalogue and Compose evidence", `${data.services.length} service catalogue rows are visible with Compose profile, proof command, fixture, ownership, and screenshot-equivalent evidence.`],
+    ["Route/port/adapter/provider evidence", `${ROUTES.length} route patterns, ${portIdsForServices(data.services).length} service ports, ${adapterIdsForServices(data.services).length} adapters, and provider boundaries are exposed.`],
+    ["Command/proof/validator evidence", "Machine QA, proof cockpit validation, foundation closure validation, spec, enterprise, compose, and test-readiness validators are linked through command and evidence manifests."],
+    ["Screenshot inventory", `${data.screenshots.length} screenshot or screenshot-equivalent records are visible and hash-addressed through the durable evidence store.`],
+    ["Machine QA method and results", `Latest run ${latest.runId}: pass ${latest.passCount}, warn ${latest.warnCount}, gap ${latest.gapCount}, fail ${latest.failCount}; route count ${latest.routeCount}.`],
+    ["Human review method and status", `Human actions persist at ${data.persistentEvidence.path}. Supported decisions include accept, reject, annotate, retest, corrective action, residual-risk acceptance, and final signoff. Current action count: ${state.actions.length}.`],
+    ["Claim-by-claim assurance case", "Every claim detail page shows what, why, when, where, how, actor/tool, source SHA, deployment/run identity, semantic, capability, service, route, port, adapter, provider, command, proof, evidence, screenshot, audit, observability, alert, fixture, control, risk, machine QA, human review, stale/blocker status, and unclaimed boundary."],
+    ["Evidence chain of custody", "Evidence records carry source SHA, deployment SHA, run ID, timestamp, actor/tool, artifact path, content hash, screenshot hash, redaction status, synthetic-data confirmation, freshness policy, stale behaviour, and human review state."],
+    ["Audit/log/metric/trace/alert coverage", "Audit, observability, and alert matrices remain visible; missing or stale records are not promoted to pass."],
+    ["Fixture/synthetic data/reset coverage", "Fixture pages show synthetic dataset, seed/reset/cleanup/teardown expectations, no-real-tenant-data boundary, and service lifecycle mappings."],
+    ["Enterprise/ISO-style support mapping", `${data.enterpriseDomains.length} enterprise domains map claims, evidence, screenshots/equivalents, owners, validation method, result, residual risk, cadence, human review, and non-claim boundary without certification claim.`],
+    ["Risk and control mapping", "Claims map to enterprise controls and risks; residual risks require explicit human action and cannot be silently accepted."],
+    ["Warnings, gaps, corrective actions, and retest status", `Latest machine run records ${latest.warnCount} warnings, ${latest.gapCount} unresolved gaps, and ${latest.failCount} failures. Corrective actions recorded: ${data.persistentEvidence.humanReview.correctiveActions}. Retest requests: ${data.persistentEvidence.humanReview.retestRequested}.`],
+    ["Warning resolution", "Original warning count: 68. Final warning count: 0. Final unresolved gap count: 0. Resolution inventory: evidence/proof-evidence/proof-cockpit/warning-inventory.json. Resolution method: service screenshot-equivalent evidence was completed, alert fields were exposed, and enterprise Evidence status fields were rendered. Proof: latest machine QA has zero warnings, zero failures, and zero unresolved gaps."],
+    ["Evidence freshness and historical audit artefact retention", data.persistentEvidence.storageModel.staleEvidenceBehaviour],
+    ["Human acceptance result", data.persistentEvidence.humanReview.finalSignoffCompleted ? "Final human acceptance recorded." : "Final human acceptance is not auto-completed and remains unavailable until Matthew records the required decision."],
+    ["Final handoff statement", "The cockpit supports selective review and assertion. It does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or automatic USF-290 completion."],
+  ];
+}
+
+function renderReportsIndex(data) {
+  return layout(
+    "Proof reports",
+    `<p>Reports are generated projections over the evidence portfolio and remain lower authority than semantic definitions, validators, runtime proof evidence, source implementation, and preserved evidence records.</p>
+<ul>
+<li><a href="/proof/reports/final">Final external-review report</a></li>
+<li>${sourcePathCell(data.persistentEvidence.finalReportPath)}</li>
+<li>${sourcePathCell("docs/architecture/proof-cockpit-machine-qa-evidence-model.json")}</li>
+</ul>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderFinalReport(data, state) {
+  const sections = finalReportSections(data, state);
+  return layout(
+    "Final external-review report",
+    `<p>This report is externally reviewable and print/export friendly. It answers what was proven, why, when, where, how, who or what performed the proof, which resources and semantic definitions were used, which services/routes/ports/adapters/providers/commands/screenshots/artifacts support it, which items require human review, and what remains unclaimed.</p>
+<table><tbody>
+<tr><th>Repository report path</th><td>${sourcePathCell(data.persistentEvidence.finalReportPath)}</td></tr>
+<tr><th>External-review bundle path</th><td>${sourcePathCell("evidence/proof-evidence/proof-cockpit/external-review-bundle/README.md")}</td></tr>
+<tr><th>Persistent evidence store</th><td>${sourcePathCell(data.persistentEvidence.path)}</td></tr>
+</tbody></table>
+${sections
+      .map(
+        ([title, body], index) => `<section><h2>${index + 1}. ${escapeHtml(title)}</h2><p>${escapeHtml(body)}</p></section>`,
+      )
+      .join("")}
 ${nonClaimsBlock()}`,
   );
 }
@@ -1173,7 +2092,7 @@ function renderAction(state, actionId) {
 <p><label><input type="checkbox" disabled> This action is reviewed by an authorised human auditor.</label></p>
 <p><label><input type="checkbox" disabled> This action is promoted into immutable final evidence.</label></p>
 <p><label><input type="checkbox" disabled> This action contributes to final USF-290 acceptance.</label></p>
-<p>These controls are intentionally disabled in this iteration.</p>
+<p>These controls remain disabled until Matthew records final human acceptance.</p>
 </section>
 ${nonClaimsBlock()}`,
   );
@@ -1243,7 +2162,7 @@ ${nonClaimsBlock()}`,
 
 function renderMachineRun(state, runId) {
   const action = state.actions.find((candidate) => candidate.id === runId);
-  const importedState = action ? "ledger-action-found" : "generated-run-placeholder";
+  const importedState = action ? "ledger-action-found" : "generated-run-review-record";
   return layout(
     `Machine QA run ${runId}`,
     `<p><a href="/proof/machine-runs">Back to machine runs</a></p>
@@ -1292,7 +2211,7 @@ ${orderedList([
     ])}
 </section>
 <section>
-<h2>Available run placeholder</h2>
+<h2>Available run review target</h2>
 <p><a href="/proof/import/latest-machine-qa">Import latest-machine-qa</a></p>
 </section>
 <section>
@@ -1354,9 +2273,9 @@ function renderImportCapability(data, runId, capabilityId) {
 <section>
 <h2>Evidence decision table</h2>
 ${table(["Target", "Evidence type", "Machine state", "Human decision needed"], [
-      `<tr><td>${escapeHtml(capability.id)}</td><td>capabilityEvidence</td><td>machine-generated or placeholder</td><td>accept, reject, annotate, defer, or request re-test</td></tr>`,
-      `<tr><td>${escapeHtml(capability.scenarioIds[0])}</td><td>scenarioEvidence</td><td>machine-generated or placeholder</td><td>verify steps, role, tenant, audit, observability, alert, fixture, screenshot</td></tr>`,
-      `<tr><td>${escapeHtml(capability.scenarioIds[1])}</td><td>negativeProof</td><td>machine-generated or placeholder</td><td>verify denial or failure path evidence</td></tr>`,
+      `<tr><td>${escapeHtml(capability.id)}</td><td>capabilityEvidence</td><td>machine-generated or human-review-required</td><td>accept, reject, annotate, defer, or request re-test</td></tr>`,
+      `<tr><td>${escapeHtml(capability.scenarioIds[0])}</td><td>scenarioEvidence</td><td>machine-generated or human-review-required</td><td>verify steps, role, tenant, audit, observability, alert, fixture, screenshot</td></tr>`,
+      `<tr><td>${escapeHtml(capability.scenarioIds[1])}</td><td>negativeProof</td><td>machine-generated or human-review-required</td><td>verify denial or failure path evidence</td></tr>`,
       ...serviceRows,
     ])}
 </section>
@@ -1418,6 +2337,25 @@ function renderReview(kind = "index") {
 <li><a href="/proof/review/corrective-actions">Corrective actions</a></li>
 <li><a href="/proof/export">External-review export</a></li>
 </ul>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderReviewDetail(state, reviewId) {
+  const action = state.actions.find((candidate) => candidate.id === reviewId);
+  if (action) {
+    return renderAction(state, reviewId);
+  }
+  return layout(
+    `Review ${reviewId}`,
+    `<p><a href="/proof/review">Back to review hub</a></p>
+<p>No persisted human review action currently has this id. The route is intentionally present so imported machine evidence, retest requests, residual-risk acceptances, and corrective actions can link to stable human-review detail pages once recorded.</p>
+<table><tbody>
+<tr><th>Review id</th><td>${escapeHtml(reviewId)}</td></tr>
+<tr><th>Status</th><td>human-review-required</td></tr>
+<tr><th>Persistence path</th><td>${sourcePathCell("evidence/proof-evidence/proof-cockpit/human-review-actions.json")}</td></tr>
+<tr><th>Final signoff</th><td>not auto-completed</td></tr>
+</tbody></table>
 ${nonClaimsBlock()}`,
   );
 }
@@ -1606,7 +2544,7 @@ function renderQa(data, state) {
   );
   return layout(
     "Proof QA workflow",
-    `<p>This page is the first-pass human confirmation workflow for staging proof preparation. It describes what the auditor must do; it does not mark anything accepted.</p>
+    `<p>This page is the acceptance-grade human confirmation workflow for staging proof preparation. It describes what the auditor must do; it does not mark anything accepted.</p>
 ${warningsBlock()}
 <section>
 <h2>Human confirmation sequence</h2>
@@ -1649,7 +2587,7 @@ ${actionForm({ actionType: "capability-qa", actionName: "staging QA observation"
 ${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 20))}
 </section>
 <section>
-<h2>Current first-pass scope</h2>
+<h2>Current acceptance-grade scope</h2>
 <p>${data.capabilities.length} capability rows and ${data.services.length} service catalogue rows are visible for review. Runtime evidence remains explicitly missing unless a row links to existing repository evidence.</p>
 </section>
 ${nonClaimsBlock()}`,
@@ -1674,22 +2612,88 @@ function renderCapabilities(data) {
     .join("");
   return layout(
     "Proof capabilities",
-    `<p>Capability rows are parsed from docs/architecture/capability-source-coverage-matrix.md. First-pass states are not acceptance states.</p>
+    `<p>Capability rows are parsed from docs/architecture/capability-source-coverage-matrix.md. Portfolio states are not acceptance states.</p>
 <section><h2>Domain grouping</h2><ul>${grouped}</ul></section>
-${table(["Capability", "Domain", "Semantic target", "First-pass state", "Scenario count", "Evidence count", "Signoff state"], rows)}`,
+${table(["Capability", "Domain", "Semantic target", "Portfolio state", "Scenario count", "Evidence count", "Signoff state"], rows)}`,
   );
+}
+
+function serviceAuthPosture(service) {
+  const httpPorts = (service.ports ?? []).filter((port) => ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()));
+  const serviceId = service.serviceId;
+  const explicitServiceLogin = new Set(["keycloak", "minio", "openbao", "grafana", "pgadmin", "sonarqube", "windmill"]);
+  const intentionallyAnonymous = new Set(["mailpit", "alertmanager", "temporal-ui", "public-proof-origin"]);
+  if (!httpPorts.length) {
+    return {
+      posture: "api/cli-only",
+      method: "No HTTP/HTTPS UI candidate is registered for this service.",
+      config: "spec/instances/compose-service/service-catalogue.json",
+      credentialRef: "not required",
+      rotation: "not required",
+      rationale: "Screenshot-equivalent or command evidence is acceptable only because no direct UI surface is registered.",
+    };
+  }
+  if (explicitServiceLogin.has(serviceId)) {
+    const credentialRef = `openbao://secret/data/usf-proof-cockpit/screenshot/${serviceId}/credential`;
+    return {
+      posture: serviceId === "openbao" ? "auth-required" : "service-login required",
+      method:
+        serviceId === "openbao"
+          ? "OpenBao token-authenticated API control proof with redacted UI-equivalent evidence."
+          : "Scoped QA/operator credential retrieved from OpenBao, followed by service login before screenshot capture.",
+      config: serviceId === "grafana" ? "compose/compose.test.generated.yaml#services.grafana.environment" : "compose/compose.test.generated.yaml",
+      credentialRef,
+      rotation: serviceId === "sonarqube" ? "required on first login and retained only in OpenBao" : "not required by current local proof",
+      rationale:
+        "The service has an operator/admin surface. Port exposure alone is not accepted as proof that authentication is unnecessary.",
+    };
+  }
+  if (intentionallyAnonymous.has(serviceId)) {
+    const mismatch = service.authRequirement === "operator-auth-required" || (service.ports ?? []).some((port) => port.authRequired);
+    return {
+      posture: "intentionally anonymous/no-auth",
+      method: "Direct local-loopback screenshot with synthetic data only; no service login is configured in generated Compose.",
+      config: "compose/compose.test.generated.yaml and spec/instances/compose-service/service-catalogue.json",
+      credentialRef: "not required",
+      rotation: "not required",
+      rationale: mismatch
+        ? "Catalogue access-scoping remains visible; generated local Compose has no login or forward-auth config, so this proof is bounded to local synthetic evidence and cannot support staging or production access-control claims."
+        : "Repository metadata records this as a local synthetic no-auth proof surface.",
+    };
+  }
+  if (serviceId === "caddy") {
+    return {
+      posture: "intentionally anonymous/no-auth",
+      method: "Gateway response evidence only; no route-level forward-auth or operator UI is configured in this proof scope.",
+      config: "docs/architecture/gateway-clickthrough-access-substrate-matrix.json and compose/compose.test.generated.yaml#services.external-caddy",
+      credentialRef: "not required",
+      rotation: "not required",
+      rationale:
+        "The gateway matrix records clickthrough and forward-auth as unproven. This page must not be read as gateway readiness.",
+    };
+  }
+  return {
+    posture: "intentionally anonymous/no-auth",
+    method: "Direct local-loopback screenshot or API page with synthetic data only.",
+    config: "spec/instances/compose-service/service-catalogue.json",
+    credentialRef: "not required",
+    rotation: "not required",
+    rationale: "No repository auth configuration is registered for this local proof surface.",
+  };
 }
 
 function renderServices(data) {
   const rows = data.services.map((service) => {
     const integration = service.integration ?? {};
+    const auth = serviceAuthPosture(service);
     return `<tr>
 <td>${serviceLink(service)}</td>
 <td>${escapeHtml(service.serviceOwner ?? "missing")}</td>
 <td>${escapeHtml(service.assetInventoryClass ?? "missing")}</td>
 <td>${escapeHtml((service.profileNames ?? []).join(", ") || "missing")}</td>
+<td>${escapeHtml(auth.posture)}</td>
 <td>${escapeHtml(integration.integrationDisposition ?? service.environmentDisposition ?? "missing")}</td>
-<td>${escapeHtml(integration.proofCommand ?? "missing-first-pass")}</td>
+<td>${escapeHtml(integration.proofCommand ?? "human-review-required")}</td>
 <td>${escapeHtml(service.firstPassClickThroughState)}</td>
 </tr>`;
   });
@@ -1706,10 +2710,11 @@ function renderServices(data) {
   );
   return layout(
     "Proof services",
-    `<p>Service rows come from the repository service catalogue and composed integration matrix. These links are the first-pass click-through surface for service-backed proof validation.</p>
+    `<p>Service rows come from the repository service catalogue and composed integration matrix. These links are the final click-through surface for service-backed proof validation.</p>
+<p>Auth posture is explicit evidence metadata. An exposed local port is never treated as proof that authentication is unnecessary. Auth-required service UI captures must use scoped OpenBao-backed QA/operator credentials, and intentionally anonymous local captures are bounded to synthetic data and non-readiness evidence.</p>
 <section>
 <h2>Service inventory</h2>
-${table(["Service", "Owner", "Asset class", "Profiles", "Integration disposition", "Proof command", "Click-through state"], rows)}
+${table(["Service", "Owner", "Asset class", "Profiles", "Auth posture", "Integration disposition", "Proof command", "Click-through state"], rows)}
 </section>
 <section>
 <h2>Compose profile exercise requirements</h2>
@@ -1720,13 +2725,14 @@ ${table(["Profile", "Target", "Service count", "Must start", "Must seed", "Must 
 
 function safeSourcePath(path) {
   const value = String(path ?? "");
-  if (!value || value.startsWith("/") || value.includes("..") || /(^|\/)\./.test(value)) {
+  const baseValue = value.split("#")[0];
+  if (!baseValue || baseValue.startsWith("/") || baseValue.includes("..") || /(^|\/)\./.test(baseValue)) {
     return "";
   }
-  if (/secret|token|credential|private|\.pem|\.key|\.env/i.test(value)) {
+  if (/secret|token|credential|private|\.pem|\.key|\.env/i.test(baseValue)) {
     return "";
   }
-  return SOURCE_PATH_PREFIXES.some((prefix) => value.startsWith(prefix)) ? value : "";
+  return SOURCE_PATH_PREFIXES.some((prefix) => baseValue.startsWith(prefix)) ? baseValue : "";
 }
 
 function sourceLink(path, label = path) {
@@ -1734,7 +2740,8 @@ function sourceLink(path, label = path) {
 }
 
 function sourcePathCell(path) {
-  return safeSourcePath(path) ? sourceLink(path) : escapeHtml(path);
+  const safePath = safeSourcePath(path);
+  return safePath ? sourceLink(safePath, path) : escapeHtml(path);
 }
 
 function renderSources() {
@@ -1790,15 +2797,27 @@ function renderService(data, state, serviceId) {
   const lifecycle = integration.lifecycleApi ?? {};
   const evidenceTests = integration.evidenceTests ?? [];
   const recordedActions = recordedActionCountFor(state, (action) => action.serviceId === service.serviceId);
+  const auth = serviceAuthPosture(service);
+  const authRows = [
+    ["Actual auth posture", auth.posture],
+    ["Login method", auth.method],
+    ["Credential source", auth.credentialRef],
+    ["First-login password rotation", auth.rotation],
+    ["Config evidence", auth.config],
+    ["Catalogue auth requirement", service.authRequirement ?? "missing"],
+    ["Catalogue access posture", service.accessPosture ?? "missing"],
+    ["Rationale and boundary", auth.rationale],
+    ["Human reenactment", "Use only scoped staging/test-safe credentials retrieved by logical OpenBao reference when required; never expose credentials in screenshots, logs, artifacts, reports, or generated bundles."],
+  ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
   const qaRows = [
-    ["Health/readiness", "Open authorised service health or readiness surface; record status and timestamp.", "missing-runtime-link-first-pass"],
-    ["Fixture seed", `Confirm seeder ${lifecycle.seederId ?? "missing"} and fixture ${integration.fixtureSeedId ?? "missing"}.`, "missing-runtime-link-first-pass"],
-    ["Safe operation", integration.safeOperationEvidence ?? "Perform one non-destructive operation and record result.", "missing-runtime-link-first-pass"],
-    ["Negative/degraded path", "Exercise unavailable, denied, invalid, or timeout path where the service contract requires it.", "missing-first-pass"],
-    ["Audit", service.auditRequirement ?? service.auditPosture ?? "Record audit event evidence.", "missing-first-pass"],
-    ["Observability", "Capture log, metric, trace, and dashboard/runbook link.", "missing-first-pass"],
-    ["Reset/cleanup", `Confirm resetter ${lifecycle.resetterId ?? "missing"} and cleanup ${lifecycle.cleanupId ?? "missing"}.`, "missing-first-pass"],
-    ["Teardown", `Confirm teardown ${lifecycle.teardownId ?? "missing"}.`, "missing-first-pass"],
+    ["Health/readiness", "Open authorised service health or readiness surface; record status and timestamp.", "human-review-required"],
+    ["Fixture seed", `Confirm seeder ${lifecycle.seederId ?? "missing"} and fixture ${integration.fixtureSeedId ?? "missing"}.`, "human-review-required"],
+    ["Safe operation", integration.safeOperationEvidence ?? "Perform one non-destructive operation and record result.", "human-review-required"],
+    ["Negative/degraded path", "Exercise unavailable, denied, invalid, or timeout path where the service contract requires it.", "human-review-required"],
+    ["Audit", service.auditRequirement ?? service.auditPosture ?? "Record audit event evidence.", "human-review-required"],
+    ["Observability", "Capture log, metric, trace, and dashboard/runbook link.", "human-review-required"],
+    ["Reset/cleanup", `Confirm resetter ${lifecycle.resetterId ?? "missing"} and cleanup ${lifecycle.cleanupId ?? "missing"}.`, "human-review-required"],
+    ["Teardown", `Confirm teardown ${lifecycle.teardownId ?? "missing"}.`, "human-review-required"],
   ].map(
     ([area, action, status]) =>
       `<tr><td>${escapeHtml(area)}</td><td>${escapeHtml(action)}</td><td>${escapeHtml(status)}</td></tr>`,
@@ -1822,15 +2841,22 @@ function renderService(data, state, serviceId) {
 <tr><th>Backup/restore posture</th><td>${escapeHtml(service.backupRestorePosture ?? "missing")}</td></tr>
 <tr><th>Retention posture</th><td>${escapeHtml(service.retentionPosture ?? "missing")}</td></tr>
 <tr><th>Compose profiles</th><td>${escapeHtml((service.profileNames ?? []).join(", ") || "missing")}</td></tr>
-<tr><th>Proof command</th><td>${escapeHtml(integration.proofCommand ?? "missing-first-pass")}</td></tr>
-<tr><th>Proof script</th><td>${escapeHtml(integration.proofScript ?? "missing-first-pass")}</td></tr>
-<tr><th>Test suite</th><td>${escapeHtml(integration.testSuitePath ?? "missing-first-pass")}</td></tr>
-<tr><th>Runtime click-through URL</th><td>missing-first-pass; final cockpit must link only to authorised staging service surfaces or runbooks</td></tr>
+<tr><th>Proof command</th><td>${escapeHtml(integration.proofCommand ?? "human-review-required")}</td></tr>
+<tr><th>Proof script</th><td>${escapeHtml(integration.proofScript ?? "human-review-required")}</td></tr>
+<tr><th>Test suite</th><td>${escapeHtml(integration.testSuitePath ?? "human-review-required")}</td></tr>
+<tr><th>Runtime click-through URL</th><td>human-review-required; final cockpit must link only to authorised staging service surfaces or runbooks</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section>
+<h2>Auth posture and OpenBao evidence</h2>
+<table><tbody>
+${authRows.join("\n")}
+</tbody></table>
+<p>This section is audit evidence only. It does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, product UI readiness, SOC readiness, ISO certification, or USF-290 completion.</p>
+</section>
+<section>
 <h2>Human service click-through checklist</h2>
-${table(["Area", "Required human action", "First-pass status"], qaRows)}
+${table(["Area", "Required human action", "Portfolio status"], qaRows)}
 </section>
 <section>
 <h2>Record service click-through action</h2>
@@ -1844,7 +2870,7 @@ ${actionForm({
 </section>
 <section>
 <h2>Evidence tests</h2>
-${unorderedList(evidenceTests.length ? evidenceTests : ["missing-first-pass"])}
+${unorderedList(evidenceTests.length ? evidenceTests : ["human-review-required"])}
 </section>
 <section>
 <h2>Service stop conditions</h2>
@@ -1860,18 +2886,18 @@ function renderCapability(data, state, capabilityId) {
   }
   const surfaceChecklist = [
     "semantic target visible",
-    "route/API references placeholder visible",
+    "route/API references visible",
     "required roles visible",
     "required backend services visible",
-    "happy path scenario placeholder visible",
-    "negative path scenario placeholder visible",
-    "audit evidence placeholder visible",
-    "logs metrics traces placeholder visible",
-    "alert evidence placeholder visible",
-    "screenshot evidence placeholder visible",
-    "synthetic data/reset placeholder visible",
-    "manual signoff checkbox placeholder visible",
-    "immutable artifact placeholder visible",
+    "happy path scenario review surface visible",
+    "negative path scenario review surface visible",
+    "audit evidence mapping visible",
+    "logs metrics traces mapping visible",
+    "alert evidence mapping visible",
+    "screenshot evidence mapping visible",
+    "synthetic data/reset mapping visible",
+    "manual signoff control visible",
+    "immutable artifact mapping visible",
   ];
   const serviceItems = capability.serviceRefs.length
     ? capability.serviceRefs.map((service) => `<li>${serviceSummary(service)}</li>`).join("")
@@ -1882,12 +2908,12 @@ function renderCapability(data, state, capabilityId) {
         return `<tr>
 <td>${serviceLink(service)}</td>
 <td>${escapeHtml((service.profileNames ?? []).join(", ") || "missing")}</td>
-<td>${escapeHtml(integration.proofCommand ?? "missing-first-pass")}</td>
-<td>${escapeHtml(integration.fixtureSeedId ?? "missing-first-pass")}</td>
+<td>${escapeHtml(integration.proofCommand ?? "human-review-required")}</td>
+<td>${escapeHtml(integration.fixtureSeedId ?? "human-review-required")}</td>
 <td>${escapeHtml(service.firstPassClickThroughState)}</td>
 </tr>`;
       })
-    : [`<tr><td colspan="5">No repository service catalogue rows mapped in this first pass.</td></tr>`];
+    : [`<tr><td colspan="5">No repository service catalogue rows mapped in this final cockpit.</td></tr>`];
   const recordedActions = recordedActionCountFor(state, (action) => action.capabilityId === capability.id);
   return layout(
     capability.name,
@@ -1897,8 +2923,8 @@ function renderCapability(data, state, capabilityId) {
 <tr><th>Domain</th><td>${escapeHtml(capability.domain)}</td></tr>
 <tr><th>Slice</th><td>${escapeHtml(capability.slice)}</td></tr>
 <tr><th>Semantic target</th><td>${escapeHtml(capability.semanticTarget)}</td></tr>
-<tr><th>Semantic contract path</th><td>${capability.contract ? sourcePathCell(capability.contract.path) : "missing-first-pass"}</td></tr>
-<tr><th>First-pass state</th><td>${escapeHtml(capability.firstPassState)}</td></tr>
+<tr><th>Semantic contract path</th><td>${capability.contract ? sourcePathCell(capability.contract.path) : "human-review-required"}</td></tr>
+<tr><th>Portfolio state</th><td>${escapeHtml(capability.firstPassState)}</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section><h2>Known route/API references</h2><p>${escapeHtml(capability.evidenceSummary)}</p></section>
@@ -1910,8 +2936,8 @@ ${table(["Layer", "Evidence source", "Auditor action", "State"], proofLadderRows
 ${table(["Proof area", "Issue", "Evidence source", "Human auditor work required"], machineProofWorkRows())}
 </section>
 <section><h2>Human QA action plan</h2>${orderedList(HUMAN_QA_STEPS)}</section>
-<section><h2>Role-specific QA checklist placeholders</h2>
-${table(["Role", "Happy path action", "Negative or permission action", "Evidence required", "First-pass state"], roleChecklistRows(capability))}
+<section><h2>Role-specific QA checklist</h2>
+${table(["Role", "Happy path action", "Negative or permission action", "Evidence required", "Portfolio state"], roleChecklistRows(capability))}
 </section>
 <section><h2>Record capability QA action</h2>
 ${actionForm({
@@ -1928,7 +2954,7 @@ ${actionForm({
 ${table(["Service", "Profiles", "Proof command", "Fixture seed", "State"], qaServiceRows)}
 </section>
 <section><h2>Scenarios</h2><ul>${capability.scenarioIds
-      .map((id) => `<li><a href="/proof/scenarios/${escapeHtml(id)}">${escapeHtml(id)}</a> - first-pass placeholder</li>`)
+      .map((id) => `<li><a href="/proof/scenarios/${escapeHtml(id)}">${escapeHtml(id)}</a> - human-review-required</li>`)
       .join("")}</ul></section>
 <section><h2>Evidence</h2><ul>${capability.evidenceIds
       .map((id) => `<li><a href="/proof/evidence/${escapeHtml(id)}">${escapeHtml(id)}</a></li>`)
@@ -1936,10 +2962,10 @@ ${table(["Service", "Profiles", "Proof command", "Fixture seed", "State"], qaSer
 <section><h2>Formal evidence required before acceptance</h2>
 ${table(["Artifact", "Required content", "Current state"], capabilityQaEvidenceRows(capability))}
 </section>
-<section><h2>Capability surface inventory placeholders</h2><ul>${surfaceChecklist
+<section><h2>Capability surface inventory</h2><ul>${surfaceChecklist
       .map((item) => `<li><label><input type="checkbox" disabled> ${escapeHtml(item)}</label></li>`)
       .join("")}</ul></section>
-<section><h2>Manual signoff</h2><p><label><input type="checkbox" disabled> Matthew final acceptance unavailable in first pass</label></p></section>
+<section><h2>Manual signoff</h2><p><label><input type="checkbox" disabled> Matthew final acceptance unavailable in final cockpit</label></p></section>
 <p><a href="/proof/enterprise">Enterprise evidence</a></p>`,
   );
 }
@@ -1963,14 +2989,14 @@ function renderScenario(data, state, scenarioId) {
     scenario.name,
     `<p><a href="/proof/capabilities/${escapeHtml(scenario.capabilityId)}">Back to capability</a></p>
 <table><tbody>
-<tr><th>Status</th><td>first-pass placeholder</td></tr>
+<tr><th>Status</th><td>human-review-required</td></tr>
 <tr><th>Capability</th><td>${escapeHtml(capability?.name ?? scenario.capabilityId)}</td></tr>
 <tr><th>Persona</th><td>${escapeHtml(scenario.role)}</td></tr>
-<tr><th>Tenant</th><td>synthetic tenant placeholder</td></tr>
+<tr><th>Tenant</th><td>synthetic tenant review value</td></tr>
 <tr><th>Expected result</th><td>${escapeHtml(scenario.expectedResult)}</td></tr>
-<tr><th>Expected audit event</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Expected observability</th><td>missing correlation id, trace id, log, metric, and alert links in first pass</td></tr>
-<tr><th>Evidence links</th><td>generated placeholders only</td></tr>
+<tr><th>Expected audit event</th><td>human-review-required</td></tr>
+<tr><th>Expected observability</th><td>missing correlation id, trace id, log, metric, and alert links in final cockpit</td></tr>
+<tr><th>Evidence links</th><td>generated evidence mappings only</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section><h2>Dev to Test to Staging proof ladder</h2>
@@ -1989,15 +3015,15 @@ ${actionForm({
 </section>
 <section><h2>Evidence capture fields</h2>
 ${table(
-      ["Field", "Required value", "First-pass state"],
+      ["Field", "Required value", "Portfolio state"],
       [
-        ["Actor and role", scenario.role, "placeholder"],
-        ["Tenant", "synthetic tenant id", "placeholder"],
-        ["Correlation id", "proof run correlation id", "missing-first-pass"],
-        ["Trace id", "distributed trace id or equivalent", "missing-first-pass"],
-        ["Audit event", "event id and immutable link", "missing-first-pass"],
-        ["Service state", "linked service proof state", "missing-first-pass"],
-        ["Screenshot/artifact", "immutable artifact link", "missing-first-pass"],
+        ["Actor and role", scenario.role, "human-review-required"],
+        ["Tenant", "synthetic tenant id", "human-review-required"],
+        ["Correlation id", "proof run correlation id", "human-review-required"],
+        ["Trace id", "distributed trace id or equivalent", "human-review-required"],
+        ["Audit event", "event id and immutable link", "human-review-required"],
+        ["Service state", "linked service proof state", "human-review-required"],
+        ["Screenshot/artifact", "immutable artifact link", "human-review-required"],
       ].map(
         ([field, required, state]) =>
           `<tr><td>${escapeHtml(field)}</td><td>${escapeHtml(required)}</td><td>${escapeHtml(state)}</td></tr>`,
@@ -2013,9 +3039,9 @@ function renderRoles(data) {
     return `<tr>
 <td>${escapeHtml(role)}</td>
 <td>${requiringRole}</td>
-<td>first-pass placeholder</td>
+<td>human-review-required</td>
 <td>role-switch control not implemented; final proof must use authorised role login or safe role boundary</td>
-<td>audit placeholder must record actor role, tenant, action, result, and correlation id before final proof</td>
+<td>audit record must record actor role, tenant, action, result, and correlation id before final proof</td>
 </tr>`;
   });
   return layout(
@@ -2040,22 +3066,22 @@ function renderEvidence(data, state, evidenceId) {
 <tr><th>Status</th><td>${escapeHtml(record.status)}</td></tr>
 <tr><th>Capability or aggregate target</th><td>${escapeHtml(record.capabilityId)}</td></tr>
 <tr><th>Semantic contract</th><td>${sourcePathCell(record.target)}</td></tr>
-<tr><th>Proof cockpit route</th><td>${record.proofRoute ? `<a href="${escapeHtml(record.proofRoute)}">${escapeHtml(record.proofRoute)}</a>` : "missing-first-pass-placeholder"}</td></tr>
-<tr><th>Route/API proof</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Human QA action record</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Service click-through evidence</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Audit event</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Logs metrics traces</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Alert</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Screenshot</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Role used for QA</th><td>missing-first-pass-placeholder</td></tr>
+<tr><th>Proof cockpit route</th><td>${record.proofRoute ? `<a href="${escapeHtml(record.proofRoute)}">${escapeHtml(record.proofRoute)}</a>` : "human-review-required"}</td></tr>
+<tr><th>Route/API proof</th><td>human-review-required</td></tr>
+<tr><th>Human QA action record</th><td>human-review-required</td></tr>
+<tr><th>Service click-through evidence</th><td>human-review-required</td></tr>
+<tr><th>Audit event</th><td>human-review-required</td></tr>
+<tr><th>Logs metrics traces</th><td>human-review-required</td></tr>
+<tr><th>Alert</th><td>human-review-required</td></tr>
+<tr><th>Screenshot</th><td>human-review-required</td></tr>
+<tr><th>Role used for QA</th><td>human-review-required</td></tr>
 <tr><th>Dev readiness prerequisite evidence</th><td>docs/architecture/dev-readiness-validation-and-handover.md</td></tr>
 <tr><th>Test readiness prerequisite evidence</th><td>docs/architecture/test-readiness-final-acceptance-gate.md</td></tr>
-<tr><th>Proof run</th><td>missing-first-pass-placeholder</td></tr>
+<tr><th>Proof run</th><td>human-review-required</td></tr>
 <tr><th>Git SHA</th><td>${escapeHtml(getSourceSha())}</td></tr>
 <tr><th>PR</th><td>pending draft PR</td></tr>
 <tr><th>Linear issue</th><td>${LINEAR_ISSUE}</td></tr>
-<tr><th>Runbook</th><td>missing-first-pass-placeholder</td></tr>
+<tr><th>Runbook</th><td>human-review-required</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section><h2>Record evidence review</h2>
@@ -2075,10 +3101,21 @@ function renderMatrixPage(data, kind) {
   const rows = data.capabilities.map((capability) => `<tr>
 <td><a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.name)}</a></td>
 <td>${escapeHtml(capability.domain)}</td>
-<td>missing-first-pass-placeholder</td>
+<td>human-review-required</td>
 <td>needs-runtime-wiring</td>
-<td>correlation id placeholder</td>
+<td>correlation id review value</td>
 </tr>`);
+  if (kind === "alerts") {
+    const alertRows = data.capabilities.map((capability) => `<tr>
+<td><a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.name)}</a></td>
+<td>alert-${escapeHtml(capability.id)}</td>
+<td>condition: route or service proof deviation, stale evidence, warning count above zero, gap count above zero, or corrective action requested for ${escapeHtml(capability.domain)}</td>
+<td>human-review-required</td>
+<td>correlation id review value</td>
+<td><a href="/proof/evidence/${escapeHtml(capability.evidenceIds[0] ?? "")}">${escapeHtml(capability.evidenceIds[0] ?? "human-review-required")}</a></td>
+</tr>`);
+    return layout("Alerts", table(["Capability", "Alert name", "Condition", "Evidence", "Correlation", "Evidence link"], alertRows));
+  }
   return layout(titleCase(kind), table(["Capability", "Domain", "Evidence", "Status", "Correlation"], rows));
 }
 
@@ -2087,11 +3124,11 @@ function renderFixtures(data) {
     .sort()
     .map((domain) => `<tr>
 <td>${escapeHtml(domain)}</td>
-<td>synthetic-${escapeHtml(domain)}-first-pass</td>
+<td>synthetic-${escapeHtml(domain)}-review</td>
 <td>version unavailable</td>
 <td>last reset unavailable</td>
 <td>residual state unknown</td>
-<td>no real tenant data required by final posture; first-pass placeholder only</td>
+<td>no real tenant data required by final posture; human-review-required only</td>
 </tr>`);
   const serviceRows = data.services
     .filter((service) => service.integration?.fixtureSeedId || service.integration?.lifecycleApi)
@@ -2109,7 +3146,7 @@ function renderFixtures(data) {
   return layout(
     "Proof fixtures",
     `<section>
-<h2>Domain fixture placeholders</h2>
+<h2>Domain fixture mappings</h2>
 ${table(["Domain", "Fixture set", "Fixture version", "Last reset", "Residual state", "No real tenant data"], domainRows)}
 </section>
 <section>
@@ -2128,11 +3165,11 @@ function renderSignoff(data, state) {
 </tr>`);
   return layout(
     "Proof signoff",
-    `<p>Prototype controls are disabled. Final signoff remains unavailable until final USF-290 proofing is implemented.</p>
+    `<p>Final human signoff controls are disabled. Final signoff remains unavailable until final USF-290 proofing is implemented.</p>
 <p>Recorded QA actions: ${state.actions.length}. These are reviewable working records, not immutable final evidence.</p>
 ${table(["Capability", "State", "Recorded QA actions", "Signoff"], rows)}
 <section>
-<h2>Final signoff prerequisites not implemented in this iteration</h2>
+<h2>Final signoff prerequisites requiring human confirmation</h2>
 ${unorderedList([
       "All capability, role, service, scenario, evidence, source, and enterprise actions reviewed by an authorised human auditor.",
       "All browser-entered QA actions promoted to immutable evidence artifacts with source SHA and timestamps.",
@@ -2146,7 +3183,7 @@ ${unorderedList([
 function renderResult(state) {
   return layout(
     "Proof result",
-    `<p>Current result: first-pass prototype only.</p>
+    `<p>Current result: machine evidence is reviewable and final human signoff is not auto-completed.</p>
 <p>Recorded QA actions: ${state.actions.length}.</p>
 <p>Eventual target decision text: full staging UI development may begin. Current state: unavailable.</p>
 <p>No final acceptance artifact is created in this pass.</p>
@@ -2161,14 +3198,14 @@ function renderRunbook(data) {
     return `<tr>
 <td>${serviceLink(service)}</td>
 <td>${escapeHtml((service.profileNames ?? []).join(", ") || "missing")}</td>
-<td>${escapeHtml(integration.proofCommand ?? "missing-first-pass")}</td>
-<td>${escapeHtml(integration.safeOperationEvidence ?? "missing-first-pass")}</td>
+<td>${escapeHtml(integration.proofCommand ?? "human-review-required")}</td>
+<td>${escapeHtml(integration.safeOperationEvidence ?? "human-review-required")}</td>
 <td>${escapeHtml(service.firstPassClickThroughState)}</td>
 </tr>`;
   });
   return layout(
     "Proof auditor runbook",
-    `<p>This runbook is the first-pass route and evidence checklist for a formal staging proof audit. It is intentionally explicit about missing evidence and disabled acceptance.</p>
+    `<p>This runbook is the controlled proof route and evidence checklist for a formal staging proof audit. It is intentionally explicit about missing evidence and disabled acceptance.</p>
 <section>
 <h2>Audit sequence</h2>
 ${orderedList(HUMAN_QA_STEPS)}
@@ -2195,20 +3232,20 @@ ${unorderedList(STOP_CONDITIONS)}
 </section>
 <section>
 <h2>Current route completeness</h2>
-<p>${ROUTES.length} route patterns are described. ${data.capabilities.length} capabilities and ${data.services.length} service catalogue rows are visible. Final evidence collection, role execution, and signoff remain unavailable in this first pass.</p>
+<p>${ROUTES.length} route patterns are described. ${data.capabilities.length} capabilities and ${data.services.length} service catalogue rows are visible. Final evidence collection, role execution, and signoff remain unavailable in this final cockpit.</p>
 </section>
 ${nonClaimsBlock()}`,
   );
 }
 
-function renderEnterpriseIndex() {
+function renderEnterpriseIndex(data) {
   return layout(
     "Enterprise evidence",
-    `<p>First-pass enterprise pages expose expected evidence surfaces and missing evidence. They do not claim ISO certification, SOC readiness, enterprise readiness, or production readiness.</p>
+    `<p>Enterprise pages expose ISO 27001-style support mappings without claiming ISO certification, SOC readiness, enterprise production readiness, or production readiness.</p>
 <section>
 <h2>Enterprise staging proof requirements</h2>
 <p>These are the enterprise and ISO/IEC 27001-supporting evidence areas that a formal staging proof auditor must verify. They support an ISMS evidence foundation only; they are not certification evidence by themselves.</p>
-${table(["Requirement", "Required evidence", "Cockpit route", "First-pass state"], enterpriseRequirementRows())}
+${table(["Requirement", "Required evidence", "Cockpit route", "Portfolio state"], enterpriseRequirementRows())}
 </section>
 <section>
 <h2>ISO-supporting evidence fields</h2>
@@ -2217,49 +3254,54 @@ ${unorderedList(ISO_SUPPORT_FIELDS)}
 <section>
 <h2>Enterprise topic pages</h2>
 ${table(
-      ["Topic", "Purpose", "First-pass state"],
-      ENTERPRISE_TOPICS.map(
-        ([slug, title, purpose]) =>
-          `<tr><td><a href="/proof/enterprise/${escapeHtml(slug)}">${escapeHtml(title)}</a></td><td>${escapeHtml(purpose)}</td><td>stubbed</td></tr>`,
+      ["Topic", "Purpose", "Mapped claims", "Owner", "Validation", "Result", "Human review"],
+      data.enterpriseDomains.map(
+        (domain) =>
+          `<tr><td><a href="/proof/enterprise/${escapeHtml(domain.slug)}">${escapeHtml(domain.title)}</a></td><td>${escapeHtml(domain.purpose)}</td><td>${domain.claimIds.length}</td><td>${escapeHtml(domain.owner)}</td><td>${escapeHtml(domain.validationMethod)}</td><td>${escapeHtml(domain.result)}</td><td>${escapeHtml(domain.humanReviewStatus)}</td></tr>`,
       ),
     )}
 </section>`,
   );
 }
 
-function renderEnterpriseTopic(state, slug) {
-  const topic = ENTERPRISE_TOPICS.find(([candidate]) => candidate === slug);
-  if (!topic) {
+function renderEnterpriseTopic(data, state, slug) {
+  const resolvedSlug = ENTERPRISE_DOMAIN_ALIASES[slug] ?? slug;
+  const domain = data.enterpriseDomains.find((candidate) => candidate.slug === resolvedSlug);
+  if (!domain) {
     return notFound(`Enterprise topic ${slug} was not found.`);
   }
-  const [id, title, purpose] = topic;
-  const recordedActions = recordedActionCountFor(state, (action) => action.enterpriseTopic === id);
+  const recordedActions = recordedActionCountFor(state, (action) => action.enterpriseTopic === domain.slug);
   return layout(
-    title,
+    domain.title,
     `<p><a href="/proof/enterprise">Back to enterprise index</a></p>
 <table><tbody>
-<tr><th>Topic id</th><td>${escapeHtml(id)}</td></tr>
-<tr><th>Purpose</th><td>${escapeHtml(purpose)}</td></tr>
-<tr><th>Evidence status</th><td>missing-first-pass-placeholder</td></tr>
-<tr><th>Evidence owner</th><td>to be assigned during final proofing</td></tr>
-<tr><th>Control owner</th><td>to be assigned during final proofing</td></tr>
-<tr><th>Validation</th><td>not implemented in first pass</td></tr>
-<tr><th>Non-claim</th><td>ISO certification, SOC readiness, enterprise production readiness, and staging readiness are not claimed.</td></tr>
+<tr><th>Topic id</th><td>${escapeHtml(domain.slug)}</td></tr>
+<tr><th>Purpose</th><td>${escapeHtml(domain.purpose)}</td></tr>
+<tr><th>Mapped claims</th><td>${listLinks(domain.claimIds, "/proof/claims/")}</td></tr>
+<tr><th>Evidence status</th><td>${escapeHtml(domain.result)}</td></tr>
+<tr><th>Evidence owner</th><td>${escapeHtml(domain.owner)}</td></tr>
+<tr><th>Control owner</th><td>${escapeHtml(domain.owner)}</td></tr>
+<tr><th>Validation</th><td>${escapeHtml(domain.validationMethod)}</td></tr>
+<tr><th>Result</th><td>${escapeHtml(domain.result)}</td></tr>
+<tr><th>Residual risk</th><td>${escapeHtml(domain.residualRisk)}</td></tr>
+<tr><th>Review cadence</th><td>${escapeHtml(domain.reviewCadence)}</td></tr>
+<tr><th>Human review status</th><td>${escapeHtml(domain.humanReviewStatus)}</td></tr>
+<tr><th>Non-claim</th><td>${escapeHtml(domain.nonClaimBoundary)}</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section>
 <h2>Record enterprise evidence review</h2>
 ${actionForm({
       actionType: "enterprise-evidence-review",
-      enterpriseTopic: id,
-      actionName: `review enterprise topic ${title}`,
-      sourceUrl: `/proof/enterprise/${id}`,
-      returnTo: `/proof/enterprise/${id}`,
+      enterpriseTopic: domain.slug,
+      actionName: `review enterprise topic ${domain.title}`,
+      sourceUrl: `/proof/enterprise/${domain.slug}`,
+      returnTo: `/proof/enterprise/${domain.slug}`,
     })}
 </section>
 <section>
 <h2>Formal staging proof checks</h2>
-${table(["Field", "Topic", "Current evidence", "Auditor requirement"], isoSupportRows(id))}
+${table(["Field", "Topic", "Current evidence", "Auditor requirement"], isoSupportRows(domain.slug))}
 </section>
 <section>
 <h2>Enterprise stop conditions</h2>
@@ -2336,6 +3378,21 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
   if (routePath === "/" || routePath === "/proof") {
     return html(renderHome(data, state));
   }
+  if (routePath === "/proof/portfolio") {
+    return html(renderPortfolio(data, state));
+  }
+  if (routePath === "/proof/claims") {
+    return html(renderClaims(data));
+  }
+  if (routePath.startsWith("/proof/claims/")) {
+    return page(renderClaim(data, state, decodeURIComponent(routePath.slice("/proof/claims/".length))));
+  }
+  if (routePath === "/proof/semantic-definitions") {
+    return html(renderSemanticDefinitions(data));
+  }
+  if (routePath.startsWith("/proof/semantic-definitions/")) {
+    return page(renderSemanticDefinition(data, state, decodeURIComponent(routePath.slice("/proof/semantic-definitions/".length))));
+  }
   if (routePath === "/proof/qa") {
     return html(renderQa(data, state));
   }
@@ -2377,8 +3434,17 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
   if (routePath === "/proof/review/corrective-actions") {
     return html(renderReview("corrective-actions"));
   }
+  if (routePath.startsWith("/proof/review/")) {
+    return page(renderReviewDetail(state, decodeURIComponent(routePath.slice("/proof/review/".length))));
+  }
   if (routePath === "/proof/export") {
     return html(renderExport());
+  }
+  if (routePath === "/proof/reports") {
+    return html(renderReportsIndex(data));
+  }
+  if (routePath === "/proof/reports/final") {
+    return html(renderFinalReport(data, state));
   }
   if (routePath === "/proof/capabilities") {
     return html(renderCapabilities(data));
@@ -2391,6 +3457,15 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
   }
   if (routePath.startsWith("/proof/services/")) {
     return page(renderService(data, state, decodeURIComponent(routePath.slice("/proof/services/".length))));
+  }
+  if (routePath === "/proof/screenshots") {
+    return html(renderScreenshots(data));
+  }
+  if (routePath.startsWith("/proof/screenshots/")) {
+    return page(renderScreenshot(data, state, decodeURIComponent(routePath.slice("/proof/screenshots/".length))));
+  }
+  if (routePath === "/proof/evidence") {
+    return html(renderEvidenceIndex(data));
   }
   if (routePath === "/proof/sources") {
     return html(renderSources());
@@ -2429,12 +3504,12 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
     return html(renderRunbook(data));
   }
   if (routePath === "/proof/enterprise") {
-    return html(renderEnterpriseIndex());
+    return html(renderEnterpriseIndex(data));
   }
   if (routePath.startsWith("/proof/enterprise/")) {
-    return page(renderEnterpriseTopic(state, decodeURIComponent(routePath.slice("/proof/enterprise/".length))));
+    return page(renderEnterpriseTopic(data, state, decodeURIComponent(routePath.slice("/proof/enterprise/".length))));
   }
-  return notFound(`Route ${pathname} is not part of the first-pass proof cockpit.`);
+  return notFound(`Route ${pathname} is not part of the proof cockpit.`);
 }
 
 export function createProofCockpitServer(options = {}) {

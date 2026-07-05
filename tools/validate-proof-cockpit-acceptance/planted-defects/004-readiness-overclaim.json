@@ -1,0 +1,7 @@
+{
+  "id": "004-readiness-overclaim",
+  "expectedRule": "USF-PROOF-COCKPIT-004",
+  "fixture": {
+    "kind": "readiness-overclaim"
+  }
+}

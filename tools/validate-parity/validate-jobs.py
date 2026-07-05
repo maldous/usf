@@ -144,7 +144,7 @@ USF151_PROOF_MARKERS = (
     "httpJobApiReadinessClaim: false",
     "productionReadinessClaim: false",
     "iso27001CertificationClaim: false",
-    "fullReactParityClaim: false",
+    "fullProductReadinessClaim: false",
     "usf133ClosureClaim: false",
 )
 USF151_REQUIRED_HELPER_TOKENS = (
@@ -178,7 +178,7 @@ PROHIBITED_TRUE_CLAIMS = (
     "iso27001CertificationClaim: true",
     "enterpriseProductionReadinessClaim: true",
     "fullDevReadinessClaim: true",
-    "fullReactParityClaim: true",
+    "fullProductReadinessClaim: true",
     "usf133ClosureClaim: true",
 )
 

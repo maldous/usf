@@ -169,7 +169,7 @@ USF-159 uses `effectivenessState=proven-local` for local telemetry operations an
 `liveMonitoringReadinessClaim=false`, `liveAlertingClaim=false`, `dashboardReadinessClaim=false`,
 `incidentResponseReadinessClaim=false`, `siemReadinessClaim=false`, and the broader readiness and
 certification non-claims. No live observability, incident-response, staging, production, SOC, ISO,
-full dev readiness, full React parity, enterprise production readiness, or USF-133 closure claim is
+full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure claim is
 made.
 
 ## Deferred Depth

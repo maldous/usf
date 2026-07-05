@@ -22,4 +22,4 @@ The remaining provider and environment readiness boundaries are explicitly defer
 
 ## Non-Claims
 
-USF-222 does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full React parity, or USF-133 closure.
+USF-222 does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full product readiness, or USF-133 closure.

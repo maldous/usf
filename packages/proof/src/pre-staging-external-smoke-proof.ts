@@ -164,7 +164,7 @@ async function main(): Promise<number> {
           "no-enterprise-production-readiness",
           "no-product-ui-readiness",
           "no-browser-e2e-readiness",
-          "no-full-react-product-parity",
+          "no-full-product-readiness",
         ],
       },
       null,

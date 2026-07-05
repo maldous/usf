@@ -137,7 +137,7 @@ interface PublicRouteTelemetryProofResult {
   readonly socReadinessClaim: false;
   readonly isoCertificationClaim: false;
   readonly enterpriseProductionReadinessClaim: false;
-  readonly fullReactParityClaim: false;
+  readonly fullProductReadinessClaim: false;
   readonly v2ProofTagAuthorizationClaim: false;
   readonly hostEvidence: readonly HostRouteEvidence[];
   readonly failureReasons: readonly string[];
@@ -159,7 +159,7 @@ const NON_CLAIMS = Object.freeze([
   "no-enterprise-production-readiness",
   "no-product-ui-readiness",
   "no-browser-e2e-readiness",
-  "no-full-react-product-parity",
+  "no-full-product-readiness",
   "no-caddy-semantic-requirement",
   "no-v2-proof-tag-authorization",
 ] as const);
@@ -471,7 +471,7 @@ export async function runPublicRouteTelemetryProof(
       socReadinessClaim: false,
       isoCertificationClaim: false,
       enterpriseProductionReadinessClaim: false,
-      fullReactParityClaim: false,
+      fullProductReadinessClaim: false,
       v2ProofTagAuthorizationClaim: false,
       hostEvidence,
       failureReasons,
@@ -482,7 +482,7 @@ export async function runPublicRouteTelemetryProof(
         "non-product route proof marker was observed in DOM metadata and bootstrap payload",
         "Faro and Sentry telemetry bootstrap marker/config was observed without live telemetry ingestion",
         "proof remains gateway neutral and does not require Caddy Netlify Cloudflare Worker or another gateway product",
-        "no staging production deployment live-provider SOC ISO enterprise production product UI browser E2E full React parity or v2-proof tag authorization claim emitted",
+        "no staging production deployment live-provider SOC ISO enterprise production product UI browser E2E full product readiness or v2-proof tag authorization claim emitted",
       ],
       nonClaims: NON_CLAIMS,
     };

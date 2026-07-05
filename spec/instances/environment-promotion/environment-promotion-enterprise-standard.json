@@ -77,7 +77,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ],
       "promotionPrerequisites": [
@@ -163,7 +163,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ],
       "promotionPrerequisites": [
@@ -250,7 +250,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ],
       "promotionPrerequisites": [
@@ -333,7 +333,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ],
       "promotionPrerequisites": [
@@ -410,7 +410,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -444,7 +444,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -478,7 +478,7 @@
         "soc-readiness",
         "iso27001-certification",
         "enterprise-production-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     }
@@ -491,7 +491,7 @@
     "hermetic-mock provider mode must not satisfy local-composed-real-service, external-sandbox, or live-external-provider requirements",
     "destructive test semantics must not satisfy staging or production posture",
     "readiness claims must not exceed proof level, provider mode, environment class, freshness, and approval evidence",
-    "ISO/SOC/certification, enterprise production, full dev, full React parity, and USF-133 closure claims remain prohibited"
+    "ISO/SOC/certification, enterprise production, full dev, full product readiness, and USF-133 closure claims remain prohibited"
   ],
   "enterpriseAssuranceRequirements": [
     "risk register and risk treatment",
@@ -535,7 +535,7 @@
       "ISO/IEC 27001 certification",
       "enterprise production readiness",
       "full dev readiness",
-      "full React parity",
+      "full product readiness",
       "USF-133 closure"
     ],
     "prohibitedInferences": [
@@ -564,7 +564,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ]
 }

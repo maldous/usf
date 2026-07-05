@@ -47,4 +47,4 @@ USF-263 must prove external DNS, TLS, HTTPS, and JSON proof endpoint delivery. U
 
 ## Non-Claims
 
-This contract does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or Caddy as a required gateway.
+This contract does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or Caddy as a required gateway.

@@ -36,7 +36,7 @@ const REQUIRED_NON_CLAIMS = Object.freeze([
   "iso27001-certification",
   "enterprise-production-readiness",
   "full-dev-readiness",
-  "full-react-parity-readiness",
+  "full-product-readiness",
   "USF-133-closure",
 ] as const);
 

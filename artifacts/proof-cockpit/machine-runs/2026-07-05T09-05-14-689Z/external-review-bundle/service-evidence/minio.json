@@ -1,0 +1,56 @@
+{
+  "serviceId": "minio",
+  "serviceName": "MinIO",
+  "serviceKind": "object-storage",
+  "serviceUrls": [
+    "http://127.0.0.1:9000/",
+    "http://127.0.0.1:9001/"
+  ],
+  "serviceUrl": "",
+  "servicePortProtocol": "s3-api:http, minio-console:http",
+  "capabilityIds": [
+    "cap-026-relational-storage-migrations-rls",
+    "cap-027-backup-restore",
+    "cap-028-pitr-retention-legal-hold-data-residency",
+    "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+    "cap-030-tenant-data-import-export",
+    "cap-032-object-storage-tenant-prefixes-signed-urls",
+    "cap-060-history-read-model-read-only-projection"
+  ],
+  "scenarioIds": [
+    "cap-026-relational-storage-migrations-rls-happy-path",
+    "cap-026-relational-storage-migrations-rls-negative-path",
+    "cap-027-backup-restore-happy-path",
+    "cap-027-backup-restore-negative-path",
+    "cap-028-pitr-retention-legal-hold-data-residency-happy-path",
+    "cap-028-pitr-retention-legal-hold-data-residency-negative-path",
+    "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr-happy-path",
+    "cap-029-data-governance-catalog-lineage-classification-pii-dsr-gdpr-negative-path",
+    "cap-030-tenant-data-import-export-happy-path",
+    "cap-030-tenant-data-import-export-negative-path",
+    "cap-032-object-storage-tenant-prefixes-signed-urls-happy-path",
+    "cap-032-object-storage-tenant-prefixes-signed-urls-negative-path",
+    "cap-060-history-read-model-read-only-projection-happy-path",
+    "cap-060-history-read-model-read-only-projection-negative-path"
+  ],
+  "rolePersona": "platform operator",
+  "authMethodUsed": "SSO where available; service login only where explicitly allowed for staging QA.",
+  "timestamp": "2026-07-05T09:05:35.506Z",
+  "sourceGitSha": "4f51c1a6ce92d3e4888e7869f59867612e9a4d47",
+  "deploymentEnvironment": "local-machine-qa",
+  "correlationId": "compose-service-minio-machine-qa",
+  "traceId": "compose-service-minio-machine-qa-trace",
+  "screenshotPath": "",
+  "evidenceClass": "blocked",
+  "evidenceKind": "service-auth-unavailable",
+  "evidenceStatus": "machine-warn",
+  "redactionStatus": "not-captured-auth-required-or-unavailable",
+  "syntheticDataConfirmation": "Only service catalogue, route, and synthetic proof context are recorded; no real tenant data is used.",
+  "claimSupported": "Object storage boundary and synthetic tenant object supporting evidence.",
+  "limitation": "Service requires authorised login or SSO evidence that was not available to this machine QA run.",
+  "humanReviewStatus": "human-review-required",
+  "gaps": [
+    "http://127.0.0.1:9000/ unavailable or not safely reachable: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:9000/\nCall log:\n  - navigating to \"http://127.0.0.1:9000/\", waiting until \"domcontentloaded\"\n",
+    "http://127.0.0.1:9001/ unavailable or not safely reachable: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:9001/\nCall log:\n  - navigating to \"http://127.0.0.1:9001/\", waiting until \"domcontentloaded\"\n"
+  ]
+}
