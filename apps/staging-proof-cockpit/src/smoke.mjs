@@ -3,8 +3,11 @@ import { startProofCockpitServer } from "./server.mjs";
 const ROUTES = Object.freeze([
   "/proof",
   "/proof/",
+  "/proof/qa",
   "/proof/capabilities",
   "/proof/capabilities/cap-001-tenant-identity-record-fqdn",
+  "/proof/services",
+  "/proof/services/postgres",
   "/proof/scenarios/cap-001-tenant-identity-record-fqdn-happy-path",
   "/proof/evidence/cap-001-tenant-identity-record-fqdn-semantic-contract",
   "/proof/roles",
@@ -31,9 +34,14 @@ const ROUTES = Object.freeze([
   "/proof/enterprise/resilience-capacity",
   "/proof/enterprise/observability-runbooks",
   "/proof/enterprise/policy-governance",
+  "/proof/enterprise/iso-control-support",
+  "/proof/enterprise/internal-audit",
+  "/proof/enterprise/secure-sdlc",
+  "/proof/enterprise/evidence-integrity",
   "/proof/enterprise/nonconformity-corrective-action",
   "/proof/enterprise/management-review",
   "/proof/enterprise/single-operator-risk",
+  "/proof/runbook",
 ]);
 
 const server = await startProofCockpitServer({ host: "127.0.0.1", port: 0 });
@@ -64,6 +72,10 @@ try {
   ).size;
   if (listed !== 75) {
     throw new Error(`proof-cockpit-smoke-capability-count-${listed}`);
+  }
+  const services = await fetch(`${baseUrl}/proof/services`).then((response) => response.text());
+  if (!services.includes("/proof/services/postgres")) {
+    throw new Error("proof-cockpit-smoke-service-link-missing");
   }
   console.log(JSON.stringify({ outcome: "pass", checkedRoutes: results.length, listedCapabilities: listed }));
 } finally {
