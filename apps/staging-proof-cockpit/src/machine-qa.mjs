@@ -3026,7 +3026,7 @@ Each normalized evidence record includes claim support, why the evidence matters
 
 ## 14. Evidence chain of custody
 
-Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, redaction status, limitations, and human review status.
+Every normalized evidence record includes source SHA, environment, command or URL, timestamp, artifact path or screenshot path, content hash, screenshot hash where image evidence exists, redaction status, limitations, and human review status.
 
 ## 15. Audit/log/metric/trace/alert coverage
 
