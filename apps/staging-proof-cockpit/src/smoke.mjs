@@ -4,10 +4,13 @@ const ROUTES = Object.freeze([
   "/proof",
   "/proof/",
   "/proof/qa",
+  "/proof/actions",
   "/proof/capabilities",
   "/proof/capabilities/cap-001-tenant-identity-record-fqdn",
   "/proof/services",
   "/proof/services/postgres",
+  "/proof/sources",
+  "/proof/source?path=docs/architecture/dev-readiness-validation-and-handover.md",
   "/proof/scenarios/cap-001-tenant-identity-record-fqdn-happy-path",
   "/proof/evidence/cap-001-tenant-identity-record-fqdn-semantic-contract",
   "/proof/roles",
@@ -44,7 +47,8 @@ const ROUTES = Object.freeze([
   "/proof/runbook",
 ]);
 
-const server = await startProofCockpitServer({ host: "127.0.0.1", port: 0 });
+const statePath = `/tmp/usf-proof-cockpit-smoke-${process.pid}.json`;
+const server = await startProofCockpitServer({ host: "127.0.0.1", port: 0, statePath });
 try {
   const address = server.address();
   if (!address || typeof address === "string") {
@@ -76,6 +80,35 @@ try {
   const services = await fetch(`${baseUrl}/proof/services`).then((response) => response.text());
   if (!services.includes("/proof/services/postgres")) {
     throw new Error("proof-cockpit-smoke-service-link-missing");
+  }
+  const postResponse = await fetch(`${baseUrl}/proof/actions`, {
+    method: "POST",
+    redirect: "manual",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      actionType: "capability-qa",
+      capabilityId: "cap-001-tenant-identity-record-fqdn",
+      role: "tenant admin",
+      actor: "smoke-auditor",
+      tenant: "synthetic-smoke-tenant",
+      actionName: "smoke QA action",
+      outcome: "draft-performed",
+      correlationId: "smoke-correlation",
+      traceId: "smoke-trace",
+      auditEventId: "smoke-audit",
+      devEvidenceConfirmed: "yes",
+      testEvidenceConfirmed: "yes",
+      noRealTenantData: "yes",
+      nonClaimsConfirmed: "yes",
+      returnTo: "/proof/actions",
+    }),
+  });
+  if (postResponse.status !== 303) {
+    throw new Error(`proof-cockpit-smoke-post-status-${postResponse.status}`);
+  }
+  const actions = await fetch(`${baseUrl}/proof/actions`).then((response) => response.text());
+  if (!actions.includes("smoke-auditor") || !actions.includes("cap-001-tenant-identity-record-fqdn")) {
+    throw new Error("proof-cockpit-smoke-action-not-recorded");
   }
   console.log(JSON.stringify({ outcome: "pass", checkedRoutes: results.length, listedCapabilities: listed }));
 } finally {

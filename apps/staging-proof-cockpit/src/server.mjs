@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
-import { readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
 
 const ROOT = new URL("../../..", import.meta.url).pathname;
@@ -9,6 +9,7 @@ const CONTRACT_DIR = join(ROOT, "spec/instances/semantic-contract");
 const SERVICE_CATALOGUE_PATH = join(ROOT, "spec/instances/compose-service/service-catalogue.json");
 const COMPOSED_SERVICE_MATRIX_PATH = join(ROOT, "docs/architecture/composed-service-integration-test-matrix.json");
 const LINEAR_ISSUE = "USF-290";
+const DEFAULT_STATE_PATH = process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/tmp/usf-proof-cockpit-actions.json";
 
 const NON_CLAIMS = Object.freeze([
   "no-staging-readiness",
@@ -42,10 +43,14 @@ const ROLES = Object.freeze([
 const ROUTES = Object.freeze([
   "/proof",
   "/proof/qa",
+  "/proof/actions",
+  "/proof/actions/:actionId",
   "/proof/capabilities",
   "/proof/capabilities/:capabilityId",
   "/proof/services",
   "/proof/services/:serviceId",
+  "/proof/sources",
+  "/proof/source",
   "/proof/scenarios/:scenarioId",
   "/proof/roles",
   "/proof/evidence/:evidenceId",
@@ -72,6 +77,15 @@ const ROUTES = Object.freeze([
   "/proof/enterprise/resilience-capacity",
   "/proof/enterprise/observability-runbooks",
   "/proof/enterprise/policy-governance",
+  "/proof/enterprise/iso-control-support",
+  "/proof/enterprise/internal-audit",
+  "/proof/enterprise/legal-regulatory",
+  "/proof/enterprise/security-objectives",
+  "/proof/enterprise/document-control",
+  "/proof/enterprise/competence-awareness",
+  "/proof/enterprise/physical-environmental",
+  "/proof/enterprise/secure-sdlc",
+  "/proof/enterprise/evidence-integrity",
   "/proof/enterprise/nonconformity-corrective-action",
   "/proof/enterprise/management-review",
   "/proof/enterprise/single-operator-risk",
@@ -81,10 +95,14 @@ const ROUTES = Object.freeze([
 const ROUTE_SUMMARIES = Object.freeze([
   ["/proof", "Cockpit landing page", "Confirm warnings, source SHA, environment metadata, and route map.", "source SHA, deployment metadata, visible non-claims"],
   ["/proof/qa", "Formal human QA workflow", "Follow the per-capability confirmation sequence and stop conditions before signoff.", "human action record, screenshot, correlation id, immutable artifact"],
+  ["/proof/actions", "Recorded QA action ledger", "Review submitted browser QA actions, blockers, evidence links, and confirmation check states.", "file-backed local QA records; not immutable final evidence"],
+  ["/proof/actions/:actionId", "QA action detail", "Review one submitted action and decide whether more evidence or correction is needed.", "operator-entered action fields, source SHA, timestamp"],
   ["/proof/capabilities", "All capability inventory", "Choose a capability, then open its service, scenario, evidence, audit, and observability links.", "75 capability rows, domain grouping, current prototype state"],
   ["/proof/capabilities/:capabilityId", "Capability detail", "Execute happy and negative path placeholders, verify services, and collect evidence.", "semantic contract, role, service, scenario, fixture, audit, alert, signoff placeholders"],
   ["/proof/services", "Compose service click-through inventory", "Open each required backing service page before a service-backed capability is accepted.", "service catalogue row, composed integration row, lifecycle command, proof command"],
   ["/proof/services/:serviceId", "Compose service detail", "Verify service health, seed/reset state, safe operation evidence, and operator boundary.", "catalogue ownership, profiles, fixture lifecycle, proof command, runbook gaps"],
+  ["/proof/sources", "Evidence/source document index", "Open whitelisted source and evidence documents required by the proof ladder and enterprise audit.", "repository paths rendered read-only in browser"],
+  ["/proof/source", "Evidence/source document viewer", "Review one whitelisted repository document without shell access.", "read-only repository file content"],
   ["/proof/scenarios/:scenarioId", "Scenario action page", "Perform the listed persona/tenant steps and capture expected result plus evidence links.", "scenario status, expected audit event, expected observability, expected alert"],
   ["/proof/roles", "Role and persona matrix", "Verify role-switch or role-login evidence without unsafe impersonation shortcuts.", "persona, role boundary, audit placeholder"],
   ["/proof/evidence/:evidenceId", "Evidence record page", "Attach or verify proof run, audit, observability, screenshot, PR, Linear, and runbook links.", "evidence id, status, target, source SHA"],
@@ -317,6 +335,66 @@ const ISO_SUPPORT_FIELDS = Object.freeze([
   "non-claim statement",
 ]);
 
+const STAGING_PROOF_UI_REQUIREMENTS = Object.freeze([
+  ["Capability QA", "capability, role, synthetic tenant, happy path, negative path, result, screenshot", "/proof/capabilities"],
+  ["Scenario execution", "persona, role, tenant, steps performed, expected result, observed result, blocker state", "/proof/scenarios/:scenarioId"],
+  ["Service click-through", "service route, compose profile, health/readiness, fixture seed, safe operation, cleanup", "/proof/services/:serviceId"],
+  ["Audit review", "actor, tenant, action, event id, timestamp, correlation id, immutable link", "/proof/audit"],
+  ["Observability review", "correlation id, trace id, log link, metric or latency bucket, dashboard/runbook link", "/proof/observability"],
+  ["Fixture lifecycle", "fixture id, version, seed/reset/cleanup/teardown evidence, residual state, no-real-data check", "/proof/fixtures"],
+  ["Alert review", "alert name, condition, service or route, expected severity, evidence link, no-alert rationale", "/proof/alerts"],
+  ["Source and document review", "repo path, source SHA, evidence source, auditor confirmation, correction needed", "/proof/sources"],
+  ["Enterprise evidence", "risk owner, control owner, evidence owner, applicability, exception path, review cadence", "/proof/enterprise"],
+  ["Action ledger", "recorded browser action, role, outcome, notes, links, prerequisite confirmations", "/proof/actions"],
+  ["Final signoff", "all actions reviewed, immutable evidence produced, acceptance gate enabled by later implementation", "/proof/signoff"],
+]);
+
+const QA_ACTION_TYPES = Object.freeze([
+  "capability-qa",
+  "service-clickthrough",
+  "scenario-exercise",
+  "evidence-review",
+  "enterprise-evidence-review",
+  "source-document-review",
+  "blocker-record",
+]);
+
+const QA_OUTCOMES = Object.freeze([
+  "draft-performed",
+  "evidence-attached",
+  "needs-review",
+  "blocked",
+  "not-applicable-with-rationale",
+]);
+
+const SOURCE_DOCUMENTS = Object.freeze([
+  ["Dev readiness handover", "docs/architecture/dev-readiness-validation-and-handover.md"],
+  ["Test readiness final acceptance", "docs/architecture/test-readiness-final-acceptance-gate.md"],
+  ["Test environment service contract", "docs/architecture/test-environment-service-contract.json"],
+  ["Composed semantic harness", "docs/architecture/composed-semantic-test-harness.json"],
+  ["Deterministic fixture lifecycle", "docs/architecture/deterministic-test-fixture-lifecycle.json"],
+  ["Test command surface", "docs/architecture/test-readiness-command-surface-and-ci-gate.json"],
+  ["Semantic service obligation manifest", "docs/architecture/semantic-service-test-obligation-manifest.json"],
+  ["Missing evidence planted defects gate", "docs/architecture/missing-evidence-planted-defects-regression-gate.json"],
+  ["Test completion staging-entry gate", "docs/architecture/test-environment-completion-and-staging-entry-gate.json"],
+  ["Pre-staging external HTTP gate", "docs/architecture/pre-staging-external-http-semantics-readiness-gate.json"],
+  ["Capability source coverage matrix", "docs/architecture/capability-source-coverage-matrix.md"],
+  ["Composed service integration matrix", "docs/architecture/composed-service-integration-test-matrix.json"],
+  ["Service catalogue", "spec/instances/compose-service/service-catalogue.json"],
+  ["Schema registry", "spec/registries/schema-registry.json"],
+  ["Taxonomy catalogue", "spec/taxonomies/taxonomy-catalog.json"],
+  ["Vocabulary catalogue", "spec/vocabularies/vocabulary-catalog.json"],
+]);
+
+const SOURCE_PATH_PREFIXES = Object.freeze([
+  "docs/architecture/",
+  "spec/instances/semantic-contract/",
+  "spec/instances/compose-service/",
+  "spec/registries/",
+  "spec/taxonomies/",
+  "spec/vocabularies/",
+]);
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -353,9 +431,42 @@ function stripBackticks(value) {
   return String(value ?? "").replaceAll("`", "");
 }
 
+function statePathFromOptions(options = {}) {
+  return options.statePath ?? DEFAULT_STATE_PATH;
+}
+
+function blankProofState() {
+  return { schemaVersion: 1, actions: [] };
+}
+
+function loadProofState(statePath = DEFAULT_STATE_PATH) {
+  const state = readJsonOrNull(statePath);
+  if (!state || !Array.isArray(state.actions)) {
+    return blankProofState();
+  }
+  return {
+    schemaVersion: 1,
+    actions: state.actions.filter((action) => action && typeof action === "object"),
+    updatedAt: state.updatedAt,
+  };
+}
+
+function saveProofState(state, statePath = DEFAULT_STATE_PATH) {
+  mkdirSync(dirname(statePath), { recursive: true });
+  writeFileSync(statePath, `${JSON.stringify({ ...state, updatedAt: new Date().toISOString() }, null, 2)}\n`);
+}
+
 function readJsonOrNull(path) {
   try {
     return JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function readTextOrNull(path) {
+  try {
+    return readFileSync(path, "utf8");
   } catch {
     return null;
   }
@@ -544,8 +655,10 @@ function layout(title, body) {
 <nav>
 <a href="/proof">Home</a> |
 <a href="/proof/qa">QA</a> |
+<a href="/proof/actions">Actions</a> |
 <a href="/proof/capabilities">Capabilities</a> |
 <a href="/proof/services">Services</a> |
+<a href="/proof/sources">Sources</a> |
 <a href="/proof/roles">Roles</a> |
 <a href="/proof/audit">Audit</a> |
 <a href="/proof/observability">Observability</a> |
@@ -600,6 +713,61 @@ function unorderedList(items) {
   return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
 }
 
+function textInput(name, label, value = "") {
+  return `<p><label>${escapeHtml(label)} <input name="${escapeHtml(name)}" value="${escapeHtml(value)}"></label></p>`;
+}
+
+function hiddenInput(name, value = "") {
+  return `<input type="hidden" name="${escapeHtml(name)}" value="${escapeHtml(value)}">`;
+}
+
+function textArea(name, label, value = "") {
+  return `<p><label>${escapeHtml(label)}<br><textarea name="${escapeHtml(name)}" rows="4" cols="80">${escapeHtml(value)}</textarea></label></p>`;
+}
+
+function selectInput(name, label, options, selected = "") {
+  return `<p><label>${escapeHtml(label)} <select name="${escapeHtml(name)}">${options
+    .map((option) => {
+      const isSelected = option === selected ? " selected" : "";
+      return `<option value="${escapeHtml(option)}"${isSelected}>${escapeHtml(option)}</option>`;
+    })
+    .join("")}</select></label></p>`;
+}
+
+function checkboxInput(name, label) {
+  return `<p><label><input type="checkbox" name="${escapeHtml(name)}" value="yes"> ${escapeHtml(label)}</label></p>`;
+}
+
+function actionForm(context = {}) {
+  return `<form method="post" action="/proof/actions">
+${hiddenInput("returnTo", context.returnTo ?? "/proof/actions")}
+${hiddenInput("capabilityId", context.capabilityId ?? "")}
+${hiddenInput("serviceId", context.serviceId ?? "")}
+${hiddenInput("scenarioId", context.scenarioId ?? "")}
+${hiddenInput("evidenceId", context.evidenceId ?? "")}
+${hiddenInput("enterpriseTopic", context.enterpriseTopic ?? "")}
+${selectInput("actionType", "Action type", QA_ACTION_TYPES, context.actionType ?? "capability-qa")}
+${selectInput("outcome", "Current outcome", QA_OUTCOMES, context.outcome ?? "draft-performed")}
+${selectInput("role", "QA role used", ROLES, context.role ?? "auditor")}
+${textInput("actor", "Human operator or auditor", context.actor ?? "")}
+${textInput("tenant", "Synthetic tenant or scope", context.tenant ?? "")}
+${textInput("actionName", "Action performed", context.actionName ?? "")}
+${textInput("correlationId", "Correlation id", context.correlationId ?? "")}
+${textInput("traceId", "Trace id", context.traceId ?? "")}
+${textInput("auditEventId", "Audit event id", context.auditEventId ?? "")}
+${textInput("evidenceUrl", "Evidence URL", context.evidenceUrl ?? "")}
+${textInput("sourceUrl", "Source or document URL", context.sourceUrl ?? "")}
+${textInput("serviceUrl", "Service click-through URL", context.serviceUrl ?? "")}
+${textInput("screenshotUrl", "Screenshot or artifact URL", context.screenshotUrl ?? "")}
+${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence.")}
+${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence.")}
+${checkboxInput("noRealTenantData", "This action used no real tenant data, real secrets, or private local state.")}
+${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full React parity claim.")}
+${textArea("notes", "Notes, blockers, corrections, or human observation", context.notes ?? "")}
+<p><button type="submit">Record QA action</button></p>
+</form>`;
+}
+
 function serviceLink(service) {
   return `<a href="/proof/services/${escapeHtml(service.serviceId)}">${escapeHtml(service.displayName ?? service.serviceId)}</a>`;
 }
@@ -639,7 +807,7 @@ function proofLadderRows(capability) {
     const resolvedSource = source === "/proof/capabilities/:capabilityId" ? `/proof/capabilities/${capability.id}` : source;
     return `<tr>
 <td>${escapeHtml(level)}</td>
-<td>${escapeHtml(resolvedSource)}</td>
+<td>${sourcePathCell(resolvedSource)}</td>
 <td>${escapeHtml(auditorAction)}</td>
 <td>${escapeHtml(state)}</td>
 </tr>`;
@@ -652,7 +820,7 @@ function machineProofWorkRows() {
       `<tr>
 <td>${escapeHtml(proofArea)}</td>
 <td>${escapeHtml(issue)}</td>
-<td>${escapeHtml(evidenceSource)}</td>
+<td>${sourcePathCell(evidenceSource)}</td>
 <td>${escapeHtml(auditorWork)}</td>
 </tr>`,
   );
@@ -682,6 +850,13 @@ function isoSupportRows(topicId) {
   );
 }
 
+function stagingProofUiRows() {
+  return STAGING_PROOF_UI_REQUIREMENTS.map(
+    ([area, fields, route]) =>
+      `<tr><td>${escapeHtml(area)}</td><td>${escapeHtml(fields)}</td><td>${routeToLink(route)}</td><td>partially-wired-current-iteration</td></tr>`,
+  );
+}
+
 function roleChecklistRows(capability) {
   return capability.roles.map((role) => `<tr>
 <td>${escapeHtml(role)}</td>
@@ -699,12 +874,107 @@ function routeSummaryRows() {
   );
 }
 
-function renderHome(data) {
+function recentActionRows(state, limit = 12) {
+  const actions = [...state.actions].slice(0, limit);
+  if (!actions.length) {
+    return [`<tr><td colspan="7">No QA actions recorded yet.</td></tr>`];
+  }
+  return actions.map((action) => `<tr>
+<td><a href="/proof/actions/${escapeHtml(action.id)}">${escapeHtml(action.id)}</a></td>
+<td>${escapeHtml(action.createdAt)}</td>
+<td>${escapeHtml(action.actionType)}</td>
+<td>${escapeHtml(action.capabilityId || action.serviceId || action.scenarioId || action.enterpriseTopic || "general")}</td>
+<td>${escapeHtml(action.role)}</td>
+<td>${escapeHtml(action.outcome)}</td>
+<td>${escapeHtml(action.actor || "missing")}</td>
+</tr>`);
+}
+
+function recordedActionCountFor(state, predicate) {
+  return state.actions.filter(predicate).length;
+}
+
+function normalizeAction(params) {
+  const actionType = QA_ACTION_TYPES.includes(params.get("actionType")) ? params.get("actionType") : "capability-qa";
+  const outcome = QA_OUTCOMES.includes(params.get("outcome")) ? params.get("outcome") : "needs-review";
+  const role = ROLES.includes(params.get("role")) ? params.get("role") : "auditor";
+  const now = new Date().toISOString();
+  return {
+    id: `qa-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: now,
+    updatedAt: now,
+    sourceSha: getSourceSha(),
+    actionType,
+    outcome,
+    role,
+    actor: String(params.get("actor") ?? "").slice(0, 160),
+    tenant: String(params.get("tenant") ?? "").slice(0, 160),
+    actionName: String(params.get("actionName") ?? "").slice(0, 240),
+    capabilityId: String(params.get("capabilityId") ?? "").slice(0, 160),
+    serviceId: String(params.get("serviceId") ?? "").slice(0, 160),
+    scenarioId: String(params.get("scenarioId") ?? "").slice(0, 200),
+    evidenceId: String(params.get("evidenceId") ?? "").slice(0, 200),
+    enterpriseTopic: String(params.get("enterpriseTopic") ?? "").slice(0, 160),
+    correlationId: String(params.get("correlationId") ?? "").slice(0, 200),
+    traceId: String(params.get("traceId") ?? "").slice(0, 200),
+    auditEventId: String(params.get("auditEventId") ?? "").slice(0, 200),
+    evidenceUrl: String(params.get("evidenceUrl") ?? "").slice(0, 500),
+    sourceUrl: String(params.get("sourceUrl") ?? "").slice(0, 500),
+    serviceUrl: String(params.get("serviceUrl") ?? "").slice(0, 500),
+    screenshotUrl: String(params.get("screenshotUrl") ?? "").slice(0, 500),
+    notes: String(params.get("notes") ?? "").slice(0, 4000),
+    confirmations: {
+      devEvidenceConfirmed: params.has("devEvidenceConfirmed"),
+      testEvidenceConfirmed: params.has("testEvidenceConfirmed"),
+      noRealTenantData: params.has("noRealTenantData"),
+      nonClaimsConfirmed: params.has("nonClaimsConfirmed"),
+    },
+    finalAcceptanceClaimed: false,
+  };
+}
+
+function actionDetailRows(action) {
+  return Object.entries({
+    id: action.id,
+    createdAt: action.createdAt,
+    sourceSha: action.sourceSha,
+    actionType: action.actionType,
+    outcome: action.outcome,
+    role: action.role,
+    actor: action.actor,
+    tenant: action.tenant,
+    actionName: action.actionName,
+    capabilityId: action.capabilityId,
+    serviceId: action.serviceId,
+    scenarioId: action.scenarioId,
+    evidenceId: action.evidenceId,
+    enterpriseTopic: action.enterpriseTopic,
+    correlationId: action.correlationId,
+    traceId: action.traceId,
+    auditEventId: action.auditEventId,
+    evidenceUrl: action.evidenceUrl,
+    sourceUrl: action.sourceUrl,
+    serviceUrl: action.serviceUrl,
+    screenshotUrl: action.screenshotUrl,
+    devEvidenceConfirmed: action.confirmations?.devEvidenceConfirmed,
+    testEvidenceConfirmed: action.confirmations?.testEvidenceConfirmed,
+    noRealTenantData: action.confirmations?.noRealTenantData,
+    nonClaimsConfirmed: action.confirmations?.nonClaimsConfirmed,
+    finalAcceptanceClaimed: action.finalAcceptanceClaimed,
+    notes: action.notes,
+  }).map(
+    ([field, value]) =>
+      `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value === true ? "yes" : value === false ? "no" : value)}</td></tr>`,
+  );
+}
+
+function renderHome(data, state) {
   const metadata = [
     `<tr><th>Source SHA</th><td>${escapeHtml(getSourceSha())}</td></tr>`,
     `<tr><th>Environment</th><td>${escapeHtml(process.env.USF_PROOF_ENVIRONMENT ?? "local-first-pass")}</td></tr>`,
     `<tr><th>Deployment</th><td>${escapeHtml(process.env.USF_DEPLOYMENT_ID ?? "unavailable-first-pass")}</td></tr>`,
     `<tr><th>Capability rows</th><td>${data.capabilities.length}</td></tr>`,
+    `<tr><th>Recorded QA actions</th><td>${state.actions.length}</td></tr>`,
   ].join("");
   return layout(
     "USF staging proof cockpit",
@@ -717,6 +987,46 @@ ${warningsBlock()}
 <section>
 <h2>Route map</h2>
 ${table(["Route", "Delivers", "Human QA action", "Required evidence"], routeSummaryRows())}
+</section>
+<section>
+<h2>Recent QA actions</h2>
+${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 8))}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderActions(state) {
+  return layout(
+    "Proof QA actions",
+    `<p>This ledger stores browser-entered QA actions for review. It is local operational evidence capture only, not immutable final acceptance.</p>
+<section>
+<h2>Record general QA action</h2>
+${actionForm({ actionType: "blocker-record", actionName: "general QA observation", returnTo: "/proof/actions" })}
+</section>
+<section>
+<h2>Recent actions</h2>
+${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 100))}
+</section>
+${nonClaimsBlock()}`,
+  );
+}
+
+function renderAction(state, actionId) {
+  const action = state.actions.find((candidate) => candidate.id === actionId);
+  if (!action) {
+    return notFound(`QA action ${actionId} was not found.`);
+  }
+  return layout(
+    `QA action ${action.id}`,
+    `<p><a href="/proof/actions">Back to QA actions</a></p>
+<table><tbody>${actionDetailRows(action).join("")}</tbody></table>
+<section>
+<h2>Review controls</h2>
+<p><label><input type="checkbox" disabled> This action is reviewed by an authorised human auditor.</label></p>
+<p><label><input type="checkbox" disabled> This action is promoted into immutable final evidence.</label></p>
+<p><label><input type="checkbox" disabled> This action contributes to final USF-290 acceptance.</label></p>
+<p>These controls are intentionally disabled in this iteration.</p>
 </section>
 ${nonClaimsBlock()}`,
   );
@@ -738,7 +1048,7 @@ function routeToLink(route) {
   return `<a href="${escapeHtml(route)}">${escapeHtml(route)}</a>`;
 }
 
-function renderQa(data) {
+function renderQa(data, state) {
   const artifactRows = [
     ["Capability evidence", "semantic contract, route/API proof, role/persona, happy path, negative path, screenshot", "/proof/capabilities"],
     ["Service evidence", "compose profile, health/readiness, seed/reset/cleanup, safe operation, proof command", "/proof/services"],
@@ -781,8 +1091,20 @@ ${table(["Proof area", "Issue", "Evidence source", "Human auditor work required"
 ${table(["Evidence area", "Required content", "Cockpit route"], artifactRows)}
 </section>
 <section>
+<h2>Minimal browser UI required for complete staging proof</h2>
+${table(["Proof area", "Required input or check", "Route", "Current state"], stagingProofUiRows())}
+</section>
+<section>
 <h2>Stop conditions</h2>
 ${unorderedList(STOP_CONDITIONS)}
+</section>
+<section>
+<h2>Record QA action</h2>
+${actionForm({ actionType: "capability-qa", actionName: "staging QA observation", returnTo: "/proof/actions" })}
+</section>
+<section>
+<h2>Recent QA actions</h2>
+${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 20))}
 </section>
 <section>
 <h2>Current first-pass scope</h2>
@@ -854,7 +1176,70 @@ ${table(["Profile", "Target", "Service count", "Must start", "Must seed", "Must 
   );
 }
 
-function renderService(data, serviceId) {
+function safeSourcePath(path) {
+  const value = String(path ?? "");
+  if (!value || value.startsWith("/") || value.includes("..") || /(^|\/)\./.test(value)) {
+    return "";
+  }
+  if (/secret|token|credential|private|\.pem|\.key|\.env/i.test(value)) {
+    return "";
+  }
+  return SOURCE_PATH_PREFIXES.some((prefix) => value.startsWith(prefix)) ? value : "";
+}
+
+function sourceLink(path, label = path) {
+  return `<a href="/proof/source?path=${encodeURIComponent(path)}">${escapeHtml(label)}</a>`;
+}
+
+function sourcePathCell(path) {
+  return safeSourcePath(path) ? sourceLink(path) : escapeHtml(path);
+}
+
+function renderSources() {
+  const rows = SOURCE_DOCUMENTS.map(
+    ([title, path]) =>
+      `<tr><td>${escapeHtml(title)}</td><td>${sourceLink(path)}</td><td>repository evidence source</td></tr>`,
+  );
+  return layout(
+    "Proof source documents",
+    `<p>This index exposes whitelisted repository evidence and source documents in the browser for human QA review. It intentionally does not expose secrets, environment files, private keys, or arbitrary filesystem paths.</p>
+${table(["Document", "Path", "Purpose"], rows)}
+<section>
+<h2>Record source-document review</h2>
+${actionForm({ actionType: "source-document-review", actionName: "source document review", returnTo: "/proof/actions" })}
+</section>`,
+  );
+}
+
+function renderSourceFile(url) {
+  const path = safeSourcePath(url?.searchParams?.get("path"));
+  if (!path) {
+    return notFound("Source path is not whitelisted for browser review.");
+  }
+  const content = readTextOrNull(join(ROOT, path));
+  if (content === null) {
+    return notFound(`Source document ${path} was not found.`);
+  }
+  return layout(
+    `Source ${path}`,
+    `<p><a href="/proof/sources">Back to source documents</a></p>
+<table><tbody>
+<tr><th>Path</th><td>${escapeHtml(path)}</td></tr>
+<tr><th>Source SHA</th><td>${escapeHtml(getSourceSha())}</td></tr>
+<tr><th>Authority note</th><td>Rendered read-only for QA review. Generated reports remain lower authority than source evidence, validators, and repository artefacts.</td></tr>
+</tbody></table>
+<section>
+<h2>Record review of this source</h2>
+${actionForm({ actionType: "source-document-review", sourceUrl: path, actionName: `review ${path}`, returnTo: "/proof/actions" })}
+</section>
+<section>
+<h2>Content</h2>
+<pre>${escapeHtml(content.slice(0, 200000))}</pre>
+</section>`,
+  );
+}
+
+function renderService(data, state, serviceId) {
   const service = data.servicesById.get(serviceId);
   if (!service) {
     return notFound(`Service ${serviceId} was not found.`);
@@ -862,6 +1247,7 @@ function renderService(data, serviceId) {
   const integration = service.integration ?? {};
   const lifecycle = integration.lifecycleApi ?? {};
   const evidenceTests = integration.evidenceTests ?? [];
+  const recordedActions = recordedActionCountFor(state, (action) => action.serviceId === service.serviceId);
   const qaRows = [
     ["Health/readiness", "Open authorised service health or readiness surface; record status and timestamp.", "missing-runtime-link-first-pass"],
     ["Fixture seed", `Confirm seeder ${lifecycle.seederId ?? "missing"} and fixture ${integration.fixtureSeedId ?? "missing"}.`, "missing-runtime-link-first-pass"],
@@ -898,10 +1284,21 @@ function renderService(data, serviceId) {
 <tr><th>Proof script</th><td>${escapeHtml(integration.proofScript ?? "missing-first-pass")}</td></tr>
 <tr><th>Test suite</th><td>${escapeHtml(integration.testSuitePath ?? "missing-first-pass")}</td></tr>
 <tr><th>Runtime click-through URL</th><td>missing-first-pass; final cockpit must link only to authorised staging service surfaces or runbooks</td></tr>
+<tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section>
 <h2>Human service click-through checklist</h2>
 ${table(["Area", "Required human action", "First-pass status"], qaRows)}
+</section>
+<section>
+<h2>Record service click-through action</h2>
+${actionForm({
+      actionType: "service-clickthrough",
+      serviceId: service.serviceId,
+      actionName: `click through ${service.displayName ?? service.serviceId}`,
+      sourceUrl: "spec/instances/compose-service/service-catalogue.json",
+      returnTo: `/proof/services/${service.serviceId}`,
+    })}
 </section>
 <section>
 <h2>Evidence tests</h2>
@@ -914,7 +1311,7 @@ ${unorderedList(STOP_CONDITIONS)}
   );
 }
 
-function renderCapability(data, capabilityId) {
+function renderCapability(data, state, capabilityId) {
   const capability = data.capabilities.find((candidate) => candidate.id === capabilityId);
   if (!capability) {
     return notFound(`Capability ${capabilityId} was not found.`);
@@ -949,6 +1346,7 @@ function renderCapability(data, capabilityId) {
 </tr>`;
       })
     : [`<tr><td colspan="5">No repository service catalogue rows mapped in this first pass.</td></tr>`];
+  const recordedActions = recordedActionCountFor(state, (action) => action.capabilityId === capability.id);
   return layout(
     capability.name,
     `<p><a href="/proof/capabilities">Back to capabilities</a></p>
@@ -957,8 +1355,9 @@ function renderCapability(data, capabilityId) {
 <tr><th>Domain</th><td>${escapeHtml(capability.domain)}</td></tr>
 <tr><th>Slice</th><td>${escapeHtml(capability.slice)}</td></tr>
 <tr><th>Semantic target</th><td>${escapeHtml(capability.semanticTarget)}</td></tr>
-<tr><th>Semantic contract path</th><td>${capability.contract ? escapeHtml(capability.contract.path) : "missing-first-pass"}</td></tr>
+<tr><th>Semantic contract path</th><td>${capability.contract ? sourcePathCell(capability.contract.path) : "missing-first-pass"}</td></tr>
 <tr><th>First-pass state</th><td>${escapeHtml(capability.firstPassState)}</td></tr>
+<tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section><h2>Known route/API references</h2><p>${escapeHtml(capability.evidenceSummary)}</p></section>
 <section><h2>Required roles</h2><ul>${capability.roles.map((role) => `<li>${escapeHtml(role)}</li>`).join("")}</ul></section>
@@ -971,6 +1370,16 @@ ${table(["Proof area", "Issue", "Evidence source", "Human auditor work required"
 <section><h2>Human QA action plan</h2>${orderedList(HUMAN_QA_STEPS)}</section>
 <section><h2>Role-specific QA checklist placeholders</h2>
 ${table(["Role", "Happy path action", "Negative or permission action", "Evidence required", "First-pass state"], roleChecklistRows(capability))}
+</section>
+<section><h2>Record capability QA action</h2>
+${actionForm({
+      actionType: "capability-qa",
+      capabilityId: capability.id,
+      actionName: `QA ${capability.name}`,
+      role: capability.roles[0] ?? "auditor",
+      sourceUrl: capability.contract?.path ?? capability.semanticTarget,
+      returnTo: `/proof/capabilities/${capability.id}`,
+    })}
 </section>
 <section><h2>Required backend services</h2><ul>${serviceItems}</ul></section>
 <section><h2>Compose service click-through requirements</h2>
@@ -993,7 +1402,7 @@ ${table(["Artifact", "Required content", "Current state"], capabilityQaEvidenceR
   );
 }
 
-function renderScenario(data, scenarioId) {
+function renderScenario(data, state, scenarioId) {
   const scenario = data.scenarios.get(scenarioId);
   if (!scenario) {
     return notFound(`Scenario ${scenarioId} was not found.`);
@@ -1007,6 +1416,7 @@ function renderScenario(data, scenarioId) {
     "Record audit event, correlation id, trace id, log/metric evidence, alert evidence, and service state.",
     "Run or record reset and cleanup evidence before any signoff decision.",
   ];
+  const recordedActions = recordedActionCountFor(state, (action) => action.scenarioId === scenario.id);
   return layout(
     scenario.name,
     `<p><a href="/proof/capabilities/${escapeHtml(scenario.capabilityId)}">Back to capability</a></p>
@@ -1019,11 +1429,22 @@ function renderScenario(data, scenarioId) {
 <tr><th>Expected audit event</th><td>missing-first-pass-placeholder</td></tr>
 <tr><th>Expected observability</th><td>missing correlation id, trace id, log, metric, and alert links in first pass</td></tr>
 <tr><th>Evidence links</th><td>generated placeholders only</td></tr>
+<tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
 <section><h2>Dev to Test to Staging proof ladder</h2>
 ${capability ? table(["Layer", "Evidence source", "Auditor action", "State"], proofLadderRows(capability)) : "<p>Capability proof ladder unavailable.</p>"}
 </section>
 <section><h2>QA steps</h2>${orderedList(scenarioSteps)}</section>
+<section><h2>Record scenario exercise</h2>
+${actionForm({
+      actionType: "scenario-exercise",
+      capabilityId: scenario.capabilityId,
+      scenarioId: scenario.id,
+      role: scenario.role,
+      actionName: scenario.name,
+      returnTo: `/proof/scenarios/${scenario.id}`,
+    })}
+</section>
 <section><h2>Evidence capture fields</h2>
 ${table(
       ["Field", "Required value", "First-pass state"],
@@ -1061,18 +1482,19 @@ function renderRoles(data) {
   );
 }
 
-function renderEvidence(data, evidenceId) {
+function renderEvidence(data, state, evidenceId) {
   const record = data.evidence.get(evidenceId);
   if (!record) {
     return notFound(`Evidence record ${evidenceId} was not found.`);
   }
+  const recordedActions = recordedActionCountFor(state, (action) => action.evidenceId === record.id);
   return layout(
     record.title,
     `<p><a href="/proof/capabilities/${escapeHtml(record.capabilityId)}">Back to capability</a></p>
 <table><tbody>
 <tr><th>Evidence id</th><td>${escapeHtml(record.id)}</td></tr>
 <tr><th>Status</th><td>${escapeHtml(record.status)}</td></tr>
-<tr><th>Semantic contract</th><td>${escapeHtml(record.target)}</td></tr>
+<tr><th>Semantic contract</th><td>${sourcePathCell(record.target)}</td></tr>
 <tr><th>Route/API proof</th><td>missing-first-pass-placeholder</td></tr>
 <tr><th>Human QA action record</th><td>missing-first-pass-placeholder</td></tr>
 <tr><th>Service click-through evidence</th><td>missing-first-pass-placeholder</td></tr>
@@ -1088,7 +1510,18 @@ function renderEvidence(data, evidenceId) {
 <tr><th>PR</th><td>pending draft PR</td></tr>
 <tr><th>Linear issue</th><td>${LINEAR_ISSUE}</td></tr>
 <tr><th>Runbook</th><td>missing-first-pass-placeholder</td></tr>
-</tbody></table>`,
+<tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
+</tbody></table>
+<section><h2>Record evidence review</h2>
+${actionForm({
+      actionType: "evidence-review",
+      capabilityId: record.capabilityId,
+      evidenceId: record.id,
+      sourceUrl: record.target,
+      actionName: `review ${record.title}`,
+      returnTo: `/proof/evidence/${record.id}`,
+    })}
+</section>`,
   );
 }
 
@@ -1140,23 +1573,35 @@ ${table(["Service", "Fixture seed", "Seeder", "Resetter", "Cleanup", "Teardown"]
   );
 }
 
-function renderSignoff(data) {
+function renderSignoff(data, state) {
   const rows = data.capabilities.map((capability) => `<tr>
 <td><a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.name)}</a></td>
 <td>${escapeHtml(capability.firstPassState)}</td>
+<td>${recordedActionCountFor(state, (action) => action.capabilityId === capability.id)}</td>
 <td><label><input type="checkbox" disabled> final signoff unavailable</label></td>
 </tr>`);
   return layout(
     "Proof signoff",
     `<p>Prototype controls are disabled. Final signoff remains unavailable until final USF-290 proofing is implemented.</p>
-${table(["Capability", "State", "Signoff"], rows)}`,
+<p>Recorded QA actions: ${state.actions.length}. These are reviewable working records, not immutable final evidence.</p>
+${table(["Capability", "State", "Recorded QA actions", "Signoff"], rows)}
+<section>
+<h2>Final signoff prerequisites not implemented in this iteration</h2>
+${unorderedList([
+      "All capability, role, service, scenario, evidence, source, and enterprise actions reviewed by an authorised human auditor.",
+      "All browser-entered QA actions promoted to immutable evidence artifacts with source SHA and timestamps.",
+      "All stop conditions cleared or explicitly dispositioned with owner and rationale.",
+      "Final USF-290 acceptance criteria mapped to evidence and checked in Linear.",
+    ])}
+</section>`,
   );
 }
 
-function renderResult() {
+function renderResult(state) {
   return layout(
     "Proof result",
     `<p>Current result: first-pass prototype only.</p>
+<p>Recorded QA actions: ${state.actions.length}.</p>
 <p>Eventual target decision text: full staging UI development may begin. Current state: unavailable.</p>
 <p>No final acceptance artifact is created in this pass.</p>
 ${nonClaimsBlock()}`,
@@ -1189,6 +1634,10 @@ ${table(["Route", "Delivers", "Human QA action", "Required evidence"], routeRows
 <section>
 <h2>Machine proof to human work map</h2>
 ${table(["Proof area", "Issue", "Evidence source", "Human auditor work required"], machineProofWorkRows())}
+</section>
+<section>
+<h2>Minimal browser UI required for complete staging proof</h2>
+${table(["Proof area", "Required input or check", "Route", "Current state"], stagingProofUiRows())}
 </section>
 <section>
 <h2>Service click-through coverage</h2>
@@ -1232,12 +1681,13 @@ ${table(
   );
 }
 
-function renderEnterpriseTopic(slug) {
+function renderEnterpriseTopic(state, slug) {
   const topic = ENTERPRISE_TOPICS.find(([candidate]) => candidate === slug);
   if (!topic) {
     return notFound(`Enterprise topic ${slug} was not found.`);
   }
   const [id, title, purpose] = topic;
+  const recordedActions = recordedActionCountFor(state, (action) => action.enterpriseTopic === id);
   return layout(
     title,
     `<p><a href="/proof/enterprise">Back to enterprise index</a></p>
@@ -1249,7 +1699,18 @@ function renderEnterpriseTopic(slug) {
 <tr><th>Control owner</th><td>to be assigned during final proofing</td></tr>
 <tr><th>Validation</th><td>not implemented in first pass</td></tr>
 <tr><th>Non-claim</th><td>ISO certification, SOC readiness, enterprise production readiness, and staging readiness are not claimed.</td></tr>
+<tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
+<section>
+<h2>Record enterprise evidence review</h2>
+${actionForm({
+      actionType: "enterprise-evidence-review",
+      enterpriseTopic: id,
+      actionName: `review enterprise topic ${title}`,
+      sourceUrl: `/proof/enterprise/${id}`,
+      returnTo: `/proof/enterprise/${id}`,
+    })}
+</section>
 <section>
 <h2>Formal staging proof checks</h2>
 ${table(["Field", "Topic", "Current evidence", "Auditor requirement"], isoSupportRows(id))}
@@ -1278,38 +1739,92 @@ function html(body) {
   return { status: 200, body };
 }
 
+function redirect(location) {
+  return { status: 303, body: "", headers: { Location: location || "/proof/actions" } };
+}
+
 function page(result) {
   return typeof result === "string" ? html(result) : result;
 }
 
-export function renderProofCockpit(pathname, data = buildData()) {
+function readRequestBody(request) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let size = 0;
+    request.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > 128 * 1024) {
+        reject(new Error("proof-cockpit-post-too-large"));
+        request.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    request.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    request.on("error", reject);
+  });
+}
+
+function safeReturnTo(value) {
+  const target = String(value ?? "/proof/actions");
+  return target.startsWith("/proof") && !target.startsWith("//") ? target : "/proof/actions";
+}
+
+async function handleProofPost(request, statePath) {
+  const url = new URL(request.url ?? "/", "http://127.0.0.1");
+  const routePath = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, "") : url.pathname;
+  if (routePath !== "/proof/actions") {
+    return { status: 405, body: layout("Method not allowed", "<p>Only QA action form submissions are supported.</p>") };
+  }
+  const body = await readRequestBody(request);
+  const params = new URLSearchParams(body);
+  const state = loadProofState(statePath);
+  const action = normalizeAction(params);
+  state.actions.unshift(action);
+  saveProofState(state, statePath);
+  return redirect(safeReturnTo(params.get("returnTo")) || `/proof/actions/${action.id}`);
+}
+
+export function renderProofCockpit(pathname, data = buildData(), state = blankProofState(), url = new URL(pathname, "http://127.0.0.1")) {
   const routePath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   if (routePath === "/" || routePath === "/proof") {
-    return html(renderHome(data));
+    return html(renderHome(data, state));
   }
   if (routePath === "/proof/qa") {
-    return html(renderQa(data));
+    return html(renderQa(data, state));
+  }
+  if (routePath === "/proof/actions") {
+    return html(renderActions(state));
+  }
+  if (routePath.startsWith("/proof/actions/")) {
+    return page(renderAction(state, decodeURIComponent(routePath.slice("/proof/actions/".length))));
   }
   if (routePath === "/proof/capabilities") {
     return html(renderCapabilities(data));
   }
   if (routePath.startsWith("/proof/capabilities/")) {
-    return page(renderCapability(data, decodeURIComponent(routePath.slice("/proof/capabilities/".length))));
+    return page(renderCapability(data, state, decodeURIComponent(routePath.slice("/proof/capabilities/".length))));
   }
   if (routePath === "/proof/services") {
     return html(renderServices(data));
   }
   if (routePath.startsWith("/proof/services/")) {
-    return page(renderService(data, decodeURIComponent(routePath.slice("/proof/services/".length))));
+    return page(renderService(data, state, decodeURIComponent(routePath.slice("/proof/services/".length))));
+  }
+  if (routePath === "/proof/sources") {
+    return html(renderSources());
+  }
+  if (routePath === "/proof/source") {
+    return page(renderSourceFile(url));
   }
   if (routePath.startsWith("/proof/scenarios/")) {
-    return page(renderScenario(data, decodeURIComponent(routePath.slice("/proof/scenarios/".length))));
+    return page(renderScenario(data, state, decodeURIComponent(routePath.slice("/proof/scenarios/".length))));
   }
   if (routePath === "/proof/roles") {
     return html(renderRoles(data));
   }
   if (routePath.startsWith("/proof/evidence/")) {
-    return page(renderEvidence(data, decodeURIComponent(routePath.slice("/proof/evidence/".length))));
+    return page(renderEvidence(data, state, decodeURIComponent(routePath.slice("/proof/evidence/".length))));
   }
   if (routePath === "/proof/audit") {
     return html(renderMatrixPage(data, "audit"));
@@ -1324,10 +1839,10 @@ export function renderProofCockpit(pathname, data = buildData()) {
     return html(renderMatrixPage(data, "alerts"));
   }
   if (routePath === "/proof/signoff") {
-    return html(renderSignoff(data));
+    return html(renderSignoff(data, state));
   }
   if (routePath === "/proof/result") {
-    return html(renderResult());
+    return html(renderResult(state));
   }
   if (routePath === "/proof/runbook") {
     return html(renderRunbook(data));
@@ -1336,26 +1851,40 @@ export function renderProofCockpit(pathname, data = buildData()) {
     return html(renderEnterpriseIndex());
   }
   if (routePath.startsWith("/proof/enterprise/")) {
-    return page(renderEnterpriseTopic(decodeURIComponent(routePath.slice("/proof/enterprise/".length))));
+    return page(renderEnterpriseTopic(state, decodeURIComponent(routePath.slice("/proof/enterprise/".length))));
   }
   return notFound(`Route ${pathname} is not part of the first-pass proof cockpit.`);
 }
 
 export function createProofCockpitServer(options = {}) {
   const data = options.data ?? buildData();
-  return createServer((request, response) => {
-    const url = new URL(request.url ?? "/", "http://127.0.0.1");
-    const result = renderProofCockpit(url.pathname, data);
-    response.writeHead(result.status, {
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "no-store",
-      "X-Content-Type-Options": "nosniff",
-    });
-    if (request.method === "HEAD") {
-      response.end();
-      return;
+  const statePath = statePathFromOptions(options);
+  return createServer(async (request, response) => {
+    try {
+      const url = new URL(request.url ?? "/", "http://127.0.0.1");
+      const result =
+        request.method === "POST"
+          ? await handleProofPost(request, statePath)
+          : renderProofCockpit(url.pathname, data, loadProofState(statePath), url);
+      response.writeHead(result.status, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+        ...(result.headers ?? {}),
+      });
+      if (request.method === "HEAD") {
+        response.end();
+        return;
+      }
+      response.end(result.body);
+    } catch (error) {
+      response.writeHead(500, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+      });
+      response.end(layout("Proof cockpit error", `<p>${escapeHtml(error?.message ?? error)}</p>`));
     }
-    response.end(result.body);
   });
 }
 
