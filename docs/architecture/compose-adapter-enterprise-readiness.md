@@ -8,7 +8,7 @@ validators, and executed proof output.
 USF-183 hardens the implemented Compose-backed runtime adapters for local/dev/test proof. This
 is enterprise evidence posture only. It is not enterprise production readiness, full dev
 readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, staging
-readiness, production readiness, test readiness, or full React parity.
+readiness, production readiness, test readiness, or full product readiness.
 
 ## Adapter Requirements
 

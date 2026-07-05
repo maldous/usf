@@ -88,7 +88,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "executionProofBoundaries": [
@@ -103,7 +103,7 @@
         "pgbackrest"
       ],
       "whatIsProven": "A profile-gated local Compose proof starts synthetic Postgres with WAL archiving enabled, creates a pgBackRest online full backup while Postgres is running, and observes at least one archived WAL file.",
-      "whatIsNotProven": "This does not prove no backup readiness, restore readiness, environment promotion, provider-managed operation, live-provider, staging, production, SOC, ISO, full dev, full React parity, or USF-133 closure claim is made.",
+      "whatIsNotProven": "This does not prove no backup readiness, restore readiness, environment promotion, provider-managed operation, live-provider, staging, production, SOC, ISO, full dev, full product readiness, or USF-133 closure claim is made.",
       "nonEquivalenceBoundary": "Local online backup and local WAL archive evidence are not equivalent to managed backup operation, environment-promotion backup gates, production backup operation, or live-provider backup service evidence."
     },
     {
@@ -117,7 +117,7 @@
         "pgbackrest"
       ],
       "whatIsProven": "The proof dispatches a deterministic local scheduled-backup operation as a second pgBackRest backup, creates a restore point, restores into an isolated volume, replays archived WAL to the target, and verifies the post-target mutation is absent.",
-      "whatIsNotProven": "This does not prove no scheduler service readiness, provider-managed schedule operation, PITR readiness, restore readiness, staging, production, live-provider, SOC, ISO, full dev, full React parity, or USF-133 closure claim is made.",
+      "whatIsNotProven": "This does not prove no scheduler service readiness, provider-managed schedule operation, PITR readiness, restore readiness, staging, production, live-provider, SOC, ISO, full dev, full product readiness, or USF-133 closure claim is made.",
       "nonEquivalenceBoundary": "A deterministic local scheduled dispatch is not equivalent to a production scheduler, managed backup plan, operator runbook rehearsal, or environment promotion gate."
     },
     {
@@ -131,7 +131,7 @@
         "pgbackrest"
       ],
       "whatIsProven": "The proof stops the source Postgres before restore, restores to a fresh isolated volume, captures local RPO/RTO observation buckets, proves missing repository fail-closed behaviour, and tears down Compose resources and temporary directories.",
-      "whatIsNotProven": "This does not prove no DR readiness, RPO target achievement, RTO target achievement, production incident runbook, provider-managed DR, staging, production, live-provider, SOC, ISO, full dev, full React parity, or USF-133 closure claim is made.",
+      "whatIsNotProven": "This does not prove no DR readiness, RPO target achievement, RTO target achievement, production incident runbook, provider-managed DR, staging, production, live-provider, SOC, ISO, full dev, full product readiness, or USF-133 closure claim is made.",
       "nonEquivalenceBoundary": "Local failure rehearsal and local duration/count observations are not equivalent to target-backed RPO/RTO commitments, production DR exercise, customer-impact assessment, or live-provider disaster recovery evidence."
     }
   ],
@@ -152,7 +152,7 @@
         "iso-supporting-evidence-completeness"
       ],
       "followUpIssue": "USF-193",
-      "nonClaimBoundary": "USF-223 does not prove test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, full dev, full React parity, or USF-133 closure readiness."
+      "nonClaimBoundary": "USF-223 does not prove test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, full dev, full product readiness, or USF-133 closure readiness."
     },
     {
       "id": "provider-managed-backup-and-supplier-boundary",
@@ -213,8 +213,7 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "usf-133-closure"
   ]
 }

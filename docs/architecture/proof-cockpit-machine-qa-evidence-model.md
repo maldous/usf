@@ -1,6 +1,6 @@
 # Proof Cockpit Machine QA Evidence Model
 
-This document defines the first durable evidence model for USF-290 machine QA. It supports machine collection, human import, external review, and future capability/service growth. It does not claim staging readiness, production readiness, SOC readiness, ISO certification, enterprise production readiness, browser E2E readiness, full React parity, or USF-290 completion.
+This document defines the first durable evidence model for USF-290 machine QA. It supports machine collection, human import, external review, and future capability/service growth. It does not claim staging readiness, production readiness, SOC readiness, ISO certification, enterprise production readiness, browser E2E readiness, full product readiness, or USF-290 completion.
 
 The model separates discovery, execution, evidence normalization, evaluation, human import, and reporting. Machine QA may collect and normalize evidence, but Matthew’s acceptance remains a separate audited human decision.
 

@@ -85,8 +85,8 @@ const prohibitedClaims = [
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
-  "full-react-parity-readiness",
+  "full-product-readiness",
+  "full-product-readiness",
 ];
 
 describe("enterprise control evidence test suite", () => {

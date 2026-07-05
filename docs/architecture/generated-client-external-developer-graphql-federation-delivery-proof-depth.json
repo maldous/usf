@@ -76,7 +76,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "surfaceDispositions": [
@@ -103,7 +103,7 @@
         "tools/validate-parity/validate-api.py"
       ],
       "nonEquivalenceBoundary": "REST/OpenAPI route-contract proof is not GraphQL runtime proof, resolver authorization proof, persisted-query proof, subscription proof, GraphQL schema compatibility proof, or GraphQL client readiness.",
-      "nonClaimBoundary": "No GraphQL runtime readiness, GraphQL operation readiness, public API readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No GraphQL runtime readiness, GraphQL operation readiness, public API readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure is claimed."
     },
     {
       "id": "federation-runtime",
@@ -127,7 +127,7 @@
         "docs/architecture/api-and-contract-surface-standard.md"
       ],
       "nonEquivalenceBoundary": "GraphQL lineage and REST/OpenAPI proof are not federation gateway proof, schema stitching proof, subgraph authorization proof, federation composition proof, or gateway deployment proof.",
-      "nonClaimBoundary": "No federation readiness, gateway federation readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No federation readiness, gateway federation readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure is claimed."
     },
     {
       "id": "generated-sdk",
@@ -150,7 +150,7 @@
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
       ],
       "nonEquivalenceBoundary": "OpenAPI JSON generation, local route metadata, and public compatibility snapshot hashes are not generated SDK package creation, SDK compile proof, SDK runtime compatibility proof, versioned package publication, or customer distribution readiness.",
-      "nonClaimBoundary": "No generated SDK readiness, SDK package readiness, SDK distribution readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No generated SDK readiness, SDK package readiness, SDK distribution readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure is claimed."
     },
     {
       "id": "generated-client",
@@ -172,7 +172,7 @@
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
       ],
       "nonEquivalenceBoundary": "API proof markers and route metadata are not generated client artifact creation, generated client compile/run proof, multi-language client fixture proof, customer compatibility proof, or public package distribution proof.",
-      "nonClaimBoundary": "No generated client readiness, generated client compatibility readiness, external developer client readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No generated client readiness, generated client compatibility readiness, external developer client readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure is claimed."
     },
     {
       "id": "external-developer-platform",
@@ -194,7 +194,7 @@
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
       ],
       "nonEquivalenceBoundary": "Local API proof, OpenAPI output, and release-governance documentation are not developer portal operation, API key onboarding, public documentation hosting, support workflow, public changelog, or customer-facing compatibility readiness.",
-      "nonClaimBoundary": "No external developer platform readiness, public documentation readiness, API key workflow readiness, support/SLA readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No external developer platform readiness, public documentation readiness, API key workflow readiness, support/SLA readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure is claimed."
     },
     {
       "id": "client-distribution",
@@ -215,7 +215,7 @@
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
       ],
       "nonEquivalenceBoundary": "Route contracts and local proof markers are not package registry operation, client artifact signing, SBOM publication, deprecation notices, consumer migration support, or public distribution readiness.",
-      "nonClaimBoundary": "No client distribution readiness, package publication readiness, artifact signing readiness, public developer readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No client distribution readiness, package publication readiness, artifact signing readiness, public developer readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure is claimed."
     }
   ],
   "acceptanceCriteriaMapping": [
@@ -250,7 +250,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure",
     "generated-sdk-readiness",
     "generated-client-readiness",
@@ -270,6 +270,6 @@
       "USF-API-033",
       "USF-API-034"
     ],
-    "nonEquivalenceBoundary": "USF-224 successor proof is bounded local execution evidence only and remains non-equivalent to public package publication, deployed GraphQL service, deployed federation gateway, public API readiness, environment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure."
+    "nonEquivalenceBoundary": "USF-224 successor proof is bounded local execution evidence only and remains non-equivalent to public package publication, deployed GraphQL service, deployed federation gateway, public API readiness, environment readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure."
   }
 }

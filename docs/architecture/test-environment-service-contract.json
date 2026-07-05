@@ -131,9 +131,20 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:db", "corepack pnpm proof:authz", "corepack pnpm proof:audit", "corepack pnpm runtime:proof:compose"],
+      "validationCommands": [
+        "corepack pnpm proof:db",
+        "corepack pnpm proof:authz",
+        "corepack pnpm proof:audit",
+        "corepack pnpm runtime:proof:compose"
+      ],
       "readinessEvidence": "service catalogue test policy is generated composed-local with real-product-required substitution and reset-per-run lifecycle",
-      "resetSeedCleanup": {"seed": "synthetic proof fixtures only", "reset": "down -v between composed test runs", "cleanup": "proof-owned records and volumes removed", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic proof fixtures only",
+        "reset": "down -v between composed test runs",
+        "cleanup": "proof-owned records and volumes removed",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -143,9 +154,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:auth"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:auth"
+      ],
       "readinessEvidence": "service catalogue test policy is generated composed-local with real-product-required substitution and reset-per-run lifecycle",
-      "resetSeedCleanup": {"seed": "synthetic identity metadata only", "reset": "down -v between composed test runs", "cleanup": "database volume removed", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable identity fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic identity metadata only",
+        "reset": "down -v between composed test runs",
+        "cleanup": "database volume removed",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable identity fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -155,9 +175,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:auth"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:auth"
+      ],
       "readinessEvidence": "Keycloak readiness must use service-specific bounded retry before any auth or resolver authorization test claim",
-      "resetSeedCleanup": {"seed": "synthetic realm/client/actor fixtures only", "reset": "down -v between composed test runs", "cleanup": "synthetic realm state removed with volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable auth fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic realm/client/actor fixtures only",
+        "reset": "down -v between composed test runs",
+        "cleanup": "synthetic realm state removed with volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable auth fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -167,9 +196,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:providers"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:providers"
+      ],
       "readinessEvidence": "NATS event bus proof must connect to composed service before eventing claims",
-      "resetSeedCleanup": {"seed": "synthetic events only", "reset": "fresh Compose project for composed test run", "cleanup": "subjects and connections closed", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable event fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic events only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "subjects and connections closed",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable event fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -179,9 +217,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:providers"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:providers"
+      ],
       "readinessEvidence": "Temporal client proof must connect to composed service before workflow claims",
-      "resetSeedCleanup": {"seed": "synthetic workflow namespace/task fixtures only", "reset": "fresh Compose project for composed test run", "cleanup": "workers shut down and task queues drained where proof writes state", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable workflow fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic workflow namespace/task fixtures only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "workers shut down and task queues drained where proof writes state",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable workflow fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -191,9 +238,19 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:providers", "corepack pnpm proof:files"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:providers",
+        "corepack pnpm proof:files"
+      ],
       "readinessEvidence": "MinIO object-store proof must use composed service and collision-free tenant/object-key path evidence",
-      "resetSeedCleanup": {"seed": "synthetic objects only", "reset": "down -v between composed test runs", "cleanup": "synthetic buckets/objects removed or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable storage fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic objects only",
+        "reset": "down -v between composed test runs",
+        "cleanup": "synthetic buckets/objects removed or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable storage fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -203,9 +260,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:config"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:config"
+      ],
       "readinessEvidence": "OpenBao secret-store proof must use composed service and collision-free tenant/secret-name path evidence",
-      "resetSeedCleanup": {"seed": "synthetic secrets only", "reset": "down -v between composed test runs", "cleanup": "synthetic KV paths removed or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable secret fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic secrets only",
+        "reset": "down -v between composed test runs",
+        "cleanup": "synthetic KV paths removed or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable secret fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -215,9 +281,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability", "corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability",
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "OpenTelemetry collector is the composed telemetry boundary for local observability proof evidence",
-      "resetSeedCleanup": {"seed": "synthetic telemetry only", "reset": "fresh Compose project for composed test run", "cleanup": "telemetry buffers discarded", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable telemetry fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic telemetry only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "telemetry buffers discarded",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable telemetry fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -227,9 +302,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability", "corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability",
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "Prometheus is the composed metrics boundary for local observability proof evidence",
-      "resetSeedCleanup": {"seed": "synthetic metrics only", "reset": "fresh Compose project for composed test run", "cleanup": "time-series data discarded by volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable metrics fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic metrics only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "time-series data discarded by volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable metrics fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -239,9 +323,17 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "Grafana local dashboard metadata is composed evidence only and not public dashboard readiness",
-      "resetSeedCleanup": {"seed": "synthetic dashboard metadata only", "reset": "fresh Compose project for composed test run", "cleanup": "dashboard state discarded by volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable dashboard fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic dashboard metadata only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "dashboard state discarded by volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable dashboard fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -251,9 +343,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability", "corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability",
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "Loki is the composed log evidence boundary for local observability proof evidence",
-      "resetSeedCleanup": {"seed": "synthetic logs only", "reset": "fresh Compose project for composed test run", "cleanup": "log data discarded by volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable log fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic logs only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "log data discarded by volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable log fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -263,9 +364,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability", "corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability",
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "Tempo is the composed trace evidence boundary for local observability proof evidence",
-      "resetSeedCleanup": {"seed": "synthetic traces only", "reset": "fresh Compose project for composed test run", "cleanup": "trace data discarded by volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable trace fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic traces only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "trace data discarded by volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable trace fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -275,9 +385,18 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm runtime:proof:compose", "corepack pnpm proof:notify"],
+      "validationCommands": [
+        "corepack pnpm runtime:proof:compose",
+        "corepack pnpm proof:notify"
+      ],
       "readinessEvidence": "Mailpit is the composed synthetic email/SMPP-adjacent local notification proof boundary",
-      "resetSeedCleanup": {"seed": "synthetic messages only", "reset": "fresh Compose project for composed test run", "cleanup": "synthetic mailbox data purged by API or container reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable notification fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic messages only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "synthetic mailbox data purged by API or container reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable notification fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -287,237 +406,439 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:notify"],
+      "validationCommands": [
+        "corepack pnpm proof:notify"
+      ],
       "readinessEvidence": "Webhook sink is the composed local receiver for synthetic webhook proof evidence where supported",
-      "resetSeedCleanup": {"seed": "synthetic webhook events only", "reset": "fresh Compose project for composed test run", "cleanup": "event buffer discarded", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable webhook fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic webhook events only",
+        "reset": "fresh Compose project for composed test run",
+        "cleanup": "event buffer discarded",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable webhook fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "redis",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["runtime-providers"],
+      "composeProfiles": [
+        "runtime-providers"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:cache:redis"],
+      "validationCommands": [
+        "corepack pnpm proof:cache:redis"
+      ],
       "readinessEvidence": "Redis is profile-gated under runtime-providers and must be composed for cache/eventing service-backed test claims",
-      "resetSeedCleanup": {"seed": "synthetic cache keys only", "reset": "down -v between profile-gated composed test runs", "cleanup": "keys purged or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable cache fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic cache keys only",
+        "reset": "down -v between profile-gated composed test runs",
+        "cleanup": "keys purged or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable cache fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "meilisearch",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["runtime-providers"],
+      "composeProfiles": [
+        "runtime-providers"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:search:meilisearch"],
+      "validationCommands": [
+        "corepack pnpm proof:search:meilisearch"
+      ],
       "readinessEvidence": "Meilisearch is profile-gated under runtime-providers and must be composed for search service-backed test claims",
-      "resetSeedCleanup": {"seed": "synthetic search documents only", "reset": "down -v between profile-gated composed test runs", "cleanup": "indexes deleted or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable search fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic search documents only",
+        "reset": "down -v between profile-gated composed test runs",
+        "cleanup": "indexes deleted or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable search fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "clickhouse",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["runtime-providers"],
+      "composeProfiles": [
+        "runtime-providers"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:analytics:clickhouse"],
+      "validationCommands": [
+        "corepack pnpm proof:analytics:clickhouse"
+      ],
       "readinessEvidence": "ClickHouse is profile-gated under runtime-providers and must be composed for analytics event-store test claims",
-      "resetSeedCleanup": {"seed": "synthetic analytics events only", "reset": "down -v between profile-gated composed test runs", "cleanup": "proof database/table dropped or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable analytics fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic analytics events only",
+        "reset": "down -v between profile-gated composed test runs",
+        "cleanup": "proof database/table dropped or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable analytics fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "pgadmin",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["operator-tools"],
+      "composeProfiles": [
+        "operator-tools"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:operator-access", "corepack pnpm proof:operator-lifecycle"],
+      "validationCommands": [
+        "corepack pnpm proof:operator-access",
+        "corepack pnpm proof:operator-lifecycle"
+      ],
       "readinessEvidence": "pgAdmin is profile-gated as an operator surface and requires explicit local access/audit posture before operator test claims",
-      "resetSeedCleanup": {"seed": "synthetic operator metadata only", "reset": "down -v between profile-gated composed test runs", "cleanup": "operator metadata discarded", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable operator fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic operator metadata only",
+        "reset": "down -v between profile-gated composed test runs",
+        "cleanup": "operator metadata discarded",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable operator fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "sonar-postgres",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["assurance"],
+      "composeProfiles": [
+        "assurance"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:assurance:sonarqube"],
+      "validationCommands": [
+        "corepack pnpm proof:assurance:sonarqube"
+      ],
       "readinessEvidence": "SonarQube backing database is profile-gated under assurance and must be composed for Sonar zero-issue quality-gate evidence",
-      "resetSeedCleanup": {"seed": "synthetic Sonar project metadata only", "reset": "down -v between assurance proof runs", "cleanup": "Sonar project deleted and volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must preserve repeatable assurance fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic Sonar project metadata only",
+        "reset": "down -v between assurance proof runs",
+        "cleanup": "Sonar project deleted and volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must preserve repeatable assurance fixture lifecycle"
+      },
       "followUpIssue": "USF-238"
     },
     {
       "serviceId": "sonarqube",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["assurance"],
+      "composeProfiles": [
+        "assurance"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:assurance:sonarqube"],
+      "validationCommands": [
+        "corepack pnpm proof:assurance:sonarqube"
+      ],
       "readinessEvidence": "SonarQube is profile-gated under assurance and bounded to local synthetic zero-open-issue scan proof",
-      "resetSeedCleanup": {"seed": "synthetic scan project only", "reset": "down -v between assurance proof runs", "cleanup": "project deleted, token revoked, volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must preserve repeatable assurance fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic scan project only",
+        "reset": "down -v between assurance proof runs",
+        "cleanup": "project deleted, token revoked, volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must preserve repeatable assurance fixture lifecycle"
+      },
       "followUpIssue": "USF-238"
     },
     {
       "serviceId": "localstack",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["provider-emulation"],
+      "composeProfiles": [
+        "provider-emulation"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:localstack"],
+      "validationCommands": [
+        "corepack pnpm proof:localstack"
+      ],
       "readinessEvidence": "LocalStack is a composed local provider emulator for bounded provider-substrate test evidence and not live cloud readiness",
-      "resetSeedCleanup": {"seed": "synthetic S3/SQS/SNS/Secrets Manager resources only", "reset": "down -v between provider-emulation proof runs", "cleanup": "resources deleted or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable provider-emulation fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic S3/SQS/SNS/Secrets Manager resources only",
+        "reset": "down -v between provider-emulation proof runs",
+        "cleanup": "resources deleted or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable provider-emulation fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "wiremock",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["provider-mocks"],
+      "composeProfiles": [
+        "provider-mocks"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:wiremock"],
+      "validationCommands": [
+        "corepack pnpm proof:wiremock"
+      ],
       "readinessEvidence": "WireMock is a composed local HTTP mock substrate and not live external provider readiness",
-      "resetSeedCleanup": {"seed": "synthetic mappings only", "reset": "down -v between provider-mock proof runs", "cleanup": "mappings deleted or container reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable provider-mock fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic mappings only",
+        "reset": "down -v between provider-mock proof runs",
+        "cleanup": "mappings deleted or container reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable provider-mock fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "alertmanager",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["observability"],
+      "composeProfiles": [
+        "observability"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "Alertmanager is profile-gated under observability and bounded to local synthetic alert routing evidence",
-      "resetSeedCleanup": {"seed": "synthetic alert routes only", "reset": "fresh Compose project for observability profile", "cleanup": "alert state discarded", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable alert fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic alert routes only",
+        "reset": "fresh Compose project for observability profile",
+        "cleanup": "alert state discarded",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable alert fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "alloy",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["observability"],
+      "composeProfiles": [
+        "observability"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability:operations-execution"],
+      "validationCommands": [
+        "corepack pnpm proof:observability:operations-execution"
+      ],
       "readinessEvidence": "Alloy is profile-gated under observability and bounded to local collector-routing evidence",
-      "resetSeedCleanup": {"seed": "synthetic telemetry routing only", "reset": "fresh Compose project for observability profile", "cleanup": "collector state discarded", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable collector fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic telemetry routing only",
+        "reset": "fresh Compose project for observability profile",
+        "cleanup": "collector state discarded",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable collector fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "windmill-postgres",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["workflow-provider"],
+      "composeProfiles": [
+        "workflow-provider"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:workflow:windmill"],
+      "validationCommands": [
+        "corepack pnpm proof:workflow:windmill"
+      ],
       "readinessEvidence": "Windmill Postgres is profile-gated under workflow-provider and supports bounded local workflow-provider proof",
-      "resetSeedCleanup": {"seed": "synthetic workflow metadata only", "reset": "down -v between workflow-provider runs", "cleanup": "database volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic workflow metadata only",
+        "reset": "down -v between workflow-provider runs",
+        "cleanup": "database volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "windmill-redis",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["workflow-provider"],
+      "composeProfiles": [
+        "workflow-provider"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:workflow:windmill"],
+      "validationCommands": [
+        "corepack pnpm proof:workflow:windmill"
+      ],
       "readinessEvidence": "Windmill Redis is profile-gated under workflow-provider and supports bounded local workflow-provider proof",
-      "resetSeedCleanup": {"seed": "synthetic queue/cache metadata only", "reset": "down -v between workflow-provider runs", "cleanup": "cache volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic queue/cache metadata only",
+        "reset": "down -v between workflow-provider runs",
+        "cleanup": "cache volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "windmill",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["workflow-provider"],
+      "composeProfiles": [
+        "workflow-provider"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:workflow:windmill"],
+      "validationCommands": [
+        "corepack pnpm proof:workflow:windmill"
+      ],
       "readinessEvidence": "Windmill is profile-gated under workflow-provider and bounded to local operator automation proof",
-      "resetSeedCleanup": {"seed": "synthetic workspace/script metadata only", "reset": "down -v between workflow-provider runs", "cleanup": "workspace/script state deleted or volume reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic workspace/script metadata only",
+        "reset": "down -v between workflow-provider runs",
+        "cleanup": "workspace/script state deleted or volume reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "windmill-worker",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["workflow-provider"],
+      "composeProfiles": [
+        "workflow-provider"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:workflow:windmill"],
+      "validationCommands": [
+        "corepack pnpm proof:workflow:windmill"
+      ],
       "readinessEvidence": "Windmill worker is profile-gated under workflow-provider and bounded to local worker execution proof",
-      "resetSeedCleanup": {"seed": "synthetic job execution only", "reset": "down -v between workflow-provider runs", "cleanup": "workers stopped and volumes reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"},
+      "resetSeedCleanup": {
+        "seed": "synthetic job execution only",
+        "reset": "down -v between workflow-provider runs",
+        "cleanup": "workers stopped and volumes reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "temporal-postgres",
       "dependencyClass": "unsupported for test readiness",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["workflow-provider"],
+      "composeProfiles": [
+        "workflow-provider"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:workflow:windmill"],
+      "validationCommands": [
+        "corepack pnpm proof:workflow:windmill"
+      ],
       "readinessEvidence": "Generated but service catalogue readiness tier remains deferred; it cannot satisfy a test-readiness claim until a source issue promotes or replaces it with evidence",
-      "resetSeedCleanup": {"seed": "not accepted for test-readiness claim", "reset": "not accepted for test-readiness claim", "cleanup": "not accepted for test-readiness claim", "teardown": "Compose down with remove-orphans if profile is started", "determinism": "deferred"},
+      "resetSeedCleanup": {
+        "seed": "not accepted for test-readiness claim",
+        "reset": "not accepted for test-readiness claim",
+        "cleanup": "not accepted for test-readiness claim",
+        "teardown": "Compose down with remove-orphans if profile is started",
+        "determinism": "deferred"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "temporal-ui",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["workflow-provider"],
+      "composeProfiles": [
+        "workflow-provider"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:workflow:windmill", "corepack pnpm proof:operator-lifecycle"],
+      "validationCommands": [
+        "corepack pnpm proof:workflow:windmill",
+        "corepack pnpm proof:operator-lifecycle"
+      ],
       "readinessEvidence": "Temporal UI is profile-gated as an operator surface and does not create product UI or browser E2E readiness",
-      "resetSeedCleanup": {"seed": "synthetic workflow metadata only", "reset": "down -v between workflow-provider runs", "cleanup": "workflow UI backing state reset", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic workflow metadata only",
+        "reset": "down -v between workflow-provider runs",
+        "cleanup": "workflow UI backing state reset",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable workflow-provider fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "pgbackrest",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["backup-restore"],
+      "composeProfiles": [
+        "backup-restore"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:backup:pgbackrest", "corepack pnpm proof:backup:operations"],
+      "validationCommands": [
+        "corepack pnpm proof:backup:pgbackrest",
+        "corepack pnpm proof:backup:operations"
+      ],
       "readinessEvidence": "pgBackRest is profile-gated under backup-restore and bounded to local configured backup/restore proof evidence",
-      "resetSeedCleanup": {"seed": "synthetic backup fixtures only", "reset": "down -v between backup-restore runs", "cleanup": "backup repository and temp files removed", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable backup fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic backup fixtures only",
+        "reset": "down -v between backup-restore runs",
+        "cleanup": "backup repository and temp files removed",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable backup fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "clamav",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["scanning"],
+      "composeProfiles": [
+        "scanning"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:scanner:clamav"],
+      "validationCommands": [
+        "corepack pnpm proof:scanner:clamav"
+      ],
       "readinessEvidence": "ClamAV is profile-gated under scanning and bounded to local synthetic file scanning proof evidence",
-      "resetSeedCleanup": {"seed": "synthetic clean and EICAR-style fixture content only", "reset": "fresh Compose project for scanning profile", "cleanup": "temporary scan files removed", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable scanner fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic clean and EICAR-style fixture content only",
+        "reset": "fresh Compose project for scanning profile",
+        "cleanup": "temporary scan files removed",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable scanner fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
       "serviceId": "caddy",
       "dependencyClass": "composed backing service required",
       "composeTarget": "compose/compose.test.generated.yaml",
-      "composeProfiles": ["gateway"],
+      "composeProfiles": [
+        "gateway"
+      ],
       "profileGated": true,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:api", "corepack pnpm proof:operator-access"],
+      "validationCommands": [
+        "corepack pnpm proof:api",
+        "corepack pnpm proof:operator-access"
+      ],
       "readinessEvidence": "Caddy is profile-gated under gateway and bounded to loopback local routing proof, not public exposure readiness",
-      "resetSeedCleanup": {"seed": "synthetic routes only", "reset": "fresh Compose project for gateway profile", "cleanup": "route state discarded", "teardown": "Compose down with remove-orphans", "determinism": "USF-237 must prove repeatable gateway fixture lifecycle if included in test gate"},
+      "resetSeedCleanup": {
+        "seed": "synthetic routes only",
+        "reset": "fresh Compose project for gateway profile",
+        "cleanup": "route state discarded",
+        "teardown": "Compose down with remove-orphans",
+        "determinism": "USF-237 must prove repeatable gateway fixture lifecycle if included in test gate"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -527,9 +848,17 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:assurance:sonarqube"],
+      "validationCommands": [
+        "corepack pnpm proof:assurance:sonarqube"
+      ],
       "readinessEvidence": "Plugin installer posture is catalogue evidence only for local Sonar proof; OIDC live integration is not in test-readiness scope",
-      "resetSeedCleanup": {"seed": "not applicable", "reset": "not generated", "cleanup": "not generated", "teardown": "not generated", "determinism": "not applicable"},
+      "resetSeedCleanup": {
+        "seed": "not applicable",
+        "reset": "not generated",
+        "cleanup": "not generated",
+        "teardown": "not generated",
+        "determinism": "not applicable"
+      },
       "followUpIssue": "USF-238"
     },
     {
@@ -539,9 +868,17 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:auth"],
+      "validationCommands": [
+        "corepack pnpm proof:auth"
+      ],
       "readinessEvidence": "Service catalogue remains deferred; mock IdP proof may support hermetic/dev semantics but not service-backed test readiness",
-      "resetSeedCleanup": {"seed": "not accepted for test-readiness claim", "reset": "not accepted for test-readiness claim", "cleanup": "not accepted for test-readiness claim", "teardown": "not generated", "determinism": "deferred"},
+      "resetSeedCleanup": {
+        "seed": "not accepted for test-readiness claim",
+        "reset": "not accepted for test-readiness claim",
+        "cleanup": "not accepted for test-readiness claim",
+        "teardown": "not generated",
+        "determinism": "deferred"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -551,9 +888,17 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability:sentry"],
+      "validationCommands": [
+        "corepack pnpm proof:observability:sentry"
+      ],
       "readinessEvidence": "Sentry remains catalogue-only/shared control-plane posture; local SDK envelope proof is not live Sentry service readiness",
-      "resetSeedCleanup": {"seed": "synthetic envelope fixtures only", "reset": "not generated", "cleanup": "proof-local data discarded", "teardown": "not generated", "determinism": "bounded local SDK envelope proof only"},
+      "resetSeedCleanup": {
+        "seed": "synthetic envelope fixtures only",
+        "reset": "not generated",
+        "cleanup": "proof-local data discarded",
+        "teardown": "not generated",
+        "determinism": "bounded local SDK envelope proof only"
+      },
       "followUpIssue": "USF-236"
     },
     {
@@ -563,9 +908,17 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:api"],
+      "validationCommands": [
+        "corepack pnpm proof:api"
+      ],
       "readinessEvidence": "Historical platform-api row is out of scope; USF API proof is current-state authority and does not mirror React platform-api",
-      "resetSeedCleanup": {"seed": "not applicable", "reset": "not generated", "cleanup": "not generated", "teardown": "not generated", "determinism": "not applicable"},
+      "resetSeedCleanup": {
+        "seed": "not applicable",
+        "reset": "not generated",
+        "cleanup": "not generated",
+        "teardown": "not generated",
+        "determinism": "not applicable"
+      },
       "followUpIssue": "USF-234"
     },
     {
@@ -575,20 +928,42 @@
       "composeProfiles": [],
       "profileGated": false,
       "inMemorySubstituteAllowed": false,
-      "validationCommands": ["corepack pnpm proof:observability:browser-telemetry"],
+      "validationCommands": [
+        "corepack pnpm proof:observability:browser-telemetry"
+      ],
       "readinessEvidence": "Historical React app row is out of scope; minimal Faro browser telemetry proof is not product UI or browser E2E readiness",
-      "resetSeedCleanup": {"seed": "not applicable", "reset": "not generated", "cleanup": "not generated", "teardown": "not generated", "determinism": "not applicable"},
+      "resetSeedCleanup": {
+        "seed": "not applicable",
+        "reset": "not generated",
+        "cleanup": "not generated",
+        "teardown": "not generated",
+        "determinism": "not applicable"
+      },
       "followUpIssue": "USF-234"
     }
   ],
   "enterpriseEvidenceRefs": {
-    "soaSupportMappings": ["soa-usf-235-test-environment-service-contract"],
-    "evidenceRegister": ["evidence-usf-235-test-environment-service-contract"],
-    "threatModelAbuseCaseRegister": ["threat-usf-235-test-environment-service-contract"],
-    "accessReviewPrivilegedOperationPosture": ["access-usf-235-test-environment-service-contract"],
-    "backupRestoreResiliencePosture": ["resilience-usf-235-test-environment-service-contract"],
-    "incidentVulnerabilityManagementEvidence": ["incident-usf-235-test-environment-service-contract"],
-    "privacyDataMinimisationPosture": ["privacy-usf-235-test-environment-service-contract"]
+    "soaSupportMappings": [
+      "soa-usf-235-test-environment-service-contract"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-235-test-environment-service-contract"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-235-test-environment-service-contract"
+    ],
+    "accessReviewPrivilegedOperationPosture": [
+      "access-usf-235-test-environment-service-contract"
+    ],
+    "backupRestoreResiliencePosture": [
+      "resilience-usf-235-test-environment-service-contract"
+    ],
+    "incidentVulnerabilityManagementEvidence": [
+      "incident-usf-235-test-environment-service-contract"
+    ],
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-235-test-environment-service-contract"
+    ]
   },
   "validationCommands": [
     "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
@@ -622,7 +997,6 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ]
 }

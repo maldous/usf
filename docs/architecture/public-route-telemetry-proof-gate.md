@@ -32,4 +32,4 @@ The route proof does not require Cloudflare API credentials and does not send li
 
 ## Boundary
 
-This is public route and telemetry bootstrap proof only. It is not product UI readiness, broad browser E2E readiness, full React product parity, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization.
+This is public route and telemetry bootstrap proof only. It is not product UI readiness, broad browser E2E readiness, full product readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or v2-proof tag authorization.

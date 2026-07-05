@@ -256,7 +256,7 @@ REQUIRED_NON_CLAIMS = {
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
+    "full-product-readiness",
 }
 REQUIRED_HARNESS_NON_CLAIMS = REQUIRED_NON_CLAIMS | {"final-test-readiness"}
 PROHIBITED_ALLOWED_CLAIMS = {
@@ -270,8 +270,8 @@ PROHIBITED_ALLOWED_CLAIMS = {
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness",
+    "full-product-readiness",
+    "full-product-readiness",
 }
 SERVICE_BACKED_CLASS = "composed backing service required"
 NON_COMPOSED_CLASSES = {
@@ -4230,7 +4230,7 @@ def check_coverage_gate(F: Findings, state: dict[str, Any]) -> None:
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
+        "full-product-readiness",
         "usf-234-closure",
     }
     missing = sorted(required_non_claims - non_claims)
@@ -4864,7 +4864,7 @@ def check_test_readiness_final_acceptance_gate(F: Findings, state: dict[str, Any
         "enterpriseProductionReadinessClaimAllowed",
         "productUiReadinessClaimAllowed",
         "browserE2EReadinessClaimAllowed",
-        "fullReactProductParityClaimAllowed",
+        "fullProductReadinessClaimAllowed",
     ):
         if gate.get(claim_key) is not False:
             F.add("USF-TEST-READINESS-111", f"{TEST_READINESS_FINAL_ACCEPTANCE_GATE_PATH}#{claim_key}", "final acceptance gate must preserve higher-readiness non-claims")

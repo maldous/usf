@@ -85,7 +85,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "executionEvidence": {
@@ -204,7 +204,7 @@
     "No Sentry service readiness, ingestion, issue lifecycle, alert handoff, or provider console operation is proven.",
     "No Grafana browser dashboard, public dashboard exposure, or operator console readiness is proven.",
     "USF-222 records no proof for Alertmanager live delivery, on-call escalation, customer notification, or production incident response operation.",
-    "No test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, full dev, full React parity, or USF-133 closure readiness is proven."
+    "No test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, full dev, full product readiness, or USF-133 closure readiness is proven."
   ],
   "nonClaims": [
     "full-dev-readiness",
@@ -216,7 +216,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure",
     "live-monitoring-readiness",
     "alerting-readiness",

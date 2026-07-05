@@ -24,4 +24,4 @@ Service-backed rows remain tied to composed-service evidence and deterministic f
 
 ## Non-Claims
 
-This suite does not claim penetration-test completion, final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, full React parity readiness, or final USF-234 acceptance.
+This suite does not claim penetration-test completion, final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or final USF-234 acceptance.

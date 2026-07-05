@@ -150,7 +150,7 @@ The implemented and proven local controls are:
 - route metadata for compatibility, browser posture, security headers, field exposure, gateway posture, tenant scope, PDP policy, idempotency, pagination, and observability;
 - OpenAPI route coverage, unique operation IDs, synthetic safe examples, and no public readiness claim;
 - tenant-context fail-closed behaviour, PDP denial, tenant mismatch denial, deterministic idempotency conflict, opaque cursor posture, and value-free audit evidence;
-- explicit non-claims for public API readiness, generated SDK readiness, GraphQL or federation readiness, gateway-live readiness, WAF readiness, TLS termination readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+- explicit non-claims for public API readiness, generated SDK readiness, GraphQL or federation readiness, gateway-live readiness, WAF readiness, TLS termination readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, and USF-133 closure.
 
 The explicitly reclassified or deferred controls are:
 
@@ -160,7 +160,7 @@ The explicitly reclassified or deferred controls are:
 - Public API compatibility remains deferred to USF-213. Gateway, trusted proxy, TLS termination, WAF, edge, and public exposure remain deferred to future gateway route-proof work. The service catalogue and gateway-clickthrough substrate are local/profile-gated posture only.
 - Broad import/export/bulk API surface depth remains owned by USF-163.
 
-This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, gateway-live readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
+This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, gateway-live readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, full dev readiness, full product readiness, or USF-133 closure.
 
 ## USF-213 Public API Compatibility And Release Governance Boundary
 
@@ -172,7 +172,7 @@ The implemented and proven local controls are:
 - explicit public API compatibility scope that does not rely on route metadata alone;
 - release-governance, versioning, and SemVer posture as documented boundaries;
 - synthetic OpenAPI examples and contract metadata preserved as local evidence only;
-- explicit non-claims for public API readiness, consumer-driven contract readiness, release compatibility readiness, external developer platform readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+- explicit non-claims for public API readiness, consumer-driven contract readiness, release compatibility readiness, external developer platform readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, and USF-133 closure.
 
 The explicitly deferred controls are:
 
@@ -181,7 +181,7 @@ The explicitly deferred controls are:
 - package SemVer release operation, public changelog operation, production release approval, deployment readiness, and environment promotion readiness;
 - generated SDK/client distribution, GraphQL, and federation readiness, which remain under USF-214 or future authorised source issues.
 
-This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, public launch readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
+This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, public API readiness, public launch readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full product readiness, or USF-133 closure.
 
 ## USF-214 GraphQL, Federation, And Generated Client Disposition Boundary
 
@@ -200,10 +200,10 @@ The explicitly deferred controls are:
 - GraphQL runtime, federation gateway, resolver authorization, schema stitching, subscriptions, persisted queries, and GraphQL client runtime;
 - external developer portal, API key issuance, SDK registry publication, public documentation operation, public support workflow, and customer onboarding.
 
-This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full React parity, or USF-133 closure.
+This is ISO/IEC 27001-supporting evidence organisation only. It is not ISO certification, SOC readiness, GraphQL readiness, federation readiness, generated SDK readiness, generated client readiness, external developer platform readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, full dev readiness, full product readiness, or USF-133 closure.
 
 ## USF-220 Delivery Depth Follow-Up Boundary
 
 USF-220 records the selected closure-tier disposition for the GraphQL, federation, generated SDK, generated client, external developer platform, and client distribution surfaces classified by USF-214. It does not add a runtime, generated client, SDK package, developer portal, public API launch, or federation implementation. It replaces placeholder future follow-up wording with USF-224 as the explicit execution-proof owner for any separately authorised generated-client, external-developer, GraphQL, or federation delivery work.
 
-USF-220 preserves the non-equivalence boundary: REST/OpenAPI local proof, route metadata, OpenAPI output, and compatibility snapshot evidence are not GraphQL runtime proof, federation gateway proof, generated SDK/client proof, external developer platform proof, package publication proof, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure.
+USF-220 preserves the non-equivalence boundary: REST/OpenAPI local proof, route metadata, OpenAPI output, and compatibility snapshot evidence are not GraphQL runtime proof, federation gateway proof, generated SDK/client proof, external developer platform proof, package publication proof, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure.

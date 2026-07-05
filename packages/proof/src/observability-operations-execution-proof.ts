@@ -44,7 +44,7 @@ const NON_CLAIMS = Object.freeze([
   "no-soc-readiness",
   "no-iso27001-certification",
   "no-enterprise-production-readiness",
-  "no-full-react-parity",
+  "no-full-product-readiness",
   "no-usf-133-closure",
   "no-live-monitoring-readiness",
   "no-alerting-readiness",
@@ -421,7 +421,7 @@ export async function runObservabilityOperationsExecutionProof(): Promise<Observ
       "cross-tenant aggregate suppressed tenant names and raw telemetry values",
       "tenant-specific queries remained isolated",
       "structured log trace metric and audit evidence were captured with redaction",
-      "Sentry service readiness, live alert delivery, public dashboard readiness, incident-response readiness, staging, production, SOC, ISO, full dev readiness, full React parity, and USF-133 closure remain non-claims",
+      "Sentry service readiness, live alert delivery, public dashboard readiness, incident-response readiness, staging, production, SOC, ISO, full dev readiness, full product readiness, and USF-133 closure remain non-claims",
     ]),
     deferredBoundaries: Object.freeze([
       "live-observability-provider-readiness-not-proven",

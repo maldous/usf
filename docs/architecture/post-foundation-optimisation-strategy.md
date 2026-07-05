@@ -11,7 +11,7 @@
 
 This strategy defines how the repository should move from evolution-heavy foundation evidence into an optimal current-state development foundation after the `v2-foundation` baseline. It keeps the same or stronger semantic confidence while reducing future reliance on historical migration scaffolding.
 
-The `v2-foundation` tag remains a one-off annotated baseline tag. The tag does not create a general naming exception and does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+The `v2-foundation` tag remains a one-off annotated baseline tag. The tag does not create a general naming exception and does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.
 
 ## Strategy Boundary
 
@@ -74,7 +74,7 @@ Bootstrap evolution wording remains useful for ancestry and should be treated as
 
 USF-133 closure-tier, lane, and final reconciliation artefacts remain useful audit evidence. They must not imply future readiness, source issue completion, or current implementation authority.
 
-React parity and complete-react-to-USF artefacts document how the foundation was reconciled from historical source. They are not full React product parity claims. USF-230 should introduce a current capability and proof index so new work starts from present contracts and validators.
+React parity and complete-react-to-USF artefacts document how the foundation was reconciled from historical source. They are not full product readiness claims. USF-230 should introduce a current capability and proof index so new work starts from present contracts and validators.
 
 ## Canonical Current-State Authority Model
 
@@ -130,4 +130,4 @@ USF-230 must split work into child issues only if execution discovers separable 
 
 ## Non-Claims
 
-This strategy does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity. It does not reopen or change the completed foundation and dev-readiness baseline.
+This strategy does not claim test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness. It does not reopen or change the completed foundation and dev-readiness baseline.

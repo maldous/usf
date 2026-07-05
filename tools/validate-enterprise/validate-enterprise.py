@@ -147,7 +147,7 @@ REQUIRED_NON_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
 }
 REQUIRED_LANES = {"USF-185", "USF-186", "USF-187", "USF-188", "USF-189", "USF-190", "USF-191"}
 REQUIRED_ENTERPRISE_FOUNDATION_ISSUES = {f"USF-{issue_number}" for issue_number in range(273, 289)}
@@ -268,7 +268,7 @@ ASSURANCE_OVERCLAIM_MARKERS = {
     "deploymentReadinessClaim=true",
     "liveProviderReadinessClaim=true",
     "enterpriseProductionReadinessClaim=true",
-    "fullReactParityClaim=true",
+    "fullProductReadinessClaim=true",
 }
 ASSURANCE_CONTROL_PLANES = {
     "sentry-error-monitoring": {
@@ -2455,7 +2455,7 @@ def check_operator_access_lifecycle_execution_proof(F: Findings, state: dict[str
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(field) is not False:
@@ -4334,7 +4334,7 @@ def check_observability_service_operations_depth(F: Findings, state: dict[str, A
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:
@@ -4549,7 +4549,7 @@ def check_observability_operations_execution_proof(F: Findings, state: dict[str,
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:
@@ -4708,7 +4708,7 @@ def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:
@@ -4883,7 +4883,7 @@ def check_backup_restore_execution_proof(F: Findings, state: dict[str, Any]) -> 
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:
@@ -5022,7 +5022,7 @@ def check_generated_client_graphql_delivery_depth(F: Findings, state: dict[str, 
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:
@@ -5147,7 +5147,7 @@ def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str,
         "enterprise-production-readiness",
         "product-ui-readiness",
         "browser-e2e-readiness",
-        "full-react-product-parity",
+        "full-product-readiness",
     }
     for issue_id in sorted(REQUIRED_ENTERPRISE_FOUNDATION_ISSUES):
         row = domains_by_issue.get(issue_id, {})

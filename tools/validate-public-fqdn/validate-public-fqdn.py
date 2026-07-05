@@ -98,7 +98,7 @@ REQUIRED_NON_CLAIMS = {
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
+    "full-product-readiness",
     "caddy-required-gateway",
 }
 REQUIRED_EXTERNAL_NON_CLAIMS = REQUIRED_NON_CLAIMS | {"v2-proof-tag-authorization"}
@@ -114,7 +114,7 @@ PROHIBITED_ALLOWED_CLAIMS = REQUIRED_NON_CLAIMS | {
     "iso",
     "product-ui",
     "browser-e2e",
-    "full-react-parity",
+    "full-product-readiness",
 }
 PROHIBITED_NOOP_COMMANDS = {"", "true", "false", "echo", "#"}
 EXPECTED_EXTERNAL_PROOF_COMMANDS = {
@@ -1691,7 +1691,7 @@ def check_public_fqdn_tag_gate(F: Findings, tag_gate: Any) -> None:
             "enterpriseProductionReadinessClaim",
             "productUiReadinessClaim",
             "browserE2eReadinessClaim",
-            "fullReactProductParityClaim",
+            "fullProductReadinessClaim",
         ):
             if claims.get(key) is not False:
                 F.add("USF-PUBLIC-FQDN-017", f"{TAG_GATE_PATH}#claims.{key}", "tag gate overclaims readiness")
@@ -1755,7 +1755,7 @@ def check_false_claims(F: Findings, rule_id: str, path: Path, evidence: dict[str
         "enterpriseProductionReadinessClaim",
         "productUiReadinessClaim",
         "browserE2eReadinessClaim",
-        "fullReactProductParityClaim",
+        "fullProductReadinessClaim",
     ):
         if claims.get(key) is not False:
             F.add(rule_id, f"{path}#claims.{key}", "external HTTP evidence overclaims readiness")

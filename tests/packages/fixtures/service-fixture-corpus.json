@@ -118,7 +118,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "alloy",
@@ -210,7 +210,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "caddy",
@@ -313,7 +313,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "clamav",
@@ -416,7 +416,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "clickhouse",
@@ -519,7 +519,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "grafana",
@@ -622,7 +622,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "keycloak",
@@ -725,7 +725,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "keycloak-db",
@@ -833,7 +833,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "localstack",
@@ -938,7 +938,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "loki",
@@ -1041,7 +1041,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "mailpit",
@@ -1143,7 +1143,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "meilisearch",
@@ -1248,7 +1248,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "minio",
@@ -1355,7 +1355,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "mock-oidc",
@@ -1421,7 +1421,7 @@
       },
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "nats",
@@ -1527,7 +1527,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "openbao",
@@ -1628,7 +1628,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "otel-collector",
@@ -1732,7 +1732,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "pgadmin",
@@ -1825,7 +1825,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "pgbackrest",
@@ -1928,7 +1928,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "platform-api",
@@ -1994,7 +1994,7 @@
       },
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "postgres",
@@ -2098,7 +2098,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "prometheus",
@@ -2201,7 +2201,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "public-proof-origin",
@@ -2273,7 +2273,7 @@
       },
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus disposition for public-proof-origin does not claim final Test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or v2-proof tag authorization."
+      "nonClaimBoundary": "Fixture corpus disposition for public-proof-origin does not claim final Test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorization."
     },
     {
       "serviceId": "react-app",
@@ -2339,7 +2339,7 @@
       },
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "redis",
@@ -2444,7 +2444,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "sentry",
@@ -2511,7 +2511,7 @@
       },
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "sonar-oidc-plugin",
@@ -2578,7 +2578,7 @@
       },
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "sonar-postgres",
@@ -2675,7 +2675,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "sonarqube",
@@ -2780,7 +2780,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "tempo",
@@ -2873,7 +2873,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "temporal",
@@ -2978,7 +2978,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "temporal-postgres",
@@ -3079,7 +3079,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "temporal-ui",
@@ -3176,7 +3176,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "webhook-sink",
@@ -3278,7 +3278,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "windmill",
@@ -3371,7 +3371,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "windmill-postgres",
@@ -3474,7 +3474,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "windmill-redis",
@@ -3567,7 +3567,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "windmill-worker",
@@ -3669,7 +3669,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     },
     {
       "serviceId": "wiremock",
@@ -3771,7 +3771,7 @@
       "nonTestDisposition": null,
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
-      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or USF-234 acceptance."
+      "nonClaimBoundary": "Fixture corpus evidence does not claim final test readiness, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or USF-234 acceptance."
     }
   ],
   "semanticContractFixtures": [
@@ -7649,6 +7649,6 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ]
 }

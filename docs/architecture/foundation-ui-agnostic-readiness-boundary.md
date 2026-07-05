@@ -5,7 +5,7 @@
 | Document type | Architecture / scope boundary (normative planning) |
 | Status | Draft / planning |
 | Authority level | Reviewable planning boundary; subordinate to the Charter, Authority Model, accepted ADRs, validators, and proof evidence |
-| Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `docs/architecture/full-react-parity-readiness-directive.md` |
+| Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `docs/architecture/superseded-lineage-closure-provenance.md` |
 | Primary inputs | Historical `../react` UI and test evidence; `spec/schemas/ui-semantic-model.schema.json`; `spec/instances/ui-semantic-model/`; `docs/architecture/ui-journey-accessibility-proof-slice-plan.md` |
 | Repository state | This pass introduces no UI/React/browser artefacts, no Playwright, and no new implementation code. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89), which has no UI/browser surface. |
 

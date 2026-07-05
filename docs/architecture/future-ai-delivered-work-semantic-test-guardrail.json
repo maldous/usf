@@ -3,7 +3,11 @@
   "title": "Future AI Delivered Work Semantic Test Guardrail",
   "issueId": "USF-252",
   "parentIssueId": "USF-234",
-  "dependsOnIssueIds": ["USF-239", "USF-247", "USF-259"],
+  "dependsOnIssueIds": [
+    "USF-239",
+    "USF-247",
+    "USF-259"
+  ],
   "lifecycleState": "active-test-readiness-guardrail",
   "purpose": "Fail closed when future AI or developer work changes services, capabilities, generated Compose, tests, fixtures, validators, commands, coverage, or evidence without the matching semantic, test-obligation, fixture, evidence, and non-claim updates.",
   "sourceAuthorities": {
@@ -35,7 +39,9 @@
   "changeImpactDetector": [
     {
       "changedFileClass": "semantic-contract",
-      "pathPatterns": ["spec/instances/semantic-contract/*.json"],
+      "pathPatterns": [
+        "spec/instances/semantic-contract/*.json"
+      ],
       "obligationFacets": [
         "semantic-definition",
         "unit",
@@ -43,13 +49,20 @@
         "enterprise-evidence",
         "future-ai-guardrail"
       ],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Changed semantic contract must update obligation manifest, relevant tests, evidence refs, and non-claims."
     },
     {
       "changedFileClass": "service-catalogue",
-      "pathPatterns": ["spec/instances/compose-service/service-catalogue.json"],
+      "pathPatterns": [
+        "spec/instances/compose-service/service-catalogue.json"
+      ],
       "obligationFacets": [
         "service-catalogue",
         "composed-integration",
@@ -69,7 +82,10 @@
     },
     {
       "changedFileClass": "generated-compose",
-      "pathPatterns": ["compose/compose.test.generated.yaml", "compose/*.generated.yaml"],
+      "pathPatterns": [
+        "compose/compose.test.generated.yaml",
+        "compose/*.generated.yaml"
+      ],
       "obligationFacets": [
         "generated-compose",
         "service-catalogue-authority",
@@ -88,20 +104,29 @@
     },
     {
       "changedFileClass": "adapter",
-      "pathPatterns": ["adapters/**"],
+      "pathPatterns": [
+        "adapters/**"
+      ],
       "obligationFacets": [
         "adapter-boundary",
         "provider-mode",
         "service-backed-proof",
         "sdk-governance"
       ],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Adapter change must update provider boundary evidence, relevant service tests, and non-claims."
     },
     {
       "changedFileClass": "capability",
-      "pathPatterns": ["capabilities/**"],
+      "pathPatterns": [
+        "capabilities/**"
+      ],
       "obligationFacets": [
         "capability-contract",
         "unit",
@@ -109,13 +134,20 @@
         "authorization",
         "audit"
       ],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Capability change must update semantic contract mapping, tests, evidence, and non-claims."
     },
     {
       "changedFileClass": "api-route",
-      "pathPatterns": ["apps/api/**"],
+      "pathPatterns": [
+        "apps/api/**"
+      ],
       "obligationFacets": [
         "api-contract",
         "authorization",
@@ -123,13 +155,20 @@
         "audit",
         "functional-regression"
       ],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "API change must update contract, auth/tenant tests, audit evidence, and non-claims."
     },
     {
       "changedFileClass": "worker-job",
-      "pathPatterns": ["apps/work/**"],
+      "pathPatterns": [
+        "apps/work/**"
+      ],
       "obligationFacets": [
         "worker-contract",
         "jobs",
@@ -137,7 +176,12 @@
         "audit",
         "operational-resilience"
       ],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Worker change must update job obligations, tenant and audit tests, resilience evidence, and non-claims."
     },
@@ -154,15 +198,32 @@
         "composed-service-proof",
         "supplier-boundary"
       ],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Provider binding change must update registry/evidence, service-backed proof, and non-claims."
     },
     {
       "changedFileClass": "validator",
-      "pathPatterns": ["tools/validate-*/**"],
-      "obligationFacets": ["validator-rule", "planted-defect", "selftest", "diagnostic-output"],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "pathPatterns": [
+        "tools/validate-*/**"
+      ],
+      "obligationFacets": [
+        "validator-rule",
+        "planted-defect",
+        "selftest",
+        "diagnostic-output"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Validator change must update rule metadata, planted defects, tests, evidence, and non-claims."
     },
@@ -173,15 +234,33 @@
         "Makefile",
         "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
       ],
-      "obligationFacets": ["command", "ci-local-alignment", "coverage", "assurance"],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "obligationFacets": [
+        "command",
+        "ci-local-alignment",
+        "coverage",
+        "assurance"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Command surface change must update command evidence, validators, docs, and non-claims."
     },
     {
       "changedFileClass": "seeder-fixture",
-      "pathPatterns": ["tests/packages/fixtures/**"],
-      "obligationFacets": ["fixture", "seed", "reset", "cleanup", "determinism"],
+      "pathPatterns": [
+        "tests/packages/fixtures/**"
+      ],
+      "obligationFacets": [
+        "fixture",
+        "seed",
+        "reset",
+        "cleanup",
+        "determinism"
+      ],
       "requiredUpdates": [
         "semantic-authority",
         "test-obligation",
@@ -194,25 +273,64 @@
     },
     {
       "changedFileClass": "enterprise-evidence",
-      "pathPatterns": ["spec/instances/enterprise-evidence/**", "docs/architecture/*enterprise*"],
-      "obligationFacets": ["soa", "evidence-register", "risk", "privacy", "incident"],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "pathPatterns": [
+        "spec/instances/enterprise-evidence/**",
+        "docs/architecture/*enterprise*"
+      ],
+      "obligationFacets": [
+        "soa",
+        "evidence-register",
+        "risk",
+        "privacy",
+        "incident"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Enterprise evidence change must update SoA/evidence/threat/access/resilience/incident/privacy rows and tests."
     },
     {
       "changedFileClass": "test-suite",
-      "pathPatterns": ["tests/packages/*.test.ts", "tests/packages/**/*.test.ts"],
-      "obligationFacets": ["unit", "integration", "regression", "assurance", "negative-case"],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "pathPatterns": [
+        "tests/packages/*.test.ts",
+        "tests/packages/**/*.test.ts"
+      ],
+      "obligationFacets": [
+        "unit",
+        "integration",
+        "regression",
+        "assurance",
+        "negative-case"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Test-suite change must keep obligation mapping, negative cases, evidence, and non-claims aligned."
     },
     {
       "changedFileClass": "planted-defect",
-      "pathPatterns": ["tools/validate-test-readiness/planted-defects/**"],
-      "obligationFacets": ["planted-defect", "selftest", "validator-rule"],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "pathPatterns": [
+        "tools/validate-test-readiness/planted-defects/**"
+      ],
+      "obligationFacets": [
+        "planted-defect",
+        "selftest",
+        "validator-rule"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Planted-defect change must preserve selftest coverage and rule mapping."
     },
@@ -223,8 +341,18 @@
         "sonar-project.properties",
         "docs/architecture/test-coverage-gate.json"
       ],
-      "obligationFacets": ["coverage", "lcov", "sonar", "exclusion-rationale"],
-      "requiredUpdates": ["semantic-authority", "test-obligation", "evidence", "non-claim-review"],
+      "obligationFacets": [
+        "coverage",
+        "lcov",
+        "sonar",
+        "exclusion-rationale"
+      ],
+      "requiredUpdates": [
+        "semantic-authority",
+        "test-obligation",
+        "evidence",
+        "non-claim-review"
+      ],
       "serviceBackedClaimMayUseInMemorySubstitute": false,
       "diagnosticTemplate": "Coverage gate change must preserve threshold, LCOV/Sonar evidence, exclusions, and non-claims."
     }
@@ -388,9 +516,15 @@
     }
   ],
   "enterpriseEvidenceRefs": {
-    "soaSupportMappings": ["soa-usf-239-semantic-service-test-obligation-manifest"],
-    "evidenceRegister": ["evidence-usf-239-semantic-service-test-obligation-manifest"],
-    "threatModelAbuseCaseRegister": ["threat-usf-239-semantic-service-test-obligation-manifest"],
+    "soaSupportMappings": [
+      "soa-usf-239-semantic-service-test-obligation-manifest"
+    ],
+    "evidenceRegister": [
+      "evidence-usf-239-semantic-service-test-obligation-manifest"
+    ],
+    "threatModelAbuseCaseRegister": [
+      "threat-usf-239-semantic-service-test-obligation-manifest"
+    ],
     "accessReviewPrivilegedOperationPosture": [
       "access-usf-239-semantic-service-test-obligation-manifest"
     ],
@@ -400,7 +534,9 @@
     "incidentVulnerabilityManagementEvidence": [
       "incident-usf-239-semantic-service-test-obligation-manifest"
     ],
-    "privacyDataMinimisationPosture": ["privacy-usf-239-semantic-service-test-obligation-manifest"]
+    "privacyDataMinimisationPosture": [
+      "privacy-usf-239-semantic-service-test-obligation-manifest"
+    ]
   },
   "validationCommands": [
     "corepack pnpm test -- tests/packages/future-ai-delivered-work-semantic-test-guardrail.test.ts",
@@ -422,8 +558,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "final-usf-234-acceptance"
   ]
 }

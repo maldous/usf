@@ -416,8 +416,8 @@ const prohibitedNonClaims = [
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
-  "full-react-parity-readiness",
+  "full-product-readiness",
+  "full-product-readiness",
 ];
 
 describe("USF-255 supply-chain SBOM licence test gate", () => {

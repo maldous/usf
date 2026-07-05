@@ -132,7 +132,7 @@
       "not Redis wire-protocol proof",
       "not Redis expiration, eviction, persistence, or key-space proof",
       "not a live-provider readiness claim",
-      "not test, staging, production, SOC, ISO, full dev, or full React parity readiness"
+      "not test, staging, production, SOC, ISO, full dev, or full product readiness"
     ]
   },
   "redisProviderBoundary": {
@@ -226,7 +226,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ],
   "nonClaims": [
     "full-dev-readiness",
@@ -238,6 +238,6 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity"
+    "full-product-readiness"
   ]
 }

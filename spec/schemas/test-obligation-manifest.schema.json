@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:test-obligation-manifest",
   "title": "USF Test Obligation Manifest Schema",
-  "description": "Draft JSON Schema for the USF test-readiness obligation manifest. It validates the repository-level mapping from semantic contracts and Compose service catalogue rows to test obligation classes, owner issues, evidence boundaries, validation commands, and explicit non-claims. This is a test-readiness planning and validation schema only; it does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or USF-234 closure.",
+  "description": "Draft JSON Schema for the USF test-readiness obligation manifest. It validates the repository-level mapping from semantic contracts and Compose service catalogue rows to test obligation classes, owner issues, evidence boundaries, validation commands, and explicit non-claims. This is a test-readiness planning and validation schema only; it does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or USF-234 closure.",
   "type": "object",
   "additionalProperties": false,
   "required": [

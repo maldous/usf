@@ -426,7 +426,7 @@ Every surface **MUST NOT** expose: raw secrets, provider internals, worker crede
 | Local transactional outbox commit + inbound inbox dedupe — `capabilities/jobs/src/enterprise-workflow-controls.ts` | Live provider delivery runtime and distributed outbox processing |
 | Tenant quota/backpressure, pause/resume/drain admission, heartbeat miss, concurrency-key gate, dry-run impact gate, high-risk automation override, provider egress allow-list, circuit breaker, and snapshot replay-authorization posture — `capabilities/jobs/src/enterprise-workflow-controls.ts` | Cron + tenant-local / DST schedules; blackout / maintenance windows |
 | Value-free lifecycle and enterprise workflow-control audit events (§17) — `packages/core`, `capabilities/jobs` | Live observability metrics / dashboards / alerting |
-| Hermetic behaviour proof of the full matrix — `packages/proof/src/jobs-workflows-proof.ts`, `make jobs-proof` | Environment promotion, live-provider, staging, production, SOC, ISO, full dev readiness, full React parity, and USF-133 closure claims |
+| Hermetic behaviour proof of the full matrix — `packages/proof/src/jobs-workflows-proof.ts`, `make jobs-proof` | Environment promotion, live-provider, staging, production, SOC, ISO, full dev readiness, full product readiness, and USF-133 closure claims |
 
 No DEFERRED item above is overclaimed as IMPLEMENTED, live, or production-live anywhere in USF while its blocker is open. Hermetic / in-memory proof never satisfies a live-external-provider claim, and production-shaped never satisfies production-live.
 

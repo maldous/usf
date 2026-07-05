@@ -53,7 +53,7 @@ REQUIRED_NON_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
 }
 
 CORE = "packages/core/src/index.ts"
@@ -605,7 +605,7 @@ def run_checks(F, state=None):
         "socReadinessClaim",
         "iso27001CertificationClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(false_claim) is not False:
@@ -758,7 +758,7 @@ def run_checks(F, state=None):
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(false_claim) is not False:
@@ -1059,7 +1059,7 @@ def run_checks(F, state=None):
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if usf222_claims.get(key) is not False:
@@ -1133,7 +1133,7 @@ def run_checks(F, state=None):
         "iso27001CertificationClaim: false",
         "enterpriseProductionReadinessClaim: false",
         "fullDevReadinessClaim: false",
-        "fullReactParityClaim: false",
+        "fullProductReadinessClaim: false",
         "usf133ClosureClaim: false",
     ):
         if token not in browser_telemetry_proof:
@@ -1314,7 +1314,7 @@ def run_checks(F, state=None):
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if usf225_claims.get(key) is not False:

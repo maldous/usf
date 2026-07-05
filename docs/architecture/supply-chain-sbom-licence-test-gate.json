@@ -80,7 +80,7 @@
     "enterpriseProductionReadinessClaimAllowed": false,
     "productUiReadinessClaimAllowed": false,
     "browserE2eReadinessClaimAllowed": false,
-    "fullReactProductParityClaimAllowed": false,
+    "fullProductReadinessClaimAllowed": false,
     "finalUsf234AcceptanceClaimAllowed": false,
     "productionSupplyChainMaturityClaimAllowed": false
   },
@@ -476,8 +476,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "final-usf-234-acceptance",
     "production-supply-chain-maturity",
     "live-provider-supply-chain-proof"

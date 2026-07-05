@@ -22,7 +22,7 @@ Generated Compose presence and Sentry-internal ClickHouse usage are not general 
 
 The boundary records owner, risk owner, control owner, service catalogue linkage, provider registry linkage, Statement of Applicability support rows, threat and abuse cases, access posture, incident and vulnerability posture, privacy posture, retention posture, secret boundary, supplier boundary, SDK dependency governance, and explicit non-claims.
 
-This is evidence organization only. It does not claim ISO certification, SOC readiness, production readiness, staging readiness, test readiness, live-provider readiness, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure.
+This is evidence organization only. It does not claim ISO certification, SOC readiness, production readiness, staging readiness, test readiness, live-provider readiness, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure.
 
 ## Remaining Boundaries
 

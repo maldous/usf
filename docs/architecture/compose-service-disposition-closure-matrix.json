@@ -29,7 +29,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness"
+    "full-product-readiness"
   ],
   "closure_disposition_counts": {
     "implemented": 13,
@@ -93,7 +93,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -165,7 +165,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -239,7 +239,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -310,7 +310,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -385,7 +385,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -459,7 +459,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -534,7 +534,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -615,7 +615,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -706,7 +706,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -799,7 +799,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -891,7 +891,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -983,7 +983,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1069,7 +1069,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1144,7 +1144,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1242,7 +1242,7 @@
           "redis-sdk-boundary-recorded"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1354,7 +1354,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1455,7 +1455,7 @@
           "clickhouse-sdk-boundary-recorded"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1563,7 +1563,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1643,7 +1643,7 @@
           "USF-193"
         ],
         "non_equivalence_boundaries": [
-          "USF-204 bounded local Compose proof is not SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity readiness."
+          "USF-204 bounded local Compose proof is not SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full product readiness."
         ],
         "missing_evidence": [
           "USF-204 proves bounded local Compose SonarQube scan/readback semantics for synthetic data only.",
@@ -1660,7 +1660,7 @@
           "quality-gate-readiness",
           "scanner-readiness",
           "vulnerability-clearance-readiness",
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1760,7 +1760,7 @@
           "quality-gate-readiness",
           "scanner-readiness",
           "vulnerability-clearance-readiness",
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1848,8 +1848,8 @@
         "non_equivalence_boundaries": [
           "Existing lint, typecheck, and test commands are not automatically equivalent to SonarQube analysis and history.",
           "Lane 3 preserves the split between mandatory local deterministic verification and deferred SonarQube service proof; local validators are not equivalent to SonarQube service-operating evidence.",
-          "SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
-          "USF-204 bounded local Compose proof is not SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity readiness."
+          "SonarQube service evidence must not imply test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full product readiness.",
+          "USF-204 bounded local Compose proof is not SonarQube readiness, scanner readiness, vulnerability clearance, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full product readiness."
         ],
         "missing_evidence": [
           "USF-204 proves bounded local Compose SonarQube scan/readback semantics for synthetic data only.",
@@ -1866,7 +1866,7 @@
           "quality-gate-readiness",
           "scanner-readiness",
           "vulnerability-clearance-readiness",
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -1954,7 +1954,7 @@
           "USF-176 records bounded mock-provider disposition only; USF-201 proves webhook-sink capture only; USF-210 records selected-tier mock OIDC supersession and live-provider non-equivalence remains explicit."
         ],
         "missing_evidence": [
-          "mock OIDC service startup, standalone issuer compatibility, live IdP compatibility, SSO readiness, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure remain unproven and non-claimed"
+          "mock OIDC service startup, standalone issuer compatibility, live IdP compatibility, SSO readiness, staging, production, SOC, ISO certification, full dev readiness, full product readiness, and USF-133 closure remain unproven and non-claimed"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -1963,7 +1963,7 @@
           "deferred-boundary-recorded"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2052,7 +2052,7 @@
         ],
         "non_equivalence_boundaries": [
           "USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics only for profile-gated local Compose.",
-          "LocalStack emulator proof is not live cloud-provider compatibility, supplier assurance, production credential posture, staging readiness, production readiness, full dev readiness, full React parity, SOC readiness, ISO certification, or USF-133 closure."
+          "LocalStack emulator proof is not live cloud-provider compatibility, supplier assurance, production credential posture, staging readiness, production readiness, full dev readiness, full product readiness, SOC readiness, ISO certification, or USF-133 closure."
         ],
         "missing_evidence": [
           "live external/provider-managed cloud evidence",
@@ -2065,7 +2065,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2164,7 +2164,7 @@
           "LocalStack cloud-emulator proof remains tracked by USF-208.",
           "live external/provider-managed provider compatibility evidence",
           "provider contract certification evidence",
-          "staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure evidence remain unproven and non-claimed"
+          "staging, production, SOC, ISO certification, full dev readiness, full product readiness, and USF-133 closure evidence remain unproven and non-claimed"
         ],
         "accepted_out_of_scope_rationale": "",
         "readiness_claims_allowed": [
@@ -2173,7 +2173,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2281,7 +2281,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2383,7 +2383,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2470,7 +2470,7 @@
         "non_equivalence_boundaries": [
           "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
           "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
-          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full product readiness."
         ],
         "missing_evidence": [
           "USF-212 proves configured local Windmill bootstrap depends on a healthy Windmill Postgres service, but it does not prove independent Windmill persistence migrations, backup, restore, PITR, or production data resilience.",
@@ -2484,7 +2484,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2584,7 +2584,7 @@
         "non_equivalence_boundaries": [
           "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
           "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
-          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full product readiness."
         ],
         "missing_evidence": [
           "USF-212 proves configured local Windmill bootstrap depends on a healthy Windmill Redis service and worker execution path, but it does not prove independent queue/cache durability, recovery, or production operations.",
@@ -2598,7 +2598,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2698,7 +2698,7 @@
         "non_equivalence_boundaries": [
           "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
           "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
-          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full product readiness."
         ],
         "missing_evidence": [
           "Operator console UI clickthrough and access-review execution remain unproven.",
@@ -2712,7 +2712,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2814,7 +2814,7 @@
         "non_equivalence_boundaries": [
           "USF-212 proves a bounded profile-gated local Compose Windmill configured proof using official windmill-client, synthetic workspace and script execution, value-free audit evidence, invalid credential fail-closed behaviour, readiness retry, and teardown only.",
           "Temporal application workflow proof, jobs proof, and worker runtime proof remain non-equivalent to Windmill operator automation service semantics outside the USF-212 bounded proof.",
-          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full React parity readiness."
+          "USF-212 bounded local evidence is not Windmill readiness, operator automation readiness, test readiness, staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, USF-133 closure, or full product readiness."
         ],
         "missing_evidence": [
           "USF-212 proves synthetic script execution reaches a composed Windmill worker, but it does not prove USF worker runtime integration with Windmill.",
@@ -2828,7 +2828,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -2935,7 +2935,7 @@
           "deferred-boundary-recorded"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3025,7 +3025,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3112,7 +3112,7 @@
         "non_equivalence_boundaries": [
           "DB/RLS proof and files proof are not equivalent to pgBackRest backup artifact creation, restore drill, RPO/RTO, or disaster recovery proof.",
           "USF-211 local cold backup/restore proof is not online backup, WAL archive, PITR, scheduled backup, RPO/RTO, disaster recovery, provider-managed operation, production readiness, or live-provider readiness.",
-          "USF-219 disposition evidence is not equivalent to online backup, WAL archive, PITR, scheduled backup operation, corruption/failure drill, DR rehearsal, RPO/RTO achievement, provider-managed backup operation, environment promotion, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+          "USF-219 disposition evidence is not equivalent to online backup, WAL archive, PITR, scheduled backup operation, corruption/failure drill, DR rehearsal, RPO/RTO achievement, provider-managed backup operation, environment promotion, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
         ],
         "missing_evidence": [
           "online backup and WAL archive proof",
@@ -3130,7 +3130,7 @@
           "profile-gated-local-cold-backup-restore-proof"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3238,7 +3238,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3341,7 +3341,7 @@
           "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
           "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance.",
           "Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.",
-          "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full React parity readiness.",
+          "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full product readiness.",
           "USF-196 records local observability proof as non-equivalent to Sentry service readiness, event ingestion, issue lifecycle, alert handoff, incident workflow, retention, and operator-console evidence.",
           "USF-205 records an accepted official SDK envelope proof, but that local SDK transport proof is not Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, operator console, supplier, live-provider, or environment promotion evidence.",
           "USF-218 records current observability service operations disposition evidence and USF-222 must prove alert delivery, dashboard runtime, incident workflow, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, Sentry service readiness, and live/provider-managed evidence before any stronger observability readiness claim."
@@ -3365,7 +3365,7 @@
           "observability-service-execution-proof-deferred-to-USF-222"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3498,7 +3498,7 @@
           "generated-compose-derivation"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3575,7 +3575,7 @@
         ],
         "non_equivalence_boundaries": [
           "A locally proven public proof origin service is not equivalent to external Cloudflare route delivery for the declared public FQDNs.",
-          "Public JSON proof delivery is not product UI readiness, browser E2E readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full React parity.",
+          "Public JSON proof delivery is not product UI readiness, browser E2E readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, or full product readiness.",
           "Caddy, Netlify, Cloudflare Worker, nginx, static hosting, or any other edge/origin implementation may provide evidence, but none is a semantic requirement."
         ],
         "missing_evidence": [
@@ -3591,7 +3591,7 @@
           "local-public-proof-origin-response-contract"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3675,7 +3675,7 @@
           "historical-source-classification"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",
@@ -3741,7 +3741,7 @@
           "historical-source-classification"
         ],
         "readiness_claims_prohibited": [
-          "full-react-parity-readiness",
+          "full-product-readiness",
           "full-dev-readiness",
           "test-readiness",
           "staging-readiness",

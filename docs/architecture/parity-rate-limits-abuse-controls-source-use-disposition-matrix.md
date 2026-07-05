@@ -69,4 +69,4 @@ Remaining out-of-scope or deferred boundaries are not hidden:
 - public HTTP guardrail admin APIs, operator UI, and break-glass operation;
 - provider-managed Redis/Postgres/CDN/WAF counters and customer traffic operation;
 - live alerting/SIEM/DLP/UEBA integration;
-- staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+- staging readiness, production readiness, live-provider readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, and USF-133 closure.

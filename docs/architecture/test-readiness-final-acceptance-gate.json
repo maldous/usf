@@ -44,7 +44,7 @@
   "enterpriseProductionReadinessClaimAllowed": false,
   "productUiReadinessClaimAllowed": false,
   "browserE2EReadinessClaimAllowed": false,
-  "fullReactProductParityClaimAllowed": false,
+  "fullProductReadinessClaimAllowed": false,
   "definition": {
     "boundedTestReadiness": "The repository can run its supported semantic, contract, integration, and assurance tests through documented commands against composed backing services where required, with deterministic synthetic fixtures, reset/cleanup evidence, validators, planted defects, and enterprise evidence refs.",
     "serviceBackedRule": "Required service-backed claims must use composed backing services and cannot be satisfied by in-memory, process-local, hermetic, or mock substitutes.",
@@ -612,7 +612,7 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ],
   "finalValidationBoundary": {
     "id": "post-USF-260-merge-main-validation-before-USF-234-final-acceptance",

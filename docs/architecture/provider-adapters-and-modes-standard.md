@@ -129,7 +129,7 @@ Future-live providers represent supplier name reference, subprocessor status, da
 
 `docs/architecture/provider-risk-resilience-depth-matrix.json` records the USF-157 provider risk/resilience aggregate. It reconciles current active and profile-gated local composed-provider proof rows with the remaining provider depth controls that must stay explicit: live-external-authorised authority, supplier/subprocessor workflow, live egress allow-listing, live TLS/certificate validation, circuit-breaker/timeout/fallback/bulkhead posture, provider drift detection, incident hooks, failover/disaster-recovery proof, cache/search/gateway/observability provider depth, and composed-provider readiness aggregation.
 
-The aggregate is a source-issue evidence gate, not a readiness gate. It may record bounded local proof and explicit reclassification with owner, risk owner, control owner, review date, follow-up boundary, validation command, and non-claims. It must not be used to claim provider readiness, live-provider readiness, supplier approval, failover readiness, disaster recovery readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure.
+The aggregate is a source-issue evidence gate, not a readiness gate. It may record bounded local proof and explicit reclassification with owner, risk owner, control owner, review date, follow-up boundary, validation command, and non-claims. It must not be used to claim provider readiness, live-provider readiness, supplier approval, failover readiness, disaster recovery readiness, staging readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure.
 
 ## Capability Boundary
 

@@ -23,4 +23,4 @@ Reasons:
 
 The gate is implemented and fail-closed. Cache hits, stale responses, cacheable proof/control routes, missing no-store headers, unknown provider status with Age, provider-specific semantic requirements, destructive smoke checks, and readiness overclaims still fail.
 
-Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or v2-proof tag authorisation.
+Non-claims: this does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorisation.

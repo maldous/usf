@@ -38,4 +38,4 @@ The proof commands do not require Cloudflare API credentials.
 
 ## Non-Claims
 
-This gate does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, Caddy as a required gateway, or v2-proof tag authorization.
+This gate does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, Caddy as a required gateway, or v2-proof tag authorization.

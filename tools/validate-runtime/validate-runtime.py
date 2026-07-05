@@ -228,7 +228,7 @@ REQUIRED_PROHIBITED_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "full-dev-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "test-readiness",
 }
 ANALYTICS_EVENT_STORE_REQUIRED_ISSUES = {"USF-172", "USF-197", "USF-206", "USF-189", "USF-184", "USF-192", "USF-133"}
@@ -732,7 +732,7 @@ PROHIBITED_ALLOWED_MARKERS = {
     "soc",
     "iso",
     "full-dev",
-    "full-react",
+    "full-product-readiness",
     "test-readiness",
 }
 SOURCE_TEARDOWN_MARKERS = (
@@ -4208,7 +4208,7 @@ def check_backup_restore_operational_depth(F: Findings, state: dict[str, Any]) -
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:
@@ -4371,7 +4371,7 @@ def check_backup_restore_execution_proof(F: Findings, state: dict[str, Any]) -> 
         "iso27001CertificationClaim",
         "enterpriseProductionReadinessClaim",
         "fullDevReadinessClaim",
-        "fullReactParityClaim",
+        "fullProductReadinessClaim",
         "usf133ClosureClaim",
     ):
         if claims.get(key) is not False:

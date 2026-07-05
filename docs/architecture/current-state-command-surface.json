@@ -137,7 +137,7 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity",
+    "no-full-product-readiness",
     "no-final-test-readiness"
   ],
   "testReadinessCommandSurface": "docs/architecture/test-readiness-command-surface-and-ci-gate.json",

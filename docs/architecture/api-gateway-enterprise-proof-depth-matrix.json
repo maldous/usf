@@ -6,7 +6,7 @@
   "capabilityId": "api-gateway-enterprise-depth",
   "proofCommand": "make api-proof",
   "rawProofCommand": "corepack pnpm proof:api",
-  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF API contract proof, synthetic tenants, local route metadata, OpenAPI coverage, safe error envelopes, PDP denials, local idempotency, opaque cursor posture, value-free audit evidence, and explicit reclassification of public API, generated client, GraphQL, browser-session, gateway-live, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure claims.",
+  "rawProofCommandBoundary": "Hermetic in-memory proof only. It exercises the USF API contract proof, synthetic tenants, local route metadata, OpenAPI coverage, safe error envelopes, PDP denials, local idempotency, opaque cursor posture, value-free audit evidence, and explicit reclassification of public API, generated client, GraphQL, browser-session, gateway-live, staging, production, SOC, ISO certification, full dev readiness, full product readiness, and USF-133 closure claims.",
   "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
   "proofFile": "packages/proof/src/api-contracts-proof.ts",
   "validatorFile": "tools/validate-parity/validate-api.py",
@@ -50,11 +50,11 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
-    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full product readiness, or USF-133 closure claim is made.",
     "Hermetic API proof does not prove public API readiness, external developer platform readiness, generated SDK readiness, GraphQL federation readiness, browser-session readiness, gateway-live readiness, WAF readiness, TLS termination readiness, or deployed edge readiness.",
     "Local route metadata and OpenAPI proof do not prove customer-facing compatibility guarantees, consumer-driven contract operation, browser UI operation, public unsubscribe or bulk API readiness, environment promotion, or production API operation.",
     "The external-caddy service catalogue row and gateway-clickthrough matrix remain profile-gated local substrate evidence only; they are not equivalent to public gateway or live edge readiness."

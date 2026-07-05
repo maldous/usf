@@ -2,7 +2,7 @@
 
 USF-225 adds a bounded local browser telemetry proof for the foundation observability slice. The proof uses a transient loopback-only static browser page, the official Grafana Faro browser SDK, and Playwright Core against a local Chromium executable.
 
-This artefact is proof evidence organization only. It does not create product UI, React application delivery, page systems, component systems, visual snapshots, broad browser E2E coverage, accessibility journeys, public monitoring, live Faro ingestion, staging readiness, production readiness, SOC readiness, ISO/IEC 27001 certification, full dev readiness, full React parity, enterprise production readiness, or USF-133 closure.
+This artefact is proof evidence organization only. It does not create product UI, React application delivery, page systems, component systems, visual snapshots, broad browser E2E coverage, accessibility journeys, public monitoring, live Faro ingestion, staging readiness, production readiness, SOC readiness, ISO/IEC 27001 certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure.
 
 ## Proof Boundary
 
@@ -43,8 +43,8 @@ The proof verifies:
 
 Product UI and browser journey readiness remain outside USF-225 and are retained as disposition context under USF-134. Live Faro ingestion and environment promotion semantics remain outside USF-225 and are owned by later environment-readiness authority such as USF-193.
 
-Missing future work must not be treated as implied completion. Any broader UI, browser E2E, monitoring-provider, staging, production, SOC, ISO, full dev readiness, full React parity, or USF-133 closure claim requires a separate source issue and merged proof.
+Missing future work must not be treated as implied completion. Any broader UI, browser E2E, monitoring-provider, staging, production, SOC, ISO, full dev readiness, full product readiness, or USF-133 closure claim requires a separate source issue and merged proof.
 
 ## Non-Claims
 
-USF-225 does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full React parity, browser E2E readiness, product UI readiness, live Faro readiness, live monitoring readiness, or USF-133 closure.
+USF-225 does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full product readiness, browser E2E readiness, product UI readiness, live Faro readiness, live monitoring readiness, or USF-133 closure.

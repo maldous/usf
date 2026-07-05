@@ -20,4 +20,4 @@ Service-backed claims remain tied to composed integration and fixture evidence. 
 
 ## Non-Claims
 
-This suite does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full React product parity, or final USF-234 acceptance.
+This suite does not claim final test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or final USF-234 acceptance.

@@ -106,7 +106,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "surfaceProofs": [
@@ -209,7 +209,7 @@
         "enterprise-readiness"
       ],
       "nonEquivalenceBoundary": "Local temporary package layout and hashes are not public package publication, registry availability, artifact signing, SBOM publication, or customer distribution readiness.",
-      "nonClaimBoundary": "No package publication readiness, client distribution readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No package publication readiness, client distribution readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure is claimed."
     },
     {
       "id": "deployed-graphql-federation-operation",
@@ -227,7 +227,7 @@
         "enterprise-readiness"
       ],
       "nonEquivalenceBoundary": "In-process graphql-js execution is not deployed GraphQL HTTP service, Apollo federation gateway, live subscriptions, provider-managed schema registry, or production runtime operation.",
-      "nonClaimBoundary": "No GraphQL runtime readiness, federation readiness, public API readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure is claimed."
+      "nonClaimBoundary": "No GraphQL runtime readiness, federation readiness, public API readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure is claimed."
     }
   ],
   "acceptanceCriteriaMapping": [
@@ -268,7 +268,7 @@
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ]
 }

@@ -431,7 +431,7 @@
       "gitStatusBeforeCorrection": "clean",
       "openGithubPullRequestsBeforeCorrection": [],
       "openLinearBacklogTodoInProgressBeforeCorrection": ["USF-227"],
-      "nonClaimBoundary": "This post-merge validation supports bounded dev-readiness handover evidence only and does not claim test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full React product parity, or broader readiness."
+      "nonClaimBoundary": "This post-merge validation supports bounded dev-readiness handover evidence only and does not claim test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, full product readiness, or broader readiness."
     }
   },
   "failuresFixedDuringUSF226": [
@@ -572,7 +572,7 @@
     "enterpriseProductionReadinessClaim": false,
     "productUiReadinessClaim": false,
     "browserE2EReadinessClaim": false,
-    "fullReactProductParityClaim": false
+    "fullProductReadinessClaim": false
   },
   "nonClaims": [
     "test-readiness",
@@ -585,6 +585,6 @@
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity"
+    "full-product-readiness"
   ]
 }

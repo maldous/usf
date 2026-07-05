@@ -37,7 +37,7 @@
     },
     {
       "criterion": "No scanner, backup, KMS, production, or certification claim is made without proof.",
-      "evidence": "claims are false and nonClaims includes live scanner, backup/restore, KMS, files/storage readiness beyond bounded proof, staging, production, SOC, ISO certification, full-readiness, full React parity, and USF-133 closure non-claims."
+      "evidence": "claims are false and nonClaims includes live scanner, backup/restore, KMS, files/storage readiness beyond bounded proof, staging, production, SOC, ISO certification, full-readiness, full product readiness, and USF-133 closure non-claims."
     }
   ],
   "controls": [
@@ -264,7 +264,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
@@ -283,7 +283,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ]
 }

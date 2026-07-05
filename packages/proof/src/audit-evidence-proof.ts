@@ -585,7 +585,7 @@ function main(): void {
         socReadinessClaim: false,
         iso27001CertificationClaim: false,
         fullDevReadinessClaim: false,
-        fullReactParityClaim: false,
+        fullProductReadinessClaim: false,
         usf133ClosureClaim: false,
         checks: checks.length,
         checkLabels: checks,

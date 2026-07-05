@@ -102,7 +102,7 @@ REQUIRED_NON_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
 }
 
 DONE_VALUES = {"done", "closed", "complete", "completed", "resolved"}

@@ -16,4 +16,4 @@ The JSON artefact records promotion-impact rows for data-bearing services whose 
 
 ## Non-claims
 
-USF-219 does not claim backup readiness, restore readiness, disaster recovery readiness, PITR readiness, online backup readiness, scheduled backup readiness, RPO readiness, RTO readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full dev readiness, full React parity, or USF-133 closure.
+USF-219 does not claim backup readiness, restore readiness, disaster recovery readiness, PITR readiness, online backup readiness, scheduled backup readiness, RPO readiness, RTO readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure.

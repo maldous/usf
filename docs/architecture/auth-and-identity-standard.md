@@ -18,7 +18,7 @@
 
 This standard is the semantic authority for the Keycloak-brokered authentication and identity parity domain (USF-133). It defines the **enterprise identity control plane in full breadth** — token validation, identity semantics, sessions, assurance, tenant self-service SSO, cross-tenant access, just-in-time provisioning, domain verification, invitations, lifecycle, account linking, privileged SSO administration, attribute mapping, browser security posture, provider config, threat controls, API surfaces, and audit — and marks each item **IMPLEMENTED**, **DEFERRED**, or **RESERVED**.
 
-This is one authorised parity domain among many under USF-133. It is **not** a claim of full React parity and **not** a production-live or live-external-provider readiness claim.
+This is one authorised parity domain among many under USF-133. It is **not** a claim of full product readiness and **not** a production-live or live-external-provider readiness claim.
 
 **Hermetic honesty (Charter / Standards Profile §12–13; Authority Model proof-honesty bar).**
 

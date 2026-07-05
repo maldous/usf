@@ -51,8 +51,8 @@ const REQUIRED_NON_CLAIMS = [
   "enterprise-production-readiness",
   "product-ui-readiness",
   "browser-e2e-readiness",
-  "full-react-product-parity",
-  "full-react-parity-readiness",
+  "full-product-readiness",
+  "full-product-readiness",
   "final-usf-234-acceptance",
 ] as const;
 

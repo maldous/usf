@@ -15,7 +15,7 @@ Machine-readable evidence is in `docs/architecture/performance-concurrency-resou
 ## Boundaries
 
 - No service-backed performance claim is made.
-- No production scale, production readiness, staging readiness, live-provider readiness, SOC readiness, ISO certification, product UI readiness, browser E2E readiness, full React parity, or final USF-234 acceptance is claimed.
+- No production scale, production readiness, staging readiness, live-provider readiness, SOC readiness, ISO certification, product UI readiness, browser E2E readiness, full product readiness, or final USF-234 acceptance is claimed.
 - The test-readiness validator enforces the generic USF-254 expanded category from USF-259 and the issue-specific suite matrix here.
 - USF-TEST-READINESS-081 through USF-TEST-READINESS-087 fail closed for missing suite linkage, service/profile budget disposition gaps, missing baselines or budgets, unsafe concurrency/load/resource budgets, missing cleanup under pressure, unsupported overclaims, and missing enterprise evidence linkage.
 - Nine planted defects across 081 through 087 selftest those validator classes, including independent missing-baseline, missing-budget, disabled-concurrency, and unbounded-load cases.

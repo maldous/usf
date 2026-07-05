@@ -487,7 +487,7 @@ describe("performance concurrency resource regression suite", () => {
       "enterprise-production-readiness",
       "product-ui-readiness",
       "browser-e2e-readiness",
-      "full-react-product-parity",
+      "full-product-readiness",
       "final-usf-234-acceptance",
     ]) {
       expect(suite.nonClaims).toContain(nonClaim);

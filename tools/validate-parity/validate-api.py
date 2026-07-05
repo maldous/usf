@@ -761,7 +761,7 @@ def run_checks(F, state=None):
             "socReadinessClaim",
             "iso27001CertificationClaim",
             "fullDevReadinessClaim",
-            "fullReactParityClaim",
+            "fullProductReadinessClaim",
             "usf133ClosureClaim",
         ):
             if not isinstance(claims, dict) or claims.get(claim) is not False:
@@ -873,7 +873,7 @@ def run_checks(F, state=None):
             "socReadinessClaim",
             "iso27001CertificationClaim",
             "fullDevReadinessClaim",
-            "fullReactParityClaim",
+            "fullProductReadinessClaim",
             "usf133ClosureClaim",
         ):
             if not isinstance(claims, dict) or claims.get(claim) is not False:
@@ -987,7 +987,7 @@ def run_checks(F, state=None):
         "iso27001CertificationClaim: false",
         "enterpriseProductionReadinessClaim: false",
         "fullDevReadinessClaim: false",
-        "fullReactParityClaim: false",
+        "fullProductReadinessClaim: false",
         "usf133ClosureClaim: false",
         "rawTokenReturned: false",
         "assertSafe",
@@ -1065,7 +1065,7 @@ def run_checks(F, state=None):
             "iso27001CertificationClaim",
             "enterpriseProductionReadinessClaim",
             "fullDevReadinessClaim",
-            "fullReactParityClaim",
+            "fullProductReadinessClaim",
             "usf133ClosureClaim",
         ):
             if not isinstance(claims, dict) or claims.get(claim) is not False:

@@ -51,7 +51,7 @@
       "criterion": "Readiness directive, UI-agnostic boundary, and scope-classification matrix exist in docs/architecture and are merged.",
       "classification": "mapped-to-merged-evidence",
       "evidenceRefs": [
-        "docs/architecture/full-react-parity-readiness-directive.md",
+        "docs/architecture/superseded-lineage-closure-provenance.md",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
         "docs/architecture/react-parity-scope-classification-matrix.md",
         "docs/architecture/usf-final-semantic-completeness-audit.json"
@@ -221,7 +221,7 @@
       "remainingBoundary": "Sentry service readiness, service ingestion, issue lifecycle, alert handoff, incident workflow, dashboard runtime, retention purge, SLI/SLO operation, cross-tenant aggregate analytics, operator console, supplier/live-provider, and environment readiness remain deferred to USF-222 or later authorised issues.",
       "nonClaims": [
         "live-provider-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -258,7 +258,7 @@
         "federation-readiness",
         "external-developer-platform-readiness",
         "full-dev-readiness",
-        "full-react-parity-readiness",
+        "full-product-readiness",
         "usf-133-closure"
       ]
     },
@@ -345,7 +345,7 @@
       "status": "resolved-by-bounded-disposition-evidence",
       "followUpIssue": "USF-223",
       "evidenceSource": "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
-      "nonClaimBoundary": "USF-219 does not prove backup readiness, restore readiness, DR readiness, PITR, RPO/RTO, environment readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-219 does not prove backup readiness, restore readiness, DR readiness, PITR, RPO/RTO, environment readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "issueId": "USF-220",
@@ -354,7 +354,7 @@
       "status": "resolved-by-bounded-disposition-evidence",
       "followUpIssue": "USF-224",
       "evidenceSource": "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json",
-      "nonClaimBoundary": "USF-220 does not prove generated SDK readiness, generated client readiness, external developer platform readiness, GraphQL runtime readiness, federation readiness, public API readiness, environment readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-220 does not prove generated SDK readiness, generated client readiness, external developer platform readiness, GraphQL runtime readiness, federation readiness, public API readiness, environment readiness, live-provider readiness, production readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     }
   ],
   "linearBlockerRelationPolicy": {
@@ -389,7 +389,7 @@
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure"
   ]
 }

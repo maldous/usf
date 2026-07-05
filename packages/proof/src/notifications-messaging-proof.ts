@@ -632,7 +632,7 @@ export async function runNotificationsMessagingProof() {
     socReadinessClaim: false,
     enterpriseProductionReadinessClaim: false,
     fullDevReadinessClaim: false,
-    fullReactParityClaim: false,
+    fullProductReadinessClaim: false,
     usf133ClosureClaim: false,
   } as const;
 }

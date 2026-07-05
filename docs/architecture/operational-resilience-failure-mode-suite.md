@@ -19,4 +19,4 @@ Seven planted defects selftest those validator classes.
 
 ## Non-Claims
 
-This suite does not claim final USF-234 test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full React product parity.
+This suite does not claim final USF-234 test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness.

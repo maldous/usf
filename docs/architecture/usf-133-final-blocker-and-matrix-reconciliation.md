@@ -38,7 +38,7 @@ This is a source-issue status-integrity gate. It does not close USF-133 and does
 | Parity validator and make gate exist | Parity validators include the closure-tier, service-disposition, environment, domain-depth, and final blocker consistency checks. | No validator result closes USF-133 by itself. |
 | Semantic authority decisions are tracked | Repository artefacts carry current owner, evidence, and non-claim boundaries. | Remaining source issues must land their own merged evidence. |
 | Future UI issue exists | USF-134 exists as future UI/UX tracking context. | USF-134 is not used as foundation closure evidence. |
-| No readiness claim while incomplete | Non-claims are explicit in the reconciliation artefact and validator. | Full dev, test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, full React parity, and USF-133 closure remain non-claims. |
+| No readiness claim while incomplete | Non-claims are explicit in the reconciliation artefact and validator. | Full dev, test, staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, full product readiness, and USF-133 closure remain non-claims. |
 
 ## Matrix Reconciliation
 
@@ -58,4 +58,4 @@ The parity validator includes USF-PARITY-039 for this reconciliation. It fails i
 
 ## Non-Claims
 
-This reconciliation does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full React parity, or USF-133 closure.
+This reconciliation does not claim full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification, enterprise production readiness, full product readiness, or USF-133 closure.

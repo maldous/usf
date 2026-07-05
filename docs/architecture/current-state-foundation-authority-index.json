@@ -150,7 +150,7 @@
       "classification": "historical-lineage",
       "activeAuthority": false,
       "pathsOrPatterns": [
-        "../react"
+        "superseded-external-lineage"
       ],
       "retentionPosture": "archive-reference",
       "futureUse": "Inspect only as historical semantic/source evidence when a current issue explicitly requires lineage. Do not copy or mirror runtime/application code or paths."
@@ -167,7 +167,7 @@
         "docs/architecture/react-*.json"
       ],
       "retentionPosture": "archive-reference",
-      "futureUse": "Use for audit traceability and source disposition, not as a direct future implementation recipe or full React product parity claim."
+      "futureUse": "Use for audit traceability and source disposition, not as a direct future implementation recipe or full product readiness product parity claim."
     },
     {
       "id": "closure-and-lane-orchestration",
@@ -247,7 +247,7 @@
   ],
   "futureWorkflowRules": [
     "Read current semantic contracts, ADRs, validators, proof evidence, and enterprise evidence before implementation.",
-    "Use historical React, source-use, parity, closure, and bootstrap artefacts only as lineage or audit inputs when explicitly needed.",
+    "Use superseded external-lineage, source-use, parity, closure, and bootstrap artefacts only as lineage or audit inputs when explicitly needed.",
     "Do not infer readiness or source issue completion from wrapper, closure, or generated reports.",
     "Update semantic contracts, proofs, validators, planted defects, enterprise evidence, and Linear acceptance mapping together when behaviour or assurance posture changes.",
     "Preserve explicit non-claims unless a later issue separately proves and authorises a stronger claim."
@@ -275,7 +275,7 @@
     "no-enterprise-production-readiness",
     "no-product-ui-readiness",
     "no-browser-e2e-readiness",
-    "no-full-react-product-parity",
+    "no-full-product-readiness",
     "no-final-test-readiness"
   ]
 }

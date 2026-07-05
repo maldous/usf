@@ -47,7 +47,7 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "acceptanceCriteriaMapping": [
@@ -92,7 +92,7 @@
       ],
       "proofCommand": "make api-proof",
       "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",
-      "nonClaimBoundary": "USF-213 defines public API compatibility posture but does not prove public API readiness, public launch readiness, external developer platform readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, full dev readiness, full React parity, or USF-133 closure."
+      "nonClaimBoundary": "USF-213 defines public API compatibility posture but does not prove public API readiness, public launch readiness, external developer platform readiness, staging readiness, production readiness, deployment readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure."
     },
     {
       "id": "compatibility-snapshot-evidence",
@@ -234,7 +234,7 @@
     }
   ],
   "nonClaims": [
-    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full product readiness, or USF-133 closure claim is made.",
     "No public API readiness, public API launch readiness, external developer platform readiness, consumer-driven contract readiness, generated SDK readiness, public documentation readiness, release compatibility readiness, SemVer release readiness, or customer compatibility guarantee is made.",
     "USF-213 does not implement GraphQL, federation, generated clients, SDK distribution, public developer portal, API key issuance, public support workflow, staging deployment, production deployment, live gateway, WAF, TLS termination, or edge operation."
   ]

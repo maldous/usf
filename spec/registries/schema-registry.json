@@ -1780,7 +1780,7 @@
       "authorityRole": "runtime-proof-evidence",
       "driftRisks": [
         "Treating in-memory proof as composed-provider proof.",
-        "Treating compose-boundary proof as staging, production, live-provider, SOC, ISO, full dev, or full React parity readiness."
+        "Treating compose-boundary proof as staging, production, live-provider, SOC, ISO, full dev, or full product readiness."
       ],
       "aiGuidance": "Runtime proof manifests support bounded evidence only. Do not upgrade provider mode or readiness claims beyond observed proof output.",
       "deferredDetails": [
@@ -1856,7 +1856,7 @@
         "Validation passing is treated as Done without acceptance-criteria evidence.",
         "Statement of Applicability support is misread as ISO/IEC 27001 certification or SOC readiness."
       ],
-      "aiGuidance": "Use this model as evidence organisation and validator input only. Do not claim certification, staging, production, live-provider, full dev, or full React parity readiness from these rows."
+      "aiGuidance": "Use this model as evidence organisation and validator input only. Do not claim certification, staging, production, live-provider, full dev, or full product readiness from these rows."
     },
     {
       "id": "test-obligation-manifest.schema.json",
@@ -1921,7 +1921,7 @@
         "A future test omits a semantic contract or service row.",
         "A service-backed test-readiness claim is satisfied by an in-memory substitute.",
         "A generated test Compose service or profile exists without a seed, exercise, reset, teardown, and evidence obligation.",
-        "Obligation metadata is misread as final test readiness, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full React product parity readiness."
+        "Obligation metadata is misread as final test readiness, staging, production, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness."
       ],
       "aiGuidance": "Use this schema to enforce test obligations before implementation or final acceptance. Do not infer final USF-234 acceptance or any external readiness/certification claim from obligation metadata."
     },

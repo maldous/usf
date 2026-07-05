@@ -228,6 +228,6 @@ USF-161 adds bounded synthetic distributed guardrails proof:
 - cost quota denial and provider-unavailable fail-closed evidence;
 - IP-derived privacy posture using opaque references only;
 - tenant, audit, retention, and cleanup evidence;
-- explicit non-equivalence for live edge, gateway, WAF, CDN, bot, fraud, provider-managed abuse controls, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure.
+- explicit non-equivalence for live edge, gateway, WAF, CDN, bot, fraud, provider-managed abuse controls, staging, production, SOC, ISO certification, full dev readiness, full product readiness, and USF-133 closure.
 
 Still outside this standard's proven boundary are live WAF, edge, gateway, CDN, bot, fraud, SIEM, DLP, UEBA, customer traffic, production abuse-control operation, public guardrail API routes, admin UI, break-glass operation, provider-managed counters, and environment promotion readiness.

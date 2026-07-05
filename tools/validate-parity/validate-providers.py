@@ -179,7 +179,7 @@ USF157_REQUIRED_NON_CLAIMS = {
     "soc-readiness",
     "iso27001-certification",
     "enterprise-production-readiness",
-    "full-react-parity-readiness",
+    "full-product-readiness",
     "usf-133-closure",
 }
 
@@ -198,7 +198,7 @@ USF157_FORBIDDEN_ALLOWED_CLAIMS = {
     "iso27001-certification",
     "enterprise-production-readiness",
     "full-dev-readiness",
-    "full-react-parity",
+    "full-product-readiness",
     "usf-133-closure",
 }
 

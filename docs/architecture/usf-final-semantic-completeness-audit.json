@@ -114,7 +114,7 @@
       "criterion": "Readiness directive, UI-agnostic boundary, and scope-classification matrix exist in docs/architecture and are merged.",
       "classification": "partially-proven",
       "evidence": [
-        "docs/architecture/full-react-parity-readiness-directive.md",
+        "docs/architecture/superseded-lineage-closure-provenance.md",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
         "docs/architecture/react-parity-scope-classification-matrix.md"
       ],
@@ -322,7 +322,7 @@
     "socReadiness": false,
     "iso27001Certification": false,
     "enterpriseProductionReadiness": false,
-    "fullReactParity": false,
+    "fullProductReadiness": false,
     "usf133Closure": false
   }
 }

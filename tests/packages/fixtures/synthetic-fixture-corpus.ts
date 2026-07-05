@@ -89,7 +89,7 @@ export function assertFixtureCorpusSafe(corpus: SyntheticFixtureCorpus): void {
     "enterprise-production-readiness",
     "product-ui-readiness",
     "browser-e2e-readiness",
-    "full-react-product-parity",
+    "full-product-readiness",
   ]);
   for (const claim of corpus.allowedClaims) {
     if (prohibitedClaims.has(claim)) {

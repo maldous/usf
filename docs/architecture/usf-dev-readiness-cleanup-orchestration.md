@@ -126,7 +126,7 @@ If a command is unavailable or fails, record that result without claiming it pas
 
 This cleanup pass does not claim full dev readiness, staging readiness, production readiness,
 deployment readiness, live-provider readiness, SOC readiness, ISO/IEC 27001 certification,
-enterprise production readiness, test readiness, or full React parity. It does not close USF-133.
+enterprise production readiness, test readiness, or full product readiness. It does not close USF-133.
 It does not mutate USF-39.
 
 ## Implementation Prompt Skeletons

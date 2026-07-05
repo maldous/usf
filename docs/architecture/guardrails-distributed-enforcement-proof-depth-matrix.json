@@ -6,7 +6,7 @@
   "capabilityId": "guardrails-distributed-enforcement-depth",
   "proofCommand": "make guardrails-proof",
   "rawProofCommand": "corepack pnpm proof:guardrails",
-  "rawProofCommandBoundary": "Hermetic synthetic proof only. It exercises bounded distributed guardrails depth using deterministic local proof fixtures, synthetic tenants, synthetic actors, synthetic route metadata, proof-local durable counters, two proof nodes, value-free audit evidence, opaque IP-derived references, and explicit non-claims for live WAF, CDN, bot, fraud, edge, gateway, production abuse-prevention, staging, production, SOC, ISO certification, full dev readiness, full React parity, and USF-133 closure.",
+  "rawProofCommandBoundary": "Hermetic synthetic proof only. It exercises bounded distributed guardrails depth using deterministic local proof fixtures, synthetic tenants, synthetic actors, synthetic route metadata, proof-local durable counters, two proof nodes, value-free audit evidence, opaque IP-derived references, and explicit non-claims for live WAF, CDN, bot, fraud, edge, gateway, production abuse-prevention, staging, production, SOC, ISO certification, full dev readiness, full product readiness, and USF-133 closure.",
   "validatorCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
   "proofFile": "packages/proof/src/rate-limits-abuse-controls-proof.ts",
   "validatorFile": "tools/validate-parity/validate-guardrails.py",
@@ -64,11 +64,11 @@
     "iso27001CertificationClaim": false,
     "enterpriseProductionReadinessClaim": false,
     "fullDevReadinessClaim": false,
-    "fullReactParityClaim": false,
+    "fullProductReadinessClaim": false,
     "usf133ClosureClaim": false
   },
   "nonClaims": [
-    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full React parity, or USF-133 closure claim is made.",
+    "No full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, full product readiness, or USF-133 closure claim is made.",
     "USF-161 bounded proof does not prove live WAF, CDN, bot, fraud, edge, gateway, provider-managed counters, staging, production, or external abuse-control operations.",
     "Synthetic durable counter and multi-node proof does not prove Redis, Postgres, gateway, CDN, WAF, bot, fraud, SIEM, DLP, UEBA, or live provider operation.",
     "Proof-local operator guardrail control-plane events do not create public HTTP guardrail APIs or operator UI readiness."
