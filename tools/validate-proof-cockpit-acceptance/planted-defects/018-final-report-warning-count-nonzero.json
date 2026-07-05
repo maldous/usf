@@ -1,0 +1,7 @@
+{
+  "id": "018-final-report-warning-count-nonzero",
+  "expectedRule": "USF-PROOF-COCKPIT-011",
+  "fixture": {
+    "kind": "final-report-warning-count-nonzero"
+  }
+}

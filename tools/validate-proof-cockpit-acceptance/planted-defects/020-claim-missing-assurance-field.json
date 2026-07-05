@@ -1,0 +1,7 @@
+{
+  "id": "020-claim-missing-assurance-field",
+  "expectedRule": "USF-PROOF-COCKPIT-007",
+  "fixture": {
+    "kind": "claim-missing-assurance-field"
+  }
+}

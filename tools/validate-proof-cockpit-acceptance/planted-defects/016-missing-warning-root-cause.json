@@ -1,0 +1,7 @@
+{
+  "id": "016-missing-warning-root-cause",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "missing-warning-root-cause"
+  }
+}

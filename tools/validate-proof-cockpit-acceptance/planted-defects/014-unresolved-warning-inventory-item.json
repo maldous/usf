@@ -1,0 +1,7 @@
+{
+  "id": "014-unresolved-warning-inventory-item",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "unresolved-warning-inventory-item"
+  }
+}

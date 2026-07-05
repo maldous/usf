@@ -21,6 +21,7 @@ FOUNDATION_IMPORT_PATH = ROOT / "docs" / "architecture" / "proof-cockpit-foundat
 STORE_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "staging-evidence-store.json"
 HUMAN_ACTIONS_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "human-review-actions.json"
 FINAL_REPORT_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "final-external-review-report.md"
+WARNING_INVENTORY_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "warning-inventory.json"
 BUNDLE_MANIFEST_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "external-review-bundle" / "manifest.json"
 PACKAGE_PATH = ROOT / "package.json"
 MAKEFILE_PATH = ROOT / "Makefile"
@@ -114,9 +115,11 @@ REQUIRED_EVIDENCE_FIELDS = [
 REQUIRED_MANIFEST_FILES = [
     "qa-run.json",
     "evidence-index.json",
-    "screenshot-manifest.json",
+    "proof-cockpit-screenshot-manifest.json",
     "command-manifest.json",
     "service-manifest.json",
+    "service-evidence-manifest.json",
+    "composed-service-screenshot-manifest.json",
     "adapter-manifest.json",
     "route-manifest.json",
     "control-map.json",
@@ -145,15 +148,65 @@ REQUIRED_FINAL_REPORT_SECTIONS = [
     "Enterprise/ISO-style support mapping",
     "Risk and control mapping",
     "Warnings, gaps, corrective actions, and retest status",
+    "Warning resolution",
     "Evidence freshness and historical audit artefact retention",
     "Human acceptance result",
     "Final handoff statement",
+]
+
+EVIDENCE_ONLY_PREFIXES = (
+    "artifacts/proof-cockpit/",
+    "evidence/proof-evidence/proof-cockpit/",
+)
+
+REQUIRED_PLANTED_KINDS = [
+    "machine-run-warning-count-nonzero",
+    "unresolved-warning-inventory-item",
+    "hidden-warning",
+    "missing-warning-root-cause",
+    "missing-warning-fixed-artifact",
+    "final-report-warning-count-nonzero",
+    "screenshot-equivalent-missing-hash",
+    "claim-missing-assurance-field",
+    "service-evidence-missing-reenactment",
+    "stale-evidence-treated-current",
+    "final-signoff-auto-completed",
 ]
 
 
 def load_json(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def load_optional_json(path: Path) -> Any:
+    if not path.exists():
+        return {}
+    return load_json(path)
+
+
+def git_output(args: list[str]) -> str:
+    return subprocess.run(["git", *args], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
+
+
+def current_head() -> str:
+    return git_output(["rev-parse", "HEAD"])
+
+
+def changed_paths_since(commit: str) -> list[str]:
+    if not commit:
+        return []
+    try:
+        output = git_output(["diff", "--name-only", f"{commit}..HEAD"])
+    except subprocess.CalledProcessError:
+        return ["<unresolvable-source-sha>"]
+    return [line for line in output.splitlines() if line.strip()]
+
+
+def evidence_only_since(commit: str) -> tuple[bool, list[str]]:
+    changed = changed_paths_since(commit)
+    non_evidence = [path for path in changed if not path.startswith(EVIDENCE_ONLY_PREFIXES)]
+    return not non_evidence, non_evidence
 
 
 def node_data() -> dict[str, Any]:
@@ -192,6 +245,9 @@ console.log(JSON.stringify({
 
 def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
     store = load_json(STORE_PATH)
+    latest = store.get("latestMachineRun", {})
+    stored_artifact_dir = ROOT / latest.get("artifactDir", "") if latest.get("artifactDir") else None
+    effective_artifact_dir = artifact_dir or stored_artifact_dir
     screenshot_manifest_path = ""
     if store.get("machineRunHistory"):
         screenshot_manifest_path = store["machineRunHistory"][-1].get("screenshotManifest", "")
@@ -200,13 +256,24 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         candidate = ROOT / screenshot_manifest_path
         if candidate.exists():
             generated_screenshot_manifest = load_json(candidate)
+    machine_run_report: dict[str, Any] = {}
+    service_evidence_manifest: dict[str, Any] = {}
+    gap_register: dict[str, Any] = {}
+    if effective_artifact_dir:
+        machine_run_report = load_optional_json(effective_artifact_dir / "proof-cockpit-machine-qa-run.json")
+        service_evidence_manifest = load_optional_json(effective_artifact_dir / "service-evidence-manifest.json")
+        gap_register = load_optional_json(effective_artifact_dir / "gap-register.json")
     data = {
         "model": load_json(MODEL_PATH),
         "foundationImport": load_json(FOUNDATION_IMPORT_PATH),
         "store": store,
         "humanActions": load_json(HUMAN_ACTIONS_PATH),
         "bundleManifest": load_json(BUNDLE_MANIFEST_PATH),
+        "warningInventory": load_optional_json(WARNING_INVENTORY_PATH),
         "generatedScreenshotManifest": generated_screenshot_manifest,
+        "machineRunReport": machine_run_report,
+        "serviceEvidenceManifest": service_evidence_manifest,
+        "gapRegister": gap_register,
         "package": load_json(PACKAGE_PATH),
         "makefile": MAKEFILE_PATH.read_text(encoding="utf-8"),
         "server": SERVER_PATH.read_text(encoding="utf-8"),
@@ -214,7 +281,8 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "machineQa": MACHINE_QA_PATH.read_text(encoding="utf-8"),
         "finalReport": FINAL_REPORT_PATH.read_text(encoding="utf-8"),
         "nodeData": node_data(),
-        "artifactDir": artifact_dir,
+        "artifactDir": effective_artifact_dir,
+        "currentHead": current_head(),
         "planted": [],
     }
     for path in sorted(PLANTED.glob("*.json")):
@@ -305,9 +373,15 @@ def rule_004_nonclaims(data: dict[str, Any]) -> list[dict[str, str]]:
     overclaim_patterns = [
         r"staging readiness (is )?(complete|ready|approved|passed)",
         r"production readiness (is )?(complete|ready|approved|passed)",
+        r"deployment readiness (is )?(complete|ready|approved|passed)",
+        r"live-provider readiness (is )?(complete|ready|approved|passed)",
         r"soc readiness (is )?(complete|ready|approved|passed)",
         r"iso certification (is )?(complete|ready|approved|passed)",
+        r"enterprise production readiness (is )?(complete|ready|approved|passed)",
+        r"product ui readiness (is )?(complete|ready|approved|passed)",
+        r"browser e2e readiness (is )?(complete|ready|approved|passed)",
         r"full product readiness (is )?(complete|ready|approved|passed)",
+        r"usf-290 (is )?(complete|done|closed|automatically complete)\b(?![\"'])",
         r"final acceptance automatic[\"']?\s*:\s*true",
     ]
     for pattern in overclaim_patterns:
@@ -374,8 +448,14 @@ def rule_007_evidence_records(data: dict[str, Any]) -> list[dict[str, str]]:
 
 def rule_008_human_acceptance_separate(data: dict[str, Any]) -> list[dict[str, str]]:
     failures: list[dict[str, str]] = []
-    if data["store"].get("humanReview", {}).get("finalSignoffCompleted") is not False:
+    human_review = data["store"].get("humanReview", {})
+    latest = data["store"].get("latestMachineRun", {})
+    if human_review.get("finalSignoffCompleted") is not False:
         failures.append(finding("USF-PROOF-COCKPIT-008", "Persistent evidence store must not auto-complete final signoff", str(STORE_PATH.relative_to(ROOT))))
+    if human_review.get("finalSignoffAvailable") is not False and (
+        latest.get("warnCount", 0) > 0 or latest.get("gapCount", 0) > 0 or latest.get("failCount", 0) > 0
+    ):
+        failures.append(finding("USF-PROOF-COCKPIT-008", "Final signoff cannot be available while machine warnings, gaps, or failures remain", str(STORE_PATH.relative_to(ROOT))))
     if data["humanActions"].get("finalAcceptanceClaimed") is not False:
         failures.append(finding("USF-PROOF-COCKPIT-008", "Human actions file must not claim final acceptance", str(HUMAN_ACTIONS_PATH.relative_to(ROOT))))
     if data["bundleManifest"].get("finalAcceptanceAutomatic") is not False:
@@ -388,6 +468,51 @@ def rule_008_human_acceptance_separate(data: dict[str, Any]) -> list[dict[str, s
 def rule_009_gaps_corrective_actions(data: dict[str, Any]) -> list[dict[str, str]]:
     failures: list[dict[str, str]] = []
     store = data["store"]
+    latest = store.get("latestMachineRun", {})
+    machine_run = data.get("machineRunReport", {})
+    machine_counts = machine_run.get("counts", {})
+    for field, label in [("warnCount", "warning"), ("gapCount", "gap"), ("failCount", "failure")]:
+        if latest.get(field, 0) > 0:
+            failures.append(finding("USF-PROOF-COCKPIT-009", f"Latest machine run has non-zero {label} count: {latest.get(field)}", str(STORE_PATH.relative_to(ROOT))))
+    for field, label in [("warn", "warning"), ("fail", "failure")]:
+        if machine_counts.get(field, 0) > 0:
+            failures.append(finding("USF-PROOF-COCKPIT-009", f"Machine QA artifact has non-zero {label} count: {machine_counts.get(field)}", str(data.get("artifactDir") or "")))
+    if len(machine_run.get("gaps", [])) > 0:
+        failures.append(finding("USF-PROOF-COCKPIT-009", f"Machine QA artifact has unresolved gaps: {len(machine_run.get('gaps', []))}", str(data.get("artifactDir") or "")))
+    gap_register = data.get("gapRegister", {})
+    if len(gap_register.get("gaps", [])) > 0:
+        failures.append(finding("USF-PROOF-COCKPIT-009", f"Gap register is not empty: {len(gap_register.get('gaps', []))}", str(data.get("artifactDir") or "")))
+    warning_inventory = data.get("warningInventory", {})
+    items = warning_inventory.get("warnings", [])
+    summary = warning_inventory.get("summary", {})
+    if not items:
+        failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory is missing or empty", str(WARNING_INVENTORY_PATH.relative_to(ROOT))))
+    if summary.get("originalWarningCount") != 68:
+        failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory must preserve original warning count 68", str(WARNING_INVENTORY_PATH.relative_to(ROOT))))
+    if summary.get("finalWarningCount") != 0:
+        failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory final warning count must be zero", str(WARNING_INVENTORY_PATH.relative_to(ROOT))))
+    if summary.get("hiddenWarningCount", 0) != 0:
+        failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory indicates hidden warnings", str(WARNING_INVENTORY_PATH.relative_to(ROOT))))
+    if len(items) != summary.get("originalWarningCount", len(items)):
+        failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory item count does not match original warning count", str(WARNING_INVENTORY_PATH.relative_to(ROOT))))
+    for item in items:
+        warning_id = item.get("warningId", "unknown-warning")
+        for field in ["rootCause", "requiredFix", "fixedArtifactPath", "validationCommand"]:
+            if not item.get(field):
+                failures.append(finding("USF-PROOF-COCKPIT-009", f"Warning inventory item missing {field}", warning_id))
+        if item.get("finalStatus") != "fixed":
+            failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory item is not fixed", warning_id))
+    source_sha = latest.get("sourceSha", "")
+    if source_sha and source_sha != data.get("currentHead"):
+        evidence_only, non_evidence = evidence_only_since(source_sha)
+        if not evidence_only:
+            failures.append(
+                finding(
+                    "USF-PROOF-COCKPIT-009",
+                    f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
+                    ",".join(non_evidence[:10]),
+                )
+            )
     gaps = store.get("gaps", [])
     corrective = store.get("correctiveActions", [])
     if gaps and not corrective:
@@ -415,6 +540,20 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
     ]
     if missing_hash:
         failures.append(finding("USF-PROOF-COCKPIT-010", "Generated screenshot manifest row lacks screenshot/artifact hash", ",".join(missing_hash[:10])))
+    services = data.get("serviceEvidenceManifest", {}).get("services", [])
+    if len(services) < data["nodeData"].get("serviceCount", 0):
+        failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence manifest does not cover every service", str(data.get("artifactDir") or "")))
+    for service in services:
+        service_id = service.get("serviceId", "unknown-service")
+        if service.get("evidenceStatus") != "machine-pass":
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence status is not machine-pass", service_id))
+        if service.get("gaps"):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence has unresolved gaps", service_id))
+        for field in ["screenshotPath", "screenshotHash", "artifactPath", "artifactHash", "humanReenactmentInstruction", "nextSafeAction"]:
+            if not service.get(field):
+                failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence missing {field}", service_id))
+        if service.get("evidenceClass") in {"api-equivalent", "cli-equivalent", "unsafe-to-screenshot", "unavailable", "blocked"} and not service.get("screenshotEquivalentReason"):
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Screenshot-equivalent service evidence missing reason", service_id))
     secret_patterns = [
         r"-----BEGIN [A-Z ]*PRIVATE KEY-----",
         r"\b[A-Z0-9_]*TOKEN\s*[:=]\s*[A-Za-z0-9._~+/=-]{24,}",
@@ -433,6 +572,26 @@ def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     for section in REQUIRED_FINAL_REPORT_SECTIONS:
         if section not in report:
             failures.append(finding("USF-PROOF-COCKPIT-011", f"Final report section missing: {section}", str(FINAL_REPORT_PATH.relative_to(ROOT))))
+    weak_sections = []
+    for section in REQUIRED_FINAL_REPORT_SECTIONS:
+        pattern = re.compile(rf"##\s+\d+\.\s+{re.escape(section)}\s*\n(?P<body>.*?)(?=\n##\s+\d+\.|\Z)", re.S)
+        match = pattern.search(report)
+        if match and len(match.group("body").strip()) < 40:
+            weak_sections.append(section)
+    if weak_sections:
+        failures.append(finding("USF-PROOF-COCKPIT-011", "Final report weakly populated sections", ",".join(weak_sections)))
+    forbidden_warning_phrases = [
+        r"warn(?:ing)?s?\s*remain",
+        r"final warning count:\s*[1-9]",
+        r"latest machine run records\s+[1-9][0-9]*\s+warnings",
+        r"gap register entries:\s*[1-9]",
+    ]
+    for pattern in forbidden_warning_phrases:
+        if re.search(pattern, report, re.I):
+            failures.append(finding("USF-PROOF-COCKPIT-011", f"Final report contains unresolved-warning wording: {pattern}", str(FINAL_REPORT_PATH.relative_to(ROOT))))
+    for phrase in ["Original warning count: 68", "Final warning count: 0", "Final unresolved gap count: 0", "warning-inventory.json"]:
+        if phrase not in report:
+            failures.append(finding("USF-PROOF-COCKPIT-011", f"Final report missing warning-resolution proof phrase: {phrase}", str(FINAL_REPORT_PATH.relative_to(ROOT))))
     if data["bundleManifest"].get("generatedReportsAreAuthority") is not False:
         failures.append(finding("USF-PROOF-COCKPIT-011", "Generated reports must not be marked authority", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
     for file_name in ["../staging-evidence-store.json", "../final-external-review-report.md", "README.md", "manifest.json"]:
@@ -446,12 +605,14 @@ def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
 
 def rule_012_planted_coverage(data: dict[str, Any]) -> list[dict[str, str]]:
     planted_rules = [fixture.get("expectedRule") for fixture in data["planted"]]
+    planted_kinds = [fixture.get("fixture", {}).get("kind") for fixture in data["planted"]]
     failures: list[dict[str, str]] = []
     for rule_id in RULE_IDS:
         if rule_id not in planted_rules:
             failures.append(finding("USF-PROOF-COCKPIT-012", f"Missing planted defect for {rule_id}"))
-    if len(planted_rules) != len(set(planted_rules)):
-        failures.append(finding("USF-PROOF-COCKPIT-012", "Planted defect expectedRule values must be unique"))
+    for kind in REQUIRED_PLANTED_KINDS:
+        if kind not in planted_kinds:
+            failures.append(finding("USF-PROOF-COCKPIT-012", f"Missing planted defect kind: {kind}"))
     return failures
 
 
@@ -507,6 +668,29 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["finalReport"] = mutated["finalReport"].replace("content hash", "content digest")
     elif kind == "planted-defect-coverage-missing":
         mutated["planted"] = [item for item in mutated["planted"] if item.get("expectedRule") != "USF-PROOF-COCKPIT-001"]
+    elif kind == "machine-run-warning-count-nonzero":
+        mutated["store"]["latestMachineRun"]["warnCount"] = 1
+        mutated["machineRunReport"].setdefault("counts", {})["warn"] = 1
+    elif kind == "unresolved-warning-inventory-item":
+        mutated["warningInventory"]["warnings"][0]["finalStatus"] = "open"
+    elif kind == "hidden-warning":
+        mutated["warningInventory"].setdefault("summary", {})["hiddenWarningCount"] = 1
+    elif kind == "missing-warning-root-cause":
+        mutated["warningInventory"]["warnings"][0]["rootCause"] = ""
+    elif kind == "missing-warning-fixed-artifact":
+        mutated["warningInventory"]["warnings"][0]["fixedArtifactPath"] = ""
+    elif kind == "final-report-warning-count-nonzero":
+        mutated["finalReport"] += "\nFinal warning count: 1\n"
+    elif kind == "screenshot-equivalent-missing-hash":
+        mutated["serviceEvidenceManifest"]["services"][0]["screenshotHash"] = ""
+    elif kind == "claim-missing-assurance-field":
+        mutated["nodeData"]["claimsMissingEvidence"] = ["claim-planted-missing-assurance-field"]
+    elif kind == "service-evidence-missing-reenactment":
+        mutated["serviceEvidenceManifest"]["services"][0]["humanReenactmentInstruction"] = ""
+    elif kind == "stale-evidence-treated-current":
+        mutated["store"]["latestMachineRun"]["sourceSha"] = "0000000000000000000000000000000000000000"
+    elif kind == "final-signoff-auto-completed":
+        mutated["store"]["humanReview"]["finalSignoffCompleted"] = True
     return mutated
 
 

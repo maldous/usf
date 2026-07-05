@@ -1,0 +1,7 @@
+{
+  "id": "019-screenshot-equivalent-missing-hash",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "screenshot-equivalent-missing-hash"
+  }
+}

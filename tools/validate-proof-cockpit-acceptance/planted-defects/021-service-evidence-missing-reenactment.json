@@ -1,0 +1,7 @@
+{
+  "id": "021-service-evidence-missing-reenactment",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "service-evidence-missing-reenactment"
+  }
+}

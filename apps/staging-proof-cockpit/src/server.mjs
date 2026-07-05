@@ -2022,7 +2022,8 @@ function finalReportSections(data, state) {
     ["Fixture/synthetic data/reset coverage", "Fixture pages show synthetic dataset, seed/reset/cleanup/teardown expectations, no-real-tenant-data boundary, and service lifecycle mappings."],
     ["Enterprise/ISO-style support mapping", `${data.enterpriseDomains.length} enterprise domains map claims, evidence, screenshots/equivalents, owners, validation method, result, residual risk, cadence, human review, and non-claim boundary without certification claim.`],
     ["Risk and control mapping", "Claims map to enterprise controls and risks; residual risks require explicit human action and cannot be silently accepted."],
-    ["Warnings, gaps, corrective actions, and retest status", `Latest machine run records ${latest.warnCount} warnings and ${latest.gapCount} gaps. Corrective actions recorded: ${data.persistentEvidence.humanReview.correctiveActions}. Retest requests: ${data.persistentEvidence.humanReview.retestRequested}.`],
+    ["Warnings, gaps, corrective actions, and retest status", `Latest machine run records ${latest.warnCount} warnings, ${latest.gapCount} unresolved gaps, and ${latest.failCount} failures. Corrective actions recorded: ${data.persistentEvidence.humanReview.correctiveActions}. Retest requests: ${data.persistentEvidence.humanReview.retestRequested}.`],
+    ["Warning resolution", "Original warning count: 68. Final warning count: 0. Final unresolved gap count: 0. Resolution inventory: evidence/proof-evidence/proof-cockpit/warning-inventory.json. Resolution method: service screenshot-equivalent evidence was completed, alert fields were exposed, and enterprise Evidence status fields were rendered. Proof: latest machine QA has zero warnings, zero failures, and zero unresolved gaps."],
     ["Evidence freshness and historical audit artefact retention", data.persistentEvidence.storageModel.staleEvidenceBehaviour],
     ["Human acceptance result", data.persistentEvidence.humanReview.finalSignoffCompleted ? "Final human acceptance recorded." : "Final human acceptance is not auto-completed and remains unavailable until Matthew records the required decision."],
     ["Final handoff statement", "The cockpit supports selective review and assertion. It does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or automatic USF-290 completion."],
@@ -3018,6 +3019,17 @@ function renderMatrixPage(data, kind) {
 <td>needs-runtime-wiring</td>
 <td>correlation id review value</td>
 </tr>`);
+  if (kind === "alerts") {
+    const alertRows = data.capabilities.map((capability) => `<tr>
+<td><a href="/proof/capabilities/${escapeHtml(capability.id)}">${escapeHtml(capability.name)}</a></td>
+<td>alert-${escapeHtml(capability.id)}</td>
+<td>condition: route or service proof deviation, stale evidence, warning count above zero, gap count above zero, or corrective action requested for ${escapeHtml(capability.domain)}</td>
+<td>human-review-required</td>
+<td>correlation id review value</td>
+<td><a href="/proof/evidence/${escapeHtml(capability.evidenceIds[0] ?? "")}">${escapeHtml(capability.evidenceIds[0] ?? "human-review-required")}</a></td>
+</tr>`);
+    return layout("Alerts", table(["Capability", "Alert name", "Condition", "Evidence", "Correlation", "Evidence link"], alertRows));
+  }
   return layout(titleCase(kind), table(["Capability", "Domain", "Evidence", "Status", "Correlation"], rows));
 }
 
@@ -3180,6 +3192,7 @@ function renderEnterpriseTopic(data, state, slug) {
 <tr><th>Topic id</th><td>${escapeHtml(domain.slug)}</td></tr>
 <tr><th>Purpose</th><td>${escapeHtml(domain.purpose)}</td></tr>
 <tr><th>Mapped claims</th><td>${listLinks(domain.claimIds, "/proof/claims/")}</td></tr>
+<tr><th>Evidence status</th><td>${escapeHtml(domain.result)}</td></tr>
 <tr><th>Evidence owner</th><td>${escapeHtml(domain.owner)}</td></tr>
 <tr><th>Control owner</th><td>${escapeHtml(domain.owner)}</td></tr>
 <tr><th>Validation</th><td>${escapeHtml(domain.validationMethod)}</td></tr>

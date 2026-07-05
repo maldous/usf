@@ -1,0 +1,7 @@
+{
+  "id": "023-final-signoff-auto-completed",
+  "expectedRule": "USF-PROOF-COCKPIT-008",
+  "fixture": {
+    "kind": "final-signoff-auto-completed"
+  }
+}

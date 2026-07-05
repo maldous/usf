@@ -1,0 +1,7 @@
+{
+  "id": "013-machine-run-warning-count-nonzero",
+  "expectedRule": "USF-PROOF-COCKPIT-009",
+  "fixture": {
+    "kind": "machine-run-warning-count-nonzero"
+  }
+}
