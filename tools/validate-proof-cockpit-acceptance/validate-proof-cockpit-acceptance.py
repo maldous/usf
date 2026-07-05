@@ -171,7 +171,20 @@ REQUIRED_PLANTED_KINDS = [
     "service-evidence-missing-reenactment",
     "stale-evidence-treated-current",
     "final-signoff-auto-completed",
+    "auth-required-service-without-authenticated-screenshot",
+    "service-missing-auth-posture",
+    "openbao-credential-evidence-missing",
 ]
+
+AUTH_POSTURES = {
+    "auth-required",
+    "intentionally anonymous/no-auth",
+    "protected by gateway/forward-auth",
+    "service-login required",
+    "api/cli-only",
+    "unsafe-to-capture",
+    "unavailable",
+}
 
 
 def load_json(path: Path) -> Any:
@@ -554,6 +567,33 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
                 failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence missing {field}", service_id))
         if service.get("evidenceClass") in {"api-equivalent", "cli-equivalent", "unsafe-to-screenshot", "unavailable", "blocked"} and not service.get("screenshotEquivalentReason"):
             failures.append(finding("USF-PROOF-COCKPIT-010", "Screenshot-equivalent service evidence missing reason", service_id))
+        if service.get("actualAuthPosture") not in AUTH_POSTURES:
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence missing explicit actual auth posture", service_id))
+        for field in ["loginMethod", "authPostureConfigPath", "authPostureRationale"]:
+            if not service.get(field):
+                failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence missing auth field {field}", service_id))
+        if service.get("credentialValuePersisted") is not False:
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence must explicitly avoid persisted credential values", service_id))
+        if service.get("credentialRequired"):
+            for field in ["credentialSourceRef", "credentialScope", "openBaoLogicalSecretRef", "openBaoPath", "openBaoRolePersona", "openBaoAccessTimestamp", "openBaoAuditEvidence"]:
+                if not service.get(field):
+                    failures.append(finding("USF-PROOF-COCKPIT-010", f"OpenBao credential evidence missing {field}", service_id))
+            if not str(service.get("credentialSourceRef", "")).startswith("openbao://"):
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Credential source is not an OpenBao logical reference", service_id))
+        if service.get("authenticatedCaptureRequired"):
+            if service.get("authenticatedCaptureStatus") != "captured-authenticated-ui":
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Auth-required service lacks authenticated UI screenshot", service_id))
+            for field in ["authenticatedUiScreenshotPath", "authenticatedUiScreenshotHash"]:
+                if not service.get(field):
+                    failures.append(finding("USF-PROOF-COCKPIT-010", f"Authenticated service evidence missing {field}", service_id))
+            if service.get("evidenceClass") in {"api-equivalent", "cli-equivalent", "unsafe-to-screenshot", "blocked", "unavailable"}:
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Auth-required service cannot be satisfied by screenshot-equivalent evidence", service_id))
+        if service.get("firstLoginPasswordRotationRequired") and service.get("firstLoginPasswordRotationCompleted") is not True:
+            failures.append(finding("USF-PROOF-COCKPIT-010", "First-login password rotation was required but not completed", service_id))
+        if service.get("actualAuthPosture") == "intentionally anonymous/no-auth":
+            for field in ["authPostureConfigPath", "authPostureRationale"]:
+                if not service.get(field):
+                    failures.append(finding("USF-PROOF-COCKPIT-010", f"Anonymous/no-auth posture missing {field}", service_id))
     secret_patterns = [
         r"-----BEGIN [A-Z ]*PRIVATE KEY-----",
         r"\b[A-Z0-9_]*TOKEN\s*[:=]\s*[A-Za-z0-9._~+/=-]{24,}",
@@ -691,6 +731,21 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["store"]["latestMachineRun"]["sourceSha"] = "0000000000000000000000000000000000000000"
     elif kind == "final-signoff-auto-completed":
         mutated["store"]["humanReview"]["finalSignoffCompleted"] = True
+    elif kind == "auth-required-service-without-authenticated-screenshot":
+        service = mutated["serviceEvidenceManifest"]["services"][0]
+        service["authenticatedCaptureRequired"] = True
+        service["authenticatedCaptureStatus"] = "not-captured"
+        service["authenticatedUiScreenshotPath"] = ""
+        service["authenticatedUiScreenshotHash"] = ""
+        service["evidenceClass"] = "api-equivalent"
+    elif kind == "service-missing-auth-posture":
+        mutated["serviceEvidenceManifest"]["services"][0]["actualAuthPosture"] = ""
+    elif kind == "openbao-credential-evidence-missing":
+        service = mutated["serviceEvidenceManifest"]["services"][0]
+        service["credentialRequired"] = True
+        service["credentialSourceRef"] = ""
+        service["openBaoLogicalSecretRef"] = ""
+        service["openBaoAuditEvidence"] = ""
     return mutated
 
 

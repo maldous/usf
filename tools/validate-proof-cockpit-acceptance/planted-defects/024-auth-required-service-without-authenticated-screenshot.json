@@ -1,0 +1,7 @@
+{
+  "id": "024-auth-required-service-without-authenticated-screenshot",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "auth-required-service-without-authenticated-screenshot"
+  }
+}

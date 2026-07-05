@@ -1,0 +1,7 @@
+{
+  "id": "025-service-missing-auth-posture",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "service-missing-auth-posture"
+  }
+}

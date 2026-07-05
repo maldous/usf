@@ -6299,7 +6299,7 @@
         "environment": [
           {
             "name": "PGADMIN_DEFAULT_EMAIL",
-            "value": "admin@example.test"
+            "value": "admin@example.com"
           },
           {
             "name": "PGADMIN_DEFAULT_PASSWORD",

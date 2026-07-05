@@ -2618,14 +2618,80 @@ ${table(["Capability", "Domain", "Semantic target", "Portfolio state", "Scenario
   );
 }
 
+function serviceAuthPosture(service) {
+  const httpPorts = (service.ports ?? []).filter((port) => ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()));
+  const serviceId = service.serviceId;
+  const explicitServiceLogin = new Set(["keycloak", "minio", "openbao", "grafana", "pgadmin", "sonarqube", "windmill"]);
+  const intentionallyAnonymous = new Set(["mailpit", "alertmanager", "temporal-ui", "public-proof-origin"]);
+  if (!httpPorts.length) {
+    return {
+      posture: "api/cli-only",
+      method: "No HTTP/HTTPS UI candidate is registered for this service.",
+      config: "spec/instances/compose-service/service-catalogue.json",
+      credentialRef: "not required",
+      rotation: "not required",
+      rationale: "Screenshot-equivalent or command evidence is acceptable only because no direct UI surface is registered.",
+    };
+  }
+  if (explicitServiceLogin.has(serviceId)) {
+    const credentialRef = `openbao://secret/data/usf-proof-cockpit/screenshot/${serviceId}/credential`;
+    return {
+      posture: serviceId === "openbao" ? "auth-required" : "service-login required",
+      method:
+        serviceId === "openbao"
+          ? "OpenBao token-authenticated API control proof with redacted UI-equivalent evidence."
+          : "Scoped QA/operator credential retrieved from OpenBao, followed by service login before screenshot capture.",
+      config: serviceId === "grafana" ? "compose/compose.test.generated.yaml#services.grafana.environment" : "compose/compose.test.generated.yaml",
+      credentialRef,
+      rotation: serviceId === "sonarqube" ? "required on first login and retained only in OpenBao" : "not required by current local proof",
+      rationale:
+        "The service has an operator/admin surface. Port exposure alone is not accepted as proof that authentication is unnecessary.",
+    };
+  }
+  if (intentionallyAnonymous.has(serviceId)) {
+    const mismatch = service.authRequirement === "operator-auth-required" || (service.ports ?? []).some((port) => port.authRequired);
+    return {
+      posture: "intentionally anonymous/no-auth",
+      method: "Direct local-loopback screenshot with synthetic data only; no service login is configured in generated Compose.",
+      config: "compose/compose.test.generated.yaml and spec/instances/compose-service/service-catalogue.json",
+      credentialRef: "not required",
+      rotation: "not required",
+      rationale: mismatch
+        ? "Catalogue access-scoping remains visible; generated local Compose has no login or forward-auth config, so this proof is bounded to local synthetic evidence and cannot support staging or production access-control claims."
+        : "Repository metadata records this as a local synthetic no-auth proof surface.",
+    };
+  }
+  if (serviceId === "caddy") {
+    return {
+      posture: "intentionally anonymous/no-auth",
+      method: "Gateway response evidence only; no route-level forward-auth or operator UI is configured in this proof scope.",
+      config: "docs/architecture/gateway-clickthrough-access-substrate-matrix.json and compose/compose.test.generated.yaml#services.external-caddy",
+      credentialRef: "not required",
+      rotation: "not required",
+      rationale:
+        "The gateway matrix records clickthrough and forward-auth as unproven. This page must not be read as gateway readiness.",
+    };
+  }
+  return {
+    posture: "intentionally anonymous/no-auth",
+    method: "Direct local-loopback screenshot or API page with synthetic data only.",
+    config: "spec/instances/compose-service/service-catalogue.json",
+    credentialRef: "not required",
+    rotation: "not required",
+    rationale: "No repository auth configuration is registered for this local proof surface.",
+  };
+}
+
 function renderServices(data) {
   const rows = data.services.map((service) => {
     const integration = service.integration ?? {};
+    const auth = serviceAuthPosture(service);
     return `<tr>
 <td>${serviceLink(service)}</td>
 <td>${escapeHtml(service.serviceOwner ?? "missing")}</td>
 <td>${escapeHtml(service.assetInventoryClass ?? "missing")}</td>
 <td>${escapeHtml((service.profileNames ?? []).join(", ") || "missing")}</td>
+<td>${escapeHtml(auth.posture)}</td>
 <td>${escapeHtml(integration.integrationDisposition ?? service.environmentDisposition ?? "missing")}</td>
 <td>${escapeHtml(integration.proofCommand ?? "human-review-required")}</td>
 <td>${escapeHtml(service.firstPassClickThroughState)}</td>
@@ -2645,9 +2711,10 @@ function renderServices(data) {
   return layout(
     "Proof services",
     `<p>Service rows come from the repository service catalogue and composed integration matrix. These links are the final click-through surface for service-backed proof validation.</p>
+<p>Auth posture is explicit evidence metadata. An exposed local port is never treated as proof that authentication is unnecessary. Auth-required service UI captures must use scoped OpenBao-backed QA/operator credentials, and intentionally anonymous local captures are bounded to synthetic data and non-readiness evidence.</p>
 <section>
 <h2>Service inventory</h2>
-${table(["Service", "Owner", "Asset class", "Profiles", "Integration disposition", "Proof command", "Click-through state"], rows)}
+${table(["Service", "Owner", "Asset class", "Profiles", "Auth posture", "Integration disposition", "Proof command", "Click-through state"], rows)}
 </section>
 <section>
 <h2>Compose profile exercise requirements</h2>
@@ -2730,6 +2797,18 @@ function renderService(data, state, serviceId) {
   const lifecycle = integration.lifecycleApi ?? {};
   const evidenceTests = integration.evidenceTests ?? [];
   const recordedActions = recordedActionCountFor(state, (action) => action.serviceId === service.serviceId);
+  const auth = serviceAuthPosture(service);
+  const authRows = [
+    ["Actual auth posture", auth.posture],
+    ["Login method", auth.method],
+    ["Credential source", auth.credentialRef],
+    ["First-login password rotation", auth.rotation],
+    ["Config evidence", auth.config],
+    ["Catalogue auth requirement", service.authRequirement ?? "missing"],
+    ["Catalogue access posture", service.accessPosture ?? "missing"],
+    ["Rationale and boundary", auth.rationale],
+    ["Human reenactment", "Use only scoped staging/test-safe credentials retrieved by logical OpenBao reference when required; never expose credentials in screenshots, logs, artifacts, reports, or generated bundles."],
+  ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
   const qaRows = [
     ["Health/readiness", "Open authorised service health or readiness surface; record status and timestamp.", "human-review-required"],
     ["Fixture seed", `Confirm seeder ${lifecycle.seederId ?? "missing"} and fixture ${integration.fixtureSeedId ?? "missing"}.`, "human-review-required"],
@@ -2768,6 +2847,13 @@ function renderService(data, state, serviceId) {
 <tr><th>Runtime click-through URL</th><td>human-review-required; final cockpit must link only to authorised staging service surfaces or runbooks</td></tr>
 <tr><th>Recorded QA actions</th><td>${recordedActions}</td></tr>
 </tbody></table>
+<section>
+<h2>Auth posture and OpenBao evidence</h2>
+<table><tbody>
+${authRows.join("\n")}
+</tbody></table>
+<p>This section is audit evidence only. It does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, product UI readiness, SOC readiness, ISO certification, or USF-290 completion.</p>
+</section>
 <section>
 <h2>Human service click-through checklist</h2>
 ${table(["Area", "Required human action", "Portfolio status"], qaRows)}
