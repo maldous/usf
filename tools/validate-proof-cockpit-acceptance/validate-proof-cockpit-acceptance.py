@@ -482,13 +482,32 @@ def normalized_scan_text(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", with_camel_spacing.lower()).strip()
 
 
+# Raw secret assignment detection. The key set covers the common secret key names
+# (password, secret, token, api_key/apikey, client_secret, private_key,
+# AWS_SECRET_ACCESS_KEY, and any *_SECRET suffix) so a leaked KEY=VALUE literal in the
+# proof cockpit evidence fails closed. Detection keys on a secret-ish key name AND a
+# substantial literal value; symbolic references (SecretReference-style identifiers)
+# are still allowed via is_symbolic_secret_reference.
 SECRET_ASSIGNMENT_RE = re.compile(
-    r"(?i)\b(?P<key>[A-Z0-9_]*TOKEN|password)\b\s*[:=]\s*(?P<quote>[\"']?)(?P<value>[A-Za-z0-9._~+/=-]{12,})(?P=quote)"
+    r"(?i)\b(?P<key>[A-Z0-9_]*(?:TOKEN|PASSWORD|SECRET|API_?KEY)|CLIENT_SECRET|PRIVATE_KEY|AWS_SECRET_ACCESS_KEY)\b"
+    r"\s*[:=]\s*(?P<quote>[\"']?)(?P<value>[A-Za-z0-9._~+/=-]{12,})(?P=quote)"
+)
+
+# Source-defined synthetic (non-secret) literals that legitimately appear in evidence.
+# These are deliberately named test fixtures embedded by the machine QA harness, not
+# real credentials, so they are allowlisted to avoid a false positive. Keep this list
+# tight: only exact, deliberately-synthetic values belong here.
+APPROVED_SYNTHETIC_SECRET_LITERALS = frozenset(
+    {
+        "machine-qa-synthetic-proof-cockpit-review-secret",
+    }
 )
 
 
 def is_symbolic_secret_reference(value: str) -> bool:
     """Allow validator source identifiers while still blocking literal secrets."""
+    if value in APPROVED_SYNTHETIC_SECRET_LITERALS:
+        return True
     if not re.fullmatch(r"[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)*", value):
         return False
     lowered = value.lower()
@@ -503,6 +522,8 @@ def secret_literal_markers(text: str) -> list[str]:
         markers.append("private-key-block")
     for match in SECRET_ASSIGNMENT_RE.finditer(text):
         value = match.group("value")
+        if value in APPROVED_SYNTHETIC_SECRET_LITERALS:
+            continue
         if not match.group("quote") and is_symbolic_secret_reference(value):
             continue
         markers.append(f"{match.group('key')} literal assignment")
