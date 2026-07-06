@@ -15,7 +15,7 @@ This report records the USF-230 optimisation execution. The optimisation is non-
 
 USF-230 applies the USF-229 strategy by creating an as-now authority map and making the active handover path point to current semantic contracts, ADRs, validators, proof evidence, enterprise evidence, and dev-readiness handover artefacts.
 
-The repository keeps the full historical evolution record available, but future work no longer needs to treat closure-tier, parity-migration, bootstrap-lineage, or `../react` source evidence as active authority. Those artefacts remain retained as historical lineage, transitional scaffolding, or generated projections according to the authority index.
+The repository keeps the full historical evolution record available, but future work no longer needs to treat closure-tier, source-disposition, bootstrap-lineage, or USF's own recorded source evidence as active authority. Those artefacts remain retained as historical lineage, transitional scaffolding, or generated projections according to the authority index.
 
 ## Files Added Or Updated
 
@@ -51,7 +51,7 @@ Historical and transitional artefacts are reconciled by classification rather th
 - USF-133 closure and lane orchestration artefacts remain transitional scaffolding and audit evidence;
 - bootstrap mapping remains lineage for foundation ancestry;
 - generated Compose outputs remain derivative projections;
-- `../react` remains historical semantic/source evidence only.
+- USF's own recorded source lineage remains rank-5 source evidence only.
 
 ## Validation Plan
 

@@ -6,7 +6,7 @@
 | Status             | Draft / USF-154 implementation evidence                                                                     |
 | Authority level    | Reviewable source-use matrix; subordinate to Charter, Authority Model, ADRs, validators, and proof evidence |
 | Issue scope        | USF-154, child of USF-133                                                                                   |
-| Historical lineage | `../react` is rank-6 evidence only                                                                          |
+| Source lineage     | USF is self-defined; source paths are held in USF's own source-import registry (rank-5 source lineage), not an external authority |
 
 This source-use disposition matrix records the treatment of files touched for the API/routes/OpenAPI/contracts domain. USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No public API or production readiness is claimed. No staging, deployment, gateway, external-client SDK, external developer platform, production-live, or regulatory/certification readiness is claimed.
 
@@ -50,8 +50,8 @@ This source-use disposition matrix records the treatment of files touched for th
 | `docs/architecture/api-and-contract-surface-standard.md`                  | source-derived-rewrite | React API semantic contract plus enterprise API/contract-governance follow-up | Defines USF API as a security and contract boundary for this API contracts slice.                                                  |
 | `docs/architecture/api-contracts-source-use-disposition-matrix.md` | evidence-only-support  | USF source-use policy                                                         | Records lineage/disposition for this domain.                                                                                |
 | `docs/architecture/bootstrap-source-use-disposition-matrix.md`            | evidence-only-support  | Existing bootstrap source-use matrix                                          | Updates prior API/OpenAPI rows and adds new proof/validator/test/doc rows.                                                  |
-| `docs/architecture/react-parity-scope-classification-matrix.json`         | evidence-only-support  | Existing parity matrix                                                        | Marks the API/contracts domain authorised under USF-154 and backs it with tests/proofs; item rows classify domain subareas. |
-| `docs/architecture/react-parity-scope-classification-matrix.md`           | evidence-only-support  | Human-readable parity matrix                                                  | Mirrors the JSON status truthfully.                                                                                         |
+| `docs/architecture/functional-scope-classification-matrix.json`         | evidence-only-support  | Existing parity matrix                                                        | Marks the API/contracts domain authorised under USF-154 and backs it with tests/proofs; item rows classify domain subareas. |
+| `docs/architecture/functional-scope-classification-matrix.md`           | evidence-only-support  | Human-readable parity matrix                                                  | Mirrors the JSON status truthfully.                                                                                         |
 
 ## Historical React Behaviour Disposition
 

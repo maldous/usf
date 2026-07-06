@@ -6,12 +6,12 @@
 | Status | Draft / DB slice (USF-138) implementation coverage |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-138 under USF-133 |
-| Source row basis | `docs/architecture/enterprise-persistence-metadata-and-classification-standard.md`, `docs/architecture/persistent-object-classification-registry.json`, ADR 0010, and historical `../react` DB/RLS/migration/audit evidence as lineage only |
+| Source row basis | `docs/architecture/enterprise-persistence-metadata-and-classification-standard.md`, `docs/architecture/persistent-object-classification-registry.json`, ADR 0010, and USF's own self-defined DB/RLS/migration/audit source lineage |
 | Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no live/production database claim |
 
 ## Treatment Rules
 
-Every implementation target file added by the DB slice is listed here with a treatment and rationale. `source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined with no source antecedent. `evidence-only-support` means a test/proof artefact.
+Every implementation target file added by the DB slice is listed here with a treatment and rationale. `source-derived-rewrite` means the behaviour was authored against USF semantics with USF's own self-defined source lineage as evidence (no copy, no path mirroring). `new-with-rationale` means USF-defined with no source antecedent. `evidence-only-support` means a test/proof artefact.
 
 ## Implementation Target Files
 

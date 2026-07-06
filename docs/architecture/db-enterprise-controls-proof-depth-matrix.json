@@ -24,7 +24,7 @@
   "proofCommand": "corepack pnpm proof:db",
   "validatorCommand": "python3 tools/validate-parity/validate-db.py all --json",
   "sourceUseMatrix": "docs/architecture/db-source-use-disposition-matrix.md",
-  "parityMatrix": "docs/architecture/react-parity-scope-classification-matrix.json#db-rls-migrations",
+  "parityMatrix": "docs/architecture/functional-scope-classification-matrix.json#db-rls-migrations",
   "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#postgres",
   "runtimeProofEvidence": "packages/proof/src/db-rls-isolation-proof.ts",
   "enterpriseEvidenceRefs": [
@@ -59,7 +59,7 @@
       "satisfied": true,
       "evidenceRefs": [
         "docs/architecture/db-source-use-disposition-matrix.md",
-        "docs/architecture/react-parity-scope-classification-matrix.json#db-rls-migrations"
+        "docs/architecture/functional-scope-classification-matrix.json#db-rls-migrations"
       ]
     },
     {

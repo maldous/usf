@@ -6,7 +6,7 @@
 | Status | Draft / parity-auth-keycloak-broker (USF-133) |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010 (PDP), ADR 0012 (Keycloak sole IdP and local token validation); companion to the tenant-authorization standard, the config-and-secrets standard, and the audit-evidence standard |
 | Issue scope | Authentication and identity parity under USF-133; USF-149 adds bounded local enterprise identity control-plane proof while live/browser/provider execution remains non-claimed |
-| Evidence basis | Historical `../react` authentication/identity/OIDC/session behaviour as lineage only; PR #92 DB/RLS; PR #93 PDP; PR #94 audit/evidence; PR #95 config/secrets |
+| Evidence basis | USF's own self-defined authentication/identity/OIDC/session semantics as source lineage; PR #92 DB/RLS; PR #93 PDP; PR #94 audit/evidence; PR #95 config/secrets |
 | Proof basis | Hermetic only. Proven by `make auth-proof` over `adapters/idp` and `capabilities/auth`; includes local synthetic enterprise identity controls in `capabilities/auth/src/enterprise-identity.ts`; no live Keycloak, no live external broker, no live upstream identity provider, no browser UI, no SIEM forwarding, no production-live claim. |
 | Compliance note | ISO 27001-supporting **technical control evidence** (access control, authentication, identity lifecycle, session management). **No certification claim.** |
 

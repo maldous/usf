@@ -18,5 +18,5 @@
   "relatedInterface": "permission-grant-api",
   "relatedWorkflow": "permission-management-workflow",
   "semanticContractRef": "urn:usf:contract:permission-management",
-  "sourceRefs": ["../react/docs/v2-foundation/audit-model.json#permission-grant"]
+  "sourceRefs": ["../external-source/docs/v2-foundation/audit-model.json#permission-grant"]
 }

@@ -19,8 +19,8 @@ This matrix records source-use treatment for the USF-162 import/export/bulk slic
 | tests/packages/proof.test.ts | evidence-only-support | Proof package test pattern | Runs import/export/bulk proof in-process. |
 | tools/validate-parity/validate-bulk.py | source-derived-rewrite | Existing parity validator pattern plus import/export/bulk validator expectations | Static parity validator for import/export/bulk invariants and overclaim prevention. |
 | tools/validate-parity/bulk-planted-defects/*.json | evidence-only-support | Validator planted-defect pattern | Planted defects proving high-risk import/export/bulk validator rules fire. |
-| docs/architecture/react-parity-scope-classification-matrix.json | evidence-only-support | USF parity matrix | Adds import/export/bulk rows with truthful migrated, partial, deferred, and rewritten-from-UI classifications. |
-| docs/architecture/react-parity-scope-classification-matrix.md | evidence-only-support | Human-readable parity matrix | Adds import/export/bulk classification section. |
+| docs/architecture/functional-scope-classification-matrix.json | evidence-only-support | USF parity matrix | Adds import/export/bulk rows with truthful migrated, partial, deferred, and rewritten-from-UI classifications. |
+| docs/architecture/functional-scope-classification-matrix.md | evidence-only-support | Human-readable parity matrix | Adds import/export/bulk classification section. |
 
 ## Deferred Source-Use Notes
 

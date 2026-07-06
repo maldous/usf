@@ -9,7 +9,7 @@
   "vocabularyRefs": ["disposition-values"],
   "aiGuidance": "This instance must be rejected because the inline source reference path is empty.",
   "sourceRef": {
-    "repository": "../react",
+    "repository": "../external-source",
     "path": ""
   },
   "disposition": "preserve",

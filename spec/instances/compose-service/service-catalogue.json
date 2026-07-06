@@ -64,7 +64,7 @@
   ],
   "reactComposeServiceCount": 54,
   "sourceRefs": [
-    "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
+    "docs/architecture/usf-compose-service-completeness-matrix.md",
     "compose/compose.yaml"
   ],
   "approvedLocalSecretPlaceholders": [
@@ -184,7 +184,7 @@
       ],
       "reactComposeServiceNames": ["postgres"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#postgres"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -539,7 +539,7 @@
       ],
       "reactComposeServiceNames": ["keycloak-postgres"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak-db"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak-db"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -836,7 +836,7 @@
       ],
       "reactComposeServiceNames": ["keycloak"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -1195,7 +1195,7 @@
       ],
       "reactComposeServiceNames": [],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#nats"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#nats"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -1524,7 +1524,7 @@
       ],
       "reactComposeServiceNames": ["temporal"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#temporal"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -1882,7 +1882,7 @@
       ],
       "reactComposeServiceNames": ["minio"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#minio"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#minio"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -2289,7 +2289,7 @@
       ],
       "reactComposeServiceNames": ["openbao"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#openbao"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#openbao"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -2622,7 +2622,7 @@
       ],
       "reactComposeServiceNames": ["otel-collector"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#otel-collector"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#otel-collector"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -3010,7 +3010,7 @@
       ],
       "reactComposeServiceNames": ["prometheus"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#prometheus"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#prometheus"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -3339,7 +3339,7 @@
       ],
       "reactComposeServiceNames": ["grafana"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#grafana"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#grafana"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -3672,7 +3672,7 @@
       ],
       "reactComposeServiceNames": ["loki"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#loki"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#loki"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -4000,7 +4000,7 @@
       ],
       "reactComposeServiceNames": ["tempo"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#tempo"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#tempo"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -4329,7 +4329,7 @@
       ],
       "reactComposeServiceNames": ["mailpit"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mailpit"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#mailpit"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -4715,7 +4715,7 @@
       ],
       "reactComposeServiceNames": [],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#webhook-sink"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#webhook-sink"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -5044,7 +5044,7 @@
       ],
       "reactComposeServiceNames": ["redis"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#redis"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#redis"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -5370,7 +5370,7 @@
       ],
       "reactComposeServiceNames": ["meilisearch"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#meilisearch"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#meilisearch"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -5701,7 +5701,7 @@
       ],
       "reactComposeServiceNames": ["clickhouse"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clickhouse"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#clickhouse"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -6076,7 +6076,7 @@
       ],
       "reactComposeServiceNames": ["pgadmin"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgadmin"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#pgadmin"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -6415,7 +6415,7 @@
       ],
       "reactComposeServiceNames": ["sonar-postgres"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-postgres"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -6707,7 +6707,7 @@
       ],
       "reactComposeServiceNames": ["sonar-oidc-plugin"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-oidc-plugin"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-oidc-plugin"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -6967,7 +6967,7 @@
       ],
       "reactComposeServiceNames": ["sonarqube"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonarqube"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#sonarqube"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -7306,7 +7306,7 @@
       ],
       "reactComposeServiceNames": ["mock-oidc"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mock-oidc"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#mock-oidc"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -7547,7 +7547,7 @@
       ],
       "reactComposeServiceNames": ["localstack"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#localstack"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#localstack"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -7872,7 +7872,7 @@
       ],
       "reactComposeServiceNames": ["wiremock"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#wiremock"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#wiremock"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -8197,7 +8197,7 @@
       ],
       "reactComposeServiceNames": ["alertmanager"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alertmanager"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#alertmanager"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -8525,7 +8525,7 @@
       ],
       "reactComposeServiceNames": ["alloy"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alloy"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#alloy"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -8854,7 +8854,7 @@
       ],
       "reactComposeServiceNames": ["windmill-postgres"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-postgres"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -9142,7 +9142,7 @@
       ],
       "reactComposeServiceNames": ["windmill-redis"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-redis"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-redis"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -9419,7 +9419,7 @@
       ],
       "reactComposeServiceNames": ["windmill"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#windmill"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -9789,7 +9789,7 @@
       ],
       "reactComposeServiceNames": ["windmill-worker"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-worker"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-worker"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -10096,7 +10096,7 @@
       ],
       "reactComposeServiceNames": ["temporal-postgres"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-postgres"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -10381,7 +10381,7 @@
       ],
       "reactComposeServiceNames": ["temporal-ui"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-ui"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-ui"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -10721,7 +10721,7 @@
       ],
       "reactComposeServiceNames": ["pgbackrest"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgbackrest"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#pgbackrest"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -11035,7 +11035,7 @@
       ],
       "reactComposeServiceNames": ["clamav"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clamav"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#clamav"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -11323,7 +11323,7 @@
         "sentry-cleanup"
       ],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sentry"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#sentry"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -11936,7 +11936,7 @@
       ],
       "reactComposeServiceNames": ["external-caddy"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#caddy"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#caddy"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -12315,7 +12315,7 @@
       ],
       "reactComposeServiceNames": ["platform-api"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#platform-api"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#platform-api"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -12553,7 +12553,7 @@
       ],
       "reactComposeServiceNames": ["react-app"],
       "reactParityRows": [
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#react-app"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#react-app"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {

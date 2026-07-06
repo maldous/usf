@@ -41,8 +41,8 @@ Hexagonal structure is the load-bearing property that keeps the foundation testa
 
 ## Source References
 
-- `../react/.dependency-cruiser.cjs`
-- `../react/docs/v2-foundation/v2-directory-contracts.json`
+- USF's own dependency-direction enforcement configuration, held in USF's source-import registry.
+- USF's own directory-contracts definitions, held in USF's source-import registry.
 
 ## Proof References
 

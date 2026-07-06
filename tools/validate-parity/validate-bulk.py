@@ -42,7 +42,7 @@ SOURCE_USE = "docs/architecture/import-export-bulk-source-use-disposition-matrix
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
 DEPTH_MATRIX = "docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json"
 ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
-MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX = "docs/architecture/functional-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
 SELFTEST_DIR = "tools/validate-parity/bulk-planted-defects"
@@ -246,7 +246,7 @@ def run_checks(F, state=None):
     ]:
         if token not in standard:
             F.add("USF-BULK-002", STANDARD, f"standard missing section {token}")
-    if "Parity Import/Export/Bulk Source-Use Disposition Matrix" not in source_use:
+    if "Import/Export/Bulk Source-Use Disposition Matrix" not in source_use:
         F.add("USF-BULK-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "ImportExportPort" not in ports or "appendItemOutcome" not in ports:

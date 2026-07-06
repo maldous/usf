@@ -1,6 +1,6 @@
 # Observability/Telemetry Source-Use Disposition Matrix
 
-This matrix records source-use disposition for the USF-133 observability/telemetry slice. It uses `../react` only as historical semantic lineage and proof/test behaviour evidence. USF authors its own runtime; it does not copy external runtime/application code, does not mirror external source paths, and does not claim live monitoring, SIEM, alerting, SOC, ISO, or production readiness.
+This matrix records source-use disposition for the USF-133 observability/telemetry slice. It draws on USF's own self-defined semantic source lineage and proof/test behaviour evidence only. USF authors its own runtime; it does not copy external runtime/application code, does not mirror external source paths, and does not claim live monitoring, SIEM, alerting, SOC, ISO, or production readiness.
 
 Linear child issue: USF-158.
 
@@ -38,11 +38,11 @@ Linear child issue: USF-158.
 
 ## Lane 4 Operations Additions
 
-Lane 4 uses historical React observability evidence as lineage only:
+Lane 4 draws on USF's own self-defined observability source lineage only:
 
-- `../react/docs/adr/0062-observability-alerting-and-incident-architecture.md` for the split between built-in alert/incident foundation and deferred composed backends/on-call/status-page providers.
-- `../react/docs/evidence/observability/tenant-observability-readiness.md` for tenant-safe query, label guard, dashboard reachability, and no-fake-readiness posture.
-- `../react/apps/platform-api/scripts/alerting-runtime-proof.ts` and `../react/apps/platform-api/scripts/incident-foundation-runtime-proof.ts` for alert/incident proof expectations and no secret-bearing-column checks.
+- USF's own observability alerting and incident architecture definitions for the split between built-in alert/incident foundation and deferred composed backends/on-call/status-page providers.
+- USF's own tenant-observability-readiness evidence for tenant-safe query, label guard, dashboard reachability, and no-fake-readiness posture.
+- USF's own alerting and incident-foundation runtime proof expectations for alert/incident proof and no secret-bearing-column checks.
 
 Lane 4 does not copy external runtime/application code. USF-159 converts the previous Lane 4 source
 issue deferral into a bounded source-issue evidence gate. The USF deliverable is local operations
@@ -65,4 +65,4 @@ and not claimed.
 
 ## Boundary Confirmation
 
-USF authors its own runtime; no runtime/application code is copied from `../react` and no USF path mirrors an external source path. No OpenTelemetry, Prometheus, Loki, Tempo, Sentry, SIEM, alerting, dashboard, incident-response, external provider, staging, production, SOC, ISO, full dev readiness, full product readiness, enterprise production readiness, or live monitoring readiness is claimed.
+USF authors its own runtime; no runtime/application code is copied from an external source and no USF path mirrors an external source path. No OpenTelemetry, Prometheus, Loki, Tempo, Sentry, SIEM, alerting, dashboard, incident-response, external provider, staging, production, SOC, ISO, full dev readiness, full product readiness, enterprise production readiness, or live monitoring readiness is claimed.

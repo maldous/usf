@@ -107,8 +107,9 @@
       "artefactClass": "source-use-and-parity-matrices",
       "examples": [
         "docs/architecture/parity-*-source-use-disposition-matrix.md",
-        "docs/architecture/complete-react-to-usf-*.json",
-        "docs/architecture/react-parity-scope-classification-matrix.json",
+        "docs/architecture/usf-compose-service-completeness-matrix.json",
+        "docs/architecture/usf-functionality-completeness-matrix.json",
+        "docs/architecture/functional-scope-classification-matrix.json",
         "docs/architecture/foundation-completeness-audit.md"
       ],
       "classification": "historical-lineage",
@@ -260,7 +261,7 @@
     },
     {
       "id": "historical-parity-migration-language",
-      "marker": "superseded parity wording and complete-react-to-usf",
+      "marker": "superseded parity wording and legacy react-to-usf matrix names",
       "classification": "historical-lineage",
       "finding": "Parity matrices and review docs document how foundation evidence was reconciled from historical source.",
       "activeAuthorityBoundary": "They are not full product readiness product parity claims and must not drive future implementation by source resemblance.",

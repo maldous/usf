@@ -50,7 +50,7 @@
       "package.json#proof:cache:redis",
       "Makefile#redis-cache-proof",
       "docs/architecture/cache-eventing-service-disposition-matrix.json",
-      "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#redis",
+      "docs/architecture/usf-compose-service-completeness-matrix.json#redis",
       "docs/architecture/compose-service-disposition-closure-matrix.json#redis",
       "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-redis-cache-provider",
       "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",

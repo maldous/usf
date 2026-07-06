@@ -124,7 +124,7 @@ Strict JSON parse is required for any changed JSON. This document changes no JSO
 - Do not move USF-39 out of Backlog.
 - Do not create implementation/runtime code.
 - Do not create implementation/runtime directories.
-- Do not import runtime/application code from `../react`.
+- Do not import runtime/application code from USF's own source lineage.
 - Do not run new proof under this rollup.
 - Do not replace proof evidence with this rollup or any generated report.
 - Do not treat stale evidence as current readiness.

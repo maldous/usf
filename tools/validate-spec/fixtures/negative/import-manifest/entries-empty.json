@@ -1,7 +1,7 @@
 {
   "id": "import-manifest-entries-empty",
   "title": "Import manifest: empty entries array",
-  "sourceRepository": "../react",
+  "sourceRepository": "../external-source",
   "entries": [],
   "description": "Defect: entries is empty, violating minItems 1.",
   "authorityLevel": "historical-source-evidence",

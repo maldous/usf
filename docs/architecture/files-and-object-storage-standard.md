@@ -6,7 +6,7 @@
 | Status | Draft / parity-files-storage (USF-146) plus USF-147 bounded enterprise depth |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010; consistent with the Enterprise Persistence Metadata and Classification, audit-evidence, and config-and-secrets standards |
 | Issue scope | USF-146 under USF-133; deferred depth tracked in USF-147 |
-| Evidence basis | Historical `../react` files/storage behaviour as lineage only; PR 92 DB/RLS; PR 93 PDP; PR 94 audit; PR 95 config/secrets |
+| Evidence basis | USF's own self-defined files/storage semantics as source lineage; PR 92 DB/RLS; PR 93 PDP; PR 94 audit; PR 95 config/secrets |
 | Compliance note | ISO 27001-supporting **technical control evidence** (asset management, access control, integrity, malware/quarantine posture, retention). **Not** a certification claim. |
 
 > Normative language follows BCP 14; only uppercase keywords are normative.

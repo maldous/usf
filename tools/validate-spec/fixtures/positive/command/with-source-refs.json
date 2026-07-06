@@ -17,6 +17,6 @@
   "environmentScope": ["hermetic", "local"],
   "sideEffects": ["writes collected evidence under evidence/"],
   "emitsEvidence": true,
-  "sourceRefs": ["../react/Makefile#proof-auth", "../react/tools/v2-readiness/proof-runner.ts"],
+  "sourceRefs": ["../external-source/Makefile#proof-auth", "../external-source/tools/v2-readiness/proof-runner.ts"],
   "disposition": "preserve"
 }

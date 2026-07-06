@@ -5,7 +5,7 @@
 | Document type     | Architecture / source-use disposition matrix                                                   |
 | Status            | Draft; USF-156 provider adapters/modes slice                                                   |
 | Authority level   | Source-use evidence; subordinate to semantic definitions, ADRs, validators, and proof evidence |
-| Historical source | `../react` as lineage and behaviour evidence only                                              |
+| Source lineage    | USF's own self-defined source lineage and behaviour evidence only                              |
 
 USF authors its own runtime; no external runtime/application code is copied and no USF path mirrors an external source path. Generated reports are not semantic authority.
 

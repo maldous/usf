@@ -24,7 +24,7 @@
       ],
       "ordering": "single planted validation step",
       "sourceRefs": [
-        "../react/docs/adr/0005-hexagonal-architecture.md"
+        "../external-source/docs/adr/0005-hexagonal-architecture.md"
       ],
       "steps": [
         {

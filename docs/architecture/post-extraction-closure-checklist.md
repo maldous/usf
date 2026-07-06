@@ -27,11 +27,11 @@ Every future implementation PR under USF-39 must complete this checklist in its 
 | Semantic instances | Every behaviour, route, event, audit action, provider mode, environment, configuration, workflow, UI semantic, or data/migration claim in source is already represented by a semantic instance or is added in the same PR under the coupled-change rule. | Source introduces behaviour absent from semantics. |
 | ADR alignment | Accepted ADRs permit the implementation shape and no ADR is contradicted. Any decision reversal is handled by a new or superseding ADR in the same coupled change. | Source conflicts with ADRs or relies on an unrecorded decision. |
 | Source-use treatment | Every target file maps to source-derived-adapt, source-derived-rewrite, new-with-rationale, or evidence-only-support. The source-use matrix row numbers or new-with-rationale entries are cited. | A target file lacks treatment, mirrors a source path, or uses evidence-only rows as runtime code. |
-| Source import boundary | Direct runtime/application source import from `../react` is absent unless a later explicit directive authorises a specific file with disposition and proof rationale. | Runtime code is copied blindly or source paths dictate target structure. |
+| Source import boundary | Direct runtime/application source import from USF's own source lineage is absent unless a later explicit directive authorises a specific file with disposition and proof rationale. | Runtime code is copied blindly or source paths dictate target structure. |
 | Validator rules | The PR runs the required validator modes, including repository-wide validation, implementation guard validation, PR diff validation, and any later slice-specific validator. Findings are resolved or explicitly block merge. | Validators fail, are not run, or findings are ignored. |
 | Proof evidence | Claims above planning level have fresh proof records for the reviewed commit, with provider mode, environment, observed proof level, emitted evidence, collected evidence, and failure semantics. | Proof is stale, missing, overclaimed, or unsupported by collected evidence. |
 | Provider and environment | Provider mode and environment are recorded separately and match the proof/evidence records. | Hermetic proof is used as live-external-provider proof, or production-shaped is used as production-live. |
-| Generated reports | Reports are cited only as rank-7 summaries and reference the underlying evidence. Validators and proof records remain the evidence source. | A report pass is treated as semantic authority, proof, schema promotion, or implementation authorisation. |
+| Generated reports | Reports are cited only as rank-6 summaries and reference the underlying evidence. Validators and proof records remain the evidence source. | A report pass is treated as semantic authority, proof, schema promotion, or implementation authorisation. |
 | Schema posture | Schema lifecycle and validator maturity remain as directed. Active promotion occurs only in a separate authorised promotion PR satisfying USF-30. | A schema is marked active or advisory validation is described as active maturity without authorisation. |
 | Follow-up gaps | Any deferred gap is recorded as a follow-up issue with scope, blocker, owner, and why it does not invalidate the current slice. | A gap affects the current slice claim but is deferred as non-blocking. |
 
@@ -80,7 +80,7 @@ Allowed language:
 - "implemented the authorised slice files listed in the directive";
 - "validators passed on commit X";
 - "proof record Y observed proof level Z on provider mode A and environment B";
-- "generated report R summarises evidence E and remains rank 7";
+- "generated report R summarises evidence E and remains rank 6";
 - "follow-up issue N records work outside this slice".
 
 Forbidden language unless fully evidenced:

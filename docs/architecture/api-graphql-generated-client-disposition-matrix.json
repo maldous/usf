@@ -18,7 +18,7 @@
   "validatorFile": "tools/validate-parity/validate-api.py",
   "standard": "docs/architecture/api-and-contract-surface-standard.md",
   "sourceUseMatrix": "docs/architecture/api-contracts-source-use-disposition-matrix.md",
-  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "parityMatrix": "docs/architecture/usf-functionality-completeness-matrix.json",
   "serviceCatalogueDependency": "spec/instances/compose-service/service-catalogue.json#api",
   "enterpriseEvidenceRefs": [
     "soa-usf-214-graphql-generated-client-disposition",

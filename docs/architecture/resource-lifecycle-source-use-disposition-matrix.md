@@ -7,7 +7,7 @@
 | Linear carrier    | USF-165                                      |
 | Domain authorised | true                                         |
 
-This matrix records how the resource lifecycle, relationship, and schema-bound mutation slice is authored against USF semantics with historical `../react` evidence as lineage. USF authors its own runtime; no external runtime/application code is copied, no external source path is mirrored, and it does not claim production, legal, regulatory, eDiscovery, or production-live readiness.
+This matrix records how the resource lifecycle, relationship, and schema-bound mutation slice is authored against USF semantics with USF's own self-defined source lineage as evidence. USF authors its own runtime; no external runtime/application code is copied, no external source path is mirrored, and it does not claim production, legal, regulatory, eDiscovery, or production-live readiness.
 
 ## Runtime And Proof Files
 

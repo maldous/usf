@@ -542,7 +542,7 @@
     "authorityIndex": "docs/architecture/current-state-foundation-authority-index.json",
     "evidenceReport": "docs/architecture/foundation-optimisation-evidence.json",
     "currentWorkflow": "Future developer and AI-agent work starts from current semantic contracts, ADRs, validators, proof evidence, enterprise evidence, and this handover path.",
-    "historicalLineageBoundary": "Historical ../react source, source-use matrices, parity migration matrices, closure-tier artefacts, and bootstrap mapping remain retained lineage or audit evidence, not active future authority.",
+    "historicalLineageBoundary": "Historical source lineage, source-use matrices, completeness matrices, closure-tier artefacts, and bootstrap mapping remain retained lineage or audit evidence, not active future authority.",
     "runtimeBehaviourChanged": false,
     "validatorsWeakened": false,
     "proofCommandsRemoved": false,

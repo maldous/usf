@@ -19,10 +19,10 @@ This pass created or confirmed grouped follow-up issues for material gaps. It do
 - USF-133, USF-166, USF-167, USF-182, USF-184, USF-192, USF-193, USF-214, USF-215, and follow-up issues USF-216 through USF-220.
 - `docs/architecture/usf-133-closure-tier-evidence-gate.json`
 - `docs/architecture/usf-dev-foundation-gap-register.md`
-- `docs/architecture/complete-react-to-usf-functionality-parity-matrix.json`
+- `docs/architecture/usf-functionality-completeness-matrix.json`
 - `docs/architecture/usf-functionality-coverage-review.md`
-- `docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json`
-- `docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md`
+- `docs/architecture/usf-compose-service-completeness-matrix.json`
+- `docs/architecture/usf-compose-service-completeness-matrix.md`
 - `docs/architecture/compose-service-disposition-closure-matrix.json`
 - `docs/architecture/domain-deferred-depth-closure-matrix.json`
 - `docs/architecture/api-graphql-generated-client-disposition-matrix.json`

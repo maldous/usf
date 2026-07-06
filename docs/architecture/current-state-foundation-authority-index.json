@@ -161,13 +161,11 @@
       "activeAuthority": false,
       "pathsOrPatterns": [
         "docs/architecture/parity-*-source-use-disposition-matrix.md",
-        "docs/architecture/complete-react-to-usf-*.md",
-        "docs/architecture/complete-react-to-usf-*.json",
-        "docs/architecture/react-*.md",
-        "docs/architecture/react-*.json"
+        "docs/architecture/usf-compose-service-completeness-matrix.*",
+        "docs/architecture/usf-functionality-completeness-matrix.*"
       ],
       "retentionPosture": "archive-reference",
-      "futureUse": "Use for audit traceability and source disposition, not as a direct future implementation recipe or full product readiness product parity claim."
+      "futureUse": "Use for audit traceability and source disposition, not as a direct future implementation recipe or full product readiness completeness claim."
     },
     {
       "id": "closure-and-lane-orchestration",

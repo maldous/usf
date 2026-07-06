@@ -8,7 +8,7 @@
 | **Issue scope** | USF-64 |
 | **Source row basis** | `spec/registries/authentication-slice-source-import-manifest.json` |
 | **Row count** | 159 source rows |
-| **Historical evidence basis** | `../react` historical source evidence only |
+| **Source lineage** | USF's own self-defined source-import registry (rank-5 source lineage) only |
 
 This document defines source-use permission for the authentication proof-substrate slice. It does not create implementation files, implementation directories, schemas, evidence, proof output, generated reports, or runtime code.
 
@@ -263,7 +263,7 @@ A future implementation PR is incomplete if any target file lacks one of those t
 
 - USF-60 SHOULD add an implementation-artefact guard that requires every future implementation target file to cite a row in this matrix or declare new-with-rationale.
 - USF-60 SHOULD reject any target file that cites an evidence-only row as runtime source.
-- USF-60 SHOULD reject any target path that mirrors a historical source path from `../react`.
+- USF-60 SHOULD reject any target path that mirrors an external sibling-repository source path such as `../external-source/...`.
 - USF-61 MUST cite this matrix as the proof-substrate source-use authority before USF-39 can begin.
 - USF-61 MUST define the target-file map separately from this document and MUST preserve this document as a source-use gate, not an implementation directive.
 

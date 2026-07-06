@@ -8,7 +8,7 @@
 | **Follows** | [`charter.md`](./charter.md), [`authority-model.md`](./authority-model.md), [`standards-profile.md`](./standards-profile.md), [`ontology.md`](./ontology.md), [`directory-and-file-naming-standard.md`](./directory-and-file-naming-standard.md), [`../../spec/taxonomies/taxonomy-catalog.json`](../../spec/taxonomies/taxonomy-catalog.json), [`../../spec/vocabularies/vocabulary-catalog.json`](../../spec/vocabularies/vocabulary-catalog.json), [`../../spec/registries/schema-registry.json`](../../spec/registries/schema-registry.json) — and MUST be consistent with all eight |
 | **Artefact kind** | `architecture-document` (vocabulary `artefact-kinds`) |
 | **Authority level** | `semantic-definition` (Authority Model rank 1). It governs the **form, identity, and lifecycle** of future schema files; like the [Standards Profile](./standards-profile.md) and the [Directory and File Naming Standard](./directory-and-file-naming-standard.md) it does **not** change the authority order. It is subordinate to the constitutional layer (Charter + Authority Model). |
-| **Evidence basis** | Grounded in the historical repository `../react` → `/home/user/src/react`. Citations to `../react/...` reference existing historical paths and introduce no historical naming into USF. |
+| **Evidence basis** | Grounded in USF's own self-defined artefacts. Source paths are held in USF's own source-import registry and introduce no external naming into USF. |
 
 > **Normative language.** Requirement words follow **BCP 14** (RFC 2119 + RFC 8174) as defined in [`standards-profile.md`](./standards-profile.md) §6 and §4 of this document. Only the uppercase forms are normative, and they govern this Markdown standard — **not** JSON Schema keyword syntax.
 >
@@ -43,7 +43,7 @@ This standard exists to:
 - **Make schemas audit-friendly** — closed objects, explicit required fields, named backing value sets, and resolvable references make a schema readable and checkable by a human or a tool (§10, §12, §13, §19).
 - **Make schemas AI-safe** — an agent authors a correct schema from this standard plus the registry entry, not from source resemblance (§14, §25; Charter §7).
 - **Keep schemas aligned to ontology, taxonomy, vocabulary, and the Schema Registry** (§3.4–§3.7, §12–§14, §21).
-- **Prevent source-shape-driven schema creation.** A schema formalises USF semantics; it MUST NOT be inferred from `../react` JSON shapes alone (§14, §15; Authority Model §6.4).
+- **Prevent source-shape-driven schema creation.** A schema formalises USF semantics; it MUST NOT be inferred from source-lineage JSON shapes alone (§14, §15; Authority Model §6.4).
 - **Define lifecycle promotion rules** from `planned` → `draft` → `active` (§20).
 - **Prepare for validator implementation** by stating the checks a validator MUST later perform (§24).
 
@@ -58,9 +58,9 @@ Schema authoring operationalises Charter principles:
 - **Semantic-first governance (Charter §5.1).** A schema formalises an existing semantic definition's shape; it does not originate behaviour. Schemas follow semantics (§14).
 - **Evidence-backed correctness (Charter §5.2).** Schemas make claims checkable: required fields, resolvable references, and controlled values are evidence a validator can verify (§11, §12, §24).
 - **AI safety (Charter §5.3, §7).** Closed objects, explicit required fields, and named vocabularies remove "infer the shape from code" as a path (§10, §14, §25).
-- **No knowledge loss (Charter §5.8).** Source-lineage fields are required where an artefact derives from `../react`; nothing is dropped silently (§9, §15).
-- **Proof does not replace semantics (Charter §5.9).** A schema-valid instance is not thereby *proven*; proof/evidence schemas type evidence honestly and never let validity stand in for exercised behaviour (§16). The historical attestation is explicit: *"Proofs are evidence, not substitutes for semantic definition"* (`../react/docs/v2-foundation/v2-readiness-final-attestation.md`).
-- **Validators enforce drift control (Charter §5.10).** Schemas are the shape contract a future validator enforces, failing closed (§24). Historically: *"Validators are enforcement; proofs are evidence; V2 code is only the implementation of canonical V2 semantic artefacts"* (`../react/docs/v2-foundation/semantic-source-of-truth-transition.md`).
+- **No knowledge loss (Charter §5.8).** Source-lineage fields are required where an artefact derives from USF's own source lineage; nothing is dropped silently (§9, §15).
+- **Proof does not replace semantics (Charter §5.9).** A schema-valid instance is not thereby *proven*; proof/evidence schemas type evidence honestly and never let validity stand in for exercised behaviour (§16). The attestation recorded in USF's source lineage is explicit: *"Proofs are evidence, not substitutes for semantic definition"*.
+- **Validators enforce drift control (Charter §5.10).** Schemas are the shape contract a future validator enforces, failing closed (§24). Recorded in USF's source lineage: *"Validators are enforcement; proofs are evidence; code is only the implementation of canonical semantic artefacts"*.
 - **Implementation follows semantic contracts (Charter §5.12).** Schemas constrain artefact shape; they are not implementation code and create no runtime behaviour (§25).
 
 ### 3.2 Relationship to the Authority Model
@@ -68,8 +68,8 @@ Schema authoring operationalises Charter principles:
 - **Schemas belong to rank-1 USF semantic definitions** when they define the JSON artefact shape of semantic/governance artefacts (Authority Model §1; the Schema Registry assigns most schema classes `authorityRole: semantic-definition`).
 - **Validators are rank 3 and enforce schemas.** A validator applies a schema and fails closed; it does not define the schema's meaning (Authority Model §2.3).
 - **Runtime proof evidence is rank 4** and may be validated by the evidence/proof schemas (the registry's `evidence-schema`/`proof-schema` carry `authorityRole: runtime-proof-evidence`). Validity does not raise its authority.
-- **Schema files do not make lower-authority artefacts higher authority.** A schema-valid source file (rank 5), historical reference (rank 6), or report (rank 7) keeps its rank; conformance to a shape is not promotion.
-- **Generated reports remain lowest authority even if schema-valid** (Authority Model §2.7; the `validator-report-schema` carries `authorityRole: generated-report`). A valid report is still rank 7 and MUST NOT override evidence or semantics.
+- **Schema files do not make lower-authority artefacts higher authority.** A schema-valid source file (rank 5) or report (rank 6) keeps its rank; conformance to a shape is not promotion.
+- **Generated reports remain lowest authority even if schema-valid** (Authority Model §2.6; the `validator-report-schema` carries `authorityRole: generated-report`). A valid report is still rank 6 and MUST NOT override evidence or semantics.
 
 ### 3.3 Relationship to the Standards Profile
 
@@ -80,7 +80,7 @@ Schema authoring operationalises Charter principles:
 ### 3.4 Relationship to the Ontology
 
 - **Every schema MUST govern one or more ontology concepts** (each Schema Registry entry already names `governsOntologyConcepts`; Ontology §5). The authored schema MUST preserve that grounding (§14).
-- **Schema fields MUST map to ontology concepts or to a documented rationale** (§14). A field is not added because a `../react` JSON happened to have it.
+- **Schema fields MUST map to ontology concepts or to a documented rationale** (§14). A field is not added because a source-lineage JSON happened to have it.
 - **Schema authors MUST NOT create fields that invent new concepts** without updating the Ontology or recording deferred work, then stopping for acceptance (Authority Model §6.4; Ontology §15.10; §14 of this document).
 
 ### 3.5 Relationship to Taxonomy
@@ -149,13 +149,13 @@ https://json-schema.org/draft/2020-12/schema
 - **Modern stable dialect.** Draft 2020-12 is the current reference dialect used by JSON Schema documentation and tooling.
 - **Modular features.** It supports `$defs`, `$id`, `$anchor`, `$ref`, `unevaluatedProperties`, and vocabulary/dialect concepts useful for modular, composable schema design (§17, §18).
 - **Strict validation and reuse.** It is suitable for strict closed-object validation (§10) and modular reuse (§17).
-- **USF lineage.** The dialect is already established in the historical evidence USF derives from: the one authored historical JSON Schema, `../react/docs/v2-foundation/ui-definition.schema.json`, declares `"$schema": "https://json-schema.org/draft/2020-12/schema"`, as does `../react/docs/v2-foundation/capability-proof-definition.json`. Adopting 2020-12 keeps continuity with proven practice without copying historical content (Authority Model §2.6).
+- **USF lineage.** The dialect is already established in USF's own source lineage: the one authored historical JSON Schema, `ui-definition.schema.json`, declares `"$schema": "https://json-schema.org/draft/2020-12/schema"`, as does `capability-proof-definition.json`. Adopting 2020-12 keeps continuity with proven practice without copying historical content (Authority Model §2.5).
 
 5.4 If local tooling later cannot support Draft 2020-12, a later **ADR** MAY choose a different dialect with explicit justification. Until such an ADR exists, **Draft 2020-12 is the USF default and MUST be used** for new schema files.
 
 5.5 Scope of this decision:
 
-- **The exact validator package is not chosen here.** The historical readiness validator (`../react/tools/v2-readiness/`) is a custom, fail-closed `.mjs` rule engine (rules `rNN-*.mjs`, exit codes `0/1/2`, "fails closed", "normalises no aliases"), **not** a JSON-Schema/`ajv`-based validator; JSON Schema was used historically to *define* artefact shape (`ui-definition.schema.json`), while a custom validator *enforced* rules. USF preserves that separation: JSON Schema 2020-12 defines shape; the validator package was **deferred** to validator implementation — now partially resolved by directive (a draft/advisory validator; see §26 Amendment A).
+- **The exact validator package is not chosen here.** The historical readiness validator recorded in USF's source lineage is a custom, fail-closed `.mjs` rule engine (rules `rNN-*.mjs`, exit codes `0/1/2`, "fails closed", "normalises no aliases"), **not** a JSON-Schema/`ajv`-based validator; JSON Schema was used historically to *define* artefact shape (`ui-definition.schema.json`), while a custom validator *enforced* rules. USF preserves that separation: JSON Schema 2020-12 defines shape; the validator package was **deferred** to validator implementation — now partially resolved by directive (a draft/advisory validator; see §26 Amendment A).
 - **Tooling selection** *(since resolved for this phase by directive — see §26 Amendment A; `jsonschema==4.10.3`)*, but **the dialect choice constrains future schemas immediately** (§23, §24).
 
 ---
@@ -180,7 +180,7 @@ https://json-schema.org/draft/2020-12/schema
 
 6.8 Schema filenames MUST NOT include a redundant local `usf` segment.
 
-6.9 Schema paths MUST NOT mirror `../react` paths (Naming Standard §20; §15).
+6.9 Schema paths MUST NOT mirror source-lineage paths (Naming Standard §20; §15).
 
 6.10 No schema files are created by this task.
 
@@ -272,7 +272,7 @@ Example mapping:
 - URN-style `$id` values avoid binding schema identity to local filesystem paths.
 - URN-style `$id` values are stable, private, human-readable, and auditor-friendly.
 - USF does not currently own or govern a public schema-publication domain, so an HTTPS-form `$id` would be unowned or fake; a URN avoids that.
-- Historical tooling resolves schemas **by file path, not by `$id`** (the `../react` readiness validator loads `*.schema.json` files directly and performs no `$id`/network resolution), so a non-dereferenceable URN `$id` costs nothing operationally. The historical `ui-definition.schema.json` used a URL-form `$id` (`https://aldous.info/v2-foundation/ui-definition.schema.json`); that is rank-6 evidence, not USF authority, and is **not** adopted.
+- Historical tooling resolves schemas **by file path, not by `$id`** (the historical readiness validator loads `*.schema.json` files directly and performs no `$id`/network resolution), so a non-dereferenceable URN `$id` costs nothing operationally. The historical `ui-definition.schema.json` used a URL-form `$id` (`https://aldous.info/v2-foundation/ui-definition.schema.json`); that is rank-5 source evidence, not USF authority, and is **not** adopted.
 
 7.6 **Namespaces.**
 
@@ -287,7 +287,7 @@ Example mapping:
 - `$id` MUST be stable (never recycled or repurposed).
 - `$id` MUST NOT encode lifecycle/draft/active state.
 - `$id` MUST NOT encode a version unless a future schema-versioning ADR requires it (§20).
-- `$id` MUST NOT use a repository file path, an implementation path, or a `../react` path (§15).
+- `$id` MUST NOT use a repository file path, an implementation path, or a source-lineage path (§15).
 - `$id` MUST NOT use `.local` HTTPS-style IDs (e.g. `https://usf.local/...`), a fake or unowned public domain, an `http://` or `https://` URL, or a `file://` URI.
 - `$id` MUST NOT use the superseded dotted internal form `usf.schema.<name>`.
 - `$id` MUST NOT collide with a JSON artefact instance ID such as `usf.schema-registry`.
@@ -337,11 +337,11 @@ The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for 
 
 9.3 Deviations from the envelope MUST be recorded — in the schema's Schema Registry entry or in the schema `description` (Schema Registry `commonEnvelope` note; `commonRequirements.rules`).
 
-9.4 Source-lineage fields (`sourceRefs`/`createdFrom`, `disposition`) are **mandatory** for artefacts derived from `../react` (Schema Registry `commonEnvelope.rules`; §15).
+9.4 Source-lineage fields (`sourceRefs`/`createdFrom`, `disposition`) are **mandatory** for artefacts derived from USF's own source lineage (Schema Registry `commonEnvelope.rules`; §15).
 
 9.5 `providerMode` and `environment` are **mandatory** where evidence/proof/provider claims depend on them (§16).
 
-9.6 Generated reports MUST identify the evidence they summarise (`evidenceRefs`; §16; Authority Model §2.7).
+9.6 Generated reports MUST identify the evidence they summarise (`evidenceRefs`; §16; Authority Model §2.6).
 
 9.7 `lifecycleState` MUST use the correct vocabulary value set — `lifecycle-states` for general artefacts, `schema-lifecycle-states` for schema artefacts (§20).
 
@@ -391,7 +391,7 @@ The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for 
 
 | Field(s) | Required when |
 |---|---|
-| `sourceRefs` / `createdFrom` | the artefact is derived from `../react` (§15) |
+| `sourceRefs` / `createdFrom` | the artefact is derived from USF's own source lineage (§15) |
 | `providerMode`, `environment` | a provider/environment claim exists (proof, evidence, provider artefacts) (§16) |
 | `evidenceRefs` | the artefact is a generated report or a proof/evidence artefact (§16) |
 | `disposition` | the artefact is a source-import / disposition artefact (§15) |
@@ -464,7 +464,7 @@ The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for 
 
 15.2 Source references MUST preserve historical paths exactly (verbatim; Standards Profile §10.6; Naming Standard §20).
 
-15.3 Source-reference values MAY include forbidden historical tokens (`v2`, `legacy`, …) **only** when clearly marked as a source reference (the `../react/` prefix and/or a `repository`/`sourceKind` field), never as a USF target (Naming Standard §18, §20).
+15.3 Source-reference values MAY include forbidden historical tokens (`v2`, `legacy`, …) **only** when clearly marked as a source reference (a source-lineage prefix and/or a `repository`/`sourceKind` field), never as a USF target (Naming Standard §18, §20).
 
 15.4 Source path MUST NOT dictate target path or target schema shape (§3 intro; Authority Model §6.4; Schema Registry `reactSourceLearnings` "Source path does not dictate target schema path").
 
@@ -478,7 +478,7 @@ The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for 
 
 ## 16. Evidence, Proof, Provider, Environment, and Report Safety Policy
 
-These are authoring requirements for the relevant future schemas (evidence-envelope, proof-evidence, provider-mode, environment, validator-report). Grounded in the Charter §6, the Authority Model §2.4/§2.7/§4, AGENTS `Provider, Environment, Proof, and Report Safety`, and `../react/docs/v2-foundation/capability-proof-definition.json` (proof ladder L0–L6; `providerClass` ∈ {hermetic, compose-local, sandbox-external, live-external, none}; `environment` ∈ {dev, test, staging, prod}; `prodSafe`/`destructive`; `deliveredAndProvenMinimumLevel: 3`; `liveProviderMinimumLevel: 4`).
+These are authoring requirements for the relevant future schemas (evidence-envelope, proof-evidence, provider-mode, environment, validator-report). Grounded in the Charter §6, the Authority Model §2.4/§2.6/§4, AGENTS `Provider, Environment, Proof, and Report Safety`, and USF's own `capability-proof-definition` source lineage (proof ladder L0–L6; `providerClass` ∈ {hermetic, compose-local, sandbox-external, live-external, none}; `environment` ∈ {dev, test, staging, prod}; `prodSafe`/`destructive`; `deliveredAndProvenMinimumLevel: 3`; `liveProviderMinimumLevel: 4`).
 
 16.1 Evidence schemas MUST type the evidence kind (`evidence-kinds`).
 
@@ -496,7 +496,7 @@ These are authoring requirements for the relevant future schemas (evidence-envel
 
 16.8 `production-shaped` MUST NOT satisfy `production-live`.
 
-16.9 Generated reports are lowest authority (rank 7); their schema MUST carry `authorityRole: generated-report` and MUST NOT model a report as canonical.
+16.9 Generated reports are lowest authority (rank 6); their schema MUST carry `authorityRole: generated-report` and MUST NOT model a report as canonical.
 
 16.10 Generated reports MUST reference the underlying evidence (`evidenceRefs`).
 
@@ -549,7 +549,7 @@ These are authoring requirements for the relevant future schemas (evidence-envel
 
 - provider mode / environment safety (e.g. *if* `providerMode` is `hermetic-mock`, *then* the artefact MUST NOT assert a `live-external-provider` readiness claim);
 - generated-report status (e.g. *if* `status` is `stale` or `unknown`, *then* it MUST NOT be treated as `pass`);
-- source-derived artefacts (e.g. *if* `createdFrom` references `../react`, *then* `sourceRefs` and `disposition` are required).
+- source-derived artefacts (e.g. *if* `createdFrom` references USF's source lineage, *then* `sourceRefs` and `disposition` are required).
 
 18.8 Over-complex schemas SHOULD be rejected in review (§23) or split into simpler kind-specific schemas.
 
@@ -571,7 +571,7 @@ These are authoring requirements for the relevant future schemas (evidence-envel
 
 19.7 Large examples SHOULD NOT be embedded unless genuinely needed.
 
-19.8 Copied `../react` content MUST NOT appear as an example unless explicitly marked as a historical source reference (§15; Naming Standard §20).
+19.8 Copied source-lineage content MUST NOT appear as an example unless explicitly marked as a historical source reference (§15; Naming Standard §20).
 
 ---
 
@@ -674,7 +674,7 @@ Every future schema author MUST satisfy this checklist before a schema leaves `d
 - [ ] source-lineage rules are applied where applicable (§15);
 - [ ] provider/environment/proof/report safety rules are applied where applicable (§16);
 - [ ] no forbidden path/name tokens are present (Naming Standard §18);
-- [ ] no `../react` path is mirrored into a USF path or `$id` (§15);
+- [ ] no source-lineage path is mirrored into a USF path or `$id` (§15);
 - [ ] strict JSON parse passes;
 - [ ] the schema validates as a JSON Schema under the chosen dialect (meta-schema valid);
 - [ ] any example instances are non-canonical (§19.6);
@@ -703,7 +703,7 @@ A future validator (not created now) MUST be able to:
 - detect provider/environment schemas that would allow unsafe substitution (`hermetic-mock` as live; `production-shaped` as `production-live`);
 - detect source-reference/import schemas that would allow silent source loss (an element without a disposition).
 
-The validator MUST fail closed on any such finding (Charter §5.10; Standards Profile §18.2; historical evidence: `../react/docs/v2-foundation/v2-readiness-validator-spec.md` — "It fails closed: any contradiction is an error", exit codes `0/1/2`, "the validator normalises no aliases"). This document creates no validator; a draft/advisory validator was subsequently authorised under directive — see §26 Amendment A.
+The validator MUST fail closed on any such finding (Charter §5.10; Standards Profile §18.2; source lineage: the readiness validator spec — "It fails closed: any contradiction is an error", exit codes `0/1/2`, "the validator normalises no aliases"). This document creates no validator; a draft/advisory validator was subsequently authorised under directive — see §26 Amendment A.
 
 ---
 
@@ -804,8 +804,8 @@ This document is acceptable only if **all** hold:
 - it creates no evidence files;
 - it creates no import maps;
 - it creates no implementation files;
-- it imports no runtime/application code from `../react`.
+- it imports no runtime/application code from any external repository.
 
 ---
 
-*End of USF Schema Authoring Standard (Draft / Foundational). This document creates only itself; it creates no schema file, ADR, validator, evidence file, import map, registry, vocabulary, taxonomy, tool, or implementation directory, promotes no planned schema to `draft` or `active`, and imports no runtime/application code from `../react`.*
+*End of USF Schema Authoring Standard (Draft / Foundational). This document creates only itself; it creates no schema file, ADR, validator, evidence file, import map, registry, vocabulary, taxonomy, tool, or implementation directory, promotes no planned schema to `draft` or `active`, and imports no runtime/application code from any external repository.*

@@ -14,7 +14,7 @@ This document records the regeneration sufficiency and semantic graph closure ch
 
 The current authentication login API/audit/workflow/provider-mode slice has a reviewable semantic graph sufficient to inform a later filled implementation directive. This is a proof-substrate closure claim only.
 
-This document does not claim complete platform semantic closure. It does not start USF-39. It does not authorize implementation extraction. It does not permit direct runtime/application source import from `../react`. It does not treat historical source, historical proof, or generated reports as authority.
+This document does not claim complete platform semantic closure. It does not start USF-39. It does not authorize implementation extraction. It does not permit direct runtime/application source import from USF's own source lineage. It does not treat source lineage, historical proof, or generated reports as authority.
 
 ## Graph Inputs
 
@@ -26,7 +26,7 @@ The graph nodes for this closure check are committed USF semantic instances and 
 - implementation-entry constraints from `docs/architecture/implementation-directive-template.md`, `docs/architecture/target-implementation-topology-plan.md`, and `docs/architecture/post-extraction-closure-checklist.md`;
 - proof-entry constraints from `docs/architecture/proof-execution-substrate-authorization.md` and committed proof/evidence records.
 
-Historical React artefacts remain rank-6 evidence and lineage. They can explain why a semantic node exists, but they cannot silently fill missing USF semantics or define target source structure.
+USF's own recorded source artefacts remain rank-5 source lineage. They can explain why a semantic node exists, but they cannot silently fill missing USF semantics or define target source structure.
 
 ## Regeneration Target Matrix
 
@@ -110,8 +110,8 @@ USF-39 remains blocked until a separate explicit implementation directive is acc
 - Do not move USF-39 out of Backlog.
 - Do not create implementation/runtime code.
 - Do not create implementation/runtime directories.
-- Do not import runtime/application code from `../react`.
-- Do not mirror historical source paths as target paths.
+- Do not import runtime/application code from USF's own source lineage.
+- Do not mirror recorded source paths as target paths.
 - Do not treat generated reports as authority.
 - Do not use stale historical evidence as current proof.
 - Do not treat hermetic-mock proof as live-external-provider proof.

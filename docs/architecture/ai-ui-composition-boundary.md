@@ -25,7 +25,7 @@ An AI agent **MUST NOT** derive UI behaviour from:
 
 - visual design, JSX layout, component names, or screenshots;
 - generated reports or the proof cockpit's own rendered pages;
-- historical `../react` source structure (lineage is evidence, not a copy target).
+- USF's own source-lineage structure (lineage is evidence, not a copy target).
 
 ## The human gate (binding)
 

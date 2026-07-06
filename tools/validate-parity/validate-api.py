@@ -73,7 +73,7 @@ GRAPHQL_GENERATED_CLIENT_MATRIX = "docs/architecture/api-graphql-generated-clien
 GRAPHQL_EXECUTION_PROOF = "packages/proof/src/graphql-generated-client-execution-proof.ts"
 GRAPHQL_EXECUTION_MATRIX = "docs/architecture/generated-client-external-developer-graphql-federation-execution-proof.json"
 ENTERPRISE_EVIDENCE = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
-MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX_PATH = "docs/architecture/functional-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
 SOURCE_FILES = (
@@ -553,7 +553,7 @@ def run_checks(F, state=None):
             "packages/openapi/src/index.ts",
             "packages/proof/src/api-contracts-proof.ts",
             "tests/apps/api-contracts.test.ts",
-            "No React runtime/application code is copied",
+            "no external runtime/application code is copied",
             "No public API or production readiness is claimed",
         ):
             if token not in source_use:

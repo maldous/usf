@@ -48,7 +48,7 @@ SOURCE_USE = "docs/architecture/rate-limits-abuse-controls-source-use-dispositio
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
 DEPTH_MATRIX = "docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json"
 ENTERPRISE_MODEL = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
-MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX = "docs/architecture/functional-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
 SELFTEST_DIR = "tools/validate-parity/guardrails-planted-defects"
@@ -247,7 +247,7 @@ def run_checks(F, state=None):
     ]:
         if token not in standard:
             F.add("USF-GUARDRAILS-002", STANDARD, f"standard missing section {token}")
-    if "Parity Rate Limits / Abuse Controls Source-Use Disposition Matrix" not in source_use:
+    if "Rate Limits / Abuse Controls Source-Use Disposition Matrix" not in source_use:
         F.add("USF-GUARDRAILS-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "GuardrailPort" not in ports or "evaluate(input: GuardrailEvaluationInput)" not in ports:

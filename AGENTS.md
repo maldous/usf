@@ -590,8 +590,8 @@ workflow router for future development and audit work.
 
 This routing index does not override the Charter, Authority Model, accepted ADRs,
 validator rules, runtime proof evidence, semantic instances, or this directive.
-It identifies the current canonical entry points and classifies historical React,
-source-use, parity, closure, bootstrap, and generated artefacts as lineage,
+It identifies the current canonical entry points and classifies historical
+source-use, completeness, closure, bootstrap, and generated artefacts as lineage,
 transitional scaffolding, or generated projections where appropriate.
 
 Agents MUST NOT use source-use matrices, parity migration
@@ -606,7 +606,7 @@ alias in human-facing instructions and keep the historical command name as an
 explicit compatibility alias. Until a replacement is separately authorised and
 validated, existing command names such as `verify`, `parity`, `proof:bootstrap`,
 `validate-bootstrap`, and Sonar assurance targets remain valid compatibility
-entry points and MUST NOT be treated as full React parity, staging, production,
+entry points and MUST NOT be treated as full functional completeness, staging, production,
 deployment, live-provider, SOC, ISO certification, enterprise production, or
 product UI readiness claims.
 

@@ -36,12 +36,12 @@ No other proof runner, runtime substrate, package graph, service topology, Make 
 
 The current USF repository has semantic instances, draft schemas, validators, source import manifests, and stale historical observability proof evidence. It does not have an executable authentication runtime, proof runner, package graph, service topology, Make target, package manifest, or composed proof substrate that can exercise the authentication slice without importing or executing historical runtime code.
 
-The historical authentication proof files remain source and proof-command lineage only:
+The authentication proof files recorded in USF's own source lineage remain source and proof-command lineage only (paths held in USF's source-import registry):
 
-- `../react/apps/platform-api/scripts/auth-settings-runtime-proof.ts`
-- `../react/apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts`
-- `../react/apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts`
-- `../react/apps/platform-api/tests/substrate/auth-routes.test.ts`
+- `apps/platform-api/scripts/auth-settings-runtime-proof.ts`
+- `apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts`
+- `apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts`
+- `apps/platform-api/tests/substrate/auth-routes.test.ts`
 
 Those files depend on the historical runtime package graph, source handlers, adapters, local services, or test harnesses. Running them directly from USF would bypass USF source disposition and implementation-directory authorization. Copying them into USF would import runtime/application code or mirror historical source paths without a future implementation directive. None of those paths may satisfy current proof readiness.
 
@@ -60,7 +60,7 @@ Those files depend on the historical runtime package graph, source handlers, ada
 | Required proofLevelObserved | `behaviour-proven` for the bounded proof-only authentication slice. |
 | Freshness requirement | Any future proof claim must carry `freshness.stale` equal to `false` and `freshness.commit` equal to the USF commit being claimed. Historical or mismatched commits remain stale lineage only. |
 | Evidence output expectation | The authorized proof must produce non-empty emitted evidence and collected evidence above discovery level, with proof-evidence and evidence-envelope records committed under the existing `evidence/` homes. |
-| Generated report treatment | No generated report is authorized here. A future report may summarize evidence only as rank-7 output and may not replace proof evidence. |
+| Generated report treatment | No generated report is authorized here. A future report may summarize evidence only as rank-6 output and may not replace proof evidence. |
 
 ## Future Authorization Bar Beyond USF-77 Option A
 
@@ -108,7 +108,7 @@ If evidence records are created, every changed JSON file must parse strictly and
 - Do not move USF-39 out of Backlog.
 - Do not create product implementation/runtime code.
 - Do not create product implementation directories.
-- Do not import runtime/application code from `../react`.
+- Do not import runtime/application code from USF's own source lineage.
 - Do not execute historical proof commands as USF proof commands.
 - Do not mirror historical source paths as USF target paths.
 - Do not promote schemas to `active`.

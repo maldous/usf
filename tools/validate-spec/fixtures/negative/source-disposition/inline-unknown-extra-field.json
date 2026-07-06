@@ -9,7 +9,7 @@
   "vocabularyRefs": ["disposition-values"],
   "aiGuidance": "This instance must be rejected because the inline source reference has an unknown extra field.",
   "sourceRef": {
-    "repository": "../react",
+    "repository": "../external-source",
     "path": "src/services/auth/loginController.ts",
     "branch": "main"
   },

@@ -67,7 +67,7 @@ The later filled directive must assign every target file exactly one treatment:
 - `new-with-rationale`: no direct source row drives the file, but the directive records the semantic reason and source-disposition rationale;
 - `evidence-only-support`: source rows inform review or lineage only and cannot produce runtime code.
 
-Direct runtime/application code import from `../react` is not authorized for the implementation directive unless a later explicit source-import directive names a specific file, source-use treatment, proof rationale, and target file.
+Direct runtime/application code import from USF's own source lineage is not authorized for the implementation directive unless a later explicit source-import directive names a specific file, source-use treatment, proof rationale, and target file.
 
 Every target file must cite source-use matrix row numbers from `docs/architecture/authentication-slice-source-use-disposition-matrix.md` or a reviewed `new-with-rationale` entry. A historical source path alone is never sufficient.
 
@@ -130,7 +130,7 @@ An implementation PR is incomplete if any created target file lacks this reconci
 
 ## Generated-Report Policy
 
-Generated reports may be cited only as rank-7 summaries with evidence references and freshness. They do not authorize implementation, replace proof evidence, promote schemas, define semantics, or close source-disposition gaps.
+Generated reports may be cited only as rank-6 summaries with evidence references and freshness. They do not authorize implementation, replace proof evidence, promote schemas, define semantics, or close source-disposition gaps.
 
 ## Required PR and Work Packet Contract
 

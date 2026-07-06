@@ -9,8 +9,8 @@
   "rawProofCommandBoundary": "requires Compose Postgres to be running; make files-proof owns startup and teardown; MinIO and ClamAV reconciliation consumes existing composed-test provider evidence without claiming live object-store or scanner readiness",
   "validatorCommand": "python3 tools/validate-parity/validate-files.py all --json",
   "sourceUseMatrix": "docs/architecture/files-storage-source-use-disposition-matrix.md",
-  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
-  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "parityMatrix": "docs/architecture/usf-functionality-completeness-matrix.json",
+  "classificationMatrix": "docs/architecture/functional-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [
     "soa-usf-147-files-storage-enterprise-proof-depth",
     "evidence-usf-147-files-storage-enterprise-proof-depth",

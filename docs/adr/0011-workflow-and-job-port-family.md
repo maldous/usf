@@ -10,7 +10,7 @@ Records the human-approved decision (tracked as USF-136) that USF defines a USF-
 
 ## Context
 
-Historical `../react` evidence uses more than one orchestrator: Temporal for durable workflow orchestration and Windmill for operational automation. During the foundation-completeness readiness pass the question of whether USF carries one provider, both, or an abstracted port was recorded as a `requires-human-decision` item (scope-classification matrix; USF-136), because the Authority Model forbids inferring missing semantics from historical implementation.
+USF's own source lineage uses more than one orchestrator: Temporal for durable workflow orchestration and Windmill for operational automation. During the foundation-completeness readiness pass the question of whether USF carries one provider, both, or an abstracted port was recorded as a `requires-human-decision` item (scope-classification matrix; USF-136), because the Authority Model forbids inferring missing semantics from source lineage.
 
 A human has now decided the workflow/job model. Under the Authority Model a decision of this weight needs rank-2 ADR coverage so it is durable repository authority, not tracker context or planning prose.
 
@@ -24,7 +24,7 @@ Operational automation, scripts, internal tools, maintenance jobs, operator-trig
 
 Capabilities must depend only on USF workflow/job ports. Temporal and Windmill remain adapter/provider concerns and no capability may depend directly on either provider.
 
-Every historical `../react` workflow or job must be classified as exactly one of: `durable-domain-workflow`, `operational-automation-job`, `scheduled-maintenance-job`, `human-approval-flow`, `event-triggered-job`, `not-applicable`, or `requires-human-decision`.
+Every workflow or job in USF's own source lineage must be classified as exactly one of: `durable-domain-workflow`, `operational-automation-job`, `scheduled-maintenance-job`, `human-approval-flow`, `event-triggered-job`, `not-applicable`, or `requires-human-decision`.
 
 ## Rationale
 
@@ -34,8 +34,8 @@ Workflow-like work in the historical stack is not homogeneous: durable, evidence
 
 - `docs/architecture/charter.md`
 - `docs/architecture/authority-model.md`
-- `docs/architecture/full-react-parity-readiness-directive.md`
-- `docs/architecture/react-parity-scope-classification-matrix.md`
+- `docs/architecture/functional-completeness-readiness-directive.md`
+- `docs/architecture/functional-scope-classification-matrix.md`
 - `spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json`
 - `spec/instances/semantic-contract/background-workers-job-runner.json`
 - `spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json`
@@ -75,8 +75,8 @@ Workflow-like work in the historical stack is not homogeneous: durable, evidence
 - Do not make any capability depend directly on Temporal or Windmill.
 - Do not collapse durable workflows and operational jobs into a single provider-coupled mechanism.
 - Do not promote hermetic or in-memory workflow proof to a live-provider claim.
-- Do not infer workflow or job semantics from historical `../react` source; implement against USF semantics.
-- Do not copy `../react` workflow or job code or mirror its paths.
+- Do not infer workflow or job semantics from USF's own source lineage; implement against USF semantics.
+- Do not copy workflow or job code from an external sibling repository or mirror its paths.
 
 ## Consequences
 
@@ -90,7 +90,7 @@ Workflow-like work in the historical stack is not homogeneous: durable, evidence
 - Agents must keep capabilities dependent only on USF workflow/job ports and never on Temporal or Windmill directly.
 - Agents must preserve the durable-workflow versus operational-job split and the in-memory dev / composed-test provider posture.
 - Agents must not implement the ports or adapters from this ADR alone; a separate authorised implementation directive is required.
-- Agents must classify every historical workflow or job using the seven approved values and must not infer workflow semantics from historical `../react` code.
+- Agents must classify every workflow or job in USF's own source lineage using the seven approved values and must not infer workflow semantics from source-lineage code.
 
 ## Supersession
 

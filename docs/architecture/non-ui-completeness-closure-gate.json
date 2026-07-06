@@ -1,0 +1,75 @@
+{
+  "id": "non-ui-completeness-closure-gate",
+  "issueId": "USF-291",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-05T04:50:58Z",
+  "sourceGitSha": "775650cc2387091a89fdf82c5f63eff937c6028c",
+  "sourceLineageGitSha": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+  "environment": "test",
+  "boundedClaim": "Full non-UI foundation and operational-substrate completeness is proven in the Test environment, with UI/UX explicitly excluded.",
+  "closureDecision": "bounded-test-closure-permitted-after-validator-pass",
+  "boundedClaimPermitted": true,
+  "uiUxExcluded": true,
+  "stagingReadinessClaimed": false,
+  "productionReadinessClaimed": false,
+  "sourceInputs": [
+    "scope",
+    "functionality",
+    "services",
+    "serviceCatalogue",
+    "runtimeProof",
+    "capabilityCoverage",
+    "readinessDirective",
+    "l5Audit"
+  ],
+  "requiredArtefacts": [
+    "docs/architecture/non-ui-source-lineage-inventory.json",
+    "docs/architecture/service-completeness-matrix.json",
+    "docs/architecture/route-port-adapter-provider-completeness-matrix.json",
+    "docs/architecture/test-proof-disposition-ledger.json",
+    "docs/architecture/ui-derived-foundation-behaviour-rewrite-ledger.json",
+    "docs/architecture/operator-admin-surface-completeness-matrix.json",
+    "docs/architecture/non-ui-completeness-assurance-case.json",
+    "docs/architecture/non-ui-completeness-gap-register.json",
+    "docs/architecture/non-ui-completeness-external-review-report.md"
+  ],
+  "evidenceSummary": {
+    "sourceLineageTrackedFiles": 2346,
+    "baselineDispositions": {
+      "covered-by-existing-usf-proof": 1594,
+      "not-applicable-with-rationale": 77,
+      "deprecated-with-rationale": 675
+    },
+    "serviceRows": 54,
+    "routePortAdapterProviderRows": 903,
+    "testProofRows": 230,
+    "uiDerivedRows": 230,
+    "operatorAdminSurfaces": 18,
+    "openGapCount": 0,
+    "serviceDispositions": {
+      "covered-by-existing-usf-proof": 51,
+      "replaced-by-equivalent-and-proven": 1,
+      "not-applicable-with-rationale": 1,
+      "replaced-by-better-service-and-proven": 1
+    }
+  },
+  "validators": [
+    "python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py all --json",
+    "python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py selftest --json"
+  ],
+  "nonClaims": [
+    "React UI parity",
+    "visual parity",
+    "UX parity",
+    "product UI readiness",
+    "Staging readiness for real users",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product parity"
+  ]
+}

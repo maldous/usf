@@ -35,7 +35,7 @@ PROOF_TESTS = "tests/packages/proof.test.ts"
 STANDARD = "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md"
 SOURCE_USE = "docs/architecture/resource-lifecycle-source-use-disposition-matrix.md"
 BOOTSTRAP_SOURCE_USE = "docs/architecture/bootstrap-source-use-disposition-matrix.md"
-MATRIX = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX = "docs/architecture/functional-scope-classification-matrix.json"
 PACKAGE = "package.json"
 MAKEFILE = "Makefile"
 SELFTEST_DIR = "tools/validate-parity/resource-planted-defects"
@@ -242,7 +242,7 @@ def run_checks(findings, state=None):
     ]:
         if token not in standard:
             findings.add("USF-RESOURCES-002", STANDARD, f"standard missing section {token}")
-    if "Parity Resource Lifecycle Source-Use Disposition Matrix" not in source_use:
+    if "Resource Lifecycle Source-Use Disposition Matrix" not in source_use:
         findings.add("USF-RESOURCES-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "ResourceLifecyclePort" not in ports or "safeStatusView" not in ports:

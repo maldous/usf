@@ -6,7 +6,7 @@
 | Status | Draft / parity-jobs-workflows (USF-133) |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010 (PDP); companion to ADR 0011 (workflow/job port family) and ADR 0013 (jobs/workflows execution model); consistent with the tenant-authorization standard, the config-and-secrets standard, the files-and-object-storage standard, and the audit-evidence standard |
 | Issue scope | Jobs, workflows, scheduling, and operational automation parity under USF-133; enterprise breadth defined here, live execution deferred to named Linear child blockers |
-| Evidence basis | Historical `../react` jobs / workers / schedulers / workflows / automation behaviour as lineage only; PR #92 DB/RLS; PR #93 PDP; PR #94 audit/evidence; PR #95 config/secrets; PR #96 files/storage |
+| Evidence basis | USF's own self-defined jobs / workers / schedulers / workflows / automation semantics as source lineage; PR #92 DB/RLS; PR #93 PDP; PR #94 audit/evidence; PR #95 config/secrets; PR #96 files/storage |
 | Proof basis | Hermetic only. Proven by `make jobs-proof` over `adapters/wf`, `capabilities/jobs`, and the USF-151 enterprise workflow control plane; no live Temporal, no live Windmill, no live external queue, no live scheduler, no live worker cluster, no production-live claim. |
 | Compliance note | ISO 27001-supporting **technical control evidence** (operations security, change management, logging and monitoring, separation of duties). **No certification claim.** |
 

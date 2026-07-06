@@ -54,7 +54,7 @@
       "package.json#proof:backup:pgbackrest",
       "Makefile#pgbackrest-proof",
       "docs/architecture/pgbackrest-configured-proof-boundary.json",
-      "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json#pgbackrest",
+      "docs/architecture/usf-compose-service-completeness-matrix.json#pgbackrest",
       "docs/architecture/compose-service-disposition-closure-matrix.json#pgbackrest",
       "spec/instances/runtime-proof/runtime-application-compose-parity.json#usf-189-pgbackrest-backup-provider",
       "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",

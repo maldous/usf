@@ -6,12 +6,12 @@
 | Status | Draft / files-storage slice (USF-146) plus USF-147 bounded enterprise depth coverage |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-146 under USF-133; deferred depth tracked in USF-147 |
-| Source row basis | `docs/architecture/files-and-object-storage-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), the audit-evidence and config-and-secrets standards, and historical `../react` files/storage behaviour as lineage only |
+| Source row basis | `docs/architecture/files-and-object-storage-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), the audit-evidence and config-and-secrets standards, and USF's own self-defined files/storage source lineage |
 | Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no Playwright; bounded local MinIO and ClamAV composed-test proof/reconciliation only; no live S3/object-store, live scanner, KMS, DLP, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` = behaviour authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` = USF-defined. `evidence-only-support` = a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `adapters/store/src/index.ts`, `capabilities/files/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/db/src/generated-types.ts`, `adapters/db/migrations/manifest.json`) are not re-listed here.
+`source-derived-rewrite` = behaviour authored against USF semantics with USF's own self-defined source lineage as evidence (no copy, no path mirroring). `new-with-rationale` = USF-defined. `evidence-only-support` = a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `adapters/store/src/index.ts`, `capabilities/files/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/db/src/generated-types.ts`, `adapters/db/migrations/manifest.json`) are not re-listed here.
 
 ## Implementation Target Files
 
@@ -49,9 +49,9 @@
 | Encryption/KMS posture | explicitly reclassified | standard fields, USF-147 matrix | At-rest/in-transit/key_ref reserved; live KMS, customer-managed key, and production encryption readiness are not claimed. |
 | Quotas/abuse | explicitly reclassified | standard fields, USF-147 matrix | Size validation is proven; storage quota runtime, upload/download rate limiting, multipart, and temporary-upload cleanup remain non-claims. |
 
-## React UI/Playwright File Behaviours
+## UI/Playwright File Behaviours
 
-The historical `../react` files/storage inventory (`.claude/runs/.../react-files-storage-inventory.json`, 31 items) found **0 UI/Playwright-only** file behaviours: all object CRUD is API-only, and the one UI surface (an `admin-storage` readiness panel, explicitly "not a file browser") is tested with Vitest/MSW, not Playwright. All storage proof lives in Node unit tests + `*-runtime-proof.ts` scripts, re-expressed here as USF capability/port/adapter/proof tests. No UI/Playwright file test disappears silently.
+USF's own self-defined files/storage source inventory (31 items) records **0 UI/Playwright-only** file behaviours: all object CRUD is API-only, and the one UI surface (an `admin-storage` readiness panel, explicitly "not a file browser") is tested with Vitest/MSW, not Playwright. All storage proof lives in Node unit tests + `*-runtime-proof.ts` scripts, re-expressed here as USF capability/port/adapter/proof tests. No UI/Playwright file test disappears silently.
 
 ## Non-goals
 

@@ -8,7 +8,7 @@
 | **Follows** | [`charter.md`](./charter.md), [`authority-model.md`](./authority-model.md), [`standards-profile.md`](./standards-profile.md), [`ontology.md`](./ontology.md), [`../../spec/taxonomies/taxonomy-catalog.json`](../../spec/taxonomies/taxonomy-catalog.json), [`../../spec/vocabularies/vocabulary-catalog.json`](../../spec/vocabularies/vocabulary-catalog.json), [`../../spec/registries/schema-registry.json`](../../spec/registries/schema-registry.json) — and MUST be consistent with all seven |
 | **Artefact kind** | `architecture-document` (vocabulary `artefact-kinds`) |
 | **Authority level** | `semantic-definition` (Authority Model rank 1). It is a governance/architecture document that operationalises the existing naming rules; like the [Standards Profile](./standards-profile.md) it governs the **form and placement** of lower artefacts and **does not change the authority order**. It is subordinate to the constitutional layer (Charter + Authority Model). |
-| **Evidence basis** | Grounded in the historical repository `../react` → `/home/user/src/react`. Citations to `../react/...` reference existing historical paths and introduce no historical naming into USF. |
+| **Evidence basis** | Grounded in USF's own self-defined artefacts. Source paths are held in USF's own source-import registry and introduce no external naming into USF. |
 
 > **Normative language.** Requirement words follow **BCP 14** (RFC 2119 + RFC 8174) as defined in [`standards-profile.md`](./standards-profile.md) §6 and §4 of this document. Only the uppercase forms carry normative meaning.
 >
@@ -34,9 +34,9 @@
 
 This standard exists to:
 
-- **Provide one canonical naming policy.** A single place that resolves how USF paths, directories, files, and machine-readable IDs are named, so naming is decided by recorded rule rather than by per-task judgement or imitation of `../react`.
-- **Prevent migration-phase naming from becoming permanent architecture.** The historical target-tree intent — *"V2 reuses every proven V1 asset, refined into clean, final-state names. NO legacy/temp/transitional naming. NO vague buckets."* (`../react/docs/v2-foundation/v2-target-tree.txt`) — is elevated here to an enforceable USF rule (Charter §1.3, §4).
-- **Prevent source-path-driven architecture.** Source paths from `../react` MUST NOT dictate USF paths (AGENTS `Source Repository Policy`; Authority Model §2.6; Ontology §8.3). A historical path is evidence, not a target.
+- **Provide one canonical naming policy.** A single place that resolves how USF paths, directories, files, and machine-readable IDs are named, so naming is decided by recorded rule rather than by per-task judgement or imitation of a source path.
+- **Prevent migration-phase naming from becoming permanent architecture.** The target-tree intent — *"reuse every proven asset, refined into clean, final-state names. NO legacy/temp/transitional naming. NO vague buckets."* recorded in USF's own source lineage — is elevated here to an enforceable USF rule (Charter §1.3, §4).
+- **Prevent source-path-driven architecture.** Source paths in USF's source lineage MUST NOT dictate USF paths (AGENTS `Source Repository Policy`; Authority Model §2.5; Ontology §8.3). A historical source path is evidence, not a target.
 - **Prevent accidental duplication of path conventions.** One concept gets one canonical name in one canonical home (Charter §1.4; Ontology §7.13).
 - **Make future schema/ADR/evidence/validator/import paths predictable.** The Schema Registry already names planned schema paths; this document fixes the rules those and all later paths obey (§12, §19).
 - **Support future validators.** This standard is written so that a validator can later enforce it: forbidden tokens, case collisions, duplicate semantic names, planned-vs-active schema files, and report placement are all machine-checkable (§23).
@@ -65,12 +65,12 @@ This document operationalises specific Charter principles:
 - **It governs path/name decisions.** It is authoritative on *how artefacts are named and where they live*. It is not authoritative on *what behaviour is intended* (that is the capability/semantic-contract corpus) or *what was decided* (ADRs, rank 2).
 - **It does not change the authority order.** It introduces no new authority class and re-ranks nothing (Standards Profile §5.2). A naming rule that contradicted the authority order would be a defect in this document.
 - **Implementation paths are lower authority than semantic definitions.** A directory name or file path (rank-5 implementation, when implementation exists) MUST NOT redefine a semantic concept (Authority Model §2.5; Ontology §14 "A path name treated as architecture — forbidden").
-- **Generated reports cannot redefine naming policy.** A generated report (rank 7) MUST NOT assert, alter, or override any naming rule here (Authority Model §2.7; §15 of this document).
-- **`../react` paths are historical evidence only.** Rank-6 lineage; consulted, cited, never made into USF paths (Authority Model §2.6; §20 of this document).
+- **Generated reports cannot redefine naming policy.** A generated report (rank 6) MUST NOT assert, alter, or override any naming rule here (Authority Model §2.6; §15 of this document).
+- **Source-lineage paths are historical evidence only.** Rank-5 source lineage; consulted, cited, never made into USF paths (Authority Model §2.5; §20 of this document).
 
 ### 3.3 Relationship to the Standards Profile
 
-- **The Standards Profile already names directory/naming as a USF-defined standard** (Standards Profile §9 "Directory and naming standard" and §17 "Directory and Naming Standard"), grounded in `../react/docs/v2-foundation/v2-directory-contracts.json` (26 directory contracts: `path`, `responsibility`, `allowedContents`, `forbiddenContents`, `owner`, `dependencyDirection`, `architectureRule`) and `v2-target-tree.txt`.
+- **The Standards Profile already names directory/naming as a USF-defined standard** (Standards Profile §9 "Directory and naming standard" and §17 "Directory and Naming Standard"), grounded in USF's own directory-contracts source lineage (26 directory contracts: `path`, `responsibility`, `allowedContents`, `forbiddenContents`, `owner`, `dependencyDirection`, `architectureRule`) and the target-tree.
 - **This document is the concrete directory/file naming standard** that the Standards Profile anticipated. It supplies the rules the Standards Profile described at the level of a checkable policy.
 - **Validators will later enforce it.** Per Standards Profile §17.5 and §18, validators MUST detect forbidden tokens and reject reintroduction of deprecated conventions; per §21.3 a standard governing drift control and AI alignment MUST progress to at least validator-enforced. §23 of this document records those expectations without creating the validator.
 
@@ -125,11 +125,11 @@ These principles govern every name this standard regulates. They are the rationa
 
 5.3 **One concept, one canonical name.** A concept owns exactly one canonical identity, one canonical home, and one canonical name; duplicates are a defect (Charter §1.4; Ontology §7.13). The same artefact MUST NOT exist under two equivalent names.
 
-5.4 **No source-path-driven target naming.** A `../react` path MUST NOT be reused or transliterated as a USF path (AGENTS `Source paths from ../react MUST NOT dictate future USF paths`; Ontology §8.3; §20).
+5.4 **No source-path-driven target naming.** A source-lineage path MUST NOT be reused or transliterated as a USF path (AGENTS `Source Repository Policy`; Ontology §8.3; §20).
 
 5.5 **No implementation-driven semantic naming.** A directory, package, class, or file name (rank 5) MUST NOT define or rename a semantic concept (Authority Model §2.5; Ontology §14 "A path name treated as architecture").
 
-5.6 **No generated-report-driven semantic naming.** A generated report (rank 7) MUST NOT introduce or alter a canonical name or naming rule (Authority Model §2.7; Vocabulary `Generated reports MUST NOT introduce new canonical values`).
+5.6 **No generated-report-driven semantic naming.** A generated report (rank 6) MUST NOT introduce or alter a canonical name or naming rule (Authority Model §2.6; Vocabulary `Generated reports MUST NOT introduce new canonical values`).
 
 5.7 **No case-only distinctions.** Two names MUST NOT differ only by letter case, because many developer machines and tools are case-insensitive or inconsistent (§21).
 
@@ -207,7 +207,7 @@ Proof, runtime, validation, import, and generated evidence artefacts.
 Rules:
 
 - Evidence files MUST NOT be populated until the evidence-envelope schema and validator strategy exist, unless a later directive explicitly authorises specific evidence (AGENTS `Evidence Rules`). `evidence/` currently holds only a `.gitkeep` placeholder.
-- Generated reports belong under `evidence/`, **not** under `docs/` and **not** under `spec/`, once generated-report conventions are defined (§15; Authority Model §2.7).
+- Generated reports belong under `evidence/`, **not** under `docs/` and **not** under `spec/`, once generated-report conventions are defined (§15; Authority Model §2.6).
 - Evidence MUST preserve, in its content (not necessarily its filename), provider mode, environment, source reference, freshness/staleness, and evidence kind where relevant (Standards Profile §11; AGENTS `Evidence Rules`; Vocabulary `evidence-kinds`, `provider-modes`, `environment-classes`).
 
 ### `tools/`
@@ -245,7 +245,7 @@ Explanation:
 
 - These are implementation or runtime directories. They realise behaviour (rank 5) and presuppose semantic contracts, schemas, validators, and source-import maps that do not yet exist.
 - They MUST NOT be created before semantic authority, schemas, validators, and import maps justify them (Charter §5.12; Authority Model §5; Standards Profile §20.8).
-- Similar directories exist in `../react` (for example `../react/apps`, `../react/packages`, `../react/services`, `../react/config`, `../react/infra`, `../react/scripts`, `../react/docker`, and Terraform under `../react/infra`). **Source existence does not authorise target creation** (AGENTS `Agents MUST NOT create implementation-shaped structure merely because similar structure exists in ../react`).
+- Similar directories exist in USF's source lineage (for example `apps`, `packages`, `services`, `config`, `infra`, `scripts`, `docker`, and Terraform under `infra`). **Source existence does not authorise target creation** (AGENTS `Source Repository Policy`).
 - Future implementation directories MUST be created **only** through a source-import or implementation-extraction directive that names them, justifies them against semantics, and dispositions the source they derive from (Ontology §8; Standards Profile §10).
 
 ---
@@ -264,7 +264,7 @@ Explanation:
 
 8.6 Vague grouping directories MUST NOT be pre-created (§5.9, §18).
 
-8.7 Directories MUST NOT be pre-created solely because they exist in `../react` (§7; §20).
+8.7 Directories MUST NOT be pre-created solely because they exist in USF's source lineage (§7; §20).
 
 8.8 Generated-output directories MUST NOT be pre-created before the generators and validators that define them exist (§14, §15, §16).
 
@@ -300,7 +300,7 @@ These rules apply to all USF-authored files.
 
 9.11 File names MUST NOT use lifecycle/status suffixes such as `-draft`, `-final`, `-new`, `-old`, `-accepted`, `-superseded`, or `-wip`. Lifecycle belongs in artefact content/metadata, never in the filename (§10, §13, §15).
 
-9.12 Dates MUST NOT appear in file names unless the artefact is inherently time-specific evidence or report output (and even then, freshness is commit-pinned in content, §15; Authority Model §2.7). Version numbers MUST NOT appear in file names unless governed by a future versioning standard (§12, §25).
+9.12 Dates MUST NOT appear in file names unless the artefact is inherently time-specific evidence or report output (and even then, freshness is commit-pinned in content, §15; Authority Model §2.6). Version numbers MUST NOT appear in file names unless governed by a future versioning standard (§12, §25).
 
 9.13 Aliases MUST be explicit (§5.11); duplicate filenames with equivalent meaning are forbidden.
 
@@ -309,7 +309,7 @@ Exceptions (permitted, narrowly):
 - `README.md` MAY be used where a directory genuinely requires human orientation. (Uppercase `README` is the established cross-platform convention; it is an allowed conventional name, not a USF-authored kebab artefact.)
 - `AGENTS.md` is the allowed root-level AI-agent directive (it already exists). `CLAUDE.md`, `CODEX.md` and similar tool-specific manifests MAY exist as pointers back to `AGENTS.md` and MUST NOT redefine USF policy (AGENTS `Status`).
 - Conventional tool files — `LICENSE`, `Makefile`, `package.json`, `tsconfig.json`, lockfiles, linter/config dotfiles, and similar — carry fixed external names and MAY be introduced **only** when their corresponding stage is authorised (for example, a Make/command stage or an implementation-extraction directive). They are allowed-exception names, not USF-authored kebab artefacts, and their introduction is itself governed (Charter §5.13; §7; §16).
-- Historical paths from `../react` MAY be quoted or referenced exactly but MUST NOT be recreated as USF paths (§20).
+- Historical source-lineage paths MAY be quoted or referenced exactly but MUST NOT be recreated as USF paths (§20).
 
 ---
 
@@ -437,7 +437,7 @@ No ADRs are created in this task (AGENTS `ADR Rules`). This section defines the 
 0001-short-semantic-title.md
 ```
 
-(The historical repository uses `docs/adr/` with an authoritative numbering register — `../react/docs/v2-foundation/v2-target-tree.txt` shows `docs/adr/` "ADRs + ACTION-REGISTER.md (authoritative numbering)". USF adopts the *principle* of a stable numeric identity, not the historical files.)
+(USF's source lineage uses `docs/adr/` with an authoritative numbering register — the target-tree shows `docs/adr/` "ADRs + ACTION-REGISTER.md (authoritative numbering)". USF adopts the *principle* of a stable numeric identity, not the historical files.)
 
 13.3 ADR filenames MUST NOT use dates as the primary ADR ID unless a future ADR standard explicitly chooses date-based IDs.
 
@@ -459,11 +459,11 @@ No evidence files are created in this task (AGENTS `Evidence Rules`). This secti
 
 14.2 Evidence filenames SHOULD encode a stable subject and the evidence kind, not a status exaggeration (Vocabulary `evidence-kinds`).
 
-14.3 Generated reports MUST be distinguishable from raw and proof evidence (Standards Profile §11.3; AGENTS `Evidence Rules`; §15). A report filename SHOULD carry a report-kind marker (for example a `-report` suffix, following the historical `../react/docs/v2-foundation/usf-audit/*-report.json` convention) so it is not mistaken for raw evidence.
+14.3 Generated reports MUST be distinguishable from raw and proof evidence (Standards Profile §11.3; AGENTS `Evidence Rules`; §15). A report filename SHOULD carry a report-kind marker (for example a `-report` suffix, following USF's own `usf-audit/*-report.json` convention) so it is not mistaken for raw evidence.
 
 14.4 Evidence filenames MUST NOT include status claims such as `pass`, `green`, `complete`, `ready`, or `final` (Charter §5.2 "the word `complete` is not permitted" without backing; AGENTS `Provider, Environment, Proof, and Report Safety`).
 
-14.5 Freshness/staleness belongs in content metadata (commit-pinning), not in the filename (Authority Model §2.7, §4.3; Standards Profile §11.6).
+14.5 Freshness/staleness belongs in content metadata (commit-pinning), not in the filename (Authority Model §2.6, §4.3; Standards Profile §11.6).
 
 14.6 Provider mode and environment MAY appear in a filename **only** when needed to distinguish evidence subjects, and **only** once the evidence schema permits it — and never to overclaim (a `hermetic-mock` proof file MUST NOT carry a `live-external-provider` token; Charter §6; §3.4).
 
@@ -487,17 +487,17 @@ These are illustrative of a likely future shape only. They are **not** approved 
 
 ## 15. Generated Report Naming Rules
 
-15.1 Generated reports are the lowest authority class (rank 7; Authority Model §2.7).
+15.1 Generated reports are the lowest authority class (rank 6; Authority Model §2.6).
 
 15.2 Generated report filenames MUST NOT imply canonical truth or a passing status (§14.4).
 
-15.3 Generated report filenames SHOULD include the subject and the report kind (e.g. a `-report` marker; historical precedent: `../react/docs/v2-foundation/usf-audit/behaviour-proof-readiness-report.json`, `proof-negative-control-report.json`).
+15.3 Generated report filenames SHOULD include the subject and the report kind (e.g. a `-report` marker; precedent in USF's source lineage: `usf-audit/behaviour-proof-readiness-report.json`, `proof-negative-control-report.json`).
 
 15.4 A report's status (`pass`, `fail`, `partial`, `stale`, `not-run`, `unknown`; Vocabulary `report-statuses`) belongs **inside** the report content, never in the filename.
 
-15.5 A report MUST identify the evidence it summarises (Authority Model §2.7; Standards Profile §11.8; Ontology §7.7).
+15.5 A report MUST identify the evidence it summarises (Authority Model §2.6; Standards Profile §11.8; Ontology §7.7).
 
-15.6 Reports MUST be regenerable from current artefacts (Authority Model §2.7 "regenerated from current artefacts").
+15.6 Reports MUST be regenerable from current artefacts (Authority Model §2.6 "regenerated from current artefacts").
 
 15.7 A stale report MUST NOT satisfy `pass` (Authority Model §4.3; AGENTS `stale MUST NOT satisfy pass`); `unknown` MUST NOT satisfy `pass` (AGENTS).
 
@@ -517,7 +517,7 @@ No tools are created in this task (AGENTS `Validator Rules`). This section defin
 
 16.2 Tool files SHOULD use verb-object naming, e.g. `validate-foundation.mjs`.
 
-16.3 `tools/` SHOULD start flat; subdirectories are introduced only when multiple related tools or shared libraries justify them (§8.10). (The historical `../react/tools` only subdivides where volume warrants it, e.g. `tools/architecture/`, `tools/e2e/`.)
+16.3 `tools/` SHOULD start flat; subdirectories are introduced only when multiple related tools or shared libraries justify them (§8.10). (USF's `tools/` source lineage only subdivides where volume warrants it, e.g. `tools/architecture/`, `tools/e2e/`.)
 
 16.4 Recommended verb prefixes by purpose (consistent with Vocabulary `command-kinds`):
 
@@ -532,7 +532,7 @@ No tools are created in this task (AGENTS `Validator Rules`). This section defin
 
 16.7 Validators MUST fail closed once implemented (Standards Profile §18.2).
 
-16.8 The file extension/runtime for USF tools (for example `.mjs` following the historical `../react/tools/**/*.mjs` convention, or another choice) is confirmed by the future tool/validator-authoring directive; the verb-object naming and flat-first rules above hold regardless (§25).
+16.8 The file extension/runtime for USF tools (for example `.mjs` following USF's own `tools/**/*.mjs` convention, or another choice) is confirmed by the future tool/validator-authoring directive; the verb-object naming and flat-first rules above hold regardless (§25).
 
 16.9 Future subdirectories such as `tools/validate/`, `tools/generate/`, `tools/import/`, and `tools/lib/` MAY exist later but are **not** created until justified by real volume (§8.10). No tools and no tool subdirectories are created in this task.
 
@@ -585,19 +585,19 @@ The forbidden tokens below MUST NOT appear in USF **canonical** path segments, f
 
 | Token | Why forbidden | Forbidden contexts | Allowed exceptions | Allowed historical reference (example) | Forbidden new USF path/name (example) |
 |---|---|---|---|---|---|
-| `v2` | Encodes migration phase / branch version; USF is not a version branch of `../react` | Any canonical path, filename, ID, package, value id | Quoted historical paths; source references; source notes; explanatory text | `../react/docs/v2-foundation/v2-target-tree.txt` | `docs/v2-foundation/`, `schema-v2.json` |
+| `v2` | Encodes migration phase / branch version; USF is not a version branch of any external repository | Any canonical path, filename, ID, package, value id | Quoted historical paths; source references; source notes; explanatory text | `../external-source/docs/v2-foundation/v2-target-tree.txt` | `docs/v2-foundation/`, `schema-v2.json` |
 | `legacy` | Migration-phase label; not a stable semantic category | Same as above | Same as above | "the historical (`legacy`) validator" in prose | `packages/legacy-auth/`, `legacy-config.json` |
-| `old` | Relative-time label; unstable | Same as above | Same as above | quoting `-old` in `../react` runbook | `auth-old.md`, `old/` |
-| `new` | Relative-time label; unstable | Same as above | Same as above | quoting `-new` in `../react` runbook | `new-architecture.md`, `new/` |
+| `old` | Relative-time label; unstable | Same as above | Same as above | quoting `-old` in a source-lineage runbook | `auth-old.md`, `old/` |
+| `new` | Relative-time label; unstable | Same as above | Same as above | quoting `-new` in a source-lineage runbook | `new-architecture.md`, `new/` |
 | `temp` | Transient label; not final-state | Same as above | Same as above | explaining why `temp` is forbidden | `temp/`, `temp-validator.mjs` |
 | `transitional` | Migration-phase label | Same as above | Same as above | quoting "no `transitional` naming" | `transitional/`, `config-transitional.json` |
 | redundant local `usf` | A repeated `usf` segment inside the `usf` repository adds no meaning | Repository path segments; package/implementation names; redundant prefixes on local value IDs | The repository/product name `usf` in prose; the **`usf.` namespace on global artefact IDs** (e.g. `usf.schema-registry`) | `id: usf.schema-registry` (global ID) | `spec/usf-schemas/`, `usf-schema-registry.schema.json`, `spec/schemas/usf-schema-registry.schema.json` |
-| vague buckets — `misc`, `common`, `shared`, `utils`, `general` (and equivalents) | Hide unclassified content; defeat classification (`v2-target-tree.txt` "NO vague buckets") | Directory names, especially | Only with explicit, governed justification recorded in an ADR or this standard | `../react` annotates `hooks/` "named, not a junk bucket" | `packages/common/`, `tools/utils/`, `spec/misc/` |
+| vague buckets — `misc`, `common`, `shared`, `utils`, `general` (and equivalents) | Hide unclassified content; defeat classification (`v2-target-tree.txt` "NO vague buckets") | Directory names, especially | Only with explicit, governed justification recorded in an ADR or this standard | source lineage annotates `hooks/` "named, not a junk bucket" | `packages/common/`, `tools/utils/`, `spec/misc/` |
 
 Allowed exceptions (consolidated; AGENTS `Strict Naming Rules`; Vocabulary `forbiddenValues` `redundant-usf`):
 
 - quoted historical source paths;
-- source references to `../react`;
+- source references to USF's own source lineage;
 - source notes;
 - historical aliases recorded in the Vocabulary catalogue;
 - explanatory text (including this section);
@@ -607,7 +607,7 @@ Allowed exceptions (consolidated; AGENTS `Strict Naming Rules`; Vocabulary `forb
 
 Crucial distinction:
 
-- Citing `../react/docs/v2-foundation/...` is **allowed** as a historical reference.
+- Citing a historical source path such as `../external-source/docs/v2-foundation/...` is **allowed** as a historical reference.
 - Creating `docs/v2-foundation/` in USF is **forbidden**.
 
 ---
@@ -655,9 +655,9 @@ Notes: "deferred" home means the canonical directory under `spec/` or `evidence/
 
 20.3 Source reference paths MAY include forbidden historical tokens (`v2`, `legacy`, etc.) because they are quoted historical evidence (§18 allowed exceptions).
 
-20.4 Source reference paths MUST be clearly marked as historical/external — by the `../react/` prefix and/or an explicit `repository`/`source kind` field (Standards Profile §10.6; Ontology §5.4). A reader MUST be able to tell at a glance that the path is evidence, not a USF target.
+20.4 Source reference paths MUST be clearly marked as historical/external — by a source-lineage prefix and/or an explicit `repository`/`source kind` field (Standards Profile §10.6; Ontology §5.4). A reader MUST be able to tell at a glance that the path is evidence, not a USF target.
 
-20.5 No source reference path may be silently converted into a USF path (§5.4; AGENTS `Source paths from ../react MUST NOT dictate future USF paths`).
+20.5 No source reference path may be silently converted into a USF path (§5.4; AGENTS `Source Repository Policy`).
 
 20.6 Every source-derived artefact later requires a disposition (Vocabulary `disposition-values`; Ontology §8.3; Standards Profile §10.5); no source element disappears for naming reasons without one.
 
@@ -665,7 +665,7 @@ Notes: "deferred" home means the canonical directory under `spec/` or `evidence/
 
 Examples:
 
-- **Allowed:** referencing `../react/docs/v2-foundation/v2-directory-contracts.json` as historical evidence.
+- **Allowed:** referencing a historical source path such as `../external-source/docs/v2-foundation/v2-directory-contracts.json` as historical evidence.
 - **Forbidden:** creating `docs/v2-foundation/` in USF.
 - **Allowed:** quoting the historical `v2-target-tree.txt`.
 - **Forbidden:** naming a USF directory `v2-target-tree/`.
@@ -751,7 +751,7 @@ These describe what a future validator MUST be able to check (Standards Profile 
 
 23.11 Validate that generated reports are not placed under `spec/` (or `docs/`) (§15.8).
 
-23.12 Validate that source paths from `../react` are not reused as USF paths (§20.5).
+23.12 Validate that source-lineage paths are not reused as USF paths (§20.5).
 
 23.13 Validate that global IDs (`usf.`-namespaced) and repository paths follow their separate domain rules (§17): `usf.` permitted on global IDs, forbidden as a redundant path/file segment.
 
@@ -779,7 +779,7 @@ Future AI agents (and humans) working on USF MUST:
 
 24.9 Not create implementation directories without a source-import or implementation-extraction directive (§7; AGENTS `Implementation Rules`).
 
-24.10 Not infer path names from `../react` (§20; AGENTS `Source Repository Policy`).
+24.10 Not infer path names from USF's source lineage (§20; AGENTS `Source Repository Policy`).
 
 24.11 Stop when this naming policy conflicts with a requested path, and report the conflict (AGENTS `Conflict Handling`, `Non-Negotiable Stop Conditions`; Authority Model §6.8).
 
@@ -833,8 +833,8 @@ This document is acceptable only if **all** hold:
 - It defines validator/tool naming rules (§16).
 - It defines when not to pre-create directories (§8).
 - It does not create schemas, ADRs, validators, evidence files, import maps, or implementation files.
-- It does not import runtime/application code from `../react`.
+- It does not import runtime/application code from any external repository.
 
 ---
 
-*End of USF Directory and File Naming Standard (Draft / Foundational). This document creates only itself; it creates no schema, ADR, validator, evidence file, import map, registry, vocabulary, taxonomy, tool, or implementation directory, and imports no runtime/application code from `../react`.*
+*End of USF Directory and File Naming Standard (Draft / Foundational). This document creates only itself; it creates no schema, ADR, validator, evidence file, import map, registry, vocabulary, taxonomy, tool, or implementation directory, and imports no runtime/application code from any external repository.*

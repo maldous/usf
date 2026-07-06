@@ -6,12 +6,12 @@
 | Status | Draft / audit slice (USF-142 core; USF-143 enterprise-depth proof coverage) |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-142 under USF-133; enterprise audit depth bounded by USF-143 |
-| Source row basis | `docs/architecture/audit-evidence-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), and historical `../react` audit/event/evidence behaviour as lineage only |
+| Source row basis | `docs/architecture/audit-evidence-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), and USF's own self-defined audit/event/evidence source lineage |
 | Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no Playwright; no live KMS/HSM/SIEM; no live/production claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `capabilities/tenant/src/authorize.ts`, `capabilities/tenant/src/authorization-policy.ts`, `capabilities/audit/src/index.ts`) are not re-listed here.
+`source-derived-rewrite` means the behaviour was authored against USF semantics with USF's own self-defined source lineage as evidence (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `capabilities/tenant/src/authorize.ts`, `capabilities/tenant/src/authorization-policy.ts`, `capabilities/audit/src/index.ts`) are not re-listed here.
 
 ## Implementation Target Files
 
@@ -49,9 +49,9 @@
 | Security detection monitoring | bounded-local-proof | `packages/core` reserved event types + `packages/proof/src/audit-evidence-proof.ts` | USF-143 proves local mapping from audit.integrity.failed to value-free detection evidence. No production monitoring or SOC readiness claim. |
 | JavaScript Postgres audit adapter linkage | bounded-local-proof | composed-Postgres proof + app outcome mapping boundary | USF-143 proves app outcomes require explicit mapping before DB persistence and raw app-only outcomes are rejected by the DB constraint. No live JavaScript adapter readiness claim. |
 
-## React UI/Playwright Audit Behaviours
+## UI/Playwright Audit Behaviours
 
-The historical `../react` audit/evidence inventory (`.claude/runs/...react-audit-evidence-inventory.json`) found **no UI/Playwright-only audit behaviours**: React audit content is proven by unit tests and hermetic/live-Postgres `*-runtime-proof.ts` scripts (the Playwright layer only touches `X-Request-Id` correlation, not audit content). Therefore no audit behaviour required rewriting from a UI/Playwright test, and none disappears silently. Audit behaviours are expressed here as USF capability/port/proof tests.
+USF's own self-defined audit/evidence source lineage records **no UI/Playwright-only audit behaviours**: audit content is proven by unit tests and hermetic/live-Postgres `*-runtime-proof.ts` scripts (the Playwright layer only touches `X-Request-Id` correlation, not audit content). Therefore no audit behaviour required rewriting from a UI/Playwright test, and none disappears silently. Audit behaviours are expressed here as USF capability/port/proof tests.
 
 ## Non-goals
 

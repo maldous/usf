@@ -28,7 +28,7 @@ Every work packet must name the repository inputs the agent must read from disk 
 - `spec/registries/schema-registry.json`;
 - task-specific semantic instances, ADRs, evidence records, source import manifests, source-use matrices, validator files, and architecture gate documents.
 
-The work packet must state whether `../react` may be inspected and, if so, for which evidence-only purpose. Historical React source must not become hidden authority.
+The work packet must state whether USF's own source lineage may be inspected and, if so, for which evidence-only purpose. Source lineage must not become hidden authority.
 
 ## Required Linear Inputs
 
@@ -75,8 +75,8 @@ The agent must report these facts at completion:
 - files intentionally not modified but relevant;
 - JSON parse results for changed JSON, if any;
 - validation commands run and result;
-- whether `../react` was inspected;
-- whether any React runtime/application code was imported;
+- whether USF's own source lineage was inspected;
+- whether any runtime/application code was imported;
 - whether implementation/runtime code was created;
 - whether implementation/runtime directories were created;
 - whether schemas were activated;

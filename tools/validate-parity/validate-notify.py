@@ -52,7 +52,7 @@ STANDARD = "docs/architecture/notifications-and-messaging-standard.md"
 SOURCE_USE = "docs/architecture/notifications-messaging-source-use-disposition-matrix.md"
 DEPTH_MATRIX_PATH = "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
 ENTERPRISE_EVIDENCE_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
-MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX_PATH = "docs/architecture/functional-scope-classification-matrix.json"
 SOURCE_FILES = (
     CORE,
     PORTS,
@@ -408,7 +408,7 @@ def run_checks(F, state=None):
             "adapters/mail/src/index.ts",
             "tests/capabilities/notifications-messaging.test.ts",
             "packages/proof/src/notifications-messaging-proof.ts",
-            "No React runtime/application code is copied",
+            "no external runtime/application code is copied",
             "No live external delivery provider readiness is claimed",
         ):
             if token not in source_use:
