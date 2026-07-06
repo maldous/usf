@@ -14,7 +14,7 @@
   },
   "ownedTestFile": "tests/packages/performance-concurrency-resource-regression-suite.test.ts",
   "scope": {
-    "serviceBudgetDispositionCount": 39,
+    "serviceBudgetDispositionCount": 40,
     "composeProfileStartupBudgetCount": 10,
     "semanticContractFixtureCount": 67,
     "usesRealTimers": false,
@@ -513,6 +513,14 @@
       "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",
       "fixtureSeedId": "not-applicable",
       "unsupportedReason": "post-Test public FQDN proof-origin service is outside the canonical Test readiness composed target and does not make a service-backed load or performance claim"
+    },
+    {
+      "serviceId": "staging-proof-cockpit",
+      "budgetProfileId": null,
+      "budgetDisposition": "out-of-scope-budget-disposition",
+      "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",
+      "fixtureSeedId": "not-applicable",
+      "unsupportedReason": "staging proof cockpit service is outside the canonical Test readiness composed target and does not make a service-backed load or performance claim"
     },
     {
       "serviceId": "web-app",

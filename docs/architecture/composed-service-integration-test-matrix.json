@@ -19,7 +19,7 @@
   },
   "generatedServiceCount": 33,
   "profileCount": 11,
-  "serviceCatalogueDispositionCount": 39,
+  "serviceCatalogueDispositionCount": 40,
   "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
   "testReadinessClaimAllowed": false,
   "serviceIntegrationRows": [
@@ -4061,6 +4061,38 @@
       "owner": "platform-public-edge-foundation",
       "riskOwner": "platform-public-edge-risk-owner",
       "controlOwner": "platform-public-edge-control-owner",
+      "dataClassification": "synthetic-data",
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaims": [
+        "final-test-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "full-product-readiness",
+        "usf-234-closure"
+      ]
+    },
+    {
+      "serviceCatalogueId": "staging-proof-cockpit",
+      "generatedComposeServiceId": null,
+      "composeTarget": null,
+      "testDisposition": "deferred-with-follow-up",
+      "boundedRationale": "Staging proof cockpit is a staging-only operator fixture. It is not generated in the canonical test Compose target and must not satisfy a Test readiness service-backed claim.",
+      "followUpIssueIds": [
+        "USF-290",
+        "USF-292"
+      ],
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
       "dataClassification": "synthetic-data",
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,

@@ -11,7 +11,7 @@
   },
   "scope": {
     "semanticContractEnterpriseObligationCount": 67,
-    "serviceEnterpriseObligationCount": 39,
+    "serviceEnterpriseObligationCount": 40,
     "requiredEnterpriseSectionCount": 10,
     "serviceBackedClaimsRequireComposedEvidence": true,
     "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
@@ -25,7 +25,7 @@
   "requiredEnterpriseSections": [
     {
       "sectionId": "soaSupportMappings",
-      "expectedRowCount": 241,
+      "expectedRowCount": 243,
       "requiredFields": [
         "id",
         "controlPurpose",
@@ -108,7 +108,7 @@
     },
     {
       "sectionId": "accessReviewPrivilegedOperationPosture",
-      "expectedRowCount": 94,
+      "expectedRowCount": 95,
       "requiredFields": [
         "id",
         "targetType",
@@ -123,7 +123,7 @@
     },
     {
       "sectionId": "backupRestoreResiliencePosture",
-      "expectedRowCount": 99,
+      "expectedRowCount": 100,
       "requiredFields": [
         "id",
         "targetType",
@@ -138,7 +138,7 @@
     },
     {
       "sectionId": "incidentVulnerabilityManagementEvidence",
-      "expectedRowCount": 119,
+      "expectedRowCount": 120,
       "requiredFields": [
         "id",
         "targetType",
@@ -278,6 +278,7 @@
       "postgres",
       "prometheus",
       "public-proof-origin",
+      "staging-proof-cockpit",
       "web-app",
       "redis",
       "sentry",

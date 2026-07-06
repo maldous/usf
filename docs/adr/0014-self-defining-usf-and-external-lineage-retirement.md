@@ -10,7 +10,7 @@ Records the owner-ratified constitutional amendment that re-founds USF as a self
 
 ## Context
 
-The USF constitutional layer previously grounded the foundation in a sibling repository as historical semantic/source evidence and lineage, and the Authority Model carried a seven-rank order whose rank 6 was "Historical external source and semantic evidence". The mechanism layer expressed this lineage through a source-import manifest attributed to an external repository at a frozen commit and tag, a source-reference allowlist of external-repository paths, per-instance source-evidence entries pointing at external compose and audit artefacts, and normalised proof-evidence records attributed to an external repository. The accountable owner has ratified, through the deliberate constitutional-amendment process, that USF must be self-defined with no external legacies: the external sibling-repository lineage authority is removed from the constitutional and mechanism layers and the external lineage record is deliberately discarded. React remains permitted as a UI framework technology choice; this decision retires only the external sibling-repository lineage authority, not any legitimate framework decision, and it deliberately leaves the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator to later phases.
+The USF constitutional layer previously grounded the foundation in a sibling repository as historical semantic/source evidence and lineage, and the Authority Model carried a seven-rank order whose rank 6 was "Historical external source and semantic evidence". The mechanism layer expressed this lineage through a source-import manifest attributed to an external repository at a frozen commit and tag, a source-reference allowlist of external-repository paths, per-instance source-evidence entries pointing at external compose and audit artefacts, and normalised proof-evidence records attributed to an external repository. The accountable owner has ratified, through the deliberate constitutional-amendment process, that USF must be self-defined with no external legacies: the external sibling-repository lineage authority is removed from the constitutional and mechanism layers and the external lineage record is deliberately discarded. A UI framework technology choice remains permitted; this decision retires only external sibling-repository lineage authority, not any legitimate framework decision. At acceptance time, this ADR deliberately left the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator to later phases; later cleanup and rename work has since re-founded those surfaces into USF-native/current-state form, renamed the react-app compose service, reworked ADR 0005 and the non-UI validator posture, and sealed remaining external-lineage material as non-authoritative provenance.
 
 ## Decision
 
@@ -56,8 +56,8 @@ Re-founding USF as self-defined removes an external dependency from the constitu
 
 ## Permitted Changes
 
-- Author a repository-wide guard forbidding external cross-repository discriminators once the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator have been re-founded in a later phase.
-- Re-found or retire the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator under a later authorised phase.
+- Maintain or extend the governed-reference guard forbidding external cross-repository discriminators as new edge cases are identified.
+- Treat the parity/equivalence documentation corpus, the former react-app compose service, ADR 0005 follow-up, and the non-UI validation posture as completed current-state follow-up work rather than unresolved deferrals; use the current-state authority index and closure seal records for routing.
 - Add source-import rows that cover the currently allowlisted USF-native evidence references, retiring those allowlist entries.
 
 ## Forbidden Drift
@@ -73,14 +73,25 @@ Re-founding USF as self-defined removes an external dependency from the constitu
 - The Charter and Authority Model are amended: USF is self-originating and the authority order is six ranks ending in generated reports.
 - The agent directives (`AGENTS.md`, `CLAUDE.md`, `CODEX.md`) no longer reference an external sibling repository and express the self-defined model.
 - The mechanism layer (source-import manifest, allowlist, per-instance source evidence, normalised proof evidence) is re-attributed to the self-defined "usf" model; the external lineage record is discarded.
-- The parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator retain external references pending a later phase; a repository-wide zero-external-reference guard is deferred until that phase.
+- At ADR acceptance, the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator retained external references pending a later phase. That later follow-up has since completed through the cleanup and rename PRs and the USF-292 closure records: the material is now either USF-native/current-state or sealed as non-authoritative provenance, and the governed-reference discriminator guard is active.
 
 ## AI Alignment Rules
 
 - Agents MUST treat USF as self-defined and MUST NOT treat any external repository as USF authority or lineage.
 - Agents MUST NOT add a cross-repository discriminator to a governed semantic or ADR reference; where lineage narrative is needed it belongs in prose, not in governed reference fields.
 - Agents MUST preserve proof honesty when re-attributing evidence: never relabel a proof to a stronger level, provider class, or environment.
-- Agents MUST NOT re-found the deferred corpus (parity/equivalence docs, react-app service, ADR 0005, non-UI parity validator) from this ADR alone; a later authorised phase is required.
+- Agents MUST NOT treat the original deferred-corpus note as current unresolved work; they MUST use the current-state authority index and closure seal records. Any further re-found/retire work still requires a later authorised phase.
+
+## Follow-up Completion Note
+
+As of 2026-07-07, repository history and current-state artefacts show the later cleanup and rename phases referenced above have completed:
+
+- PR #262 finished the broad React-elimination phase, recast docs and ontology to the six-rank self-defined model, re-founded the non-UI completeness gate, and generalised the governed-reference guard.
+- PR #263 removed non-essential React references repo-wide and recast remaining material to USF source-lineage/current-state wording.
+- PR #264 renamed the react-app compose service to web-app and the react-enterprise-app directory to enterprise-app.
+- The USF-292 closure records and current-state foundation authority index classify superseded external-lineage material as retained lineage/provenance only and require current work to use USF-native entry points.
+
+This note does not change the original constitutional decision, does not make historical lineage active authority, and does not upgrade any readiness claim. It only prevents the original later-phase language from being read as current unresolved operational guidance.
 
 ## Supersession
 

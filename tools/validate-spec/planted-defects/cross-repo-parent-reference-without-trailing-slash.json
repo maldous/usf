@@ -1,0 +1,49 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-NATIVE-001",
+  "instances": {
+    "spec/instances/workflow/cross-repo-parent-reference-without-trailing-slash.json": {
+      "id": "workflow.cross-repo-parent-reference-without-trailing-slash",
+      "workflowKind": "workflow",
+      "title": "Cross Repo Parent Reference Without Trailing Slash Workflow",
+      "description": "Planted workflow whose governed sourceRefs field carries a parent-relative sibling-repository discriminator without a trailing slash.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Workflow"
+      ],
+      "taxonomyRefs": [
+        "event-workflow-classification"
+      ],
+      "vocabularyRefs": [
+        "event-workflow-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "participants": [
+        "workflow.cross-repo-parent-reference-without-trailing-slash"
+      ],
+      "ordering": "single planted validation step",
+      "sourceRefs": [
+        "../react"
+      ],
+      "steps": [
+        {
+          "id": "planted-step",
+          "description": "Exercise the USF-native parent-relative discriminator guard without requiring a trailing slash."
+        }
+      ],
+      "stateTransitions": [
+        {
+          "from": "start",
+          "to": "finish"
+        }
+      ],
+      "failurePaths": [
+        "parent-relative sibling repository discriminator in a governed reference fails validation"
+      ],
+      "compensationPaths": [
+        "no compensation for planted selftest"
+      ]
+    }
+  }
+}

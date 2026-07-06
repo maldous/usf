@@ -14,7 +14,7 @@
   "corpusPath": "tests/packages/fixtures/service-fixture-corpus.json",
   "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts",
   "proofCommand": "corepack pnpm test-readiness:fixtures",
-  "serviceFixtureCount": 39,
+  "serviceFixtureCount": 40,
   "semanticContractFixtureCount": 67,
   "serviceFixtures": [
     {
@@ -2274,6 +2274,77 @@
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
       "nonClaimBoundary": "Fixture corpus disposition for public-proof-origin does not claim final Test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorization."
+    },
+    {
+      "serviceId": "staging-proof-cockpit",
+      "fixtureSeedId": "not-applicable",
+      "sourceObligationEvidenceId": "evidence.usf-292.service.staging-proof-cockpit",
+      "sourceManifestPath": "docs/architecture/semantic-service-test-obligation-manifest.json",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "not-generated",
+      "composeServiceId": "staging-proof-cockpit",
+      "composeProfiles": [],
+      "generatedInTestCompose": false,
+      "requiredInTest": false,
+      "dependencyDisposition": "out-of-scope",
+      "assetInventoryClass": "operator-surface",
+      "dataClassification": "synthetic-data",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-243",
+        "USF-244",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-249",
+        "USF-252",
+        "USF-290",
+        "USF-292"
+      ],
+      "lifecycleApi": {
+        "seederId": "not-applicable",
+        "resetterId": "not-applicable",
+        "cleanupId": "not-applicable",
+        "teardownId": "not-applicable",
+        "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
+      },
+      "fixturePlan": null,
+      "lifecycleCoverage": {
+        "seed": false,
+        "reset": false,
+        "cleanup": false,
+        "teardown": false,
+        "repeatability": false,
+        "failureRecovery": false,
+        "deterministicSeed": "not-applicable",
+        "failureDiagnosis": "Staging proof cockpit is outside the canonical Test Compose target; fixture corpus retains a bounded non-test disposition and no service-backed Test readiness claim."
+      },
+      "provenance": {
+        "syntheticOnly": true,
+        "productionDerived": false,
+        "realTenantDataAllowed": false,
+        "realSecretsAllowed": false,
+        "liveProviderPayloadAllowed": false,
+        "privateLocalStateAllowed": false,
+        "redactionPolicy": "no tenant names, user emails, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, real user data, or production data",
+        "retentionPosture": "bounded disposition and local proof-output evidence only; no runtime fixture data retained"
+      },
+      "validationCommands": [
+        "corepack pnpm proof-cockpit:validate",
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+      ],
+      "nonTestDisposition": {
+        "reason": "staging proof cockpit service is generated only for proof cockpit evidence outside the canonical Test Compose target",
+        "followUpIssue": "USF-292",
+        "linkedBlockingIssue": "USF-290",
+        "preventsFinalAcceptanceUntilReclassified": false
+      },
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Fixture corpus disposition for staging-proof-cockpit does not claim final Test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, or full product readiness."
     },
     {
       "serviceId": "web-app",

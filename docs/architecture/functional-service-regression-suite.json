@@ -15,7 +15,7 @@
   "scope": {
     "testLayer": "functional-regression",
     "semanticContractCount": 67,
-    "serviceRegressionCount": 39,
+    "serviceRegressionCount": 40,
     "behaviourCaseTypesRequired": [
       "positive",
       "negative",
@@ -13781,6 +13781,102 @@
       "inMemoryServiceSubstituteAllowed": false,
       "testReadinessClaimAllowed": false,
       "nonClaimBoundary": "Public proof-origin functional mapping records a bounded post-Test disposition only. Local proof-origin response-contract evidence is not external public route proof, not final Test acceptance, and not staging, production, deployment, live-provider, SOC, ISO, product UI, browser E2E, full product readiness, or v2-proof authorization.",
+      "serviceCatalogueDisposition": "deferred-with-follow-up"
+    },
+    {
+      "serviceId": "staging-proof-cockpit",
+      "composeServiceId": "staging-proof-cockpit",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeTarget": "not-generated",
+      "fixtureSeedId": "not-applicable",
+      "fixtureCorpusSeedId": "not-applicable",
+      "integrationMatrixDisposition": null,
+      "integrationMatrixProofCommand": null,
+      "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
+      "testName": "service functional regression boundary remains current: staging-proof-cockpit",
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-243",
+        "USF-244",
+        "USF-246",
+        "USF-247",
+        "USF-248",
+        "USF-249",
+        "USF-252",
+        "USF-290",
+        "USF-292"
+      ],
+      "assetInventoryClass": "operator-surface",
+      "dataClassification": "synthetic-data",
+      "behaviourCases": [
+        {
+          "caseType": "positive",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "negative",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "authorization",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "tenant-isolation",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "audit",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "readiness",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        },
+        {
+          "caseType": "provider-boundary",
+          "status": "bounded-staging-proof-cockpit-disposition",
+          "requiresComposedEvidence": false,
+          "integrationMatrixRequired": false,
+          "fixtureRequired": false,
+          "inMemoryServiceSubstituteAllowed": false,
+          "testReadinessClaimAllowed": false
+        }
+      ],
+      "serviceBackedClaimRequiresComposedService": false,
+      "inMemoryServiceSubstituteAllowed": false,
+      "testReadinessClaimAllowed": false,
+      "nonClaimBoundary": "Staging proof cockpit functional mapping records a bounded proof-cockpit disposition only. It is not final Test acceptance and not staging, production, deployment, live-provider, SOC, ISO, product UI, browser E2E, or full product readiness.",
       "serviceCatalogueDisposition": "deferred-with-follow-up"
     },
     {
