@@ -34,7 +34,7 @@
     "apps/platform-api/tests/unit/tenant-storage.test.ts",
     "docs/adr/0049-tenant-storage-readiness.md",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/evidence/operations/tenant-storage-readiness.md",
     "packages/adapters-object-storage/README.md",
     "packages/adapters-object-storage/package.json",

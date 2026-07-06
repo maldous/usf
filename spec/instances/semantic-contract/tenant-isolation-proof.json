@@ -98,7 +98,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
     "apps/platform-api/scripts/tenant-storage-runtime-proof.ts",
     "apps/platform-api/src/usecases/tenant-storage.ts",

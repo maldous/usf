@@ -95,7 +95,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/src/db/migrations/001-identity-schema.sql",
     "apps/platform-api/src/db/migrations/004-rls-policies.sql",
     "apps/platform-api/src/db/migrations/012-rls-current-user-check.sql",

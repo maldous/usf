@@ -94,7 +94,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/metering-quota-routes-runtime-proof.ts",
     "apps/platform-api/scripts/quota-enforcement-runtime-proof.ts",
     "apps/platform-api/src/adapters/postgres-quota-repository.ts",

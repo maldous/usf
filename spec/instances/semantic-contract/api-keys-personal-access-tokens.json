@@ -100,7 +100,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/src/usecases/api-keys.ts",
     "apps/platform-api/src/usecases/api-key-crypto.ts"
   ],

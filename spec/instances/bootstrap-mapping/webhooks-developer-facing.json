@@ -42,7 +42,7 @@
     "apps/platform-api/src/usecases/webhook-worker.ts",
     "apps/platform-api/src/usecases/webhooks.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "capabilityTargets": [
     {

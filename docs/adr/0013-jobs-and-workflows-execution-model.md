@@ -35,7 +35,7 @@ Recording the execution-control model as rank-2 authority keeps the correctness,
 ## Source References
 
 - `docs/architecture/capability-source-coverage-matrix.md`
-- `docs/architecture/react-l5-equivalence-audit.md`
+- `docs/architecture/foundation-completeness-audit.md`
 
 ## Proof References
 

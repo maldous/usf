@@ -47,7 +47,7 @@ RULES = {
 
 REQUIRED_ARTEFACTS = [
     "docs/architecture/implementation-extraction-directive.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/architecture/complete-readiness-blocker-register.md",
     "docs/architecture/final-v2-readiness-reconciliation.md",
     "docs/architecture/bootstrap-readiness-governance.md",

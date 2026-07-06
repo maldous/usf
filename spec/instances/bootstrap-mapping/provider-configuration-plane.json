@@ -39,7 +39,7 @@
     "docs/adr/0037-per-tenant-authentication-provider-configuration.md",
     "docs/adr/0070-provider-configuration-plane.md",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/evidence/platform/provider-config-foundation.md"
   ],
   "capabilityTargets": [

@@ -5,7 +5,7 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-27",
-  "context": "USF adopts hexagonal architecture as its own binding structural decision. The foundation-completeness audit records the supporting evidence for this structure: explicit ports and adapters boundaries, usecases depending on ports rather than adapters, dependency-direction enforcement, public-export-only imports, and a contracts, domain, adapter, and runtime package split. Any historical material referenced there is rank-6 lineage, not future live authority. The decision is made under the readiness-acceleration directive recorded in Linear USF-113 with the human decision delegated to the agent. The implementation language and runtime are an open decision deferred to a future implementation directive; this ADR carries only the language-agnostic ports and adapters architecture as semantic information, and no external source code is imported.",
+  "context": "USF adopts hexagonal architecture as its own binding structural decision. The foundation-completeness audit records the supporting evidence for this structure: explicit ports and adapters boundaries, usecases depending on ports rather than adapters, dependency-direction enforcement, public-export-only imports, and a contracts, domain, adapter, and runtime package split. That evidence is USF-internal historical lineage, not future live authority. The decision is made under the readiness-acceleration directive recorded in Linear USF-113 with the human decision delegated to the agent. The implementation language and runtime are an open decision deferred to a future implementation directive; this ADR carries only the language-agnostic ports and adapters architecture as semantic information, and no external source code is imported.",
   "decision": "USF treats hexagonal architecture as a binding implementation constraint. The future extracted implementation must separate a framework-agnostic domain core from inbound and outbound ports, implement every external dependency as an adapter behind a port, keep the dependency direction acyclic with domain depending on ports and never on adapters, isolate frameworks at the edges, keep the UI layer dependent only on contract artefacts, and expose modules through public exports only. This ADR defines requirements only and creates no implementation code, directory, or schema activation.",
   "consequences": [
     "USF-113 has a recorded binding architecture decision.",
@@ -35,7 +35,7 @@
     "Agents must stop and propose a superseding ADR rather than silently introducing a domain-to-adapter or UI-to-domain dependency."
   ],
   "semanticRefs": [
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/architecture/charter.md",
     "docs/architecture/ontology.md",
     "docs/architecture/target-implementation-topology-plan.md"

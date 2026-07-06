@@ -36,7 +36,7 @@
     "apps/platform-api/tests/unit/tenant-storage.test.ts",
     "docs/adr/0049-tenant-storage-readiness.md",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/evidence/operations/tenant-storage-readiness.md",
     "docs/evidence/platform/domain-identity-capability-permutation-review.md",
     "e2e/prod/cookie-security.test.ts",

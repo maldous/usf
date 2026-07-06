@@ -44,7 +44,7 @@ Combining RBAC and ABAC in a USF-owned PDP keeps the application-layer authoriza
 ## Source References
 
 - `docs/architecture/capability-source-coverage-matrix.md`
-- `docs/architecture/react-l5-equivalence-audit.md`
+- `docs/architecture/foundation-completeness-audit.md`
 
 ## Proof References
 

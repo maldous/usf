@@ -36,7 +36,7 @@
     "apps/platform-api/src/usecases/environment-registry.ts",
     "docs/adr/0072-environment-registry-bootstrap-and-operations.md",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/evidence/platform/environment-registry-foundation.md"
   ],
   "capabilityTargets": [

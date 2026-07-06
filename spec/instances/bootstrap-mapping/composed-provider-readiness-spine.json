@@ -33,7 +33,7 @@
     "apps/platform-api/src/usecases/composed-providers.ts",
     "docs/adr/0071-composed-provider-readiness.md",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/evidence/platform/composed-provider-readiness.md"
   ],
   "capabilityTargets": [

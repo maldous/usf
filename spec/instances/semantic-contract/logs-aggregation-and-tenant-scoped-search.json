@@ -96,7 +96,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/tenant-observability-runtime-proof.ts",
     "apps/platform-api/src/server/admin-logs.ts",
     "apps/platform-api/src/usecases/logs.ts",

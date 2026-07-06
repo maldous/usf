@@ -63,7 +63,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "adrRefs": [
     "docs/adr/0005-hexagonal-architecture.md"

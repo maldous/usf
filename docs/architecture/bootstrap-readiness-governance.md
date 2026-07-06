@@ -6,7 +6,7 @@
 | **Status** | Draft / READY_FOR_V2_BOOTSTRAP bootstrap-gate input |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter, Authority Model, accepted ADRs, validators, and runtime proof evidence |
 | **Issue scope** | USF-100, USF-98, USF-117, USF-73, USF-99, USF-39 |
-| **Primary inputs** | `docs/architecture/bootstrap-start.json`, `docs/architecture/implementation-extraction-directive.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/react-l5-equivalence-audit.md`, `spec/instances/bootstrap-mapping/`, `tools/validate-bootstrap/validate-bootstrap.py` |
+| **Primary inputs** | `docs/architecture/bootstrap-start.json`, `docs/architecture/implementation-extraction-directive.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/foundation-completeness-audit.md`, `spec/instances/bootstrap-mapping/`, `tools/validate-bootstrap/validate-bootstrap.py` |
 
 This record captures the human bootstrap decisions that must be true before a future `v2-bootstrap` marker may be placed. ADR 0009 (`docs/adr/0009-bootstrap-readiness-marker-and-dev-test-boundary.md`) records the normative marker and dev/test boundary decision; this document remains the detailed bootstrap governance record constrained by that ADR. It is governance only. It creates no implementation directory, runtime file, Compose file, migration file, seed fixture, package scaffold, OpenAPI skeleton, adapter stub, or generated TypeScript runtime. It does not start USF-39, sign USF-100, or claim production readiness.
 

@@ -99,7 +99,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/platform-services-runtime-proof.ts",
     "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts",
     "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts",

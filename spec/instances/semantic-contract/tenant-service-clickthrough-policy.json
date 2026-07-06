@@ -97,7 +97,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/service-clickthrough-policy-runtime-proof.ts",
     "apps/platform-api/scripts/clickthrough-services-runtime-proof.ts",
     "apps/platform-api/src/usecases/service-clickthrough.ts",

@@ -34,7 +34,7 @@
     "apps/platform-api/src/db/migrations/012-rls-current-user-check.sql",
     "apps/platform-api/tests/unit/migrations.test.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "capabilityTargets": [
     {
