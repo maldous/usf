@@ -1,0 +1,18 @@
+# USF /proof cockpit gate — COMMITTED CLOSED DEFAULT.
+#
+# This is the fail-closed default imported by docker/caddy/Caddyfile at
+# /srv/caddy-runtime/proof-cockpit-auth.caddy. It responds 503 so the /proof
+# cockpit route is CLOSED whenever a proof-review session is not open.
+#
+# `make caddy-up` seeds a writable runtime copy of this file into the gitignored
+# host dir (.proof-review/caddy) bind-mounted to /srv/caddy-runtime. The public
+# read-only proof edge stays served regardless of this include.
+#
+# `make proof-review-up` overwrites the runtime copy with an authenticated body
+# (basic_auth { <operator-user> <bcrypt-hash> } then reverse_proxy to the
+# staging-proof-cockpit service) and reloads Caddy to OPEN the gate.
+# `make proof-review-down` restores this closed default and reloads to CLOSE it.
+#
+# The operator credential lives only in the gitignored runtime copy, never here
+# and never in a committed file or the caddy service environment.
+respond "USF proof review surface is not currently open" 503

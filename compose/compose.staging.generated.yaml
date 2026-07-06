@@ -539,20 +539,12 @@ services:
     environment:
       PROOF_COCKPIT_HOST: 0.0.0.0
       PROOF_COCKPIT_PORT: 8080
-      USF_PROOF_COCKPIT_ALLOW_WRITES: yes
-      USF_PROOF_COCKPIT_REVIEW_SECRET: local-placeholder-proof-cockpit-review-secret
+      USF_PROOF_COCKPIT_ALLOW_WRITES: "${USF_PROOF_COCKPIT_ALLOW_WRITES:-}"
+      USF_PROOF_COCKPIT_REVIEW_SECRET: "${USF_PROOF_COCKPIT_REVIEW_SECRET:-}"
       USF_PROOF_COCKPIT_REVIEW_ACTOR: "Matthew Aldous"
       USF_PROOF_COCKPIT_TRUST_FORWARD_AUTH: yes
       USF_PROOF_COCKPIT_STATE_PATH: /var/lib/usf-proof-cockpit/human-review-actions.json
       USF_SOURCE_SHA: "${USF_SOURCE_SHA}"
-    ports:
-      -
-        name: staging-proof-cockpit-http
-        target: 8080
-        published: 18085
-        host_ip: 127.0.0.1
-        protocol: tcp
-        app_protocol: http
     volumes:
       - ../:/srv/usf:ro
       - proof-cockpit-ledger:/var/lib/usf-proof-cockpit
@@ -569,23 +561,31 @@ services:
       - proof-cockpit
   external-caddy:
     image: caddy:2-alpine
+    environment:
+      USF_PROOF_STAGING_FQDN: "${USF_PROOF_STAGING_FQDN}"
+      USF_PROOF_PROD_FQDN: "${USF_PROOF_PROD_FQDN}"
     ports:
       -
         name: gateway-http
         target: 80
-        published: 8081
+        published: 80
         host_ip: 127.0.0.1
         protocol: tcp
         app_protocol: http
       -
         name: gateway-https
         target: 443
-        published: 8443
+        published: 443
         host_ip: 127.0.0.1
         protocol: tcp
         app_protocol: https
+    volumes:
+      - ../docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../.proof-review/caddy:/srv/caddy-runtime
+      - caddy-data:/data
     profiles:
       - gateway
+      - proof-cockpit
 volumes:
   postgres-data: {}
   keycloak-db-data: {}
@@ -593,3 +593,4 @@ volumes:
   pgbackrest-repo: {}
   pgbackrest-restore: {}
   proof-cockpit-ledger: {}
+  caddy-data: {}

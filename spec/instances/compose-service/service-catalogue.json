@@ -82,6 +82,7 @@
     "foundation_app_password",
     "keycloak_password",
     "local-placeholder-proof-cockpit-review-secret",
+    "${USF_PROOF_COCKPIT_REVIEW_SECRET:-}",
     "minio_password",
     "postgres://windmill:windmill_password@windmill-postgres:5432/windmill",
     "sonar_password",
@@ -13005,13 +13006,13 @@
             "proof-cockpit"
           ],
           "required": true,
-          "collisionGroup": "host-published",
+          "collisionGroup": "not-host-published",
           "concurrentEnvironmentPolicy": "single-environment-only",
-          "portAllocationMode": "fixed",
+          "portAllocationMode": "not-published",
           "productionExposure": "prohibited",
-          "rationale": "Loopback-only generated Compose exposure for the staging operator proof cockpit fixture.",
-          "exposureRationale": "Operator-admin proof fixture; loopback-only and never a direct public host port. Public reachability is via the edge Caddy operator-authenticated reverse proxy per ADR 0015.",
-          "accessPolicy": "Access is edge-authenticated at the Caddy reverse proxy (operator basic authentication) on the 1e100.network staging host; the service port itself is loopback-only and requires the cockpit write guard plus CSRF for write actions.",
+          "rationale": "Compose-network-only container port for the staging operator proof cockpit fixture; not host-published. The edge Caddy reaches it as staging-proof-cockpit:8080 over the compose network.",
+          "exposureRationale": "Operator-admin proof fixture; the container port is not host-published at all. Public reachability is only via the composed edge Caddy operator-authenticated reverse proxy per ADR 0015.",
+          "accessPolicy": "Access is edge-authenticated at the composed Caddy reverse proxy (operator basic authentication via the reload-managed include) on the staging FQDN host; the container port is not host-published and requires the cockpit write guard plus CSRF for write actions.",
           "authRequired": true,
           "tlsRequired": false,
           "auditRequired": true,
@@ -13134,11 +13135,11 @@
           },
           {
             "name": "USF_PROOF_COCKPIT_ALLOW_WRITES",
-            "value": "yes"
+            "value": "${USF_PROOF_COCKPIT_ALLOW_WRITES:-}"
           },
           {
             "name": "USF_PROOF_COCKPIT_REVIEW_SECRET",
-            "value": "local-placeholder-proof-cockpit-review-secret"
+            "value": "${USF_PROOF_COCKPIT_REVIEW_SECRET:-}"
           },
           {
             "name": "USF_PROOF_COCKPIT_REVIEW_ACTOR",
@@ -13354,7 +13355,8 @@
           "substitutionPolicy": "real-product-required",
           "composePolicy": "generate-profile-gated-service",
           "composeProfiles": [
-            "gateway"
+            "gateway",
+            "proof-cockpit"
           ],
           "generated": true,
           "seedReset": "seeded-once-or-evolving",
@@ -13391,17 +13393,26 @@
         }
       },
       "composeProfiles": [
-        "gateway"
+        "gateway",
+        "proof-cockpit"
       ],
       "dependencies": [],
-      "volumes": [],
+      "volumes": [
+        {
+          "name": "caddy-data",
+          "purpose": "persist Caddy-managed ACME/TLS certificate material and edge state so certs survive edge restarts",
+          "dataBoundary": "metadata-only",
+          "lifecycle": "persistent-per-environment",
+          "composeVolumeName": "caddy-data"
+        }
+      ],
       "networks": [],
       "ports": [
         {
           "portId": "gateway-http",
           "name": "gateway-http",
           "containerPort": 80,
-          "publishedPort": 8081,
+          "publishedPort": 80,
           "protocol": "tcp",
           "appProtocol": "http",
           "hostIp": "127.0.0.1",
@@ -13409,8 +13420,6 @@
           "exposureClass": "gateway",
           "accessModel": "developer-access",
           "environmentScopes": [
-            "dev",
-            "test",
             "staging"
           ],
           "composeProfiles": [
@@ -13424,7 +13433,7 @@
           "concurrentEnvironmentPolicy": "single-environment-only",
           "portAllocationMode": "fixed",
           "productionExposure": "cloud-provider",
-          "rationale": "Local generated Compose exposure for Caddy Gateway; dev/test/staging are not concurrently runnable by default.",
+          "rationale": "Composed public proof edge host publish (127.0.0.1) for the staging FQDN edge only; dev/test reach Caddy over the compose network without a host port.",
           "exposureRationale": "service endpoint; loopback-only and non-production.",
           "accessPolicy": "Access follows developer-access; host publication is loopback-only and local to the generated Compose target.",
           "authRequired": true,
@@ -13467,7 +13476,7 @@
           "portId": "gateway-https",
           "name": "gateway-https",
           "containerPort": 443,
-          "publishedPort": 8443,
+          "publishedPort": 443,
           "protocol": "tcp",
           "appProtocol": "https",
           "hostIp": "127.0.0.1",
@@ -13475,8 +13484,6 @@
           "exposureClass": "gateway",
           "accessModel": "developer-access",
           "environmentScopes": [
-            "dev",
-            "test",
             "staging"
           ],
           "composeProfiles": [
@@ -13490,7 +13497,7 @@
           "concurrentEnvironmentPolicy": "single-environment-only",
           "portAllocationMode": "fixed",
           "productionExposure": "cloud-provider",
-          "rationale": "Local generated Compose exposure for Caddy Gateway; dev/test/staging are not concurrently runnable by default.",
+          "rationale": "Composed public proof edge host publish (127.0.0.1) for the staging FQDN edge only; dev/test reach Caddy over the compose network without a host port.",
           "exposureRationale": "service endpoint; loopback-only and non-production.",
           "accessPolicy": "Access follows developer-access; host publication is loopback-only and local to the generated Compose target.",
           "authRequired": true,
@@ -13595,12 +13602,26 @@
         "serviceName": "external-caddy",
         "image": "caddy:2-alpine",
         "profiles": [
-          "gateway"
+          "gateway",
+          "proof-cockpit"
         ],
         "command": [],
-        "environment": [],
+        "environment": [
+          {
+            "name": "USF_PROOF_STAGING_FQDN",
+            "value": "${USF_PROOF_STAGING_FQDN}"
+          },
+          {
+            "name": "USF_PROOF_PROD_FQDN",
+            "value": "${USF_PROOF_PROD_FQDN}"
+          }
+        ],
         "ports": [],
-        "volumes": [],
+        "volumes": [
+          "../docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro",
+          "../.proof-review/caddy:/srv/caddy-runtime",
+          "caddy-data:/data"
+        ],
         "dependsOn": [],
         "healthcheck": null
       }

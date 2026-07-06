@@ -2,35 +2,38 @@
   "id": "command.proof-review-down",
   "commandKind": "make-target",
   "title": "Reconcile Acceptance Ledger and Tear Down Proof Review Surface",
-  "description": "Operator lifecycle command that materialises the acceptance ledger out of the ADR 0015 review volume into the committed evidence corpus, commits it, then tears the review surface down while preserving the ledger volume.",
-  "purpose": "Persist the operator's recorded acceptance and signoff decisions from the running review surface into the committed evidence corpus as the manual operator reconciliation step, then stop the review surface.",
+  "description": "Operator lifecycle command that materialises the acceptance ledger out of the ADR 0015 review volume into the committed evidence corpus, commits it, closes the /proof gate (restores the committed 503 default and reloads the edge), then stops only the cockpit while leaving the shared public proof edge up and preserving the ledger volume.",
+  "purpose": "Persist the operator's recorded acceptance and signoff decisions from the running cockpit into the committed evidence corpus as the manual operator reconciliation step, then close the /proof cockpit gate and stop the cockpit while the shared composed public proof edge keeps serving.",
   "invocation": "make proof-review-down",
   "inputs": [
     "tools/proof-review/proof-review.sh",
-    "compose/compose.staging.generated.yaml"
+    "compose/compose.staging.generated.yaml",
+    "docker/caddy/proof-cockpit-auth.caddy"
   ],
   "outputs": [
     "Updated evidence/proof-evidence/proof-cockpit/human-review-actions.json",
     "A git commit reconciling the acceptance ledger from the review volume",
-    "Stopped review Compose service and Caddy container with the ledger volume preserved"
+    "A closed /proof gate (the committed 503 default restored on the runtime include and reloaded) with the cockpit stopped, the external-caddy edge left running, and the ledger volume preserved"
   ],
   "environmentScope": [
     "local",
     "staging"
   ],
   "sideEffects": [
-    "Reads the acceptance ledger from the running review Docker volume",
+    "Reads the acceptance ledger from the running cockpit Docker volume",
     "Overwrites evidence/proof-evidence/proof-cockpit/human-review-actions.json with the materialised ledger",
     "Creates a git commit of the reconciled acceptance ledger (not pushed automatically)",
-    "Stops and removes the review Compose service and operator Caddy container, preserving the ledger volume"
+    "Restores the committed CLOSED (503) /proof gate include on the gitignored runtime mount and reloads external-caddy to close the gate",
+    "Stops only the staging-proof-cockpit service (leaving external-caddy up so the public proof routes keep serving) and preserves the ledger volume (no volume removal)"
   ],
-  "failureSemantics": "Fails closed if the review service is not running or the materialised ledger is not valid JSON with at least one action; on failure nothing is committed and the surface is left for inspection. The commit records the operator's own recorded decisions and does not itself upgrade any readiness claim; final signoff remains whatever the operator recorded in the cockpit.",
+  "failureSemantics": "Fails closed if the cockpit service is not running or the materialised ledger is not valid JSON with at least one action; on failure nothing is committed and the surface is left for inspection. The commit records the operator's own recorded decisions and does not itself upgrade any readiness claim; final signoff remains whatever the operator recorded in the cockpit.",
   "emitsEvidence": true,
   "sourceRefs": [
     "tools/proof-review/proof-review.sh",
     "Makefile",
     "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
     "docs/runbooks/proof-cockpit-human-signoff.md",
+    "docker/caddy/proof-cockpit-auth.caddy",
     "evidence/proof-evidence/proof-cockpit/human-review-actions.json"
   ],
   "disposition": "preserve",
@@ -47,5 +50,5 @@
     "environment-classes",
     "disposition-values"
   ],
-  "aiGuidance": "Use this command to reconcile operator-recorded acceptance from the review volume into the committed evidence corpus and tear the surface down. It git-commits the acceptance ledger but never pushes; the running service is never given repository write credentials. Do not use it to fabricate acceptance the operator did not record in the cockpit."
+  "aiGuidance": "Use this command to reconcile operator-recorded acceptance from the review volume into the committed evidence corpus, close the /proof gate, and stop the cockpit while leaving the shared composed proof edge running. It git-commits the acceptance ledger but never pushes; the running service is never given repository write credentials; it does not stop external-caddy (use caddy-down for that) and never removes the ledger volume. Do not use it to fabricate acceptance the operator did not record in the cockpit."
 }
