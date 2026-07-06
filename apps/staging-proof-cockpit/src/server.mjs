@@ -1798,8 +1798,21 @@ function evidenceLink(evidenceId) {
   return `<a href="/proof/evidence/${escapeHtml(evidenceId)}">${escapeHtml(evidenceId)}</a>`;
 }
 
+function promotedProofArtifactPath(path) {
+  const value = String(path ?? "").split("#")[0];
+  const tmpPrefix = "/tmp/usf-proof-cockpit-machine-qa/";
+  if (!value.startsWith(tmpPrefix)) {
+    return value;
+  }
+  const promotedRelativePath = value.slice(tmpPrefix.length);
+  if (!promotedRelativePath || promotedRelativePath.includes("..") || /(^|\/)\./.test(promotedRelativePath)) {
+    return "";
+  }
+  return `artifacts/proof-cockpit/machine-runs/${promotedRelativePath}`;
+}
+
 function safeImagePath(path) {
-  const safePath = safeSourcePath(path);
+  const safePath = safeSourcePath(promotedProofArtifactPath(path));
   if (!safePath || !safePath.startsWith("artifacts/proof-cockpit/") || !safePath.endsWith(".png")) {
     return "";
   }
@@ -1838,6 +1851,7 @@ Redaction: ${escapeHtml(displayValue(screenshot?.redactionStatus, "Derived from 
 }
 
 function screenshotPathHasReviewableRedaction(path) {
+  const normalizedPath = promotedProofArtifactPath(path);
   const store = loadPersistentEvidenceStore();
   const rows = loadScreenshotManifestRows(store);
   for (const row of rows) {
@@ -1847,8 +1861,10 @@ function screenshotPathHasReviewableRedaction(path) {
       row.authenticatedUiScreenshotPath,
       row.artifactPath,
       row.apiCliArtifactPath,
-    ].filter(Boolean);
-    if (!candidatePaths.includes(path)) {
+    ]
+      .filter(Boolean)
+      .map(promotedProofArtifactPath);
+    if (!candidatePaths.includes(normalizedPath)) {
       continue;
     }
     const status = String(row.redactionStatus ?? "").toLowerCase();
@@ -1946,17 +1962,19 @@ function recordedActionCountFor(state, predicate) {
   return state.actions.filter(predicate).length;
 }
 
-function reviewDecisionCounts(state) {
-  return state.actions.reduce(
-    (counts, action) => {
-      if (action.outcome === "human-accepted") counts.accepted += 1;
-      if (action.outcome === "human-rejected") counts.rejected += 1;
-      if (action.outcome === "retest-requested") counts.retest += 1;
-      if (action.actionType === "corrective-action-created" || action.outcome === "corrective-action-required") counts.corrective += 1;
-      if (action.actionType === "human-note-added") counts.notes += 1;
+function reviewItemStateCounts(items, state) {
+  return items.reduce(
+    (counts, item) => {
+      const decision = reviewItemDecision(state, item);
+      counts.total += 1;
+      if (decision.status === "accepted") counts.accepted += 1;
+      if (decision.status === "rejected") counts.rejected += 1;
+      if (decision.status === "retest-requested") counts.retest += 1;
+      if (decision.status === "human-review-required") counts.pending += 1;
+      if (decision.status === "re-review-required") counts.reReview += 1;
       return counts;
     },
-    { accepted: 0, rejected: 0, retest: 0, corrective: 0, notes: 0 },
+    { total: 0, accepted: 0, rejected: 0, retest: 0, pending: 0, reReview: 0 },
   );
 }
 
@@ -1969,13 +1987,30 @@ function actionMatchesReviewItem(action, item) {
   );
 }
 
+function actionSortTime(action) {
+  const parsed = Date.parse(action.updatedAt ?? action.createdAt ?? "");
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function latestMatchingAction(actions, predicate) {
+  return actions
+    .filter(predicate)
+    .sort((left, right) => {
+      const byTime = actionSortTime(right) - actionSortTime(left);
+      return byTime || String(right.id ?? "").localeCompare(String(left.id ?? ""));
+    })[0];
+}
+
 export function reviewItemDecision(state, item) {
   // Prefer an exact per-item match (evidenceId === item.id) so a per-item
-  // acceptance is authoritative; fall back to the looser capability/service
-  // match only when no exact per-item action exists.
+  // acceptance is authoritative; when multiple actions exist, use the newest
+  // one so a later acceptance/rejection can supersede stale ledger entries.
+  // Fall back to the looser capability/service match only when no exact
+  // per-item action exists.
+  const actions = Array.isArray(state.actions) ? state.actions : [];
   const action =
-    state.actions.find((candidate) => candidate.evidenceId === item.id) ??
-    state.actions.find((candidate) => actionMatchesReviewItem(candidate, item));
+    latestMatchingAction(actions, (candidate) => candidate.evidenceId === item.id) ??
+    latestMatchingAction(actions, (candidate) => actionMatchesReviewItem(candidate, item));
   if (!action) {
     return { status: "human-review-required", tone: "review", action: null };
   }
@@ -2281,13 +2316,20 @@ function renderHome(data, state) {
   const latest = store.latestMachineRun;
   const human = store.humanReview;
   const reviewItems = buildReviewItems(data);
-  const currentIndex = currentReviewIndex(reviewItems, state, new URL("/proof", "http://127.0.0.1"));
-  const currentItem = reviewItems[currentIndex];
-  const decisionCounts = reviewDecisionCounts(state);
+  const openStatuses = new Set(["human-review-required", "re-review-required", "rejected", "retest-requested"]);
+  const reviewStates = reviewItems.map((item, index) => ({ item, index, decision: reviewItemDecision(state, item) }));
+  const openReviewState = reviewStates.find(({ decision }) => openStatuses.has(decision.status));
+  const currentIndex = openReviewState?.index ?? currentReviewIndex(reviewItems, state, new URL("/proof", "http://127.0.0.1"));
+  const currentItem = openReviewState?.item ?? reviewItems[currentIndex];
+  const itemDecisionCounts = reviewItemStateCounts(reviewItems, state);
+  const openReviewCount =
+    itemDecisionCounts.pending + itemDecisionCounts.reReview + itemDecisionCounts.rejected + itemDecisionCounts.retest;
   const blockerText =
     latest.failCount || latest.warnCount || latest.gapCount
       ? `${latest.failCount} failures, ${latest.warnCount} warnings, ${latest.gapCount} unresolved gaps`
-      : "No machine QA blockers; human review and final signoff remain required.";
+      : openReviewCount
+        ? `${openReviewCount} review items remain for human action.`
+        : "No machine QA blockers and no current review items pending; final signoff remains separate.";
   return layout(
     "USF Proof Review",
     `<section class="hero">
@@ -2303,7 +2345,7 @@ ${statusBadge(`${latest.failCount} failures`, latest.failCount ? "bad" : "pass")
 ${statusBadge(human.finalSignoffAvailable ? "final signoff available after human criteria" : "final signoff not auto-completed", "review")}
 </div>
 <div class="hero-actions">
-<a class="button-link button-primary" href="/proof/review">Start review</a>
+<a class="button-link button-primary" href="/proof/review">${openReviewCount ? "Start review" : "Open review ledger"}</a>
 <a class="button-link" href="/proof/reports/final">Open printable report</a>
 <a class="button-link" href="/proof/screenshots">Review screenshots</a>
 <a class="button-link" href="/proof/evidence">Review evidence bundle</a>
@@ -2311,10 +2353,10 @@ ${statusBadge(human.finalSignoffAvailable ? "final signoff available after human
 </div>
 </div>
 <aside class="decision-panel">
-<h3>Next review item</h3>
-<p>${statusBadge(currentItem.type, "neutral")} ${statusBadge(reviewItemDecision(state, currentItem).status, reviewItemDecision(state, currentItem).tone)}</p>
-<p><strong>${escapeHtml(currentItem.title)}</strong></p>
-<p>${escapeHtml(currentItem.summary)}</p>
+<h3>${openReviewCount ? "Next review item" : "No review items pending"}</h3>
+<p>${statusBadge(`${itemDecisionCounts.accepted}/${itemDecisionCounts.total} accepted`, "accepted")} ${statusBadge(`${openReviewCount} open`, openReviewCount ? "review" : "pass")}</p>
+<p><strong>${escapeHtml(openReviewCount ? currentItem.title : "Current proof baseline accepted")}</strong></p>
+<p>${escapeHtml(openReviewCount ? currentItem.summary : "All current review-item fingerprints have accepted baseline decisions in the action ledger. A future evidence or screenshot change will return only affected items to this queue.")}</p>
 <p><a class="button-link button-primary" href="/proof/review?item=${encodeURIComponent(String(currentIndex))}">Open current item</a></p>
 </aside>
 </div>
@@ -2323,9 +2365,9 @@ ${statusBadge(human.finalSignoffAvailable ? "final signoff available after human
 <h2>Current decision status</h2>
 <div class="grid">
 <div class="card"><h3>Machine QA</h3><p class="metric">${escapeHtml(`${latest.passCount} / ${latest.warnCount} / ${latest.gapCount} / ${latest.failCount}`)}</p><p class="muted">pass / warn / gap / fail</p></div>
-<div class="card"><h3>Human review progress</h3><p class="metric">${state.actions.length}</p><p class="muted">recorded browser review actions</p></div>
-<div class="card"><h3>Decisions</h3><p>${statusBadge(`${decisionCounts.accepted} accepted`, "accepted")} ${statusBadge(`${decisionCounts.rejected} rejected`, "rejected")} ${statusBadge(`${decisionCounts.retest} retest`, "warn")}</p></div>
-<div class="card"><h3>Blockers</h3><p>${statusBadge(blockerText, latest.failCount || latest.warnCount || latest.gapCount ? "bad" : "pass")}</p></div>
+<div class="card"><h3>Human review progress</h3><p class="metric">${escapeHtml(`${itemDecisionCounts.accepted} / ${itemDecisionCounts.total}`)}</p><p class="muted">${escapeHtml(`${openReviewCount} open current review items; ${state.actions.length} recorded ledger actions`)}</p></div>
+<div class="card"><h3>Current item decisions</h3><p>${statusBadge(`${itemDecisionCounts.accepted} accepted`, "accepted")} ${statusBadge(`${itemDecisionCounts.rejected} rejected`, "rejected")} ${statusBadge(`${itemDecisionCounts.retest} retest`, "warn")} ${statusBadge(`${itemDecisionCounts.reReview} re-review`, itemDecisionCounts.reReview ? "review" : "pass")}</p></div>
+<div class="card"><h3>Blockers</h3><p>${statusBadge(blockerText, latest.failCount || latest.warnCount || latest.gapCount || openReviewCount ? "bad" : "pass")}</p></div>
 <div class="card"><h3>Evidence scope</h3><p>${escapeHtml(data.claims.length)} claims, ${escapeHtml(data.capabilities.length)} capabilities, ${escapeHtml(data.services.length)} services, ${escapeHtml(data.screenshots.length)} screenshots.</p></div>
 </div>
 </section>
@@ -2982,6 +3024,35 @@ function renderReview(data, state, url = new URL("/proof/review", "http://127.0.
     return layout("Corrective actions", `${table(["Corrective action", "Description", "Owner", "Re-test"], reviewRows("correctiveActions"))}${nonClaimsBlock()}`);
   }
   const items = buildReviewItems(data);
+  const itemDecisionCounts = reviewItemStateCounts(items, state);
+  const openCount =
+    itemDecisionCounts.pending + itemDecisionCounts.reReview + itemDecisionCounts.rejected + itemDecisionCounts.retest;
+  if (!explicitId && !url.searchParams.has("item") && openCount === 0) {
+    return layout(
+      "Proof review workflow",
+      `<section class="hero">
+<h2>No current review items are pending</h2>
+<p>All ${escapeHtml(items.length)} current review-item fingerprints have accepted decisions in the action ledger. Future evidence, screenshot, report, or route changes will alter affected fingerprints and return only those items to this workflow.</p>
+<div class="hero-actions">
+<a class="button-link button-primary" href="/proof/signoff">Review signoff state</a>
+<a class="button-link" href="/proof/review?item=0">Open accepted item ledger</a>
+<a class="button-link" href="/proof/reports/final">Open printable report</a>
+</div>
+</section>
+<section>
+<h2>Current review queue</h2>
+${table(["State", "Count"], [
+        `<tr><th>Accepted current items</th><td>${escapeHtml(itemDecisionCounts.accepted)}</td></tr>`,
+        `<tr><th>Rejected items</th><td>${escapeHtml(itemDecisionCounts.rejected)}</td></tr>`,
+        `<tr><th>Retest requested</th><td>${escapeHtml(itemDecisionCounts.retest)}</td></tr>`,
+        `<tr><th>Re-review required</th><td>${escapeHtml(itemDecisionCounts.reReview)}</td></tr>`,
+        `<tr><th>Unreviewed items</th><td>${escapeHtml(itemDecisionCounts.pending)}</td></tr>`,
+        `<tr><th>Recorded ledger actions</th><td>${escapeHtml(state.actions.length)}</td></tr>`,
+      ])}
+</section>
+${nonClaimsBlock()}`,
+    );
+  }
   const index = currentReviewIndex(items, state, url, explicitId);
   const item = items[index];
   const decision = reviewItemDecision(state, item);
@@ -3933,16 +4004,18 @@ function renderSignoff(data, state) {
   const rejected = itemStates.filter(({ decision }) => decision.status === "rejected");
   const retest = itemStates.filter(({ decision }) => decision.status === "retest-requested");
   const unreviewed = itemStates.filter(({ decision }) => decision.status === "human-review-required");
+  const reReview = itemStates.filter(({ decision }) => decision.status === "re-review-required");
   const accepted = itemStates.filter(({ decision }) => decision.status === "accepted");
   const rows = [
     ["Accepted review items", accepted.length],
     ["Rejected review items", rejected.length],
     ["Retest requested", retest.length],
+    ["Re-review required", reReview.length],
     ["Unreviewed items", unreviewed.length],
     ["Recorded browser actions", state.actions.length],
     ["Final signoff auto-completed", "no"],
   ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
-  const openRows = [...rejected, ...retest, ...unreviewed].slice(0, 50).map(({ item, decision }) => `<tr>
+  const openRows = [...rejected, ...retest, ...reReview, ...unreviewed].slice(0, 50).map(({ item, decision }) => `<tr>
 <td><a href="/proof/review?item=${encodeURIComponent(item.id)}">${escapeHtml(item.title)}</a></td>
 <td>${escapeHtml(item.type)}</td>
 <td>${escapeHtml(decision.status)}</td>
