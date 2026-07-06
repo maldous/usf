@@ -42,6 +42,7 @@ const EXTERNAL_REVIEW_BUNDLE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "external-rev
 const DEFAULT_STATE_PATH =
   process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/var/lib/usf-proof-cockpit/human-review-actions.json";
 const CSRF_COOKIE_NAME = "proof_cockpit_csrf";
+const FINAL_SIGNOFF_PHRASE = "FINAL SIGNOFF USF-290";
 
 const NON_CLAIMS = Object.freeze([
   "no-staging-readiness",
@@ -491,7 +492,7 @@ const STAGING_PROOF_UI_REQUIREMENTS = Object.freeze([
   ["Source and document review", "repo path, source SHA, evidence source, auditor confirmation, correction needed", "/proof/sources"],
   ["Enterprise evidence", "risk owner, control owner, evidence owner, applicability, exception path, review cadence", "/proof/enterprise"],
   ["Action ledger", "recorded browser action, role, outcome, notes, links, prerequisite confirmations", "/proof/actions"],
-  ["Final signoff", "all actions reviewed, immutable evidence produced, acceptance gate enabled by later implementation", "/proof/signoff"],
+  ["Final signoff", "all actions reviewed, no open review items, explicit guarded browser signoff action", "/proof/signoff"],
 ]);
 
 const QA_ACTION_TYPES = Object.freeze([
@@ -1978,6 +1979,35 @@ function reviewItemStateCounts(items, state) {
   );
 }
 
+export function finalSignoffState(data, state) {
+  const items = buildReviewItems(data);
+  const itemStates = items.map((item) => ({ item, decision: reviewItemDecision(state, item) }));
+  const counts = reviewItemStateCounts(items, state);
+  const latest = data.persistentEvidence.latestMachineRun;
+  const machineBlockers = Number(latest.failCount ?? 0) + Number(latest.warnCount ?? 0) + Number(latest.gapCount ?? 0);
+  const openItems = itemStates.filter(({ decision }) =>
+    ["rejected", "retest-requested", "human-review-required", "re-review-required"].includes(decision.status),
+  );
+  const signoffAction = latestMatchingAction(
+    state.actions ?? [],
+    (action) =>
+      action.actionType === "human-final-decision" &&
+      action.outcome === "human-accepted" &&
+      action.evidenceId === "usf-290-final-signoff",
+  );
+  return {
+    items,
+    itemStates,
+    counts,
+    latest,
+    machineBlockers,
+    openItems,
+    signoffAction,
+    signoffAvailable: machineBlockers === 0 && openItems.length === 0 && counts.total > 0,
+    signoffRecorded: Boolean(signoffAction),
+  };
+}
+
 function actionMatchesReviewItem(action, item) {
   return (
     action.evidenceId === item.id ||
@@ -2276,6 +2306,110 @@ function normalizeAction(params, actor) {
   };
 }
 
+function finalSignoffError(message, status = 400) {
+  return {
+    status,
+    body: layout(
+      "Final signoff not recorded",
+      `<section>
+<h2>Final signoff not recorded</h2>
+<p>${escapeHtml(message)}</p>
+<p><a class="button-link button-primary" href="/proof/signoff">Back to signoff</a> <a class="button-link" href="/proof/review">Open review ledger</a></p>
+${nonClaimsBlock()}
+</section>`,
+    ),
+  };
+}
+
+function normalizeFinalSignoffAction(params, actor, signoff) {
+  if (signoff.signoffRecorded) {
+    return { error: finalSignoffError("A final signoff action is already recorded in the browser action ledger.", 409) };
+  }
+  if (!signoff.signoffAvailable) {
+    return {
+      error: finalSignoffError(
+        `Final signoff is unavailable: ${signoff.machineBlockers} machine blockers and ${signoff.openItems.length} open review items remain.`,
+        409,
+      ),
+    };
+  }
+  const missingConfirmations = [
+    "acceptedCurrentEvidence",
+    "qaZeroConfirmed",
+    "deltaReviewAcknowledged",
+    "nonClaimsConfirmed",
+  ].filter((name) => !params.has(name));
+  if (missingConfirmations.length) {
+    return { error: finalSignoffError(`Required signoff confirmations are missing: ${missingConfirmations.join(", ")}.`) };
+  }
+  if (String(params.get("signoffPhrase") ?? "").trim() !== FINAL_SIGNOFF_PHRASE) {
+    return { error: finalSignoffError(`The exact signoff phrase must be typed: ${FINAL_SIGNOFF_PHRASE}.`) };
+  }
+  const now = new Date().toISOString();
+  const signoffFingerprint = contentHash(
+    JSON.stringify({
+      issueId: ACCEPTANCE_ISSUE,
+      sourceSha: getSourceSha(),
+      qaRun: signoff.latest.qaRun ?? signoff.latest.runId ?? "",
+      counts: signoff.counts,
+      machine: {
+        pass: signoff.latest.passCount,
+        warn: signoff.latest.warnCount,
+        gaps: signoff.latest.gapCount,
+        fail: signoff.latest.failCount,
+      },
+    }),
+  ).slice(0, 32);
+  return {
+    action: {
+      id: `qa-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+      createdAt: now,
+      updatedAt: now,
+      sourceSha: getSourceSha(),
+      actionType: "human-final-decision",
+      outcome: "human-accepted",
+      role: ROLES.includes(params.get("role")) ? params.get("role") : "auditor",
+      actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
+      tenant: String(params.get("tenant") ?? "synthetic-proof-review").slice(0, 160),
+      actionName: `Final signoff: ${ACCEPTANCE_ISSUE} human acceptance decision`,
+      capabilityId: "proof-cockpit-human-acceptance",
+      serviceId: "staging-proof-cockpit",
+      scenarioId: "final-human-signoff",
+      evidenceId: "usf-290-final-signoff",
+      enterpriseTopic: "human-review-and-acceptance",
+      correlationId: `signoff-${signoffFingerprint}`,
+      traceId: "",
+      auditEventId: `human-final-signoff-${signoffFingerprint}`,
+      evidenceUrl: "/proof",
+      sourceUrl: "/proof/reports/final",
+      serviceUrl: "/proof/signoff",
+      screenshotUrl: "/proof/screenshots",
+      notes: String(params.get("notes") ?? "").slice(0, 4000),
+      acceptanceFingerprint: signoffFingerprint,
+      confirmations: {
+        devEvidenceConfirmed: true,
+        testEvidenceConfirmed: true,
+        noRealTenantData: true,
+        nonClaimsConfirmed: true,
+      },
+      finalSignoff: {
+        issueId: ACCEPTANCE_ISSUE,
+        explicitBrowserAction: true,
+        notAutoCompleted: true,
+        acceptedCurrentReviewItems: signoff.counts.accepted,
+        totalCurrentReviewItems: signoff.counts.total,
+        openReviewItems: signoff.openItems.length,
+        machinePassCount: signoff.latest.passCount,
+        machineWarnCount: signoff.latest.warnCount,
+        machineGapCount: signoff.latest.gapCount,
+        machineFailCount: signoff.latest.failCount,
+        nonClaimsPreserved: [...NON_CLAIMS],
+      },
+      finalAcceptanceClaimed: false,
+    },
+  };
+}
+
 function actionDetailRows(action) {
   return Object.entries({
     id: action.id,
@@ -2303,6 +2437,16 @@ function actionDetailRows(action) {
     testEvidenceConfirmed: action.confirmations?.testEvidenceConfirmed,
     noRealTenantData: action.confirmations?.noRealTenantData,
     nonClaimsConfirmed: action.confirmations?.nonClaimsConfirmed,
+    finalSignoffIssue: action.finalSignoff?.issueId,
+    finalSignoffExplicitBrowserAction: action.finalSignoff?.explicitBrowserAction,
+    finalSignoffNotAutoCompleted: action.finalSignoff?.notAutoCompleted,
+    finalSignoffAcceptedCurrentReviewItems: action.finalSignoff?.acceptedCurrentReviewItems,
+    finalSignoffTotalCurrentReviewItems: action.finalSignoff?.totalCurrentReviewItems,
+    finalSignoffOpenReviewItems: action.finalSignoff?.openReviewItems,
+    finalSignoffMachinePassCount: action.finalSignoff?.machinePassCount,
+    finalSignoffMachineWarnCount: action.finalSignoff?.machineWarnCount,
+    finalSignoffMachineGapCount: action.finalSignoff?.machineGapCount,
+    finalSignoffMachineFailCount: action.finalSignoff?.machineFailCount,
     finalAcceptanceClaimed: action.finalAcceptanceClaimed,
     notes: action.notes,
   }).map(
@@ -2322,6 +2466,7 @@ function renderHome(data, state) {
   const currentIndex = openReviewState?.index ?? currentReviewIndex(reviewItems, state, new URL("/proof", "http://127.0.0.1"));
   const currentItem = openReviewState?.item ?? reviewItems[currentIndex];
   const itemDecisionCounts = reviewItemStateCounts(reviewItems, state);
+  const signoff = finalSignoffState(data, state);
   const openReviewCount =
     itemDecisionCounts.pending + itemDecisionCounts.reReview + itemDecisionCounts.rejected + itemDecisionCounts.retest;
   const blockerText =
@@ -2342,7 +2487,7 @@ ${statusBadge(`${latest.passCount} pass`, "pass")}
 ${statusBadge(`${latest.warnCount} warnings`, latest.warnCount ? "warn" : "pass")}
 ${statusBadge(`${latest.gapCount} unresolved gaps`, latest.gapCount ? "warn" : "pass")}
 ${statusBadge(`${latest.failCount} failures`, latest.failCount ? "bad" : "pass")}
-${statusBadge(human.finalSignoffAvailable ? "final signoff available after human criteria" : "final signoff not auto-completed", "review")}
+${statusBadge(signoff.signoffRecorded ? "final signoff recorded by browser action" : signoff.signoffAvailable ? "final signoff available after human criteria" : human.finalSignoffAvailable ? "final signoff available after human criteria" : "final signoff not auto-completed", signoff.signoffRecorded ? "accepted" : "review")}
 </div>
 <div class="hero-actions">
 <a class="button-link button-primary" href="/proof/review">${openReviewCount ? "Start review" : "Open review ledger"}</a>
@@ -3998,9 +4143,53 @@ ${table(["Service", "Fixture seed", "Seeder", "Resetter", "Cleanup", "Teardown"]
   );
 }
 
+function renderFinalSignoffForm(signoff) {
+  const policy = writePolicyFromOptions();
+  const disabled = policy.allowWrites && signoff.signoffAvailable && !signoff.signoffRecorded ? "" : " disabled";
+  const disabledReason = signoff.signoffRecorded
+    ? "Final signoff is already recorded in the browser action ledger."
+    : signoff.signoffAvailable
+      ? policy.allowWrites
+        ? "Final signoff is available. Type the exact phrase and submit only if you are making the final human decision."
+        : "Final signoff is available, but this serving mode is read-only until the authorised operator write boundary is enabled."
+      : "Final signoff is unavailable until machine blockers and rejected, retest, re-review, or unreviewed items are cleared.";
+  const hiddenFields = {
+    csrfToken: csrfTokenForPolicy(policy),
+    returnTo: "/proof/signoff",
+    actionType: "human-final-decision",
+    outcome: "human-accepted",
+    role: "auditor",
+    tenant: "synthetic-proof-review",
+  };
+  return `<div class="review-actions" aria-label="Final signoff action">
+${writePolicyNotice(policy)}
+<p>${escapeHtml(disabledReason)}</p>
+<form class="review-decision-form" method="post" action="/proof/signoff">
+${Object.entries(hiddenFields)
+  .map(([name, value]) => hiddenInput(name, value))
+  .join("")}
+<fieldset>
+<legend>Explicit final signoff</legend>
+<p class="decision-help">This records Matthew's final browser decision for ${ACCEPTANCE_ISSUE}. It does not make machine QA automatic, and it does not claim staging, production, SOC, ISO, enterprise-production, product UI, browser E2E, live-provider, deployment, or full-product readiness.</p>
+<div class="review-confirmations">
+${checkboxInput("acceptedCurrentEvidence", `I accept the current proof baseline: ${signoff.counts.accepted}/${signoff.counts.total} current review items accepted and no open review items.`)}
+${checkboxInput("qaZeroConfirmed", `I confirmed the current machine QA result: ${signoff.latest.passCount} pass, ${signoff.latest.warnCount} warnings, ${signoff.latest.gapCount} unresolved gaps, ${signoff.latest.failCount} failures.`)}
+${checkboxInput("deltaReviewAcknowledged", "I understand future proof changes must return only affected changed evidence to the review queue.")}
+${checkboxInput("nonClaimsConfirmed", "I understand this signoff preserves the listed non-claims and does not upgrade readiness beyond the evidence.")}
+</div>
+<label>Type ${escapeHtml(FINAL_SIGNOFF_PHRASE)}<br><input name="signoffPhrase" autocomplete="off" spellcheck="false" placeholder="${escapeHtml(FINAL_SIGNOFF_PHRASE)}"${disabled}></label>
+<label>Final signoff note<br><textarea name="notes" rows="4" placeholder="Optional human acceptance note for the audit ledger."${disabled}></textarea></label>
+<div class="decision-buttons">
+<button class="primary" type="submit" name="decision" value="final-signoff"${disabled}>Record final signoff</button>
+</div>
+</fieldset>
+</form>
+</div>`;
+}
+
 function renderSignoff(data, state) {
-  const items = buildReviewItems(data);
-  const itemStates = items.map((item) => ({ item, decision: reviewItemDecision(state, item) }));
+  const signoff = finalSignoffState(data, state);
+  const itemStates = signoff.itemStates;
   const rejected = itemStates.filter(({ decision }) => decision.status === "rejected");
   const retest = itemStates.filter(({ decision }) => decision.status === "retest-requested");
   const unreviewed = itemStates.filter(({ decision }) => decision.status === "human-review-required");
@@ -4013,8 +4202,13 @@ function renderSignoff(data, state) {
     ["Re-review required", reReview.length],
     ["Unreviewed items", unreviewed.length],
     ["Recorded browser actions", state.actions.length],
+    ["Final signoff available", signoff.signoffAvailable ? "yes" : "no"],
+    ["Final signoff recorded", signoff.signoffRecorded ? "yes" : "no"],
     ["Final signoff auto-completed", "no"],
   ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
+  const signoffRows = signoff.signoffAction
+    ? actionDetailRows(signoff.signoffAction)
+    : [`<tr><td colspan="2">No explicit final signoff action is recorded yet.</td></tr>`];
   const openRows = [...rejected, ...retest, ...reReview, ...unreviewed].slice(0, 50).map(({ item, decision }) => `<tr>
 <td><a href="/proof/review?item=${encodeURIComponent(item.id)}">${escapeHtml(item.title)}</a></td>
 <td>${escapeHtml(item.type)}</td>
@@ -4025,7 +4219,7 @@ function renderSignoff(data, state) {
     "Proof signoff",
     `<section class="hero">
 <h2>Final signoff</h2>
-<p>Final human signoff is separate from machine QA, is not auto-completed, and final acceptance remains unavailable until Matthew makes an explicit final decision for ${ACCEPTANCE_ISSUE}. This page shows what remains before that decision.</p>
+<p>Final human signoff is separate from machine QA, is not auto-completed, and can only be recorded by an explicit browser action after rejected, retest, re-review, and unreviewed items are cleared. This page records that decision without making any readiness overclaim.</p>
 </section>
 <section>
 <h2>Current signoff state</h2>
@@ -4034,6 +4228,14 @@ ${table(["Field", "Value"], rows)}
 <section>
 <h2>Remaining rejected, retest, or unreviewed items</h2>
 ${table(["Item", "Type", "State", "Risk posture"], openRows.length ? openRows : [`<tr><td colspan="4">No rejected, retest, or unreviewed review items are currently recorded in the browser action ledger.</td></tr>`])}
+</section>
+<section>
+<h2>Record final signoff</h2>
+${renderFinalSignoffForm(signoff)}
+</section>
+<section>
+<h2>Recorded final signoff action</h2>
+${table(["Field", "Value"], signoffRows)}
 </section>
 <section>
 <h2>Final signoff prerequisites requiring human confirmation</h2>
@@ -4048,13 +4250,15 @@ ${unorderedList([
   );
 }
 
-function renderResult(state) {
+function renderResult(data, state) {
+  const signoff = finalSignoffState(data, state);
   return layout(
     "Proof result",
     `<p>Current result: machine evidence is reviewable and final human signoff is not auto-completed.</p>
 <p>Recorded QA actions: ${state.actions.length}.</p>
-<p>Eventual target decision text: full staging UI development may begin. Current state: unavailable.</p>
-<p>No final acceptance artifact is created in this pass.</p>
+<p>Final signoff state: ${escapeHtml(signoff.signoffRecorded ? "explicit browser signoff recorded" : signoff.signoffAvailable ? "available for explicit human action" : "unavailable until blockers clear")}.</p>
+<p>Eventual target decision text: full staging UI development may begin. Current state: ${escapeHtml(signoff.signoffRecorded ? "human signoff recorded for USF-290 acceptance workflow" : "unavailable")}.</p>
+<p>${escapeHtml(signoff.signoffRecorded ? "A final human signoff action is present in the browser action ledger." : "No final acceptance artifact is created until Matthew submits the signoff action.")}</p>
 ${nonClaimsBlock()}`,
   );
 }
@@ -4273,11 +4477,11 @@ function csrfValid(request, params, policy) {
   return Boolean(expected && secureEqual(supplied, expected) && secureEqual(cookie, expected));
 }
 
-async function handleProofPost(request, statePath, policy = writePolicyFromOptions()) {
+async function handleProofPost(request, statePath, policy = writePolicyFromOptions(), data = buildData()) {
   const url = new URL(request.url ?? "/", "http://127.0.0.1");
   const routePath = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, "") : url.pathname;
-  if (routePath !== "/proof/actions") {
-    return { status: 405, body: layout("Method not allowed", "<p>Only QA action form submissions are supported.</p>") };
+  if (!["/proof/actions", "/proof/signoff"].includes(routePath)) {
+    return { status: 405, body: layout("Method not allowed", "<p>Only QA action and final signoff form submissions are supported.</p>") };
   }
   if (!policy.allowWrites) {
     return forbiddenWriteResponse(
@@ -4292,6 +4496,15 @@ async function handleProofPost(request, statePath, policy = writePolicyFromOptio
     return forbiddenWriteResponse("The proof-cockpit CSRF/session token was missing or invalid.");
   }
   const state = loadProofState(statePath);
+  if (routePath === "/proof/signoff") {
+    const result = normalizeFinalSignoffAction(params, actorFromRequest(request, policy), finalSignoffState(data, state));
+    if (result.error) {
+      return result.error;
+    }
+    state.actions.unshift(result.action);
+    saveProofState(state, statePath);
+    return redirect(safeReturnTo(params.get("returnTo")) || `/proof/actions/${result.action.id}`);
+  }
   const action = normalizeAction(params, actorFromRequest(request, policy));
   state.actions.unshift(action);
   saveProofState(state, statePath);
@@ -4423,7 +4636,7 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
     return html(renderSignoff(data, state));
   }
   if (routePath === "/proof/result") {
-    return html(renderResult(state));
+    return html(renderResult(data, state));
   }
   if (routePath === "/proof/runbook") {
     return html(renderRunbook(data));
@@ -4448,7 +4661,7 @@ export function createProofCockpitServer(options = {}) {
         (request.method === "GET" || request.method === "HEAD") && url.pathname === "/proof/image"
           ? renderProofImage(url)
           : request.method === "POST"
-          ? await handleProofPost(request, statePath, writePolicy)
+          ? await handleProofPost(request, statePath, writePolicy, data)
           : renderProofCockpit(url.pathname, data, loadProofState(statePath), url);
       const csrfCookie = csrfCookieHeader(writePolicy);
       response.writeHead(result.status, {
