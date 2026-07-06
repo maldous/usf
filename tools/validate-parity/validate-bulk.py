@@ -246,7 +246,7 @@ def run_checks(F, state=None):
     ]:
         if token not in standard:
             F.add("USF-BULK-002", STANDARD, f"standard missing section {token}")
-    if "Parity Import/Export/Bulk Source-Use Disposition Matrix" not in source_use:
+    if "Import/Export/Bulk Source-Use Disposition Matrix" not in source_use:
         F.add("USF-BULK-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "ImportExportPort" not in ports or "appendItemOutcome" not in ports:

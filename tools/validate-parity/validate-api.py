@@ -553,7 +553,7 @@ def run_checks(F, state=None):
             "packages/openapi/src/index.ts",
             "packages/proof/src/api-contracts-proof.ts",
             "tests/apps/api-contracts.test.ts",
-            "No React runtime/application code is copied",
+            "no external runtime/application code is copied",
             "No public API or production readiness is claimed",
         ):
             if token not in source_use:

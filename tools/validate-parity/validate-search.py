@@ -233,7 +233,7 @@ def run_checks(findings, state=None):
     ]:
         if token not in standard:
             findings.add("USF-SEARCH-002", STANDARD, f"standard missing section {token}")
-    if "Parity Search/Indexing Source-Use Disposition Matrix" not in source_use:
+    if "Search/Indexing Source-Use Disposition Matrix" not in source_use:
         findings.add("USF-SEARCH-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "SearchIndexPort" not in ports or "safeStatusView" not in ports:

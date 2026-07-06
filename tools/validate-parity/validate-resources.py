@@ -242,7 +242,7 @@ def run_checks(findings, state=None):
     ]:
         if token not in standard:
             findings.add("USF-RESOURCES-002", STANDARD, f"standard missing section {token}")
-    if "Parity Resource Lifecycle Source-Use Disposition Matrix" not in source_use:
+    if "Resource Lifecycle Source-Use Disposition Matrix" not in source_use:
         findings.add("USF-RESOURCES-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "ResourceLifecyclePort" not in ports or "safeStatusView" not in ports:

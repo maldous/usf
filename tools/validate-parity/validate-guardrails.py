@@ -247,7 +247,7 @@ def run_checks(F, state=None):
     ]:
         if token not in standard:
             F.add("USF-GUARDRAILS-002", STANDARD, f"standard missing section {token}")
-    if "Parity Rate Limits / Abuse Controls Source-Use Disposition Matrix" not in source_use:
+    if "Rate Limits / Abuse Controls Source-Use Disposition Matrix" not in source_use:
         F.add("USF-GUARDRAILS-002", SOURCE_USE, "domain source-use matrix missing")
 
     if "GuardrailPort" not in ports or "evaluate(input: GuardrailEvaluationInput)" not in ports:

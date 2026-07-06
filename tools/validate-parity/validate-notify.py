@@ -408,7 +408,7 @@ def run_checks(F, state=None):
             "adapters/mail/src/index.ts",
             "tests/capabilities/notifications-messaging.test.ts",
             "packages/proof/src/notifications-messaging-proof.ts",
-            "No React runtime/application code is copied",
+            "no external runtime/application code is copied",
             "No live external delivery provider readiness is claimed",
         ):
             if token not in source_use:
