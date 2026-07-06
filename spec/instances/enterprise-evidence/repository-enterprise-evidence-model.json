@@ -6366,6 +6366,35 @@
       ]
     },
     {
+      "id": "soa-proof-proof-proof-review-public",
+      "mappedType": "proof-command",
+      "controlPurpose": "Organise USF-290 and USF-293 live proof review human acknowledgement evidence for the public /proof surface without treating it as product UI readiness.",
+      "riskTreated": "The public proof review surface could be unavailable, return 502, omit human review controls, hide screenshot evidence, or be mistaken for staging, production, product UI, browser E2E, live-provider, SOC, ISO, enterprise production, or full product readiness.",
+      "assetServiceAffected": "proof:proof-review-public; packages/proof/src/proof-review-public-proof.ts; https://1e100.network/proof",
+      "owner": "platform-proof-foundation",
+      "riskOwner": "platform-proof-risk-owner",
+      "controlOwner": "platform-proof-control-owner",
+      "implementationStatus": "effectivenessState=proven-local; sourceIssue=USF-290; relatedIssue=USF-293; treatment=fail-closed live HTTPS route proof for landing review screenshots final report and signoff; reviewDate=2026-09-30",
+      "evidenceSource": "packages/proof/src/proof-review-public-proof.ts; evidence/proof-evidence/proof-cockpit/staging-evidence-store.json; artifacts/proof-cockpit/machine-runs/2026-07-06T01-22-15-528Z/proof-cockpit-machine-qa-run.json",
+      "validationCommand": "corepack pnpm proof:proof-review-public",
+      "deferredReason": "not-deferred-for-human-acknowledgement-surface-availability; all readiness and product UI claims remain non-claims",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "real-user-staging-readiness"
+      ]
+    },
+    {
       "id": "soa-proof-proof-external-http-behaviour",
       "mappedType": "proof-command",
       "controlPurpose": "Organise USF-268 external HTTP behaviour contract proof evidence without treating gateway or provider configuration as semantic authority.",
@@ -9810,6 +9839,25 @@
         "USF-265"
       ],
       "retentionPosture": "Retain committed value-free proof-gate evidence, validator rules, planted defects, and command output summaries. Do not retain raw endpoints beyond declared FQDNs, raw telemetry payloads, tokens, Cloudflare API material, real tenant data, product UI data, browser journey screenshots, or production data."
+    },
+    {
+      "id": "evidence-proof-proof-proof-review-public",
+      "proofResult": "proof-review-public-human-acknowledgement-proof",
+      "whatWasProven": "The live public USF proof review surface at https://1e100.network/proof returned HTTP 200 HTML for landing, review, screenshots, final report, and signoff routes; the review route exposed accept, reject, request retest, add note, previous, and next controls; screenshot evidence rendered inline for review and gallery pages.",
+      "whatWasNotProven": "This does not prove product UI readiness, real-user staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, browser E2E readiness, full dev readiness, test readiness, or full product readiness.",
+      "runtimeMode": "external-public-proof-review-http-html-proof-command",
+      "providerMode": "public-internet-observation-no-live-provider-readiness-claim",
+      "serviceCatalogueRow": "not-applicable-proof-cockpit-human-review-surface",
+      "adapterProviderId": "proof-review-public-human-acknowledgement-proof",
+      "validationCommand": "corepack pnpm proof:proof-review-public",
+      "commandPin": "tsx packages/proof/src/proof-review-public-proof.ts",
+      "commitPin": "683c9d94f46b07dd40a11103aab13ff4f41cc590",
+      "issueLinks": [
+        "USF-290",
+        "USF-293"
+      ],
+      "prOrMergeSha": "683c9d94f46b07dd40a11103aab13ff4f41cc590",
+      "retentionPosture": "Retain committed proof command, source-use disposition, promoted machine QA evidence, and value-free route evidence. Do not retain credentials, raw secrets, real tenant data, product UI data, browser journey payloads, raw provider logs, or production data."
     },
     {
       "id": "evidence-proof-proof-external-http-behaviour",
@@ -29135,6 +29183,43 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "v2-proof-tag-authorization"
+      ]
+    },
+    {
+      "id": "privacy-proof-proof-proof-review-public",
+      "targetType": "proof-review-public-human-acknowledgement-proof",
+      "target": "USF-290 proof:proof-review-public privacy and redaction boundary",
+      "posture": [
+        "effectivenessState=proven-local",
+        "sourceIssue=USF-290",
+        "relatedIssue=USF-293",
+        "dataOrigin=public-proof-review-route-observation-and-committed-synthetic-evidence-metadata-only",
+        "syntheticVsProductionDerived=not-production-derived",
+        "piiPosture=no-production-PII-customer-data-tenant-name-user-email-token-endpoint-stack-provider-payload-or-raw-SDK-error-retained",
+        "dataClassification=internal-proof-review-evidence-metadata",
+        "redactionPolicy=retain-only-route-status-marker-inline-image-count-and-value-free-proof-metadata-suppress-credentials-secrets-raw-provider-logs-real-tenant-data-and-product-UI-data",
+        "retentionPurgePosture=committed-value-free-proof-command-and-promoted-machine-QA-evidence-retained-generated-command-output-not-committed",
+        "legalHoldRelevance=not-proven-for-live-provider-or-production-data",
+        "crossBorderDataResidencyBoundary=public-proof-review-route-observation-only-no-live-provider-residency-claim",
+        "dataResidencyCrossBorderBoundary=public-proof-review-route-observation-only-no-live-provider-residency-claim"
+      ],
+      "evidenceSource": "packages/proof/src/proof-review-public-proof.ts; artifacts/proof-cockpit/machine-runs/2026-07-06T01-22-15-528Z/proof-cockpit-machine-qa-run.json",
+      "validationCommand": "corepack pnpm proof:proof-review-public",
+      "deferredReason": "Product UI privacy, real-user staging privacy, browser E2E journey privacy, live-provider privacy, production data residency, legal hold, SOC, ISO certification, enterprise production, full dev readiness, test readiness, staging readiness, production readiness, deployment readiness, and full product readiness remain non-claims.",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "real-user-staging-readiness"
       ]
     },
     {
