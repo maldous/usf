@@ -13415,10 +13415,10 @@
           "publishedPort": 80,
           "protocol": "tcp",
           "appProtocol": "http",
-          "hostIp": "127.0.0.1",
-          "bindScope": "loopback-only",
+          "hostIp": "0.0.0.0",
+          "bindScope": "public",
           "exposureClass": "gateway",
-          "accessModel": "developer-access",
+          "accessModel": "operator-access",
           "environmentScopes": [
             "staging"
           ],
@@ -13433,9 +13433,9 @@
           "concurrentEnvironmentPolicy": "single-environment-only",
           "portAllocationMode": "fixed",
           "productionExposure": "cloud-provider",
-          "rationale": "Composed public proof edge host publish (127.0.0.1) for the staging FQDN edge only; dev/test reach Caddy over the compose network without a host port.",
-          "exposureRationale": "service endpoint; loopback-only and non-production.",
-          "accessPolicy": "Access follows developer-access; host publication is loopback-only and local to the generated Compose target.",
+          "rationale": "Composed public proof origin edge host publish (0.0.0.0) for the staging FQDN edge only; this is the accepted, owner-authorised PUBLIC proof origin edge (external-caddy) that serves the read-only public proof routes and the operator-basic-auth-gated /proof cockpit route per ADR 0015 and the public-fqdn/public-proof-origin authority (USF-263/USF-264). Dev/test reach Caddy over the compose network without a host port.",
+          "exposureRationale": "Intentionally internet-exposed public proof origin edge: the public edge routes (/.well-known/usf-public-edge.json, /__proof/public-route) are read-only public proof markers and the /proof cockpit route is operator-basic-auth-gated per ADR 0015. Public reachability of hermetic synthetic proof content is not any readiness claim.",
+          "accessPolicy": "Public edge routes are read-only public proof markers served to any client; the /proof cockpit route requires the operator basic_auth reload-managed include (committed default CLOSED) before proxying to the loopback-only staging-proof-cockpit. Operator/admin and cockpit services stay loopback-only behind this edge.",
           "authRequired": true,
           "tlsRequired": false,
           "auditRequired": true,
@@ -13443,9 +13443,9 @@
           "dataClassification": "routing-metadata",
           "adminSurface": false,
           "operatorSurface": true,
-          "internetExposureAllowed": false,
-          "defaultDenyReason": "Host publication defaults to 127.0.0.1; LAN/public bind is denied without explicit accepted authority.",
-          "productionExposureBoundary": "No local generated port is a production exposure; production uses explicit external/cloud/prohibited policy.",
+          "internetExposureAllowed": true,
+          "defaultDenyReason": "Non-loopback public bind is authorised for this port only by the accepted public proof origin edge authority (ADR 0015 + public-fqdn/public-proof-origin, USF-263/USF-264) recorded in the operator-access-gateway posture matrix; every other service and the cockpit stay loopback-only behind this edge.",
+          "productionExposureBoundary": "No local generated port is a production exposure; production uses explicit external/cloud/prohibited policy. This staging public edge does not imply production readiness.",
           "iso27001SupportStatement": "Supports access-control, logging, and change-evidence posture without claiming ISO/IEC 27001 certification.",
           "readinessClaimsAllowed": [
             "local-compose-config",
@@ -13459,8 +13459,8 @@
             "iso27001-certification",
             "soc-readiness"
           ],
-          "controlPurpose": "Control local gateway exposure for caddy.",
-          "riskOwner": "platform-engineering",
+          "controlPurpose": "Control the accepted public proof origin edge exposure for caddy (public edge routes + operator-auth-gated /proof).",
+          "riskOwner": "platform-access-risk-owner",
           "retentionLoggingPosture": "Generated Compose logs are local operational evidence only and must not contain raw secrets.",
           "breakGlassRelevance": "not-production-break-glass",
           "evidenceProduced": [
@@ -13469,7 +13469,7 @@
             "port-availability-check"
           ],
           "deferredControls": [
-            "TLS for local loopback ports is deferred unless required by a later authority."
+            "Live public deployment (DNS, TLS issuance, applying the composed edge on a public host) remains a separate operator step recorded in the runbooks; TLS termination proof is deferred."
           ]
         },
         {
@@ -13479,10 +13479,10 @@
           "publishedPort": 443,
           "protocol": "tcp",
           "appProtocol": "https",
-          "hostIp": "127.0.0.1",
-          "bindScope": "loopback-only",
+          "hostIp": "0.0.0.0",
+          "bindScope": "public",
           "exposureClass": "gateway",
-          "accessModel": "developer-access",
+          "accessModel": "operator-access",
           "environmentScopes": [
             "staging"
           ],
@@ -13497,9 +13497,9 @@
           "concurrentEnvironmentPolicy": "single-environment-only",
           "portAllocationMode": "fixed",
           "productionExposure": "cloud-provider",
-          "rationale": "Composed public proof edge host publish (127.0.0.1) for the staging FQDN edge only; dev/test reach Caddy over the compose network without a host port.",
-          "exposureRationale": "service endpoint; loopback-only and non-production.",
-          "accessPolicy": "Access follows developer-access; host publication is loopback-only and local to the generated Compose target.",
+          "rationale": "Composed public proof origin edge host publish (0.0.0.0) for the staging FQDN edge only; this is the accepted, owner-authorised PUBLIC proof origin edge (external-caddy) that serves the read-only public proof routes and the operator-basic-auth-gated /proof cockpit route per ADR 0015 and the public-fqdn/public-proof-origin authority (USF-263/USF-264). Dev/test reach Caddy over the compose network without a host port.",
+          "exposureRationale": "Intentionally internet-exposed public proof origin edge: the public edge routes (/.well-known/usf-public-edge.json, /__proof/public-route) are read-only public proof markers and the /proof cockpit route is operator-basic-auth-gated per ADR 0015. Public reachability of hermetic synthetic proof content is not any readiness claim.",
+          "accessPolicy": "Public edge routes are read-only public proof markers served to any client; the /proof cockpit route requires the operator basic_auth reload-managed include (committed default CLOSED) before proxying to the loopback-only staging-proof-cockpit. Operator/admin and cockpit services stay loopback-only behind this edge.",
           "authRequired": true,
           "tlsRequired": false,
           "auditRequired": true,
@@ -13507,9 +13507,9 @@
           "dataClassification": "routing-metadata",
           "adminSurface": false,
           "operatorSurface": true,
-          "internetExposureAllowed": false,
-          "defaultDenyReason": "Host publication defaults to 127.0.0.1; LAN/public bind is denied without explicit accepted authority.",
-          "productionExposureBoundary": "No local generated port is a production exposure; production uses explicit external/cloud/prohibited policy.",
+          "internetExposureAllowed": true,
+          "defaultDenyReason": "Non-loopback public bind is authorised for this port only by the accepted public proof origin edge authority (ADR 0015 + public-fqdn/public-proof-origin, USF-263/USF-264) recorded in the operator-access-gateway posture matrix; every other service and the cockpit stay loopback-only behind this edge.",
+          "productionExposureBoundary": "No local generated port is a production exposure; production uses explicit external/cloud/prohibited policy. This staging public edge does not imply production readiness.",
           "iso27001SupportStatement": "Supports access-control, logging, and change-evidence posture without claiming ISO/IEC 27001 certification.",
           "readinessClaimsAllowed": [
             "local-compose-config",
@@ -13523,8 +13523,8 @@
             "iso27001-certification",
             "soc-readiness"
           ],
-          "controlPurpose": "Control local gateway exposure for caddy.",
-          "riskOwner": "platform-engineering",
+          "controlPurpose": "Control the accepted public proof origin edge exposure for caddy (public edge routes + operator-auth-gated /proof).",
+          "riskOwner": "platform-access-risk-owner",
           "retentionLoggingPosture": "Generated Compose logs are local operational evidence only and must not contain raw secrets.",
           "breakGlassRelevance": "not-production-break-glass",
           "evidenceProduced": [
@@ -13533,7 +13533,7 @@
             "port-availability-check"
           ],
           "deferredControls": [
-            "TLS for local loopback ports is deferred unless required by a later authority."
+            "Live public deployment (DNS, TLS issuance, applying the composed edge on a public host) remains a separate operator step recorded in the runbooks; TLS termination proof is deferred."
           ]
         }
       ],

@@ -1,12 +1,9 @@
 {
-  "description": "Lane 2 gateway posture claims public operator exposure.",
+  "description": "Lane 2 gateway posture claims public operator exposure without a valid accepted public proof origin edge authority (the accepted authority is voided), so public exposure must fail closed.",
   "expectedRule": "USF-ENTERPRISE-014",
-  "operatorAccessPatch": [
-    {
-      "id": "usf-186-access-posture-caddy",
-      "set": {
-        "publicExposureAllowed": true
-      }
+  "operatorAccessTopSet": {
+    "acceptedPublicProofOriginEdge": {
+      "authorised": false
     }
-  ]
+  }
 }

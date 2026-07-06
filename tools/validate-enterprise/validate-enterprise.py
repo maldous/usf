@@ -980,6 +980,82 @@ def local_publication(service: dict[str, Any]) -> str:
     return "non-loopback-present"
 
 
+# Accepted-authority exception for the composed public proof origin edge.
+#
+# This is a narrow, explicit accepted-authority mechanism, not a blanket
+# relaxation. It authorises ONLY the caddy gateway service to bind the public
+# proof origin edge (the read-only public proof routes plus the operator
+# basic-auth-gated /proof cockpit route) per ADR 0015 and the public-fqdn /
+# public-proof-origin authority (USF-263 / USF-264). It never authorises any
+# other service, any operator/admin service, or LAN exposure, and it never
+# permits a public-exposure readiness overclaim. The block must be present and
+# well-formed for the exception to apply; otherwise the loopback default and its
+# fail-closed findings stand.
+PUBLIC_PROOF_ORIGIN_EDGE_SERVICE_ID = "caddy"
+PUBLIC_PROOF_ORIGIN_EDGE_AUTHORITY_ISSUES = {"USF-263", "USF-264"}
+PUBLIC_PROOF_ORIGIN_EDGE_DECISION = (
+    "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md"
+)
+PUBLIC_PROOF_ORIGIN_EDGE_PORTS = {("gateway-http", 80), ("gateway-https", 443)}
+
+
+def accepted_public_proof_origin_edge(matrix: dict[str, Any]) -> dict[str, Any] | None:
+    """Return the well-formed accepted public proof origin edge authority, else None.
+
+    Fail-closed: any missing, malformed, or overclaiming field means the
+    exception does not apply and the loopback checks run as normal.
+    """
+    if not isinstance(matrix, dict):
+        return None
+    edge = matrix.get("acceptedPublicProofOriginEdge")
+    if not isinstance(edge, dict):
+        return None
+    if edge.get("authorised") is not True:
+        return None
+    if edge.get("serviceId") != PUBLIC_PROOF_ORIGIN_EDGE_SERVICE_ID:
+        return None
+    if edge.get("decision") != PUBLIC_PROOF_ORIGIN_EDGE_DECISION:
+        return None
+    if not PUBLIC_PROOF_ORIGIN_EDGE_AUTHORITY_ISSUES <= set(edge.get("authorityIssues", [])):
+        return None
+    if edge.get("directPublicHostPort") is not True:
+        return None
+    if edge.get("operatorGatedRoute") != "/proof" or not edge.get("operatorGate"):
+        return None
+    # A public-exposure readiness overclaim voids the exception (fail closed).
+    if edge.get("publicExposureReadinessClaim") is not False:
+        return None
+    if not edge.get("behindEdgeLoopbackOnly"):
+        return None
+    authorised_ports = {
+        (port.get("portId"), port.get("publishedPort"))
+        for port in edge.get("authorisedPorts", [])
+        if isinstance(port, dict)
+    }
+    if authorised_ports != PUBLIC_PROOF_ORIGIN_EDGE_PORTS:
+        return None
+    if any(
+        port.get("hostIp") != "0.0.0.0" or port.get("bindScope") != "public"
+        for port in edge.get("authorisedPorts", [])
+        if isinstance(port, dict)
+    ):
+        return None
+    return edge
+
+
+def caddy_port_is_authorised_public_edge(edge: dict[str, Any] | None, port: dict[str, Any]) -> bool:
+    """True only for the exact caddy gateway ports authorised by the accepted edge."""
+    if not edge:
+        return False
+    key = (port.get("portId"), port.get("publishedPort"))
+    return (
+        key in PUBLIC_PROOF_ORIGIN_EDGE_PORTS
+        and port.get("hostIp") == "0.0.0.0"
+        and port.get("bindScope") == "public"
+        and port.get("internetExposureAllowed") is True
+    )
+
+
 def service_needs_resilience_posture(service: dict[str, Any]) -> bool:
     return service.get("dataBoundary") not in {None, "none"} or service.get("serviceKind") in {
         "database",
@@ -2080,6 +2156,11 @@ def check_operator_access_gateway_matrix(F: Findings, state: dict[str, Any]) -> 
         F.add("USF-ENTERPRISE-014", str(OPERATOR_ACCESS_MATRIX_PATH), "operator access gateway posture matrix is missing")
         return
 
+    # Narrow accepted-authority exception: the composed caddy public proof origin
+    # edge (ADR 0015 + public-fqdn/public-proof-origin, USF-263/USF-264). Only
+    # when well-formed does it authorise the caddy gateway ports to bind public.
+    public_edge = accepted_public_proof_origin_edge(matrix)
+
     services = {
         service.get("serviceId"): service
         for service in state["serviceCatalogue"].get("services", [])
@@ -2200,7 +2281,15 @@ def check_operator_access_gateway_matrix(F: Findings, state: dict[str, Any]) -> 
                 F.add("USF-ENTERPRISE-014", row_id, f"missing {field}")
         if row.get("effectivenessState") not in EFFECTIVENESS_STATES:
             F.add("USF-ENTERPRISE-014", row_id, "unknown effectiveness state")
-        if row.get("publicExposureAllowed") is not False:
+        is_public_edge_row = public_edge is not None and service_id == PUBLIC_PROOF_ORIGIN_EDGE_SERVICE_ID
+        if is_public_edge_row:
+            # Accepted public proof origin edge: public exposure is authorised for
+            # this row only. LAN exposure is still denied and readiness is not claimed.
+            if row.get("publicExposureAllowed") is not True:
+                F.add("USF-ENTERPRISE-014", row_id, "accepted public proof origin edge row must record publicExposureAllowed true")
+            if row.get("acceptedPublicProofOriginEdgeRef") != "acceptedPublicProofOriginEdge":
+                F.add("USF-ENTERPRISE-014", row_id, "public edge row must reference the accepted public proof origin edge authority")
+        elif row.get("publicExposureAllowed") is not False:
             F.add("USF-ENTERPRISE-014", row_id, "public exposure must remain denied")
         if row.get("lanExposureAllowed") is not False:
             F.add("USF-ENTERPRISE-014", row_id, "LAN exposure must remain denied")
@@ -2223,13 +2312,19 @@ def check_operator_access_gateway_matrix(F: Findings, state: dict[str, Any]) -> 
             if publication == "not-host-published" and service.get("accessModel") == "external-provider-console"
             else publication
         )
-        if publication == "non-loopback-present":
+        if is_public_edge_row:
+            # The accepted public edge is expected to be non-loopback-present with a
+            # public bind scope; this is not a fail-closed exposed-port finding.
+            expected_bind = "public"
+        elif publication == "non-loopback-present":
             F.add("USF-ENTERPRISE-014", service_id, "service catalogue contains non-loopback or exposed port")
         if row.get("defaultBindScope") != expected_bind:
             F.add("USF-ENTERPRISE-014", row_id, "default bind scope does not match catalogue exposure")
         if row.get("localHostPublication") != publication:
             F.add("USF-ENTERPRISE-014", row_id, "local host publication does not match service ports")
         for port in service.get("ports", []) or []:
+            if is_public_edge_row and caddy_port_is_authorised_public_edge(public_edge, port):
+                continue
             if (
                 port.get("hostIp") != "127.0.0.1"
                 or port.get("bindScope") != "loopback-only"
@@ -3149,6 +3244,10 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
         F.add("USF-ENTERPRISE-020", "caddy", "service catalogue lacks caddy gateway row")
         return
 
+    # Narrow accepted-authority exception for the composed caddy public proof
+    # origin edge (ADR 0015 + public-fqdn/public-proof-origin, USF-263/USF-264).
+    public_edge = accepted_public_proof_origin_edge(matrix)
+
     expected_top = {
         "sourceIssue": "USF-180",
         "parentIssue": "USF-133",
@@ -3195,10 +3294,18 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
             "gatewayReadinessClaim": False,
             "deploymentReadinessClaim": False,
         }
+        if public_edge is not None:
+            # Accepted public proof origin edge: the staging FQDN edge binds public
+            # 0.0.0.0:80/443. LAN exposure, production exposure by this issue,
+            # gateway readiness, and deployment readiness all remain denied.
+            expected_inclusion["localHostPublication"] = "non-loopback-present"
+            expected_inclusion["publicExposureAllowed"] = True
         for key, expected in expected_inclusion.items():
             observed = inclusion.get(key)
             if observed is not expected if isinstance(expected, bool) else observed != expected:
                 F.add("USF-ENTERPRISE-020", f"gatewayInclusion.{key}", f"expected {expected!r}")
+        if public_edge is not None and inclusion.get("acceptedPublicProofOriginEdgeRef") != "acceptedPublicProofOriginEdge":
+            F.add("USF-ENTERPRISE-020", "gatewayInclusion.acceptedPublicProofOriginEdgeRef", "public edge inclusion must reference the accepted public proof origin edge authority")
         if not inclusion.get("evidenceBoundary") or "no runtime route" not in str(inclusion.get("evidenceBoundary", "")):
             F.add("USF-ENTERPRISE-020", "gatewayInclusion.evidenceBoundary", "gateway evidence boundary must deny route readiness")
 
@@ -3210,10 +3317,14 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
     port_map = {port.get("portId"): port for port in ports if isinstance(port, dict)}
     for port_id, published_port in (("gateway-http", 80), ("gateway-https", 443)):
         port = port_map.get(port_id, {})
-        if port.get("hostIp") != "127.0.0.1" or port.get("bindScope") != "loopback-only":
-            F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway ports must remain loopback-only")
-        if port.get("internetExposureAllowed") is not False:
-            F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway port internet exposure must be denied")
+        if public_edge is not None and caddy_port_is_authorised_public_edge(public_edge, port):
+            # Authorised public proof origin edge port: public 0.0.0.0 bind is accepted.
+            pass
+        else:
+            if port.get("hostIp") != "127.0.0.1" or port.get("bindScope") != "loopback-only":
+                F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway ports must remain loopback-only")
+            if port.get("internetExposureAllowed") is not False:
+                F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway port internet exposure must be denied")
         if port.get("publishedPort") != published_port:
             F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", f"expected published port {published_port}")
 
@@ -3250,6 +3361,11 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
             "publicExposureAllowed": False,
             "lanExposureAllowed": False,
         }
+        if public_edge is not None:
+            # Accepted public proof origin edge binds public 0.0.0.0:80/443 on the
+            # staging FQDN edge; LAN exposure remains denied.
+            expected_transport["hostIp"] = "0.0.0.0"
+            expected_transport["publicExposureAllowed"] = True
         for key, expected in expected_transport.items():
             observed = transport.get(key)
             if observed is not expected if isinstance(expected, bool) else observed != expected:

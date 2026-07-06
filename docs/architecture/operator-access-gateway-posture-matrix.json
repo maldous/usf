@@ -1052,7 +1052,7 @@
       "id": "usf-186-access-posture-caddy",
       "serviceId": "caddy",
       "surfaceKind": "gateway",
-      "effectivenessState": "defined-only",
+      "effectivenessState": "implemented",
       "accessModel": "operator-access",
       "authRequirement": "operator-auth-required",
       "auditRequirement": "operator-action-audit-required",
@@ -1060,20 +1060,21 @@
       "riskOwner": "platform-access-risk-owner",
       "controlOwner": "platform-access-control-owner",
       "breakGlassRelevance": "admin-relevant",
-      "defaultBindScope": "loopback-only",
-      "localHostPublication": "loopback-only",
-      "publicExposureAllowed": false,
+      "defaultBindScope": "public",
+      "localHostPublication": "non-loopback-present",
+      "publicExposureAllowed": true,
       "lanExposureAllowed": false,
+      "acceptedPublicProofOriginEdgeRef": "acceptedPublicProofOriginEdge",
       "sourceRefs": [
         "docker/caddy/Caddyfile",
         "docker/caddy/Caddyfile.external",
         "compose.yaml"
       ],
       "deferredRisk": {
-        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
-        "threatFailureScenario": "future gateway work creates public/LAN route, bypasses authn/authz, misses audit, or implies clickthrough readiness",
+        "riskStatement": "live public deployment (DNS, TLS issuance, applying the composed edge on a public host) and executed operator access review/deprovisioning are not proven for this accepted public proof origin edge; the /proof operator gate credential lifecycle is operator-controlled",
+        "threatFailureScenario": "future gateway work imports the /proof cockpit route into the production FQDN site, removes the operator basic_auth gate, publishes an operator/admin service directly, misses audit, or implies clickthrough/readiness",
         "affectedAssetService": "caddy",
-        "impact": "public exposure, unauthorised administrative action, or readiness overclaim",
+        "impact": "unauthorised operator access, LAN exposure of an operator/admin service, or readiness overclaim",
         "likelihood": "medium-before-runtime-access-proof",
         "owner": "platform-access-foundation",
         "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
@@ -1218,5 +1219,53 @@
     ],
     "servicePortBindScope": "loopback-only",
     "directPublicExposureClaim": false
+  },
+  "acceptedPublicProofOriginEdge": {
+    "authorised": true,
+    "authorityKind": "public-proof-origin-edge",
+    "serviceId": "caddy",
+    "decision": "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+    "publicFqdnAuthority": "docs/architecture/public-fqdn-semantic-contract.md",
+    "authorityIssues": [
+      "USF-263",
+      "USF-264"
+    ],
+    "summary": "The composed external-caddy edge is the accepted, owner-authorised PUBLIC proof origin edge. Only the caddy gateway ports (gateway-http 80, gateway-https 443) bind public 0.0.0.0 on the staging FQDN edge. The edge serves the read-only public proof routes to any client and reverse-proxies the /proof cockpit route only behind the operator basic_auth reload-managed include (committed default CLOSED). Every other service, including staging-proof-cockpit, stays loopback-only behind this edge; no operator/admin service is directly public or LAN-exposed.",
+    "directPublicHostPort": true,
+    "operatorGatedRoute": "/proof",
+    "operatorGate": "Caddy operator HTTP basic authentication via the reload-managed include; committed default CLOSED (503); the /proof route is imported only into the staging FQDN site and never into the production FQDN site.",
+    "publicRoutes": [
+      "/.well-known/usf-public-edge.json",
+      "/__proof/public-route"
+    ],
+    "authorisedPorts": [
+      {
+        "portId": "gateway-http",
+        "publishedPort": 80,
+        "hostIp": "0.0.0.0",
+        "bindScope": "public"
+      },
+      {
+        "portId": "gateway-https",
+        "publishedPort": 443,
+        "hostIp": "0.0.0.0",
+        "bindScope": "public"
+      }
+    ],
+    "behindEdgeLoopbackOnly": "staging-proof-cockpit and all operator/admin/control-plane services remain loopback-only behind this edge; only the caddy gateway ports are internet-exposed.",
+    "publicExposureReadinessClaim": false,
+    "nonClaims": [
+      "full-dev-readiness",
+      "test-readiness",
+      "staging-readiness",
+      "production-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "soc-readiness",
+      "iso27001-certification",
+      "enterprise-production-readiness",
+      "full-product-readiness"
+    ],
+    "nonClaimPreservation": "Public reachability of hermetic synthetic proof content and an operator-authenticated proof cockpit is not a platform go-live and upgrades no readiness claim; live public deployment (DNS, TLS issuance, applying the composed edge on a public host) remains a separate operator step recorded in the runbooks."
   }
 }
