@@ -3084,7 +3084,7 @@
       "id": "source-lineage-ui-foundation-rewrite-d96949a9d742",
       "sourceLineageId": "source-lineage-d96949a9d742",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
+        "apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3121,7 +3121,7 @@
       "id": "source-lineage-ui-foundation-rewrite-dab9658cbb7b",
       "sourceLineageId": "source-lineage-dab9658cbb7b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/config/__tests__/web-config.test.ts"
+        "apps/enterprise-app/src/config/__tests__/web-config.test.ts"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -3150,7 +3150,7 @@
       "id": "source-lineage-ui-foundation-rewrite-5e41dcc18cc6",
       "sourceLineageId": "source-lineage-5e41dcc18cc6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
+        "apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -3179,7 +3179,7 @@
       "id": "source-lineage-ui-foundation-rewrite-022c7fdfcd29",
       "sourceLineageId": "source-lineage-022c7fdfcd29",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3216,7 +3216,7 @@
       "id": "source-lineage-ui-foundation-rewrite-854931b0a239",
       "sourceLineageId": "source-lineage-854931b0a239",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3253,7 +3253,7 @@
       "id": "source-lineage-ui-foundation-rewrite-e37e9defcb84",
       "sourceLineageId": "source-lineage-e37e9defcb84",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
+        "apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3290,7 +3290,7 @@
       "id": "source-lineage-ui-foundation-rewrite-bef0490fe6d0",
       "sourceLineageId": "source-lineage-bef0490fe6d0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3327,7 +3327,7 @@
       "id": "source-lineage-ui-foundation-rewrite-3080aaaa59fc",
       "sourceLineageId": "source-lineage-3080aaaa59fc",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3364,7 +3364,7 @@
       "id": "source-lineage-ui-foundation-rewrite-49c56d8913cf",
       "sourceLineageId": "source-lineage-49c56d8913cf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3401,7 +3401,7 @@
       "id": "source-lineage-ui-foundation-rewrite-70e032da907f",
       "sourceLineageId": "source-lineage-70e032da907f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3438,7 +3438,7 @@
       "id": "source-lineage-ui-foundation-rewrite-3e5394f6e22c",
       "sourceLineageId": "source-lineage-3e5394f6e22c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3475,7 +3475,7 @@
       "id": "source-lineage-ui-foundation-rewrite-e56150bcdf52",
       "sourceLineageId": "source-lineage-e56150bcdf52",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3512,7 +3512,7 @@
       "id": "source-lineage-ui-foundation-rewrite-fa9bdded540f",
       "sourceLineageId": "source-lineage-fa9bdded540f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3549,7 +3549,7 @@
       "id": "source-lineage-ui-foundation-rewrite-5950bb6378ca",
       "sourceLineageId": "source-lineage-5950bb6378ca",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3586,7 +3586,7 @@
       "id": "source-lineage-ui-foundation-rewrite-1b58d333489d",
       "sourceLineageId": "source-lineage-1b58d333489d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3623,7 +3623,7 @@
       "id": "source-lineage-ui-foundation-rewrite-b104c953751a",
       "sourceLineageId": "source-lineage-b104c953751a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3660,7 +3660,7 @@
       "id": "source-lineage-ui-foundation-rewrite-69e3f37e3f8c",
       "sourceLineageId": "source-lineage-69e3f37e3f8c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3697,7 +3697,7 @@
       "id": "source-lineage-ui-foundation-rewrite-ed5fc06ffa17",
       "sourceLineageId": "source-lineage-ed5fc06ffa17",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3734,7 +3734,7 @@
       "id": "source-lineage-ui-foundation-rewrite-9103da7e74b6",
       "sourceLineageId": "source-lineage-9103da7e74b6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3771,7 +3771,7 @@
       "id": "source-lineage-ui-foundation-rewrite-7f3571e805bf",
       "sourceLineageId": "source-lineage-7f3571e805bf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3808,7 +3808,7 @@
       "id": "source-lineage-ui-foundation-rewrite-2a688a39c792",
       "sourceLineageId": "source-lineage-2a688a39c792",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
+        "apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3845,7 +3845,7 @@
       "id": "source-lineage-ui-foundation-rewrite-9eb3667037a0",
       "sourceLineageId": "source-lineage-9eb3667037a0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
+        "apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3882,7 +3882,7 @@
       "id": "source-lineage-ui-foundation-rewrite-a8f7cda790cc",
       "sourceLineageId": "source-lineage-a8f7cda790cc",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3919,7 +3919,7 @@
       "id": "source-lineage-ui-foundation-rewrite-14e5ab8a4123",
       "sourceLineageId": "source-lineage-14e5ab8a4123",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
+        "apps/enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3956,7 +3956,7 @@
       "id": "source-lineage-ui-foundation-rewrite-c45cf659df39",
       "sourceLineageId": "source-lineage-c45cf659df39",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
+        "apps/enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -3993,7 +3993,7 @@
       "id": "source-lineage-ui-foundation-rewrite-0d129b25e1e4",
       "sourceLineageId": "source-lineage-0d129b25e1e4",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
+        "apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -4022,7 +4022,7 @@
       "id": "source-lineage-ui-foundation-rewrite-d816f7c5aa45",
       "sourceLineageId": "source-lineage-d816f7c5aa45",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx"
+        "apps/enterprise-app/src/routes/__tests__/login.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -4059,7 +4059,7 @@
       "id": "source-lineage-ui-foundation-rewrite-f38fa0546a2c",
       "sourceLineageId": "source-lineage-f38fa0546a2c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
+        "apps/enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -4096,7 +4096,7 @@
       "id": "source-lineage-ui-foundation-rewrite-1a5d21e1d135",
       "sourceLineageId": "source-lineage-1a5d21e1d135",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
+        "apps/enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -4133,7 +4133,7 @@
       "id": "source-lineage-ui-foundation-rewrite-4b88d357b1b7",
       "sourceLineageId": "source-lineage-4b88d357b1b7",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/app.test.tsx"
+        "apps/enterprise-app/src/tests/app.test.tsx"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -4162,7 +4162,7 @@
       "id": "source-lineage-ui-foundation-rewrite-92b6a9bdfb7f",
       "sourceLineageId": "source-lineage-92b6a9bdfb7f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/as-text.test.ts"
+        "apps/enterprise-app/src/tests/as-text.test.ts"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -4191,7 +4191,7 @@
       "id": "source-lineage-ui-foundation-rewrite-1913c4a482d5",
       "sourceLineageId": "source-lineage-1913c4a482d5",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/msw/msw-substrate.test.ts"
+        "apps/enterprise-app/src/tests/msw/msw-substrate.test.ts"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -4220,7 +4220,7 @@
       "id": "source-lineage-ui-foundation-rewrite-55a941b035be",
       "sourceLineageId": "source-lineage-55a941b035be",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
+        "apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -4257,7 +4257,7 @@
       "id": "source-lineage-ui-foundation-rewrite-efc4378f4a86",
       "sourceLineageId": "source-lineage-efc4378f4a86",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/substrate/require-permission.test.tsx"
+        "apps/enterprise-app/src/tests/substrate/require-permission.test.tsx"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",
@@ -4294,7 +4294,7 @@
       "id": "source-lineage-ui-foundation-rewrite-fa8451cf04ca",
       "sourceLineageId": "source-lineage-fa8451cf04ca",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/theme/theme.test.tsx"
+        "apps/enterprise-app/src/tests/theme/theme.test.tsx"
       ],
       "classification": "ui-only-out-of-scope",
       "foundationBehaviour": "pure UI/UX or visual/browser behaviour excluded",
@@ -4323,7 +4323,7 @@
       "id": "source-lineage-ui-foundation-rewrite-d8e938f22e84",
       "sourceLineageId": "source-lineage-d8e938f22e84",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/use-session.test.ts"
+        "apps/enterprise-app/src/tests/use-session.test.ts"
       ],
       "classification": "foundation-behaviour-rewritten-and-proven",
       "foundationBehaviour": "authorization, tenant isolation, identity, HTTP/security, error handling, API format, admin gate, observability, or audit behaviour inferred from source path",

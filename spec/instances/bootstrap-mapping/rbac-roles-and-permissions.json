@@ -32,7 +32,7 @@
     "apps/platform-api/src/server/authorize-resource.ts",
     "apps/platform-api/tests/unit/audit.test.ts",
     "apps/platform-api/tests/unit/authorize-resource.test.ts",
-    "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+    "apps/enterprise-app/src/components/RequirePermission.tsx",
     "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md",
     "packages/authorisation-runtime/src/index.ts",
     "packages/authorisation-runtime/tests/authorisation-runtime.test.ts",

@@ -13784,7 +13784,7 @@
       "serviceCatalogueDisposition": "deferred-with-follow-up"
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "composeServiceId": null,
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "not-generated",
@@ -13793,7 +13793,7 @@
       "integrationMatrixDisposition": null,
       "integrationMatrixProofCommand": null,
       "testFile": "tests/packages/semantic-functional-regression-suite.test.ts",
-      "testName": "service functional regression boundary remains current: react-app",
+      "testName": "service functional regression boundary remains current: web-app",
       "ownerIssueIds": [
         "USF-239",
         "USF-242",

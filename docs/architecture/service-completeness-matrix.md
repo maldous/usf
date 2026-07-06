@@ -25,7 +25,7 @@ This artefact supports USF-291 only. It does not claim UI completeness, product 
 |source-service-41d963db60cc|platform-api|covered-by-existing-usf-proof|covered-by-usf-runtime|apps/api|
 |source-service-afc848c316af|postgres|covered-by-existing-usf-proof|implemented|postgres|
 |source-service-aad8f23c2fa0|prometheus|covered-by-existing-usf-proof|implemented|prometheus|
-|source-service-8e3b08350689|react-app|not-applicable-with-rationale|out-of-foundation-scope|USF-134 future UI|
+|source-service-8e3b08350689|web-app|not-applicable-with-rationale|out-of-foundation-scope|USF-134 future UI|
 |source-service-b840fc02d524|redis|covered-by-existing-usf-proof|profile-gated-bounded-proof|Redis local Compose SDK-backed proof plus NATS event-bus proof; non-equivalence boundary retained|
 |source-service-9cee99b66a56|sentry-cleanup|covered-by-existing-usf-proof|deferred|observability telemetry only|
 |source-service-51631665e717|sentry-clickhouse|covered-by-existing-usf-proof|deferred|observability telemetry only|

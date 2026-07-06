@@ -53,7 +53,7 @@ Observed source-lineage asset classes (lineage citations held in USF's source-im
 | Asset class | Representative recorded path (source lineage) | Manifest source-kind it maps to | Coverage note |
 |---|---|---|---|
 | Backend source | `apps/platform-api/src/**` | `source-file` (453 rows) | Sampled in baseline, not exhaustive per-file |
-| Web app source | `apps/react-enterprise-app/src/**` | `source-file` | Sampled |
+| Web app source | `apps/enterprise-app/src/**` | `source-file` | Sampled |
 | Packages graph | `packages/*` (~40 packages) | `package` (139 rows) | Package units classified (rule `USF-IMPORT-006`) |
 | Tests | `apps/**/tests/**`, `packages/**` | `test` (301 rows) | Sampled |
 | Proof scripts | `apps/platform-api/scripts/*-runtime-proof.ts` | `proof-script` (99 rows) | Proof units classified (rule `USF-IMPORT-007`) |

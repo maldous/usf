@@ -91,10 +91,10 @@ The genuinely **new** lens this directive adds — absent from the substrate abo
 
 This planning pass answers, at domain granularity (detail in the scope-classification matrix):
 
-- What functionality does USF's recorded source lineage contain? — 36 packages, 2 apps (platform-api, react-enterprise-app), 1 dev service (mock-oidc), 12 foundation domains, ~15 provider integrations.
+- What functionality does USF's recorded source lineage contain? — 36 packages, 2 apps (platform-api, enterprise-app), 1 dev service (mock-oidc), 12 foundation domains, ~15 provider integrations.
 - Which services/ports/adapters/routes/jobs/workflows/provider-contracts/commands/tests/proofs exist? — inventoried per domain in the scope-classification matrix.
 - Which are foundation-relevant? — the 12 domains in §6 of the scope-classification matrix.
-- Which are UI/UX-only and out of foundation scope? — the `react-enterprise-app` SPA, `ui-design-system`, and the UI/visual/build E2E suites.
+- Which are UI/UX-only and out of foundation scope? — the `enterprise-app` SPA, `ui-design-system`, and the UI/visual/build E2E suites.
 - Which Playwright/browser tests contain foundation behaviour to be rewritten? — the focused rewrite list in the scope-classification matrix (auth/identity broker flow, tenant isolation/RLS, authorization matrix, request instrumentation/observability, security headers, cookie security, error safety, admin authorization gates).
 - Which are deprecated / not applicable? — recorded with rationale.
 - Which require human semantic authority before migration? — recorded as `requires-human-decision` with a Linear blocker.

@@ -3697,11 +3697,11 @@
       }
     },
     {
-      "service_id": "react-app",
+      "service_id": "web-app",
       "display_name": "source-lineage App",
       "service_kind": "implementation-ui",
       "source_compose_service_names": [
-        "react-app"
+        "web-app"
       ],
       "source_accounting_statuses": [
         "out-of-foundation-scope"
@@ -3718,9 +3718,9 @@
         "closure_disposition": "out-of-foundation-scope",
         "closure_blocking": false,
         "service_catalogue_authority": true,
-        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#react-app",
+        "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#web-app",
         "source_completeness_refs": [
-          "docs/architecture/usf-compose-service-completeness-matrix.md#react-app"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#web-app"
         ],
         "proof_evidence_refs": [],
         "tracking_issues": [
@@ -3753,12 +3753,12 @@
           "enterprise-production-readiness"
         ],
         "enterprise_evidence_refs": [
-          "soa-service-react-app",
+          "soa-service-web-app",
           "evidence-lane1-service-disposition-closure-matrix",
           "threat-lane-usf-185",
           "evidence-enterprise-evidence-model-validator",
-          "soa-deferred-boundary-react-app",
-          "incident-vulnerability-react-app"
+          "soa-deferred-boundary-web-app",
+          "incident-vulnerability-web-app"
         ]
       }
     }

@@ -41,7 +41,7 @@
       "description": "Search results are isolated by tenant under the canonical row-level-security predicate and further gated by an optional per-document permission key so a user only sees documents they are entitled to, never another tenant's documents. Admin readiness and reindex are operator-scoped privileged operations. Indexed metadata deliberately omits secret fields so the search surface cannot leak sensitive values.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ]
     },
     "contracts": {
@@ -56,7 +56,7 @@
       "description": "Queries are validated and scoped to the tenant and, where present, the permission key, so unscoped or cross-tenant queries are rejected; indexing validates the document shape and uniqueness on tenant/type/document id. Readiness is validated by a probe reporting ready, degraded, or blocked. Missing or invalid configuration fails closed rather than returning unscoped results.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ]
     },
     "errorModel": {
@@ -64,7 +64,7 @@
       "description": "The model is fail-closed: a query under one tenant context must return zero rows from another tenant, an unready engine reports degraded or blocked rather than serving stale or unscoped results, and provider failure returns a typed degraded or readiness error with mutation boundaries closed. The search surface never fabricates results or exposes secret metadata. Tenant data cannot be silently dropped or remapped.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ]
     },
     "auditModel": {
@@ -72,7 +72,7 @@
       "description": "Search and reindex operations preserve tenant context through route/use-case/provider spans, with typed error logs carrying the tenant/organisation identifier when tenant-scoped, and readiness transitions are observable as a signal. Indexed metadata excludes secrets so audit and logs do not surface sensitive content. Recovery must preserve tenant boundary and audit.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/search.test.ts",
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ]
     },
     "readinessModel": {
@@ -95,8 +95,8 @@
       "status": "complete",
       "description": "UI semantics recovered from cited UI source.",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/features/admin-logs/use-log-search.ts",
-        "apps/react-enterprise-app/src/features/admin-search/AdminSearchPage.tsx"
+        "apps/enterprise-app/src/features/admin-logs/use-log-search.ts",
+        "apps/enterprise-app/src/features/admin-search/AdminSearchPage.tsx"
       ]
     }
   },
@@ -111,10 +111,10 @@
     "apps/platform-api/src/ports/search-repository.ts",
     "apps/platform-api/src/usecases/search.ts",
     "apps/platform-api/tests/unit/search.test.ts",
-    "apps/react-enterprise-app/src/features/admin-logs/use-log-search.ts",
-    "apps/react-enterprise-app/src/features/admin-search/AdminSearchPage.tsx",
-    "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx",
-    "apps/react-enterprise-app/src/features/admin-search/admin-search-client.ts"
+    "apps/enterprise-app/src/features/admin-logs/use-log-search.ts",
+    "apps/enterprise-app/src/features/admin-search/AdminSearchPage.tsx",
+    "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx",
+    "apps/enterprise-app/src/features/admin-search/admin-search-client.ts"
   ],
   "adrRefs": [
     "docs/adr/0005-hexagonal-architecture.md"

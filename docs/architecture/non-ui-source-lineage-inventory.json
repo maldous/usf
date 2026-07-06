@@ -37644,7 +37644,7 @@
     {
       "sourceLineageId": "source-lineage-5e6785c6aa29",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/Dockerfile"
+        "apps/enterprise-app/Dockerfile"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -37707,7 +37707,7 @@
     {
       "sourceLineageId": "source-lineage-27ba7c56dca2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/README.md"
+        "apps/enterprise-app/README.md"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -37770,7 +37770,7 @@
     {
       "sourceLineageId": "source-lineage-90ec689d5ffa",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/index.html"
+        "apps/enterprise-app/index.html"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -37833,7 +37833,7 @@
     {
       "sourceLineageId": "source-lineage-e18661ff7b8a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/package-lock.json"
+        "apps/enterprise-app/package-lock.json"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -37896,7 +37896,7 @@
     {
       "sourceLineageId": "source-lineage-a07efd8f02fe",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/package.json"
+        "apps/enterprise-app/package.json"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "package",
@@ -37959,7 +37959,7 @@
     {
       "sourceLineageId": "source-lineage-718bdde648bf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/public/.gitkeep"
+        "apps/enterprise-app/public/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38022,7 +38022,7 @@
     {
       "sourceLineageId": "source-lineage-d7b1899ae34e",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/app/.gitkeep"
+        "apps/enterprise-app/src/app/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38085,7 +38085,7 @@
     {
       "sourceLineageId": "source-lineage-3c40ff930a30",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/app/query-client.ts"
+        "apps/enterprise-app/src/app/query-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38148,7 +38148,7 @@
     {
       "sourceLineageId": "source-lineage-dd4144cb895a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/app/router.ts"
+        "apps/enterprise-app/src/app/router.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -38212,7 +38212,7 @@
     {
       "sourceLineageId": "source-lineage-f53b0d15f0f8",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/app/shell-store.ts"
+        "apps/enterprise-app/src/app/shell-store.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38275,7 +38275,7 @@
     {
       "sourceLineageId": "source-lineage-67a761720f48",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/auth/login-providers.ts"
+        "apps/enterprise-app/src/auth/login-providers.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -38339,7 +38339,7 @@
     {
       "sourceLineageId": "source-lineage-8aee52d9fb9d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/.gitkeep"
+        "apps/enterprise-app/src/components/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38402,7 +38402,7 @@
     {
       "sourceLineageId": "source-lineage-a479db779e56",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/AdminLayout.tsx"
+        "apps/enterprise-app/src/components/AdminLayout.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -38466,7 +38466,7 @@
     {
       "sourceLineageId": "source-lineage-46dc2b9af6cf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/AppShell.tsx"
+        "apps/enterprise-app/src/components/AppShell.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38529,7 +38529,7 @@
     {
       "sourceLineageId": "source-lineage-fb842c9a72c5",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/AuthenticatedLayout.tsx"
+        "apps/enterprise-app/src/components/AuthenticatedLayout.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -38593,7 +38593,7 @@
     {
       "sourceLineageId": "source-lineage-37771a22ec22",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/DefaultErrorComponent.tsx"
+        "apps/enterprise-app/src/components/DefaultErrorComponent.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -38657,7 +38657,7 @@
     {
       "sourceLineageId": "source-lineage-97a5c644604f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/DefaultNotFoundComponent.tsx"
+        "apps/enterprise-app/src/components/DefaultNotFoundComponent.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38720,7 +38720,7 @@
     {
       "sourceLineageId": "source-lineage-f34aaefde80b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/DefaultPendingComponent.tsx"
+        "apps/enterprise-app/src/components/DefaultPendingComponent.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38783,7 +38783,7 @@
     {
       "sourceLineageId": "source-lineage-a14c66f2a8e7",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+        "apps/enterprise-app/src/components/RequirePermission.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -38847,10 +38847,10 @@
     {
       "sourceLineageId": "source-lineage-d96949a9d742",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
+        "apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
+        "apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -38913,7 +38913,7 @@
     {
       "sourceLineageId": "source-lineage-20db1805dcaf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/components/index.ts"
+        "apps/enterprise-app/src/components/index.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -38976,10 +38976,10 @@
     {
       "sourceLineageId": "source-lineage-dab9658cbb7b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/config/__tests__/web-config.test.ts"
+        "apps/enterprise-app/src/config/__tests__/web-config.test.ts"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/config/__tests__/web-config.test.ts"
+        "apps/enterprise-app/src/config/__tests__/web-config.test.ts"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -39041,7 +39041,7 @@
     {
       "sourceLineageId": "source-lineage-2394aad12f85",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/config/web-config.ts"
+        "apps/enterprise-app/src/config/web-config.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39104,7 +39104,7 @@
     {
       "sourceLineageId": "source-lineage-278c47a09666",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/.gitkeep"
+        "apps/enterprise-app/src/features/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39167,7 +39167,7 @@
     {
       "sourceLineageId": "source-lineage-65984e588dfd",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/FeaturePage.tsx"
+        "apps/enterprise-app/src/features/_template/FeaturePage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39230,7 +39230,7 @@
     {
       "sourceLineageId": "source-lineage-83c509e25360",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/README.md"
+        "apps/enterprise-app/src/features/_template/README.md"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39293,10 +39293,10 @@
     {
       "sourceLineageId": "source-lineage-5e41dcc18cc6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
+        "apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
+        "apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -39358,7 +39358,7 @@
     {
       "sourceLineageId": "source-lineage-b3a6c777ac34",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/components/WidgetTable.tsx"
+        "apps/enterprise-app/src/features/_template/components/WidgetTable.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39421,7 +39421,7 @@
     {
       "sourceLineageId": "source-lineage-37dbcb1f3e2d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/feature.mutations.ts"
+        "apps/enterprise-app/src/features/_template/feature.mutations.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39484,7 +39484,7 @@
     {
       "sourceLineageId": "source-lineage-8bc3e94fe319",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/feature.queries.ts"
+        "apps/enterprise-app/src/features/_template/feature.queries.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -39547,7 +39547,7 @@
     {
       "sourceLineageId": "source-lineage-4a9cbabf3816",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/_template/feature.schema.ts"
+        "apps/enterprise-app/src/features/_template/feature.schema.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -39611,7 +39611,7 @@
     {
       "sourceLineageId": "source-lineage-6b74bec81cbb",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-account/AdminAccountPage.tsx"
+        "apps/enterprise-app/src/features/admin-account/AdminAccountPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -39675,10 +39675,10 @@
     {
       "sourceLineageId": "source-lineage-022c7fdfcd29",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -39741,7 +39741,7 @@
     {
       "sourceLineageId": "source-lineage-333c62672147",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-account/admin-account-client.ts"
+        "apps/enterprise-app/src/features/admin-account/admin-account-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -39805,7 +39805,7 @@
     {
       "sourceLineageId": "source-lineage-e4170bd716a6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-account/use-admin-account.ts"
+        "apps/enterprise-app/src/features/admin-account/use-admin-account.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -39869,7 +39869,7 @@
     {
       "sourceLineageId": "source-lineage-bac2f7dcd064",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/AdminAuthPage.tsx"
+        "apps/enterprise-app/src/features/admin-auth/AdminAuthPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -39933,7 +39933,7 @@
     {
       "sourceLineageId": "source-lineage-b9265786da3b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/IdpManager.tsx"
+        "apps/enterprise-app/src/features/admin-auth/IdpManager.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -39997,10 +39997,10 @@
     {
       "sourceLineageId": "source-lineage-854931b0a239",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -40063,10 +40063,10 @@
     {
       "sourceLineageId": "source-lineage-e37e9defcb84",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
+        "apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
+        "apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -40129,7 +40129,7 @@
     {
       "sourceLineageId": "source-lineage-34ca4008d3b2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/admin-auth-client.ts"
+        "apps/enterprise-app/src/features/admin-auth/admin-auth-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40193,7 +40193,7 @@
     {
       "sourceLineageId": "source-lineage-e6bf7c74a0f2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-auth/use-admin-auth.ts"
+        "apps/enterprise-app/src/features/admin-auth/use-admin-auth.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40257,7 +40257,7 @@
     {
       "sourceLineageId": "source-lineage-efedaf654ae8",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-clickthrough/AdminClickthroughPage.tsx"
+        "apps/enterprise-app/src/features/admin-clickthrough/AdminClickthroughPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40321,7 +40321,7 @@
     {
       "sourceLineageId": "source-lineage-932234a00407",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-clickthrough/admin-clickthrough-client.ts"
+        "apps/enterprise-app/src/features/admin-clickthrough/admin-clickthrough-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40385,7 +40385,7 @@
     {
       "sourceLineageId": "source-lineage-911cb6081dbb",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-clickthrough/use-admin-clickthrough.ts"
+        "apps/enterprise-app/src/features/admin-clickthrough/use-admin-clickthrough.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40449,7 +40449,7 @@
     {
       "sourceLineageId": "source-lineage-692e9a8dc546",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-config/AdminConfigPage.tsx"
+        "apps/enterprise-app/src/features/admin-config/AdminConfigPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40513,10 +40513,10 @@
     {
       "sourceLineageId": "source-lineage-bef0490fe6d0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -40579,7 +40579,7 @@
     {
       "sourceLineageId": "source-lineage-dbceeb4003bd",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-config/admin-config-client.ts"
+        "apps/enterprise-app/src/features/admin-config/admin-config-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40643,7 +40643,7 @@
     {
       "sourceLineageId": "source-lineage-009cc858fcdd",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-config/use-admin-config.ts"
+        "apps/enterprise-app/src/features/admin-config/use-admin-config.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40707,7 +40707,7 @@
     {
       "sourceLineageId": "source-lineage-8a1eca4619ad",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-developer/AdminDeveloperPage.tsx"
+        "apps/enterprise-app/src/features/admin-developer/AdminDeveloperPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40771,10 +40771,10 @@
     {
       "sourceLineageId": "source-lineage-3080aaaa59fc",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -40837,7 +40837,7 @@
     {
       "sourceLineageId": "source-lineage-698ba91b892d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-developer/admin-developer-client.ts"
+        "apps/enterprise-app/src/features/admin-developer/admin-developer-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40901,7 +40901,7 @@
     {
       "sourceLineageId": "source-lineage-90ecf9bd56bb",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-developer/use-admin-developer.ts"
+        "apps/enterprise-app/src/features/admin-developer/use-admin-developer.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -40965,7 +40965,7 @@
     {
       "sourceLineageId": "source-lineage-e2027da9466b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-domains/AdminDomainsPage.tsx"
+        "apps/enterprise-app/src/features/admin-domains/AdminDomainsPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41029,10 +41029,10 @@
     {
       "sourceLineageId": "source-lineage-49c56d8913cf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -41095,7 +41095,7 @@
     {
       "sourceLineageId": "source-lineage-b237a4f09c27",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-domains/admin-domains-client.ts"
+        "apps/enterprise-app/src/features/admin-domains/admin-domains-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41159,7 +41159,7 @@
     {
       "sourceLineageId": "source-lineage-5f6449df5f23",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-domains/use-admin-domains.ts"
+        "apps/enterprise-app/src/features/admin-domains/use-admin-domains.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41223,7 +41223,7 @@
     {
       "sourceLineageId": "source-lineage-1550ce0ed9f5",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-email/AdminEmailPage.tsx"
+        "apps/enterprise-app/src/features/admin-email/AdminEmailPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41287,10 +41287,10 @@
     {
       "sourceLineageId": "source-lineage-70e032da907f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -41353,7 +41353,7 @@
     {
       "sourceLineageId": "source-lineage-00ebb0f9a08a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-email/admin-email-client.ts"
+        "apps/enterprise-app/src/features/admin-email/admin-email-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41417,7 +41417,7 @@
     {
       "sourceLineageId": "source-lineage-63179b8321ee",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-email/use-admin-email.ts"
+        "apps/enterprise-app/src/features/admin-email/use-admin-email.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41481,7 +41481,7 @@
     {
       "sourceLineageId": "source-lineage-adc46111a57f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-entitlements/AdminEntitlementsPage.tsx"
+        "apps/enterprise-app/src/features/admin-entitlements/AdminEntitlementsPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41545,10 +41545,10 @@
     {
       "sourceLineageId": "source-lineage-3e5394f6e22c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -41611,7 +41611,7 @@
     {
       "sourceLineageId": "source-lineage-eab7e2a2e6a5",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-entitlements/admin-entitlements-client.ts"
+        "apps/enterprise-app/src/features/admin-entitlements/admin-entitlements-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41675,7 +41675,7 @@
     {
       "sourceLineageId": "source-lineage-6f159b9971af",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-entitlements/use-admin-entitlements.ts"
+        "apps/enterprise-app/src/features/admin-entitlements/use-admin-entitlements.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41739,7 +41739,7 @@
     {
       "sourceLineageId": "source-lineage-76da9aa72090",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-events/AdminEventsPage.tsx"
+        "apps/enterprise-app/src/features/admin-events/AdminEventsPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41803,10 +41803,10 @@
     {
       "sourceLineageId": "source-lineage-e56150bcdf52",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -41869,7 +41869,7 @@
     {
       "sourceLineageId": "source-lineage-ff08e0e8b927",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-events/admin-events-client.ts"
+        "apps/enterprise-app/src/features/admin-events/admin-events-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41933,7 +41933,7 @@
     {
       "sourceLineageId": "source-lineage-369da8fe00a4",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-events/use-admin-events.ts"
+        "apps/enterprise-app/src/features/admin-events/use-admin-events.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -41997,7 +41997,7 @@
     {
       "sourceLineageId": "source-lineage-65960f53f7b1",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-features/AdminFeaturesPage.tsx"
+        "apps/enterprise-app/src/features/admin-features/AdminFeaturesPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42061,10 +42061,10 @@
     {
       "sourceLineageId": "source-lineage-fa9bdded540f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -42127,7 +42127,7 @@
     {
       "sourceLineageId": "source-lineage-e1c10481ce4d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-features/admin-features-client.ts"
+        "apps/enterprise-app/src/features/admin-features/admin-features-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42191,7 +42191,7 @@
     {
       "sourceLineageId": "source-lineage-d54e9da5218c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-features/use-admin-features.ts"
+        "apps/enterprise-app/src/features/admin-features/use-admin-features.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42255,7 +42255,7 @@
     {
       "sourceLineageId": "source-lineage-6a3bd5e183e1",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/AdminLogsPage.tsx"
+        "apps/enterprise-app/src/features/admin-logs/AdminLogsPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42319,7 +42319,7 @@
     {
       "sourceLineageId": "source-lineage-cebde64c4cb4",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/admin-logs-client.ts"
+        "apps/enterprise-app/src/features/admin-logs/admin-logs-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42383,7 +42383,7 @@
     {
       "sourceLineageId": "source-lineage-5ae950afda03",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/admin-logs.query-state.ts"
+        "apps/enterprise-app/src/features/admin-logs/admin-logs.query-state.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42447,7 +42447,7 @@
     {
       "sourceLineageId": "source-lineage-44e07b2eac19",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/admin-logs.schema.ts"
+        "apps/enterprise-app/src/features/admin-logs/admin-logs.schema.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42511,7 +42511,7 @@
     {
       "sourceLineageId": "source-lineage-bd038cd89727",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/components/LogEntryDetails.tsx"
+        "apps/enterprise-app/src/features/admin-logs/components/LogEntryDetails.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42575,7 +42575,7 @@
     {
       "sourceLineageId": "source-lineage-fbf9f2db77f8",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/components/LogLevelBadge.tsx"
+        "apps/enterprise-app/src/features/admin-logs/components/LogLevelBadge.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42639,7 +42639,7 @@
     {
       "sourceLineageId": "source-lineage-9e6d9501f26a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/components/LogResultsTable.tsx"
+        "apps/enterprise-app/src/features/admin-logs/components/LogResultsTable.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42703,7 +42703,7 @@
     {
       "sourceLineageId": "source-lineage-c02c3ba4d791",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/components/LogSearchForm.tsx"
+        "apps/enterprise-app/src/features/admin-logs/components/LogSearchForm.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42767,7 +42767,7 @@
     {
       "sourceLineageId": "source-lineage-25170fcd00b9",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-logs/use-log-search.ts"
+        "apps/enterprise-app/src/features/admin-logs/use-log-search.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42831,7 +42831,7 @@
     {
       "sourceLineageId": "source-lineage-bb2a4a3541f8",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-members/AdminMembersPage.tsx"
+        "apps/enterprise-app/src/features/admin-members/AdminMembersPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -42895,10 +42895,10 @@
     {
       "sourceLineageId": "source-lineage-5950bb6378ca",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -42961,7 +42961,7 @@
     {
       "sourceLineageId": "source-lineage-0a3cee854eac",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-members/admin-members-client.ts"
+        "apps/enterprise-app/src/features/admin-members/admin-members-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43025,7 +43025,7 @@
     {
       "sourceLineageId": "source-lineage-45ce284da3d7",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-members/use-admin-members.ts"
+        "apps/enterprise-app/src/features/admin-members/use-admin-members.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43089,7 +43089,7 @@
     {
       "sourceLineageId": "source-lineage-6051e43b4d3a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-monitoring/AdminMonitoringPage.tsx"
+        "apps/enterprise-app/src/features/admin-monitoring/AdminMonitoringPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43153,10 +43153,10 @@
     {
       "sourceLineageId": "source-lineage-1b58d333489d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -43219,7 +43219,7 @@
     {
       "sourceLineageId": "source-lineage-c9213a748f05",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-monitoring/admin-monitoring-client.ts"
+        "apps/enterprise-app/src/features/admin-monitoring/admin-monitoring-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43283,7 +43283,7 @@
     {
       "sourceLineageId": "source-lineage-6bdc5be8edbc",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-monitoring/use-admin-monitoring.ts"
+        "apps/enterprise-app/src/features/admin-monitoring/use-admin-monitoring.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43347,7 +43347,7 @@
     {
       "sourceLineageId": "source-lineage-2887f7476a92",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-observability/AdminObservabilityPage.tsx"
+        "apps/enterprise-app/src/features/admin-observability/AdminObservabilityPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43411,10 +43411,10 @@
     {
       "sourceLineageId": "source-lineage-b104c953751a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -43477,7 +43477,7 @@
     {
       "sourceLineageId": "source-lineage-1ffa2d6e8172",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-observability/admin-observability-client.ts"
+        "apps/enterprise-app/src/features/admin-observability/admin-observability-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43541,7 +43541,7 @@
     {
       "sourceLineageId": "source-lineage-34397b6451c6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-observability/use-admin-observability.ts"
+        "apps/enterprise-app/src/features/admin-observability/use-admin-observability.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43605,7 +43605,7 @@
     {
       "sourceLineageId": "source-lineage-f8347aac840e",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-platform/AdminPlatformPage.tsx"
+        "apps/enterprise-app/src/features/admin-platform/AdminPlatformPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43669,10 +43669,10 @@
     {
       "sourceLineageId": "source-lineage-69e3f37e3f8c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -43735,7 +43735,7 @@
     {
       "sourceLineageId": "source-lineage-4ca8c35cfcc2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-platform/admin-platform-client.ts"
+        "apps/enterprise-app/src/features/admin-platform/admin-platform-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43799,7 +43799,7 @@
     {
       "sourceLineageId": "source-lineage-fb3afb163cd8",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-platform/use-admin-platform.ts"
+        "apps/enterprise-app/src/features/admin-platform/use-admin-platform.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43863,7 +43863,7 @@
     {
       "sourceLineageId": "source-lineage-3ea668a2c2ce",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-readiness/AdminReadinessPage.tsx"
+        "apps/enterprise-app/src/features/admin-readiness/AdminReadinessPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -43927,10 +43927,10 @@
     {
       "sourceLineageId": "source-lineage-ed5fc06ffa17",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -43993,7 +43993,7 @@
     {
       "sourceLineageId": "source-lineage-491bb0955fa2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-readiness/admin-readiness-client.ts"
+        "apps/enterprise-app/src/features/admin-readiness/admin-readiness-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44057,7 +44057,7 @@
     {
       "sourceLineageId": "source-lineage-9aa8bb9af063",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-readiness/use-admin-readiness.ts"
+        "apps/enterprise-app/src/features/admin-readiness/use-admin-readiness.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44121,7 +44121,7 @@
     {
       "sourceLineageId": "source-lineage-db780762b6b2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-scheduled-jobs/AdminScheduledJobsPage.tsx"
+        "apps/enterprise-app/src/features/admin-scheduled-jobs/AdminScheduledJobsPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44185,10 +44185,10 @@
     {
       "sourceLineageId": "source-lineage-9103da7e74b6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -44251,7 +44251,7 @@
     {
       "sourceLineageId": "source-lineage-243bddeb4083",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-scheduled-jobs/admin-scheduled-jobs-client.ts"
+        "apps/enterprise-app/src/features/admin-scheduled-jobs/admin-scheduled-jobs-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44315,7 +44315,7 @@
     {
       "sourceLineageId": "source-lineage-68d62a2220ba",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-scheduled-jobs/use-admin-scheduled-jobs.ts"
+        "apps/enterprise-app/src/features/admin-scheduled-jobs/use-admin-scheduled-jobs.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44379,7 +44379,7 @@
     {
       "sourceLineageId": "source-lineage-57d0834c11ad",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-search/AdminSearchPage.tsx"
+        "apps/enterprise-app/src/features/admin-search/AdminSearchPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44443,10 +44443,10 @@
     {
       "sourceLineageId": "source-lineage-7f3571e805bf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -44509,7 +44509,7 @@
     {
       "sourceLineageId": "source-lineage-0054bb6dc136",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-search/admin-search-client.ts"
+        "apps/enterprise-app/src/features/admin-search/admin-search-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44573,7 +44573,7 @@
     {
       "sourceLineageId": "source-lineage-1083ae9d5e90",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-search/use-admin-search.ts"
+        "apps/enterprise-app/src/features/admin-search/use-admin-search.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44637,7 +44637,7 @@
     {
       "sourceLineageId": "source-lineage-ea73fbb81b94",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-storage/AdminStoragePage.tsx"
+        "apps/enterprise-app/src/features/admin-storage/AdminStoragePage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44701,10 +44701,10 @@
     {
       "sourceLineageId": "source-lineage-2a688a39c792",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
+        "apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
+        "apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -44767,7 +44767,7 @@
     {
       "sourceLineageId": "source-lineage-a1b7fc8314d6",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-storage/admin-storage-client.ts"
+        "apps/enterprise-app/src/features/admin-storage/admin-storage-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44831,7 +44831,7 @@
     {
       "sourceLineageId": "source-lineage-b20b1d18a35a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-storage/use-admin-storage.ts"
+        "apps/enterprise-app/src/features/admin-storage/use-admin-storage.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44895,7 +44895,7 @@
     {
       "sourceLineageId": "source-lineage-52ffc60ebd43",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-usage/AdminUsagePage.tsx"
+        "apps/enterprise-app/src/features/admin-usage/AdminUsagePage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -44959,10 +44959,10 @@
     {
       "sourceLineageId": "source-lineage-9eb3667037a0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
+        "apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
+        "apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -45025,7 +45025,7 @@
     {
       "sourceLineageId": "source-lineage-e78c841c8369",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-usage/admin-usage-client.ts"
+        "apps/enterprise-app/src/features/admin-usage/admin-usage-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45089,7 +45089,7 @@
     {
       "sourceLineageId": "source-lineage-5a934fe77d46",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-usage/use-admin-usage.ts"
+        "apps/enterprise-app/src/features/admin-usage/use-admin-usage.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45153,7 +45153,7 @@
     {
       "sourceLineageId": "source-lineage-02861ece5c33",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/AdminWebhooksPage.tsx"
+        "apps/enterprise-app/src/features/admin-webhooks/AdminWebhooksPage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45217,10 +45217,10 @@
     {
       "sourceLineageId": "source-lineage-a8f7cda790cc",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -45283,7 +45283,7 @@
     {
       "sourceLineageId": "source-lineage-0765b79a6fa0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/admin-webhooks-client.ts"
+        "apps/enterprise-app/src/features/admin-webhooks/admin-webhooks-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45347,7 +45347,7 @@
     {
       "sourceLineageId": "source-lineage-6067d249cf8f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/use-admin-webhooks.ts"
+        "apps/enterprise-app/src/features/admin-webhooks/use-admin-webhooks.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45411,7 +45411,7 @@
     {
       "sourceLineageId": "source-lineage-41165e62a17b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/AdminQueryError.tsx"
+        "apps/enterprise-app/src/features/admin/AdminQueryError.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45475,7 +45475,7 @@
     {
       "sourceLineageId": "source-lineage-1569f0548a4a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/AuditTrailPanel.tsx"
+        "apps/enterprise-app/src/features/admin/AuditTrailPanel.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45539,10 +45539,10 @@
     {
       "sourceLineageId": "source-lineage-14e5ab8a4123",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
+        "apps/enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
+        "apps/enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -45605,10 +45605,10 @@
     {
       "sourceLineageId": "source-lineage-c45cf659df39",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
+        "apps/enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
+        "apps/enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -45671,7 +45671,7 @@
     {
       "sourceLineageId": "source-lineage-45bf19145c56",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/admin-error.ts"
+        "apps/enterprise-app/src/features/admin/admin-error.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45735,7 +45735,7 @@
     {
       "sourceLineageId": "source-lineage-1bb3bb01654e",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/admin-fetch.ts"
+        "apps/enterprise-app/src/features/admin/admin-fetch.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45799,7 +45799,7 @@
     {
       "sourceLineageId": "source-lineage-c5f2ec9d262d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/audit-client.ts"
+        "apps/enterprise-app/src/features/admin/audit-client.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45863,7 +45863,7 @@
     {
       "sourceLineageId": "source-lineage-cd7198b764fa",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/admin/use-audit.ts"
+        "apps/enterprise-app/src/features/admin/use-audit.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -45927,7 +45927,7 @@
     {
       "sourceLineageId": "source-lineage-529d50978287",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/organisation/OrganisationProfilePage.tsx"
+        "apps/enterprise-app/src/features/organisation/OrganisationProfilePage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -45990,10 +45990,10 @@
     {
       "sourceLineageId": "source-lineage-0d129b25e1e4",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
+        "apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
+        "apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -46055,7 +46055,7 @@
     {
       "sourceLineageId": "source-lineage-c8e256b78f14",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/organisation/organisation.mutations.ts"
+        "apps/enterprise-app/src/features/organisation/organisation.mutations.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46118,7 +46118,7 @@
     {
       "sourceLineageId": "source-lineage-59faa431da9c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/features/organisation/organisation.queries.ts"
+        "apps/enterprise-app/src/features/organisation/organisation.queries.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46181,7 +46181,7 @@
     {
       "sourceLineageId": "source-lineage-74ee246c9d26",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/hooks/.gitkeep"
+        "apps/enterprise-app/src/hooks/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46244,7 +46244,7 @@
     {
       "sourceLineageId": "source-lineage-6459b1b69958",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/hooks/use-session.ts"
+        "apps/enterprise-app/src/hooks/use-session.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -46308,7 +46308,7 @@
     {
       "sourceLineageId": "source-lineage-b3bd404f1524",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/index.ts"
+        "apps/enterprise-app/src/index.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46371,7 +46371,7 @@
     {
       "sourceLineageId": "source-lineage-72eecb582941",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/lib/as-text.ts"
+        "apps/enterprise-app/src/lib/as-text.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46434,7 +46434,7 @@
     {
       "sourceLineageId": "source-lineage-88bc1bee8f23",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/main.tsx"
+        "apps/enterprise-app/src/main.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46497,7 +46497,7 @@
     {
       "sourceLineageId": "source-lineage-20e79a7b1cc2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/fixtures/admin.ts"
+        "apps/enterprise-app/src/msw/fixtures/admin.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -46561,7 +46561,7 @@
     {
       "sourceLineageId": "source-lineage-718148770b72",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/fixtures/organisation.ts"
+        "apps/enterprise-app/src/msw/fixtures/organisation.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46624,7 +46624,7 @@
     {
       "sourceLineageId": "source-lineage-bf5ba5e8ae73",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/fixtures/providers.ts"
+        "apps/enterprise-app/src/msw/fixtures/providers.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -46688,7 +46688,7 @@
     {
       "sourceLineageId": "source-lineage-4cfdc58b0043",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/fixtures/session.ts"
+        "apps/enterprise-app/src/msw/fixtures/session.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -46752,7 +46752,7 @@
     {
       "sourceLineageId": "source-lineage-2e41949bf8a4",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/fixtures/theme.ts"
+        "apps/enterprise-app/src/msw/fixtures/theme.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46815,7 +46815,7 @@
     {
       "sourceLineageId": "source-lineage-8910e20023c9",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/graphql/factories.ts"
+        "apps/enterprise-app/src/msw/graphql/factories.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46878,7 +46878,7 @@
     {
       "sourceLineageId": "source-lineage-4244335c403c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/graphql/handlers.ts"
+        "apps/enterprise-app/src/msw/graphql/handlers.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -46941,7 +46941,7 @@
     {
       "sourceLineageId": "source-lineage-af831c2a3894",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/handlers.ts"
+        "apps/enterprise-app/src/msw/handlers.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -47004,7 +47004,7 @@
     {
       "sourceLineageId": "source-lineage-41bb11e0061a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/index.ts"
+        "apps/enterprise-app/src/msw/index.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -47067,7 +47067,7 @@
     {
       "sourceLineageId": "source-lineage-4b6e95baef14",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/msw/server.ts"
+        "apps/enterprise-app/src/msw/server.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -47130,7 +47130,7 @@
     {
       "sourceLineageId": "source-lineage-f2dafae41677",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/observability/faro.ts"
+        "apps/enterprise-app/src/observability/faro.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47194,7 +47194,7 @@
     {
       "sourceLineageId": "source-lineage-06878a23048c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routeTree.gen.ts"
+        "apps/enterprise-app/src/routeTree.gen.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47258,7 +47258,7 @@
     {
       "sourceLineageId": "source-lineage-c4afa1b13c45",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/.gitkeep"
+        "apps/enterprise-app/src/routes/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47322,7 +47322,7 @@
     {
       "sourceLineageId": "source-lineage-da619d7f9dff",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/__root.tsx"
+        "apps/enterprise-app/src/routes/__root.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47386,10 +47386,10 @@
     {
       "sourceLineageId": "source-lineage-d816f7c5aa45",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx"
+        "apps/enterprise-app/src/routes/__tests__/login.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx"
+        "apps/enterprise-app/src/routes/__tests__/login.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -47452,7 +47452,7 @@
     {
       "sourceLineageId": "source-lineage-e4c59f057158",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/_authenticated.tsx"
+        "apps/enterprise-app/src/routes/_authenticated.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47516,7 +47516,7 @@
     {
       "sourceLineageId": "source-lineage-e509cf319ebc",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/account.tsx"
+        "apps/enterprise-app/src/routes/admin/account.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47580,7 +47580,7 @@
     {
       "sourceLineageId": "source-lineage-8fa70b016088",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/auth.tsx"
+        "apps/enterprise-app/src/routes/admin/auth.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47644,7 +47644,7 @@
     {
       "sourceLineageId": "source-lineage-8c8f6bd7e322",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/clickthrough.tsx"
+        "apps/enterprise-app/src/routes/admin/clickthrough.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47708,7 +47708,7 @@
     {
       "sourceLineageId": "source-lineage-736f8e3821f1",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/config.tsx"
+        "apps/enterprise-app/src/routes/admin/config.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47772,7 +47772,7 @@
     {
       "sourceLineageId": "source-lineage-cac75eda4c4c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/developer.tsx"
+        "apps/enterprise-app/src/routes/admin/developer.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47836,7 +47836,7 @@
     {
       "sourceLineageId": "source-lineage-0a8aedbdaef1",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/domains.tsx"
+        "apps/enterprise-app/src/routes/admin/domains.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47900,7 +47900,7 @@
     {
       "sourceLineageId": "source-lineage-e1d2bce4d0a7",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/email.tsx"
+        "apps/enterprise-app/src/routes/admin/email.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -47964,7 +47964,7 @@
     {
       "sourceLineageId": "source-lineage-3eb660483bbe",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/entitlements.tsx"
+        "apps/enterprise-app/src/routes/admin/entitlements.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48028,7 +48028,7 @@
     {
       "sourceLineageId": "source-lineage-edd0d891e43c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/events.tsx"
+        "apps/enterprise-app/src/routes/admin/events.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48092,7 +48092,7 @@
     {
       "sourceLineageId": "source-lineage-eb2fda097262",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/features.tsx"
+        "apps/enterprise-app/src/routes/admin/features.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48156,7 +48156,7 @@
     {
       "sourceLineageId": "source-lineage-a164da9e6cdf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/index.tsx"
+        "apps/enterprise-app/src/routes/admin/index.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48220,7 +48220,7 @@
     {
       "sourceLineageId": "source-lineage-cc52a5c10e40",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/layout.tsx"
+        "apps/enterprise-app/src/routes/admin/layout.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48284,7 +48284,7 @@
     {
       "sourceLineageId": "source-lineage-08f581e5d6bf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/logs.tsx"
+        "apps/enterprise-app/src/routes/admin/logs.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48348,7 +48348,7 @@
     {
       "sourceLineageId": "source-lineage-7232531a54e0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/members.tsx"
+        "apps/enterprise-app/src/routes/admin/members.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48412,7 +48412,7 @@
     {
       "sourceLineageId": "source-lineage-c777cd2cb0e0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/monitoring.tsx"
+        "apps/enterprise-app/src/routes/admin/monitoring.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48476,7 +48476,7 @@
     {
       "sourceLineageId": "source-lineage-5d8d1aacf5fe",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/observability.tsx"
+        "apps/enterprise-app/src/routes/admin/observability.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48540,7 +48540,7 @@
     {
       "sourceLineageId": "source-lineage-e815426e9cb0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/platform.tsx"
+        "apps/enterprise-app/src/routes/admin/platform.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48604,7 +48604,7 @@
     {
       "sourceLineageId": "source-lineage-42db70e40f90",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/readiness.tsx"
+        "apps/enterprise-app/src/routes/admin/readiness.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48668,7 +48668,7 @@
     {
       "sourceLineageId": "source-lineage-1f8c33de2763",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/scheduled-jobs.tsx"
+        "apps/enterprise-app/src/routes/admin/scheduled-jobs.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48732,7 +48732,7 @@
     {
       "sourceLineageId": "source-lineage-205733a3d3a1",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/search.tsx"
+        "apps/enterprise-app/src/routes/admin/search.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48796,7 +48796,7 @@
     {
       "sourceLineageId": "source-lineage-397a12148464",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/storage.tsx"
+        "apps/enterprise-app/src/routes/admin/storage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48860,7 +48860,7 @@
     {
       "sourceLineageId": "source-lineage-4520a535a98d",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/usage.tsx"
+        "apps/enterprise-app/src/routes/admin/usage.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48924,7 +48924,7 @@
     {
       "sourceLineageId": "source-lineage-17f58cbf7340",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/admin/webhooks.tsx"
+        "apps/enterprise-app/src/routes/admin/webhooks.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -48988,7 +48988,7 @@
     {
       "sourceLineageId": "source-lineage-2cf1f94bc846",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/e2e-harness.tsx"
+        "apps/enterprise-app/src/routes/e2e-harness.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -49052,7 +49052,7 @@
     {
       "sourceLineageId": "source-lineage-c72cde9e88b5",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/index.tsx"
+        "apps/enterprise-app/src/routes/index.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -49116,7 +49116,7 @@
     {
       "sourceLineageId": "source-lineage-b3c0524df54f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/login.tsx"
+        "apps/enterprise-app/src/routes/login.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -49180,7 +49180,7 @@
     {
       "sourceLineageId": "source-lineage-74dbe1796836",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/routes/organisation/profile.tsx"
+        "apps/enterprise-app/src/routes/organisation/profile.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -49244,7 +49244,7 @@
     {
       "sourceLineageId": "source-lineage-e871dcca16d9",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/services/.gitkeep"
+        "apps/enterprise-app/src/services/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -49307,7 +49307,7 @@
     {
       "sourceLineageId": "source-lineage-34d8ec11ef38",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/styles/.gitkeep"
+        "apps/enterprise-app/src/styles/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -49370,7 +49370,7 @@
     {
       "sourceLineageId": "source-lineage-b315fa678673",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/styles/globals.css"
+        "apps/enterprise-app/src/styles/globals.css"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -49433,7 +49433,7 @@
     {
       "sourceLineageId": "source-lineage-84dd59421511",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/test-setup.ts"
+        "apps/enterprise-app/src/test-setup.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -49496,7 +49496,7 @@
     {
       "sourceLineageId": "source-lineage-b69a1c6943a2",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/.gitkeep"
+        "apps/enterprise-app/src/tests/.gitkeep"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -49559,10 +49559,10 @@
     {
       "sourceLineageId": "source-lineage-f38fa0546a2c",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
+        "apps/enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
+        "apps/enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -49625,10 +49625,10 @@
     {
       "sourceLineageId": "source-lineage-1a5d21e1d135",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
+        "apps/enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
+        "apps/enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -49691,10 +49691,10 @@
     {
       "sourceLineageId": "source-lineage-4b88d357b1b7",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/app.test.tsx"
+        "apps/enterprise-app/src/tests/app.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/app.test.tsx"
+        "apps/enterprise-app/src/tests/app.test.tsx"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -49756,10 +49756,10 @@
     {
       "sourceLineageId": "source-lineage-92b6a9bdfb7f",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/as-text.test.ts"
+        "apps/enterprise-app/src/tests/as-text.test.ts"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/as-text.test.ts"
+        "apps/enterprise-app/src/tests/as-text.test.ts"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -49821,10 +49821,10 @@
     {
       "sourceLineageId": "source-lineage-1913c4a482d5",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/msw/msw-substrate.test.ts"
+        "apps/enterprise-app/src/tests/msw/msw-substrate.test.ts"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/msw/msw-substrate.test.ts"
+        "apps/enterprise-app/src/tests/msw/msw-substrate.test.ts"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -49886,10 +49886,10 @@
     {
       "sourceLineageId": "source-lineage-55a941b035be",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
+        "apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
+        "apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -49952,10 +49952,10 @@
     {
       "sourceLineageId": "source-lineage-efc4378f4a86",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/substrate/require-permission.test.tsx"
+        "apps/enterprise-app/src/tests/substrate/require-permission.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/substrate/require-permission.test.tsx"
+        "apps/enterprise-app/src/tests/substrate/require-permission.test.tsx"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -50018,10 +50018,10 @@
     {
       "sourceLineageId": "source-lineage-fa8451cf04ca",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/theme/theme.test.tsx"
+        "apps/enterprise-app/src/tests/theme/theme.test.tsx"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/theme/theme.test.tsx"
+        "apps/enterprise-app/src/tests/theme/theme.test.tsx"
       ],
       "category": "ui-only-test",
       "sourceKind": "test",
@@ -50083,10 +50083,10 @@
     {
       "sourceLineageId": "source-lineage-d8e938f22e84",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/tests/use-session.test.ts"
+        "apps/enterprise-app/src/tests/use-session.test.ts"
       ],
       "sourceLineageTestsOrProofs": [
-        "apps/react-enterprise-app/src/tests/use-session.test.ts"
+        "apps/enterprise-app/src/tests/use-session.test.ts"
       ],
       "category": "ui-derived-foundation-behaviour",
       "sourceKind": "test",
@@ -50149,7 +50149,7 @@
     {
       "sourceLineageId": "source-lineage-6183796a8343",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/theme/ThemeProvider.tsx"
+        "apps/enterprise-app/src/theme/ThemeProvider.tsx"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-derived-foundation-behaviour",
@@ -50213,7 +50213,7 @@
     {
       "sourceLineageId": "source-lineage-cc9ab1d90036",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/theme/theme.ts"
+        "apps/enterprise-app/src/theme/theme.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -50276,7 +50276,7 @@
     {
       "sourceLineageId": "source-lineage-f455a4d1363b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/theme/use-theme.ts"
+        "apps/enterprise-app/src/theme/use-theme.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -50339,7 +50339,7 @@
     {
       "sourceLineageId": "source-lineage-b702d2e7e86b",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/src/vite-env.d.ts"
+        "apps/enterprise-app/src/vite-env.d.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -50402,7 +50402,7 @@
     {
       "sourceLineageId": "source-lineage-798a3fdb8cbf",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/tsconfig.json"
+        "apps/enterprise-app/tsconfig.json"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -50465,7 +50465,7 @@
     {
       "sourceLineageId": "source-lineage-b0aea7a587d0",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/vite.config.ts"
+        "apps/enterprise-app/vite.config.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -50528,7 +50528,7 @@
     {
       "sourceLineageId": "source-lineage-aa437aa0254a",
       "sourceLineagePaths": [
-        "apps/react-enterprise-app/vitest.config.ts"
+        "apps/enterprise-app/vitest.config.ts"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
@@ -126886,7 +126886,7 @@
     {
       "sourceLineageId": "source-lineage-a796cbcdda1b",
       "sourceLineagePaths": [
-        "tools/architecture/generate-package-readmes/tests/fixtures/representative/golden/react-app/README.md"
+        "tools/architecture/generate-package-readmes/tests/fixtures/representative/golden/web-app/README.md"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "command-proof-tooling",
@@ -127454,7 +127454,7 @@
     {
       "sourceLineageId": "source-lineage-8b3658c87238",
       "sourceLineagePaths": [
-        "tools/architecture/generate-package-readmes/tests/fixtures/representative/valid/react-app/package.json"
+        "tools/architecture/generate-package-readmes/tests/fixtures/representative/valid/web-app/package.json"
       ],
       "sourceLineageTestsOrProofs": [],
       "category": "package",

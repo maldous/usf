@@ -31,9 +31,9 @@
   "sourceRefs": [
     "apps/platform-api/src/config/registry.ts",
     "apps/platform-api/src/server/routes.ts",
-    "apps/react-enterprise-app/src/theme/ThemeProvider.tsx",
-    "apps/react-enterprise-app/src/theme/theme.ts",
-    "apps/react-enterprise-app/src/theme/use-theme.ts",
+    "apps/enterprise-app/src/theme/ThemeProvider.tsx",
+    "apps/enterprise-app/src/theme/theme.ts",
+    "apps/enterprise-app/src/theme/use-theme.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
     "docs/architecture/foundation-completeness-audit.md"
   ],

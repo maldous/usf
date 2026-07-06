@@ -5517,7 +5517,7 @@
       "testReadinessClaimAllowed": false
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "composeServiceId": null,
       "fixtureSeedId": "not-applicable",
       "fixtureCorpusSeedId": "not-applicable",
@@ -5570,7 +5570,7 @@
       "inMemoryServiceSubstituteAllowed": false,
       "failClosedExpected": true,
       "testFile": "tests/packages/security-abuse-fuzzing-regression-suite.test.ts",
-      "testName": "service security abuse boundary remains current: react-app",
+      "testName": "service security abuse boundary remains current: web-app",
       "testReadinessClaimAllowed": false
     },
     {

@@ -1023,11 +1023,11 @@
       ]
     },
     {
-      "id": "soa-service-react-app",
+      "id": "soa-service-web-app",
       "mappedType": "service",
       "controlPurpose": "Preserve service disposition, owner/risk/control accountability, access posture, evidence posture, and readiness non-claims for source-lineage App.",
       "riskTreated": "Service failure affects only its classified environment scope.",
-      "assetServiceAffected": "react-app",
+      "assetServiceAffected": "web-app",
       "owner": "platform-architecture-foundation",
       "riskOwner": "platform-architecture-risk-owner",
       "controlOwner": "platform-architecture-control-owner",
@@ -2953,11 +2953,11 @@
       ]
     },
     {
-      "id": "soa-deferred-boundary-react-app",
+      "id": "soa-deferred-boundary-web-app",
       "mappedType": "deferred-boundary",
-      "controlPurpose": "Govern explicit deferred or out-of-scope boundary for react-app.",
+      "controlPurpose": "Govern explicit deferred or out-of-scope boundary for web-app.",
       "riskTreated": "Deferred work must remain linked to follow-up evidence and must not be hidden behind broad readiness claims.",
-      "assetServiceAffected": "react-app",
+      "assetServiceAffected": "web-app",
       "owner": "platform-architecture-foundation",
       "riskOwner": "platform-architecture-risk-owner",
       "controlOwner": "platform-architecture-control-owner",
@@ -21350,9 +21350,9 @@
       ]
     },
     {
-      "id": "incident-vulnerability-react-app",
+      "id": "incident-vulnerability-web-app",
       "targetType": "service",
-      "target": "react-app",
+      "target": "web-app",
       "posture": [
         "incidentDetectionHook=local-evidence-only-or-deferred",
         "alertingPosture=no-production-alerting-claim",

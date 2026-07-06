@@ -12,7 +12,7 @@
     "alloy",
     "external-caddy",
     "pgadmin",
-    "react-app",
+    "web-app",
     "sentry-cleanup",
     "sentry-clickhouse",
     "sentry-events-consumer",
@@ -616,14 +616,14 @@
       "provider_mode_posture": "local/composed evidence only; live external readiness not claimed",
       "source_build": {
         "context": ".",
-        "dockerfile": "apps/react-enterprise-app/Dockerfile"
+        "dockerfile": "apps/enterprise-app/Dockerfile"
       },
       "source_compose_file": "compose.yaml",
       "source_image": null,
       "source_ports": [
         "${WEB_HTTP_PORT:-80}:80"
       ],
-      "source_service": "react-app",
+      "source_service": "web-app",
       "selection_class": "future-ui",
       "tracking_recommendation": "USF-133 follow-up or human decision before USF-133 closure",
       "usf_accounting_status": "out-of-foundation-scope",

@@ -1240,7 +1240,7 @@
     },
     {
       "id": "source-service-8e3b08350689",
-      "sourceLineageService": "react-app",
+      "sourceLineageService": "web-app",
       "sourceLineagePaths": [
         "compose.yaml"
       ],

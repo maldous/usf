@@ -41,7 +41,7 @@ The relevant historical source evidence includes:
 - `apps/platform-api/src/server/authorize-resource.ts`;
 - `apps/platform-api/tests/unit/authorize-resource.test.ts`;
 - `apps/platform-api/tests/unit/audit.test.ts`;
-- `apps/react-enterprise-app/src/components/RequirePermission.tsx`;
+- `apps/enterprise-app/src/components/RequirePermission.tsx`;
 - `packages/authorisation-runtime/src/index.ts`;
 - `packages/authorisation-runtime/tests/authorisation-runtime.test.ts`;
 - `packages/platform-errors/tests/platform-errors-auth.test.ts`;

@@ -37,7 +37,7 @@
     "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
     "apps/platform-api/tests/substrate/session-fixture.test.ts",
     "apps/platform-api/tests/unit/auth-usecase.test.ts",
-    "apps/react-enterprise-app/src/hooks/use-session.ts",
+    "apps/enterprise-app/src/hooks/use-session.ts",
     "docs/evidence/identity/identity-access-baseline.md",
     "docs/evidence/identity/keycloak-login-callback.md",
     "docs/evidence/identity/tenant-identity-membership-v2.md",

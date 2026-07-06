@@ -12457,7 +12457,7 @@
       "generatedComposeTargets": []
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "displayName": "source-lineage App",
       "serviceOwner": "platform-architecture-foundation",
       "riskOwner": "platform-architecture-risk-owner",
@@ -12466,7 +12466,7 @@
       "environmentDisposition": "out-of-scope",
       "providerBoundary": {
         "disposition": "out-of-scope",
-        "supplierBoundary": "react-app requires future provider/supplier boundary evidence before any live or production claim.",
+        "supplierBoundary": "web-app requires future provider/supplier boundary evidence before any live or production claim.",
         "evidenceBoundary": "Catalogue/schema/generator validation only; runtime/provider evidence must be recorded separately before stronger claims.",
         "notes": "Provider boundary is out-of-scope; this does not upgrade local Compose to staging, production, live-provider, SOC, or ISO certification readiness."
       },
@@ -12483,8 +12483,8 @@
       "secretPosture": "no-secrets",
       "backupRestorePosture": "not-required",
       "retentionPosture": "local-ephemeral",
-      "tenantBoundary": "dev: dev tenant boundary is provider-managed and must be evidenced for react-app; test: test tenant boundary is provider-managed and must be evidenced for react-app; staging: staging tenant boundary is provider-managed and must be evidenced for react-app; production: production tenant boundary is provider-managed and must be evidenced for react-app",
-      "operationalOwnerBoundary": "platform-architecture-foundation owns catalogue classification for react-app; production operations, live-provider operation, incident response, and compliance readiness need future authority and evidence.",
+      "tenantBoundary": "dev: dev tenant boundary is provider-managed and must be evidenced for web-app; test: test tenant boundary is provider-managed and must be evidenced for web-app; staging: staging tenant boundary is provider-managed and must be evidenced for web-app; production: production tenant boundary is provider-managed and must be evidenced for web-app",
+      "operationalOwnerBoundary": "platform-architecture-foundation owns catalogue classification for web-app; production operations, live-provider operation, incident response, and compliance readiness need future authority and evidence.",
       "operatorAccessBoundary": "No operator/admin service boundary applies.",
       "sharedControlPlaneJustification": "not-applicable; service is not classified as a shared cross-environment control plane.",
       "breakGlassRelevance": "not-applicable",
@@ -12502,12 +12502,12 @@
           "audit-evidence-boundary",
           "change-evidence-boundary"
         ],
-        "supportStatement": "react-app metadata supports ISO/IEC 27001-style evidence organisation for asset inventory and control ownership only.",
+        "supportStatement": "web-app metadata supports ISO/IEC 27001-style evidence organisation for asset inventory and control ownership only.",
         "certificationClaimed": false,
         "nonClaim": "No ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, live-provider readiness, enterprise production readiness, full product readiness, or full dev readiness is claimed."
       },
       "enterpriseFeatureSupport": {
-        "assetInventory": "react-app is registered as out-of-scope-historical in the semantic service catalogue.",
+        "assetInventory": "web-app is registered as out-of-scope-historical in the semantic service catalogue.",
         "riskOwnership": "Risk ownership is assigned to platform-architecture-risk-owner; Linear remains tracking only.",
         "controlOwnership": "Control ownership is assigned to platform-architecture-control-owner; generated Compose does not define control authority.",
         "accessControlBoundary": "Access posture is no-human-access; local ports remain loopback-bound unless future authority changes them.",
@@ -12516,8 +12516,8 @@
         "backupRestoreResilience": "Backup/restore posture is not-required; resilience claims require separate proof.",
         "supplierProviderBoundary": "Provider boundary is out-of-scope; external supplier/provider claims require missing evidence to be closed.",
         "secretCredentialBoundary": "Secret posture is no-secrets; raw production secrets are prohibited in generated Compose.",
-        "changePromotionEvidence": "Change and promotion evidence is limited to schema/catalogue validation, generated Compose determinism, git history, and PR checks for react-app.",
-        "incidentResponseEvidence": "Incident response evidence is not claimed for react-app; future incident workflow proof must be separate.",
+        "changePromotionEvidence": "Change and promotion evidence is limited to schema/catalogue validation, generated Compose determinism, git history, and PR checks for web-app.",
+        "incidentResponseEvidence": "Incident response evidence is not claimed for web-app; future incident workflow proof must be separate.",
         "statementOfApplicabilitySupport": true,
         "certificationOrReadinessClaims": "Supports evidence organisation only; does not claim SOC readiness, ISO/IEC 27001 certification, staging readiness, production readiness, live-provider readiness, full product readiness, or full dev readiness."
       },
@@ -12551,9 +12551,9 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "sourceComposeServiceNames": ["react-app"],
+      "sourceComposeServiceNames": ["web-app"],
       "sourceCompletenessRows": [
-        "docs/architecture/usf-compose-service-completeness-matrix.md#react-app"
+        "docs/architecture/usf-compose-service-completeness-matrix.md#web-app"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
@@ -12573,9 +12573,9 @@
           "proofObligation": "No proof obligation because not required.",
           "selectedComposeTarget": "not-generated",
           "rationale": "Historical runtime implementation is outside foundation scope.",
-          "environmentScopeMechanism": "dev external provider account/project/environment selection for react-app",
-          "projectBoundary": "dev provider project/account boundary is required before readiness claims for react-app",
-          "tenantBoundary": "dev tenant boundary is provider-managed and must be evidenced for react-app",
+          "environmentScopeMechanism": "dev external provider account/project/environment selection for web-app",
+          "projectBoundary": "dev provider project/account boundary is required before readiness claims for web-app",
+          "tenantBoundary": "dev tenant boundary is provider-managed and must be evidenced for web-app",
           "accessBoundary": "dev provider access console or credential boundary follows accessModel no-human-access",
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         },
@@ -12595,9 +12595,9 @@
           "proofObligation": "No proof obligation because not required.",
           "selectedComposeTarget": "not-generated",
           "rationale": "Not required in this environment.",
-          "environmentScopeMechanism": "test external provider account/project/environment selection for react-app",
-          "projectBoundary": "test provider project/account boundary is required before readiness claims for react-app",
-          "tenantBoundary": "test tenant boundary is provider-managed and must be evidenced for react-app",
+          "environmentScopeMechanism": "test external provider account/project/environment selection for web-app",
+          "projectBoundary": "test provider project/account boundary is required before readiness claims for web-app",
+          "tenantBoundary": "test tenant boundary is provider-managed and must be evidenced for web-app",
           "accessBoundary": "test provider access console or credential boundary follows accessModel no-human-access",
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         },
@@ -12617,9 +12617,9 @@
           "proofObligation": "No proof obligation because not required.",
           "selectedComposeTarget": "not-generated",
           "rationale": "Not required in this environment.",
-          "environmentScopeMechanism": "staging external provider account/project/environment selection for react-app",
-          "projectBoundary": "staging provider project/account boundary is required before readiness claims for react-app",
-          "tenantBoundary": "staging tenant boundary is provider-managed and must be evidenced for react-app",
+          "environmentScopeMechanism": "staging external provider account/project/environment selection for web-app",
+          "projectBoundary": "staging provider project/account boundary is required before readiness claims for web-app",
+          "tenantBoundary": "staging tenant boundary is provider-managed and must be evidenced for web-app",
           "accessBoundary": "staging provider access console or credential boundary follows accessModel no-human-access",
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         },
@@ -12639,9 +12639,9 @@
           "proofObligation": "No proof obligation because not required.",
           "selectedComposeTarget": "not-generated",
           "rationale": "Not required in this environment.",
-          "environmentScopeMechanism": "production external provider account/project/environment selection for react-app",
-          "projectBoundary": "production provider project/account boundary is required before readiness claims for react-app",
-          "tenantBoundary": "production tenant boundary is provider-managed and must be evidenced for react-app",
+          "environmentScopeMechanism": "production external provider account/project/environment selection for web-app",
+          "projectBoundary": "production provider project/account boundary is required before readiness claims for web-app",
+          "tenantBoundary": "production tenant boundary is provider-managed and must be evidenced for web-app",
           "accessBoundary": "production provider access console or credential boundary follows accessModel no-human-access",
           "productionExposureBoundary": "production exposure is allowed only through the explicit production external-provider policy"
         }

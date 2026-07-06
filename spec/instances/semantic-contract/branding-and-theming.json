@@ -98,8 +98,8 @@
       "status": "complete",
       "description": "UI semantics recovered from cited UI source.",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/theme/ThemeProvider.tsx",
-        "apps/react-enterprise-app/src/theme/theme.ts"
+        "apps/enterprise-app/src/theme/ThemeProvider.tsx",
+        "apps/enterprise-app/src/theme/theme.ts"
       ]
     }
   },
@@ -108,9 +108,9 @@
     "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/src/config/registry.ts",
     "apps/platform-api/src/server/routes.ts",
-    "apps/react-enterprise-app/src/theme/ThemeProvider.tsx",
-    "apps/react-enterprise-app/src/theme/theme.ts",
-    "apps/react-enterprise-app/src/theme/use-theme.ts"
+    "apps/enterprise-app/src/theme/ThemeProvider.tsx",
+    "apps/enterprise-app/src/theme/theme.ts",
+    "apps/enterprise-app/src/theme/use-theme.ts"
   ],
   "adrRefs": [
     "docs/adr/0005-hexagonal-architecture.md"

@@ -27935,7 +27935,7 @@
       "id": "source-lineage-equivalence-a796cbcdda1b",
       "sourceLineageId": "source-lineage-a796cbcdda1b",
       "sourceLineagePaths": [
-        "tools/architecture/generate-package-readmes/tests/fixtures/representative/golden/react-app/README.md"
+        "tools/architecture/generate-package-readmes/tests/fixtures/representative/golden/web-app/README.md"
       ],
       "category": "command-proof-tooling",
       "routePortAdapterProviderId": "route-port-adapter-provider-a796cbcdda1b",

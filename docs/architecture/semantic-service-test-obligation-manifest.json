@@ -2090,7 +2090,7 @@
       "boundedDisposition": "post-Test public FQDN proof-origin row retained as non-test disposition; USF-263 and USF-266 own public proof evidence outside Test readiness."
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "displayName": "source-lineage App",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeServiceId": null,
@@ -2143,7 +2143,7 @@
         "corepack pnpm test-readiness:validate"
       ],
       "fixtureSeedId": "not-applicable",
-      "evidenceId": "evidence.usf-239.service.react-app",
+      "evidenceId": "evidence.usf-239.service.web-app",
       "nonClaimBoundary": "This row creates a test obligation only. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
       "inMemoryServiceSubstituteAllowed": null,
       "boundedDisposition": "historical or out-of-scope row retained for non-test disposition only"
