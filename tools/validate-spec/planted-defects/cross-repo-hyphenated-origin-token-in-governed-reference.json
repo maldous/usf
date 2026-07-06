@@ -1,0 +1,49 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-NATIVE-001",
+  "instances": {
+    "spec/instances/workflow/cross-repo-hyphenated-origin-token-in-governed-reference.json": {
+      "id": "workflow.cross-repo-hyphenated-origin-token-in-governed-reference",
+      "workflowKind": "workflow",
+      "title": "Cross Repo Hyphenated Origin Token In Governed Reference Workflow",
+      "description": "Planted workflow whose governed sourceRefs field carries a hyphenated external origin discriminator in repository position.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Workflow"
+      ],
+      "taxonomyRefs": [
+        "event-workflow-classification"
+      ],
+      "vocabularyRefs": [
+        "event-workflow-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "participants": [
+        "workflow.cross-repo-hyphenated-origin-token-in-governed-reference"
+      ],
+      "ordering": "single planted validation step",
+      "sourceRefs": [
+        "legacy-react-origin/docs/adr/0005-hexagonal-architecture.md"
+      ],
+      "steps": [
+        {
+          "id": "planted-step",
+          "description": "Exercise the USF-native origin-token discriminator guard for a hyphenated origin label."
+        }
+      ],
+      "stateTransitions": [
+        {
+          "from": "start",
+          "to": "finish"
+        }
+      ],
+      "failurePaths": [
+        "hyphenated origin discriminator in a governed reference fails validation"
+      ],
+      "compensationPaths": [
+        "no compensation for planted selftest"
+      ]
+    }
+  }
+}

@@ -2090,6 +2090,67 @@
       "boundedDisposition": "post-Test public FQDN proof-origin row retained as non-test disposition; USF-263 and USF-266 own public proof evidence outside Test readiness."
     },
     {
+      "serviceId": "staging-proof-cockpit",
+      "displayName": "Staging Proof Cockpit",
+      "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
+      "composeServiceId": "staging-proof-cockpit",
+      "requiredInTest": false,
+      "generatedInTestCompose": false,
+      "dependencyDisposition": "out-of-scope",
+      "realisationMode": "prohibited",
+      "composeTarget": "not-generated",
+      "composeProfiles": [],
+      "profileGated": false,
+      "assetInventoryClass": "operator-surface",
+      "dataClassification": "synthetic-data",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "testLayerCoverage": {
+        "unit": true,
+        "composedIntegration": false,
+        "contractDesign": true,
+        "functionalRegression": true,
+        "operational": false,
+        "enterpriseEvidence": true,
+        "seedResetFixture": false,
+        "coverage": true,
+        "negativeFailClosed": true,
+        "missingEvidenceRegression": true
+      },
+      "obligationClassIds": [
+        "unit",
+        "enterprise-evidence",
+        "functional-regression",
+        "design-contract-drift",
+        "future-ai-guardrail",
+        "missing-evidence-regression",
+        "out-of-scope-disposition",
+        "auth-tenant-role-permission"
+      ],
+      "ownerIssueIds": [
+        "USF-239",
+        "USF-243",
+        "USF-244",
+        "USF-246",
+        "USF-247",
+        "USF-252",
+        "USF-249",
+        "USF-290",
+        "USF-292"
+      ],
+      "validationCommands": [
+        "python3 tools/validate-test-readiness/validate-test-readiness.py all --json",
+        "corepack pnpm test-readiness:validate",
+        "corepack pnpm proof-cockpit:validate"
+      ],
+      "fixtureSeedId": "not-applicable",
+      "evidenceId": "evidence.usf-292.service.staging-proof-cockpit",
+      "nonClaimBoundary": "This row is a staging-only proof cockpit fixture disposition. It does not prove final test readiness or any staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.",
+      "inMemoryServiceSubstituteAllowed": null,
+      "boundedDisposition": "staging-proof-cockpit is generated only in the staging Compose proof-cockpit profile and retained as a non-test disposition; USF-290 and USF-292 own proof cockpit closure evidence outside Test readiness."
+    },
+    {
       "serviceId": "web-app",
       "displayName": "source-lineage App",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",

@@ -967,6 +967,25 @@
       "enterpriseExceptionRef": "exception-service-public-proof-origin"
     },
     {
+      "serviceId": "staging-proof-cockpit",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#staging-proof-cockpit",
+      "enterpriseEvidenceSource": "closure-matrix-row",
+      "serviceCatalogueOwnerSource": "service-catalogue-row",
+      "sourceIssueRefs": [
+        "USF-167",
+        "USF-290",
+        "USF-293",
+        "USF-221"
+      ],
+      "assuranceMaturityLevel": "documented",
+      "promotionImpact": [
+        "staging-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "enterpriseExceptionRef": "exception-service-staging-proof-cockpit"
+    },
+    {
       "serviceId": "platform-api",
       "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#platform-api",
       "enterpriseEvidenceSource": "closure-matrix-row",
@@ -2973,6 +2992,45 @@
         "usf-133-closure",
         "full-dev-readiness",
         "test-readiness"
+      ]
+    },
+    {
+      "id": "exception-service-staging-proof-cockpit",
+      "targetType": "service",
+      "targetId": "staging-proof-cockpit",
+      "disposition": "deferred-with-owner",
+      "reason": "ADR 0015 and the proof cockpit commands record a bounded profile-gated staging operator fixture, but external route delivery, executed operator access-review and deprovisioning evidence, and any final USF-290 human acceptance claim remain separate.",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "treatmentPath": "defer-with-owner-and-validator-boundary",
+      "followUpIssue": "USF-290",
+      "reviewDate": "2026-09-30",
+      "blockerStatus": "bounded-operator-fixture-does-not-satisfy-readiness-or-usf-133-closure",
+      "promotionImpact": [
+        "staging-readiness",
+        "enterprise-readiness",
+        "iso-supporting-evidence-completeness"
+      ],
+      "preventsPromotion": {
+        "staging-readiness": true,
+        "enterprise-readiness": true,
+        "iso-supporting-evidence-completeness": true
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "usf-133-closure"
       ]
     }
   ],

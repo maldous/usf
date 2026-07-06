@@ -5,13 +5,13 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-07-06",
-  "context": "The USF constitutional layer previously grounded the foundation in a sibling repository as historical semantic/source evidence and lineage, and the Authority Model carried a seven-rank order whose rank 6 was a historical external source and semantic evidence class. The mechanism layer expressed this lineage through a source-import manifest attributed to an external repository at a frozen commit and tag, a source-reference allowlist of external-repository paths, per-instance source-evidence entries pointing at external compose and audit artefacts, and normalised proof-evidence records attributed to an external repository. The accountable owner has ratified, through the deliberate constitutional-amendment process, that USF must be self-defined with no external legacies: the external sibling-repository lineage authority is removed from the constitutional and mechanism layers and the external lineage record is deliberately discarded. source-lineage remains permitted as a UI framework technology choice; this decision retires only the external sibling-repository lineage authority, and it deliberately leaves the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator to later phases.",
+  "context": "The USF constitutional layer previously grounded the foundation in a sibling repository as historical semantic/source evidence and lineage, and the Authority Model carried a seven-rank order whose rank 6 was a historical external source and semantic evidence class. The mechanism layer expressed this lineage through a source-import manifest attributed to an external repository at a frozen commit and tag, a source-reference allowlist of external-repository paths, per-instance source-evidence entries pointing at external compose and audit artefacts, and normalised proof-evidence records attributed to an external repository. The accountable owner has ratified, through the deliberate constitutional-amendment process, that USF must be self-defined with no external legacies: the external sibling-repository lineage authority is removed from the constitutional and mechanism layers and the external lineage record is deliberately discarded. A UI framework technology choice remains permitted; this decision retires only external sibling-repository lineage authority. At acceptance time, this ADR deliberately left the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator to later phases; later cleanup and rename work has since re-founded those surfaces into USF-native/current-state form, renamed the react-app compose service, reworked ADR 0005 and the non-UI validator posture, and sealed remaining external-lineage material as non-authoritative provenance.",
   "decision": "USF is re-founded as a self-originating, self-defined foundation. It derives all of its authority from its own artefacts and claims no external repository as its lineage or authority. The Authority Model's historical external-source-and-semantic-evidence authority class (formerly rank 6) is removed, and the operational authority order is re-numbered to six ranks ending in generated reports as the lowest rank: USF semantic definitions, USF ADRs, USF validator rules, runtime proof evidence, USF source implementation, generated reports. The source-import manifest is retained as USF's own self-defined source-path registry but re-founded: its top-level source repository is usf, and the per-entry external repository and tag attribution fields are discarded while every source path and target concept is preserved. The source-reference allowlist, the per-instance compose source-evidence, the enterprise-evidence source references, and the normalised observability proof-evidence attribution are re-attributed to the self-defined usf model, preserving each proof at its existing level and provider class with no downgrade and no schema violation. A governed semantic or ADR reference MUST be a canonical repository-local USF reference; a cross-repository discriminator in a governed reference is forbidden and MUST fail validation.",
   "consequences": [
     "The Charter and Authority Model are amended: USF is self-originating and the authority order is six ranks ending in generated reports.",
     "The agent directives no longer reference an external sibling repository and express the self-defined model.",
     "The mechanism layer is re-attributed to the self-defined usf model and the external lineage record is discarded.",
-    "The parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator retain external references pending a later phase; a repository-wide zero-external-reference guard is deferred until that phase."
+    "At ADR acceptance, the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator retained external references pending a later phase. That later follow-up has since completed through the cleanup and rename PRs and the USF-292 closure records: the material is now either USF-native/current-state or sealed as non-authoritative provenance, and the governed-reference discriminator guard is active."
   ],
   "invariants": [
     "USF is self-defined and claims no external repository as its lineage or authority.",
@@ -22,8 +22,8 @@
     "Re-founding preserves every source path and proof; no proof level or provider class is upgraded or downgraded."
   ],
   "permittedChanges": [
-    "Author a repository-wide guard forbidding external cross-repository discriminators once the deferred corpus has been re-founded in a later phase.",
-    "Re-found or retire the parity/equivalence documentation corpus, the react-app compose service, ADR 0005, and the non-UI parity validator under a later authorised phase.",
+    "Maintain or extend the governed-reference guard forbidding external cross-repository discriminators as new edge cases are identified.",
+    "Treat the parity/equivalence documentation corpus, the former react-app compose service, ADR 0005 follow-up, and the non-UI validation posture as completed current-state follow-up work rather than unresolved deferrals; use the current-state authority index and closure seal records for routing.",
     "Add source-import rows that cover the currently allowlisted USF-native evidence references, retiring those allowlist entries."
   ],
   "forbiddenDrift": [
@@ -37,11 +37,17 @@
     "Agents must treat USF as self-defined and must not treat any external repository as USF authority or lineage.",
     "Agents must not add a cross-repository discriminator to a governed semantic or ADR reference; lineage narrative belongs in prose, not in governed reference fields.",
     "Agents must preserve proof honesty when re-attributing evidence and never relabel a proof to a stronger level, provider class, or environment.",
-    "Agents must not re-found the deferred corpus from this ADR alone; a later authorised phase is required."
+    "Agents must not treat the original deferred-corpus note as current unresolved work; they must use the current-state authority index and closure seal records. Any further re-found or retire work still requires a later authorised phase."
   ],
   "semanticRefs": [
     "docs/architecture/charter.md",
     "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/superseded-lineage-closure-provenance.md",
+    "docs/architecture/superseded-lineage-closure-provenance.json",
+    "docs/architecture/usf-current-state-foundation-closure-record.json",
+    "docs/architecture/usf-current-state-foundation-closure-report.md",
     "spec/registries/source-import-manifest.json",
     "spec/schemas/import-manifest.schema.json"
   ],
@@ -58,7 +64,8 @@
   ],
   "validatorRefs": [
     "tools/validate-spec/validate-spec.py",
-    "tools/validate-bootstrap/validate-bootstrap.py"
+    "tools/validate-bootstrap/validate-bootstrap.py",
+    "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py"
   ],
   "supersedes": [],
   "rationale": "Re-founding USF as self-defined removes an external dependency from the constitutional and mechanism layers while preserving every self-defined artefact the corpus resolves against, so the change is clean rather than lossy. Removing the historical external authority class and re-numbering the authority order keeps the order coherent and closes the ambiguity of an external repository sitting inside the internal precedence chain. Re-attributing rather than deleting the source-import manifest, allowlist, and proof-evidence attribution keeps USF's own source-path registry and hermetic proofs intact and honestly classified, with no proof level or provider class upgraded or downgraded. Discarding the external repository and tag attribution executes the owner's decision that the external lineage record is deliberately discarded, and forbidding cross-repository discriminators in governed references makes the self-defined posture validator-enforced.",
@@ -78,5 +85,5 @@
     "authority-levels",
     "artefact-kinds"
   ],
-  "aiGuidance": "Use this ADR when evaluating USF's self-defined posture: USF claims no external repository as authority or lineage, the authority order is six ranks ending in generated reports, and the source-import manifest, allowlist, and proof-evidence attribution are self-defined usf artefacts. A governed semantic or ADR reference must be a canonical repository-local USF reference; a cross-repository discriminator in a governed reference is forbidden. Do not re-found the deferred parity/equivalence corpus, react-app service, ADR 0005, or non-UI parity validator from this ADR alone."
+  "aiGuidance": "Use this ADR when evaluating USF's self-defined posture: USF claims no external repository as authority or lineage, the authority order is six ranks ending in generated reports, and the source-import manifest, allowlist, and proof-evidence attribution are self-defined usf artefacts. A governed semantic or ADR reference must be a canonical repository-local USF reference; a cross-repository discriminator in a governed reference is forbidden. The original deferred-corpus language is no longer current operational guidance: use the current-state authority index and USF-292 closure records for routing, and treat remaining external-lineage material as retained provenance only."
 }

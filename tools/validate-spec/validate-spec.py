@@ -880,7 +880,9 @@ INSTANCE_REF_SCALARS = {
 # guard enforces the self-defined posture against any external/sibling-repository reference,
 # not one named legacy source. A cross-repo legacy discriminator is either:
 #   (a) a parent-relative sibling-repository path segment — "../<name>/" — reaching outside
-#       this repository into a sibling checkout; or
+#       this repository into a sibling checkout. The sibling token is forbidden whether
+#       it is the whole reference ("../source"), a leading path segment ("../source/..."),
+#       or a URI/fragment base ("../source#..."); or
 #   (b) a "*-origin" cross-repo attribution token in the REPOSITORY POSITION — "<name>-origin"
 #       as the whole reference or its leading path segment — naming an external source
 #       repository as the origin of a governed reference.
@@ -890,8 +892,8 @@ INSTANCE_REF_SCALARS = {
 # repo-local path with an "-origin" domain component deeper in it (e.g. an
 # "auth-origin" evidence file under docs/) is NOT a cross-repo discriminator.
 CROSS_REPO_DISCRIMINATOR_PATTERNS = (
-    ("parent-relative sibling-repository path", re.compile(r"\.\./[A-Za-z0-9._-]+/")),
-    ("cross-repo '*-origin' repository attribution token", re.compile(r"^[A-Za-z0-9]+-origin(?:/|$)")),
+    ("parent-relative sibling-repository path", re.compile(r"\.\./[A-Za-z0-9._-]+(?=$|[/#?])")),
+    ("cross-repo '*-origin' repository attribution token", re.compile(r"^[A-Za-z0-9._-]+-origin(?=$|[/#?])")),
 )
 
 
