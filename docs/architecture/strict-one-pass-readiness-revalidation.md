@@ -6,7 +6,7 @@
 | **Status** | Draft / gate result |
 | **Authority level** | Reviewable readiness artefact; subordinate to the Charter, Authority Model, accepted ADRs, validators, semantic instances, runtime proof evidence, source-use matrices, and any later human-filled implementation directive |
 | **Issue scope** | USF-96 |
-| **Primary inputs** | `docs/architecture/final-pre-usf-39-readiness-revalidation.md`, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/multi-environment-proof-posture-closure.md`, `docs/architecture/react-readiness-rule-parity-matrix.md`, `docs/architecture/regeneration-sufficiency-semantic-graph-closure.md`, `spec/instances/`, `evidence/`, `tools/validate-spec/validate-spec.py`, Linear USF-58 through USF-100 |
+| **Primary inputs** | `docs/architecture/final-pre-usf-39-readiness-revalidation.md`, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/multi-environment-proof-posture-closure.md`, `docs/architecture/usf-readiness-rule-coverage-matrix.md`, `docs/architecture/regeneration-sufficiency-semantic-graph-closure.md`, `spec/instances/`, `evidence/`, `tools/validate-spec/validate-spec.py`, Linear USF-58 through USF-100 |
 
 This revalidation records the stricter human standard for USF-39 readiness: complete one-pass V2 readiness, not narrow authentication proof substrate readiness. It creates no implementation code, implementation directory, runtime substrate, proof evidence, generated report, source import, or schema activation. It does not start USF-39.
 

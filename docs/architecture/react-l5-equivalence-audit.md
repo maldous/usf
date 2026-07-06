@@ -162,7 +162,7 @@ USF-114 status: ledger complete; concrete contracts are USF-97/USF-86 follow-up 
 | Provider modes | hermetic/compose-local/sandbox-external/live-external (`USF_PROVIDER_MODE`) | `provider-mode.mock-identity-provider` only; `production-proof-posture-matrix.md` | `v2-semantic-only` | `missing-environment-posture` |
 | Compose substrate | `../react/compose.yaml` (~54 services), `../react/docker/`, `../react/infra/` | not authorised; topology plan keeps service/infra roots blocked | `v2-source-use-only` | `missing-environment-posture` |
 | CI gates | `../react/.github/workflows/*` (quality, architecture, CodeQL) | USF has `.github/workflows/validate-spec.yml` fail-closed gate + advisory validator | `v2-equivalent-current` (spec gate) / `v2-source-use-only` (product gates) | `no-gap` / `missing-validator-coverage` |
-| React readiness rules R1–R62 | `../react/tools/v2-readiness/` | mapped by `react-readiness-rule-parity-matrix.md`; USF enforces its own rule set | `v2-semantic-only` | `missing-validator-coverage` (partial) |
+| React readiness rules R1–R62 | `../react/tools/v2-readiness/` | mapped by `usf-readiness-rule-coverage-matrix.md`; USF enforces its own rule set | `v2-semantic-only` | `missing-validator-coverage` (partial) |
 
 USF-107/108/109 status: equivalence matrices complete; the concrete toolchain/environment/topology decisions are explicit human/ADR items for the all-slices migration. Authentication is only the current proof substrate, not the scope boundary for V2. Provider mode and environment remain separate dimensions; no upgrade by implication.
 

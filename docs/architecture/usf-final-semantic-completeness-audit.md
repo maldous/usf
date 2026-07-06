@@ -20,7 +20,7 @@ This pass created or confirmed grouped follow-up issues for material gaps. It do
 - `docs/architecture/usf-133-closure-tier-evidence-gate.json`
 - `docs/architecture/usf-dev-foundation-gap-register.md`
 - `docs/architecture/complete-react-to-usf-functionality-parity-matrix.json`
-- `docs/architecture/complete-react-to-usf-functionality-parity-review.md`
+- `docs/architecture/usf-functionality-coverage-review.md`
 - `docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json`
 - `docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md`
 - `docs/architecture/compose-service-disposition-closure-matrix.json`

@@ -76,7 +76,7 @@
       "criterion": "Every historical test and proof group is classified; no UI or Playwright test disappears silently.",
       "classification": "mapped-to-existing-classification-evidence",
       "evidenceRefs": [
-        "docs/architecture/complete-react-to-usf-functionality-parity-review.md",
+        "docs/architecture/usf-functionality-coverage-review.md",
         "docs/architecture/react-parity-scope-classification-matrix.json",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md"
       ],
@@ -89,7 +89,7 @@
       "classification": "mapped-to-boundary-evidence",
       "evidenceRefs": [
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
-        "docs/architecture/complete-react-to-usf-functionality-parity-review.md"
+        "docs/architecture/usf-functionality-coverage-review.md"
       ],
       "remainingBlocker": "External-developer generated-client and GraphQL/federation execution proof remains deferred to USF-224; this is not a selected closure-tier blocker after USF-220 disposition evidence.",
       "nonClaimBoundary": "UI/UX and Playwright evidence are not foundation readiness requirements by themselves."
