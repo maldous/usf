@@ -37,6 +37,7 @@ Open `/proof/review`. Only changed or new items appear in the review queue. Unch
 Work the queue to empty:
 
 - Use the per-item decision forms to Accept each affected item. Each decision carries explicit human confirmation checkboxes; none are hidden or prefilled.
+- To accept the whole open subset in one action, use the **Accept all open review items** control at the top of `/proof/review`. It requires the same four explicit confirmation checkboxes (none hidden or prefilled) and records one human acceptance per currently open item at that item's current evidence fingerprint. It does **not** perform final signoff — signoff remains the separate, deliberate action in Step 2. Accepting all is appropriate when you have reviewed the affected subset and are ready to accept the current known-good state in bulk.
 - The gap register (`/proof/review/gaps`), nonconformities (`/proof/review/nonconformities`), and corrective actions (`/proof/review/corrective-actions`) surface any machine-found issues that must be resolved, deferred, or risk-accepted before signoff.
 - Final signoff is unavailable while any open review items or machine blockers remain.
 
