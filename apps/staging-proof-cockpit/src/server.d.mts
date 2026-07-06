@@ -66,4 +66,7 @@ export function startProofCockpitServer(options?: {
   port?: number;
   host?: string;
   statePath?: string;
+  allowWrites?: boolean;
+  reviewSecret?: string;
+  actor?: string;
 }): Server<typeof IncomingMessage, typeof ServerResponse>;
