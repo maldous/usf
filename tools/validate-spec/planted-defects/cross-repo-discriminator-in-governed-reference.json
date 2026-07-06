@@ -1,0 +1,49 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-NATIVE-001",
+  "instances": {
+    "spec/instances/workflow/cross-repo-discriminator-in-governed-reference.json": {
+      "id": "workflow.cross-repo-discriminator-in-governed-reference",
+      "workflowKind": "workflow",
+      "title": "Cross Repo Discriminator In Governed Reference Workflow",
+      "description": "Planted workflow whose governed sourceRefs field carries a cross-repo legacy discriminator instead of a canonical repo-local USF path.",
+      "authorityLevel": "semantic-definition",
+      "lifecycleState": "draft",
+      "ontologyConcepts": [
+        "Workflow"
+      ],
+      "taxonomyRefs": [
+        "event-workflow-classification"
+      ],
+      "vocabularyRefs": [
+        "event-workflow-kinds"
+      ],
+      "aiGuidance": "Selftest fixture only.",
+      "participants": [
+        "workflow.cross-repo-discriminator-in-governed-reference"
+      ],
+      "ordering": "single planted validation step",
+      "sourceRefs": [
+        "../react/docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
+      ],
+      "steps": [
+        {
+          "id": "planted-step",
+          "description": "Exercise the USF-native discriminator guard."
+        }
+      ],
+      "stateTransitions": [
+        {
+          "from": "start",
+          "to": "finish"
+        }
+      ],
+      "failurePaths": [
+        "cross-repo legacy discriminator in a governed reference fails validation"
+      ],
+      "compensationPaths": [
+        "no compensation for planted selftest"
+      ]
+    }
+  }
+}
