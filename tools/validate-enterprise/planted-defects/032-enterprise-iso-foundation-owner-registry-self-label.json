@@ -1,0 +1,14 @@
+{
+  "id": "032-enterprise-iso-foundation-owner-registry-self-label",
+  "description": "Flip one enterprise ISO-style owner registry entry back to a self-label / pending-organisation placeholder so it no longer resolves to an accountable identity.",
+  "enterpriseIsoOwnerRegistryPatch": [
+    {
+      "ownerId": "isms-scope-context-risk-owner",
+      "set": {
+        "accountableIdentity": "isms-scope-context-risk-owner",
+        "resolution": "logical-foundation-owner-label-pending-formal-organisational-directory"
+      }
+    }
+  ],
+  "expectedRule": "USF-ENTERPRISE-032"
+}
