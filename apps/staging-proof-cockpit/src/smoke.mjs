@@ -110,55 +110,71 @@ try {
     }
     results.push({ route, status: response.status });
   }
+  // The primary decision surface: /proof and /proof/review both land on the single
+  // Accept/Reject decision page. Assert the single-decision controls exist, that there
+  // is no per-item 4-checkbox / typed-phrase workflow, and that the layout is
+  // single-column (the old sticky action bar and 2-column review-shell markers are gone).
   const home = await fetch(`${baseUrl}/proof`).then((response) => response.text());
-  for (const required of [
-    "USF Proof Review",
-    "External-review report first",
-    "Next review item",
-    "Start review",
-    "Open printable report",
-    "Final signoff",
-    "Secondary audit detail",
-  ]) {
-    if (!home.includes(required)) {
-      throw new Error(`proof-cockpit-smoke-home-missing-${required}`);
-    }
-  }
   const review = await fetch(`${baseUrl}/proof/review`).then((response) => response.text());
-  for (const required of [
-    "review-decision-form",
-    'name="decision" value="accept"',
-    'name="decision" value="reject"',
-    'name="decision" value="retest"',
-    'name="decision" value="note"',
-    "Accept",
-    "Reject",
-    "Request retest",
-    "Inline screenshot evidence",
-    "Machine QA conclusion",
-    'action="/proof/review/accept-all"',
-    "Accept all open review items",
+  for (const surface of [
+    ["home", home],
+    ["review", review],
   ]) {
-    if (!review.includes(required)) {
-      throw new Error(`proof-cockpit-smoke-review-missing-${required}`);
+    const [label, text] = surface;
+    for (const required of [
+      "USF Proof Review",
+      "Accept or reject the current proof state",
+      'action="/proof/accept"',
+      'formaction="/proof/reject"',
+      'name="operatorAccept"',
+      "I, the authenticated operator, accept the current proof state",
+      ">Accept<",
+      ">Reject<",
+      "Current proof state",
+      "Artifact navigation",
+    ]) {
+      if (!text.includes(required)) {
+        throw new Error(`proof-cockpit-smoke-decision-missing-${label}-${required}`);
+      }
     }
-  }
-  const decisionFormCount = [...review.matchAll(/class="review-decision-form"/g)].length;
-  if (decisionFormCount !== 1) {
-    throw new Error(`proof-cockpit-smoke-review-decision-form-count-${decisionFormCount}`);
-  }
-  for (const forbidden of [
-    'type="hidden" name="devEvidenceConfirmed"',
-    'type="hidden" name="testEvidenceConfirmed"',
-    'type="hidden" name="noRealTenantData"',
-    'type="hidden" name="nonClaimsConfirmed"',
-  ]) {
-    if (review.includes(forbidden)) {
-      throw new Error(`proof-cockpit-smoke-hidden-auto-confirmation-${forbidden}`);
+    // Exactly one confirmation checkbox is the only friction.
+    const confirmCount = [...text.matchAll(/type="checkbox"/g)].length;
+    if (confirmCount !== 1) {
+      throw new Error(`proof-cockpit-smoke-decision-confirm-count-${label}-${confirmCount}`);
     }
-  }
-  if (!review.includes("<img src=\"/proof/image?path=")) {
-    throw new Error("proof-cockpit-smoke-review-inline-image-missing");
+    // Single-column: no sticky action bar, no 2-column review-shell, no per-item forms.
+    for (const forbidden of [
+      "position:sticky",
+      'class="review-shell"',
+      'class="review-main"',
+      'class="review-side"',
+      'class="review-decision-form"',
+      "review-accept-all",
+      "/proof/review/accept-all",
+      "signoffPhrase",
+      "FINAL SIGNOFF USF-290",
+      'name="decision" value="retest"',
+      'name="decision" value="note"',
+      'name="acceptedCurrentEvidence"',
+    ]) {
+      if (text.includes(forbidden)) {
+        throw new Error(`proof-cockpit-smoke-decision-forbidden-${label}-${forbidden}`);
+      }
+    }
+    // The single confirmation is a live, unchecked checkbox — never a hidden pre-filled
+    // auto-confirmation. No confirmation is prefilled or smuggled in as a hidden input.
+    for (const hidden of [
+      'type="hidden" name="operatorAccept"',
+      'type="hidden" name="devEvidenceConfirmed"',
+      'type="hidden" name="nonClaimsConfirmed"',
+    ]) {
+      if (text.includes(hidden)) {
+        throw new Error(`proof-cockpit-smoke-hidden-auto-confirmation-${label}-${hidden}`);
+      }
+    }
+    if (/name="operatorAccept"[^>]*checked/.test(text)) {
+      throw new Error(`proof-cockpit-smoke-hidden-auto-confirmation-${label}-prechecked`);
+    }
   }
   const screenshots = await fetch(`${baseUrl}/proof/screenshots`).then((response) => response.text());
   if (!screenshots.includes("Visual evidence gallery") || !screenshots.includes("<img src=\"/proof/image?path=")) {

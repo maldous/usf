@@ -43,7 +43,6 @@ const EXTERNAL_REVIEW_BUNDLE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "external-rev
 const DEFAULT_STATE_PATH =
   process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/var/lib/usf-proof-cockpit/human-review-actions.json";
 const CSRF_COOKIE_NAME = "proof_cockpit_csrf";
-const FINAL_SIGNOFF_PHRASE = "FINAL SIGNOFF USF-290";
 
 const NON_CLAIMS = Object.freeze([
   "no-staging-readiness",
@@ -1516,17 +1515,15 @@ button,.button-link{cursor:pointer}
 button{padding:8px 12px;border:1px solid #525252;background:#fff}
 button.primary{border-color:#174ea6;background:#174ea6;color:#fff}
 button.danger{border-color:var(--bad);color:var(--bad)}
-.review-shell{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
-.review-main,.review-side{background:#fff;border:1px solid var(--line);padding:16px}
+.review-shell,.review-main,.review-side{display:block;width:100%;background:#fff;border:1px solid var(--line);padding:16px;margin:12px 0}
 .progress{height:12px;background:#e8e8e2;border:1px solid var(--line);overflow:hidden}
 .progress span{display:block;height:100%;background:#174ea6}
-.review-actions{position:sticky;bottom:0;background:#fff;border:1px solid var(--line);padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
-.review-actions form{display:inline}
-.review-actions .review-decision-form{display:block;width:100%}
-.review-decision-form fieldset{border:0;margin:0;padding:0}
-.review-confirmations{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 12px;margin:8px 0}
-.review-confirmations p{margin:0}
-.decision-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.decision-form{background:#fff;border:1px solid var(--line);padding:16px;margin:16px 0}
+.decision-form fieldset{border:0;margin:0;padding:0}
+.decision-confirm{margin:14px 0;font-size:15px;line-height:1.5;display:flex;align-items:flex-start;gap:10px}
+.decision-confirm input{width:22px;height:22px;flex:0 0 auto;margin-top:2px}
+.decision-buttons{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.decision-buttons button{min-height:44px;padding:10px 20px;font-size:15px}
 .decision-help{width:100%;margin:0 0 8px;color:var(--muted)}
 .note-form{width:100%;display:block}
 .note-form textarea{width:100%}
@@ -1538,8 +1535,8 @@ button.danger{border-color:var(--bad);color:var(--bad)}
 .evidence-card{background:#fff;border:1px solid var(--line);padding:14px;margin:10px 0}
 .print-report{background:#fff;border:1px solid var(--line);padding:24px}
 .print-cover{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:18px}
-@media(max-width:860px){.topbar{display:block}nav{justify-content:flex-start;margin-top:12px}.executive-summary{display:block}.decision-panel{margin-top:12px}.review-shell{display:block}.review-side{margin-top:14px}main,header,footer{padding-left:12px;padding-right:12px}.hero h2{font-size:24px}.review-actions{margin-left:-12px;margin-right:-12px;border-left:0;border-right:0}.table-wrap{overflow-x:auto}}
-@media print{body{background:#fff;color:#000;font-size:11pt}header,nav,form,button,.hero-actions,.review-actions,.no-print,.button-link,.table-wrap:before{display:none!important}main{max-width:none;padding:0}.print-report{border:0;padding:0}.print-cover{page-break-after:avoid}.screenshot-card{break-inside:avoid}.screenshot-card img{max-height:360px}section{break-inside:avoid;border-top:1px solid #999}a{color:#000;text-decoration:none}footer{border-top:1px solid #999}}
+@media(max-width:860px){.topbar{display:block}nav{justify-content:flex-start;margin-top:12px}.executive-summary{display:block}.decision-panel{margin-top:12px}main,header,footer{padding-left:12px;padding-right:12px}.hero h2{font-size:24px}.table-wrap{overflow-x:auto}.decision-buttons{flex-direction:column}.decision-buttons button,.decision-buttons .button-link{width:100%;justify-content:center}}
+@media print{body{background:#fff;color:#000;font-size:11pt}header,nav,form,button,.hero-actions,.decision-form,.no-print,.button-link,.table-wrap:before{display:none!important}main{max-width:none;padding:0}.print-report{border:0;padding:0}.print-cover{page-break-after:avoid}.screenshot-card{break-inside:avoid}.screenshot-card img{max-height:360px}section{break-inside:avoid;border-top:1px solid #999}a{color:#000;text-decoration:none}footer{border-top:1px solid #999}}
 </style>
 </head>
 <body>
@@ -2011,6 +2008,113 @@ export function finalSignoffState(data, state) {
   };
 }
 
+// Single-decision acceptance model (USF-293): a deliberate operator Accept records,
+// in one guarded human action, an acceptance of every currently-open review item at
+// its current evidence fingerprint (the former "accept all"), plus the final
+// USF-290 human acceptance decision. This preserves the delta-acceptance model
+// underneath: future changed evidence resurfaces the affected items only.
+const FINAL_DECISION_CONFIRMATIONS = Object.freeze({
+  devEvidenceConfirmed: true,
+  testEvidenceConfirmed: true,
+  noRealTenantData: true,
+  nonClaimsConfirmed: true,
+});
+
+function buildBulkAcceptanceActions(data, state, actor, role, now, sha) {
+  const openStatuses = new Set(["human-review-required", "re-review-required", "rejected", "retest-requested"]);
+  const openItems = buildReviewItems(data).filter((item) => openStatuses.has(reviewItemDecision(state, item).status));
+  return openItems.map((item, offset) => ({
+    id: `qa-accept-${Date.now().toString(36)}-${offset.toString(36)}`,
+    createdAt: now,
+    updatedAt: now,
+    sourceSha: sha,
+    actionType: "machine-evidence-accepted",
+    outcome: "human-accepted",
+    role,
+    actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
+    tenant: "synthetic-proof-review",
+    actionName: `Accept current proof state: ${item.title}`.slice(0, 240),
+    capabilityId: item.capabilityId ?? "",
+    serviceId: item.serviceId ?? "",
+    scenarioId: "",
+    evidenceId: item.id,
+    enterpriseTopic: "",
+    correlationId: "",
+    traceId: "",
+    auditEventId: "",
+    evidenceUrl: "",
+    sourceUrl: item.sourceUrl ?? "",
+    serviceUrl: item.route ?? "",
+    screenshotUrl: item.screenshots?.[0]?.screenshotPath ?? "",
+    notes:
+      "Recorded by the single-decision operator Accept for every currently-open review item at its current evidence fingerprint. Future changed evidence resurfaces the affected items.",
+    acceptanceFingerprint: item.acceptanceFingerprint ?? "",
+    confirmations: { ...FINAL_DECISION_CONFIRMATIONS },
+    finalAcceptanceClaimed: false,
+  }));
+}
+
+function buildFinalDecisionAction(data, signoff, actor, role, outcome, notes, now, sha) {
+  const rejected = outcome === "human-rejected";
+  const signoffFingerprint = contentHash(
+    JSON.stringify({
+      issueId: ACCEPTANCE_ISSUE,
+      outcome,
+      sourceSha: sha,
+      qaRun: signoff.latest.qaRun ?? signoff.latest.runId ?? "",
+      counts: signoff.counts,
+      machine: {
+        pass: signoff.latest.passCount,
+        warn: signoff.latest.warnCount,
+        gaps: signoff.latest.gapCount,
+        fail: signoff.latest.failCount,
+      },
+    }),
+  ).slice(0, 32);
+  return {
+    id: `qa-final-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: now,
+    updatedAt: now,
+    sourceSha: sha,
+    actionType: "human-final-decision",
+    outcome,
+    role,
+    actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
+    tenant: "synthetic-proof-review",
+    actionName: `Final ${rejected ? "rejection" : "acceptance"}: ${ACCEPTANCE_ISSUE} human decision`,
+    capabilityId: "proof-cockpit-human-acceptance",
+    serviceId: "staging-proof-cockpit",
+    scenarioId: "final-human-decision",
+    evidenceId: "usf-290-final-signoff",
+    enterpriseTopic: "human-review-and-acceptance",
+    correlationId: `final-${signoffFingerprint}`,
+    traceId: "",
+    auditEventId: `human-final-decision-${signoffFingerprint}`,
+    evidenceUrl: "/proof",
+    sourceUrl: "/proof/reports/final",
+    serviceUrl: "/proof",
+    screenshotUrl: "/proof/screenshots",
+    notes: String(notes ?? "").slice(0, 4000),
+    acceptanceFingerprint: signoffFingerprint,
+    confirmations: { ...FINAL_DECISION_CONFIRMATIONS },
+    finalSignoff: {
+      issueId: ACCEPTANCE_ISSUE,
+      explicitBrowserAction: true,
+      notAutoCompleted: true,
+      decision: rejected ? "human-rejected" : "human-accepted",
+      acceptedCurrentReviewItems: signoff.counts.accepted,
+      totalCurrentReviewItems: signoff.counts.total,
+      openReviewItems: signoff.openItems.length,
+      machinePassCount: signoff.latest.passCount,
+      machineWarnCount: signoff.latest.warnCount,
+      machineGapCount: signoff.latest.gapCount,
+      machineFailCount: signoff.latest.failCount,
+      nonClaimsPreserved: [...NON_CLAIMS],
+    },
+    finalAcceptanceClaimed: false,
+  };
+}
+
 function actionMatchesReviewItem(action, item) {
   return (
     action.evidenceId === item.id ||
@@ -2208,50 +2312,6 @@ function currentReviewIndex(items, state, url, explicitId = "") {
   return firstOpen >= 0 ? firstOpen : 0;
 }
 
-function reviewItemActionForms(item, returnTo) {
-  const policy = writePolicyFromOptions();
-  const disabled = policy.allowWrites ? "" : " disabled";
-  const base = {
-    csrfToken: csrfTokenForPolicy(policy),
-    returnTo,
-    capabilityId: item.capabilityId ?? "",
-    serviceId: item.serviceId ?? "",
-    evidenceId: item.id,
-    sourceUrl: item.sourceUrl ?? "",
-    serviceUrl: item.route ?? "",
-    screenshotUrl: item.screenshots?.[0]?.screenshotPath ?? "",
-    role: "auditor",
-    tenant: "synthetic-proof-review",
-    itemTitle: item.title,
-    acceptanceFingerprint: item.acceptanceFingerprint ?? "",
-  };
-  return `<div class="review-actions" aria-label="Review actions">
-${writePolicyNotice(policy)}
-<form class="review-decision-form" method="post" action="/proof/actions">
-${Object.entries(base)
-  .map(([name, value]) => hiddenInput(name, value))
-  .join("")}
-<fieldset>
-<legend>Review decision</legend>
-<p class="decision-help">Use one decision for the current item. Confirmation checkboxes are explicit human assertions; none are hidden or prefilled.</p>
-<div class="review-confirmations">
-${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence.")}
-${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence.")}
-${checkboxInput("noRealTenantData", "This action used no real tenant data, real secrets, or private local state.")}
-${checkboxInput("nonClaimsConfirmed", "This action makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
-</div>
-<label>Add note, blocker, correction, or sampling observation<br><textarea name="notes" rows="3" placeholder="Optional note for accept/reject/retest; required for a note-only action."></textarea></label>
-<div class="decision-buttons">
-<button class="primary" type="submit" name="decision" value="accept"${disabled}>Accept</button>
-<button class="danger" type="submit" name="decision" value="reject"${disabled}>Reject</button>
-<button type="submit" name="decision" value="retest"${disabled}>Request retest</button>
-<button type="submit" name="decision" value="note"${disabled}>Add note</button>
-</div>
-</fieldset>
-</form>
-</div>`;
-}
-
 function normalizeAction(params, actor) {
   const decision = String(params.get("decision") ?? "").toLowerCase();
   const itemTitle = String(params.get("itemTitle") ?? "review item").slice(0, 200);
@@ -2309,109 +2369,6 @@ function normalizeAction(params, actor) {
   };
 }
 
-function finalSignoffError(message, status = 400) {
-  return {
-    status,
-    body: layout(
-      "Final signoff not recorded",
-      `<section>
-<h2>Final signoff not recorded</h2>
-<p>${escapeHtml(message)}</p>
-<p><a class="button-link button-primary" href="/proof/signoff">Back to signoff</a> <a class="button-link" href="/proof/review">Open review ledger</a></p>
-${nonClaimsBlock()}
-</section>`,
-    ),
-  };
-}
-
-function normalizeFinalSignoffAction(params, actor, signoff) {
-  if (signoff.signoffRecorded) {
-    return { error: finalSignoffError("A final signoff action is already recorded in the browser action ledger.", 409) };
-  }
-  if (!signoff.signoffAvailable) {
-    return {
-      error: finalSignoffError(
-        `Final signoff is unavailable: ${signoff.machineBlockers} machine blockers and ${signoff.openItems.length} open review items remain.`,
-        409,
-      ),
-    };
-  }
-  const missingConfirmations = [
-    "acceptedCurrentEvidence",
-    "qaZeroConfirmed",
-    "deltaReviewAcknowledged",
-    "nonClaimsConfirmed",
-  ].filter((name) => !params.has(name));
-  if (missingConfirmations.length) {
-    return { error: finalSignoffError(`Required signoff confirmations are missing: ${missingConfirmations.join(", ")}.`) };
-  }
-  if (String(params.get("signoffPhrase") ?? "").trim() !== FINAL_SIGNOFF_PHRASE) {
-    return { error: finalSignoffError(`The exact signoff phrase must be typed: ${FINAL_SIGNOFF_PHRASE}.`) };
-  }
-  const now = new Date().toISOString();
-  const signoffFingerprint = contentHash(
-    JSON.stringify({
-      issueId: ACCEPTANCE_ISSUE,
-      sourceSha: getSourceSha(),
-      qaRun: signoff.latest.qaRun ?? signoff.latest.runId ?? "",
-      counts: signoff.counts,
-      machine: {
-        pass: signoff.latest.passCount,
-        warn: signoff.latest.warnCount,
-        gaps: signoff.latest.gapCount,
-        fail: signoff.latest.failCount,
-      },
-    }),
-  ).slice(0, 32);
-  return {
-    action: {
-      id: `qa-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
-      createdAt: now,
-      updatedAt: now,
-      sourceSha: getSourceSha(),
-      actionType: "human-final-decision",
-      outcome: "human-accepted",
-      role: ROLES.includes(params.get("role")) ? params.get("role") : "auditor",
-      actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
-      tenant: String(params.get("tenant") ?? "synthetic-proof-review").slice(0, 160),
-      actionName: `Final signoff: ${ACCEPTANCE_ISSUE} human acceptance decision`,
-      capabilityId: "proof-cockpit-human-acceptance",
-      serviceId: "staging-proof-cockpit",
-      scenarioId: "final-human-signoff",
-      evidenceId: "usf-290-final-signoff",
-      enterpriseTopic: "human-review-and-acceptance",
-      correlationId: `signoff-${signoffFingerprint}`,
-      traceId: "",
-      auditEventId: `human-final-signoff-${signoffFingerprint}`,
-      evidenceUrl: "/proof",
-      sourceUrl: "/proof/reports/final",
-      serviceUrl: "/proof/signoff",
-      screenshotUrl: "/proof/screenshots",
-      notes: String(params.get("notes") ?? "").slice(0, 4000),
-      acceptanceFingerprint: signoffFingerprint,
-      confirmations: {
-        devEvidenceConfirmed: true,
-        testEvidenceConfirmed: true,
-        noRealTenantData: true,
-        nonClaimsConfirmed: true,
-      },
-      finalSignoff: {
-        issueId: ACCEPTANCE_ISSUE,
-        explicitBrowserAction: true,
-        notAutoCompleted: true,
-        acceptedCurrentReviewItems: signoff.counts.accepted,
-        totalCurrentReviewItems: signoff.counts.total,
-        openReviewItems: signoff.openItems.length,
-        machinePassCount: signoff.latest.passCount,
-        machineWarnCount: signoff.latest.warnCount,
-        machineGapCount: signoff.latest.gapCount,
-        machineFailCount: signoff.latest.failCount,
-        nonClaimsPreserved: [...NON_CLAIMS],
-      },
-      finalAcceptanceClaimed: false,
-    },
-  };
-}
 
 function actionDetailRows(action) {
   return Object.entries({
@@ -2458,101 +2415,97 @@ function actionDetailRows(action) {
   );
 }
 
+// One short non-claims sentence for the primary decision surface.
+const NON_CLAIMS_SENTENCE =
+  "This is synthetic, hermetic proof only: it makes no staging, production, deployment, live-provider, SOC, ISO, enterprise-production, product-UI, browser-E2E, or full-product readiness claim.";
+
+function decisionForm(signoff) {
+  const policy = writePolicyFromOptions();
+  const disabled = policy.allowWrites ? "" : " disabled";
+  const recorded = signoff.signoffRecorded;
+  const recordedOutcome = signoff.signoffAction?.outcome === "human-rejected" ? "human-rejected" : "human-accepted";
+  const statusLine = recorded
+    ? `A final human decision is already recorded: ${escapeHtml(recordedOutcome)} by ${escapeHtml(signoff.signoffAction?.actor ?? "the authenticated operator")}.`
+    : policy.allowWrites
+      ? "You are the authenticated operator. Tick the single confirmation, then choose Accept or Reject."
+      : "This serving mode is read-only. The Accept and Reject controls are shown for review but writes require the authorised operator write boundary (allow-writes plus review secret) and CSRF.";
+  return `<form class="decision-form" method="post" action="/proof/accept">
+${writePolicyNotice(policy)}
+${hiddenInput("csrfToken", csrfTokenForPolicy(policy))}
+${hiddenInput("returnTo", "/proof")}
+<fieldset>
+<legend>Accept or reject the current proof state</legend>
+<p class="decision-help">${statusLine}</p>
+<p class="decision-help">${escapeHtml(NON_CLAIMS_SENTENCE)}</p>
+<label class="decision-confirm"><input type="checkbox" name="operatorAccept" value="yes"${disabled}> <span>I, the authenticated operator, accept the current proof state.</span></label>
+<div class="decision-buttons">
+<button class="primary" type="submit" formaction="/proof/accept" name="decision" value="accept"${disabled}>Accept</button>
+<button class="danger" type="submit" formaction="/proof/reject" name="decision" value="reject"${disabled}>Reject</button>
+</div>
+</fieldset>
+</form>`;
+}
+
 function renderHome(data, state) {
   const store = data.persistentEvidence;
   const latest = store.latestMachineRun;
-  const human = store.humanReview;
   const reviewItems = buildReviewItems(data);
-  const openStatuses = new Set(["human-review-required", "re-review-required", "rejected", "retest-requested"]);
-  const reviewStates = reviewItems.map((item, index) => ({ item, index, decision: reviewItemDecision(state, item) }));
-  const openReviewState = reviewStates.find(({ decision }) => openStatuses.has(decision.status));
-  const currentIndex = openReviewState?.index ?? currentReviewIndex(reviewItems, state, new URL("/proof", "http://127.0.0.1"));
-  const currentItem = openReviewState?.item ?? reviewItems[currentIndex];
   const itemDecisionCounts = reviewItemStateCounts(reviewItems, state);
   const signoff = finalSignoffState(data, state);
   const openReviewCount =
     itemDecisionCounts.pending + itemDecisionCounts.reReview + itemDecisionCounts.rejected + itemDecisionCounts.retest;
-  const blockerText =
-    latest.failCount || latest.warnCount || latest.gapCount
-      ? `${latest.failCount} failures, ${latest.warnCount} warnings, ${latest.gapCount} unresolved gaps`
-      : openReviewCount
-        ? `${openReviewCount} review items remain for human action.`
-        : "No machine QA blockers and no current review items pending; final signoff remains separate.";
+  const acceptanceStatus = signoff.signoffRecorded
+    ? signoff.signoffAction?.outcome === "human-rejected"
+      ? "human-rejected"
+      : "human-accepted"
+    : "not decided (final signoff not auto-completed)";
+  const acceptanceTone = signoff.signoffRecorded
+    ? signoff.signoffAction?.outcome === "human-rejected"
+      ? "rejected"
+      : "accepted"
+    : "review";
   return layout(
     "USF Proof Review",
     `<section class="hero">
-<h2>USF Proof Review</h2>
-<div class="executive-summary">
-<div>
-<p class="report-lede">External-review report first: machine evidence is complete enough for selective browser review, while ${ACCEPTANCE_ISSUE} remains a separate human acceptance gate. Start with the current review item, sample screenshots inline, then use signoff only after rejected, retest, and unreviewed items are cleared.</p>
+<h2>Accept or reject the current proof state</h2>
+<p class="report-lede">One deliberate operator decision covers the whole current proof state. ${escapeHtml(NON_CLAIMS_SENTENCE)}</p>
 <div class="decision-banner">
 ${statusBadge(`${latest.passCount} pass`, "pass")}
-${statusBadge(`${latest.warnCount} warnings`, latest.warnCount ? "warn" : "pass")}
-${statusBadge(`${latest.gapCount} unresolved gaps`, latest.gapCount ? "warn" : "pass")}
-${statusBadge(`${latest.failCount} failures`, latest.failCount ? "bad" : "pass")}
-${statusBadge(signoff.signoffRecorded ? "final signoff recorded by browser action" : signoff.signoffAvailable ? "final signoff available after human criteria" : human.finalSignoffAvailable ? "final signoff available after human criteria" : "final signoff not auto-completed", signoff.signoffRecorded ? "accepted" : "review")}
-</div>
-<div class="hero-actions">
-<a class="button-link button-primary" href="/proof/review">${openReviewCount ? "Start review" : "Open review ledger"}</a>
-<a class="button-link" href="/proof/reports/final">Open printable report</a>
-<a class="button-link" href="/proof/screenshots">Review screenshots</a>
-<a class="button-link" href="/proof/evidence">Review evidence bundle</a>
-<a class="button-link" href="/proof/signoff">Final signoff</a>
-</div>
-</div>
-<aside class="decision-panel">
-<h3>${openReviewCount ? "Next review item" : "No review items pending"}</h3>
-<p>${statusBadge(`${itemDecisionCounts.accepted}/${itemDecisionCounts.total} accepted`, "accepted")} ${statusBadge(`${openReviewCount} open`, openReviewCount ? "review" : "pass")}</p>
-<p><strong>${escapeHtml(openReviewCount ? currentItem.title : "Current proof baseline accepted")}</strong></p>
-<p>${escapeHtml(openReviewCount ? currentItem.summary : "All current review-item fingerprints have accepted baseline decisions in the action ledger. A future evidence or screenshot change will return only affected items to this queue.")}</p>
-<p><a class="button-link button-primary" href="/proof/review?item=${encodeURIComponent(String(currentIndex))}">Open current item</a></p>
-</aside>
+${statusBadge(`${latest.warnCount} warn`, latest.warnCount ? "warn" : "pass")}
+${statusBadge(`${latest.gapCount} gaps`, latest.gapCount ? "warn" : "pass")}
+${statusBadge(`${latest.failCount} fail`, latest.failCount ? "bad" : "pass")}
+${statusBadge(`acceptance: ${acceptanceStatus}`, acceptanceTone)}
 </div>
 </section>
 <section>
-<h2>Current decision status</h2>
-<div class="grid">
-<div class="card"><h3>Machine QA</h3><p class="metric">${escapeHtml(`${latest.passCount} / ${latest.warnCount} / ${latest.gapCount} / ${latest.failCount}`)}</p><p class="muted">pass / warn / gap / fail</p></div>
-<div class="card"><h3>Human review progress</h3><p class="metric">${escapeHtml(`${itemDecisionCounts.accepted} / ${itemDecisionCounts.total}`)}</p><p class="muted">${escapeHtml(`${openReviewCount} open current review items; ${state.actions.length} recorded ledger actions`)}</p></div>
-<div class="card"><h3>Current item decisions</h3><p>${statusBadge(`${itemDecisionCounts.accepted} accepted`, "accepted")} ${statusBadge(`${itemDecisionCounts.rejected} rejected`, "rejected")} ${statusBadge(`${itemDecisionCounts.retest} retest`, "warn")} ${statusBadge(`${itemDecisionCounts.reReview} re-review`, itemDecisionCounts.reReview ? "review" : "pass")}</p></div>
-<div class="card"><h3>Blockers</h3><p>${statusBadge(blockerText, latest.failCount || latest.warnCount || latest.gapCount || openReviewCount ? "bad" : "pass")}</p></div>
-<div class="card"><h3>Evidence scope</h3><p>${escapeHtml(data.claims.length)} claims, ${escapeHtml(data.capabilities.length)} capabilities, ${escapeHtml(data.services.length)} services, ${escapeHtml(data.screenshots.length)} screenshots.</p></div>
-</div>
-</section>
-<section>
-<h2>Secondary audit detail</h2>
-<details class="secondary-disclosure">
-<summary>Dev to Test to Staging proof ladder</summary>
-${table(["Stage", "Source artifact", "Command", "Validator/evidence", "Status", "Gaps", "Handoff condition", "Non-claims"], proofLadderFullRows())}
-</details>
-<details class="secondary-disclosure">
-<summary>Evidence identity and chain-of-custody anchors</summary>
+<h2>Current proof state</h2>
 ${table(
       ["Field", "Value"],
       [
-        ["Latest machine QA run", latest.runId],
+        ["Machine QA (pass / warn / gaps / fail)", `${latest.passCount} / ${latest.warnCount} / ${latest.gapCount} / ${latest.failCount}`],
+        ["Current review items", `${itemDecisionCounts.total} total, ${openReviewCount} open`],
+        ["Machine QA run id", latest.runId],
         ["Source SHA", getSourceSha()],
-        ["Deployment/run identity", `${latest.deploymentSha} / ${latest.runId}`],
-        ["Environment", latest.environment],
-        ["Persistent evidence store", store.path],
-        ["Final report path", store.finalReportPath],
-        ["External-review bundle", store.externalReviewBundlePath],
-        ["Related issues", RELATED_ISSUES.join(", ")],
-      ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${sourcePathCell(value)}</td></tr>`),
+        ["Acceptance status", acceptanceStatus],
+        ["Recorded ledger actions", state.actions.length],
+      ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`),
     )}
-</details>
 </section>
 <section>
-<h2>Recent QA actions</h2>
-${table(["Action", "Created", "Type", "Target", "Role", "Outcome", "Actor"], recentActionRows(state, 8))}
+<h2>Decision</h2>
+${decisionForm(signoff)}
 </section>
 <section>
-<h2>Secondary drill-down pages</h2>
+<h2>Artifact navigation (viewable, never required)</h2>
 <div class="grid">
-<div class="card"><h3>Portfolio</h3><p>Complete machine-indexed assurance model.</p><p><a href="/proof/portfolio">Open portfolio</a></p></div>
-<div class="card"><h3>Claims</h3><p>Claim-by-claim details and mappings.</p><p><a href="/proof/claims">Open claims</a></p></div>
-<div class="card"><h3>Services</h3><p>Auth posture, service evidence, and OpenBao references.</p><p><a href="/proof/services">Open services</a></p></div>
-<div class="card"><h3>Source documents</h3><p>Whitelisted repository evidence sources.</p><p><a href="/proof/sources">Open sources</a></p></div>
+<div class="card"><h3>Capabilities</h3><p><a href="/proof/capabilities">Open capabilities</a></p></div>
+<div class="card"><h3>Services</h3><p><a href="/proof/services">Open services</a></p></div>
+<div class="card"><h3>Evidence</h3><p><a href="/proof/evidence">Open evidence bundle</a></p></div>
+<div class="card"><h3>Screenshots</h3><p><a href="/proof/screenshots">Open screenshots</a></p></div>
+<div class="card"><h3>Registers</h3><p><a href="/proof/review/gaps">Gaps</a>, <a href="/proof/review/nonconformities">nonconformities</a>, <a href="/proof/review/corrective-actions">corrective actions</a></p></div>
+<div class="card"><h3>Action ledger</h3><p><a href="/proof/actions">Open action ledger</a></p></div>
+<div class="card"><h3>Printable report</h3><p><a href="/proof/reports/final">Open printable report</a></p></div>
+<div class="card"><h3>Signoff state</h3><p><a href="/proof/signoff">Open signoff state</a></p></div>
 </div>
 </section>
 ${nonClaimsBlock()}`,
@@ -3165,35 +3118,9 @@ function reviewRows(kind) {
 </tr>`);
 }
 
-function reviewAcceptAllForm(openCount, returnTo) {
-  const policy = writePolicyFromOptions();
-  const disabled = policy.allowWrites ? "" : " disabled";
-  return `<section class="review-accept-all" aria-label="Accept all open review items">
-<h2>Accept all open review items</h2>
-<p class="muted">${escapeHtml(
-    `${openCount} review item(s) are currently open. Accepting all records one human acceptance per open item at its current evidence fingerprint. This does not perform final signoff; final signoff remains a separate explicit action on the signoff page.`,
-  )}</p>
-<form class="review-accept-all-form" method="post" action="/proof/review/accept-all">
-${hiddenInput("csrfToken", csrfTokenForPolicy(policy))}
-${hiddenInput("returnTo", returnTo)}
-<fieldset>
-<legend>Bulk acceptance</legend>
-<p class="decision-help">These confirmation checkboxes are explicit human assertions applied to every open item; none are hidden or prefilled.</p>
-<div class="review-confirmations">
-${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence for these items.")}
-${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence for these items.")}
-${checkboxInput("noRealTenantData", "These items used no real tenant data, real secrets, or private local state.")}
-${checkboxInput("nonClaimsConfirmed", "Accepting these items makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
-</div>
-<div class="decision-buttons">
-<button class="primary" type="submit"${disabled}>Accept all ${escapeHtml(openCount)} open items</button>
-</div>
-</fieldset>
-</form>
-${writePolicyNotice(policy)}
-</section>`;
-}
-
+// Read-only, single-column artifact detail page for one review item. This is
+// artifact navigation only: it is never the acceptance path (that is the single
+// Accept/Reject decision on /proof). It carries no decision form and no accept-all.
 function renderReview(data, state, url = new URL("/proof/review", "http://127.0.0.1"), kind = "index", explicitId = "") {
   if (kind === "gaps") {
     return layout("Machine QA gap register", `${table(["Gap", "Description", "Owner", "Next action"], reviewRows("gaps"))}${nonClaimsBlock()}`);
@@ -3205,41 +3132,11 @@ function renderReview(data, state, url = new URL("/proof/review", "http://127.0.
     return layout("Corrective actions", `${table(["Corrective action", "Description", "Owner", "Re-test"], reviewRows("correctiveActions"))}${nonClaimsBlock()}`);
   }
   const items = buildReviewItems(data);
-  const itemDecisionCounts = reviewItemStateCounts(items, state);
-  const openCount =
-    itemDecisionCounts.pending + itemDecisionCounts.reReview + itemDecisionCounts.rejected + itemDecisionCounts.retest;
-  if (!explicitId && !url.searchParams.has("item") && openCount === 0) {
-    return layout(
-      "Proof review workflow",
-      `<section class="hero">
-<h2>No current review items are pending</h2>
-<p>All ${escapeHtml(items.length)} current review-item fingerprints have accepted decisions in the action ledger. Future evidence, screenshot, report, or route changes will alter affected fingerprints and return only those items to this workflow.</p>
-<div class="hero-actions">
-<a class="button-link button-primary" href="/proof/signoff">Review signoff state</a>
-<a class="button-link" href="/proof/review?item=0">Open accepted item ledger</a>
-<a class="button-link" href="/proof/reports/final">Open printable report</a>
-</div>
-</section>
-<section>
-<h2>Current review queue</h2>
-${table(["State", "Count"], [
-        `<tr><th>Accepted current items</th><td>${escapeHtml(itemDecisionCounts.accepted)}</td></tr>`,
-        `<tr><th>Rejected items</th><td>${escapeHtml(itemDecisionCounts.rejected)}</td></tr>`,
-        `<tr><th>Retest requested</th><td>${escapeHtml(itemDecisionCounts.retest)}</td></tr>`,
-        `<tr><th>Re-review required</th><td>${escapeHtml(itemDecisionCounts.reReview)}</td></tr>`,
-        `<tr><th>Unreviewed items</th><td>${escapeHtml(itemDecisionCounts.pending)}</td></tr>`,
-        `<tr><th>Recorded ledger actions</th><td>${escapeHtml(state.actions.length)}</td></tr>`,
-      ])}
-</section>
-${nonClaimsBlock()}`,
-    );
-  }
   const index = currentReviewIndex(items, state, url, explicitId);
   const item = items[index];
   const decision = reviewItemDecision(state, item);
-  const progress = Math.round(((index + 1) / items.length) * 100);
   const previous = index > 0 ? `<a class="button-link" href="/proof/review?item=${index - 1}">Previous</a>` : "";
-  const next = index + 1 < items.length ? `<a class="button-link button-primary" href="/proof/review?item=${index + 1}">Next</a>` : `<a class="button-link button-primary" href="/proof/signoff">Review signoff state</a>`;
+  const next = index + 1 < items.length ? `<a class="button-link button-primary" href="/proof/review?item=${index + 1}">Next</a>` : `<a class="button-link button-primary" href="/proof">Back to decision</a>`;
   const evidenceRows = item.evidenceLinks.length
     ? item.evidenceLinks.map((id) => `<tr><td>${evidenceLink(id)}</td><td>${sourcePathCell(data.evidence.get(id)?.target ?? "Derived from review item mapping.")}</td></tr>`)
     : [`<tr><td>Not applicable - no separate evidence record.</td><td>Derived from machine QA and screenshot/service/claim mapping.</td></tr>`];
@@ -3247,18 +3144,13 @@ ${nonClaimsBlock()}`,
     ? item.screenshots.map((screenshot, shotIndex) => renderScreenshotFigure(screenshot, { eager: shotIndex === 0 })).join("")
     : `<div class="card"><p><strong>Not applicable - no inline screenshot for this item.</strong></p><p>This review item is supported by source/evidence records rather than a screenshot artifact.</p></div>`;
   return layout(
-    "Proof review workflow",
+    "Proof review item detail",
     `<section class="hero">
 <h2>${escapeHtml(item.title)}</h2>
 <p>${statusBadge(item.type, "neutral")} ${statusBadge(decision.status, decision.tone)}</p>
-<div class="progress" aria-label="Review progress"><span style="width:${escapeHtml(progress)}%"></span></div>
-<p class="muted">Item ${index + 1} of ${items.length}. ${escapeHtml(displayValue(decision.action?.createdAt, "No human decision recorded for this item yet."))}</p>
+<p class="muted">Item ${index + 1} of ${items.length}. ${escapeHtml(displayValue(decision.action?.createdAt, "No human decision recorded for this item yet."))} This is a read-only artifact detail page; the acceptance decision is the single Accept or Reject on <a href="/proof">/proof</a>.</p>
 <div class="hero-actions">${previous} ${next}</div>
 </section>
-${openCount > 0 ? reviewAcceptAllForm(openCount, `/proof/review?item=${index}`) : ""}
-${reviewItemActionForms(item, `/proof/review?item=${index}`)}
-<div class="review-shell">
-<article class="review-main">
 <section>
 <h2>Inline screenshot evidence</h2>
 <div class="screenshot-grid">${screenshotFigures}</div>
@@ -3280,13 +3172,7 @@ ${reviewItemActionForms(item, `/proof/review?item=${index}`)}
 ${table(["Evidence", "Source artifact"], evidenceRows)}
 </section>
 <section>
-<h2>Human reenactment instructions</h2>
-<p>${escapeHtml(displayValue(item.screenshots[0]?.humanReenactmentInstruction, "Open the linked route or evidence record, verify source SHA, run ID, screenshot hash, redaction posture, synthetic-data boundary, and non-claims, then record a decision."))}</p>
-</section>
-</article>
-<aside class="review-side">
-<h2>Review navigation</h2>
-<p>${previous} ${next}</p>
+<h2>Item identity</h2>
 <table><tbody>
 <tr><th>Current item</th><td>${escapeHtml(item.id)}</td></tr>
 <tr><th>Type</th><td>${escapeHtml(item.type)}</td></tr>
@@ -3295,15 +3181,7 @@ ${table(["Evidence", "Source artifact"], evidenceRows)}
 <tr><th>Service</th><td>${item.serviceId ? `<a href="/proof/services/${escapeHtml(item.serviceId)}">${escapeHtml(item.serviceId)}</a>` : "Not applicable - no service mapping."}</td></tr>
 <tr><th>Decision</th><td>${escapeHtml(decision.status)}</td></tr>
 </tbody></table>
-<h2>Registers</h2>
-<ul>
-<li><a href="/proof/review/gaps">Gap register</a></li>
-<li><a href="/proof/review/nonconformities">Nonconformities</a></li>
-<li><a href="/proof/review/corrective-actions">Corrective actions</a></li>
-<li><a href="/proof/export">External-review export</a></li>
-</ul>
-</aside>
-</div>
+</section>
 ${nonClaimsBlock()}`,
   );
 }
@@ -4180,50 +4058,9 @@ ${table(["Service", "Fixture seed", "Seeder", "Resetter", "Cleanup", "Teardown"]
   );
 }
 
-function renderFinalSignoffForm(signoff) {
-  const policy = writePolicyFromOptions();
-  const disabled = policy.allowWrites && signoff.signoffAvailable && !signoff.signoffRecorded ? "" : " disabled";
-  const disabledReason = signoff.signoffRecorded
-    ? "Final signoff is already recorded in the browser action ledger."
-    : signoff.signoffAvailable
-      ? policy.allowWrites
-        ? "Final signoff is available. Type the exact phrase and submit only if you are making the final human decision."
-        : "Final signoff is available, but this serving mode is read-only until the authorised operator write boundary is enabled."
-      : "Final signoff is unavailable until machine blockers and rejected, retest, re-review, or unreviewed items are cleared.";
-  const hiddenFields = {
-    csrfToken: csrfTokenForPolicy(policy),
-    returnTo: "/proof/signoff",
-    actionType: "human-final-decision",
-    outcome: "human-accepted",
-    role: "auditor",
-    tenant: "synthetic-proof-review",
-  };
-  return `<div class="review-actions" aria-label="Final signoff action">
-${writePolicyNotice(policy)}
-<p>${escapeHtml(disabledReason)}</p>
-<form class="review-decision-form" method="post" action="/proof/signoff">
-${Object.entries(hiddenFields)
-  .map(([name, value]) => hiddenInput(name, value))
-  .join("")}
-<fieldset>
-<legend>Explicit final signoff</legend>
-<p class="decision-help">This records Matthew's final browser decision for ${ACCEPTANCE_ISSUE}. It does not make machine QA automatic, and it does not claim staging, production, SOC, ISO, enterprise-production, product UI, browser E2E, live-provider, deployment, or full-product readiness.</p>
-<div class="review-confirmations">
-${checkboxInput("acceptedCurrentEvidence", `I accept the current proof baseline: ${signoff.counts.accepted}/${signoff.counts.total} current review items accepted and no open review items.`)}
-${checkboxInput("qaZeroConfirmed", `I confirmed the current machine QA result: ${signoff.latest.passCount} pass, ${signoff.latest.warnCount} warnings, ${signoff.latest.gapCount} unresolved gaps, ${signoff.latest.failCount} failures.`)}
-${checkboxInput("deltaReviewAcknowledged", "I understand future proof changes must return only affected changed evidence to the review queue.")}
-${checkboxInput("nonClaimsConfirmed", "I understand this signoff preserves the listed non-claims and does not upgrade readiness beyond the evidence.")}
-</div>
-<label>Type ${escapeHtml(FINAL_SIGNOFF_PHRASE)}<br><input name="signoffPhrase" autocomplete="off" spellcheck="false" placeholder="${escapeHtml(FINAL_SIGNOFF_PHRASE)}"${disabled}></label>
-<label>Final signoff note<br><textarea name="notes" rows="4" placeholder="Optional human acceptance note for the audit ledger."${disabled}></textarea></label>
-<div class="decision-buttons">
-<button class="primary" type="submit" name="decision" value="final-signoff"${disabled}>Record final signoff</button>
-</div>
-</fieldset>
-</form>
-</div>`;
-}
-
+// Read-only signoff state view. The acceptance decision itself is the single guarded
+// Accept/Reject on /proof; this page only reports the recorded state, and final signoff
+// is never auto-completed by the machine surface.
 function renderSignoff(data, state) {
   const signoff = finalSignoffState(data, state);
   const itemStates = signoff.itemStates;
@@ -4232,6 +4069,7 @@ function renderSignoff(data, state) {
   const unreviewed = itemStates.filter(({ decision }) => decision.status === "human-review-required");
   const reReview = itemStates.filter(({ decision }) => decision.status === "re-review-required");
   const accepted = itemStates.filter(({ decision }) => decision.status === "accepted");
+  const decisionOutcome = signoff.signoffAction?.outcome === "human-rejected" ? "human-rejected" : "human-accepted";
   const rows = [
     ["Accepted review items", accepted.length],
     ["Rejected review items", rejected.length],
@@ -4239,13 +4077,13 @@ function renderSignoff(data, state) {
     ["Re-review required", reReview.length],
     ["Unreviewed items", unreviewed.length],
     ["Recorded browser actions", state.actions.length],
-    ["Final signoff available", signoff.signoffAvailable ? "yes" : "no"],
-    ["Final signoff recorded", signoff.signoffRecorded ? "yes" : "no"],
+    ["Final human signoff recorded", signoff.signoffRecorded ? "yes" : "no"],
+    ["Final human decision", signoff.signoffRecorded ? decisionOutcome : "unavailable until an operator decision is recorded"],
     ["Final signoff auto-completed", "no"],
   ].map(([field, value]) => `<tr><th>${escapeHtml(field)}</th><td>${escapeHtml(value)}</td></tr>`);
   const signoffRows = signoff.signoffAction
     ? actionDetailRows(signoff.signoffAction)
-    : [`<tr><td colspan="2">No explicit final signoff action is recorded yet.</td></tr>`];
+    : [`<tr><td colspan="2">No explicit final human decision is recorded yet; final signoff remains unavailable and is not auto-completed.</td></tr>`];
   const openRows = [...rejected, ...retest, ...reReview, ...unreviewed].slice(0, 50).map(({ item, decision }) => `<tr>
 <td><a href="/proof/review?item=${encodeURIComponent(item.id)}">${escapeHtml(item.title)}</a></td>
 <td>${escapeHtml(item.type)}</td>
@@ -4256,7 +4094,7 @@ function renderSignoff(data, state) {
     "Proof signoff",
     `<section class="hero">
 <h2>Final signoff</h2>
-<p>Final human signoff is separate from machine QA, is not auto-completed, and can only be recorded by an explicit browser action after rejected, retest, re-review, and unreviewed items are cleared. This page records that decision without making any readiness overclaim.</p>
+<p>Final human signoff is separate from machine QA and is never auto-completed. It is recorded only by the single deliberate operator Accept on <a href="/proof">/proof</a>; until then it stays unavailable. This page is read-only and makes no readiness overclaim.</p>
 </section>
 <section>
 <h2>Current signoff state</h2>
@@ -4267,22 +4105,13 @@ ${table(["Field", "Value"], rows)}
 ${table(["Item", "Type", "State", "Risk posture"], openRows.length ? openRows : [`<tr><td colspan="4">No rejected, retest, or unreviewed review items are currently recorded in the browser action ledger.</td></tr>`])}
 </section>
 <section>
-<h2>Record final signoff</h2>
-${renderFinalSignoffForm(signoff)}
-</section>
-<section>
-<h2>Recorded final signoff action</h2>
+<h2>Recorded final human decision</h2>
 ${table(["Field", "Value"], signoffRows)}
 </section>
 <section>
-<h2>Final signoff prerequisites requiring human confirmation</h2>
-${unorderedList([
-      "All capability, role, service, scenario, evidence, source, and enterprise actions reviewed by an authorised human auditor.",
-      "All browser-entered QA actions promoted to immutable evidence artifacts with source SHA and timestamps.",
-      "All stop conditions cleared or explicitly dispositioned with owner and rationale.",
-      "Final USF-290 acceptance criteria mapped to evidence and checked in Linear.",
-    ])}
-<p><a class="button-link button-primary" href="/proof/review">Continue review</a> <a class="button-link" href="/proof/reports/final">Open printable report</a></p>
+<h2>Where to record the decision</h2>
+<p>The single Accept or Reject decision for the whole current proof state is on <a href="/proof">/proof</a>. It is guarded by the operator write policy, CSRF double-submit, and one confirmation checkbox, and is never auto-completed.</p>
+<p><a class="button-link button-primary" href="/proof">Go to the decision</a> <a class="button-link" href="/proof/reports/final">Open printable report</a></p>
 </section>`,
   );
 }
@@ -4517,8 +4346,8 @@ function csrfValid(request, params, policy) {
 async function handleProofPost(request, statePath, policy = writePolicyFromOptions(), data = buildData()) {
   const url = new URL(request.url ?? "/", "http://127.0.0.1");
   const routePath = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, "") : url.pathname;
-  if (!["/proof/actions", "/proof/signoff", "/proof/review/accept-all"].includes(routePath)) {
-    return { status: 405, body: layout("Method not allowed", "<p>Only QA action, accept-all, and final signoff form submissions are supported.</p>") };
+  if (!["/proof/actions", "/proof/accept", "/proof/reject"].includes(routePath)) {
+    return { status: 405, body: layout("Method not allowed", "<p>Only QA action, Accept, and Reject form submissions are supported.</p>") };
   }
   if (!policy.allowWrites) {
     return forbiddenWriteResponse(
@@ -4533,67 +4362,41 @@ async function handleProofPost(request, statePath, policy = writePolicyFromOptio
     return forbiddenWriteResponse("The proof-cockpit CSRF/session token was missing or invalid.");
   }
   const state = loadProofState(statePath);
-  if (routePath === "/proof/review/accept-all") {
-    const confirmations = {
-      devEvidenceConfirmed: params.has("devEvidenceConfirmed"),
-      testEvidenceConfirmed: params.has("testEvidenceConfirmed"),
-      noRealTenantData: params.has("noRealTenantData"),
-      nonClaimsConfirmed: params.has("nonClaimsConfirmed"),
-    };
-    const missing = Object.entries(confirmations)
-      .filter(([, value]) => !value)
-      .map(([name]) => name);
-    if (missing.length) {
-      return forbiddenWriteResponse(`Accept all requires every confirmation checkbox to be ticked: ${missing.join(", ")}.`);
+  if (routePath === "/proof/accept" || routePath === "/proof/reject") {
+    // A single deliberate operator decision. Acceptance is never auto-completed by the
+    // machine surface: it requires the one confirmation checkbox in addition to the
+    // write guard and CSRF double-submit already validated above.
+    if (!params.has("operatorAccept")) {
+      return forbiddenWriteResponse(
+        "The single confirmation checkbox (I, the authenticated operator, accept the current proof state) must be ticked.",
+      );
     }
+    const outcome = routePath === "/proof/reject" ? "human-rejected" : "human-accepted";
     const actor = actorFromRequest(request, policy);
     const role = ROLES.includes(params.get("role")) ? params.get("role") : "auditor";
-    const openStatuses = new Set(["human-review-required", "re-review-required"]);
-    const openItems = buildReviewItems(data).filter((item) => openStatuses.has(reviewItemDecision(state, item).status));
     const now = new Date().toISOString();
     const sha = getSourceSha();
-    openItems.forEach((item, offset) => {
-      state.actions.unshift({
-        id: `qa-acceptall-${Date.now().toString(36)}-${offset.toString(36)}`,
-        createdAt: now,
-        updatedAt: now,
-        sourceSha: sha,
-        actionType: "machine-evidence-accepted",
-        outcome: "human-accepted",
-        role,
-        actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
-        tenant: String(params.get("tenant") ?? "synthetic-proof-review").slice(0, 160),
-        actionName: `Accept (accept-all): ${item.title}`.slice(0, 240),
-        capabilityId: item.capabilityId ?? "",
-        serviceId: item.serviceId ?? "",
-        scenarioId: "",
-        evidenceId: item.id,
-        enterpriseTopic: "",
-        correlationId: "",
-        traceId: "",
-        auditEventId: "",
-        evidenceUrl: "",
-        sourceUrl: item.sourceUrl ?? "",
-        serviceUrl: item.route ?? "",
-        screenshotUrl: item.screenshots?.[0]?.screenshotPath ?? "",
-        notes:
-          "Bulk acceptance recorded via the /proof/review Accept all control for every currently open review item at its current evidence fingerprint. Final signoff remains a separate explicit action.",
-        acceptanceFingerprint: item.acceptanceFingerprint ?? "",
-        confirmations,
-        finalAcceptanceClaimed: false,
-      });
-    });
-    saveProofState(state, statePath);
-    return redirect(safeReturnTo(params.get("returnTo")) || "/proof/review");
-  }
-  if (routePath === "/proof/signoff") {
-    const result = normalizeFinalSignoffAction(params, actorFromRequest(request, policy), finalSignoffState(data, state));
-    if (result.error) {
-      return result.error;
+    // Accept records, in one action, an acceptance of every currently-open review item at
+    // its current evidence fingerprint (the former bulk accept-all) plus the final
+    // human acceptance decision. Reject records only the final human-rejected decision.
+    if (outcome === "human-accepted") {
+      for (const acceptance of buildBulkAcceptanceActions(data, state, actor, role, now, sha)) {
+        state.actions.unshift(acceptance);
+      }
     }
-    state.actions.unshift(result.action);
+    const finalAction = buildFinalDecisionAction(
+      data,
+      finalSignoffState(data, state),
+      actor,
+      role,
+      outcome,
+      params.get("notes"),
+      now,
+      sha,
+    );
+    state.actions.unshift(finalAction);
     saveProofState(state, statePath);
-    return redirect(safeReturnTo(params.get("returnTo")) || `/proof/actions/${result.action.id}`);
+    return redirect(safeReturnTo(params.get("returnTo")) || `/proof/actions/${finalAction.id}`);
   }
   const action = normalizeAction(params, actorFromRequest(request, policy));
   state.actions.unshift(action);
@@ -4651,7 +4454,8 @@ export function renderProofCockpit(pathname, data = buildData(), state = blankPr
     return page(renderImportRun(data, runId));
   }
   if (routePath === "/proof/review") {
-    return html(renderReview(data, state, url));
+    // The single-decision surface is the acceptance path; /proof/review now lands on it.
+    return html(renderHome(data, state));
   }
   if (routePath === "/proof/review/gaps") {
     return html(renderReview(data, state, url, "gaps"));
