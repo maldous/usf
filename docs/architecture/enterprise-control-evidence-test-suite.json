@@ -25,7 +25,7 @@
   "requiredEnterpriseSections": [
     {
       "sectionId": "soaSupportMappings",
-      "expectedRowCount": 240,
+      "expectedRowCount": 241,
       "requiredFields": [
         "id",
         "controlPurpose",
@@ -44,7 +44,7 @@
     },
     {
       "sectionId": "evidenceRegister",
-      "expectedRowCount": 148,
+      "expectedRowCount": 149,
       "requiredFields": [
         "id",
         "proofResult",
@@ -153,7 +153,7 @@
     },
     {
       "sectionId": "privacyDataMinimisationPosture",
-      "expectedRowCount": 146,
+      "expectedRowCount": 147,
       "requiredFields": [
         "id",
         "targetType",
