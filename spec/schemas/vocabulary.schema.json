@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:vocabulary",
   "title": "USF Vocabulary Schema",
-  "description": "Draft JSON Schema for the USF vocabulary catalogue (spec/vocabularies/vocabulary-catalog.json) and future vocabulary artefacts. Validates value sets and their values per the catalogue's vocabularyRules: each value set declares status, governed taxonomies and ontology concepts, expected schema consumers, AI guidance, and values; each value declares a value-lifecycle and AI guidance. Per the catalogue's alias convention, aliases live ONLY in each set's aliases array and are not listed in values; therefore values[].lifecycle does NOT permit 'alias'. Active and draft value sets require at least one value; a deferred value set (e.g. capability-domains) may be empty. CLOSURE POLICY: value sets, values, aliases, lifecycle-state definitions, and forbidden-value entries are closed; descriptive blocks (currentRepositoryState, governance, reactSourceLearnings, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. Cross-record checks (unique ids, aliases resolve to canonical, forbidden never canonical) are validator-deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for the USF vocabulary catalogue (spec/vocabularies/vocabulary-catalog.json) and future vocabulary artefacts. Validates value sets and their values per the catalogue's vocabularyRules: each value set declares status, governed taxonomies and ontology concepts, expected schema consumers, AI guidance, and values; each value declares a value-lifecycle and AI guidance. Per the catalogue's alias convention, aliases live ONLY in each set's aliases array and are not listed in values; therefore values[].lifecycle does NOT permit 'alias'. Active and draft value sets require at least one value; a deferred value set (e.g. capability-domains) may be empty. CLOSURE POLICY: value sets, values, aliases, lifecycle-state definitions, and forbidden-value entries are closed; descriptive blocks (currentRepositoryState, governance, sourceLineageLearnings, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. Cross-record checks (unique ids, aliases resolve to canonical, forbidden never canonical) are validator-deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
     "kebab": {
@@ -431,7 +431,7 @@
       },
       "uniqueItems": true
     },
-    "reactSourceLearnings": {
+    "sourceLineageLearnings": {
       "type": "array",
       "$comment": "Descriptive metadata; deliberately permissive in this draft."
     },

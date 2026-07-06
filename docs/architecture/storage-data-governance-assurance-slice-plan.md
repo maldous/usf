@@ -8,7 +8,7 @@
 | **Issue scope** | USF-91 |
 | **Primary inputs** | `spec/instances/data-migration/identity-schema.json`, `spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json`, `spec/instances/semantic-contract/user-identity-and-tenant-membership.json`, `spec/instances/workflow/authentication-identity-context.json`, `docs/architecture/data-migration-backup-restore-proof-slice-plan.md`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records storage and data-governance assurance for the current authentication proof substrate. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, runs no destructive proof, creates no evidence records, and does not start USF-39.
+This plan records storage and data-governance assurance for the current authentication proof substrate. It creates no product implementation runtime, imports no source-lineage runtime/application code, creates no implementation directory, promotes no schema to `active`, runs no destructive proof, creates no evidence records, and does not start USF-39.
 
 ## Purpose
 
@@ -119,7 +119,7 @@ This plan does not authorize:
 - USF-39 implementation extraction;
 - product runtime/application code;
 - `apps/`, `packages/`, `services/`, `src/`, `infra/`, `config/`, or `scripts/` implementation directories;
-- React runtime/application code import;
+- source-lineage runtime/application code import;
 - source-path mirroring;
 - schema activation;
 - generated reports as authority;

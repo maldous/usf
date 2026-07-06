@@ -3,7 +3,7 @@
   "expectedRule": "USF-PARITY-039",
   "mutation": {
     "composeParityServicePatch": {
-      "react_service": "pgadmin",
+      "source_service": "pgadmin",
       "set": {
         "tracking_recommendation": "USF-169 plus USF-217 disposition evidence are present before any stronger readiness proof"
       }

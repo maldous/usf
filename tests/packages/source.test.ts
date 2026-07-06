@@ -1,5 +1,5 @@
 import {
-  reactRuntimeImportAllowed,
+  sourceRuntimeImportAllowed,
   sourcePathMirroringAllowed,
   sourceUseTreatments,
 } from "@foundation/source";
@@ -13,7 +13,7 @@ describe("source-use package", () => {
       "new-with-rationale",
       "evidence-only-support",
     ]);
-    expect(reactRuntimeImportAllowed).toBe(false);
+    expect(sourceRuntimeImportAllowed).toBe(false);
     expect(sourcePathMirroringAllowed).toBe(false);
   });
 });

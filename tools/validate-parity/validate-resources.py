@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF resource lifecycle/relationships parity validator (USF-165).
 
-Governance tooling only. It creates no runtime files and imports no React source.
+Governance tooling only. It creates no runtime files and imports no source lineage.
 It fails closed on governed records, lifecycle states, schema-bound mutations,
 relationship integrity, tenant/PDP posture, retention/hold/purge safety,
 audit/telemetry, source-use honesty, and no production/legal/regulatory
@@ -150,7 +150,7 @@ def build_state(overrides=None):
             matrix["domains"] = [
                 row
                 for row in matrix.get("domains", [])
-                if not isinstance(row, dict) or row.get("react_item_id") not in remove_ids
+                if not isinstance(row, dict) or row.get("source_item_id") not in remove_ids
             ]
     return {"files": files, "matrix": matrix}
 
@@ -162,7 +162,7 @@ def resource_rows(matrix):
     for row in matrix.get("domains", []):
         if not isinstance(row, dict):
             continue
-        rid = str(row.get("react_item_id", ""))
+        rid = str(row.get("source_item_id", ""))
         summary = str(row.get("behaviour_summary", "")).lower()
         if rid.startswith("resource.") or "resource lifecycle" in summary:
             rows.append(row)
@@ -329,17 +329,17 @@ def run_checks(findings, state=None):
         "resource.search-bulk-files-interactions",
         "resource.audit-observability-guardrails",
         "resource.api-openapi-posture",
-        "resource.react-ui-playwright-behaviours",
+        "resource.ui-playwright-behaviours",
     ]
-    row_ids = {row.get("react_item_id") for row in rows}
+    row_ids = {row.get("source_item_id") for row in rows}
     for rid in required_rows:
         if rid not in row_ids:
             findings.add("USF-RESOURCES-006", MATRIX, f"matrix row missing {rid}")
     for row in rows:
         if row.get("domain_authorised") is not True:
-            findings.add("USF-RESOURCES-006", MATRIX, f"resource lifecycle row not authorised: {row.get('react_item_id')}")
+            findings.add("USF-RESOURCES-006", MATRIX, f"resource lifecycle row not authorised: {row.get('source_item_id')}")
         if row.get("usf_status") in {"migrated", "partial"} and not row.get("usf_tests"):
-            findings.add("USF-RESOURCES-006", MATRIX, f"resource lifecycle row lacks tests: {row.get('react_item_id')}")
+            findings.add("USF-RESOURCES-006", MATRIX, f"resource lifecycle row lacks tests: {row.get('source_item_id')}")
     for token in [
         "capabilities/resources/src/index.ts",
         "adapters/resources/src/index.ts",

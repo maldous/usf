@@ -26,7 +26,7 @@ Related semantic instances:
 
 ## Historical Source Evidence
 
-Historical React source may be used only as source evidence and design input. It is not future live authority, and its paths do not determine USF implementation paths.
+Historical source-lineage source may be used only as source evidence and design input. It is not future live authority, and its paths do not determine USF implementation paths.
 
 Primary source lineage for this slice:
 
@@ -35,7 +35,7 @@ Primary source lineage for this slice:
 - `apps/react-enterprise-app/src/hooks/use-session.ts`
 - `apps/react-enterprise-app/src/tests/use-session.test.ts`
 - `apps/react-enterprise-app/src/components/RequirePermission.tsx`
-- `docs/evidence/frontend/react-component-platform-baseline.md`
+- `docs/evidence/frontend/source-lineage-component-platform-baseline.md`
 - `docs/evidence/auth/oidc-login-mapping-proof.md`
 - `docs/evidence/identity/keycloak-login-callback.md`
 
@@ -83,7 +83,7 @@ Generated reports are never authority for this slice.
 - No UI rendering code.
 - No product runtime code.
 - No source-path mirroring.
-- No React runtime or application code import.
+- No source-lineage runtime or application code import.
 - No runtime code import without disposition.
 - No schema activation.
 - No generated report treated as authority.

@@ -11,7 +11,7 @@
     "USF-182"
   ],
   "service_catalogue_authority": "spec/instances/compose-service/service-catalogue.json",
-  "react_compose_parity_matrix": "docs/architecture/usf-compose-service-completeness-matrix.json",
+  "source_compose_completeness_matrix": "docs/architecture/usf-compose-service-completeness-matrix.json",
   "closure_claimed": false,
   "closure_blocking_dispositions": [
     "bounded-local-proof-with-deferred-readiness-boundaries",
@@ -46,7 +46,7 @@
       "service_id": "postgres",
       "display_name": "Postgres",
       "service_kind": "database",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "postgres"
       ],
       "source_accounting_statuses": [
@@ -69,7 +69,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#postgres",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#postgres"
         ],
         "proof_evidence_refs": [
@@ -119,7 +119,7 @@
       "service_id": "keycloak-db",
       "display_name": "Keycloak Database",
       "service_kind": "identity-backing-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "keycloak-postgres"
       ],
       "source_accounting_statuses": [
@@ -142,7 +142,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#keycloak-db",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak-db"
         ],
         "proof_evidence_refs": [
@@ -191,7 +191,7 @@
       "service_id": "keycloak",
       "display_name": "Keycloak",
       "service_kind": "identity-provider",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "keycloak"
       ],
       "source_accounting_statuses": [
@@ -214,7 +214,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#keycloak",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak"
         ],
         "proof_evidence_refs": [
@@ -266,7 +266,7 @@
       "service_id": "nats",
       "display_name": "NATS",
       "service_kind": "event-bus",
-      "react_compose_service_names": [],
+      "source_compose_service_names": [],
       "source_accounting_statuses": [],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -285,7 +285,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#nats",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#nats"
         ],
         "proof_evidence_refs": [
@@ -336,7 +336,7 @@
       "service_id": "temporal",
       "display_name": "Temporal",
       "service_kind": "workflow-runtime",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "temporal"
       ],
       "source_accounting_statuses": [
@@ -359,7 +359,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#temporal"
         ],
         "proof_evidence_refs": [
@@ -411,7 +411,7 @@
       "service_id": "minio",
       "display_name": "MinIO",
       "service_kind": "object-storage",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "minio"
       ],
       "source_accounting_statuses": [
@@ -434,7 +434,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#minio",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#minio"
         ],
         "proof_evidence_refs": [
@@ -486,7 +486,7 @@
       "service_id": "openbao",
       "display_name": "OpenBao",
       "service_kind": "secret-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "openbao"
       ],
       "source_accounting_statuses": [
@@ -509,7 +509,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#openbao",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#openbao"
         ],
         "proof_evidence_refs": [
@@ -561,7 +561,7 @@
       "service_id": "otel-collector",
       "display_name": "OpenTelemetry Collector",
       "service_kind": "observability-collector",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "otel-collector"
       ],
       "source_accounting_statuses": [
@@ -584,7 +584,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#otel-collector",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#otel-collector"
         ],
         "proof_evidence_refs": [
@@ -652,7 +652,7 @@
       "service_id": "prometheus",
       "display_name": "Prometheus",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "prometheus"
       ],
       "source_accounting_statuses": [
@@ -675,7 +675,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#prometheus",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#prometheus"
         ],
         "proof_evidence_refs": [
@@ -744,7 +744,7 @@
       "service_id": "grafana",
       "display_name": "Grafana",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "grafana"
       ],
       "source_accounting_statuses": [
@@ -767,7 +767,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#grafana",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#grafana"
         ],
         "proof_evidence_refs": [
@@ -837,7 +837,7 @@
       "service_id": "loki",
       "display_name": "Loki",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "loki"
       ],
       "source_accounting_statuses": [
@@ -860,7 +860,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#loki",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#loki"
         ],
         "proof_evidence_refs": [
@@ -929,7 +929,7 @@
       "service_id": "tempo",
       "display_name": "Tempo",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "tempo"
       ],
       "source_accounting_statuses": [
@@ -952,7 +952,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#tempo",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#tempo"
         ],
         "proof_evidence_refs": [
@@ -1021,7 +1021,7 @@
       "service_id": "mailpit",
       "display_name": "Mailpit",
       "service_kind": "notification-sink",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "mailpit"
       ],
       "source_accounting_statuses": [
@@ -1044,7 +1044,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#mailpit",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#mailpit"
         ],
         "proof_evidence_refs": [
@@ -1096,7 +1096,7 @@
       "service_id": "webhook-sink",
       "display_name": "Webhook Sink",
       "service_kind": "webhook-sink",
-      "react_compose_service_names": [],
+      "source_compose_service_names": [],
       "source_accounting_statuses": [],
       "requirement_state": true,
       "human_decision_state": "accepted",
@@ -1115,7 +1115,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#webhook-sink"
         ],
         "proof_evidence_refs": [
@@ -1180,7 +1180,7 @@
       "service_id": "redis",
       "display_name": "Redis",
       "service_kind": "cache",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "redis"
       ],
       "source_accounting_statuses": [
@@ -1202,7 +1202,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#redis",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#redis"
         ],
         "proof_evidence_refs": [
@@ -1296,7 +1296,7 @@
       "service_id": "meilisearch",
       "display_name": "Meilisearch",
       "service_kind": "search-provider",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "meilisearch"
       ],
       "source_accounting_statuses": [
@@ -1318,7 +1318,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#meilisearch",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#meilisearch"
         ],
         "proof_evidence_refs": [
@@ -1393,7 +1393,7 @@
       "service_id": "clickhouse",
       "display_name": "ClickHouse",
       "service_kind": "analytics-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "clickhouse"
       ],
       "source_accounting_statuses": [
@@ -1415,7 +1415,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clickhouse",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#clickhouse"
         ],
         "proof_evidence_refs": [
@@ -1509,7 +1509,7 @@
       "service_id": "pgadmin",
       "display_name": "pgAdmin",
       "service_kind": "operator-admin",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "pgadmin"
       ],
       "source_accounting_statuses": [
@@ -1532,7 +1532,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgadmin",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#pgadmin"
         ],
         "proof_evidence_refs": [
@@ -1599,7 +1599,7 @@
       "service_id": "sonar-postgres",
       "display_name": "SonarQube Postgres",
       "service_kind": "assurance-backing-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "sonar-postgres"
       ],
       "source_accounting_statuses": [
@@ -1622,7 +1622,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-postgres",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-postgres"
         ],
         "proof_evidence_refs": [
@@ -1703,7 +1703,7 @@
       "service_id": "sonar-oidc-plugin",
       "display_name": "SonarQube OIDC Plugin Fetcher",
       "service_kind": "assurance-backing-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "sonar-oidc-plugin"
       ],
       "source_accounting_statuses": [
@@ -1724,7 +1724,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-oidc-plugin",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-oidc-plugin"
         ],
         "proof_evidence_refs": [
@@ -1796,7 +1796,7 @@
       "service_id": "sonarqube",
       "display_name": "SonarQube",
       "service_kind": "assurance-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "sonarqube"
       ],
       "source_accounting_statuses": [
@@ -1819,7 +1819,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonarqube",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#sonarqube"
         ],
         "proof_evidence_refs": [
@@ -1917,7 +1917,7 @@
       "service_id": "mock-oidc",
       "display_name": "Mock OIDC",
       "service_kind": "provider-mock",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "mock-oidc"
       ],
       "source_accounting_statuses": [
@@ -1936,7 +1936,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#mock-oidc",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#mock-oidc"
         ],
         "proof_evidence_refs": [
@@ -2006,7 +2006,7 @@
       "service_id": "localstack",
       "display_name": "LocalStack",
       "service_kind": "provider-emulator",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "localstack"
       ],
       "source_accounting_statuses": [
@@ -2028,7 +2028,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#localstack",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#localstack"
         ],
         "proof_evidence_refs": [
@@ -2115,7 +2115,7 @@
       "service_id": "wiremock",
       "display_name": "WireMock",
       "service_kind": "provider-mock",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "wiremock"
       ],
       "source_accounting_statuses": [
@@ -2137,7 +2137,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#wiremock",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#wiremock"
         ],
         "proof_evidence_refs": [
@@ -2221,7 +2221,7 @@
       "service_id": "alertmanager",
       "display_name": "Alertmanager",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "alertmanager"
       ],
       "source_accounting_statuses": [
@@ -2244,7 +2244,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#alertmanager",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#alertmanager"
         ],
         "proof_evidence_refs": [
@@ -2324,7 +2324,7 @@
       "service_id": "alloy",
       "display_name": "Grafana Alloy",
       "service_kind": "observability-collector",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "alloy"
       ],
       "source_accounting_statuses": [
@@ -2347,7 +2347,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#alloy",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#alloy"
         ],
         "proof_evidence_refs": [
@@ -2425,7 +2425,7 @@
       "service_id": "windmill-postgres",
       "display_name": "Windmill Postgres",
       "service_kind": "workflow-backing-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "windmill-postgres"
       ],
       "source_accounting_statuses": [
@@ -2448,7 +2448,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-postgres",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-postgres"
         ],
         "proof_evidence_refs": [
@@ -2539,7 +2539,7 @@
       "service_id": "windmill-redis",
       "display_name": "Windmill Redis",
       "service_kind": "workflow-backing-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "windmill-redis"
       ],
       "source_accounting_statuses": [
@@ -2562,7 +2562,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-redis",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-redis"
         ],
         "proof_evidence_refs": [
@@ -2653,7 +2653,7 @@
       "service_id": "windmill",
       "display_name": "Windmill",
       "service_kind": "operator-automation",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "windmill"
       ],
       "source_accounting_statuses": [
@@ -2676,7 +2676,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#windmill"
         ],
         "proof_evidence_refs": [
@@ -2769,7 +2769,7 @@
       "service_id": "windmill-worker",
       "display_name": "Windmill Worker",
       "service_kind": "operator-automation-worker",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "windmill-worker"
       ],
       "source_accounting_statuses": [
@@ -2792,7 +2792,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-worker",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-worker"
         ],
         "proof_evidence_refs": [
@@ -2884,7 +2884,7 @@
       "service_id": "temporal-postgres",
       "display_name": "Temporal Postgres",
       "service_kind": "workflow-backing-store",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "temporal-postgres"
       ],
       "source_accounting_statuses": [
@@ -2907,7 +2907,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-postgres",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-postgres"
         ],
         "proof_evidence_refs": [
@@ -2968,7 +2968,7 @@
       "service_id": "temporal-ui",
       "display_name": "Temporal UI",
       "service_kind": "workflow-operator-ui",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "temporal-ui"
       ],
       "source_accounting_statuses": [
@@ -2991,7 +2991,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-ui",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-ui"
         ],
         "proof_evidence_refs": [
@@ -3062,7 +3062,7 @@
       "service_id": "pgbackrest",
       "display_name": "pgBackRest",
       "service_kind": "backup-restore",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "pgbackrest"
       ],
       "source_accounting_statuses": [
@@ -3085,7 +3085,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgbackrest",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#pgbackrest"
         ],
         "proof_evidence_refs": [
@@ -3186,7 +3186,7 @@
       "service_id": "clamav",
       "display_name": "ClamAV",
       "service_kind": "file-scanner",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "clamav"
       ],
       "source_accounting_statuses": [
@@ -3209,7 +3209,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clamav",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#clamav"
         ],
         "proof_evidence_refs": [
@@ -3270,7 +3270,7 @@
       "service_id": "sentry",
       "display_name": "Sentry",
       "service_kind": "observability-control-plane",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "sentry-postgres",
         "sentry-redis",
         "sentry-clickhouse",
@@ -3307,7 +3307,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sentry",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#sentry"
         ],
         "proof_evidence_refs": [
@@ -3338,7 +3338,7 @@
           "USF-222"
         ],
         "non_equivalence_boundaries": [
-          "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
+          "source-lineage Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
           "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance.",
           "Lane 3 records Sentry as a profile-gated shared error-assurance control plane only where Sentry semantics are claimed; local logs are not equivalent to Sentry service semantics.",
           "Sentry evidence must not imply dev, test, staging, production, deployment, live-provider, SOC, ISO, enterprise production, or full product readiness.",
@@ -3441,7 +3441,7 @@
       "service_id": "caddy",
       "display_name": "Caddy Gateway",
       "service_kind": "gateway",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "external-caddy"
       ],
       "source_accounting_statuses": [
@@ -3464,7 +3464,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#caddy",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#caddy"
         ],
         "proof_evidence_refs": [
@@ -3535,7 +3535,7 @@
       "service_id": "public-proof-origin",
       "display_name": "Public Proof Origin",
       "service_kind": "application-runtime",
-      "react_compose_service_names": [],
+      "source_compose_service_names": [],
       "source_accounting_statuses": [
         "bounded-local-proof-with-deferred-readiness-boundaries"
       ],
@@ -3555,7 +3555,7 @@
         "closure_blocking": true,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#public-proof-origin",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/public-fqdn-proof-source-use-disposition-matrix.md#public-proof-origin"
         ],
         "proof_evidence_refs": [
@@ -3631,9 +3631,9 @@
     },
     {
       "service_id": "platform-api",
-      "display_name": "React Platform API",
+      "display_name": "source-lineage Platform API",
       "service_kind": "application-runtime",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "platform-api"
       ],
       "source_accounting_statuses": [
@@ -3652,7 +3652,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#platform-api",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#platform-api"
         ],
         "proof_evidence_refs": [
@@ -3663,7 +3663,7 @@
           "USF-185"
         ],
         "non_equivalence_boundaries": [
-          "Historical React runtime services are not USF implementation authority."
+          "Historical source-lineage runtime services are not USF implementation authority."
         ],
         "missing_evidence": [
           "future implementation authority if this historical service becomes in scope"
@@ -3698,9 +3698,9 @@
     },
     {
       "service_id": "react-app",
-      "display_name": "React App",
+      "display_name": "source-lineage App",
       "service_kind": "implementation-ui",
-      "react_compose_service_names": [
+      "source_compose_service_names": [
         "react-app"
       ],
       "source_accounting_statuses": [
@@ -3719,7 +3719,7 @@
         "closure_blocking": false,
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#react-app",
-        "react_parity_refs": [
+        "source_completeness_refs": [
           "docs/architecture/usf-compose-service-completeness-matrix.md#react-app"
         ],
         "proof_evidence_refs": [],
@@ -3728,7 +3728,7 @@
           "USF-185"
         ],
         "non_equivalence_boundaries": [
-          "Historical React UI service is not the USF gateway or forward-auth semantic authority."
+          "Historical source-lineage UI service is not the USF gateway or forward-auth semantic authority."
         ],
         "missing_evidence": [
           "current runtime proof stronger than catalogue classification for this service",

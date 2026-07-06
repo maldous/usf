@@ -17,9 +17,9 @@
 
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
-| `capabilities/audit/src/event-store.ts` | source-derived-rewrite | React `packages/audit-events` AuditEventPort emit/query lineage | In-memory append-only, tenant-isolated, hash-chained audit event store with non-enumerating, paginated query/get and chain verify. Adds the per-tenant hash chain React lacked. |
+| `capabilities/audit/src/event-store.ts` | source-derived-rewrite | source-lineage `packages/audit-events` AuditEventPort emit/query lineage | In-memory append-only, tenant-isolated, hash-chained audit event store with non-enumerating, paginated query/get and chain verify. Adds the per-tenant hash chain source-lineage lacked. |
 | `capabilities/audit/src/recorder.ts` | new-with-rationale | Audit-recording capability requirement | Convenience recorder that builds validated, redacted drafts and injects the recording component (chain of custody). |
-| `capabilities/audit/src/query-service.ts` | source-derived-rewrite | React audit query + admin audit-viewer lineage (deferred UI) | PDP-protected, tenant-scoped retrieval/verify/correct that records audit-of-audit access events. |
+| `capabilities/audit/src/query-service.ts` | source-derived-rewrite | source-lineage audit query + admin audit-viewer lineage (deferred UI) | PDP-protected, tenant-scoped retrieval/verify/correct that records audit-of-audit access events. |
 | `capabilities/audit/src/safe-view.ts` | new-with-rationale | Safe-projection requirement | Client-safe projection: redacted metadata, a safe verification surface, no internal chain plumbing. |
 | `packages/proof/src/audit-evidence-proof.ts` | evidence-only-support | Append-only + tamper-evidence proof requirement | Composed-Postgres proof: append-only, valid-chain re-verification, tamper detection, RLS isolation. Run via `make audit-proof`. |
 | `docs/architecture/audit-enterprise-proof-depth-matrix.json` | new-with-rationale | USF-143 enterprise audit depth gate | Maps signing/key boundary, evidence package, retention/disposal, delivery reliability, Postgres linkage, forensic refs, SIEM posture, detection mapping, multi-version readers, validators, evidence rows, and non-claims. |

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF jobs/workflows posture validator (parity-jobs-workflows, USF-133).
 
-Governance tooling only. It creates no implementation/runtime files, imports no React
+Governance tooling only. It creates no implementation/runtime files, imports no external
 source, and publishes no evidence. It fails closed on the jobs/workflows invariants that
 keep jobs controlled execution: classified, tenant-scoped or service-actor-run, PDP-
 authorized, bounded-retry, idempotent, value-redacted, and audited (ISO 27001-supporting
@@ -262,7 +262,7 @@ def jobs_row(matrix):
     if not isinstance(matrix, dict):
         return None
     for row in matrix.get("domains", []):
-        if isinstance(row, dict) and row.get("react_item_id") == "jobs-workflows":
+        if isinstance(row, dict) and row.get("source_item_id") == "jobs-workflows":
             return row
     return None
 

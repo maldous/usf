@@ -9,7 +9,7 @@
     {
       "id": "operator-surface-postgres-admin",
       "surface": "pgAdmin or equivalent DB admin posture",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -28,7 +28,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -46,7 +46,7 @@
     {
       "id": "operator-surface-minio-console",
       "surface": "MinIO console or equivalent object storage admin posture",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -65,7 +65,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -83,7 +83,7 @@
     {
       "id": "operator-surface-grafana",
       "surface": "Grafana dashboards",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -102,7 +102,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -120,7 +120,7 @@
     {
       "id": "operator-surface-sonarqube",
       "surface": "SonarQube UI/policy/hotspot posture",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -139,7 +139,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -157,7 +157,7 @@
     {
       "id": "operator-surface-sentry",
       "surface": "Sentry issue/event/alert posture",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -176,7 +176,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -194,7 +194,7 @@
     {
       "id": "operator-surface-temporal-ui",
       "surface": "Temporal UI",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -213,7 +213,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -231,7 +231,7 @@
     {
       "id": "operator-surface-windmill-ui",
       "surface": "Windmill UI",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -250,7 +250,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -268,7 +268,7 @@
     {
       "id": "operator-surface-mailpit",
       "surface": "Mailpit UI",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -287,7 +287,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -305,7 +305,7 @@
     {
       "id": "operator-surface-clickhouse",
       "surface": "ClickHouse interfaces",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -324,7 +324,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -342,7 +342,7 @@
     {
       "id": "operator-surface-prometheus",
       "surface": "Prometheus UI/targets/metrics",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -361,7 +361,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -379,7 +379,7 @@
     {
       "id": "operator-surface-loki",
       "surface": "Loki log query UI",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -398,7 +398,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -416,7 +416,7 @@
     {
       "id": "operator-surface-tempo",
       "surface": "Tempo trace UI",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -435,7 +435,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -453,7 +453,7 @@
     {
       "id": "operator-surface-alertmanager",
       "surface": "Alertmanager UI/routing state",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -472,7 +472,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -490,7 +490,7 @@
     {
       "id": "operator-surface-openbao",
       "surface": "OpenBao-style secrets console/status/policy posture",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -509,7 +509,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -527,7 +527,7 @@
     {
       "id": "operator-surface-keycloak",
       "surface": "Keycloak/SSO admin console",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -546,7 +546,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -564,7 +564,7 @@
     {
       "id": "operator-surface-gateway-forward-auth",
       "surface": "Caddy/gateway/forward-auth operator surface",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -583,7 +583,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -601,7 +601,7 @@
     {
       "id": "operator-surface-webhook-sink",
       "surface": "webhook sink UI",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -620,7 +620,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -638,7 +638,7 @@
     {
       "id": "operator-surface-meilisearch",
       "surface": "Meilisearch/search admin surface",
-      "presentInSourceLineageOrRationale": "present or represented in historical React operational substrate evidence",
+      "presentInSourceLineageOrRationale": "present or represented in historical source-lineage operational substrate evidence",
       "presentInUsfOrReplacementRationale": "represented by USF service catalogue, composed profiles, proof cockpit service evidence, or explicit CLI/API evidence equivalent",
       "accessMethod": "SSO or authorised service login where safe; API/CLI evidence where UI screenshots would expose secrets or are unavailable",
       "roleRequired": "platform operator or auditor",
@@ -657,7 +657,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on service-console change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -678,7 +678,7 @@
     "blockers": 0
   },
   "nonClaims": [
-    "React UI parity",
+    "UI parity",
     "visual parity",
     "UX parity",
     "product UI readiness",

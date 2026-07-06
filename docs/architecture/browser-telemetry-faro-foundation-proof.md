@@ -2,7 +2,7 @@
 
 USF-225 adds a bounded local browser telemetry proof for the foundation observability slice. The proof uses a transient loopback-only static browser page, the official Grafana Faro browser SDK, and Playwright Core against a local Chromium executable.
 
-This artefact is proof evidence organization only. It does not create product UI, React application delivery, page systems, component systems, visual snapshots, broad browser E2E coverage, accessibility journeys, public monitoring, live Faro ingestion, staging readiness, production readiness, SOC readiness, ISO/IEC 27001 certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure.
+This artefact is proof evidence organization only. It does not create product UI, source-lineage application delivery, page systems, component systems, visual snapshots, broad browser E2E coverage, accessibility journeys, public monitoring, live Faro ingestion, staging readiness, production readiness, SOC readiness, ISO/IEC 27001 certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure.
 
 ## Proof Boundary
 

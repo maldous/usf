@@ -73,7 +73,7 @@ const PROHIBITED_CLAIM_PATTERNS = [
   /\bsoc\b/i,
   /\biso\b/i,
   /\bfull[- ]dev[- ]readiness\b/i,
-  /\bfull[- ]react[- ]parity\b/i,
+  /\bfull[- ]source-lineage[- ]parity\b/i,
 ];
 
 type RuntimeComposedProviderEvidence =

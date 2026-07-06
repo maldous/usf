@@ -69,7 +69,7 @@ Current semantic instance coverage is concentrated on the authentication slice. 
 | Storage / data governance | Planning semantics exist | Not complete for storage surfaces | Shape checks exist | No runtime storage isolation, quota, export, deletion, legal-hold, or backup evidence | Storage posture unproven | Storage graph incomplete | NO-GO | USF-97, USF-99 |
 | Provider reliability / degraded mode / recovery | Planning semantics exist | Not complete for provider adapters | Shape checks exist | No runtime timeout, retry, degraded mode, recovery, or misconfiguration proof | Stronger provider postures unproven | Reliability graph incomplete | NO-GO | USF-97, USF-99 |
 | Regeneration sufficiency | Closed only for authentication slice | Source-use breadth incomplete | Static checks pass for current slice | Not a runtime proof | Not a posture proof | Broad platform graph explicitly not claimed | NO-GO | USF-96, USF-97 |
-| React readiness parity | Parity matrix exists | Historical lineage mapped only in part | Current USF validator does not cover all historical rules | Not a proof artefact | Production/live assurance deferred | Many rows partial or deferred | NO-GO | USF-98, USF-99 |
+| source-lineage readiness parity | Parity matrix exists | Historical lineage mapped only in part | Current USF validator does not cover all historical rules | Not a proof artefact | Production/live assurance deferred | Many rows partial or deferred | NO-GO | USF-98, USF-99 |
 | AI agent work packet and review contract | Contract exists | Not source-use closure | Not readiness proof | Not proof evidence | Not posture proof | Depends on filled directive and ready corpus | NO-GO | USF-100 |
 
 ## Aggregate Blockers
@@ -91,8 +91,8 @@ USF-96 tracks this matrix and its updates.
 - Do not move USF-39 out of Backlog.
 - Do not create implementation or runtime code.
 - Do not create implementation or runtime directories.
-- Do not import React runtime or application code.
-- Do not mirror React source paths.
+- Do not import source-lineage runtime or application code.
+- Do not mirror source lineage paths.
 - Do not promote schemas active.
 - Do not treat generated reports as authority.
 - Do not treat stale evidence as current readiness.

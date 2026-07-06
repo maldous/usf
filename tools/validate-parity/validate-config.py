@@ -2,7 +2,7 @@
 """USF configuration/secrets posture validator (parity-config-secrets, USF-144).
 
 Governance tooling only. It creates no implementation/runtime files, imports no
-React source, and publishes no evidence. It fails closed on the config/secrets
+source lineage, and publishes no evidence. It fails closed on the config/secrets
 invariants that keep configuration a safe control plane and keep secret VALUES out
 of every outward channel (ISO 27001-supporting technical control evidence only; no
 certification claim):
@@ -221,7 +221,7 @@ def config_row(matrix):
     if not isinstance(matrix, dict):
         return None
     for row in matrix.get("domains", []):
-        if isinstance(row, dict) and row.get("react_item_id") == "config-secrets":
+        if isinstance(row, dict) and row.get("source_item_id") == "config-secrets":
             return row
     return None
 

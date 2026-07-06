@@ -43,7 +43,7 @@
     "Do not let an approval requester approve their own workflow.",
     "Do not leak a payload, secret, credential, or stack trace into audit, errors, logs, OpenAPI, or proofs.",
     "Do not make a capability depend directly on Temporal or Windmill, or claim live provider readiness from hermetic proof.",
-    "Do not copy react job/workflow code or mirror its paths."
+    "Do not copy source-lineage job/workflow code or mirror its paths."
   ],
   "aiAlignmentRules": [
     "Agents must classify every job/workflow, keep tenant-impacting work tenant-scoped, and run system jobs under a concrete service actor.",

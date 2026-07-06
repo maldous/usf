@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.abac-policy-decision-point",
   "title": "ABAC Policy Decision Point Semantic Contract",
-  "description": "Source-backed draft semantic contract for the abac policy decision point capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the abac policy decision point capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -82,7 +82,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit proofs cover the decision logic and resource-policy administration and a runtime proof covers permission-before-entitlement policy ordering, demonstrated in React via hermetic state/policy-chain validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Unit proofs cover the decision logic and resource-policy administration and a runtime proof covers permission-before-entitlement policy ordering, demonstrated in source lineage via hermetic state/policy-chain validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlement-policy-chain-runtime-proof.ts",
         "apps/platform-api/tests/unit/authorize-resource.test.ts"

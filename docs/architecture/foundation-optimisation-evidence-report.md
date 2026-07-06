@@ -47,7 +47,7 @@ The repository keeps the full historical evolution record available, but future 
 Historical and transitional artefacts are reconciled by classification rather than deletion:
 
 - source-use and parity matrices remain historical-lineage evidence;
-- complete React-to-USF reviews remain historical-lineage evidence and do not imply full product readiness;
+- complete source lineage-to-USF reviews remain historical-lineage evidence and do not imply full product readiness;
 - USF-133 closure and lane orchestration artefacts remain transitional scaffolding and audit evidence;
 - bootstrap mapping remains lineage for foundation ancestry;
 - generated Compose outputs remain derivative projections;

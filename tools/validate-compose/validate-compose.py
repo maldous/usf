@@ -18,7 +18,7 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE_PATH = ROOT / "spec/instances/compose-service/service-catalogue.json"
 SCHEMA_PATH = ROOT / "spec/schemas/compose-service.schema.json"
-REACT_COMPOSE_EVIDENCE_PATH = ROOT / "docs/architecture/usf-compose-service-completeness-matrix.json"
+SOURCE_COMPOSE_EVIDENCE_PATH = ROOT / "docs/architecture/usf-compose-service-completeness-matrix.json"
 PLANTED_DEFECT_DIR = ROOT / "tools/validate-compose/planted-defects"
 
 GENERATOR_PATH = ROOT / "tools/generate-compose/generate-compose.py"
@@ -30,7 +30,7 @@ spec.loader.exec_module(generate_compose)
 
 
 RULES = {
-    "USF-COMPOSE-001": "React Compose service is not classified",
+    "USF-COMPOSE-001": "source-lineage Compose service is not classified",
     "USF-COMPOSE-002": "Compose service exists without catalogue authority",
     "USF-COMPOSE-003": "Required dev composed service is absent",
     "USF-COMPOSE-004": "SonarQube is omitted without rationale",
@@ -210,19 +210,19 @@ def display_path(path: Path) -> str:
         return str(path)
 
 
-def react_services(path: Path = REACT_COMPOSE_EVIDENCE_PATH) -> set[str]:
+def source_services(path: Path = SOURCE_COMPOSE_EVIDENCE_PATH) -> set[str]:
     evidence = load_json(path)
     services = evidence.get("services", [])
     if not isinstance(services, list):
         raise ValueError(f"{path} does not contain a services array")
     names = {
-        row["react_service"]
+        row["source_service"]
         for row in services
-        if isinstance(row, dict) and isinstance(row.get("react_service"), str)
+        if isinstance(row, dict) and isinstance(row.get("source_service"), str)
     }
-    expected_count = evidence.get("react_service_count")
+    expected_count = evidence.get("source_service_count")
     if expected_count != len(names):
-        raise ValueError(f"{path} react_service_count={expected_count} but discovered {len(names)} unique names")
+        raise ValueError(f"{path} source_service_count={expected_count} but discovered {len(names)} unique names")
     return names
 
 
@@ -582,8 +582,8 @@ def validate_schema(catalogue: dict[str, Any], findings: list[dict[str, str]]) -
 def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]) -> None:
     classified = {}
     for service in catalogue["services"]:
-        for react_name in service["reactComposeServiceNames"]:
-            classified.setdefault(react_name, []).append(service["serviceId"])
+        for source_name in service["sourceComposeServiceNames"]:
+            classified.setdefault(source_name, []).append(service["serviceId"])
 
     declared_ids = declared_capability_ids()
     for service in catalogue["services"]:
@@ -592,8 +592,8 @@ def validate_catalogue(catalogue: dict[str, Any], findings: list[dict[str, str]]
             if ref not in declared_ids:
                 add(findings, "USF-COMPOSE-038", f"{service_id}->{ref}")
 
-    for react_name in sorted(react_services() - set(classified)):
-        add(findings, "USF-COMPOSE-001", react_name)
+    for source_name in sorted(source_services() - set(classified)):
+        add(findings, "USF-COMPOSE-001", source_name)
 
     for environment in ["dev", "test", "staging", "production"]:
         compose_names = generated_service_names(catalogue, environment)

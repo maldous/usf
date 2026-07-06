@@ -14,7 +14,7 @@ This revalidation records the final pre-USF-39 gate state after the proof-slice 
 
 NO-GO for starting USF-39.
 
-USF-39 must remain Backlog because no separate human-filled implementation directive has authorized implementation extraction. USF-61 produced an implementation directive specification only. That specification defines what a later directive must include; it does not itself authorize implementation files, implementation directories, React runtime import, runtime package creation, or product execution.
+USF-39 must remain Backlog because no separate human-filled implementation directive has authorized implementation extraction. USF-61 produced an implementation directive specification only. That specification defines what a later directive must include; it does not itself authorize implementation files, implementation directories, source-lineage runtime import, runtime package creation, or product execution.
 
 The repository is ready only for a human to decide whether to issue a filled implementation directive. If that directive is issued later, USF-39 must still start under the directive's exact scope and validation gates, not under this revalidation document.
 
@@ -81,7 +81,7 @@ The authentication proof posture is hermetic only:
 - live external provider claim: false;
 - production-live claim: false.
 
-Historical React proof scripts and reports remain lineage or design input only unless converted into fresh USF evidence under a recorded source-use policy. They are not USF runtime authority and do not satisfy current proof readiness by themselves.
+Historical source-lineage proof scripts and reports remain lineage or design input only unless converted into fresh USF evidence under a recorded source-use policy. They are not USF runtime authority and do not satisfy current proof readiness by themselves.
 
 ## Claim Boundaries
 
@@ -105,8 +105,8 @@ Generated reports, command stdout, and validation summaries remain review aids o
 - Do not move USF-39 out of Backlog.
 - Do not create product implementation/runtime code.
 - Do not create implementation/runtime directories.
-- Do not import React runtime/application code.
-- Do not mirror React source paths as USF target paths.
+- Do not import source-lineage runtime/application code.
+- Do not mirror source lineage paths as USF target paths.
 - Do not promote schemas to active.
 - Do not treat generated reports as authority.
 - Do not use stale evidence for current readiness.

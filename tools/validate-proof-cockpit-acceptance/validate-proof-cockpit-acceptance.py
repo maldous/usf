@@ -644,7 +644,7 @@ def rule_004_nonclaims(data: dict[str, Any]) -> list[dict[str, str]]:
     for pattern in overclaim_patterns:
         if re.search(pattern, normalized_text):
             failures.append(finding("USF-PROOF-COCKPIT-004", f"Forbidden overclaim matched: {pattern}"))
-    forbidden_historical_token = "no-full-" + "react-product-" + "parity"
+    forbidden_historical_token = "no-full-" + "source-lineage-product-" + "parity"
     if forbidden_historical_token in text:
         failures.append(finding("USF-PROOF-COCKPIT-004", "Forbidden active historical product-readiness wording present"))
     return failures

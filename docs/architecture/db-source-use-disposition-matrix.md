@@ -17,7 +17,7 @@ Every implementation target file added by the DB slice is listed here with a tre
 
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
-| `adapters/db/migrations/0002-enterprise-persistence-metadata.sql` | source-derived-rewrite | Historical react lifecycle/audit/RLS evidence; enterprise persistence standard | Forward-only migration adding classification-driven lifecycle, actor, trace, integrity, and retention metadata, the migration-control-plane table, and integrity guardrail triggers. |
+| `adapters/db/migrations/0002-enterprise-persistence-metadata.sql` | source-derived-rewrite | Historical source-lineage lifecycle/audit/RLS evidence; enterprise persistence standard | Forward-only migration adding classification-driven lifecycle, actor, trace, integrity, and retention metadata, the migration-control-plane table, and integrity guardrail triggers. |
 | `adapters/db/migrations/0004-enterprise-db-proof-depth.sql` | new-with-rationale | USF-139 enterprise DB proof-depth acceptance and validator evidence | Forward-only migration adding the explicit tenant foreign-key guardrail for break-glass grants without editing committed migrations. |
 | `adapters/db/migrations/manifest.json` | new-with-rationale | Migration order/checksum/immutability requirement | Ordered, per-file SHA-256 manifest pinning migration immutability and order. |
 | `docs/architecture/db-enterprise-controls-proof-depth-matrix.json` | evidence-only-support | USF-139 closure and reclassification gate | Machine-readable mapping of implemented, bounded, and reclassified enterprise DB controls, evidence, follow-ups, validation commands, and non-claims. |

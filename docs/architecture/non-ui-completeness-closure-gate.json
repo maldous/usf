@@ -58,7 +58,7 @@
     "python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py selftest --json"
   ],
   "nonClaims": [
-    "React UI parity",
+    "UI parity",
     "visual parity",
     "UX parity",
     "product UI readiness",

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""USF React parity matrix enforcement validator.
+"""USF functional completeness matrix enforcement validator.
 
 Governance tooling only. It creates no implementation/runtime files, imports no
-React source, and publishes no evidence. It fails closed on the parity-matrix
+source lineage, and publishes no evidence. It fails closed on the parity-matrix
 invariants that keep a foundation-readiness claim
 honest: the machine-readable matrix
 (docs/architecture/functional-scope-classification-matrix.json) must exist and
 match its shape; every status must be canonical; every partial/missing/deferred/
 requires-human-decision item must be carried by an allowed blocker; no migrated
 item may lack USF tests/proofs; runtime rows must carry a source-use disposition
-and must not be a React copy or mirror a React path; no full-readiness claim may
+and must not be a source-lineage copy or mirror a source-lineage path; no full-readiness claim may
 stand while the matrix is incomplete; the foundation must not require Playwright/
 browser E2E; UI/Playwright test groups must be classified, with foundation
 behaviour not buried as UI-only; capabilities needed by a future UI must record a
@@ -45,8 +45,8 @@ RULES = {
     "USF-PARITY-007": ("blocking", "test/proof group is unclassified"),
     "USF-PARITY-008": ("blocking", "migrated item lacks USF tests/proofs"),
     "USF-PARITY-009": ("blocking", "runtime row lacks a source-use disposition"),
-    "USF-PARITY-010": ("blocking", "USF path mirrors a React path"),
-    "USF-PARITY-011": ("blocking", "runtime row dispositions a React copy"),
+    "USF-PARITY-010": ("blocking", "USF path mirrors a source-lineage path"),
+    "USF-PARITY-011": ("blocking", "runtime row dispositions a source-lineage copy"),
     "USF-PARITY-012": ("blocking", "full foundation readiness claimed while matrix is incomplete"),
     "USF-PARITY-013": ("blocking", "foundation claims Playwright/browser E2E as required"),
     "USF-PARITY-014": ("blocking", "UI/Playwright test group lacks a UI-aware classification"),
@@ -543,7 +543,7 @@ def check_rows(F, state):
         if not isinstance(row, dict):
             F.add("USF-PARITY-002", "domains", "domain row is not an object")
             continue
-        rid = row.get("react_item_id", "?")
+        rid = row.get("source_item_id", "?")
         status = row.get("usf_status")
         # 003 canonical status
         if status not in CANON_STATUSES:
@@ -567,14 +567,14 @@ def check_rows(F, state):
             if not disp:
                 F.add("USF-PARITY-009", f"domain:{rid}", "runtime row lacks source_use_disposition")
             elif any(marker in disp.lower() for marker in COPY_MARKERS):
-                F.add("USF-PARITY-011", f"domain:{rid}", f"runtime row dispositions a React copy: {disp}")
+                F.add("USF-PARITY-011", f"domain:{rid}", f"runtime row dispositions a source-lineage copy: {disp}")
             elif disp not in DISPOSITION_VALUES:
                 F.add("USF-PARITY-009", f"domain:{rid}", f"runtime row has invalid source_use_disposition: {disp}")
         # 010 path mirroring
-        react_paths = set(row.get("react_paths") or [])
+        source_paths = set(row.get("source_paths") or [])
         for usf_path in row.get("usf_paths") or []:
-            if "/" in usf_path and usf_path in react_paths:
-                F.add("USF-PARITY-010", f"domain:{rid}", f"USF path mirrors a React path: {usf_path}")
+            if "/" in usf_path and usf_path in source_paths:
+                F.add("USF-PARITY-010", f"domain:{rid}", f"USF path mirrors a source-lineage path: {usf_path}")
 
     for row in ui_artefacts:
         if not isinstance(row, dict):
@@ -606,10 +606,10 @@ def check_rows(F, state):
         if classification in INCOMPLETE_STATUSES:
             incomplete_blocking_present = True
         # 014 UI/Playwright group must carry a UI-aware classification. Detect real
-        # browser/UI suites (Playwright, React app, design system, ui reference harness,
+        # browser/UI suites (Playwright, source-lineage app, design system, ui reference harness,
         # TSX) rather than any path containing "e2e" (which also matches tooling like
         # tools/e2e correlation scripts).
-        joined = " ".join(row.get("react_paths") or []).lower()
+        joined = " ".join(row.get("source_paths") or []).lower()
         looks_ui = any(m in joined for m in ("playwright", "react-enterprise-app", "ui-design-system", "ui-reference-harness", ".tsx"))
         if looks_ui and classification not in UI_AWARE_STATUSES:
             F.add("USF-PARITY-014", f"test:{group}", f"UI/Playwright group lacks a UI-aware classification: {classification}")
@@ -646,13 +646,13 @@ def _catalogue_service_map(catalogue):
     }
 
 
-def _react_service_map(compose_parity_matrix):
+def _source_service_map(compose_parity_matrix):
     if not isinstance(compose_parity_matrix, dict):
         return {}
     return {
-        row.get("react_service"): row
+        row.get("source_service"): row
         for row in compose_parity_matrix.get("services", [])
-        if isinstance(row, dict) and row.get("react_service")
+        if isinstance(row, dict) and row.get("source_service")
     }
 
 
@@ -746,7 +746,7 @@ def check_compose_service_closure(F, state):
         F.add("USF-PARITY-018", COMPOSE_CLOSURE_MATRIX_PATH, "closure_blocking_dispositions do not match validator policy")
 
     service_map = _catalogue_service_map(catalogue)
-    react_map = _react_service_map(compose_parity_matrix)
+    source_service_map_lookup = _source_service_map(compose_parity_matrix)
     closure_rows = _closure_row_map(closure_matrix)
 
     if len(closure_rows) != len(closure_matrix.get("rows", [])):
@@ -773,8 +773,8 @@ def check_compose_service_closure(F, state):
         expected_ref = f"{COMPOSE_CATALOGUE_PATH}#{service_id}"
         if evidence.get("service_catalogue_ref") != expected_ref:
             F.add("USF-PARITY-019", f"service:{service_id}", "service catalogue ref does not match service_id")
-        if not _non_empty_list(evidence.get("react_parity_refs")):
-            F.add("USF-PARITY-019", f"service:{service_id}", "react parity refs are missing")
+        if not _non_empty_list(evidence.get("source_completeness_refs")):
+            F.add("USF-PARITY-019", f"service:{service_id}", "functional completeness refs are missing")
         enterprise_refs = evidence.get("enterprise_evidence_refs")
         if not _non_empty_list(enterprise_refs):
             F.add("USF-PARITY-019", f"service:{service_id}", "enterprise evidence refs are missing")
@@ -788,25 +788,25 @@ def check_compose_service_closure(F, state):
             if missing_enterprise_refs:
                 F.add("USF-PARITY-019", f"service:{service_id}", f"missing enterprise evidence refs: {sorted(missing_enterprise_refs)}")
 
-        react_names = set(service.get("reactComposeServiceNames") or [])
-        matrix_names = set(row.get("react_compose_service_names") or [])
-        if react_names != matrix_names:
-            F.add("USF-PARITY-019", f"service:{service_id}", "closure matrix react service names do not match service catalogue")
-        for react_name in sorted(react_names):
-            react_row = react_map.get(react_name)
-            if not react_row:
-                F.add("USF-PARITY-018", f"service:{service_id}:{react_name}", "react compose service is missing from parity matrix")
+        source_names = set(service.get("sourceComposeServiceNames") or [])
+        matrix_names = set(row.get("source_compose_service_names") or [])
+        if source_names != matrix_names:
+            F.add("USF-PARITY-019", f"service:{service_id}", "closure matrix source-lineage service names do not match service catalogue")
+        for source_name in sorted(source_names):
+            source_service_row = source_service_map_lookup.get(source_name)
+            if not source_service_row:
+                F.add("USF-PARITY-018", f"service:{service_id}:{source_name}", "source-lineage compose service is missing from parity matrix")
                 continue
-            status = react_row.get("usf_accounting_status")
+            status = source_service_row.get("usf_accounting_status")
             if status in COMPOSE_CLOSURE_DISPOSITIONS and disposition != status and not (
                 status in {"profile-gated-bounded-proof", "bounded-local-proof"}
                 and disposition in {"deferred", "bounded-local-proof-with-deferred-readiness-boundaries"}
             ):
-                F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", f"matrix status {status} cannot be represented as {disposition}")
+                F.add("USF-PARITY-021", f"service:{service_id}:{source_name}", f"matrix status {status} cannot be represented as {disposition}")
             if status in {"requires-human-decision", "deferred", "substituted-partial"} and disposition not in COMPOSE_BLOCKING_DISPOSITIONS:
-                F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", f"matrix status {status} cannot be closed as {disposition}")
+                F.add("USF-PARITY-021", f"service:{service_id}:{source_name}", f"matrix status {status} cannot be closed as {disposition}")
             if status == "out-of-foundation-scope" and disposition != "out-of-foundation-scope":
-                F.add("USF-PARITY-021", f"service:{service_id}:{react_name}", "out-of-scope row was not preserved")
+                F.add("USF-PARITY-021", f"service:{service_id}:{source_name}", "out-of-scope row was not preserved")
 
         if disposition in COMPOSE_IMPLEMENTED_DISPOSITIONS and not _non_empty_list(evidence.get("proof_evidence_refs")):
             F.add("USF-PARITY-021", f"service:{service_id}", "implemented or proof-covered disposition lacks proof evidence refs")
@@ -1362,7 +1362,7 @@ def check_usf216_final_reconciliation(F, state):
     if compose is None:
         F.add("USF-PARITY-039", COMPOSE_PARITY_MATRIX_PATH, f"cannot load matrix: {state.get('composeParityMatrixError')}")
     else:
-        service_rows = _rows_by_id(compose.get("services"), "react_service")
+        service_rows = _rows_by_id(compose.get("services"), "source_service")
         _check_counter(F, f"{COMPOSE_PARITY_MATRIX_PATH}.status_counts", compose.get("services", []), "usf_accounting_status", compose.get("status_counts"))
         _check_counter(F, f"{COMPOSE_PARITY_MATRIX_PATH}.evidence_grade_counts", compose.get("services", []), "evidence_grade", compose.get("evidence_grade_counts"))
         _check_sorted_list(
@@ -1370,7 +1370,7 @@ def check_usf216_final_reconciliation(F, state):
             f"{COMPOSE_PARITY_MATRIX_PATH}.missing_or_decision_services",
             compose.get("missing_or_decision_services"),
             [
-                row.get("react_service")
+                row.get("source_service")
                 for row in compose.get("services", [])
                 if row.get("usf_accounting_status") in {"deferred", "out-of-foundation-scope"}
             ],
@@ -1380,24 +1380,24 @@ def check_usf216_final_reconciliation(F, state):
             f"{COMPOSE_PARITY_MATRIX_PATH}.weakly_classified_services",
             compose.get("weakly_classified_services"),
             [
-                row.get("react_service")
+                row.get("source_service")
                 for row in compose.get("services", [])
                 if row.get("evidence_grade") in {"C", "D"}
                 and row.get("usf_accounting_status") not in {"deferred", "out-of-foundation-scope"}
             ],
         )
-        for react_service in USF216_RECONCILED_COMPOSE_SERVICES:
-            row = service_rows.get(react_service)
+        for source_service in USF216_RECONCILED_COMPOSE_SERVICES:
+            row = service_rows.get(source_service)
             if not row:
-                F.add("USF-PARITY-039", f"compose:{react_service}", "reconciled compose row is missing")
+                F.add("USF-PARITY-039", f"compose:{source_service}", "reconciled compose row is missing")
                 continue
             if row.get("usf_accounting_status") == "requires-human-decision":
-                F.add("USF-PARITY-039", f"compose:{react_service}", "stale requires-human-decision remains after owner-backed reconciliation")
+                F.add("USF-PARITY-039", f"compose:{source_service}", "stale requires-human-decision remains after owner-backed reconciliation")
             tracking = str(row.get("tracking_recommendation") or "")
             if "USF-217" not in tracking or USF217_OPERATOR_ACCESS_EXECUTION_FOLLOW_UP not in tracking:
                 F.add(
                     "USF-PARITY-039",
-                    f"compose:{react_service}",
+                    f"compose:{source_service}",
                     "operator/gateway compose row lacks USF-217 disposition evidence and USF-221 follow-up boundary",
                 )
 
@@ -1411,7 +1411,7 @@ def check_usf216_final_reconciliation(F, state):
             "closure_disposition",
             closure.get("closure_disposition_counts"),
         )
-        for react_service, service_id in USF216_RECONCILED_COMPOSE_SERVICES.items():
+        for source_service, service_id in USF216_RECONCILED_COMPOSE_SERVICES.items():
             row = closure_rows.get(service_id)
             evidence = row.get("closure_evidence", {}) if row else {}
             if evidence.get("closure_disposition") == "requires-human-decision":
@@ -1658,7 +1658,7 @@ def apply_mutation(base_state, mutation):
         patch = mutation["composeParityServicePatch"]
         row = next(
             r for r in compose_parity_matrix.get("services", [])
-            if r.get("react_service") == patch["react_service"]
+            if r.get("source_service") == patch["source_service"]
         )
         for k, v in patch.get("set", {}).items():
             row[k] = v
@@ -1750,7 +1750,7 @@ def run_selftest(F):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="USF React parity matrix enforcement validator.")
+    parser = argparse.ArgumentParser(description="USF functional completeness matrix enforcement validator.")
     parser.add_argument("mode", nargs="?", default="all", choices=["matrix", "selftest", "all"])
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()

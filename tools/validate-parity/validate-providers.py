@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF provider adapters/modes parity validator (USF-156).
 
-Governance tooling only. It creates no runtime files, imports no React source, and
+Governance tooling only. It creates no runtime files, imports no source lineage, and
 publishes no evidence. It fails closed on provider trust-boundary invariants:
 provider registry, explicit category/mode/owner, SecretReference-only credential
 posture, redacted status views, truthful health/readiness, capability-provider
@@ -290,7 +290,7 @@ def provider_rows(matrix):
     for row in matrix.get("domains", []):
         if not isinstance(row, dict):
             continue
-        rid = str(row.get("react_item_id", ""))
+        rid = str(row.get("source_item_id", ""))
         summary = str(row.get("behaviour_summary", "")).lower()
         if rid.startswith("provider") or "provider" in summary:
             rows.append(row)
@@ -475,7 +475,7 @@ def check_usf157_provider_risk_resilience(F, files, matrix, functionality_matrix
         F.add("USF-PROVIDERS-014", STANDARD, "provider standard lacks USF-157 aggregate linkage")
 
     provider_rows_in_matrix = provider_rows(matrix)
-    provider_main = [row for row in provider_rows_in_matrix if row.get("react_item_id") == "provider-adapters-modes"]
+    provider_main = [row for row in provider_rows_in_matrix if row.get("source_item_id") == "provider-adapters-modes"]
     if provider_main and "provider-risk-resilience-depth-matrix.json" not in json.dumps(provider_main[0]):
         F.add("USF-PROVIDERS-014", MATRIX, "provider main row lacks USF-157 aggregate matrix evidence")
     if isinstance(functionality_matrix, dict):
@@ -546,7 +546,7 @@ def run_checks(F, state=None):
     for token in ["Data Residency And Egress", "Secrets And Credentials", "Health Versus Readiness", "Capability Boundary", "Deferred Depth"]:
         if token not in standard:
             F.add("USF-PROVIDERS-002", STANDARD, f"provider standard section missing: {token}")
-    if not os.path.exists(SOURCE_USE) or "provider registry" not in source_use or "React UI/Playwright provider behaviours" not in source_use:
+    if not os.path.exists(SOURCE_USE) or "provider registry" not in source_use or "UI/Playwright provider behaviours" not in source_use:
         F.add("USF-PROVIDERS-002", SOURCE_USE, "provider source-use matrix missing required rows")
     if "Parity Provider Adapters/Modes Additions" not in bootstrap_source_use:
         F.add("USF-PROVIDERS-002", BOOTSTRAP_SOURCE_USE, "global source-use matrix missing provider additions")
@@ -604,12 +604,12 @@ def run_checks(F, state=None):
     rows = provider_rows(matrix)
     if len(rows) < 5:
         F.add("USF-PROVIDERS-009", MATRIX, "provider parity matrix rows incomplete")
-    provider_main = [row for row in rows if row.get("react_item_id") == "provider-adapters-modes"]
+    provider_main = [row for row in rows if row.get("source_item_id") == "provider-adapters-modes"]
     if not provider_main or provider_main[0].get("domain_authorised") is not True:
         F.add("USF-PROVIDERS-009", MATRIX, "provider main row not domain-authorised")
     if not any(row.get("blocker") == "USF-157" for row in rows):
         F.add("USF-PROVIDERS-009", MATRIX, "deferred provider depth lacks USF-157 blocker")
-    if not any(row.get("react_item_id") == "provider.deferred-live-risk-resilience-depth" for row in rows):
+    if not any(row.get("source_item_id") == "provider.deferred-live-risk-resilience-depth" for row in rows):
         F.add("USF-PROVIDERS-009", MATRIX, "deferred provider depth row missing")
 
     overclaim_sources = "\n".join([standard, source_use, openapi_text])

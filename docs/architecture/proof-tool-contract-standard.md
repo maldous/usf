@@ -47,7 +47,7 @@ Each proof tool MUST accept, or otherwise deterministically derive, these inputs
 - provider mode: the provider substrate used by the proof;
 - environment: the execution environment represented by the proof;
 - output paths: the proof-evidence record and evidence-envelope records that may be written;
-- source-use policy: the historical React inputs and their permitted treatment;
+- source-use policy: the historical source-lineage inputs and their permitted treatment;
 - governed semantic inputs: the USF semantic instances, ADRs, standards, manifests, and evidence records used as authority or lineage.
 
 If a tool supports a default claim commit, the default MUST be the current `HEAD` commit. If the proof claim is for any other commit, the command invocation MUST make that explicit.
@@ -123,13 +123,13 @@ At minimum, an executed proof that writes evidence MUST produce:
 
 - one proof-evidence record under `evidence/proof-evidence/`;
 - one runtime proof evidence envelope under `evidence/evidence-envelope/`;
-- one lineage or source-use evidence envelope when historical React proof scripts, tests, reports, or source files influenced the tool design.
+- one lineage or source-use evidence envelope when historical source-lineage proof scripts, tests, reports, or source files influenced the tool design.
 
 The proof-evidence record MUST describe the claim exercised, proof levels, provider mode, environment, live external provider claim, emitted evidence, collected evidence, freshness, and failure semantics.
 
 The runtime evidence envelope MUST preserve provider mode, environment, freshness, source references, and evidence kind.
 
-The lineage evidence envelope MUST preserve historical source references and state their source-use treatment. Historical React inputs MAY be lineage or design input, but they MUST NOT be treated as USF runtime authority, copied blindly, executed as USF proof commands, or mirrored as USF target paths.
+The lineage evidence envelope MUST preserve historical source references and state their source-use treatment. Historical source-lineage inputs MAY be lineage or design input, but they MUST NOT be treated as USF runtime authority, copied blindly, executed as USF proof commands, or mirrored as USF target paths.
 
 For the current authentication slice authorized by USF-77 Option A, the only authorized evidence outputs are:
 
@@ -161,15 +161,15 @@ The payload MUST be deterministic so a future post-merge carrier can sign or ref
 
 ## Source-Use Rules
 
-React proof scripts, tests, runtime handlers, package graphs, source files, generated reports, and operational commands are historical evidence only unless a later source-use directive explicitly authorizes a narrower treatment.
+source-lineage proof scripts, tests, runtime handlers, package graphs, source files, generated reports, and operational commands are historical evidence only unless a later source-use directive explicitly authorizes a narrower treatment.
 
-A proof tool MAY be newly authored from USF semantics and may use historical React artefacts as lineage/design input only when the source-use treatment is recorded.
+A proof tool MAY be newly authored from USF semantics and may use historical source-lineage artefacts as lineage/design input only when the source-use treatment is recorded.
 
 A proof tool MUST NOT:
 
-- import React runtime/application code;
-- execute historical React proof commands as USF proof commands;
-- mirror React source paths as USF target paths;
+- import source-lineage runtime/application code;
+- execute historical source-lineage proof commands as USF proof commands;
+- mirror source lineage paths as USF target paths;
 - create product runtime, application packages, services, adapters, servers, databases, caches, identity-provider services, package manifests, compose files, or implementation directories;
 - treat a generated report as authority;
 - silently discard source lineage.
@@ -222,9 +222,9 @@ Proof tooling MUST NOT start USF-39.
 
 Proof tooling MUST NOT create product implementation/runtime code or implementation directories.
 
-Proof tooling MUST NOT import React runtime/application code.
+Proof tooling MUST NOT import source-lineage runtime/application code.
 
-Proof tooling MUST NOT mirror React source paths as USF target paths.
+Proof tooling MUST NOT mirror source lineage paths as USF target paths.
 
 Proof tooling MUST NOT activate schemas.
 

@@ -35,7 +35,7 @@ The JSON proof endpoint and browser telemetry route are separate proof surfaces.
 
 Cloudflare is the declared DNS and edge hosting provider boundary according to the human operator. This records a supplier and provider boundary only. It does not claim live-provider readiness and does not require a Cloudflare API secret for the basic semantic contract.
 
-Generated Compose, generated gateway configuration, Caddy configuration, and historical react configuration are derivative evidence sources only. They are not semantic authority.
+Generated Compose, generated gateway configuration, Caddy configuration, and historical source-lineage configuration are derivative evidence sources only. They are not semantic authority.
 
 ## Test Boundary
 

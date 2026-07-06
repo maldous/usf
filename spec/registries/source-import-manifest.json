@@ -5852,7 +5852,7 @@
     },
     {
       "sourceRef": {
-        "path": ".claude/skills/react-admin-slice-review/SKILL.md",
+        "path": ".claude/skills/source-lineage-admin-slice-review/SKILL.md",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
@@ -6468,13 +6468,13 @@
     },
     {
       "sourceRef": {
-        "path": "docs/adr/0019-define-react-component-platform-and-frontend-integration-stack.md",
+        "path": "docs/adr/0019-define-source-lineage-component-platform-and-frontend-integration-stack.md",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: react-frontend-integration-stack. Protecting tests: test:frontend:run. Historical decision refs: ADR-0019.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: source-lineage-frontend-integration-stack. Protecting tests: test:frontend:run. Historical decision refs: ADR-0019.",
       "targetUsfConcept": "Source Reference"
     },
     {
@@ -8569,7 +8569,7 @@
     },
     {
       "sourceRef": {
-        "path": "docs/evidence/frontend/react-component-platform-baseline.json",
+        "path": "docs/evidence/frontend/source-lineage-component-platform-baseline.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
@@ -8580,7 +8580,7 @@
     },
     {
       "sourceRef": {
-        "path": "docs/evidence/frontend/react-component-platform-baseline.md",
+        "path": "docs/evidence/frontend/source-lineage-component-platform-baseline.md",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
@@ -13063,7 +13063,7 @@
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/i18n-runtime, @platform/i18n-runtime/react. Protecting tests: packages/i18n-runtime/tests/i18n-runtime.test.ts. Historical decision refs: ADR-0026.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: @platform/i18n-runtime, @platform/i18n-runtime/source-lineage. Protecting tests: packages/i18n-runtime/tests/i18n-runtime.test.ts. Historical decision refs: ADR-0026.",
       "targetUsfConcept": "Package / Module"
     },
     {
@@ -13096,7 +13096,7 @@
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V1 is a bootstrap placeholder; V2 completes the React provider/hook behind the same entry-point contract. Replace once ADR-ACT-0121 implementation lands with provider/hook tests.. Retained interfaces: I18nProvider, useTranslation, @platform/i18n-runtime/react. Protecting tests: packages/i18n-runtime/tests/i18n-runtime.test.ts. Historical decision refs: ADR-0026, ADR-ACT-0121.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V1 is a bootstrap placeholder; V2 completes the source-lineage provider/hook behind the same entry-point contract. Replace once ADR-ACT-0121 implementation lands with provider/hook tests.. Retained interfaces: I18nProvider, useTranslation, @platform/i18n-runtime/source-lineage. Protecting tests: packages/i18n-runtime/tests/i18n-runtime.test.ts. Historical decision refs: ADR-0026, ADR-ACT-0121.",
       "targetUsfConcept": "Source Reference"
     },
     {
@@ -14559,7 +14559,7 @@
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: tsconfig.base extends, jsx:react-jsx.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: tsconfig.base extends, jsx:source-lineage-jsx.",
       "targetUsfConcept": "Configuration"
     },
     {
@@ -17160,7 +17160,7 @@
     },
     {
       "sourceRef": {
-        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/access-imports-react/package.json",
+        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/access-imports-source-lineage/package.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
@@ -17171,7 +17171,7 @@
     },
     {
       "sourceRef": {
-        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/access-imports-react/src/index.ts",
+        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/access-imports-source-lineage/src/index.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -17358,7 +17358,7 @@
     },
     {
       "sourceRef": {
-        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/domain-imports-react/package.json",
+        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/domain-imports-source-lineage/package.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
@@ -17369,7 +17369,7 @@
     },
     {
       "sourceRef": {
-        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/domain-imports-react/src/index.ts",
+        "path": "tools/architecture/validate-source-imports/tests/fixtures/invalid/domain-imports-source-lineage/src/index.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",

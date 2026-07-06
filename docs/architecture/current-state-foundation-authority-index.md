@@ -84,7 +84,7 @@ The following artefacts remain retained evidence, but are not future active auth
 | -------------- | --------------- | --------------- |
 | Superseded external-lineage source and references | Historical lineage and source evidence | Inspect only when a current issue or authority artefact requires source lineage; do not copy or mirror runtime/application paths. |
 | Source-use and parity matrices | Historical-lineage evidence | Use for audit traceability and source disposition, not as a direct implementation recipe. |
-| Complete React-to-USF parity reviews | Historical-lineage evidence | Use to understand completed reconciliation; do not infer full product readiness. |
+| Complete source lineage-to-USF parity reviews | Historical-lineage evidence | Use to understand completed reconciliation; do not infer full product readiness. |
 | USF-133 closure-tier and lane orchestration artefacts | Transitional scaffolding and audit evidence | Use for audit trail only; do not treat wrapper completion as source issue completion or future readiness authority. |
 | Bootstrap mapping and bootstrap-readiness artefacts | Lineage and foundation ancestry | Use to preserve ancestry and source coverage, not to drive future implementation naming or readiness claims. |
 | Generated Compose outputs | Generated projections | Regenerate from the service catalogue and generator; do not treat generated files as semantic authority. |

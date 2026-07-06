@@ -1,6 +1,6 @@
 {
   "expectedRule": "USF-PARITY-010",
-  "description": "USF path equals a React path",
+  "description": "USF path equals a source-lineage path",
   "mutation": {
     "domainPatch": {
       "index": 0,

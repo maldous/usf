@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.support-mode-break-glass-access",
   "title": "Support Mode And Break Glass Access Semantic Contract",
-  "description": "Source-backed draft semantic contract for the support mode break glass access capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the support mode break glass access capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -82,7 +82,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "A unit proof covers the workflow and session state machine and a runtime proof covers the approval flow, demonstrated in React via hermetic local workflow/session state-machine validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the workflow and session state machine and a runtime proof covers the approval flow, demonstrated in source lineage via hermetic local workflow/session state-machine validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/support-mode.test.ts",
         "e2e/support/correlation.ts"

@@ -4,8 +4,8 @@
   "edits": [
     {
       "target": "matrix",
-      "old": "\"react_item_id\": \"bulk.import-operations\"",
-      "new": "\"react_item_id\": \"bulk.import-operations-missing\""
+      "old": "\"source_item_id\": \"bulk.import-operations\"",
+      "new": "\"source_item_id\": \"bulk.import-operations-missing\""
     }
   ]
 }

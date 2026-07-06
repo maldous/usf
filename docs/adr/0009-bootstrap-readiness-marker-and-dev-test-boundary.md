@@ -77,7 +77,7 @@ Separating the marker from USF-39 start authority prevents accidental implementa
 - USF-39 remains Backlog until a signed USF-100 directive and a separate USF-39 start action exist.
 - Local dev/test bootstrap readiness must not claim staging, production, live-external-provider, deployment, or production-live proof.
 - Future topology names are planning authority only before implementation is separately authorised.
-- React remains source lineage only; no runtime source, config, Compose file, migration, test, or package scaffold is copied by this decision.
+- source-lineage remains source lineage only; no runtime source, config, Compose file, migration, test, or package scaffold is copied by this decision.
 
 ## Permitted Changes
 
@@ -92,7 +92,7 @@ Separating the marker from USF-39 start authority prevents accidental implementa
 - Do not use `v2-bootstrap`, a proof-anchor tag, a generated report, or a Linear comment as permission to start USF-39.
 - Do not create implementation roots or scaffold before the signed directive and separate start action.
 - Do not weaken dev/test provider separation by allowing in-memory providers to satisfy test Compose proof.
-- Do not treat React Compose, migrations, package layout, or source paths as target files to copy or mirror.
+- Do not treat source-lineage Compose, migrations, package layout, or source paths as target files to copy or mirror.
 
 ## Consequences
 

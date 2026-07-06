@@ -15,7 +15,7 @@ This plan records the Linear tracking structure for foundation readiness disposi
 
 | Key | Title | Role | Blocks readiness? | Labels |
 |---|---|---|---|---|
-| USF-133 | React functional parity foundation readiness | Umbrella tracker | n/a (tracker) | governance, coverage-matrix, source-import, implementation-gate, bootstrap-followup |
+| USF-133 | functional completeness foundation readiness | Umbrella tracker | n/a (tracker) | governance, coverage-matrix, source-import, implementation-gate, bootstrap-followup |
 | USF-134 | Future UI/UX integration surface from USF foundation contracts (non-foundation-blocking) | Future UI scope | No | (none — see §4) |
 | USF-135 | Parity matrix enforcement validator and make parity gate | Validator/gate blocker | Yes (blocks USF-133) | validator, implementation-gate, governance |
 | USF-136 | Semantic authority decisions required before parity migration | Human-decision blocker | Yes (blocks USF-133) | semantic-corpus, implementation-gate, governance |

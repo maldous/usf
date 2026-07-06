@@ -3,7 +3,7 @@
   "expectedRule": "USF-PARITY-039",
   "mutation": {
     "composeParityServicePatch": {
-      "react_service": "alertmanager",
+      "source_service": "alertmanager",
       "set": {
         "evidence_grade": "A"
       }

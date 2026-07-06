@@ -2,7 +2,7 @@
 """USF bootstrap-readiness validator.
 
 This is governance tooling only. It does not create implementation/runtime files,
-does not import React source, and does not publish evidence. It checks the
+does not import source lineage, and does not publish evidence. It checks the
 bootstrap-specific invariants that sit above the general spec corpus validator:
 the implementation directive may be human-signed and accepted for USF-100 while
 the separate USF-39 start stays unauthorised, readiness
@@ -837,7 +837,7 @@ def check_bootstrap_governance(F, state):
         ("append-only postgres audit ledger", "canonical audit/evidence store is stated"),
         ("no in-memory providers in test", "dev/test provider split is stated"),
         ("staging, production, live-external-provider, and production-live proof", "non-local proof deferral is stated"),
-        ("react final proven schema lineage", "migration lineage source is stated"),
+        ("source final proven schema lineage", "migration lineage source is stated"),
         ("0001", "future baseline migration identity is stated"),
         ("no real tenant, customer, or user data migration", "real-data migration exclusion is stated"),
         ("pnpm lockfile", "lockfile target is stated"),
@@ -905,7 +905,7 @@ def check_bootstrap_adr(F, state):
         ("v2-bootstrap authorises usf-39", "marker claims USF-39 authority"),
         ("v2-bootstrap authorizes usf-39", "marker claims USF-39 authority"),
         ("linear comments define bootstrap authority", "Linear is treated as authority"),
-        ("react compose may be copied", "React source copying is allowed"),
+        ("source compose may be copied", "source lineage copying is allowed"),
     ]
     for marker, message in forbidden_claims:
         if marker in lower:
@@ -1014,13 +1014,13 @@ def build_authentication_proof_records(commit, checks):
     lineage_envelope = {
         "id": lineage_id,
         "title": "Normalised lineage for authentication slice proof",
-        "description": "Draft normalised evidence envelope recording the historical React proof inputs used only as lineage and design input for the USF proof-only harness.",
+        "description": "Draft normalised evidence envelope recording the historical source-lineage proof inputs used only as lineage and design input for the USF proof-only harness.",
         "authorityLevel": "runtime-proof-evidence",
         "lifecycleState": "draft",
         "ontologyConcepts": ["Evidence"],
         "taxonomyRefs": ["evidence-classification"],
         "vocabularyRefs": ["evidence-kinds"],
-        "aiGuidance": "Historical React inputs remain lineage only. They were not executed, copied, imported as runtime, or treated as USF live authority.",
+        "aiGuidance": "Historical source-lineage inputs remain lineage only. They were not executed, copied, imported as runtime, or treated as USF live authority.",
         "evidenceKind": "normalised-evidence",
         "sourceRefs": AUTH_HISTORICAL_INPUTS,
     }
@@ -1029,7 +1029,7 @@ def build_authentication_proof_records(commit, checks):
         "id": "usf.proof-evidence.authentication-slice-proof",
         "kind": "proof",
         "title": "Authentication slice proof",
-        "description": "Draft USF proof-evidence record emitted by the bounded proof-only authentication slice subcommand in the bootstrap validator. It exercises the committed USF authentication login API, audit, workflow, provider-mode, and hermetic environment semantics without creating product runtime or importing React runtime code.",
+        "description": "Draft USF proof-evidence record emitted by the bounded proof-only authentication slice subcommand in the bootstrap validator. It exercises the committed USF authentication login API, audit, workflow, provider-mode, and hermetic environment semantics without creating product runtime or importing source-lineage runtime code.",
         "authorityLevel": "runtime-proof-evidence",
         "lifecycleState": "draft",
         "ontologyConcepts": ["Proof", "Proof Level", "Evidence"],

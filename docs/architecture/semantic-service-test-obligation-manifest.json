@@ -1838,7 +1838,7 @@
     },
     {
       "serviceId": "platform-api",
-      "displayName": "React Platform API",
+      "displayName": "source-lineage Platform API",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeServiceId": null,
       "requiredInTest": false,
@@ -2091,7 +2091,7 @@
     },
     {
       "serviceId": "react-app",
-      "displayName": "React App",
+      "displayName": "source-lineage App",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeServiceId": null,
       "requiredInTest": false,

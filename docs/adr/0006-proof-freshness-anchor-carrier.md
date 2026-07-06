@@ -39,7 +39,7 @@ A signed annotated tag points at the exact merge commit without changing it, whi
 
 ## Source References
 
-- None. The carrier is a USF governance decision; React proof is stale lineage and cannot serve as a current anchor.
+- None. The carrier is a USF governance decision; source-lineage proof is stale lineage and cannot serve as a current anchor.
 
 ## Proof References
 

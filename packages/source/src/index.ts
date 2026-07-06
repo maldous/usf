@@ -5,5 +5,5 @@ export const sourceUseTreatments = Object.freeze([
   "evidence-only-support",
 ] as const);
 
-export const reactRuntimeImportAllowed = false;
+export const sourceRuntimeImportAllowed = false;
 export const sourcePathMirroringAllowed = false;

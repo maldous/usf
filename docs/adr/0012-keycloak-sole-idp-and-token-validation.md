@@ -10,7 +10,7 @@ Records the human-approved decision that Keycloak is the only USF-facing identit
 
 ## Context
 
-During the React functional parity readiness pass the exact USF authentication/identity stance was a requires-human-decision item under USF-133, because the Authority Model forbids inferring missing semantics from historical implementation. The historical react stack trusted Keycloak-brokered identity by confidential exchange and read userinfo, and did not locally verify token signature, issuer, audience, expiry, or not-before on its session-login path; it also carried external upstream providers behind Keycloak. A human has now decided the USF V2 identity boundary, so it needs rank-2 ADR coverage rather than tracker context or planning prose. This ADR builds on ADR 0010 (the USF policy decision point).
+During the functional completeness readiness pass the exact USF authentication/identity stance was a requires-human-decision item under USF-133, because the Authority Model forbids inferring missing semantics from historical implementation. The historical source lineage trusted Keycloak-brokered identity by confidential exchange and read userinfo, and did not locally verify token signature, issuer, audience, expiry, or not-before on its session-login path; it also carried external upstream providers behind Keycloak. A human has now decided the USF V2 identity boundary, so it needs rank-2 ADR coverage rather than tracker context or planning prose. This ADR builds on ADR 0010 (the USF policy decision point).
 
 ## Decision
 
@@ -76,7 +76,7 @@ Validating Keycloak-issued tokens locally keeps the authentication boundary insi
 - Do not use email as the primary actor identity or merge actors by email.
 - Do not allow a disabled, suspended, revoked, or deleted identity to obtain or keep a session.
 - Do not present hermetic-mock proof as live-external-provider or production-live evidence.
-- Do not copy react authentication code or mirror its paths.
+- Do not copy source-lineage authentication code or mirror its paths.
 
 ## Consequences
 

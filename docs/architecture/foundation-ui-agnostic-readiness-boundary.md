@@ -21,11 +21,11 @@ This document fixes the boundary between the **USF foundation** (in scope) and *
 
 1.3 The foundation MUST be **agnostic to the end-user experience** while being **fully prepared for future UI development**. A future UI (human- or AI-built) MUST be able to build against the foundation because every foundation-relevant capability is callable, discoverable, testable, and documented through contracts or metadata (§3).
 
-1.4 Foundation readiness MUST NOT require: browser UI implementation; React component migration; visual/UX migration; or Playwright/browser end-to-end testing. None of these are foundation artefacts.
+1.4 Foundation readiness MUST NOT require: browser UI implementation; source-lineage component migration; visual/UX migration; or Playwright/browser end-to-end testing. None of these are foundation artefacts.
 
-## 2. Classifying React UI and Playwright artefacts
+## 2. Classifying UI and Playwright artefacts
 
-No React UI test may disappear silently. Every React UI/Playwright/browser artefact MUST be classified into exactly one outcome:
+No UI test may disappear silently. Every UI/Playwright/browser artefact MUST be classified into exactly one outcome:
 
 - **UI/UX-only, out of foundation scope** (`ui-ux-only-out-of-foundation-scope`) — the artefact proves UI rendering, layout, navigation, selectors, DOM, browser-only state, CSS, visual behaviour, or accessibility-of-rendered-DOM. Classified, not migrated.
 - **Underlying foundation behaviour migrated and tested elsewhere** (`covered` / `migrated`) — the behaviour the UI test exercised is (or will be) proven by a foundation-level test.
@@ -61,7 +61,7 @@ The foundation must be **ready for future UI development** without containing an
 
 ## 4. Validator expectations (deferred to implementation)
 
-A later authorised implementation pass MUST strengthen validators so they fail closed if: full foundation readiness claims Playwright/browser E2E as required; React UI tests are ignored without classification; a UI test containing foundation behaviour is classified wholly out of scope; a capability needed by a future UI has no API/port/schema/test surface; the parity matrix has unclassified UI/UX items; the foundation claims UI/UX readiness; or the foundation adds UI/React/browser artefacts without separate authorisation. That pass MUST add planted defects for: an unclassified Playwright test; a UI-only test incorrectly marked `migrated`; a mixed UI/foundation test with the foundation behaviour dropped; a capability marked UI-ready without route/port/schema/test evidence; and a foundation PR adding UI/browser artefacts without authority. These checks are **not** built in the current planning pass.
+A later authorised implementation pass MUST strengthen validators so they fail closed if: full foundation readiness claims Playwright/browser E2E as required; UI tests are ignored without classification; a UI test containing foundation behaviour is classified wholly out of scope; a capability needed by a future UI has no API/port/schema/test surface; the parity matrix has unclassified UI/UX items; the foundation claims UI/UX readiness; or the foundation adds UI/React/browser artefacts without separate authorisation. That pass MUST add planted defects for: an unclassified Playwright test; a UI-only test incorrectly marked `migrated`; a mixed UI/foundation test with the foundation behaviour dropped; a capability marked UI-ready without route/port/schema/test evidence; and a foundation PR adding UI/browser artefacts without authority. These checks are **not** built in the current planning pass.
 
 ## 5. Readiness wording
 

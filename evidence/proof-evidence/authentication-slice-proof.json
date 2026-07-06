@@ -2,7 +2,7 @@
   "id": "usf.proof-evidence.authentication-slice-proof",
   "kind": "proof",
   "title": "Authentication slice proof",
-  "description": "Draft USF proof-evidence record emitted by the bounded proof-only authentication slice harness. It exercises the committed USF authentication login API, audit, workflow, provider-mode, and hermetic environment semantics without creating product runtime or importing React runtime code.",
+  "description": "Draft USF proof-evidence record emitted by the bounded proof-only authentication slice harness. It exercises the committed USF authentication login API, audit, workflow, provider-mode, and hermetic environment semantics without creating product runtime or importing source-lineage runtime code.",
   "authorityLevel": "runtime-proof-evidence",
   "lifecycleState": "draft",
   "ontologyConcepts": [
