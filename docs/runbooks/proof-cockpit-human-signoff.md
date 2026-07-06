@@ -10,7 +10,7 @@
 
 This runbook records how the accountable human operator reviews the staging proof cockpit and records the final human signoff for USF-290, fully autonomously, with no AI assistance in the loop. The cockpit is served by `apps/staging-proof-cockpit/src/server.mjs`.
 
-The final signoff is a deliberate human browser action. The machine surface never auto-completes it: machine QA reports evidence, but a human decision at `/proof/signoff` is the only thing that records acceptance. This runbook does not itself accept anything and does not upgrade any readiness claim. It makes no staging, production, SOC, ISO, enterprise-production, product UI, browser end-to-end, live-provider, deployment, or full-Foundation-closure claim; recording a signoff preserves those non-claims.
+The acceptance is a single deliberate human browser action. The machine surface never auto-completes it: machine QA reports evidence, but a single operator decision on `/proof` is the only thing that records acceptance. This runbook does not itself accept anything and does not upgrade any readiness claim. It makes no staging, production, SOC, ISO, enterprise-production, product UI, browser end-to-end, live-provider, deployment, or full-Foundation-closure claim; recording the decision preserves those non-claims.
 
 ## Prerequisites
 
@@ -44,53 +44,38 @@ The composed edge with the staging FQDN env is the same contract whether run aga
 
 For the staging fixture, the same cockpit is reached at `https://<USF_PROOF_STAGING_FQDN>/proof` (default `https://1e100.network/proof`) instead of a local serve. Per [ADR 0015](../adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md), the route is served by the composed `external-caddy` edge (`docker/caddy/Caddyfile`, staging FQDN parameterised by `USF_PROOF_STAGING_FQDN`), which reverse-proxies to the profile-gated `staging-proof-cockpit` Compose service reachable only over the compose network as `staging-proof-cockpit:8080` (no direct public host port). The `/proof` gate is opened by a reload-managed operator HTTP basic-authentication include on a writable runtime mount (its committed default is CLOSED, responding 503); the include and the operator credential are written by `make proof-review-up` and are described in the self-hosted public proof origin runbook. Authenticate with the operator credential at the browser prompt; the authenticated operator name is recorded as the acceptance/signoff actor. The write guard, CSRF pair, and non-auto-completed signoff behave identically to the local serve. The route exposes hermetic, synthetic proof content only and upgrades no readiness claim. Acceptance and signoff persist to the service's durable volume; promote them into the committed `evidence/proof-evidence/proof-cockpit/human-review-actions.json` corpus by the manual reconciliation step (copy the volume ledger into the repo, review the diff, and commit) — the running service is never given repository write credentials.
 
-## Step 1 — Review and accept the affected subset at `/proof/review`
+## Step 1 — Review the current proof state at `/proof`
 
-Open `/proof/review`. Only changed or new items appear in the review queue. Unchanged items carry their prior acceptance forward automatically through the evidence-fingerprint delta model: each item's material evidence is reduced to a stable fingerprint, and an item returns to the queue only when its fingerprint changes (an evidence, screenshot, report, or route change). Items whose fingerprints already have accepted decisions in the action ledger do not reappear.
+Open `/proof`. It is a single-column decision page. Read the concise state summary: the machine-QA counts (pass / warn / gaps / fail), the current review-item count, the machine-QA run id, the source SHA, and the current acceptance status. One short sentence states the non-claims (synthetic, hermetic proof only; no staging, production, deployment, live-provider, SOC, ISO, enterprise-production, product-UI, browser-E2E, or full-product readiness claim).
 
-Work the queue to empty:
+Everything below the decision is secondary artifact navigation — capabilities, services, evidence, screenshots, registers, the action ledger, the printable report, and the read-only signoff state view. Viewing any of it is optional; none of it is a required step. If you want to inspect a specific item, follow the artifact links (for example an individual review item at `/proof/review?item=N`, which is a read-only detail page). The gap register (`/proof/review/gaps`), nonconformities (`/proof/review/nonconformities`), and corrective actions (`/proof/review/corrective-actions`) remain visible for inspection.
 
-- Use the per-item decision forms to Accept each affected item. Each decision carries explicit human confirmation checkboxes; none are hidden or prefilled.
-- To accept the whole open subset in one action, use the **Accept all open review items** control at the top of `/proof/review`. It requires the same four explicit confirmation checkboxes (none hidden or prefilled) and records one human acceptance per currently open item at that item's current evidence fingerprint. It does **not** perform final signoff — signoff remains the separate, deliberate action in Step 2. Accepting all is appropriate when you have reviewed the affected subset and are ready to accept the current known-good state in bulk.
-- The gap register (`/proof/review/gaps`), nonconformities (`/proof/review/nonconformities`), and corrective actions (`/proof/review/corrective-actions`) surface any machine-found issues that must be resolved, deferred, or risk-accepted before signoff.
-- Final signoff is unavailable while any open review items or machine blockers remain.
+## Step 2 — Record the single Accept or Reject decision on `/proof`
 
-## Step 2 — Record the final signoff at `/proof/signoff`
+The one decision covers the whole current proof state. In the "Decision" section:
 
-Open `/proof/signoff`. When there are no open review items and no machine blockers, the final signoff controls are enabled. Complete all of the following:
+1. Tick the single confirmation checkbox: **I, the authenticated operator, accept the current proof state.** This is the only friction — there is no four-checkbox set and no typed phrase.
+2. Choose one:
+   - **Accept** submits `POST /proof/accept`. In one deliberate human action it records an acceptance of every currently-open review item at that item's current evidence fingerprint (equivalent to the former "accept all") **and** the final USF-290 human acceptance decision (`human-final-decision`, outcome `human-accepted`).
+   - **Reject** submits `POST /proof/reject`. It records the final human decision (`human-final-decision`, outcome `human-rejected`) and does not record any item acceptances.
 
-1. Tick the four explicit confirmation checkboxes:
-   - `acceptedCurrentEvidence` — accept the current proof baseline (accepted / total current review items, no open items).
-   - `qaZeroConfirmed` — confirm the current machine QA result (pass, warnings, unresolved gaps, failures).
-   - `deltaReviewAcknowledged` — acknowledge that future proof changes return only affected changed evidence to the review queue.
-   - `nonClaimsConfirmed` — acknowledge that this signoff preserves the listed non-claims and does not upgrade readiness beyond the evidence.
-2. Type the exact phrase into the signoff field:
-
-   ```
-   FINAL SIGNOFF USF-290
-   ```
-
-   The server rejects the submission unless the phrase matches exactly.
-3. Optionally add a final signoff note for the audit ledger.
-4. Submit "Record final signoff".
-
-The server validates the CSRF double-submit (form token plus HttpOnly `SameSite=Strict` cookie) and derives the actor from the authenticated operator identity. If a signoff action already exists, the submission is rejected with a conflict; the signoff is not duplicated.
+The server validates the write policy (allow-writes plus a non-empty review secret), the CSRF double-submit (form token plus HttpOnly `SameSite=Strict` cookie), and the single confirmation checkbox, then derives the actor from the authenticated operator identity. Acceptance is never auto-completed by the machine surface.
 
 ## What gets recorded
 
 Human actions persist to the file-backed action ledger `human-review-actions.json` (default path `/var/lib/usf-proof-cockpit/human-review-actions.json`, overridable via `USF_PROOF_COCKPIT_STATE_PATH`).
 
-- **Per-item acceptance** — each accepted review item is recorded with its acceptance fingerprint, so the delta model can carry it forward until the evidence changes.
-- **The guarded final signoff action** — recorded as an `human-final-decision` action with outcome `human-accepted`, the derived actor, an acceptance fingerprint, the four confirmations, the machine counts observed at signoff time, the preserved non-claims, and markers that this was an explicit browser action and was not auto-completed.
+- **Per-item acceptance (Accept only)** — each currently-open review item is recorded as a `machine-evidence-accepted` action with its acceptance fingerprint, so the delta model carries it forward until the evidence changes. A future evidence, screenshot, report, or route change alters the affected fingerprints and returns only those items to the open set.
+- **The guarded final human decision** — recorded as a `human-final-decision` action with outcome `human-accepted` (Accept) or `human-rejected` (Reject), the derived actor, an acceptance fingerprint, the machine counts observed at decision time, the preserved non-claims, and markers that this was an explicit browser action and was not auto-completed.
 
-`finalAcceptanceClaimed` stays governed: the recorded action sets it to `false`. Recording a human signoff is the human's acceptance decision; it does not itself flip a final-acceptance claim, and the machine surface never sets that claim automatically.
+`finalAcceptanceClaimed` stays governed: the recorded action sets it to `false`. Recording the human decision is the human's acceptance decision; it does not itself flip a final-acceptance claim, and the machine surface never sets that claim automatically.
 
 ## Stop conditions
 
-Stop and do not record a signoff if:
+Stop and do not record a decision if:
 
-- the review queue is not empty or machine blockers remain (the controls stay disabled);
 - the three write-mode environment variables are not all set (writes stay read-only);
+- the single confirmation checkbox is not ticked (the write is rejected);
 - the browser cannot present the CSRF cookie (writes are rejected).
 
-The final signoff must always be a deliberate human action taken by the accountable operator.
+The Accept or Reject decision must always be a deliberate human action taken by the accountable operator.

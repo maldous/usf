@@ -1,4 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import {
   buildData,
@@ -6,6 +10,7 @@ import {
   finalSignoffState,
   reviewItemDecision,
   reviewItemFingerprint,
+  startProofCockpitServer,
 } from "../../apps/staging-proof-cockpit/src/server.mjs";
 import { computePromotion } from "../../apps/staging-proof-cockpit/src/promote.mjs";
 
@@ -226,5 +231,166 @@ describe("automated machine-QA promotion transform", () => {
     const pruned = next.machineRunHistory.filter((r) => r.payloadPruned === true).map((r) => r.runId);
     expect(kept.sort()).toEqual(["qa-run-new", "qa-run-prior"]);
     expect(pruned).toContain("qa-run-old");
+  });
+});
+
+describe("proof cockpit single-decision Accept/Reject endpoints (USF-293)", () => {
+  const SECRET = "vitest-proof-cockpit-review-secret";
+  let server: Awaited<ReturnType<typeof startProofCockpitServer>>;
+  let base: string;
+  let stateDir: string;
+  let statePath: string;
+
+  beforeAll(async () => {
+    process.env.USF_PROOF_COCKPIT_ALLOW_WRITES = "yes";
+    process.env.USF_PROOF_COCKPIT_REVIEW_SECRET = SECRET;
+    process.env.USF_PROOF_COCKPIT_REVIEW_ACTOR = "Vitest Operator";
+    stateDir = mkdtempSync(join(tmpdir(), "proof-cockpit-endpoint-"));
+    statePath = join(stateDir, "human-review-actions.json");
+    server = await startProofCockpitServer({
+      host: "127.0.0.1",
+      port: 0,
+      statePath,
+      allowWrites: true,
+      reviewSecret: SECRET,
+      actor: "Vitest Operator",
+    });
+    const address = server.address();
+    if (!address || typeof address === "string") {
+      throw new Error("endpoint-test-address-unavailable");
+    }
+    base = `http://127.0.0.1:${address.port}`;
+  });
+
+  afterAll(async () => {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+    if (existsSync(stateDir)) {
+      rmSync(stateDir, { recursive: true, force: true });
+    }
+    delete process.env.USF_PROOF_COCKPIT_ALLOW_WRITES;
+    delete process.env.USF_PROOF_COCKPIT_REVIEW_SECRET;
+    delete process.env.USF_PROOF_COCKPIT_REVIEW_ACTOR;
+  });
+
+  async function decisionCredentials(): Promise<{ csrf: string; cookie: string }> {
+    const response = await fetch(`${base}/proof`);
+    const home = await response.text();
+    const csrf = home.match(/name="csrfToken" value="([^"]+)"/)?.[1] ?? "";
+    const cookie = response.headers.get("set-cookie")?.split(";")[0] ?? "";
+    return { csrf, cookie };
+  }
+
+  function readLedger(): { actions: Array<Record<string, unknown>> } {
+    return existsSync(statePath)
+      ? (JSON.parse(readFileSync(statePath, "utf8")) as { actions: Array<Record<string, unknown>> })
+      : { actions: [] };
+  }
+
+  it("serves /proof as a single-column decision page with Accept, Reject, and one confirmation", async () => {
+    const home = await fetch(`${base}/proof`).then((r) => r.text());
+    expect(home).toContain('action="/proof/accept"');
+    expect(home).toContain('formaction="/proof/reject"');
+    expect(home).toContain('name="operatorAccept"');
+    expect(home).toContain("I, the authenticated operator, accept the current proof state");
+    // exactly one confirmation checkbox (no four-checkbox set)
+    expect([...home.matchAll(/type="checkbox"/g)]).toHaveLength(1);
+    // single-column: no sticky bar, no two-column review-shell, no typed phrase
+    expect(home).not.toContain("position:sticky");
+    expect(home).not.toContain('class="review-shell"');
+    expect(home).not.toContain('class="review-decision-form"');
+    expect(home).not.toContain("signoffPhrase");
+    expect(home).not.toContain("FINAL SIGNOFF USF-290");
+  });
+
+  it("denies POST /proof/accept without CSRF", async () => {
+    const response = await fetch(`${base}/proof/accept`, {
+      method: "POST",
+      redirect: "manual",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ operatorAccept: "yes" }),
+    });
+    expect(response.status).toBe(403);
+  });
+
+  it("denies POST /proof/accept without the confirmation checkbox", async () => {
+    const { csrf, cookie } = await decisionCredentials();
+    const response = await fetch(`${base}/proof/accept`, {
+      method: "POST",
+      redirect: "manual",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+      body: new URLSearchParams({ csrfToken: csrf }),
+    });
+    expect(response.status).toBe(403);
+    expect(readLedger().actions).toHaveLength(0);
+  });
+
+  it("records both bulk per-item acceptance and the final human-accepted decision in one guarded action", async () => {
+    const { csrf, cookie } = await decisionCredentials();
+    const response = await fetch(`${base}/proof/accept`, {
+      method: "POST",
+      redirect: "manual",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+      body: new URLSearchParams({ csrfToken: csrf, operatorAccept: "yes", returnTo: "/proof", notes: "vitest accept" }),
+    });
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/proof");
+
+    const actions = readLedger().actions;
+    const finalDecision = actions.find((action) => action.actionType === "human-final-decision");
+    const perItem = actions.filter((action) => action.actionType === "machine-evidence-accepted");
+    const expectedItems = buildReviewItems(buildData()).length;
+
+    // Final human decision recorded, attributed to the derived operator, not auto-completed,
+    // and does not fabricate a final-acceptance claim.
+    expect(finalDecision?.outcome).toBe("human-accepted");
+    expect(finalDecision?.actor).toBe("Vitest Operator");
+    expect((finalDecision?.finalSignoff as Record<string, unknown> | undefined)?.notAutoCompleted).toBe(true);
+    expect((finalDecision?.finalSignoff as Record<string, unknown> | undefined)?.explicitBrowserAction).toBe(true);
+    expect(finalDecision?.finalAcceptanceClaimed).toBe(false);
+
+    // One acceptance per open review item at its current evidence fingerprint (bulk accept-all).
+    expect(perItem).toHaveLength(expectedItems);
+    expect(perItem.every((action) => typeof action.acceptanceFingerprint === "string" && (action.acceptanceFingerprint as string).length > 0)).toBe(true);
+    expect(perItem.every((action) => action.actor === "Vitest Operator")).toBe(true);
+    expect(perItem.every((action) => action.outcome === "human-accepted")).toBe(true);
+  });
+
+  it("records only a final human-rejected decision for POST /proof/reject (no bulk acceptance)", async () => {
+    const rejectDir = mkdtempSync(join(tmpdir(), "proof-cockpit-reject-"));
+    const rejectStatePath = join(rejectDir, "human-review-actions.json");
+    const rejectServer = await startProofCockpitServer({
+      host: "127.0.0.1",
+      port: 0,
+      statePath: rejectStatePath,
+      allowWrites: true,
+      reviewSecret: SECRET,
+      actor: "Vitest Operator",
+    });
+    try {
+      const address = rejectServer.address();
+      if (!address || typeof address === "string") {
+        throw new Error("reject-test-address-unavailable");
+      }
+      const rejectBase = `http://127.0.0.1:${address.port}`;
+      const homeResponse = await fetch(`${rejectBase}/proof`);
+      const home = await homeResponse.text();
+      const csrf = home.match(/name="csrfToken" value="([^"]+)"/)?.[1] ?? "";
+      const cookie = homeResponse.headers.get("set-cookie")?.split(";")[0] ?? "";
+      const response = await fetch(`${rejectBase}/proof/reject`, {
+        method: "POST",
+        redirect: "manual",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+        body: new URLSearchParams({ csrfToken: csrf, operatorAccept: "yes", returnTo: "/proof" }),
+      });
+      expect(response.status).toBe(303);
+      const actions = (JSON.parse(readFileSync(rejectStatePath, "utf8")) as { actions: Array<Record<string, unknown>> }).actions;
+      expect(actions.filter((action) => action.actionType === "machine-evidence-accepted")).toHaveLength(0);
+      const finalDecision = actions.find((action) => action.actionType === "human-final-decision");
+      expect(finalDecision?.outcome).toBe("human-rejected");
+      expect(finalDecision?.actor).toBe("Vitest Operator");
+    } finally {
+      await new Promise<void>((resolve) => rejectServer.close(() => resolve()));
+      rmSync(rejectDir, { recursive: true, force: true });
+    }
   });
 });
