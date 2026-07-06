@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.tenant-groups",
   "title": "Tenant Groups Semantic Contract",
-  "description": "Source-backed draft semantic contract for the tenant groups capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the tenant groups capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -80,14 +80,14 @@
     },
     "proof": {
       "status": "complete",
-      "description": "A unit proof covers group lifecycle and validation and a UI semantic harness proves the headless journey, demonstrated in React via hermetic behaviour/state validation plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers group lifecycle and validation and a UI semantic harness proves the headless journey, demonstrated in source lineage via hermetic behaviour/state validation plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/groups.test.ts"
       ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "No verified UI source path in the manifest yet; the React headless group journey is lineage only. Author the UI semantic model before generation."
+      "description": "No verified UI source path in the manifest yet; the source-lineage headless group journey is lineage only. Author the UI semantic model before generation."
     }
   },
   "sourceRefs": [

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF API/contracts posture validator (parity-api-contracts, USF-133).
 
-Governance tooling only. It creates no implementation/runtime files, imports no React
+Governance tooling only. It creates no implementation/runtime files, imports no external
 source, and publishes no evidence. It fails closed on API-as-contract-boundary
 invariants: classified routes, route-to-capability mapping, OpenAPI/implementation
 coverage, PDP/auth and tenant guards, side-effect idempotency, safe error envelopes,
@@ -253,7 +253,7 @@ def api_rows(matrix):
     for row in matrix.get("domains", []):
         if not isinstance(row, dict):
             continue
-        rid = str(row.get("react_item_id", ""))
+        rid = str(row.get("source_item_id", ""))
         summary = str(row.get("behaviour_summary", ""))
         if (
             rid.startswith("api.")
@@ -531,7 +531,7 @@ def run_checks(F, state=None):
             F.add("USF-API-011", "tests", f"API test coverage missing phrase: {token}")
 
     rows = api_rows(state["matrix"])
-    main = next((row for row in rows if row.get("react_item_id") == "api-routes-openapi"), None)
+    main = next((row for row in rows if row.get("source_item_id") == "api-routes-openapi"), None)
     if main is None:
         F.add("USF-API-012", MATRIX_PATH, "api-routes-openapi row is missing")
     else:
@@ -1327,7 +1327,7 @@ def apply_mutation(base, mutation):
             enterprise = None
     if "matrixApiSet" in mutation and matrix is not None:
         rows = api_rows(matrix)
-        row = next((item for item in rows if item.get("react_item_id") == "api-routes-openapi"), None)
+        row = next((item for item in rows if item.get("source_item_id") == "api-routes-openapi"), None)
         if row is not None:
             for key, value in mutation["matrixApiSet"].items():
                 row[key] = value

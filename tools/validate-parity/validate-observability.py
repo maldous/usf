@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF observability/telemetry parity validator (USF-158).
 
-Governance tooling only. It creates no runtime files, imports no React source, and
+Governance tooling only. It creates no runtime files, imports no source lineage, and
 publishes no evidence. It fails closed on controlled-observability invariants:
 classified telemetry signals, tenant-safe metric labels, redaction before capture,
 context propagation, PDP-protected observability surfaces, provider-mode-aware
@@ -287,7 +287,7 @@ def observability_rows(matrix):
     for row in matrix.get("domains", []):
         if not isinstance(row, dict):
             continue
-        rid = str(row.get("react_item_id", ""))
+        rid = str(row.get("source_item_id", ""))
         summary = str(row.get("behaviour_summary", "")).lower()
         if rid.startswith("observability") or "observability" in summary or "telemetry" in summary:
             rows.append(row)
@@ -391,7 +391,7 @@ def run_checks(F, state=None):
     ]:
         if token not in standard:
             F.add("USF-OBSERVABILITY-002", STANDARD, f"standard section missing {token}")
-    if not os.path.exists(SOURCE_USE) or "React UI/Playwright observability behaviours" not in source_use:
+    if not os.path.exists(SOURCE_USE) or "UI/Playwright observability behaviours" not in source_use:
         F.add("USF-OBSERVABILITY-002", SOURCE_USE, "observability source-use matrix missing")
     if "Parity Observability/Telemetry Additions" not in bootstrap_source_use:
         F.add("USF-OBSERVABILITY-002", BOOTSTRAP_SOURCE_USE, "global source-use matrix missing observability additions")
@@ -457,12 +457,12 @@ def run_checks(F, state=None):
     rows = observability_rows(matrix)
     if len(rows) < 5:
         F.add("USF-OBSERVABILITY-008", MATRIX, "observability parity matrix rows incomplete")
-    main = [row for row in rows if row.get("react_item_id") == "observability"]
+    main = [row for row in rows if row.get("source_item_id") == "observability"]
     if not main or main[0].get("domain_authorised") is not True:
         F.add("USF-OBSERVABILITY-008", MATRIX, "observability main row not domain-authorised")
     if not any("USF-159" in str(row.get("linear_issue", "")) or "USF-159" in str(row.get("evidence", "")) for row in rows):
         F.add("USF-OBSERVABILITY-008", MATRIX, "observability depth lacks USF-159 linkage")
-    if not any(row.get("react_item_id") == "observability.alerting-incident-dashboard-live-depth" for row in rows):
+    if not any(row.get("source_item_id") == "observability.alerting-incident-dashboard-live-depth" for row in rows):
         F.add("USF-OBSERVABILITY-008", MATRIX, "deferred observability depth row missing")
 
     overclaim_sources = "\n".join([standard, source_use, proof, openapi_text])
@@ -1120,7 +1120,7 @@ def run_checks(F, state=None):
         "stackBoundaryChecked: true",
         "providerPayloadBoundaryChecked: true",
         "uiReadinessClaim: false",
-        "reactReadinessClaim: false",
+        "sourceReadinessClaim: false",
         "browserE2EReadinessClaim: false",
         "faroProductionReadinessClaim: false",
         "liveMonitoringReadinessClaim: false",
@@ -1210,7 +1210,7 @@ def run_checks(F, state=None):
         minimal_scope = {}
     for key in (
         "productUiCreated",
-        "reactApplicationCreated",
+        "sourceApplicationCreated",
         "routeArchitectureCreated",
         "componentSystemCreated",
         "visualSnapshotCoverageCreated",
@@ -1301,7 +1301,7 @@ def run_checks(F, state=None):
             F.add("USF-OBSERVABILITY-021", f"{BROWSER_TELEMETRY_DEPTH}.claims.{key}", "USF-225 proof marker must be true")
     for key in (
         "uiReadinessClaim",
-        "reactReadinessClaim",
+        "sourceReadinessClaim",
         "browserE2EReadinessClaim",
         "faroProductionReadinessClaim",
         "liveMonitoringReadinessClaim",
@@ -1338,7 +1338,7 @@ def run_checks(F, state=None):
         "usf-133 closure is proven",
         "production readiness is proven",
         "live provider readiness is proven",
-        "full react parity is proven",
+        "full functional completeness is proven",
     ):
         if phrase in usf225_sources:
             F.add("USF-OBSERVABILITY-025", "USF-225", f"readiness overclaim present: {phrase}")

@@ -11,7 +11,7 @@
     "humanReadable": "docs/architecture/public-fqdn-semantic-contract.md",
     "generatedComposeAuthority": false,
     "generatedGatewayConfigAuthority": false,
-    "historicalReactAuthority": false,
+    "historicalsource lineageAuthority": false,
     "linearAuthority": false
   },
   "dependsOn": {
@@ -107,7 +107,7 @@
     "allowedImplementationEvidenceSources": [
       "cloudflare-observed-configuration",
       "external-gateway-observed-configuration",
-      "historical-react-lineage"
+      "historical-source-lineage-lineage"
     ],
     "prohibitedRequiredGateways": [
       "caddy"

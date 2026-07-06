@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF database persistence posture validator (parity-db, USF-138).
 
-Governance tooling only. Creates no runtime files, imports no React source,
+Governance tooling only. Creates no runtime files, imports no source lineage,
 publishes no evidence. Statically enforces the Enterprise Persistence Metadata
 and Classification Standard over the migration SQL under adapters/db/migrations
 and the classification registry

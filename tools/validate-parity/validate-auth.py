@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF Keycloak-brokered authentication/identity posture validator (parity-auth, USF-133).
 
-Governance tooling only. It creates no implementation/runtime files, imports no React
+Governance tooling only. It creates no implementation/runtime files, imports no external
 source, and publishes no evidence. It fails closed on the auth/identity invariants that
 keep Keycloak the sole USF-facing issuer, keep identity an authentication input (never
 authorization), and keep tokens/cookies/secrets out of every outward channel (ISO 27001-
@@ -173,7 +173,7 @@ def auth_row(matrix):
     if not isinstance(matrix, dict):
         return None
     for row in matrix.get("domains", []):
-        if isinstance(row, dict) and row.get("react_item_id") == "auth-identity":
+        if isinstance(row, dict) and row.get("source_item_id") == "auth-identity":
             return row
     return None
 

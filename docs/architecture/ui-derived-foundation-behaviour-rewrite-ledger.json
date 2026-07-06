@@ -7,7 +7,7 @@
   "sourceLineageGitSha": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
   "rows": [
     {
-      "id": "react-ui-foundation-rewrite-9ae929c882fd",
+      "id": "source-lineage-ui-foundation-rewrite-9ae929c882fd",
       "sourceLineageId": "source-lineage-9ae929c882fd",
       "sourceLineagePaths": [
         "apps/platform-api/scripts/playwright-adapter-runtime-proof.ts"
@@ -20,7 +20,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-88dbfcef014b",
+      "id": "source-lineage-ui-foundation-rewrite-88dbfcef014b",
       "sourceLineageId": "source-lineage-88dbfcef014b",
       "sourceLineagePaths": [
         "apps/platform-api/scripts/playwright-axe-adapter-runtime-proof.ts"
@@ -49,7 +49,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -65,7 +65,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-859784ee2fdb",
+      "id": "source-lineage-ui-foundation-rewrite-859784ee2fdb",
       "sourceLineageId": "source-lineage-859784ee2fdb",
       "sourceLineagePaths": [
         "apps/platform-api/src/adapters/playwright-adapter.ts"
@@ -78,7 +78,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -94,7 +94,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a89eea4ff8e8",
+      "id": "source-lineage-ui-foundation-rewrite-a89eea4ff8e8",
       "sourceLineageId": "source-lineage-a89eea4ff8e8",
       "sourceLineagePaths": [
         "apps/platform-api/src/adapters/playwright-axe-adapter.ts"
@@ -107,7 +107,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-383d54bb5c5e",
+      "id": "source-lineage-ui-foundation-rewrite-383d54bb5c5e",
       "sourceLineageId": "source-lineage-383d54bb5c5e",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/admin-logs.test.ts"
@@ -136,7 +136,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -152,7 +152,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a3e4950e2a06",
+      "id": "source-lineage-ui-foundation-rewrite-a3e4950e2a06",
       "sourceLineageId": "source-lineage-a3e4950e2a06",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/api-pipeline.test.ts"
@@ -165,7 +165,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -181,7 +181,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-fcdad4bccc01",
+      "id": "source-lineage-ui-foundation-rewrite-fcdad4bccc01",
       "sourceLineageId": "source-lineage-fcdad4bccc01",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/auth-routes.test.ts"
@@ -194,7 +194,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-10cfb04175cb",
+      "id": "source-lineage-ui-foundation-rewrite-10cfb04175cb",
       "sourceLineageId": "source-lineage-10cfb04175cb",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/graphql-organisation.test.ts"
@@ -223,7 +223,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -239,7 +239,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-80a9fdd928a1",
+      "id": "source-lineage-ui-foundation-rewrite-80a9fdd928a1",
       "sourceLineageId": "source-lineage-80a9fdd928a1",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/health-handlers.test.ts"
@@ -252,7 +252,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -268,7 +268,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-326831707e8a",
+      "id": "source-lineage-ui-foundation-rewrite-326831707e8a",
       "sourceLineageId": "source-lineage-326831707e8a",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/observability-smoke.test.ts"
@@ -281,7 +281,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -297,7 +297,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-25736748eccc",
+      "id": "source-lineage-ui-foundation-rewrite-25736748eccc",
       "sourceLineageId": "source-lineage-25736748eccc",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/organisation-profile.test.ts"
@@ -310,7 +310,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -326,7 +326,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a86f6cb6ff6a",
+      "id": "source-lineage-ui-foundation-rewrite-a86f6cb6ff6a",
       "sourceLineageId": "source-lineage-a86f6cb6ff6a",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts"
@@ -339,7 +339,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -355,7 +355,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5a5371793aa8",
+      "id": "source-lineage-ui-foundation-rewrite-5a5371793aa8",
       "sourceLineageId": "source-lineage-5a5371793aa8",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/postgres-organisation-repository.test.ts"
@@ -368,7 +368,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -384,7 +384,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5084ffca44df",
+      "id": "source-lineage-ui-foundation-rewrite-5084ffca44df",
       "sourceLineageId": "source-lineage-5084ffca44df",
       "sourceLineagePaths": [
         "apps/platform-api/tests/substrate/session-fixture.test.ts"
@@ -397,7 +397,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -413,7 +413,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ea886e4f489d",
+      "id": "source-lineage-ui-foundation-rewrite-ea886e4f489d",
       "sourceLineageId": "source-lineage-ea886e4f489d",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/admin-tenants.test.ts"
@@ -426,7 +426,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -442,7 +442,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-546dc46402f7",
+      "id": "source-lineage-ui-foundation-rewrite-546dc46402f7",
       "sourceLineageId": "source-lineage-546dc46402f7",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/api-keys.test.ts"
@@ -455,7 +455,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -471,7 +471,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f79c9ece345f",
+      "id": "source-lineage-ui-foundation-rewrite-f79c9ece345f",
       "sourceLineageId": "source-lineage-f79c9ece345f",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/app-config.test.ts"
@@ -484,7 +484,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -500,7 +500,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-8ab71cac6b63",
+      "id": "source-lineage-ui-foundation-rewrite-8ab71cac6b63",
       "sourceLineageId": "source-lineage-8ab71cac6b63",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/audit.test.ts"
@@ -513,7 +513,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -529,7 +529,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-72c38944a32b",
+      "id": "source-lineage-ui-foundation-rewrite-72c38944a32b",
       "sourceLineageId": "source-lineage-72c38944a32b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/auth-provider-config.test.ts"
@@ -542,7 +542,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -558,7 +558,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2af784fa9e0e",
+      "id": "source-lineage-ui-foundation-rewrite-2af784fa9e0e",
       "sourceLineageId": "source-lineage-2af784fa9e0e",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/auth-providers.test.ts"
@@ -571,7 +571,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -587,7 +587,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-52befa26697b",
+      "id": "source-lineage-ui-foundation-rewrite-52befa26697b",
       "sourceLineageId": "source-lineage-52befa26697b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/auth-settings-audit.test.ts"
@@ -600,7 +600,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -616,7 +616,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f68bbff6f912",
+      "id": "source-lineage-ui-foundation-rewrite-f68bbff6f912",
       "sourceLineageId": "source-lineage-f68bbff6f912",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/auth-settings-readiness.test.ts"
@@ -629,7 +629,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -645,7 +645,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9c3593474391",
+      "id": "source-lineage-ui-foundation-rewrite-9c3593474391",
       "sourceLineageId": "source-lineage-9c3593474391",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/auth-usecase.test.ts"
@@ -658,7 +658,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -674,7 +674,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7a76e3f1f46c",
+      "id": "source-lineage-ui-foundation-rewrite-7a76e3f1f46c",
       "sourceLineageId": "source-lineage-7a76e3f1f46c",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts"
@@ -687,7 +687,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -703,7 +703,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-167ab2d78cb3",
+      "id": "source-lineage-ui-foundation-rewrite-167ab2d78cb3",
       "sourceLineageId": "source-lineage-167ab2d78cb3",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/billing-catalog.test.ts"
@@ -716,7 +716,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -732,7 +732,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f80f0a8acb2a",
+      "id": "source-lineage-ui-foundation-rewrite-f80f0a8acb2a",
       "sourceLineageId": "source-lineage-f80f0a8acb2a",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/bootstrap-secrets.test.ts"
@@ -745,7 +745,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -761,7 +761,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d7db8752fae1",
+      "id": "source-lineage-ui-foundation-rewrite-d7db8752fae1",
       "sourceLineageId": "source-lineage-d7db8752fae1",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/capability-registry.test.ts"
@@ -774,7 +774,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -790,7 +790,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-018f76307012",
+      "id": "source-lineage-ui-foundation-rewrite-018f76307012",
       "sourceLineageId": "source-lineage-018f76307012",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/config-contracts.test.ts"
@@ -803,7 +803,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -819,7 +819,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-cf4ea56d1c4b",
+      "id": "source-lineage-ui-foundation-rewrite-cf4ea56d1c4b",
       "sourceLineageId": "source-lineage-cf4ea56d1c4b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/contracts-admin-drift.test.ts"
@@ -832,7 +832,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -848,7 +848,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-6b662144602d",
+      "id": "source-lineage-ui-foundation-rewrite-6b662144602d",
       "sourceLineageId": "source-lineage-6b662144602d",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/cookie-security.test.ts"
@@ -861,7 +861,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -877,7 +877,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2b59ccd34625",
+      "id": "source-lineage-ui-foundation-rewrite-2b59ccd34625",
       "sourceLineageId": "source-lineage-2b59ccd34625",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/data-governance.test.ts"
@@ -890,7 +890,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -906,7 +906,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c3ea9e68a1ff",
+      "id": "source-lineage-ui-foundation-rewrite-c3ea9e68a1ff",
       "sourceLineageId": "source-lineage-c3ea9e68a1ff",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/data-portability.test.ts"
@@ -919,7 +919,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -935,7 +935,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e97e05770b8f",
+      "id": "source-lineage-ui-foundation-rewrite-e97e05770b8f",
       "sourceLineageId": "source-lineage-e97e05770b8f",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/data-residency.test.ts"
@@ -948,7 +948,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -964,7 +964,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a93aaf620303",
+      "id": "source-lineage-ui-foundation-rewrite-a93aaf620303",
       "sourceLineageId": "source-lineage-a93aaf620303",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/delegations.test.ts"
@@ -977,7 +977,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -993,7 +993,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-70e3c7e1edd0",
+      "id": "source-lineage-ui-foundation-rewrite-70e3c7e1edd0",
       "sourceLineageId": "source-lineage-70e3c7e1edd0",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/email-sender.test.ts"
@@ -1006,7 +1006,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1022,7 +1022,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-262dcac5b9b1",
+      "id": "source-lineage-ui-foundation-rewrite-262dcac5b9b1",
       "sourceLineageId": "source-lineage-262dcac5b9b1",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/entitlements.test.ts"
@@ -1035,7 +1035,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1051,7 +1051,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2d9b6169f781",
+      "id": "source-lineage-ui-foundation-rewrite-2d9b6169f781",
       "sourceLineageId": "source-lineage-2d9b6169f781",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/events.test.ts"
@@ -1064,7 +1064,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1080,7 +1080,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d186a3fa4f14",
+      "id": "source-lineage-ui-foundation-rewrite-d186a3fa4f14",
       "sourceLineageId": "source-lineage-d186a3fa4f14",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/features.test.ts"
@@ -1093,7 +1093,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1109,7 +1109,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-dad4e29635aa",
+      "id": "source-lineage-ui-foundation-rewrite-dad4e29635aa",
       "sourceLineageId": "source-lineage-dad4e29635aa",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/forward-auth.test.ts"
@@ -1122,7 +1122,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1138,7 +1138,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-6dee08a1b598",
+      "id": "source-lineage-ui-foundation-rewrite-6dee08a1b598",
       "sourceLineageId": "source-lineage-6dee08a1b598",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/groups.test.ts"
@@ -1151,7 +1151,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1167,7 +1167,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9b5df3924169",
+      "id": "source-lineage-ui-foundation-rewrite-9b5df3924169",
       "sourceLineageId": "source-lineage-9b5df3924169",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/health-metadata-config.test.ts"
@@ -1180,7 +1180,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1196,7 +1196,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-dc7374bdbdbc",
+      "id": "source-lineage-ui-foundation-rewrite-dc7374bdbdbc",
       "sourceLineageId": "source-lineage-dc7374bdbdbc",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/idp-management.test.ts"
@@ -1209,7 +1209,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1225,7 +1225,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-84d496c6637a",
+      "id": "source-lineage-ui-foundation-rewrite-84d496c6637a",
       "sourceLineageId": "source-lineage-84d496c6637a",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/in-memory-automation-runner.test.ts"
@@ -1238,7 +1238,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1254,7 +1254,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9ccdab6c6d5b",
+      "id": "source-lineage-ui-foundation-rewrite-9ccdab6c6d5b",
       "sourceLineageId": "source-lineage-9ccdab6c6d5b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/in-memory-billing-provider.test.ts"
@@ -1267,7 +1267,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1283,7 +1283,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7dda628e3aa6",
+      "id": "source-lineage-ui-foundation-rewrite-7dda628e3aa6",
       "sourceLineageId": "source-lineage-7dda628e3aa6",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/in-memory-workflow-orchestrator.test.ts"
@@ -1296,7 +1296,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1312,7 +1312,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c1f8da70631b",
+      "id": "source-lineage-ui-foundation-rewrite-c1f8da70631b",
       "sourceLineageId": "source-lineage-c1f8da70631b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/keycloak-mapper-readiness.test.ts"
@@ -1325,7 +1325,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1341,7 +1341,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-6a983e67da29",
+      "id": "source-lineage-ui-foundation-rewrite-6a983e67da29",
       "sourceLineageId": "source-lineage-6a983e67da29",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/lago-billing-provider.test.ts"
@@ -1354,7 +1354,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1370,7 +1370,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e2e573ed1083",
+      "id": "source-lineage-ui-foundation-rewrite-e2e573ed1083",
       "sourceLineageId": "source-lineage-e2e573ed1083",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/legal-hold.test.ts"
@@ -1383,7 +1383,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1399,7 +1399,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c0a1ca6ef6df",
+      "id": "source-lineage-ui-foundation-rewrite-c0a1ca6ef6df",
       "sourceLineageId": "source-lineage-c0a1ca6ef6df",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/logs-usecase.test.ts"
@@ -1412,7 +1412,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1428,7 +1428,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5a3ffb54e83f",
+      "id": "source-lineage-ui-foundation-rewrite-5a3ffb54e83f",
       "sourceLineageId": "source-lineage-5a3ffb54e83f",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/members-v2.test.ts"
@@ -1441,7 +1441,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1457,7 +1457,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-baf606a1ed87",
+      "id": "source-lineage-ui-foundation-rewrite-baf606a1ed87",
       "sourceLineageId": "source-lineage-baf606a1ed87",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/members.test.ts"
@@ -1470,7 +1470,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1486,7 +1486,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-74c7fe1b0cc0",
+      "id": "source-lineage-ui-foundation-rewrite-74c7fe1b0cc0",
       "sourceLineageId": "source-lineage-74c7fe1b0cc0",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/metering.test.ts"
@@ -1499,7 +1499,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1515,7 +1515,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e89d3c1c6205",
+      "id": "source-lineage-ui-foundation-rewrite-e89d3c1c6205",
       "sourceLineageId": "source-lineage-e89d3c1c6205",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/notification-config.test.ts"
@@ -1528,7 +1528,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1544,7 +1544,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-dedea4ed3daf",
+      "id": "source-lineage-ui-foundation-rewrite-dedea4ed3daf",
       "sourceLineageId": "source-lineage-dedea4ed3daf",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/notification-transports.test.ts"
@@ -1557,7 +1557,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1573,7 +1573,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2a3c3360a619",
+      "id": "source-lineage-ui-foundation-rewrite-2a3c3360a619",
       "sourceLineageId": "source-lineage-2a3c3360a619",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/notifications.test.ts"
@@ -1586,7 +1586,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1602,7 +1602,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7a67c0b01163",
+      "id": "source-lineage-ui-foundation-rewrite-7a67c0b01163",
       "sourceLineageId": "source-lineage-7a67c0b01163",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/observability-alerting.test.ts"
@@ -1615,7 +1615,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1631,7 +1631,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2ab2b6481cde",
+      "id": "source-lineage-ui-foundation-rewrite-2ab2b6481cde",
       "sourceLineageId": "source-lineage-2ab2b6481cde",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/observability-probe-config.test.ts"
@@ -1644,7 +1644,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1660,7 +1660,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-59850ee78ccc",
+      "id": "source-lineage-ui-foundation-rewrite-59850ee78ccc",
       "sourceLineageId": "source-lineage-59850ee78ccc",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/observability.test.ts"
@@ -1673,7 +1673,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1689,7 +1689,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c3069f13ed2b",
+      "id": "source-lineage-ui-foundation-rewrite-c3069f13ed2b",
       "sourceLineageId": "source-lineage-c3069f13ed2b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/oidc-discovery.test.ts"
@@ -1702,7 +1702,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1718,7 +1718,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ae8a6eb908b1",
+      "id": "source-lineage-ui-foundation-rewrite-ae8a6eb908b1",
       "sourceLineageId": "source-lineage-ae8a6eb908b1",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/oidc-mapping.test.ts"
@@ -1731,7 +1731,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1747,7 +1747,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-b23c887d6a79",
+      "id": "source-lineage-ui-foundation-rewrite-b23c887d6a79",
       "sourceLineageId": "source-lineage-b23c887d6a79",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/operator-config-repositories.test.ts"
@@ -1760,7 +1760,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1776,7 +1776,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-82ee5653dbaf",
+      "id": "source-lineage-ui-foundation-rewrite-82ee5653dbaf",
       "sourceLineageId": "source-lineage-82ee5653dbaf",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/organisation-usecase.test.ts"
@@ -1789,7 +1789,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1805,7 +1805,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-830ee697a484",
+      "id": "source-lineage-ui-foundation-rewrite-830ee697a484",
       "sourceLineageId": "source-lineage-830ee697a484",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/organisation-validation.test.ts"
@@ -1818,7 +1818,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1834,7 +1834,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-76d476cde615",
+      "id": "source-lineage-ui-foundation-rewrite-76d476cde615",
       "sourceLineageId": "source-lineage-76d476cde615",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/platform-config.test.ts"
@@ -1847,7 +1847,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1863,7 +1863,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f4e331c021f2",
+      "id": "source-lineage-ui-foundation-rewrite-f4e331c021f2",
       "sourceLineageId": "source-lineage-f4e331c021f2",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/platform-services.test.ts"
@@ -1876,7 +1876,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1892,7 +1892,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c631c0ae41c2",
+      "id": "source-lineage-ui-foundation-rewrite-c631c0ae41c2",
       "sourceLineageId": "source-lineage-c631c0ae41c2",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/postgres-delegated-admin-roles.test.ts"
@@ -1905,7 +1905,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1921,7 +1921,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a04391cae593",
+      "id": "source-lineage-ui-foundation-rewrite-a04391cae593",
       "sourceLineageId": "source-lineage-a04391cae593",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/postgres-observability-repository.test.ts"
@@ -1934,7 +1934,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1950,7 +1950,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-fc320cea873a",
+      "id": "source-lineage-ui-foundation-rewrite-fc320cea873a",
       "sourceLineageId": "source-lineage-fc320cea873a",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/postgres-runtime-repositories.test.ts"
@@ -1963,7 +1963,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1979,7 +1979,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-76e10fb85676",
+      "id": "source-lineage-ui-foundation-rewrite-76e10fb85676",
       "sourceLineageId": "source-lineage-76e10fb85676",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/profile.test.ts"
@@ -1992,7 +1992,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2008,7 +2008,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ea2af6c382fc",
+      "id": "source-lineage-ui-foundation-rewrite-ea2af6c382fc",
       "sourceLineageId": "source-lineage-ea2af6c382fc",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/prometheus-metrics.test.ts"
@@ -2021,7 +2021,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2037,7 +2037,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-01e856f42843",
+      "id": "source-lineage-ui-foundation-rewrite-01e856f42843",
       "sourceLineageId": "source-lineage-01e856f42843",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/proof-registry.test.ts"
@@ -2050,7 +2050,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2066,7 +2066,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5f205a9c492a",
+      "id": "source-lineage-ui-foundation-rewrite-5f205a9c492a",
       "sourceLineageId": "source-lineage-5f205a9c492a",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/quota.test.ts"
@@ -2079,7 +2079,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2095,7 +2095,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2c4811d1f6df",
+      "id": "source-lineage-ui-foundation-rewrite-2c4811d1f6df",
       "sourceLineageId": "source-lineage-2c4811d1f6df",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/rate-limits.test.ts"
@@ -2108,7 +2108,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2124,7 +2124,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-92e24220870d",
+      "id": "source-lineage-ui-foundation-rewrite-92e24220870d",
       "sourceLineageId": "source-lineage-92e24220870d",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/redis-rate-limit-repository.test.ts"
@@ -2137,7 +2137,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2153,7 +2153,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-70ab00d5b656",
+      "id": "source-lineage-ui-foundation-rewrite-70ab00d5b656",
       "sourceLineageId": "source-lineage-70ab00d5b656",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/resolve-access-token.test.ts"
@@ -2166,7 +2166,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2182,7 +2182,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ed5cef6198de",
+      "id": "source-lineage-ui-foundation-rewrite-ed5cef6198de",
       "sourceLineageId": "source-lineage-ed5cef6198de",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/resource-policies.test.ts"
@@ -2195,7 +2195,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2211,7 +2211,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2d23e4cad921",
+      "id": "source-lineage-ui-foundation-rewrite-2d23e4cad921",
       "sourceLineageId": "source-lineage-2d23e4cad921",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/retention.test.ts"
@@ -2224,7 +2224,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2240,7 +2240,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2dfc410bec63",
+      "id": "source-lineage-ui-foundation-rewrite-2dfc410bec63",
       "sourceLineageId": "source-lineage-2dfc410bec63",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/scheduled-jobs.test.ts"
@@ -2253,7 +2253,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2269,7 +2269,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9a2c34b4b4fd",
+      "id": "source-lineage-ui-foundation-rewrite-9a2c34b4b4fd",
       "sourceLineageId": "source-lineage-9a2c34b4b4fd",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/search.test.ts"
@@ -2282,7 +2282,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2298,7 +2298,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-798396346fd6",
+      "id": "source-lineage-ui-foundation-rewrite-798396346fd6",
       "sourceLineageId": "source-lineage-798396346fd6",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/service-catalog.test.ts"
@@ -2311,7 +2311,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2327,7 +2327,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1e8c146dca5f",
+      "id": "source-lineage-ui-foundation-rewrite-1e8c146dca5f",
       "sourceLineageId": "source-lineage-1e8c146dca5f",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/service-clickthrough.test.ts"
@@ -2340,7 +2340,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2356,7 +2356,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a888709cfd5f",
+      "id": "source-lineage-ui-foundation-rewrite-a888709cfd5f",
       "sourceLineageId": "source-lineage-a888709cfd5f",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/session-config.test.ts"
@@ -2369,7 +2369,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2385,7 +2385,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-82e09b3448d6",
+      "id": "source-lineage-ui-foundation-rewrite-82e09b3448d6",
       "sourceLineageId": "source-lineage-82e09b3448d6",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/stage-config.test.ts"
@@ -2398,7 +2398,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2414,7 +2414,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-db6ca6d18ad7",
+      "id": "source-lineage-ui-foundation-rewrite-db6ca6d18ad7",
       "sourceLineageId": "source-lineage-db6ca6d18ad7",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/storage-objects.test.ts"
@@ -2427,7 +2427,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2443,7 +2443,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5071b5f17119",
+      "id": "source-lineage-ui-foundation-rewrite-5071b5f17119",
       "sourceLineageId": "source-lineage-5071b5f17119",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/sub-organisations.test.ts"
@@ -2456,7 +2456,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2472,7 +2472,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-cac8d452cc80",
+      "id": "source-lineage-ui-foundation-rewrite-cac8d452cc80",
       "sourceLineageId": "source-lineage-cac8d452cc80",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/support-announcements.test.ts"
@@ -2485,7 +2485,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2501,7 +2501,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2a2a29f7c0f8",
+      "id": "source-lineage-ui-foundation-rewrite-2a2a29f7c0f8",
       "sourceLineageId": "source-lineage-2a2a29f7c0f8",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/support-mode.test.ts"
@@ -2514,7 +2514,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2530,7 +2530,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9c0630e06776",
+      "id": "source-lineage-ui-foundation-rewrite-9c0630e06776",
       "sourceLineageId": "source-lineage-9c0630e06776",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/support-tickets.test.ts"
@@ -2543,7 +2543,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2559,7 +2559,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-902386e96ff4",
+      "id": "source-lineage-ui-foundation-rewrite-902386e96ff4",
       "sourceLineageId": "source-lineage-902386e96ff4",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/synthetic-failure-endpoint.test.ts"
@@ -2572,7 +2572,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2588,7 +2588,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-bc6d3a78d732",
+      "id": "source-lineage-ui-foundation-rewrite-bc6d3a78d732",
       "sourceLineageId": "source-lineage-bc6d3a78d732",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/temporal-workflow-provider.test.ts"
@@ -2601,7 +2601,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2617,7 +2617,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-38b5e25bca45",
+      "id": "source-lineage-ui-foundation-rewrite-38b5e25bca45",
       "sourceLineageId": "source-lineage-38b5e25bca45",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-credential.test.ts"
@@ -2630,7 +2630,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2646,7 +2646,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-cc4ff277ac6c",
+      "id": "source-lineage-ui-foundation-rewrite-cc4ff277ac6c",
       "sourceLineageId": "source-lineage-cc4ff277ac6c",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-domain-lifecycle.test.ts"
@@ -2659,7 +2659,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2675,7 +2675,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9504b804f34b",
+      "id": "source-lineage-ui-foundation-rewrite-9504b804f34b",
       "sourceLineageId": "source-lineage-9504b804f34b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-domains.test.ts"
@@ -2688,7 +2688,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2704,7 +2704,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-97c4ff1cb639",
+      "id": "source-lineage-ui-foundation-rewrite-97c4ff1cb639",
       "sourceLineageId": "source-lineage-97c4ff1cb639",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-lifecycle.test.ts"
@@ -2717,7 +2717,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2733,7 +2733,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a03c84a773cd",
+      "id": "source-lineage-ui-foundation-rewrite-a03c84a773cd",
       "sourceLineageId": "source-lineage-a03c84a773cd",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-observability.test.ts"
@@ -2746,7 +2746,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2762,7 +2762,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-cc9b13046e56",
+      "id": "source-lineage-ui-foundation-rewrite-cc9b13046e56",
       "sourceLineageId": "source-lineage-cc9b13046e56",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-resolver.test.ts"
@@ -2775,7 +2775,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2791,7 +2791,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-78c585e52d43",
+      "id": "source-lineage-ui-foundation-rewrite-78c585e52d43",
       "sourceLineageId": "source-lineage-78c585e52d43",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-secret-crypto.test.ts"
@@ -2804,7 +2804,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2820,7 +2820,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3bb8d52f1a6d",
+      "id": "source-lineage-ui-foundation-rewrite-3bb8d52f1a6d",
       "sourceLineageId": "source-lineage-3bb8d52f1a6d",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/tenant-storage.test.ts"
@@ -2833,7 +2833,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2849,7 +2849,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a54cda53a342",
+      "id": "source-lineage-ui-foundation-rewrite-a54cda53a342",
       "sourceLineageId": "source-lineage-a54cda53a342",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/test-env-preload.test.ts"
@@ -2862,7 +2862,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2878,7 +2878,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-8d2c9acb9e8b",
+      "id": "source-lineage-ui-foundation-rewrite-8d2c9acb9e8b",
       "sourceLineageId": "source-lineage-8d2c9acb9e8b",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/test-suite-completeness.test.ts"
@@ -2891,7 +2891,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2907,7 +2907,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-46620f65da96",
+      "id": "source-lineage-ui-foundation-rewrite-46620f65da96",
       "sourceLineageId": "source-lineage-46620f65da96",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/token-crypto.test.ts"
@@ -2920,7 +2920,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2936,7 +2936,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5b4a7be834ca",
+      "id": "source-lineage-ui-foundation-rewrite-5b4a7be834ca",
       "sourceLineageId": "source-lineage-5b4a7be834ca",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/vanity-domain-challenge.test.ts"
@@ -2949,7 +2949,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2965,7 +2965,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-614afec24750",
+      "id": "source-lineage-ui-foundation-rewrite-614afec24750",
       "sourceLineageId": "source-lineage-614afec24750",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/vanity-domain.test.ts"
@@ -2978,7 +2978,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2994,7 +2994,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-0f9f1165dda2",
+      "id": "source-lineage-ui-foundation-rewrite-0f9f1165dda2",
       "sourceLineageId": "source-lineage-0f9f1165dda2",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/webhook-worker.test.ts"
@@ -3007,7 +3007,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3023,7 +3023,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-8b0c3ab3b364",
+      "id": "source-lineage-ui-foundation-rewrite-8b0c3ab3b364",
       "sourceLineageId": "source-lineage-8b0c3ab3b364",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/webhooks.test.ts"
@@ -3036,7 +3036,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3052,7 +3052,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-81e7388cf0bd",
+      "id": "source-lineage-ui-foundation-rewrite-81e7388cf0bd",
       "sourceLineageId": "source-lineage-81e7388cf0bd",
       "sourceLineagePaths": [
         "apps/platform-api/tests/unit/windmill-automation-provider.test.ts"
@@ -3065,7 +3065,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3081,7 +3081,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d96949a9d742",
+      "id": "source-lineage-ui-foundation-rewrite-d96949a9d742",
       "sourceLineageId": "source-lineage-d96949a9d742",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx"
@@ -3102,7 +3102,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3118,7 +3118,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-dab9658cbb7b",
+      "id": "source-lineage-ui-foundation-rewrite-dab9658cbb7b",
       "sourceLineageId": "source-lineage-dab9658cbb7b",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/config/__tests__/web-config.test.ts"
@@ -3131,7 +3131,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3147,7 +3147,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5e41dcc18cc6",
+      "id": "source-lineage-ui-foundation-rewrite-5e41dcc18cc6",
       "sourceLineageId": "source-lineage-5e41dcc18cc6",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx"
@@ -3160,7 +3160,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3176,7 +3176,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-022c7fdfcd29",
+      "id": "source-lineage-ui-foundation-rewrite-022c7fdfcd29",
       "sourceLineageId": "source-lineage-022c7fdfcd29",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx"
@@ -3197,7 +3197,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3213,7 +3213,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-854931b0a239",
+      "id": "source-lineage-ui-foundation-rewrite-854931b0a239",
       "sourceLineageId": "source-lineage-854931b0a239",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx"
@@ -3234,7 +3234,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3250,7 +3250,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e37e9defcb84",
+      "id": "source-lineage-ui-foundation-rewrite-e37e9defcb84",
       "sourceLineageId": "source-lineage-e37e9defcb84",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx"
@@ -3271,7 +3271,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3287,7 +3287,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-bef0490fe6d0",
+      "id": "source-lineage-ui-foundation-rewrite-bef0490fe6d0",
       "sourceLineageId": "source-lineage-bef0490fe6d0",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx"
@@ -3308,7 +3308,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3324,7 +3324,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3080aaaa59fc",
+      "id": "source-lineage-ui-foundation-rewrite-3080aaaa59fc",
       "sourceLineageId": "source-lineage-3080aaaa59fc",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx"
@@ -3345,7 +3345,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3361,7 +3361,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-49c56d8913cf",
+      "id": "source-lineage-ui-foundation-rewrite-49c56d8913cf",
       "sourceLineageId": "source-lineage-49c56d8913cf",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx"
@@ -3382,7 +3382,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3398,7 +3398,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-70e032da907f",
+      "id": "source-lineage-ui-foundation-rewrite-70e032da907f",
       "sourceLineageId": "source-lineage-70e032da907f",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx"
@@ -3419,7 +3419,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3435,7 +3435,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3e5394f6e22c",
+      "id": "source-lineage-ui-foundation-rewrite-3e5394f6e22c",
       "sourceLineageId": "source-lineage-3e5394f6e22c",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx"
@@ -3456,7 +3456,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3472,7 +3472,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e56150bcdf52",
+      "id": "source-lineage-ui-foundation-rewrite-e56150bcdf52",
       "sourceLineageId": "source-lineage-e56150bcdf52",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx"
@@ -3493,7 +3493,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3509,7 +3509,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-fa9bdded540f",
+      "id": "source-lineage-ui-foundation-rewrite-fa9bdded540f",
       "sourceLineageId": "source-lineage-fa9bdded540f",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx"
@@ -3530,7 +3530,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3546,7 +3546,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5950bb6378ca",
+      "id": "source-lineage-ui-foundation-rewrite-5950bb6378ca",
       "sourceLineageId": "source-lineage-5950bb6378ca",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx"
@@ -3567,7 +3567,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3583,7 +3583,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1b58d333489d",
+      "id": "source-lineage-ui-foundation-rewrite-1b58d333489d",
       "sourceLineageId": "source-lineage-1b58d333489d",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx"
@@ -3604,7 +3604,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3620,7 +3620,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-b104c953751a",
+      "id": "source-lineage-ui-foundation-rewrite-b104c953751a",
       "sourceLineageId": "source-lineage-b104c953751a",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx"
@@ -3641,7 +3641,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3657,7 +3657,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-69e3f37e3f8c",
+      "id": "source-lineage-ui-foundation-rewrite-69e3f37e3f8c",
       "sourceLineageId": "source-lineage-69e3f37e3f8c",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx"
@@ -3678,7 +3678,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3694,7 +3694,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ed5fc06ffa17",
+      "id": "source-lineage-ui-foundation-rewrite-ed5fc06ffa17",
       "sourceLineageId": "source-lineage-ed5fc06ffa17",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx"
@@ -3715,7 +3715,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3731,7 +3731,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9103da7e74b6",
+      "id": "source-lineage-ui-foundation-rewrite-9103da7e74b6",
       "sourceLineageId": "source-lineage-9103da7e74b6",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx"
@@ -3752,7 +3752,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3768,7 +3768,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7f3571e805bf",
+      "id": "source-lineage-ui-foundation-rewrite-7f3571e805bf",
       "sourceLineageId": "source-lineage-7f3571e805bf",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx"
@@ -3789,7 +3789,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3805,7 +3805,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2a688a39c792",
+      "id": "source-lineage-ui-foundation-rewrite-2a688a39c792",
       "sourceLineageId": "source-lineage-2a688a39c792",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx"
@@ -3826,7 +3826,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3842,7 +3842,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9eb3667037a0",
+      "id": "source-lineage-ui-foundation-rewrite-9eb3667037a0",
       "sourceLineageId": "source-lineage-9eb3667037a0",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx"
@@ -3863,7 +3863,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3879,7 +3879,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a8f7cda790cc",
+      "id": "source-lineage-ui-foundation-rewrite-a8f7cda790cc",
       "sourceLineageId": "source-lineage-a8f7cda790cc",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
@@ -3900,7 +3900,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3916,7 +3916,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-14e5ab8a4123",
+      "id": "source-lineage-ui-foundation-rewrite-14e5ab8a4123",
       "sourceLineageId": "source-lineage-14e5ab8a4123",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx"
@@ -3937,7 +3937,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3953,7 +3953,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c45cf659df39",
+      "id": "source-lineage-ui-foundation-rewrite-c45cf659df39",
       "sourceLineageId": "source-lineage-c45cf659df39",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/admin/__tests__/admin-error.test.tsx"
@@ -3974,7 +3974,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3990,7 +3990,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-0d129b25e1e4",
+      "id": "source-lineage-ui-foundation-rewrite-0d129b25e1e4",
       "sourceLineageId": "source-lineage-0d129b25e1e4",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx"
@@ -4003,7 +4003,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4019,7 +4019,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d816f7c5aa45",
+      "id": "source-lineage-ui-foundation-rewrite-d816f7c5aa45",
       "sourceLineageId": "source-lineage-d816f7c5aa45",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx"
@@ -4040,7 +4040,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4056,7 +4056,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f38fa0546a2c",
+      "id": "source-lineage-ui-foundation-rewrite-f38fa0546a2c",
       "sourceLineageId": "source-lineage-f38fa0546a2c",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx"
@@ -4077,7 +4077,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4093,7 +4093,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1a5d21e1d135",
+      "id": "source-lineage-ui-foundation-rewrite-1a5d21e1d135",
       "sourceLineageId": "source-lineage-1a5d21e1d135",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts"
@@ -4114,7 +4114,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4130,7 +4130,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-4b88d357b1b7",
+      "id": "source-lineage-ui-foundation-rewrite-4b88d357b1b7",
       "sourceLineageId": "source-lineage-4b88d357b1b7",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/app.test.tsx"
@@ -4143,7 +4143,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4159,7 +4159,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-92b6a9bdfb7f",
+      "id": "source-lineage-ui-foundation-rewrite-92b6a9bdfb7f",
       "sourceLineageId": "source-lineage-92b6a9bdfb7f",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/as-text.test.ts"
@@ -4172,7 +4172,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4188,7 +4188,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1913c4a482d5",
+      "id": "source-lineage-ui-foundation-rewrite-1913c4a482d5",
       "sourceLineageId": "source-lineage-1913c4a482d5",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/msw/msw-substrate.test.ts"
@@ -4201,7 +4201,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4217,7 +4217,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-55a941b035be",
+      "id": "source-lineage-ui-foundation-rewrite-55a941b035be",
       "sourceLineageId": "source-lineage-55a941b035be",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx"
@@ -4238,7 +4238,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4254,7 +4254,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-efc4378f4a86",
+      "id": "source-lineage-ui-foundation-rewrite-efc4378f4a86",
       "sourceLineageId": "source-lineage-efc4378f4a86",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/substrate/require-permission.test.tsx"
@@ -4275,7 +4275,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4291,7 +4291,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-fa8451cf04ca",
+      "id": "source-lineage-ui-foundation-rewrite-fa8451cf04ca",
       "sourceLineageId": "source-lineage-fa8451cf04ca",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/theme/theme.test.tsx"
@@ -4304,7 +4304,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4320,7 +4320,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d8e938f22e84",
+      "id": "source-lineage-ui-foundation-rewrite-d8e938f22e84",
       "sourceLineageId": "source-lineage-d8e938f22e84",
       "sourceLineagePaths": [
         "apps/react-enterprise-app/src/tests/use-session.test.ts"
@@ -4341,7 +4341,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4357,7 +4357,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9ba127984375",
+      "id": "source-lineage-ui-foundation-rewrite-9ba127984375",
       "sourceLineageId": "source-lineage-9ba127984375",
       "sourceLineagePaths": [
         "docs/adr/0025-define-playwright-end-to-end-testing-strategy.md"
@@ -4370,7 +4370,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4386,7 +4386,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9ae8f9bf75db",
+      "id": "source-lineage-ui-foundation-rewrite-9ae8f9bf75db",
       "sourceLineageId": "source-lineage-9ae8f9bf75db",
       "sourceLineagePaths": [
         "docs/evidence/e2e/playwright-baseline.json"
@@ -4399,7 +4399,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4415,7 +4415,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-22b2e5d309bb",
+      "id": "source-lineage-ui-foundation-rewrite-22b2e5d309bb",
       "sourceLineageId": "source-lineage-22b2e5d309bb",
       "sourceLineagePaths": [
         "docs/evidence/e2e/playwright-baseline.md"
@@ -4428,7 +4428,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4444,7 +4444,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5cb2bd150714",
+      "id": "source-lineage-ui-foundation-rewrite-5cb2bd150714",
       "sourceLineageId": "source-lineage-5cb2bd150714",
       "sourceLineagePaths": [
         "docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-playwright-adapter-runtime-proof.json"
@@ -4457,7 +4457,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4473,7 +4473,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5549e8034f43",
+      "id": "source-lineage-ui-foundation-rewrite-5549e8034f43",
       "sourceLineageId": "source-lineage-5549e8034f43",
       "sourceLineagePaths": [
         "docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-playwright-axe-adapter-runtime-proof.json"
@@ -4486,7 +4486,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4502,7 +4502,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ef4b4e2f9216",
+      "id": "source-lineage-ui-foundation-rewrite-ef4b4e2f9216",
       "sourceLineageId": "source-lineage-ef4b4e2f9216",
       "sourceLineagePaths": [
         "docs/v2-foundation/usf-audit/proof-evidence/tools-ui-reference-harness-playwright-claim-mapping-spec.json"
@@ -4515,7 +4515,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4531,7 +4531,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2759a4115d57",
+      "id": "source-lineage-ui-foundation-rewrite-2759a4115d57",
       "sourceLineageId": "source-lineage-2759a4115d57",
       "sourceLineagePaths": [
         "docs/v2-foundation/usf-audit/proof-evidence/tools-ui-reference-harness-playwright-groups-spec.json"
@@ -4544,7 +4544,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4560,7 +4560,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-07918f60a28c",
+      "id": "source-lineage-ui-foundation-rewrite-07918f60a28c",
       "sourceLineageId": "source-lineage-07918f60a28c",
       "sourceLineagePaths": [
         "docs/v2-foundation/usf-audit/proof-evidence/tools-ui-reference-harness-playwright-sub-organisations-spec.json"
@@ -4573,7 +4573,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4589,7 +4589,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1ed140678701",
+      "id": "source-lineage-ui-foundation-rewrite-1ed140678701",
       "sourceLineageId": "source-lineage-1ed140678701",
       "sourceLineagePaths": [
         "e2e/discovery/accessibility.spec.ts"
@@ -4602,7 +4602,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4618,7 +4618,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-327f433b5644",
+      "id": "source-lineage-ui-foundation-rewrite-327f433b5644",
       "sourceLineageId": "source-lineage-327f433b5644",
       "sourceLineagePaths": [
         "e2e/discovery/browser-bff-trace.spec.ts"
@@ -4639,7 +4639,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4655,7 +4655,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-406ed6bf21dc",
+      "id": "source-lineage-ui-foundation-rewrite-406ed6bf21dc",
       "sourceLineageId": "source-lineage-406ed6bf21dc",
       "sourceLineagePaths": [
         "e2e/discovery/clickability.spec.ts"
@@ -4668,7 +4668,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4684,7 +4684,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e3828f0e7be7",
+      "id": "source-lineage-ui-foundation-rewrite-e3828f0e7be7",
       "sourceLineageId": "source-lineage-e3828f0e7be7",
       "sourceLineagePaths": [
         "e2e/discovery/persona-authz.spec.ts"
@@ -4705,7 +4705,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4721,7 +4721,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-379992e3b5ef",
+      "id": "source-lineage-ui-foundation-rewrite-379992e3b5ef",
       "sourceLineageId": "source-lineage-379992e3b5ef",
       "sourceLineagePaths": [
         "e2e/discovery/persona-matrix.spec.ts"
@@ -4734,7 +4734,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4750,7 +4750,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-eb0624b2e9a4",
+      "id": "source-lineage-ui-foundation-rewrite-eb0624b2e9a4",
       "sourceLineageId": "source-lineage-eb0624b2e9a4",
       "sourceLineagePaths": [
         "e2e/external/auth-negative.spec.ts"
@@ -4771,7 +4771,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4787,7 +4787,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c011c2946c9e",
+      "id": "source-lineage-ui-foundation-rewrite-c011c2946c9e",
       "sourceLineageId": "source-lineage-c011c2946c9e",
       "sourceLineagePaths": [
         "e2e/external/caddy-links.spec.ts"
@@ -4800,7 +4800,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4816,7 +4816,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-24047446015b",
+      "id": "source-lineage-ui-foundation-rewrite-24047446015b",
       "sourceLineageId": "source-lineage-24047446015b",
       "sourceLineagePaths": [
         "e2e/external/helpers.ts"
@@ -4829,7 +4829,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4845,7 +4845,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-38423b216ca2",
+      "id": "source-lineage-ui-foundation-rewrite-38423b216ca2",
       "sourceLineageId": "source-lineage-38423b216ca2",
       "sourceLineagePaths": [
         "e2e/external/login.spec.ts"
@@ -4858,7 +4858,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4874,7 +4874,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e87ac1944d0a",
+      "id": "source-lineage-ui-foundation-rewrite-e87ac1944d0a",
       "sourceLineageId": "source-lineage-e87ac1944d0a",
       "sourceLineagePaths": [
         "e2e/external/logout.spec.ts"
@@ -4887,7 +4887,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4903,7 +4903,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7a5cb4f143ef",
+      "id": "source-lineage-ui-foundation-rewrite-7a5cb4f143ef",
       "sourceLineageId": "source-lineage-7a5cb4f143ef",
       "sourceLineagePaths": [
         "e2e/external/smoke.test.ts"
@@ -4916,7 +4916,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4932,7 +4932,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f4b718f58458",
+      "id": "source-lineage-ui-foundation-rewrite-f4b718f58458",
       "sourceLineageId": "source-lineage-f4b718f58458",
       "sourceLineagePaths": [
         "e2e/external/tenant-prod.spec.ts"
@@ -4953,7 +4953,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4969,7 +4969,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5c15b4c028ef",
+      "id": "source-lineage-ui-foundation-rewrite-5c15b4c028ef",
       "sourceLineageId": "source-lineage-5c15b4c028ef",
       "sourceLineagePaths": [
         "e2e/external/tool-services.spec.ts"
@@ -4982,7 +4982,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -4998,7 +4998,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2a0ae19baa96",
+      "id": "source-lineage-ui-foundation-rewrite-2a0ae19baa96",
       "sourceLineageId": "source-lineage-2a0ae19baa96",
       "sourceLineagePaths": [
         "e2e/identity/broker-login.spec.ts"
@@ -5019,7 +5019,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5035,7 +5035,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1a81dca5cab2",
+      "id": "source-lineage-ui-foundation-rewrite-1a81dca5cab2",
       "sourceLineageId": "source-lineage-1a81dca5cab2",
       "sourceLineagePaths": [
         "e2e/identity/global-setup.ts"
@@ -5056,7 +5056,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5072,7 +5072,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-20544d2cb73d",
+      "id": "source-lineage-ui-foundation-rewrite-20544d2cb73d",
       "sourceLineageId": "source-lineage-20544d2cb73d",
       "sourceLineagePaths": [
         "e2e/identity/redirect-merge.test.ts"
@@ -5093,7 +5093,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5109,7 +5109,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-561e520116b1",
+      "id": "source-lineage-ui-foundation-rewrite-561e520116b1",
       "sourceLineageId": "source-lineage-561e520116b1",
       "sourceLineagePaths": [
         "e2e/identity/redirect-merge.ts"
@@ -5130,7 +5130,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5146,7 +5146,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-405e859c1282",
+      "id": "source-lineage-ui-foundation-rewrite-405e859c1282",
       "sourceLineageId": "source-lineage-405e859c1282",
       "sourceLineagePaths": [
         "e2e/internal/build.test.ts"
@@ -5159,7 +5159,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5175,7 +5175,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-458ff7f36bbe",
+      "id": "source-lineage-ui-foundation-rewrite-458ff7f36bbe",
       "sourceLineageId": "source-lineage-458ff7f36bbe",
       "sourceLineagePaths": [
         "e2e/internal/smoke.test.ts"
@@ -5188,7 +5188,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5204,7 +5204,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5a47707c4a9e",
+      "id": "source-lineage-ui-foundation-rewrite-5a47707c4a9e",
       "sourceLineageId": "source-lineage-5a47707c4a9e",
       "sourceLineagePaths": [
         "e2e/persona-registry.json"
@@ -5217,7 +5217,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5233,7 +5233,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7931c0c3b6c8",
+      "id": "source-lineage-ui-foundation-rewrite-7931c0c3b6c8",
       "sourceLineageId": "source-lineage-7931c0c3b6c8",
       "sourceLineagePaths": [
         "e2e/prod/admin-tools.test.ts"
@@ -5254,7 +5254,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5270,7 +5270,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3733c03edaf3",
+      "id": "source-lineage-ui-foundation-rewrite-3733c03edaf3",
       "sourceLineageId": "source-lineage-3733c03edaf3",
       "sourceLineagePaths": [
         "e2e/prod/api-contract.test.ts"
@@ -5291,7 +5291,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5307,7 +5307,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d1373766db4f",
+      "id": "source-lineage-ui-foundation-rewrite-d1373766db4f",
       "sourceLineageId": "source-lineage-d1373766db4f",
       "sourceLineagePaths": [
         "e2e/prod/asset-integrity.test.ts"
@@ -5320,7 +5320,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5336,7 +5336,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-db3a81557d73",
+      "id": "source-lineage-ui-foundation-rewrite-db3a81557d73",
       "sourceLineageId": "source-lineage-db3a81557d73",
       "sourceLineagePaths": [
         "e2e/prod/cookie-security.test.ts"
@@ -5357,7 +5357,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5373,7 +5373,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-724e9e61d353",
+      "id": "source-lineage-ui-foundation-rewrite-724e9e61d353",
       "sourceLineageId": "source-lineage-724e9e61d353",
       "sourceLineagePaths": [
         "e2e/prod/cross-cutting.test.ts"
@@ -5386,7 +5386,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5402,7 +5402,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3693f172ab64",
+      "id": "source-lineage-ui-foundation-rewrite-3693f172ab64",
       "sourceLineageId": "source-lineage-3693f172ab64",
       "sourceLineagePaths": [
         "e2e/prod/error-handling.test.ts"
@@ -5423,7 +5423,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5439,7 +5439,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-27f1bbdd4d3a",
+      "id": "source-lineage-ui-foundation-rewrite-27f1bbdd4d3a",
       "sourceLineageId": "source-lineage-27f1bbdd4d3a",
       "sourceLineagePaths": [
         "e2e/prod/performance-budget.test.ts"
@@ -5452,7 +5452,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5468,7 +5468,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-b5e983f8595f",
+      "id": "source-lineage-ui-foundation-rewrite-b5e983f8595f",
       "sourceLineageId": "source-lineage-b5e983f8595f",
       "sourceLineagePaths": [
         "e2e/prod/security-headers.test.ts"
@@ -5489,7 +5489,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5505,7 +5505,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-5651f969c309",
+      "id": "source-lineage-ui-foundation-rewrite-5651f969c309",
       "sourceLineageId": "source-lineage-5651f969c309",
       "sourceLineagePaths": [
         "e2e/scenario-manifest.json"
@@ -5518,7 +5518,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5534,7 +5534,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c48515d0d0c0",
+      "id": "source-lineage-ui-foundation-rewrite-c48515d0d0c0",
       "sourceLineageId": "source-lineage-c48515d0d0c0",
       "sourceLineagePaths": [
         "e2e/suite-registry.json"
@@ -5547,7 +5547,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5563,7 +5563,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e8364c98e33d",
+      "id": "source-lineage-ui-foundation-rewrite-e8364c98e33d",
       "sourceLineageId": "source-lineage-e8364c98e33d",
       "sourceLineagePaths": [
         "e2e/support/correlation-core.mjs"
@@ -5576,7 +5576,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5592,7 +5592,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-32e26e1885cd",
+      "id": "source-lineage-ui-foundation-rewrite-32e26e1885cd",
       "sourceLineageId": "source-lineage-32e26e1885cd",
       "sourceLineagePaths": [
         "e2e/support/correlation.ts"
@@ -5605,7 +5605,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5621,7 +5621,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1e41bfc05862",
+      "id": "source-lineage-ui-foundation-rewrite-1e41bfc05862",
       "sourceLineageId": "source-lineage-1e41bfc05862",
       "sourceLineagePaths": [
         "e2e/support/faro-flush.ts"
@@ -5634,7 +5634,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5650,7 +5650,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-54fa499b2b25",
+      "id": "source-lineage-ui-foundation-rewrite-54fa499b2b25",
       "sourceLineageId": "source-lineage-54fa499b2b25",
       "sourceLineagePaths": [
         "e2e/ui-contract.json"
@@ -5663,7 +5663,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5679,7 +5679,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-da7aaa655fc8",
+      "id": "source-lineage-ui-foundation-rewrite-da7aaa655fc8",
       "sourceLineageId": "source-lineage-da7aaa655fc8",
       "sourceLineagePaths": [
         "packages/adapters-brevo/tests/adapters-brevo.test.ts"
@@ -5692,7 +5692,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5708,7 +5708,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-43352eb3fc1b",
+      "id": "source-lineage-ui-foundation-rewrite-43352eb3fc1b",
       "sourceLineageId": "source-lineage-43352eb3fc1b",
       "sourceLineagePaths": [
         "packages/adapters-clickhouse/tests/adapters-clickhouse.test.ts"
@@ -5721,7 +5721,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5737,7 +5737,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-6b7df5bcf90d",
+      "id": "source-lineage-ui-foundation-rewrite-6b7df5bcf90d",
       "sourceLineageId": "source-lineage-6b7df5bcf90d",
       "sourceLineagePaths": [
         "packages/adapters-graphql/tests/adapters-graphql.test.ts"
@@ -5750,7 +5750,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5766,7 +5766,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-da014f7ca571",
+      "id": "source-lineage-ui-foundation-rewrite-da014f7ca571",
       "sourceLineageId": "source-lineage-da014f7ca571",
       "sourceLineagePaths": [
         "packages/adapters-ingestion/tests/adapters-ingestion.test.ts"
@@ -5779,7 +5779,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5795,7 +5795,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c52f8f7de597",
+      "id": "source-lineage-ui-foundation-rewrite-c52f8f7de597",
       "sourceLineageId": "source-lineage-c52f8f7de597",
       "sourceLineagePaths": [
         "packages/adapters-keycloak/tests/adapters-keycloak.test.ts"
@@ -5808,7 +5808,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5824,7 +5824,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-1a3a116834d1",
+      "id": "source-lineage-ui-foundation-rewrite-1a3a116834d1",
       "sourceLineageId": "source-lineage-1a3a116834d1",
       "sourceLineagePaths": [
         "packages/adapters-loki/tests/adapters-loki.test.ts"
@@ -5837,7 +5837,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5853,7 +5853,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-b9dd49d256ab",
+      "id": "source-lineage-ui-foundation-rewrite-b9dd49d256ab",
       "sourceLineageId": "source-lineage-b9dd49d256ab",
       "sourceLineagePaths": [
         "packages/adapters-object-storage/tests/adapters-object-storage.test.ts"
@@ -5866,7 +5866,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5882,7 +5882,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-39226a47e5cc",
+      "id": "source-lineage-ui-foundation-rewrite-39226a47e5cc",
       "sourceLineageId": "source-lineage-39226a47e5cc",
       "sourceLineagePaths": [
         "packages/adapters-opentelemetry/tests/adapters-opentelemetry.test.ts"
@@ -5895,7 +5895,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5911,7 +5911,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-dc2730a30af9",
+      "id": "source-lineage-ui-foundation-rewrite-dc2730a30af9",
       "sourceLineageId": "source-lineage-dc2730a30af9",
       "sourceLineagePaths": [
         "packages/adapters-postgres/tests/adapters-postgres.test.ts"
@@ -5924,7 +5924,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5940,7 +5940,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a2ee0e02f988",
+      "id": "source-lineage-ui-foundation-rewrite-a2ee0e02f988",
       "sourceLineageId": "source-lineage-a2ee0e02f988",
       "sourceLineagePaths": [
         "packages/adapters-redis/tests/adapters-redis.test.ts"
@@ -5953,7 +5953,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5969,7 +5969,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2cb240fce8d7",
+      "id": "source-lineage-ui-foundation-rewrite-2cb240fce8d7",
       "sourceLineageId": "source-lineage-2cb240fce8d7",
       "sourceLineagePaths": [
         "packages/adapters-sentry/tests/adapters-sentry.test.ts"
@@ -5982,7 +5982,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -5998,7 +5998,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-7d98e665125c",
+      "id": "source-lineage-ui-foundation-rewrite-7d98e665125c",
       "sourceLineageId": "source-lineage-7d98e665125c",
       "sourceLineagePaths": [
         "packages/api-runtime/tests/health-contract.test.ts"
@@ -6011,7 +6011,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6027,7 +6027,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-afdd0eb32d3d",
+      "id": "source-lineage-ui-foundation-rewrite-afdd0eb32d3d",
       "sourceLineageId": "source-lineage-afdd0eb32d3d",
       "sourceLineagePaths": [
         "packages/audit-events/tests/audit-events.test.ts"
@@ -6040,7 +6040,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6056,7 +6056,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c2ceeb020ed7",
+      "id": "source-lineage-ui-foundation-rewrite-c2ceeb020ed7",
       "sourceLineageId": "source-lineage-c2ceeb020ed7",
       "sourceLineagePaths": [
         "packages/authorisation-runtime/tests/authorisation-runtime.test.ts"
@@ -6069,7 +6069,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6085,7 +6085,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d7ab7d12ae84",
+      "id": "source-lineage-ui-foundation-rewrite-d7ab7d12ae84",
       "sourceLineageId": "source-lineage-d7ab7d12ae84",
       "sourceLineagePaths": [
         "packages/config-runtime/tests/config-runtime.test.ts"
@@ -6098,7 +6098,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6114,7 +6114,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3f9014504987",
+      "id": "source-lineage-ui-foundation-rewrite-3f9014504987",
       "sourceLineageId": "source-lineage-3f9014504987",
       "sourceLineagePaths": [
         "packages/contracts-analytics/tests/contracts-analytics.test.ts"
@@ -6127,7 +6127,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6143,7 +6143,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a260c8bb1131",
+      "id": "source-lineage-ui-foundation-rewrite-a260c8bb1131",
       "sourceLineageId": "source-lineage-a260c8bb1131",
       "sourceLineagePaths": [
         "packages/contracts-auth/tests/contracts-auth.test.ts"
@@ -6156,7 +6156,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6172,7 +6172,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-38e42000977d",
+      "id": "source-lineage-ui-foundation-rewrite-38e42000977d",
       "sourceLineageId": "source-lineage-38e42000977d",
       "sourceLineagePaths": [
         "packages/contracts-graphql/tests/contracts-graphql.test.ts"
@@ -6185,7 +6185,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6201,7 +6201,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-83d1022c3f36",
+      "id": "source-lineage-ui-foundation-rewrite-83d1022c3f36",
       "sourceLineageId": "source-lineage-83d1022c3f36",
       "sourceLineagePaths": [
         "packages/contracts-ingestion/tests/contracts-ingestion.test.ts"
@@ -6214,7 +6214,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6230,7 +6230,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-c343e425c683",
+      "id": "source-lineage-ui-foundation-rewrite-c343e425c683",
       "sourceLineageId": "source-lineage-c343e425c683",
       "sourceLineagePaths": [
         "packages/domain-identity/tests/domain-identity.test.ts"
@@ -6243,7 +6243,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6259,7 +6259,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-56865881f485",
+      "id": "source-lineage-ui-foundation-rewrite-56865881f485",
       "sourceLineageId": "source-lineage-56865881f485",
       "sourceLineagePaths": [
         "packages/email-runtime/tests/email-runtime.test.ts"
@@ -6272,7 +6272,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6288,7 +6288,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-a4491822b053",
+      "id": "source-lineage-ui-foundation-rewrite-a4491822b053",
       "sourceLineageId": "source-lineage-a4491822b053",
       "sourceLineagePaths": [
         "packages/graphql-api-runtime/tests/graphql-api-runtime.test.ts"
@@ -6301,7 +6301,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6317,7 +6317,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-40545681cbc0",
+      "id": "source-lineage-ui-foundation-rewrite-40545681cbc0",
       "sourceLineageId": "source-lineage-40545681cbc0",
       "sourceLineagePaths": [
         "packages/graphql-browser-client/tests/client.test.ts"
@@ -6330,7 +6330,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6346,7 +6346,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ee815ba969a7",
+      "id": "source-lineage-ui-foundation-rewrite-ee815ba969a7",
       "sourceLineageId": "source-lineage-ee815ba969a7",
       "sourceLineagePaths": [
         "packages/i18n-runtime/tests/i18n-runtime.test.ts"
@@ -6359,7 +6359,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6375,7 +6375,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-d6787b0a6074",
+      "id": "source-lineage-ui-foundation-rewrite-d6787b0a6074",
       "sourceLineageId": "source-lineage-d6787b0a6074",
       "sourceLineagePaths": [
         "packages/i18n-runtime/tests/react.test.tsx"
@@ -6388,7 +6388,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6404,7 +6404,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-dcda481f952a",
+      "id": "source-lineage-ui-foundation-rewrite-dcda481f952a",
       "sourceLineageId": "source-lineage-dcda481f952a",
       "sourceLineagePaths": [
         "packages/platform-errors/tests/platform-errors-auth.test.ts"
@@ -6417,7 +6417,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6433,7 +6433,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-cec67007d70d",
+      "id": "source-lineage-ui-foundation-rewrite-cec67007d70d",
       "sourceLineageId": "source-lineage-cec67007d70d",
       "sourceLineagePaths": [
         "packages/platform-errors/tests/platform-errors.test.ts"
@@ -6446,7 +6446,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6462,7 +6462,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-449868edd0dc",
+      "id": "source-lineage-ui-foundation-rewrite-449868edd0dc",
       "sourceLineageId": "source-lineage-449868edd0dc",
       "sourceLineagePaths": [
         "packages/platform-logging/tests/platform-logging.test.ts"
@@ -6475,7 +6475,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6491,7 +6491,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-458a08dfb337",
+      "id": "source-lineage-ui-foundation-rewrite-458a08dfb337",
       "sourceLineageId": "source-lineage-458a08dfb337",
       "sourceLineagePaths": [
         "packages/platform-observability/tests/platform-observability.test.ts"
@@ -6504,7 +6504,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6520,7 +6520,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3c1726534307",
+      "id": "source-lineage-ui-foundation-rewrite-3c1726534307",
       "sourceLineageId": "source-lineage-3c1726534307",
       "sourceLineagePaths": [
         "packages/platform-runtime-context/tests/platform-runtime-context.test.ts"
@@ -6533,7 +6533,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6549,7 +6549,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e9767e506960",
+      "id": "source-lineage-ui-foundation-rewrite-e9767e506960",
       "sourceLineageId": "source-lineage-e9767e506960",
       "sourceLineagePaths": [
         "packages/session-runtime/tests/session-runtime.test.ts"
@@ -6562,7 +6562,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6578,7 +6578,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-e4a6f7323a59",
+      "id": "source-lineage-ui-foundation-rewrite-e4a6f7323a59",
       "sourceLineageId": "source-lineage-e4a6f7323a59",
       "sourceLineagePaths": [
         "packages/storage-runtime/tests/storage-runtime.test.ts"
@@ -6591,7 +6591,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6607,7 +6607,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-be96f46b7d5e",
+      "id": "source-lineage-ui-foundation-rewrite-be96f46b7d5e",
       "sourceLineageId": "source-lineage-be96f46b7d5e",
       "sourceLineagePaths": [
         "packages/ui-design-system/tests/accessible-controls.test.tsx"
@@ -6620,7 +6620,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6636,7 +6636,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-be240f1e3e9a",
+      "id": "source-lineage-ui-foundation-rewrite-be240f1e3e9a",
       "sourceLineageId": "source-lineage-be240f1e3e9a",
       "sourceLineagePaths": [
         "packages/ui-design-system/tests/button.test.tsx"
@@ -6649,7 +6649,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6665,7 +6665,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-9ec1319e2375",
+      "id": "source-lineage-ui-foundation-rewrite-9ec1319e2375",
       "sourceLineageId": "source-lineage-9ec1319e2375",
       "sourceLineagePaths": [
         "packages/ui-design-system/tests/data-table.test.tsx"
@@ -6678,7 +6678,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6694,7 +6694,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-84426250d5fd",
+      "id": "source-lineage-ui-foundation-rewrite-84426250d5fd",
       "sourceLineageId": "source-lineage-84426250d5fd",
       "sourceLineagePaths": [
         "playwright.build.config.ts"
@@ -6707,7 +6707,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6723,7 +6723,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-f48dada5e336",
+      "id": "source-lineage-ui-foundation-rewrite-f48dada5e336",
       "sourceLineageId": "source-lineage-f48dada5e336",
       "sourceLineagePaths": [
         "playwright.discovery.config.ts"
@@ -6736,7 +6736,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6752,7 +6752,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-32e4d1f0d036",
+      "id": "source-lineage-ui-foundation-rewrite-32e4d1f0d036",
       "sourceLineageId": "source-lineage-32e4d1f0d036",
       "sourceLineagePaths": [
         "playwright.external.config.ts"
@@ -6765,7 +6765,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6781,7 +6781,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-300e65eba48d",
+      "id": "source-lineage-ui-foundation-rewrite-300e65eba48d",
       "sourceLineageId": "source-lineage-300e65eba48d",
       "sourceLineagePaths": [
         "playwright.identity.config.ts"
@@ -6794,7 +6794,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6810,7 +6810,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-ae4610d828f4",
+      "id": "source-lineage-ui-foundation-rewrite-ae4610d828f4",
       "sourceLineageId": "source-lineage-ae4610d828f4",
       "sourceLineagePaths": [
         "playwright.internal.config.ts"
@@ -6823,7 +6823,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6839,7 +6839,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-2a41a8fc268d",
+      "id": "source-lineage-ui-foundation-rewrite-2a41a8fc268d",
       "sourceLineageId": "source-lineage-2a41a8fc268d",
       "sourceLineagePaths": [
         "playwright.prod.config.ts"
@@ -6852,7 +6852,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6868,7 +6868,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-4dfe82f8d9dc",
+      "id": "source-lineage-ui-foundation-rewrite-4dfe82f8d9dc",
       "sourceLineageId": "source-lineage-4dfe82f8d9dc",
       "sourceLineagePaths": [
         "services/mock-oidc/src/server.test.ts"
@@ -6881,7 +6881,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6897,7 +6897,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-83ffa99deba2",
+      "id": "source-lineage-ui-foundation-rewrite-83ffa99deba2",
       "sourceLineageId": "source-lineage-83ffa99deba2",
       "sourceLineagePaths": [
         "tools/ui-reference-harness/playwright.config.ts"
@@ -6910,7 +6910,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6926,7 +6926,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-61244d574576",
+      "id": "source-lineage-ui-foundation-rewrite-61244d574576",
       "sourceLineageId": "source-lineage-61244d574576",
       "sourceLineagePaths": [
         "tools/ui-reference-harness/playwright/claim-mapping.spec.ts"
@@ -6939,7 +6939,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6955,7 +6955,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-37118ef31b3b",
+      "id": "source-lineage-ui-foundation-rewrite-37118ef31b3b",
       "sourceLineageId": "source-lineage-37118ef31b3b",
       "sourceLineagePaths": [
         "tools/ui-reference-harness/playwright/groups.spec.ts"
@@ -6968,7 +6968,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -6984,7 +6984,7 @@
       ]
     },
     {
-      "id": "react-ui-foundation-rewrite-3acbe5e3388f",
+      "id": "source-lineage-ui-foundation-rewrite-3acbe5e3388f",
       "sourceLineageId": "source-lineage-3acbe5e3388f",
       "sourceLineagePaths": [
         "tools/ui-reference-harness/playwright/sub-organisations.spec.ts"
@@ -6997,7 +6997,7 @@
       "owner": "USF repository maintainers",
       "reviewCadence": "before Staging handoff and on UI-derived semantic import",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -7021,7 +7021,7 @@
     }
   },
   "nonClaims": [
-    "React UI parity",
+    "UI parity",
     "visual parity",
     "UX parity",
     "product UI readiness",

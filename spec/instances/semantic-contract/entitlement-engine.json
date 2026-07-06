@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.entitlement-engine",
   "title": "Entitlement Engine Semantic Contract",
-  "description": "Source-backed draft semantic contract for the entitlement engine capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the entitlement engine capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -82,7 +82,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "A unit proof covers the deny-by-default state machine and runtime proofs cover the entitlement seam, permission-before-entitlement ordering, the live data substrate, and the routes, demonstrated in React via hermetic and live-substrate validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the deny-by-default state machine and runtime proofs cover the entitlement seam, permission-before-entitlement ordering, the live data substrate, and the routes, demonstrated in source lineage via hermetic and live-substrate validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/entitlements-runtime-proof.ts",
         "apps/platform-api/scripts/entitlements-postgres-runtime-proof.ts",

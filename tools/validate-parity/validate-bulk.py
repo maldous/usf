@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF import/export/bulk parity validator (USF-162).
 
-Governance tooling only. It creates no runtime files and imports no React source.
+Governance tooling only. It creates no runtime files and imports no source lineage.
 It fails closed on governed data-movement invariants: controlled bulk operation
 types/classifications/statuses, explicit idempotency, file_id posture, PDP,
 guardrails, jobs, audit, telemetry, evidence package hashes, source-use honesty,
@@ -162,7 +162,7 @@ def bulk_rows(matrix):
     for row in matrix.get("domains", []):
         if not isinstance(row, dict):
             continue
-        rid = str(row.get("react_item_id", ""))
+        rid = str(row.get("source_item_id", ""))
         summary = str(row.get("behaviour_summary", "")).lower()
         if rid.startswith("bulk.") or "import/export" in summary or "bulk operation" in summary:
             rows.append(row)
@@ -318,11 +318,11 @@ def run_checks(F, state=None):
         "bulk.guardrails",
         "bulk.api-openapi-surfaces",
         "bulk.provider-external-transfer-posture",
-        "bulk.react-ui-playwright-behaviours",
+        "bulk.ui-playwright-behaviours",
     ]:
-        if not any(row.get("react_item_id") == rid for row in rows):
+        if not any(row.get("source_item_id") == rid for row in rows):
             F.add("USF-BULK-006", MATRIX, f"bulk row missing {rid}")
-    if not all(row.get("domain_authorised") is True for row in rows if str(row.get("react_item_id", "")).startswith("bulk.")):
+    if not all(row.get("domain_authorised") is True for row in rows if str(row.get("source_item_id", "")).startswith("bulk.")):
         F.add("USF-BULK-006", MATRIX, "bulk rows are not domain-authorised")
     for path in [
         "adapters/bulk/src/index.ts",

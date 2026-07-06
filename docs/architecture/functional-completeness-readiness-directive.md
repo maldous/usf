@@ -28,7 +28,7 @@ This directive defines, before any further implementation resumes, the complete 
 
 2.3 This directive MUST NOT be used to upgrade bootstrap proof to broader readiness, to treat `hermetic-mock` as `live-external-provider`, to treat `production-shaped` as `production-live`, or to claim staging/production/deployment/live-provider readiness. Those remain separately authorised and separately proven (Charter §6; Authority Model §4.4).
 
-2.4 **Naming and structure conformance.** Per Charter §1.3 and the Strict Naming Rules in `AGENTS.md`, the tokens `v2`, `legacy`, `old`, `new`, `temp`, `transitional`, and a redundant `usf` segment MUST NOT appear in canonical USF path names. The artefacts named by this directive therefore use the established `react-*` convention (as in `usf-readiness-rule-coverage-matrix.md`, where `react` names the UI framework) and omit the forbidden `legacy` token from filenames. The word is retained only where this document quotes the forbidden-token list.
+2.4 **Naming and structure conformance.** Per Charter §1.3 and the Strict Naming Rules in `AGENTS.md`, the tokens `v2`, `legacy`, `old`, `new`, `temp`, `transitional`, and a redundant `usf` segment MUST NOT appear in canonical USF path names. The artefacts named by this directive therefore use the established `source-lineage-*` convention (as in `usf-readiness-rule-coverage-matrix.md`, where `source-lineage` names the UI framework) and omit the forbidden `legacy` token from filenames. The word is retained only where this document quotes the forbidden-token list.
 
 ## 3. The foundation-vs-UI scope rule
 
@@ -36,7 +36,7 @@ The USF foundation has **no UI/UX runtime**. "Full functional completeness" does
 
 3.1 The USF foundation is, and MUST remain, **UI-agnostic**: it is the set of semantic contracts, capabilities, ports, adapters, API/runtime surface, schemas, proof, validation, and AI-consumable integration surface. UI/UX is a downstream consumer concern, generated or implemented later from foundation contracts and capability metadata.
 
-3.2 Foundation readiness MUST NOT require browser UI implementation, React component migration, visual/UX migration, or Playwright/browser end-to-end testing.
+3.2 Foundation readiness MUST NOT require browser UI implementation, source-lineage component migration, visual/UX migration, or Playwright/browser end-to-end testing.
 
 3.3 React UI/UX artefacts — components, pages, browser flows, DOM behaviours, visual states, CSS, layout, interaction flows — are **NOT** foundation artefacts. They MUST be **classified**, not migrated into the foundation.
 
@@ -72,7 +72,7 @@ UI-scope statuses (new):
 
 4.2 No item may be `migrated` without USF tests/proofs. No recorded source-lineage test/proof may be left unclassified. No `requires-human-decision` item may be treated as resolved.
 
-4.3 **Matrix shape.** Each coverage row carries: `react_item_id`, `category` (service|port|adapter|route|job|workflow|provider|command|event|schema|migration|config|observability|audit|test|proof|ui|other), `react_paths[]`, `react_tests[]`, `react_proofs[]`, `behaviour_summary`, `usf_status` (one of §4), `usf_paths[]`, `usf_tests[]`, `usf_proofs[]`, `semantic_authority` (known|missing|unclear), `source_use_disposition` (preserve|replace|refactor|retire|rename|split|merge), `linear_issue`, `blocking_foundation_readiness` (bool), `evidence`, `retry_condition`. This shape is recorded in `functional-scope-classification-matrix.md`. Formalising it as a JSON Schema under `spec/schemas/` and wiring a validator is **deferred** to the implementation phase (§6, §7).
+4.3 **Matrix shape.** Each coverage row carries: `source_item_id`, `category` (service|port|adapter|route|job|workflow|provider|command|event|schema|migration|config|observability|audit|test|proof|ui|other), `source_paths[]`, `source_tests[]`, `source_proofs[]`, `behaviour_summary`, `usf_status` (one of §4), `usf_paths[]`, `usf_tests[]`, `usf_proofs[]`, `semantic_authority` (known|missing|unclear), `source_use_disposition` (preserve|replace|refactor|retire|rename|split|merge), `linear_issue`, `blocking_foundation_readiness` (bool), `evidence`, `retry_condition`. This shape is recorded in `functional-scope-classification-matrix.md`. Formalising it as a JSON Schema under `spec/schemas/` and wiring a validator is **deferred** to the implementation phase (§6, §7).
 
 ## 5. Inventory substrate (do not duplicate)
 
@@ -104,7 +104,7 @@ This planning pass answers, at domain granularity (detail in the scope-classific
 
 7.1 For this planning pass (no runtime change), the required gates are: strict JSON parse of any changed JSON; `python3 tools/validate-spec/validate-spec.py all --json` and `selftest`; `python3 tools/validate-bootstrap/validate-bootstrap.py all --json` and `selftest`; `git diff --check`. `make verify` MUST remain green.
 
-7.2 **Deferred validator hardening (NOT built in this pass; implementation scope).** A later authorised implementation pass MUST add completeness-coverage enforcement and a `make parity` target that fails closed when: the coverage matrix has `missing` items; has `partial`/`requires-human-decision` items without a Linear blocker; has unclassified source-lineage tests/proofs; has a `migrated` item lacking USF tests/proofs; claims foundation readiness while the matrix is incomplete; claims Playwright/browser E2E as required for foundation readiness; ignores a React UI test without classification; classifies a UI test that contains foundation behaviour wholly out of scope; marks a capability UI-ready without route/port/schema/test evidence; or adds React/UI/browser runtime artefacts without separate authorisation. That pass MUST add planted defects proving each failure, formalise the §4.3 matrix shape as a `spec/schemas/` schema, and make `make verify` include `make parity` before any readiness claim is admissible.
+7.2 **Deferred validator hardening (NOT built in this pass; implementation scope).** A later authorised implementation pass MUST add completeness-coverage enforcement and a `make parity` target that fails closed when: the coverage matrix has `missing` items; has `partial`/`requires-human-decision` items without a Linear blocker; has unclassified source-lineage tests/proofs; has a `migrated` item lacking USF tests/proofs; claims foundation readiness while the matrix is incomplete; claims Playwright/browser E2E as required for foundation readiness; ignores a UI test without classification; classifies a UI test that contains foundation behaviour wholly out of scope; marks a capability UI-ready without route/port/schema/test evidence; or adds source lineage/UI/browser runtime artefacts without separate authorisation. That pass MUST add planted defects proving each failure, formalise the §4.3 matrix shape as a `spec/schemas/` schema, and make `make verify` include `make parity` before any readiness claim is admissible.
 
 ## 8. Readiness wording (mandatory)
 

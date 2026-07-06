@@ -137,7 +137,7 @@ This standard does not claim ISO/IEC 27001 certification or SOC readiness.
 
 This standard does not authorise USF-133 closure.
 
-This standard does not copy React runtime code or make React source live authority.
+This standard does not copy source-lineage runtime code or make source lineage live authority.
 
 This standard does not self-accept any Linear issue, directive, or future
 implementation step.

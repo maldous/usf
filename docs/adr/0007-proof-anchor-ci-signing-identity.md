@@ -37,7 +37,7 @@ A CI attestation identity removes the need to store or rotate a private signing 
 
 ## Source References
 
-- None. The signer model is a USF governance decision; React proof is stale lineage.
+- None. The signer model is a USF governance decision; source-lineage proof is stale lineage.
 
 ## Proof References
 

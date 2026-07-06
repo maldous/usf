@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit proofs cover the delegation state machine and the storage adapter and a runtime proof covers the local composition, demonstrated in React via hermetic state-machine and audit-order validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Unit proofs cover the delegation state machine and the storage adapter and a runtime proof covers the local composition, demonstrated in source lineage via hermetic state-machine and audit-order validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "docs/architecture/capability-source-coverage-matrix.md",
         "docs/architecture/foundation-completeness-audit.md"

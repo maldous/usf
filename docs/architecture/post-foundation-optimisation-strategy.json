@@ -236,7 +236,7 @@
   ],
   "supersededLineageAndEvolutionDependencyFindings": [
     {
-      "id": "historical-react-lineage-references",
+      "id": "historical-source-lineage-lineage-references",
       "marker": "superseded-external-lineage",
       "classification": "historical-lineage",
       "finding": "Superseded external-lineage references remain widespread as source lineage and evidence citations.",
@@ -261,7 +261,7 @@
     },
     {
       "id": "historical-parity-migration-language",
-      "marker": "superseded parity wording and legacy react-to-usf matrix names",
+      "marker": "superseded parity wording and legacy source-lineage-to-usf matrix names",
       "classification": "historical-lineage",
       "finding": "Parity matrices and review docs document how foundation evidence was reconciled from historical source.",
       "activeAuthorityBoundary": "They are not full product readiness product parity claims and must not drive future implementation by source resemblance.",

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:taxonomy",
   "title": "USF Taxonomy Schema",
-  "description": "Draft JSON Schema for the USF taxonomy catalogue (spec/taxonomies/taxonomy-catalog.json) and future taxonomy artefacts. Validates taxonomy families and taxonomies per the catalogue's taxonomyRules: each family declares governed ontology concepts, purpose, expected future taxonomies/vocabulary/schema dependencies, source inputs, and AI guidance; each taxonomy belongs to a family and declares classificationMode (classification-modes), lifecycle status (lifecycle-states), governed ontology concepts, categories, category rules, future vocabulary/schema dependencies, source inputs, and AI guidance. CLOSURE POLICY: families, taxonomies, and categories are closed; descriptive metadata blocks (currentRepositoryState, governance, taxonomyRelationships, vocabularyDependencies, reactSourceLearnings, externalStandardsInfluence, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. Cross-record checks (unique family/taxonomy ids, every taxonomy in a known family) are validator-deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for the USF taxonomy catalogue (spec/taxonomies/taxonomy-catalog.json) and future taxonomy artefacts. Validates taxonomy families and taxonomies per the catalogue's taxonomyRules: each family declares governed ontology concepts, purpose, expected future taxonomies/vocabulary/schema dependencies, source inputs, and AI guidance; each taxonomy belongs to a family and declares classificationMode (classification-modes), lifecycle status (lifecycle-states), governed ontology concepts, categories, category rules, future vocabulary/schema dependencies, source inputs, and AI guidance. CLOSURE POLICY: families, taxonomies, and categories are closed; descriptive metadata blocks (currentRepositoryState, governance, taxonomyRelationships, vocabularyDependencies, sourceLineageLearnings, externalStandardsInfluence, deferredWork, acceptanceCriteria) are deliberately-open extension points typed permissively in this draft and documented as such. Cross-record checks (unique family/taxonomy ids, every taxonomy in a known family) are validator-deferred per schema-authoring-standard section 24. lifecycleState draft; not active.",
   "type": "object",
   "$defs": {
     "kebab": {
@@ -63,7 +63,7 @@
         "expectedFutureTaxonomies",
         "expectedFutureVocabularyDependencies",
         "expectedFutureSchemaDependencies",
-        "reactSourceInputs",
+        "sourceLineageInputs",
         "aiGuidance"
       ],
       "properties": {
@@ -116,7 +116,7 @@
           "minItems": 1,
           "uniqueItems": true
         },
-        "reactSourceInputs": {
+        "sourceLineageInputs": {
           "type": "array",
           "items": {
             "type": "string",
@@ -146,7 +146,7 @@
         "categoryRules",
         "futureVocabularyDependencies",
         "futureSchemaDependencies",
-        "reactSourceInputs",
+        "sourceLineageInputs",
         "aiGuidance"
       ],
       "properties": {
@@ -213,7 +213,7 @@
           "minItems": 1,
           "uniqueItems": true
         },
-        "reactSourceInputs": {
+        "sourceLineageInputs": {
           "type": "array",
           "items": {
             "type": "string",
@@ -367,7 +367,7 @@
       "type": "object",
       "$comment": "Descriptive metadata; deliberately permissive in this draft."
     },
-    "reactSourceLearnings": {
+    "sourceLineageLearnings": {
       "type": "array",
       "$comment": "Descriptive metadata; deliberately permissive in this draft."
     },

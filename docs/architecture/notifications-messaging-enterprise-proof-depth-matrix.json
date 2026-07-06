@@ -298,7 +298,7 @@
       "evidenceRefs": [
         "docs/architecture/notifications-and-messaging-standard.md"
       ],
-      "nonClaimBoundary": "No notification UI, browser E2E, customer admin messaging UI, or React UI parity readiness is claimed by USF-153."
+      "nonClaimBoundary": "No notification UI, browser E2E, customer admin messaging UI, or UI parity readiness is claimed by USF-153."
     },
     {
       "id": "live-provider-deliverability-deferred",

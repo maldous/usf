@@ -1,9 +1,9 @@
 # Operator Access Proof Source-Use Disposition Matrix
 
 This matrix records source-use treatment for the USF-169 operator access posture
-proof and the USF-221 bounded operator lifecycle proof. It uses historical React artefacts only as background lineage where
-referenced by existing USF matrices. It does not copy React runtime/application
-code, does not mirror React paths, and does not claim public exposure, gateway
+proof and the USF-221 bounded operator lifecycle proof. It uses historical source-lineage artefacts only as background lineage where
+referenced by existing USF matrices. It does not copy source-lineage runtime/application
+code, does not mirror source-lineage paths, and does not claim public exposure, gateway
 clickthrough readiness, service console login readiness, live-provider
 readiness, test readiness, staging readiness, production readiness, SOC
 readiness, ISO/IEC 27001 certification, enterprise production readiness, full

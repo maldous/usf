@@ -23,14 +23,14 @@ The USF-77 Option A authorization is narrow:
   - `evidence/evidence-envelope/authentication-slice-proof-lineage.json`
 - The proof substrate is a deterministic semantic harness over committed USF semantic instances and governance artefacts.
 - The proof substrate is not product implementation runtime.
-- Historical React proof scripts and tests are lineage/design inputs only; they are not executed, copied, imported as runtime, mirrored as target paths, or treated as USF proof commands.
+- Historical source-lineage proof scripts and tests are lineage/design inputs only; they are not executed, copied, imported as runtime, mirrored as target paths, or treated as USF proof commands.
 - The authorized provider mode is `hermetic-mock`.
 - The authorized environment is `hermetic`.
 - The authorized observed proof level is `behaviour-proven`.
 - `liveExternalProviderClaim` must be `false`.
 - No production-live claim is authorized.
 
-No other proof runner, runtime substrate, package graph, service topology, Make target, package manifest, product handler, adapter, server, database, cache, identity-provider service, compose file, implementation directory, or historical React proof command is authorized by this decision.
+No other proof runner, runtime substrate, package graph, service topology, Make target, package manifest, product handler, adapter, server, database, cache, identity-provider service, compose file, implementation directory, or historical source-lineage proof command is authorized by this decision.
 
 ## USF-76 Decline Baseline
 
@@ -54,7 +54,7 @@ Those files depend on the historical runtime package graph, source handlers, ada
 | Allowed package setup | None. No package manifest, package directory, dependency graph, or runtime package may be created under this issue. |
 | Allowed service setup | None. No Redis, Postgres, Keycloak, mock IdP service, compose file, container setup, or service directory may be created under this issue. |
 | Historical proof script source-use policy | Evidence-only lineage. The files may be read and cited as source evidence but not executed, copied, mirrored, or treated as USF proof commands. |
-| Proof runner logic treatment | New proof-only semantic harness logic is authorized in the `proof-authentication-slice` mode of `tools/validate-bootstrap/validate-bootstrap.py`; React proof runner logic remains evidence-only lineage and is not copied or executed. |
+| Proof runner logic treatment | New proof-only semantic harness logic is authorized in the `proof-authentication-slice` mode of `tools/validate-bootstrap/validate-bootstrap.py`; source-lineage proof runner logic remains evidence-only lineage and is not copied or executed. |
 | Target providerMode | `hermetic-mock` for the USF-77 Option A proof. Stronger provider modes are not authorized here. |
 | Target environment | `hermetic` for the USF-77 Option A proof. Stronger environments are not authorized here. |
 | Required proofLevelObserved | `behaviour-proven` for the bounded proof-only authentication slice. |

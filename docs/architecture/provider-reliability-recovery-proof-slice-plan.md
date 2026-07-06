@@ -8,7 +8,7 @@
 | **Issue scope** | USF-92 |
 | **Primary inputs** | `spec/instances/provider-mode/mock-identity-provider.json`, `spec/instances/configuration/provider-mode-selector.json`, `spec/instances/environment/hermetic.json`, `spec/instances/workflow/authentication-login.json`, `spec/instances/workflow/authentication-identity-context.json`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records provider reliability, degraded mode, and recovery semantics for the current authentication proof substrate. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, creates no evidence records, makes no live provider proof claim, and does not start USF-39.
+This plan records provider reliability, degraded mode, and recovery semantics for the current authentication proof substrate. It creates no product implementation runtime, imports no source-lineage runtime/application code, creates no implementation directory, promotes no schema to `active`, creates no evidence records, makes no live provider proof claim, and does not start USF-39.
 
 ## Purpose
 
@@ -102,7 +102,7 @@ This plan does not authorize:
 - USF-39 implementation extraction;
 - product runtime/application code;
 - `apps/`, `packages/`, `services/`, `src/`, `infra/`, `config/`, or `scripts/` implementation directories;
-- React runtime/application code import;
+- source-lineage runtime/application code import;
 - source-path mirroring;
 - schema activation;
 - generated reports as authority;

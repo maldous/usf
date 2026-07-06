@@ -35,7 +35,7 @@
     "compose-audit-requirements",
     "compose-break-glass-relevance"
   ],
-  "aiGuidance": "Classify every historical React Compose service before deriving Compose. Do not treat generated Compose as authority or infer production readiness from it. Treat service-level owner, risk, control, evidence, ISO-supporting, enterprise-supporting, and readiness-claim metadata as required governance metadata, not generated inventory text.",
+  "aiGuidance": "Classify every historical source-lineage Compose service before deriving Compose. Do not treat generated Compose as authority or infer production readiness from it. Treat service-level owner, risk, control, evidence, ISO-supporting, enterprise-supporting, and readiness-claim metadata as required governance metadata, not generated inventory text.",
   "environmentDefinitions": [
     {
       "environmentScope": "dev",
@@ -62,7 +62,7 @@
       "requirement": "External managed providers or cloud-native resources may replace local Compose only when explicitly recorded."
     }
   ],
-  "reactComposeServiceCount": 54,
+  "sourceComposeServiceCount": 54,
   "sourceRefs": [
     "docs/architecture/usf-compose-service-completeness-matrix.md",
     "compose/compose.yaml"
@@ -182,8 +182,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["postgres"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["postgres"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -537,8 +537,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["keycloak-postgres"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["keycloak-postgres"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak-db"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -834,8 +834,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["keycloak"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["keycloak"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -1190,11 +1190,11 @@
           "sourceKind": "current-compose",
           "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "Historical source-lineage Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [],
-      "reactParityRows": [
+      "sourceComposeServiceNames": [],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#nats"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -1522,8 +1522,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["temporal"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["temporal"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#temporal"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -1880,8 +1880,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["minio"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["minio"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#minio"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -2287,8 +2287,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["openbao"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["openbao"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#openbao"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -2620,8 +2620,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["otel-collector"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["otel-collector"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#otel-collector"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -3008,8 +3008,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["prometheus"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["prometheus"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#prometheus"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -3337,8 +3337,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["grafana"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["grafana"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#grafana"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -3670,8 +3670,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["loki"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["loki"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#loki"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -3998,8 +3998,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["tempo"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["tempo"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#tempo"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -4327,8 +4327,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["mailpit"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["mailpit"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#mailpit"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -4710,11 +4710,11 @@
           "sourceKind": "current-compose",
           "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "Historical source-lineage Compose service evidence is source evidence, not USF authority."
         }
       ],
-      "reactComposeServiceNames": [],
-      "reactParityRows": [
+      "sourceComposeServiceNames": [],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#webhook-sink"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -5042,8 +5042,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["redis"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["redis"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#redis"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -5368,8 +5368,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["meilisearch"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["meilisearch"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#meilisearch"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -5699,8 +5699,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["clickhouse"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["clickhouse"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#clickhouse"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -6074,8 +6074,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["pgadmin"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["pgadmin"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#pgadmin"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -6413,8 +6413,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["sonar-postgres"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["sonar-postgres"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -6705,8 +6705,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["sonar-oidc-plugin"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["sonar-oidc-plugin"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-oidc-plugin"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -6965,8 +6965,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["sonarqube"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["sonarqube"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#sonarqube"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -7304,8 +7304,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["mock-oidc"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["mock-oidc"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#mock-oidc"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -7545,8 +7545,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["localstack"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["localstack"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#localstack"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -7870,8 +7870,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["wiremock"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["wiremock"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#wiremock"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -8195,8 +8195,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["alertmanager"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["alertmanager"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#alertmanager"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -8523,8 +8523,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["alloy"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["alloy"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#alloy"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -8852,8 +8852,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["windmill-postgres"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["windmill-postgres"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -9140,8 +9140,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["windmill-redis"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["windmill-redis"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-redis"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -9417,8 +9417,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["windmill"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["windmill"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#windmill"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -9787,8 +9787,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["windmill-worker"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["windmill-worker"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-worker"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -10094,8 +10094,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["temporal-postgres"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["temporal-postgres"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-postgres"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -10379,8 +10379,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["temporal-ui"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["temporal-ui"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-ui"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -10719,8 +10719,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["pgbackrest"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["pgbackrest"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#pgbackrest"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -11033,8 +11033,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["clamav"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["clamav"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#clamav"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -11301,7 +11301,7 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": [
+      "sourceComposeServiceNames": [
         "sentry-postgres",
         "sentry-redis",
         "sentry-clickhouse",
@@ -11322,7 +11322,7 @@
         "sentry-taskscheduler",
         "sentry-cleanup"
       ],
-      "reactParityRows": [
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#sentry"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -11457,7 +11457,7 @@
         "generated Compose freshness when generated"
       ],
       "nonEquivalenceBoundaries": [
-        "React Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
+        "source-lineage Sentry internal backing services are deployment-model internals, not independent USF semantic authority under the selected shared/external model.",
         "Project/environment separation is required before shared Sentry can satisfy dev/test/staging assurance."
       ],
       "deferredDepth": 0,
@@ -11570,8 +11570,8 @@
           "notes": "Defines the public FQDN JSON endpoint and reserved public route semantics."
         }
       ],
-      "reactComposeServiceNames": [],
-      "reactParityRows": [],
+      "sourceComposeServiceNames": [],
+      "sourceCompletenessRows": [],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
       "environmentPolicies": {
         "dev": {
@@ -11934,8 +11934,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["external-caddy"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["external-caddy"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#caddy"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -12221,11 +12221,11 @@
     },
     {
       "serviceId": "platform-api",
-      "displayName": "React Platform API",
+      "displayName": "source-lineage Platform API",
       "serviceOwner": "platform-architecture-foundation",
       "riskOwner": "platform-architecture-risk-owner",
       "controlOwner": "platform-architecture-control-owner",
-      "purpose": "Classify and govern React Platform API as historical-application-runtime for USF Compose service disposition and generated Compose derivation.",
+      "purpose": "Classify and govern source-lineage Platform API as historical-application-runtime for USF Compose service disposition and generated Compose derivation.",
       "environmentDisposition": "out-of-scope",
       "providerBoundary": {
         "disposition": "out-of-scope",
@@ -12237,7 +12237,7 @@
       "dataBoundary": "none",
       "readinessTier": "out-of-scope",
       "evidenceGrade": "b",
-      "controlPurpose": "Preserve service disposition, owner/risk/control accountability, access posture, evidence posture, and readiness non-claims for React Platform API.",
+      "controlPurpose": "Preserve service disposition, owner/risk/control accountability, access posture, evidence posture, and readiness non-claims for source-lineage Platform API.",
       "assetInventoryClass": "out-of-scope-historical",
       "accessPosture": "no-human-access",
       "authRequirement": "not-required",
@@ -12313,8 +12313,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["platform-api"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["platform-api"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#platform-api"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -12449,7 +12449,7 @@
         "generated Compose freshness when generated"
       ],
       "nonEquivalenceBoundaries": [
-        "Historical React runtime services are not USF implementation authority."
+        "Historical source-lineage runtime services are not USF implementation authority."
       ],
       "deferredDepth": 0,
       "outOfScopeRationale": "Runtime application code is outside this foundation-scope Compose classification.",
@@ -12458,11 +12458,11 @@
     },
     {
       "serviceId": "react-app",
-      "displayName": "React App",
+      "displayName": "source-lineage App",
       "serviceOwner": "platform-architecture-foundation",
       "riskOwner": "platform-architecture-risk-owner",
       "controlOwner": "platform-architecture-control-owner",
-      "purpose": "Classify and govern React App as historical-implementation-ui for USF Compose service disposition and generated Compose derivation.",
+      "purpose": "Classify and govern source-lineage App as historical-implementation-ui for USF Compose service disposition and generated Compose derivation.",
       "environmentDisposition": "out-of-scope",
       "providerBoundary": {
         "disposition": "out-of-scope",
@@ -12474,7 +12474,7 @@
       "dataBoundary": "none",
       "readinessTier": "out-of-scope",
       "evidenceGrade": "c",
-      "controlPurpose": "Preserve service disposition, owner/risk/control accountability, access posture, evidence posture, and readiness non-claims for React App.",
+      "controlPurpose": "Preserve service disposition, owner/risk/control accountability, access posture, evidence posture, and readiness non-claims for source-lineage App.",
       "assetInventoryClass": "out-of-scope-historical",
       "accessPosture": "no-human-access",
       "authRequirement": "not-required",
@@ -12551,8 +12551,8 @@
           "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
-      "reactComposeServiceNames": ["react-app"],
-      "reactParityRows": [
+      "sourceComposeServiceNames": ["react-app"],
+      "sourceCompletenessRows": [
         "docs/architecture/usf-compose-service-completeness-matrix.md#react-app"
       ],
       "usfCapabilityRefs": ["semantic-contract.internal-service-catalog-and-readiness"],
@@ -12687,7 +12687,7 @@
         "generated Compose freshness when generated"
       ],
       "nonEquivalenceBoundaries": [
-        "Historical React UI service is not the USF gateway or forward-auth semantic authority."
+        "Historical source-lineage UI service is not the USF gateway or forward-auth semantic authority."
       ],
       "deferredDepth": 0,
       "outOfScopeRationale": "Runtime UI code is outside this foundation-scope Compose classification.",

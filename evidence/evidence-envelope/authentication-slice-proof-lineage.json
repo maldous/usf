@@ -1,7 +1,7 @@
 {
   "id": "evidence.normalised.authentication-slice-proof-lineage",
   "title": "Normalised lineage for authentication slice proof",
-  "description": "Draft normalised evidence envelope recording the historical React proof inputs used only as lineage and design input for the USF proof-only harness.",
+  "description": "Draft normalised evidence envelope recording the historical source-lineage proof inputs used only as lineage and design input for the USF proof-only harness.",
   "authorityLevel": "runtime-proof-evidence",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -13,7 +13,7 @@
   "vocabularyRefs": [
     "evidence-kinds"
   ],
-  "aiGuidance": "Historical React inputs remain lineage only. They were not executed, copied, imported as runtime, or treated as USF live authority.",
+  "aiGuidance": "Historical source-lineage inputs remain lineage only. They were not executed, copied, imported as runtime, or treated as USF live authority.",
   "evidenceKind": "normalised-evidence",
   "sourceRefs": [
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",

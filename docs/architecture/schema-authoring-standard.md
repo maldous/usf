@@ -466,7 +466,7 @@ The Schema Registry defines a common conceptual envelope (`commonEnvelope`) for 
 
 15.3 Source-reference values MAY include forbidden historical tokens (`v2`, `legacy`, …) **only** when clearly marked as a source reference (a source-lineage prefix and/or a `repository`/`sourceKind` field), never as a USF target (Naming Standard §18, §20).
 
-15.4 Source path MUST NOT dictate target path or target schema shape (§3 intro; Authority Model §6.4; Schema Registry `reactSourceLearnings` "Source path does not dictate target schema path").
+15.4 Source path MUST NOT dictate target path or target schema shape (§3 intro; Authority Model §6.4; Schema Registry `sourceLineageLearnings` "Source path does not dictate target schema path").
 
 15.5 `disposition` MUST use the vocabulary `disposition-values` set.
 

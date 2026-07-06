@@ -50,7 +50,7 @@ Historical observability proof records remain lineage. They must not satisfy cur
 | USF-90 route security and observability assurance slice | complete for semantic planning | no | yes | Route/interface security and observability semantics exist; product route runtime proof is deferred. |
 | USF-91 storage and data governance runtime assurance slice | complete for semantic planning | no | yes | Storage/data governance expectations are explicit; runtime storage assurance is deferred. |
 | USF-92 provider reliability, degraded mode, and recovery proof slice | complete for semantic planning | no | yes | Provider failure/degraded/recovery expectations are explicit; runtime adapter reliability proof is deferred. |
-| USF-93 React readiness rule parity matrix | complete | no | partial | Historical readiness rules are mapped to USF coverage or explicit gaps. |
+| USF-93 source-lineage readiness rule parity matrix | complete | no | partial | Historical readiness rules are mapped to USF coverage or explicit gaps. |
 | USF-73 multi-environment proof evidence execution | deferred | no for hermetic proof-substrate input only; yes for any stronger provider/environment claim | yes | Blocks any live-external-provider, production-shaped-as-release, production-live, broader multi-environment claim, or current-head proof claim until fresh evidence is rerun for the claimed commit. |
 
 ## Merge-Blocking Versus Release-Blocking Gaps
@@ -89,7 +89,7 @@ Release-blocking or claim-blocking until separately proven:
 - Hermetic environment proof does not satisfy production-live readiness.
 - Production-shaped evidence, if later added, does not satisfy production-live readiness.
 - Generated reports summarize evidence only and remain lowest authority.
-- Historical React proof output remains lineage unless converted into fresh, current, validated USF evidence.
+- Historical source-lineage proof output remains lineage unless converted into fresh, current, validated USF evidence.
 
 ## USF-61 Input
 

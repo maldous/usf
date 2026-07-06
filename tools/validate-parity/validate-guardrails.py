@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF rate-limit/quota/abuse-control parity validator (USF-160).
 
-Governance tooling only. It creates no runtime files, imports no React source,
+Governance tooling only. It creates no runtime files, imports no source lineage,
 and publishes no evidence. It fails closed on guardrail invariants: controlled
 policy types/scopes/classifications, fail-closed unknown policy/scope posture,
 tenant-safe in-memory enforcement, API route guard wiring, safe 429/retry-after,
@@ -166,7 +166,7 @@ def guardrail_rows(matrix):
     for row in matrix.get("domains", []):
         if not isinstance(row, dict):
             continue
-        rid = str(row.get("react_item_id", ""))
+        rid = str(row.get("source_item_id", ""))
         summary = str(row.get("behaviour_summary", "")).lower()
         if rid.startswith("guardrails.") or "guardrail" in summary or "rate-limit" in summary:
             rows.append(row)
@@ -312,15 +312,15 @@ def run_checks(F, state=None):
     rows = guardrail_rows(matrix)
     if len(rows) < 15:
         F.add("USF-GUARDRAILS-007", MATRIX, "guardrail parity matrix rows incomplete")
-    if not any(row.get("react_item_id") == "guardrails.rate-limits" for row in rows):
+    if not any(row.get("source_item_id") == "guardrails.rate-limits" for row in rows):
         F.add("USF-GUARDRAILS-007", MATRIX, "rate-limit row missing")
     if not any(
-        row.get("react_item_id") == "guardrails.future-api-ops-surfaces"
+        row.get("source_item_id") == "guardrails.future-api-ops-surfaces"
         and "proof-local operator control-plane" in str(row.get("evidence", ""))
         for row in rows
     ):
         F.add("USF-GUARDRAILS-007", MATRIX, "future API/ops USF-161 boundary row missing")
-    if not all(row.get("domain_authorised") is True for row in rows if str(row.get("react_item_id", "")).startswith("guardrails.")):
+    if not all(row.get("domain_authorised") is True for row in rows if str(row.get("source_item_id", "")).startswith("guardrails.")):
         F.add("USF-GUARDRAILS-007", MATRIX, "guardrail rows are not domain-authorised")
     for path in [
         "adapters/guardrails/src/index.ts",

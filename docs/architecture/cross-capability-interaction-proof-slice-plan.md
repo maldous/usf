@@ -8,7 +8,7 @@
 | **Issue scope** | USF-89 |
 | **Primary inputs** | `spec/instances/workflow/authentication-identity-context.json`, `spec/instances/workflow/authentication-login.json`, `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/proof-tool-contract-standard.md`, `spec/registries/source-import-manifest.json` |
 
-This plan records the current proof-substrate cross-capability interaction boundary. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
+This plan records the current proof-substrate cross-capability interaction boundary. It creates no product implementation runtime, imports no source-lineage runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
 
 ## Purpose
 
@@ -70,7 +70,7 @@ Those areas remain deferred until their semantic contracts, source-use rules, pr
 
 ## Historical Source Treatment
 
-Historical React cross-capability records, package structure, source files, tests, proof scripts, and generated reports are evidence only. They may inform semantic review through the source import manifest and capability coverage matrix, but they must not become live USF commands, implementation paths, or authority over USF semantic instances.
+Historical source-lineage cross-capability records, package structure, source files, tests, proof scripts, and generated reports are evidence only. They may inform semantic review through the source import manifest and capability coverage matrix, but they must not become live USF commands, implementation paths, or authority over USF semantic instances.
 
 ## Proof Expectations
 
@@ -103,7 +103,7 @@ This plan does not authorize:
 - USF-39 implementation extraction;
 - product runtime/application code;
 - `apps/`, `packages/`, `services/`, `src/`, `infra/`, `config/`, or `scripts/` implementation directories;
-- React runtime/application code import;
+- source-lineage runtime/application code import;
 - source-path mirroring;
 - schema activation;
 - generated reports as authority;

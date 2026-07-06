@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.service-catalog-and-provider-integration-model",
   "title": "Service Catalog And Provider Integration Model Semantic Contract",
-  "description": "Source-backed draft semantic contract for the service catalog and provider integration model capability, recovered from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the service catalog and provider integration model capability, recovered from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -72,7 +72,7 @@
     },
     "auditModel": {
       "status": "complete",
-      "description": "State-changing catalog and integration actions follow audit-before-mutation behaviour recovered from the React source and tests, recording the actor and change so the tenant boundary and DSR/GDPR evidence are preserved. Audit and readiness signals stay visible in degraded mode. Recovery preserves tenant boundary and audit evidence rather than silently overwriting it.",
+      "description": "State-changing catalog and integration actions follow audit-before-mutation behaviour recovered from the source lineage and tests, recording the actor and change so the tenant boundary and DSR/GDPR evidence are preserved. Audit and readiness signals stay visible in degraded mode. Recovery preserves tenant boundary and audit evidence rather than silently overwriting it.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/platform-services.test.ts",
         "apps/platform-api/tests/unit/service-catalog.test.ts"

@@ -235,7 +235,7 @@ describe("observability/telemetry proof", () => {
       redactionChecked: true,
       noProductUiClaim: true,
       uiReadinessClaim: false,
-      reactReadinessClaim: false,
+      sourceReadinessClaim: false,
       browserE2EReadinessClaim: false,
       faroProductionReadinessClaim: false,
       liveMonitoringReadinessClaim: false,

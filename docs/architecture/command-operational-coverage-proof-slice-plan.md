@@ -8,13 +8,13 @@
 | **Issue scope** | USF-87 |
 | **Primary inputs** | `spec/schemas/command.schema.json`, `spec/instances/command/`, `docs/architecture/proof-tool-contract-standard.md`, `tools/validate-spec/validate-spec.py`, `tools/validate-bootstrap/validate-bootstrap.py`, `spec/registries/source-import-manifest.json` |
 
-This plan records command coverage for the current pre-implementation authentication proof slice. It creates no product implementation runtime, imports no React runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
+This plan records command coverage for the current pre-implementation authentication proof slice. It creates no product implementation runtime, imports no source-lineage runtime/application code, creates no implementation directory, promotes no schema to `active`, and does not start USF-39.
 
 ## Purpose
 
 USF treats commands as governed semantic assets. Before implementation extraction, the current proof slice needs explicit command semantics for validation commands, proof commands, operational side effects, failure behaviour, and source-use boundaries.
 
-This plan closes the current tracked USF-87 slice by mapping the live USF commands used for proof readiness and by recording that historical React commands remain evidence until a later directive authorizes narrower reuse.
+This plan closes the current tracked USF-87 slice by mapping the live USF commands used for proof readiness and by recording that historical source-lineage commands remain evidence until a later directive authorizes narrower reuse.
 
 ## Current Live USF Command Coverage
 
@@ -33,7 +33,7 @@ The authentication proof command instance covers the USF proof-only harness, its
 
 ## Historical Command Treatment
 
-Historical React commands and package scripts are source evidence only. They are not live USF commands, must not be executed as USF proof commands, and must not define USF target paths.
+Historical source-lineage commands and package scripts are source evidence only. They are not live USF commands, must not be executed as USF proof commands, and must not define USF target paths.
 
 The relevant historical inputs for this slice are:
 
@@ -54,7 +54,7 @@ The following command categories are not live USF product commands in the curren
 - build commands for product packages;
 - runtime commands for applications, services, APIs, databases, workers, identity providers, or UI apps;
 - deployment, compose, infrastructure, or production operation commands;
-- React package scripts and Make targets as executable USF commands.
+- source-lineage package scripts and Make targets as executable USF commands.
 
 They remain non-applicable until a later approved directive authorizes implementation extraction or runtime substrate creation. Recording this non-applicability is part of command coverage; it prevents historical command existence from being mistaken for USF runtime readiness.
 
@@ -91,7 +91,7 @@ This command coverage plan does not authorize:
 - USF-39 implementation extraction;
 - product runtime/application code;
 - `apps/`, `packages/`, `services/`, `src/`, `infra/`, `config/`, or `scripts/` implementation directories;
-- React runtime/application code import;
+- source-lineage runtime/application code import;
 - source-path mirroring;
 - schema activation;
 - generated reports as authority;

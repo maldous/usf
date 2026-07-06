@@ -178,7 +178,7 @@ Unclassified persistent objects fail validation.
 
 ## Break-Glass Controls
 
-Controlled break-glass is allowed because React L6 proved a break-glass posture, but V2 must freshly define and prove its own model.
+Controlled break-glass is allowed because source-lineage L6 proved a break-glass posture, but V2 must freshly define and prove its own model.
 
 Break-glass requirements:
 
@@ -239,13 +239,13 @@ Rules:
 
 - no in-memory providers in test;
 - standard OSS services only in Compose;
-- React L6 Compose is source/proof lineage and baseline inventory, but V2 Compose must be freshly authored later;
+- source-lineage L6 Compose is source/proof lineage and baseline inventory, but V2 Compose must be freshly authored later;
 - carry forward equivalent OSS services where they support non-UI semantic ports or proof;
 - exclude UI-only, deprecated, not-applicable, secrets/caches/local state, staging, production, and live-only services.
 
 ## Migration and Data Targets
 
-React final proven schema lineage informs a fresh V2 `0001` SQL baseline. No migration file is created before bootstrap.
+Source final proven schema lineage informs a fresh V2 `0001` SQL baseline. No migration file is created before bootstrap.
 
 Migration and data rules:
 
@@ -261,7 +261,7 @@ Migration and data rules:
 - destructive changes require expand/contract or documented data-safety proof;
 - migration order and checksums must be verified;
 - fixtures are synthetic deterministic data only;
-- no copied React production/customer data.
+- no copied source-lineage production/customer data.
 
 ## Supply-Chain and Verification Targets
 

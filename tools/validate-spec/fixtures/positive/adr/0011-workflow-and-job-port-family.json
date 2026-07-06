@@ -5,7 +5,7 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-28",
-  "context": "The historical react stack uses more than one orchestrator: Temporal for durable workflow orchestration and Windmill for operational automation. During the React functional parity readiness pass the question of whether USF carries one provider, both, or an abstracted port was recorded as a requires-human-decision item (USF-136) because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided the workflow/job model, so it needs rank-2 ADR coverage rather than tracker context or planning prose.",
+  "context": "The historical source lineage uses more than one orchestrator: Temporal for durable workflow orchestration and Windmill for operational automation. During the functional completeness readiness pass the question of whether USF carries one provider, both, or an abstracted port was recorded as a requires-human-decision item (USF-136) because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided the workflow/job model, so it needs rank-2 ADR coverage rather than tracker context or planning prose.",
   "decision": "USF V2 defines a USF-owned workflow/job port family rather than choosing a single provider for all workflow-like work. Durable domain workflows, approval chains, retryable stateful processes, and audit/evidence-bearing long-running orchestration use the USF durable workflow port; the dev adapter is in-memory and the canonical composed-test provider adapter is Temporal. Operational automation, scripts, internal tools, maintenance jobs, operator-triggered routines, and integration glue use the USF operational job/automation port; the dev adapter is in-memory and Windmill is retained as the canonical historical-lineage operational-automation parity provider and may be implemented as a composed-test adapter where parity requires it. Capabilities depend only on USF workflow/job ports; Temporal and Windmill remain adapter/provider concerns and no capability depends directly on either provider. Every historical workflow or job must be classified as one of durable-domain-workflow, operational-automation-job, scheduled-maintenance-job, human-approval-flow, event-triggered-job, not-applicable, or requires-human-decision.",
   "consequences": [
     "The USF workflow/job model has rank-2 ADR coverage and unblocks the workflow portion of USF-136.",
@@ -31,14 +31,14 @@
     "Do not make any capability depend directly on Temporal or Windmill.",
     "Do not collapse durable workflows and operational jobs into a single provider-coupled mechanism.",
     "Do not promote hermetic or in-memory workflow proof to a live-provider claim.",
-    "Do not infer workflow or job semantics from historical react source; implement against USF semantics.",
-    "Do not copy react workflow or job code or mirror its paths."
+    "Do not infer workflow or job semantics from historical source-lineage source; implement against USF semantics.",
+    "Do not copy source-lineage workflow or job code or mirror its paths."
   ],
   "aiAlignmentRules": [
     "Agents must keep capabilities dependent only on USF workflow/job ports and never on Temporal or Windmill directly.",
     "Agents must preserve the durable-workflow versus operational-job split and the in-memory dev / composed-test provider posture.",
     "Agents must not implement the ports or adapters from this ADR alone; a separate authorised implementation directive is required.",
-    "Agents must classify every historical workflow or job using the seven approved values and must not infer workflow semantics from historical react code."
+    "Agents must classify every historical workflow or job using the seven approved values and must not infer workflow semantics from historical source-lineage code."
   ],
   "semanticRefs": [
     "docs/architecture/charter.md",
@@ -79,5 +79,5 @@
     "provider-modes",
     "environment-classes"
   ],
-  "aiGuidance": "Use this ADR when evaluating USF workflow or job work: durable domain workflows use the USF durable workflow port (in-memory dev, Temporal composed-test) and operational automation uses the USF operational job/automation port (in-memory dev, Windmill parity provider). Capabilities depend only on USF ports. Classify every historical workflow or job by the seven approved values. Do not implement from this ADR alone or infer semantics from historical react code."
+  "aiGuidance": "Use this ADR when evaluating USF workflow or job work: durable domain workflows use the USF durable workflow port (in-memory dev, Temporal composed-test) and operational automation uses the USF operational job/automation port (in-memory dev, Windmill parity provider). Capabilities depend only on USF ports. Classify every historical workflow or job by the seven approved values. Do not implement from this ADR alone or infer semantics from historical source-lineage code."
 }

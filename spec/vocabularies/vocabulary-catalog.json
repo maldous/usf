@@ -7309,7 +7309,7 @@
       "aiGuidance": "Do not repeat usf inside usf repository paths, package/implementation names, or local value IDs; the 'usf.' prefix on global artefact IDs is permitted and is not a violation."
     }
   ],
-  "reactSourceLearnings": [
+  "sourceLineageLearnings": [
     {
       "learning": "USF self-defined source proof ladder labels (L0-L6) are preserved as historical aliases, not copied as canonical future names.",
       "vocabularyImpact": "proof-levels aliases l0-l6"
@@ -7535,7 +7535,7 @@
       "satisfied": true
     },
     {
-      "criterion": "Captures React source learnings.",
+      "criterion": "Captures source lineage learnings.",
       "satisfied": true
     },
     {

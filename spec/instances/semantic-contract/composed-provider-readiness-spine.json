@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.composed-provider-readiness-spine",
   "title": "Composed Provider Readiness Spine Semantic Contract",
-  "description": "Source-backed draft semantic contract for the composed provider readiness spine capability, recovered from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the composed provider readiness spine capability, recovered from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [

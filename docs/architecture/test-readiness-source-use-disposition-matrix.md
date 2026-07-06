@@ -6,7 +6,7 @@ topology. It supports USF-252 guardrail work by making future AI and developer
 test changes explicit to the source-disposition validator instead of relying on
 implicit test-root permission.
 
-Historical React artefacts are lineage only. They were not copied, imported, or
+Historical source-lineage artefacts are lineage only. They were not copied, imported, or
 mirrored for these target files. Generated Compose remains derivative; service
 catalogue rows, semantic obligations, fixture corpus, and committed validators
 remain the authority for test-readiness evidence.

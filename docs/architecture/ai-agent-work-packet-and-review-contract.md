@@ -109,7 +109,7 @@ Reviewers should block merge when any of these are true:
 - required foundational artefacts were not inspected;
 - changed JSON was not parsed or validated where required;
 - validator failures are ignored;
-- React source is treated as hidden authority;
+- source lineage is treated as hidden authority;
 - runtime/application code is imported without explicit authorization;
 - target paths mirror historical source paths;
 - implementation directories appear without an accepted directive;
@@ -139,7 +139,7 @@ The agent must stop and request human decision when:
 - a required foundational artefact is missing or unparsable;
 - the issue scope would require implementation/runtime code but no accepted directive exists;
 - the task would create an implementation-shaped directory outside authorized scope;
-- a React source file would need to be copied or adapted without recorded source-use treatment;
+- a source lineage file would need to be copied or adapted without recorded source-use treatment;
 - a generated report would be needed as authority rather than evidence summary;
 - hermetic proof would need to satisfy live-external-provider or production-live readiness;
 - production-shaped evidence would need to satisfy production-live readiness;
@@ -157,7 +157,7 @@ USF-61 can cite this contract as follows:
 - This contract does not start USF-39.
 - This contract does not authorize implementation/runtime code.
 - This contract does not create implementation/runtime directories.
-- This contract does not import React runtime/application code.
+- This contract does not import source-lineage runtime/application code.
 - This contract does not promote schemas.
 - This contract does not replace repository authority with Linear process.
 - This contract does not treat generated reports as authority.

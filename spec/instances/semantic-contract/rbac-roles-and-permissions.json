@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit proofs cover the role/permission domain, member role mutations, and contract drift between the domain vocabulary and the admin contract, demonstrated in React via hermetic role/permission state validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Unit proofs cover the role/permission domain, member role mutations, and contract drift between the domain vocabulary and the admin contract, demonstrated in source lineage via hermetic role/permission state validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/authorize-resource.test.ts",
         "apps/platform-api/tests/unit/audit.test.ts",

@@ -17,7 +17,7 @@
 Foundation-behaviour: `migrated`, `covered`, `partial`, `missing`, `deferred`, `deprecated`, `not-applicable`, `requires-human-decision`.
 UI-scope: `ui-ux-only-out-of-foundation-scope`, `foundation-behaviour-rewritten-from-ui-test`.
 
-Row shape (per `functional-completeness-readiness-directive.md` §4.3): `react_item_id`, `category`, `react_paths[]`, `react_tests[]`, `react_proofs[]`, `behaviour_summary`, `usf_status`, `usf_paths[]`, `usf_tests[]`, `usf_proofs[]`, `semantic_authority`, `source_use_disposition`, `linear_issue`, `blocking_foundation_readiness`, `evidence`, `retry_condition`.
+Row shape (per `functional-completeness-readiness-directive.md` §4.3): `source_item_id`, `category`, `source_paths[]`, `source_tests[]`, `source_proofs[]`, `behaviour_summary`, `usf_status`, `usf_paths[]`, `usf_tests[]`, `usf_proofs[]`, `semantic_authority`, `source_use_disposition`, `linear_issue`, `blocking_foundation_readiness`, `evidence`, `retry_condition`.
 
 ## 2. Source-lineage inventory (counts)
 
@@ -65,7 +65,7 @@ Implemented foundation rows are carried by USF-152. Partial/deferred notificatio
 | retention/disposal                  | partial                                     | retention/legal_hold fields defined                                              | purge workflow and storage retention runtime        |
 | audit/evidence                      | migrated                                    | notification lifecycle audit tests and proof                                     | advanced audit export/API surfaces                  |
 | future UI/API notification surfaces | deferred                                    | behaviours rewritten as capability tests                                         | PDP-protected redacted HTTP/OpenAPI/UI surfaces     |
-| React UI/Playwright behaviours      | foundation-behaviour-rewritten-from-ui-test | admin email/webhook UI behaviours rewritten as foundation tests                  | UI/UX remains out of scope                          |
+| UI/Playwright behaviours      | foundation-behaviour-rewritten-from-ui-test | admin email/webhook UI behaviours rewritten as foundation tests                  | UI/UX remains out of scope                          |
 
 ### API / Routes / OpenAPI / Contracts Subdomain Classification
 
@@ -95,7 +95,7 @@ Implemented local/dev/test contract rows are carried by USF-154. Partial/deferre
 | bulk API safety                    | deferred                                    | standard defines high-risk controls                                                                            | bounded bulk/import/export runtime                                                    |
 | gateway/edge posture               | deferred                                    | standard and route metadata                                                                                    | trusted proxy, TLS, WAF, gateway runtime                                              |
 | GraphQL/generated client posture   | deferred                                    | lineage inventoried; no SDK readiness claimed                                                                  | scope decision and implementation if authorised                                       |
-| React UI/Playwright API behaviours | foundation-behaviour-rewritten-from-ui-test | API contract/security/error behaviours rewritten as API tests/proof                                            | UI/UX assertions remain out of scope                                                  |
+| UI/Playwright API behaviours | foundation-behaviour-rewritten-from-ui-test | API contract/security/error behaviours rewritten as API tests/proof                                            | UI/UX assertions remain out of scope                                                  |
 
 ### Provider Adapters / Modes Subdomain Classification
 
@@ -119,7 +119,7 @@ Implemented local/dev/test provider rows are carried by USF-156. Deferred live/r
 | supplier/subprocessor posture                  | partial                                     | posture fields represented without approval claim                                                                                                      | supplier review workflow                            |
 | local/composed/live-deferred separation        | migrated                                    | test/composed providers do not claim live or production readiness                                                                                      | authorised live provider proof package              |
 | future API/provider status surfaces            | migrated                                    | operator-only PDP-protected redacted routes for list/detail                                                                                            | health/readiness subroutes if authorised            |
-| React UI/Playwright provider behaviours        | foundation-behaviour-rewritten-from-ui-test | provider admin/status behaviours rewritten as capability/API/proof tests                                                                               | UI/UX remains separate                              |
+| UI/Playwright provider behaviours        | foundation-behaviour-rewritten-from-ui-test | provider admin/status behaviours rewritten as capability/API/proof tests                                                                               | UI/UX remains separate                              |
 | live provider, DR, gateway, cache/search depth | deferred                                    | USF-157 tracks live/risk/resilience depth                                                                                                              | explicit directive required before implementation   |
 
 ### Observability / Telemetry Subdomain Classification
@@ -146,7 +146,7 @@ Implemented local/dev/test observability rows are carried by USF-158. Deferred l
 | incident evidence posture                    | deferred                                    | standard defines incident linkage without readiness claim                                                                                                                     | incident workflow and runbook integration                             |
 | dashboard posture                            | deferred                                    | standard defines dashboard posture without UI implementation                                                                                                                  | dashboard runtime/future ops UI                                       |
 | future API/ops surfaces                      | partial                                     | `/v1/observability/readiness` and `/v1/observability/signals` implemented safely                                                                                              | raw log/trace/metric export routes deferred                           |
-| React UI/Playwright observability behaviours | foundation-behaviour-rewritten-from-ui-test | request instrumentation and tenant observability behaviours rewritten as API/capability/proof tests                                                                           | UI/UX assertions remain out of scope                                  |
+| UI/Playwright observability behaviours | foundation-behaviour-rewritten-from-ui-test | request instrumentation and tenant observability behaviours rewritten as API/capability/proof tests                                                                           | UI/UX assertions remain out of scope                                  |
 
 ### Rate Limits / Abuse Controls Subdomain Classification
 
@@ -174,7 +174,7 @@ Implemented local/dev/test guardrail rows are carried by USF-160. Deferred distr
 | policy config                            | migrated                                    | typed/classified policies reject secret-looking values                                                            | approval workflow and persisted config history                       |
 | observability/audit linkage              | migrated                                    | tenant-safe telemetry and value-free guardrail audit evidence                                                     | alerting/SIEM/export integration                                     |
 | future API/ops surfaces                  | deferred                                    | `/v1/guardrails/*` posture defined and deferred                                                                   | operator-only PDP-protected runtime surfaces                         |
-| React UI/Playwright guardrail behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/API/proof tests                                                     | UI/UX assertions remain out of scope                                 |
+| UI/Playwright guardrail behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/API/proof tests                                                     | UI/UX assertions remain out of scope                                 |
 
 ### Import / Export / Bulk Operations Subdomain Classification
 
@@ -204,7 +204,7 @@ Implemented local/dev/test import/export/bulk rows are carried by USF-162. Produ
 | schema versioning/mapping                    | partial                                     | schema/mapping IDs, versions, hashes represented                                                                          | schema registry and mapping runtime                          |
 | API/OpenAPI surfaces                         | deferred                                    | standard defines safe future route posture                                                                                | bounded HTTP/OpenAPI implementation                          |
 | provider/external transfer posture           | deferred                                    | provider source/destination types recognized as live-external-deferred                                                    | external transfer adapters and secret-ref proof              |
-| React UI/Playwright import/export behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/proof tests                                                                 | UI/UX assertions remain out of scope                         |
+| UI/Playwright import/export behaviours | foundation-behaviour-rewritten-from-ui-test | foundation behaviours rewritten as capability/proof tests                                                                 | UI/UX assertions remain out of scope                         |
 
 ### Search / Indexing / Discovery Subdomain Classification
 
@@ -234,7 +234,7 @@ Implemented local/dev/test search/indexing rows are carried by USF-164. Persiste
 | observability/abuse signals           | migrated                                    | query denied, high-volume query, stale result denied signals where represented                                                                                                                                                                               | SIEM/alerting and broader detection                   |
 | guardrails/exfiltration controls      | partial                                     | concrete guardrail denial path for search query                                                                                                                                                                                                              | autocomplete/high-volume/pagination scraping rollout  |
 | API/OpenAPI safety                    | deferred                                    | future route posture documented; capability/proof tests cover foundation behaviour                                                                                                                                                                           | bounded HTTP/OpenAPI search surfaces                  |
-| React UI/Playwright search behaviours | foundation-behaviour-rewritten-from-ui-test | React search route/permission behaviours rewritten as capability/proof tests                                                                                                                                                                                 | UI/UX assertions remain out of scope                  |
+| UI/Playwright search behaviours | foundation-behaviour-rewritten-from-ui-test | source-lineage search route/permission behaviours rewritten as capability/proof tests                                                                                                                                                                                 | UI/UX assertions remain out of scope                  |
 
 ### Resource Lifecycle / Relationships / Records Subdomain Classification
 
@@ -251,13 +251,13 @@ Implemented local/dev/test resource lifecycle rows are carried by USF-165. Produ
 | search/bulk/files interactions                  | partial                                     | soft delete removes search projection; bulk-managed resource guardrail denial proof                                       | broad file attachment and import/export/bulk mutation runtime |
 | audit/observability/guardrails                  | migrated                                    | value-free resource audit events, tenant-safe security signals, and guardrail denial proof                                | broad per-resource operational dashboards                     |
 | API/OpenAPI posture                             | deferred                                    | standard defines safe future route posture; capability/proof tests cover foundation behaviour                             | bounded HTTP/OpenAPI resource routes                          |
-| React UI/Playwright resource behaviours         | foundation-behaviour-rewritten-from-ui-test | resource lifecycle behaviours rewritten as capability/proof tests                                                         | UI/UX assertions remain out of scope                          |
+| UI/Playwright resource behaviours         | foundation-behaviour-rewritten-from-ui-test | resource lifecycle behaviours rewritten as capability/proof tests                                                         | UI/UX assertions remain out of scope                          |
 
 Domain count: **16 foundation domains, all `partial`** for the full functional completeness bar (semantics present; per-domain source-use, implementation, and fresh proof are the open work). No domain is `covered`/`migrated` at full functional completeness scope yet; none is silently `missing`. `requires-human-decision` flags are recorded inline (ABAC policy-engine specifics; workflow-engine choice) and carried into their domain children.
 
 ## 4. UI/UX scope (out of foundation scope)
 
-| Item                           | category | react_paths                                                                       | usf_status                         | Rationale                                                                                                                    |
+| Item                           | category | source_paths                                                                       | usf_status                         | Rationale                                                                                                                    |
 | ------------------------------ | -------- | --------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `react-enterprise-app` SPA     | ui       | `apps/react-enterprise-app`                                              | ui-ux-only-out-of-foundation-scope | React 19 SPA (TanStack Router/Query, Tailwind); downstream consumer; classified, not migrated                                |
 | `ui-design-system`             | ui       | `packages/ui-design-system`                                              | ui-ux-only-out-of-foundation-scope | Component library / visual; out of foundation scope                                                                          |
@@ -269,7 +269,7 @@ Future UI/UX work consuming foundation contracts is tracked as a separate, **non
 
 ## 5. Test / proof classification (no test disappears silently)
 
-| Group                                        | react_paths                                                                                                                                 | classification                                             | Action                                                                                 |
+| Group                                        | source_paths                                                                                                                                 | classification                                             | Action                                                                                 |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | API/integration tests                        | `apps/platform-api/tests` (~70), `packages/*/tests` (~45)                                                                                   | partial                                                    | Foundation tests pending port; rewrite as USF foundation tests under each domain child |
 | Architecture/governance tooling tests        | `tools/architecture` (~47), `tools/v2-readiness`, `tools/security`                                                                          | partial                                                    | Map to USF validators/proof tooling coverage (parity-commands)                         |

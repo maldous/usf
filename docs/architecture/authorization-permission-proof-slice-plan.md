@@ -8,7 +8,7 @@
 | **Issue scope** | USF-79 |
 | **Primary inputs** | `docs/architecture/proof-tool-contract-standard.md`, `spec/instances/semantic-contract/rbac-roles-and-permissions.json`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `spec/registries/authentication-slice-source-import-manifest.json` |
 
-This plan defines the authorization and permission proof slice before implementation extraction. It creates no proof tool, writes no proof evidence, imports no React runtime/application code, creates no implementation directory, emits no generated report, and promotes no schema to `active`.
+This plan defines the authorization and permission proof slice before implementation extraction. It creates no proof tool, writes no proof evidence, imports no source-lineage runtime/application code, creates no implementation directory, emits no generated report, and promotes no schema to `active`.
 
 ## Purpose
 
@@ -30,7 +30,7 @@ Supporting proof-substrate semantic inputs are:
 - `provider-mode.mock-identity-provider`;
 - `environment.hermetic`.
 
-These inputs are USF semantic authority. Historical React files are source evidence only.
+These inputs are USF semantic authority. Historical source-lineage files are source evidence only.
 
 ## Historical Source Evidence
 
@@ -128,9 +128,9 @@ This slice MUST NOT create product implementation/runtime code.
 
 This slice MUST NOT create implementation directories.
 
-This slice MUST NOT import React runtime/application code.
+This slice MUST NOT import source-lineage runtime/application code.
 
-This slice MUST NOT mirror React source paths as USF target paths.
+This slice MUST NOT mirror source lineage paths as USF target paths.
 
 This slice MUST NOT promote schemas active.
 

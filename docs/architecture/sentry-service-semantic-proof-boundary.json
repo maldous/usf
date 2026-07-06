@@ -17,7 +17,7 @@
   "serviceIds": [
     "sentry"
   ],
-  "reactServiceIds": [
+  "sourceServiceIds": [
     "sentry-cleanup",
     "sentry-clickhouse",
     "sentry-events-consumer",

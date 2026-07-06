@@ -3,7 +3,7 @@
 This matrix records source-use treatment for the USF-245 operational resilience
 failure-mode suite. It uses current USF test-readiness manifests, fixture
 lifecycle evidence, integration matrix evidence, and enterprise evidence as
-authority. Historical React artefacts are lineage only and were not copied,
+authority. Historical source-lineage artefacts are lineage only and were not copied,
 imported, mirrored, or used as active authority.
 
 Linear source issue: USF-245.
