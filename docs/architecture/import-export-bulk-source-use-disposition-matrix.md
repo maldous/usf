@@ -1,11 +1,11 @@
-# Parity Import/Export/Bulk Source-Use Disposition Matrix
+# Import/Export/Bulk Source-Use Disposition Matrix
 
-This matrix records source-use treatment for the USF-162 import/export/bulk parity slice and the USF-163 bounded local deep-runtime depth slice. Historical React files are lineage and behavioural evidence only. No React runtime/application code was copied, and no USF target path mirrors a React path.
+This matrix records source-use treatment for the USF-162 import/export/bulk slice and the USF-163 bounded local deep-runtime depth slice. Historical React files are lineage and behavioural evidence only. USF authors its own runtime; no external runtime/application code was copied, and no USF target path mirrors an external source path.
 
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
 | docs/architecture/import-export-and-bulk-operations-standard.md | source-derived-rewrite | React data portability, data governance, storage, retention, legal hold, and API route lineage plus USF-162 enterprise controls | Defines governed data movement semantics, classifications, file format safety, dry-run/preview, evidence package, idempotency, guardrails, audit, observability, and deferred live/regulatory depth. |
-| docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for import/export/bulk. |
+| docs/architecture/import-export-bulk-source-use-disposition-matrix.md | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for import/export/bulk. |
 | docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json | evidence-only-support | USF-163 Linear acceptance, USF-162 proof lineage, and repository evidence model | Machine-readable bounded deep-runtime proof gate for retry/resume, provider transfer fail-closed posture, parser/decompression safety, rollback/compensation, approval separation, retention purge, legal hold, enterprise evidence, and non-claim boundaries. |
 | packages/core/src/index.ts | source-derived-rewrite | React portable tenant export/import, data governance, row validation, retention, and evidence package behaviour | Adds bulk operation types, classifications, statuses, endpoint refs, format safety, validation errors, item outcomes, evidence package manifests, hashes, idempotency, and audit event taxonomy. |
 | packages/ports/src/index.ts | source-derived-rewrite | React repository/port boundary and bulk import/export behaviour evidence | Adds ImportExportPort so capabilities depend on ports rather than concrete stores. |

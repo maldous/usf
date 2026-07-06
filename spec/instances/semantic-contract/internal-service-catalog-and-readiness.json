@@ -99,7 +99,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/platform-services-runtime-proof.ts",
     "apps/platform-api/scripts/service-catalog-registry-runtime-proof.ts",
     "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts",
@@ -110,6 +110,6 @@
     "apps/platform-api/tests/unit/service-catalog.test.ts"
   ],
   "adrRefs": [
-    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
+    "docs/adr/0005-hexagonal-architecture.md"
   ]
 }

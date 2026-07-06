@@ -24,7 +24,7 @@
   "enterpriseEvidenceModel": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
   "apiDispositionMatrix": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
   "deliveryDepthMatrix": "docs/architecture/generated-client-external-developer-graphql-federation-delivery-proof-depth.json",
-  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/api-contracts-source-use-disposition-matrix.md",
   "functionalityParityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "proofCommand": "make api-graphql-generated-client-proof",
   "rawProofCommand": "corepack pnpm proof:api:graphql-generated-client",

@@ -92,13 +92,13 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts",
     "apps/platform-api/src/usecases/composed-providers.ts",
     "docs/adr/0071-composed-provider-readiness.md",
     "docs/evidence/platform/composed-provider-readiness.md"
   ],
   "adrRefs": [
-    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
+    "docs/adr/0005-hexagonal-architecture.md"
   ]
 }

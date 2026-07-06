@@ -14,7 +14,7 @@ The active bootstrap goal requires USF to move as far as possible toward control
 
 Those records capture decisions that affect future implementation permission, proof posture, provider targets, source-use boundaries, and tag movement. Under the Authority Model, a major architectural decision needs ADR coverage so it is rank-2 authority, not only planning prose or tracker context. Linear comments remain work tracking only and cannot define the bootstrap boundary.
 
-Historical `../react` evidence is useful lineage for provider substrate, proof commands, Compose services, source-use treatment, and tenant/security posture. It remains rank-6 evidence. The future USF implementation must be freshly authorised and authored against USF semantics and source-use dispositions, not copied or path-mirrored from React.
+USF-internal historical evidence is useful lineage for provider substrate, proof commands, Compose services, source-use treatment, and tenant/security posture. It remains informative lineage, not authority. The USF implementation must be freshly authorised and authored against USF semantics and source-use dispositions, not copied or path-mirrored from any external source.
 
 ## Decision
 
@@ -43,7 +43,7 @@ Separating the marker from USF-39 start authority prevents accidental implementa
 - `docs/architecture/bootstrap-readiness-governance.md`
 - `docs/architecture/target-implementation-topology-plan.md`
 - `docs/architecture/semantic-source-use-closure-ledger.md`
-- `docs/architecture/react-l5-equivalence-audit.md`
+- `docs/architecture/foundation-completeness-audit.md`
 - `docs/architecture/implementation-extraction-directive.md`
 - `docs/architecture/authority-model.md`
 - `docs/architecture/charter.md`

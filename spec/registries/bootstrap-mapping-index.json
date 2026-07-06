@@ -47,7 +47,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "160ed8294f21d3628e3b8a8e2b75d8dcafba32e2767daaee2f26aad8bce4da79"
+      "sha256": "e38ec9091b7220cb11278403f3e42f0bcdc4a01072237e33cb8db502481fbb3e"
     },
     {
       "path": "spec/instances/bootstrap-mapping/runtime-secrets-management.json",
@@ -58,7 +58,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "e9ccb288b51b411a334fcf9b487fbbe207912848aebbdd21fedce28fe74715c7"
+      "sha256": "ce4a616001bce8c985bbbbb3647a612b4d02e3a17488e1e77a5e1b48d20c75ec"
     },
     {
       "path": "spec/instances/bootstrap-mapping/serverless-function-runtime.json",
@@ -69,7 +69,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "3d37723a345efe56c943477c2222d4c842d02424b20f6f3ea3827bd7cd08a139"
+      "sha256": "02a8bcd549a6ea0d3405e2f17468d72ec3ef4322c4d3b20bce64651763db6649"
     },
     {
       "path": "spec/instances/bootstrap-mapping/branding-and-theming.json",
@@ -80,7 +80,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "ff9b41d5f8a7b11089d8d2587fa8b91f68fe5514b6fff595306576ecd7db3ea7"
+      "sha256": "db2b1c77da9dd5f565ee9f46a0fcdb65d78404b6dd1e64a9a6fc9453f73610b3"
     },
     {
       "path": "spec/instances/bootstrap-mapping/configuration-registry-and-history.json",
@@ -91,7 +91,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f111b185b3090c95deda3fb7f76b0dfbf5adf246327ecae5830c93733c4418d1"
+      "sha256": "10ed28ede18ac657da0481744658571b5b31c78ac342bbc75e9cee08d3fb77ea"
     },
     {
       "path": "spec/instances/bootstrap-mapping/custom-domains-dns-ownership-tls-canonical.json",
@@ -102,7 +102,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "dfb73241890078f02def3395b9bcd718cd35e8a34febb334ba7933284aa6c2b4"
+      "sha256": "3f0348ece9ad15bdd560064fdb3b5948cfb35f43f1522996245e858fdc5688c0"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-canonical-domain-set-unset.json",
@@ -113,7 +113,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "d82b6abc232e397dcdc600dac1567552149bdd459f832cebbcbc34b8a594ae92"
+      "sha256": "6aab8a79cc7c88761120f6da71b20ca68bd12f827edf6db6a102a0f2cb007f7b"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-domain-activation-auth-client.json",
@@ -124,7 +124,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "533e1de101b68eb9485d89aa359d29426ca2137acd6492f94e5b99a5874b22cf"
+      "sha256": "1f929a5380d85b28bcb1f95833667bfc5d9555de43dbe4c25f653e14fb653f8c"
     },
     {
       "path": "spec/instances/bootstrap-mapping/write-only-secret-settings.json",
@@ -135,7 +135,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "eb66ea52330421c08e86fdcbff49e576a05b60b99169ad421287316ac331cc4d"
+      "sha256": "70d936d5043150e48cce1c2e1876c221351bfb35674b9e43dca77c7c48c99f6f"
     },
     {
       "path": "spec/instances/bootstrap-mapping/backup-and-restore.json",
@@ -146,7 +146,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "5ae63443c77dc409cdbb56d906400811e1c624b2fcf4152854f0cc9ad8b26a04"
+      "sha256": "e4e0a08bbc470ba4f9356a4a7be90c45b845e6631077b6d9b6c23e872b60d946"
     },
     {
       "path": "spec/instances/bootstrap-mapping/data-governance-catalog-lineage-classification-pii-dsr-gdpr.json",
@@ -157,7 +157,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "8046854e1c6ae540ae0493a101063ffee0e703a47ce9de229fe0ea381b0a2faf"
+      "sha256": "36164758eac93adb76d8197ab172d95dbe161b7a8228c0186e7eb065e9692583"
     },
     {
       "path": "spec/instances/bootstrap-mapping/history-read-model-read-only-projection.json",
@@ -168,7 +168,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "4033c1213809d8582354ac3d4130b52b3616ecbd50c3889a7e5be3507bbd66df"
+      "sha256": "a4906211e3e0e9748e9de46338cb7bc93fd9cce3643f64c622426124b204d3a4"
     },
     {
       "path": "spec/instances/bootstrap-mapping/pitr-retention-legal-hold-data-residency.json",
@@ -179,7 +179,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "51d09765dbed870e76d74c7fddea1944650d9a8203a3ae74a6a83559726c48cc"
+      "sha256": "c79f41beb013d582911eb9b9ec8682722fdccc42c7b46f3a0708cabe7217bc67"
     },
     {
       "path": "spec/instances/bootstrap-mapping/relational-storage-and-migrations-and-rls.json",
@@ -190,7 +190,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "fa6f64cc56053347b4711955172f1d6dd75d96c32182b7687f4faa67a1c5c8c8"
+      "sha256": "758b6ac51cc0bab8e95b7f1fdfa7ddd10286f3b32c51bd90b9571872a0d586ef"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-data-import-export.json",
@@ -201,7 +201,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "5ab38ca1fc3964b65c2b6ba8ae7c03fa533fb1f615bade4542f00419fb72cb3f"
+      "sha256": "a574e819d069f57086fa36ccdbf9df79d1130e742b4797d0e4647fb512e89861"
     },
     {
       "path": "spec/instances/bootstrap-mapping/api-docs-developer-portal-sdks-rate-limits.json",
@@ -212,7 +212,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "a542ed063ae2c5778f40a23eb52d7a8feada9f9348585c23f35d49f9c1de923f"
+      "sha256": "ba3c643a9d692501ab6fc084748f6a16339fe0f251b5b0df10b5bb7bfef0e10b"
     },
     {
       "path": "spec/instances/bootstrap-mapping/mock-providers-dev-test.json",
@@ -223,7 +223,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f979d8a5eadaa75f2881d504e9519415506724011dd4ba1120a7c480703acba9"
+      "sha256": "284b4a1e9298461ce1a5dc6f6583313cfd84d21c65fb3d7617d735bf5a7c67d5"
     },
     {
       "path": "spec/instances/bootstrap-mapping/openapi-drift-hard-gate.json",
@@ -234,7 +234,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "fb4b541f1b0b9cbd65a40b1fa08ce03052b2383918503307b63d165b364428a3"
+      "sha256": "891aeeda6393a046930c481348e93c3a60206a8c154a2da8cda36ca2a9ab4a85"
     },
     {
       "path": "spec/instances/bootstrap-mapping/rate-limiting-api.json",
@@ -245,7 +245,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "27442fe4ca75ad23aefb3b1bce241cef95d82642db073d1776844d429f19ccbe"
+      "sha256": "d7c7f05f4e2a0fab8aa33a120e65c306d97d171afcfb3c03bc3c0d7ec82ff2c5"
     },
     {
       "path": "spec/instances/bootstrap-mapping/webhooks-developer-facing.json",
@@ -256,7 +256,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "db9561bcef5c7f642e473268bade003416abc729a26f24a3a59be658c927213d"
+      "sha256": "095fc2e0a6f3acbd68cdf7a1d82b3c83c932860ccb2baa4039a36594e2a27002"
     },
     {
       "path": "spec/instances/bootstrap-mapping/product-catalog-plans-prices.json",
@@ -267,7 +267,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "9c56432f4f97e1a9c3d06af2f3bb7607bcf3c61f032741486312f58148fda8d9"
+      "sha256": "328482914bddb58d0aa2f5d90436f475c33944a8f9adc93e2bf0e247bd011533"
     },
     {
       "path": "spec/instances/bootstrap-mapping/quota-enforcement.json",
@@ -278,7 +278,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "df8b90e706f9a30fdb40e53e90ccbe847d9e4ec4d880425226b74b2c682e5a55"
+      "sha256": "a5f823231946d049a7a4cd9fe4862c8c491b1cf825d74226394003aae759e7da"
     },
     {
       "path": "spec/instances/bootstrap-mapping/subscriptions-invoices-payment-methods-dunning.json",
@@ -289,7 +289,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "d8b3236c5321d999d57371027e51ec22ced1952f570cffb151de46a27ec4c5d7"
+      "sha256": "6815f917e4ad9604da01b771b0fee738f5f09362797857220dffb7aec0096e3d"
     },
     {
       "path": "spec/instances/bootstrap-mapping/usage-metering-and-meter-event-ingestion.json",
@@ -300,7 +300,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "2cab0b795b6b481deeb609308d49b80a70502df18e2ca36a1fa8ddfc6d0a0bdf"
+      "sha256": "d4d041037a3bd66d6244fef46167620034c15cb0a02f3c31031425dbadf6d2a0"
     },
     {
       "path": "spec/instances/bootstrap-mapping/event-bus-durable-queues-dlq-redrive.json",
@@ -311,7 +311,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "bf165a0d48696c2d9edf2079fff8cf6bab0fd4db70cbfdcbdb648c60d80746dd"
+      "sha256": "ee241ab869749bab212b7a946e0079a33f661775633be22709f3d6de6eef67f4"
     },
     {
       "path": "spec/instances/bootstrap-mapping/notification-delivery-and-preferences-and-channels.json",
@@ -322,7 +322,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "105c4c6cbc55dcfd136623dfea784b1122783a19f29679257f8f880fd3ed467a"
+      "sha256": "2884a94b0463f19c318a7a0c85448014d666ca3a993ec6fbffcba6a47e9ee38d"
     },
     {
       "path": "spec/instances/bootstrap-mapping/scheduled-jobs-built-in-on-the-event-substrate.json",
@@ -333,7 +333,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f976d79f37ed18ddaae8814863086161c59cab35f9f59dfe2898d9a229c20ea2"
+      "sha256": "763f56c21eec3a0f3d410289087dd41f4224fc4216a765944e2bdc4ddd74aa49"
     },
     {
       "path": "spec/instances/bootstrap-mapping/workflow-engine-scheduled-jobs-approvals.json",
@@ -344,7 +344,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "bcbf2a330c46d0799dd0116ed4ac4974858e5b7af5dcc164e66a702544cf5fdd"
+      "sha256": "897d1e30f710c81aaa9e68975a2c286d3252cddc2252e1797fc87caf95ef3af4"
     },
     {
       "path": "spec/instances/bootstrap-mapping/accessibility-a11y-gate.json",
@@ -355,7 +355,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "83b196a8146fa7578bb3e62f9ecb1671f55ff03e5317aa1089f5748e09798ffe"
+      "sha256": "f45924506293ad7b124ca678d3130657548efd4ba64e5d5748e85b7691790226"
     },
     {
       "path": "spec/instances/bootstrap-mapping/build-versus-compose-decision-framework.json",
@@ -366,7 +366,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "68bab87e3e5aacd861f47fbf5385e274a4e893b4c5042119cf8abc1caab53c64"
+      "sha256": "c2edbde59fb30a1b70f5b7d5a97aef1163d717c83f8fe73c35f1facf40edcc4a"
     },
     {
       "path": "spec/instances/bootstrap-mapping/composed-provider-readiness-spine.json",
@@ -377,7 +377,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "42eb8340d6631386d90fdea39c6dd110794f7016d728c10ff8c75c7d77288bd9"
+      "sha256": "43725d18e005cac4922aa6199e320264e2226d5b26f8562f8ca2c87e51277c34"
     },
     {
       "path": "spec/instances/bootstrap-mapping/e2e-confidence-ladder-stage-aware.json",
@@ -388,7 +388,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "709985fa4c04de5e0edaa315de241aaec7ff02c486db579499145bed93173475"
+      "sha256": "9cfab4c77b3e2c2f18261cc37da19c5b1d86ae4f604e6c74768aaf76c2bc30f8"
     },
     {
       "path": "spec/instances/bootstrap-mapping/environment-registry-and-bootstrap.json",
@@ -399,7 +399,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "37ed8602b92da2bfbed3400e50fd611b68bb70b8dce6b41e51cb828422db4238"
+      "sha256": "ead246f63eaeac2b1f5dbf0f0290f3faeb2b16c6314d9f01e9536f7bc7092f6b"
     },
     {
       "path": "spec/instances/bootstrap-mapping/environment-specific-vs-shared-service-model.json",
@@ -410,7 +410,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "1ef92226b30a959de40c02f028cc211eec56454098defad974dc83f63bef8cbd"
+      "sha256": "ac502ad85be4b81d1a1b11f2c6893ac83ce4f44a435162b18d9e293f75817aa7"
     },
     {
       "path": "spec/instances/bootstrap-mapping/i18n-runtime-and-validation.json",
@@ -421,7 +421,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "ca23556d27f20112b143f3cc28e7093788a03fb8407adf49f3444534e01aab92"
+      "sha256": "153c2bff17b2dadf88c046cdaa1d710abdc8b2604cef8ec9e4c513cdad592300"
     },
     {
       "path": "spec/instances/bootstrap-mapping/provider-configuration-plane.json",
@@ -432,7 +432,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "075915a0d6a12d1dd95dc2bfc13668c0fa0c168199268e3efa25183e1fd6f5e0"
+      "sha256": "89eba53afedbcbb58ed80a4de648f25039cbba3df3b4983572442778e859b2f0"
     },
     {
       "path": "spec/instances/bootstrap-mapping/provider-environment-classification.json",
@@ -443,7 +443,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "c4e058a01270991476d825cd48b80d57496e4e7ad1fbac8964b65a5ab8dbb54b"
+      "sha256": "1489b53ab3c2591c6a56149adf955df824e15c2f89ddc776be5865acefdab4d5"
     },
     {
       "path": "spec/instances/bootstrap-mapping/service-catalog-and-provider-integration-model.json",
@@ -454,7 +454,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "354eb0fe32aefd959898f3d3354e2a54ea3ea40692af01b8cf2b8679663cec56"
+      "sha256": "4acef982a5159f49b2f976655c6a59a37389da588d8371d9d5ea678ceb320d14"
     },
     {
       "path": "spec/instances/bootstrap-mapping/universal-service-foundation-scope-and-principles.json",
@@ -465,7 +465,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "98473806ad468b67d36f954f3eba16a5036fba2b13e21deb9f3704c5dfe65c39"
+      "sha256": "0f05950c2b66629436f74e5535165a74c1d5e8851be62636fba12d5bc2baad12"
     },
     {
       "path": "spec/instances/bootstrap-mapping/abac-policy-decision-point.json",
@@ -476,7 +476,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "a702d0188724a8854456b203379e04edc0a0e1a1cfdc31337a0d26cc62dd640a"
+      "sha256": "8b59599ce3773789ffea388ac3c65987e99a9c7869785e6fdf64471c7be5db29"
     },
     {
       "path": "spec/instances/bootstrap-mapping/api-keys-personal-access-tokens.json",
@@ -487,7 +487,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "d291cadd2c008060cddbf1a5a700c5ba52e67245c3a534e6e0b2e1cc4f6b4570"
+      "sha256": "f9116163fcbffc418b93736ad715393861fb84006450b1bb0ff1338783437ad0"
     },
     {
       "path": "spec/instances/bootstrap-mapping/audit-of-privileged-access.json",
@@ -498,7 +498,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "4a4c4ea2527ea0f6922fad2b415480b20521a3afc9768df4c869cd6195347c1e"
+      "sha256": "385a201965428d9395031cdaa768d6fb2a15f8e0a40a4a76e9d7501cd4c78a1c"
     },
     {
       "path": "spec/instances/bootstrap-mapping/delegated-administration-roles.json",
@@ -509,7 +509,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "916ddd09336dc8f3ecc7b2c99940d0870340f2c8e0fb4a3d747450e7ba20f275"
+      "sha256": "de7a35bc2f3431fe8faca505f15f59c65a78f66177e7bac950290cdbcc06c83a"
     },
     {
       "path": "spec/instances/bootstrap-mapping/end-user-profile-and-preferences-self-service.json",
@@ -520,7 +520,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "7fc840361d058fd696aadb3de0486228fc0770b2f1b63d564dd3f8f3ea84fbcd"
+      "sha256": "e963f89368e71aec196323e5e74e3b660f01eba35f36cc658fa98b6f79d650bd"
     },
     {
       "path": "spec/instances/bootstrap-mapping/entitlement-engine.json",
@@ -531,7 +531,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f8e0de64762cc59f4ad39740c9d1dbe6ae9a52eaa7b846002562baf6eb028c69"
+      "sha256": "37c5534e3ab35783c8a3e80361c860f269febd4dca06b584825b9c004f5d0309"
     },
     {
       "path": "spec/instances/bootstrap-mapping/rbac-roles-and-permissions.json",
@@ -553,7 +553,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "b95666b69e0c4182bdf0dba292e59c37a2c14d69e933f0eda404b925f086f831"
+      "sha256": "3c7efdf538aeeebf2d64d09063b3763cbc4b2e5c497ec2beff6ea87aba6e401f"
     },
     {
       "path": "spec/instances/bootstrap-mapping/support-mode-break-glass-access.json",
@@ -564,7 +564,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "abb8d8fac2b89499ea5c63f7422c6ecb36df4e2025a9086237ed456dc476dc74"
+      "sha256": "8e03b303d5c8421fab7478ef2b09aad41631d05a5290447a2d37b34dc9d62584"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-groups.json",
@@ -575,7 +575,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f07cd516acd045a3f9336338b21e2f2fbf8b65ca7d451828612a1e9ff6acf96c"
+      "sha256": "455f04dc10d523b55bd4757c5c5dd4341f79f61428d06c3c43fd5c995ab0aa7e"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-host-identity-resolution.json",
@@ -619,7 +619,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "2f26d460b5b714f5825ecd65d430284def4ccd3fc3599f04785f1a4b4dbf96d3"
+      "sha256": "1f00f23450713accf7fa99bd756e40bd3dd72b1e58401569f33a19920f907cbf"
     },
     {
       "path": "spec/instances/bootstrap-mapping/browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing.json",
@@ -630,7 +630,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "3af7d5e945030993c3ae8ffe5707e995e5c8408ce1f9165411e887799ac53151"
+      "sha256": "bae9f60478cf82d5645ac42c4c5fc90cf72eb685571632572e4fedaecfd87b4a"
     },
     {
       "path": "spec/instances/bootstrap-mapping/internal-service-catalog-and-readiness.json",
@@ -641,7 +641,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "9dd2435046fc774f0b71e0bd45addd6121ff624c7b31b1b0a299f34fe92f6f1e"
+      "sha256": "a6f514f42a923db3c9a60a9ebac56ab5ced10a19f72b261530fa41696dc8cc6b"
     },
     {
       "path": "spec/instances/bootstrap-mapping/logs-aggregation-and-tenant-scoped-search.json",
@@ -652,7 +652,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "ffeedfe5746555d030508db218c716c5ee5a167e6b2973004667c3c3f339e81c"
+      "sha256": "8d5c68e1f0f146e04ffc114f33da6660a65358640f350ed0bc7974b14b9867db"
     },
     {
       "path": "spec/instances/bootstrap-mapping/metrics-and-traces.json",
@@ -663,7 +663,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "ee06458acac8574b4d5c9cf40cc0c652687853ac46c851ee2798f232631ceb5e"
+      "sha256": "74687db9d1779d356bad3f759abde776b0a4d4395bafeb10082115d057b7ac00"
     },
     {
       "path": "spec/instances/bootstrap-mapping/observability-built-in-alerting-and-incidents.json",
@@ -674,7 +674,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "c4b52e10367ea32e900031e292ea0d0660451fd2d6b6c1dba32196585abc532a"
+      "sha256": "f8cdb67c341311fe4649d1e4f86819654e61402824166ed7816fe0ea3c957d8b"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-service-clickthrough-policy.json",
@@ -685,7 +685,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "fb9fbdd559afae3ce6d798c161e302c7ecaa47130cb1982c986f8339ded45ec1"
+      "sha256": "c7abea02ce0287eeb37ff09442dc4aad376e980e0973bdf95ef595c93930cb98"
     },
     {
       "path": "spec/instances/bootstrap-mapping/search-and-indexing-product-search.json",
@@ -696,7 +696,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "9af347676eeb629c26779335177d25748bcaca8ea12fd91e567324ec65e9fbfc"
+      "sha256": "d9ad30e0b0c3b63eb66961b184a7c3209aeec454c4e4291538f7330072fc3ef2"
     },
     {
       "path": "spec/instances/bootstrap-mapping/code-quality-and-secret-and-dependency-scanning.json",
@@ -707,7 +707,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "32b9976744ea403dec0b175598dca2bbd182df4d7e7aadd630e490765df59d8e"
+      "sha256": "ce3351af46c00adee5274ff5cfdd380e27930835c366f00c36e0fe66ec0d0045"
     },
     {
       "path": "spec/instances/bootstrap-mapping/compliance-reports-access-reviews-evidence-packs.json",
@@ -718,7 +718,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "fe301971b65d777ffd44c913f52d8b18e349b073da0a81c2375b63c2d5408df0"
+      "sha256": "f0f98f63848215cd75223be23a7e77bb719be547f8c9bc2c2eee0214e7f96e23"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-isolation-proof.json",
@@ -729,7 +729,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "76e816b8f8d70caa0dd7ee7ba80e5457ff0d115793bb47546be1d4dfcb2fde4d"
+      "sha256": "c964395762ea467ce3d675500a1a184bc253dd8b66b14bb532738e4178198e3f"
     },
     {
       "path": "spec/instances/bootstrap-mapping/object-storage-and-tenant-prefixes-and-signed-urls.json",
@@ -740,7 +740,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "d01bd90f0852716a3de3797a6c1e371a7b675e37ff0b38405d4945b6475f0e56"
+      "sha256": "0d293c1970c9dc981b280637abde06cca8008cb83313439ab5b552c3bd3506b4"
     },
     {
       "path": "spec/instances/bootstrap-mapping/support-tickets-customer-health-announcements.json",
@@ -751,7 +751,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "4981660757273cf0a03b06d058984febc81c36b8ea230e832b6dabbc14cae3a4"
+      "sha256": "963c40811c855e62abf68639015844d9ccde48afb25636aac9f71c7621c102e3"
     },
     {
       "path": "spec/instances/bootstrap-mapping/tenant-lifecycle-provision-suspend-delete-export.json",
@@ -762,7 +762,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "9f755e3f96aba5a70ae3a27cf399b559a88707ee8e596733e715796f096fae10"
+      "sha256": "25797408769647d3a50f71dd25522fc01e3bcd68e13704699d0045e0be9dd47c"
     }
   ]
 }

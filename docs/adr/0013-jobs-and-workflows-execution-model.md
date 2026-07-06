@@ -10,7 +10,7 @@ Records the human-approved execution-control model for USF jobs and workflows on
 
 ## Context
 
-ADR 0011 decided that USF owns a workflow/job port family (a durable workflow port and a separate operational job/automation port, with in-memory dev adapters and Temporal/Windmill as lineage/composed-test providers) but recorded authority only and left the execution-control semantics to a separate authorised implementation directive. During the jobs/workflows parity pass the exact execution-control model was a requires-human-decision item under USF-133, because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided how jobs and workflows execute: classification, tenant-safe execution, service actors, authorization, bounded retry, idempotency, dead-letter, scheduling, approvals, redaction, and audit. This ADR realises ADR 0011 with rank-2 execution-model coverage and builds on ADR 0010 (the USF policy decision point).
+ADR 0011 decided that USF owns a workflow/job port family (a durable workflow port and a separate operational job/automation port, with in-memory dev adapters and Temporal/Windmill as lineage/composed-test providers) but recorded authority only and left the execution-control semantics to a separate authorised implementation directive. During the jobs/workflows completeness pass the exact execution-control model was a requires-human-decision item under USF-133, because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided how jobs and workflows execute: classification, tenant-safe execution, service actors, authorization, bounded retry, idempotency, dead-letter, scheduling, approvals, redaction, and audit. This ADR realises ADR 0011 with rank-2 execution-model coverage and builds on ADR 0010 (the USF policy decision point).
 
 ## Decision
 
@@ -27,7 +27,7 @@ Recording the execution-control model as rank-2 authority keeps the correctness,
 - `docs/adr/0010-authorization-policy-decision-point.md`
 - `docs/adr/0011-workflow-and-job-port-family.md`
 - `docs/architecture/jobs-and-workflows-standard.md`
-- `docs/architecture/parity-jobs-workflows-source-use-disposition-matrix.md`
+- `docs/architecture/jobs-workflows-source-use-disposition-matrix.md`
 - `spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json`
 - `spec/instances/semantic-contract/background-workers-job-runner.json`
 - `spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json`
@@ -35,7 +35,7 @@ Recording the execution-control model as rank-2 authority keeps the correctness,
 ## Source References
 
 - `docs/architecture/capability-source-coverage-matrix.md`
-- `docs/architecture/react-l5-equivalence-audit.md`
+- `docs/architecture/foundation-completeness-audit.md`
 
 ## Proof References
 
@@ -79,12 +79,12 @@ Recording the execution-control model as rank-2 authority keeps the correctness,
 - Do not let an approval requester approve their own workflow.
 - Do not leak a payload, secret, credential, or stack trace into audit, errors, logs, OpenAPI, or proofs.
 - Do not make a capability depend directly on Temporal or Windmill, or claim live provider readiness from hermetic proof.
-- Do not copy react job/workflow code or mirror its paths.
+- Do not copy external job/workflow code or mirror its paths.
 
 ## Consequences
 
 - The USF jobs/workflows execution model has rank-2 ADR coverage and advances the jobs/workflows portion of USF-133.
-- The jobs-and-workflows standard, the parity-jobs-workflows source-use disposition matrix, and the workflow/job-runner/scheduled-jobs semantic contracts reference this ADR as authority.
+- The jobs-and-workflows standard, the jobs-workflows source-use disposition matrix, and the workflow/job-runner/scheduled-jobs semantic contracts reference this ADR as authority.
 - Durable workflow and operational job ports, in-memory adapters, the job and workflow services, scheduling, retry/idempotency/dead-letter, approvals, and audit are implemented and proven hermetically; live Temporal/Windmill and the enterprise breadth remain deferred.
 - Job and workflow lifecycle, denials, and failures become represented, auditable, value-free concerns.
 

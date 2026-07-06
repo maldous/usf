@@ -591,7 +591,7 @@
       "usf_status": "partial",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -641,7 +641,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -691,7 +691,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -740,7 +740,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -789,7 +789,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -838,7 +838,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -887,7 +887,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -936,7 +936,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -985,7 +985,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1034,7 +1034,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1083,7 +1083,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1132,7 +1132,7 @@
       "usf_status": "partial",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1181,7 +1181,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1230,7 +1230,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1279,7 +1279,7 @@
       "usf_status": "partial",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1370,7 +1370,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1420,7 +1420,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1469,7 +1469,7 @@
       "usf_status": "partial",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1518,7 +1518,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "packages/contracts/src/api-surface.ts",
         "packages/contracts/src/index.ts",
         "apps/api/src/server.ts",
@@ -1626,7 +1626,7 @@
         "docs/architecture/api-and-contract-surface-standard.md",
         "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md"
       ],
       "usf_tests": ["tests/packages/proof.test.ts"],
       "usf_proofs": ["make api-proof", "python3 tools/validate-parity/validate-api.py all --json"],
@@ -1739,7 +1739,7 @@
         "packages/openapi/openapi.json",
         "packages/proof/src/provider-adapters-proof.ts",
         "docs/architecture/provider-adapters-and-modes-standard.md",
-        "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+        "docs/architecture/provider-adapters-source-use-disposition-matrix.md",
         "tools/validate-parity/validate-providers.py",
         "docs/architecture/provider-risk-resilience-depth-matrix.json"
       ],
@@ -1884,7 +1884,7 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/provider-adapters-and-modes-standard.md",
-        "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+        "docs/architecture/provider-adapters-source-use-disposition-matrix.md",
         "docs/architecture/provider-risk-resilience-depth-matrix.json"
       ],
       "usf_tests": ["tests/capabilities/provider-adapters.test.ts"],
@@ -1917,7 +1917,7 @@
       "usf_status": "migrated",
       "usf_paths": [
         "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
-        "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+        "docs/architecture/observability-telemetry-source-use-disposition-matrix.md",
         "packages/core/src/index.ts",
         "packages/ports/src/index.ts",
         "adapters/obs/src/index.ts",
@@ -2106,7 +2106,7 @@
       "usf_status": "not-applicable",
       "usf_paths": [
         "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
-        "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+        "docs/architecture/observability-telemetry-source-use-disposition-matrix.md",
         "docs/architecture/observability-operations-enterprise-proof-depth-matrix.json",
         "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
       ],
@@ -3706,7 +3706,7 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/search-indexing-and-discovery-standard.md",
-        "docs/architecture/parity-search-indexing-source-use-disposition-matrix.md"
+        "docs/architecture/search-indexing-source-use-disposition-matrix.md"
       ],
       "usf_tests": ["tests/capabilities/search-indexing.test.ts"],
       "usf_proofs": ["make search-proof"],
@@ -3946,7 +3946,7 @@
       "usf_status": "deferred",
       "usf_paths": [
         "docs/architecture/resource-lifecycle-relationships-and-mutations-standard.md",
-        "docs/architecture/parity-resource-lifecycle-source-use-disposition-matrix.md"
+        "docs/architecture/resource-lifecycle-source-use-disposition-matrix.md"
       ],
       "usf_tests": [],
       "usf_proofs": ["make resources-proof"],

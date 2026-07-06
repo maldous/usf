@@ -17,7 +17,7 @@
   "proofFile": "packages/proof/src/api-contracts-proof.ts",
   "validatorFile": "tools/validate-parity/validate-api.py",
   "standard": "docs/architecture/api-and-contract-surface-standard.md",
-  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/api-contracts-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "serviceCatalogueDependency": "spec/instances/compose-service/service-catalogue.json#api",
   "enterpriseEvidenceRefs": [
@@ -109,7 +109,7 @@
       "evidenceRefs": [
         "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
         "docs/architecture/api-and-contract-surface-standard.md",
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md"
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md"
       ],
       "proofCommand": "make api-proof",
       "validationCommand": "python3 tools/validate-parity/validate-api.py all --json",

@@ -6,7 +6,7 @@
 | Status | Draft / planning — no implementation authorised by this document |
 | Authority level | Reviewable planning directive; subordinate to the Charter, Authority Model, accepted ADRs, validators, runtime proof evidence, and any future implementation directive |
 | Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `AGENTS.md` |
-| Primary inputs | `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/usf-readiness-rule-coverage-matrix.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/bootstrap-source-use-disposition-matrix.md`, `docs/architecture/complete-readiness-blocker-register.md`, the `spec/instances/` corpus, and historical `../react` evidence |
+| Primary inputs | `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/usf-readiness-rule-coverage-matrix.md`, `docs/architecture/foundation-completeness-audit.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/bootstrap-source-use-disposition-matrix.md`, `docs/architecture/complete-readiness-blocker-register.md`, the `spec/instances/` corpus, and historical `../react` evidence |
 | Companions | `docs/architecture/foundation-ui-agnostic-readiness-boundary.md`, `docs/architecture/react-parity-scope-classification-matrix.md`, `docs/architecture/full-parity-linear-tracking-plan.md` |
 | Repository state | The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89, USF-39). This directive and this pass introduce no new implementation/runtime code, no schema promotion, no proof execution, no React copy, and no React path mirroring. |
 
@@ -46,7 +46,7 @@ The USF foundation has **no UI/UX runtime**. "Full React functional parity" does
 
 ## 4. Disposition model (the bar)
 
-Every implementation-relevant historical `../react` item, and every historical test/proof, MUST be assigned exactly one **disposition status**. The model reuses the existing controlled coverage vocabulary (see `react-l5-equivalence-audit.md`, `usf-readiness-rule-coverage-matrix.md`) and adds two UI-scope statuses.
+Every implementation-relevant historical `../react` item, and every historical test/proof, MUST be assigned exactly one **disposition status**. The model reuses the existing controlled coverage vocabulary (see `foundation-completeness-audit.md`, `usf-readiness-rule-coverage-matrix.md`) and adds two UI-scope statuses.
 
 Foundation-behaviour statuses:
 
@@ -80,7 +80,7 @@ The historical inventory required to populate the parity model **already exists*
 
 - `capability-source-coverage-matrix.md` — 75 historical capabilities → USF semantic targets/gaps (67 with semantic-contract instances).
 - `usf-readiness-rule-coverage-matrix.md` — 60 historical readiness rules → USF coverage (covered/partial/deferred/not-applicable).
-- `react-l5-equivalence-audit.md` — comprehensive per-asset-class equivalence audit over the frozen React base (`v1-final`), using the controlled coverage vocabulary.
+- `foundation-completeness-audit.md` — comprehensive per-asset-class equivalence audit over the frozen React base (`v1-final`), using the controlled coverage vocabulary.
 - `bootstrap-source-use-disposition-matrix.md` and `authentication-slice-source-use-disposition-matrix.md` — source-use disposition for the bootstrap and authentication slices.
 - `semantic-source-use-closure-ledger.md`, `source-import-coverage-plan.md`, `complete-readiness-blocker-register.md` — closure ledger, import coverage, and current blocker state.
 - The `spec/instances/` corpus — 66 `semantic-contract` + 66 `bootstrap-mapping` instances.

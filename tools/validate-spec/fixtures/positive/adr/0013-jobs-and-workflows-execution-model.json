@@ -58,14 +58,14 @@
     "docs/adr/0010-authorization-policy-decision-point.md",
     "docs/adr/0011-workflow-and-job-port-family.md",
     "docs/architecture/jobs-and-workflows-standard.md",
-    "docs/architecture/parity-jobs-workflows-source-use-disposition-matrix.md",
+    "docs/architecture/jobs-workflows-source-use-disposition-matrix.md",
     "spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json",
     "spec/instances/semantic-contract/background-workers-job-runner.json",
     "spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json"
   ],
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "proofRefs": [
     "packages/proof/src/jobs-workflows-proof.ts"

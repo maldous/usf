@@ -2375,7 +2375,7 @@ READINESS_STALE_PHRASES = {
         "no carrier or signer/trust model is accepted yet",
         "approval-ready",
     ],
-    "docs/architecture/react-l5-equivalence-audit.md": [
+    "docs/architecture/foundation-completeness-audit.md": [
         "USF base state reviewed | `badef5da0c03a1e019d3f7bb84d8268ee8bc8255`",
         "USF-113: human ratification",
         "USF-117 status: ledger format + vocabulary defined and documented; validator coverage deferred",

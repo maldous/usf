@@ -35,7 +35,7 @@
     "apps/react-enterprise-app/src/theme/theme.ts",
     "apps/react-enterprise-app/src/theme/use-theme.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "capabilityTargets": [
     {

@@ -32,7 +32,7 @@
     "apps/platform-api/src/usecases/notifications.ts",
     "apps/platform-api/src/usecases/profile.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "capabilityTargets": [
     {

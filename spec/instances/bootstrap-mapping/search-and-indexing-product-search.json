@@ -42,7 +42,7 @@
     "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx",
     "apps/react-enterprise-app/src/features/admin-search/admin-search-client.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "capabilityTargets": [
     {

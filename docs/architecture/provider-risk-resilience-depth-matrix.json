@@ -8,7 +8,7 @@
   "dashboardIssue": "USF-184",
   "coordinatorIssue": "USF-192",
   "providerStandard": "docs/architecture/provider-adapters-and-modes-standard.md",
-  "providerSourceUseMatrix": "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+  "providerSourceUseMatrix": "docs/architecture/provider-adapters-source-use-disposition-matrix.md",
   "runtimeProofManifest": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
   "providerRegistry": "packages/core/src/index.ts",
   "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json",

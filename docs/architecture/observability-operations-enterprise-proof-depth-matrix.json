@@ -10,7 +10,7 @@
   "validatorCommand": "python3 tools/validate-parity/validate-observability.py all --json",
   "proofFile": "packages/proof/src/observability-telemetry-proof.ts",
   "validatorFile": "tools/validate-parity/validate-observability.py",
-  "sourceUseMatrix": "docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/observability-telemetry-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "operationsPostureInstance": "spec/instances/observability-signal/observability-operations-posture.json",

@@ -8,7 +8,7 @@
   "rawProofCommand": "corepack pnpm proof:audit",
   "rawProofCommandBoundary": "requires Compose Postgres to be running; make audit-proof owns startup and teardown",
   "validatorCommand": "python3 tools/validate-parity/validate-audit.py all --json",
-  "sourceUseMatrix": "docs/architecture/parity-audit-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/audit-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [

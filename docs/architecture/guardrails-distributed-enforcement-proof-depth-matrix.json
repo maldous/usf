@@ -10,7 +10,7 @@
   "validatorCommand": "python3 tools/validate-parity/validate-guardrails.py all --json",
   "proofFile": "packages/proof/src/rate-limits-abuse-controls-proof.ts",
   "validatorFile": "tools/validate-parity/validate-guardrails.py",
-  "sourceUseMatrix": "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/rate-limits-abuse-controls-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [
@@ -169,7 +169,7 @@
       "riskTreatment": "mitigate",
       "evidenceRefs": [
         "packages/proof/src/rate-limits-abuse-controls-proof.ts",
-        "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md"
+        "docs/architecture/rate-limits-abuse-controls-source-use-disposition-matrix.md"
       ],
       "proofChecks": [
         "synthetic route metadata covers API, jobs, notifications, files, providers, and import/export domains",

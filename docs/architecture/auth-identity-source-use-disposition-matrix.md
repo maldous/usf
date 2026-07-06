@@ -1,4 +1,4 @@
-# Parity Auth/Identity (Keycloak Broker) Source-Use Disposition Matrix
+# Auth/Identity (Keycloak Broker) Source-Use Disposition Matrix
 
 | | |
 |---|---|
@@ -18,8 +18,9 @@ ISO 27001-supporting technical control evidence only. No certification claim.
 
 ## Treatment Rules
 
-- **source-derived-rewrite** — behaviour recovered from `../react` lineage and rewritten clean to
-  USF semantics; no React runtime/application code is copied, and no React path is mirrored.
+- **source-derived-rewrite** — behaviour authored against USF semantics with `../react` evidence as
+  lineage; USF authors its own runtime, no external runtime/application code is copied, and no external
+  source path is mirrored.
 - **new-with-rationale** — no direct historical antecedent; introduced to satisfy a USF semantic
   contract / ADR (e.g. local Keycloak token validation, which `../react` did not perform).
 - **evidence-only-support** — `../react` material consulted as behaviour evidence only; nothing
@@ -43,7 +44,7 @@ Keycloak and are never modelled, named, configured, credentialed, or accepted di
 | `tests/adapters/keycloak-verifier.test.ts` | new-with-rationale | evidence-only-support | Unit tests of the verifier accept/deny matrix and JWKS handling. |
 | `tests/capabilities/auth-identity.test.ts` | source-derived-rewrite | `../react` auth test lineage (evidence only) | Capability tests for identity mapping, session lifecycle, and identity-to-tenant handoff. Rewrites foundation behaviour from React unit/e2e tests; no Playwright. |
 
-Extended (already source-dispositioned by prior parity matrices; no path change):
+Extended (already source-dispositioned by prior source-use disposition matrices; no path change):
 `packages/core/src/index.ts`, `packages/ports/src/index.ts`, `adapters/idp/src/index.ts`,
 `capabilities/auth/src/index.ts` — extended with Keycloak-broker types, ports, and exports.
 

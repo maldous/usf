@@ -1,4 +1,4 @@
-# Parity Notifications Messaging Source-Use Disposition Matrix
+# Notifications Messaging Source-Use Disposition Matrix
 
 |                     |                                                                                  |
 | ------------------- | -------------------------------------------------------------------------------- |
@@ -8,7 +8,7 @@
 | Issue scope         | USF-152, child of USF-133                                                        |
 | Historical lineage  | `../react` is rank-6 evidence only                                               |
 
-This matrix records the treatment of files touched for the notifications/messaging parity domain. No React runtime/application code is copied. No React path is mirrored. No live external delivery provider readiness is claimed. No staging, production, deployment, live email, live SMS, live push, live webhook, live SMTP, deliverability certification, ISO certification, legal compliance certification, or production-live readiness is claimed.
+This matrix records the treatment of files touched for the notifications/messaging domain. USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No live external delivery provider readiness is claimed. No staging, production, deployment, live email, live SMS, live push, live webhook, live SMTP, deliverability certification, ISO certification, legal compliance certification, or production-live readiness is claimed.
 
 ## Runtime And Capability Files
 
@@ -40,7 +40,7 @@ This matrix records the treatment of files touched for the notifications/messagi
 | ----------- | --------- | ---------------- | --------- |
 | `docs/architecture/notifications-and-messaging-standard.md` | source-derived-rewrite | React notification semantic contract plus enterprise notification control follow-up | Defines the USF controlled-communication standard for this parity slice. |
 | `docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-153 enterprise proof-depth requirement | Records machine-checkable bounded-local proof, explicit non-equivalence boundaries, deferred live-provider/API/UI boundaries, enterprise evidence refs, validator refs, and non-claims. |
-| `docs/architecture/parity-notifications-messaging-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Records lineage/disposition for this domain. |
+| `docs/architecture/notifications-messaging-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Records lineage/disposition for this domain. |
 | `docs/architecture/bootstrap-source-use-disposition-matrix.md` | evidence-only-support | Existing bootstrap source-use matrix | Updates prior thin notify/mail rows and adds new proof/validator/test/doc rows. |
 | `docs/architecture/react-parity-scope-classification-matrix.json` | evidence-only-support | Existing parity matrix | Marks the notifications domain authorised under USF-152 and backs it with tests/proofs; item rows classify domain subareas. |
 | `docs/architecture/react-parity-scope-classification-matrix.md` | evidence-only-support | Human-readable parity matrix | Mirrors the JSON status truthfully. |
@@ -64,4 +64,4 @@ This matrix records the treatment of files touched for the notifications/messagi
 
 ## Boundary Confirmation
 
-No React runtime/application code is copied. No target path mirrors a historical React path. Runtime files are source-derived rewrites or new-with-rationale. Generated reports are not treated as canonical. No live external delivery provider readiness is claimed.
+USF authors its own runtime; no external runtime/application code is copied and no target path mirrors a historical external source path. Runtime files are source-derived rewrites or new-with-rationale. Generated reports are not treated as canonical. No live external delivery provider readiness is claimed.

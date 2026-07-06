@@ -1,4 +1,4 @@
-# 0005 React Hexagonal Architecture Carry Forward
+# 0005 Hexagonal Architecture
 
 ## Status
 
@@ -6,15 +6,15 @@ Accepted.
 
 ## Description
 
-Records the decision that USF carries the React hexagonal (ports-and-adapters) architecture forward as an explicit, binding architecture constraint for future implementation extraction, and names the port/adapter boundaries and dependency-direction rules the implementation MUST satisfy. It defines requirements only; it creates no implementation code or directories.
+Records USF's decision to adopt a hexagonal (ports-and-adapters) architecture as an explicit, binding architecture constraint for future implementation, and names the port/adapter boundaries and dependency-direction rules the implementation MUST satisfy. It defines requirements only; it creates no implementation code or directories.
 
 ## Context
 
 This decision is made under the readiness-acceleration directive recorded in Linear USF-113, with the human decision delegated to the agent for the most complete, ready-to-build foundation.
 
-The React L5 equivalence audit (`docs/architecture/react-l5-equivalence-audit.md` section 7.1) inventoried strong evidence that `../react` was materially built around hexagonal architecture: explicit `ports/` and `adapters/` directories under `../react/apps/platform-api/src/`, usecases depending on ports rather than adapters, dependency-direction enforcement in `../react/.dependency-cruiser.cjs` and the lint configuration, public-export-only imports via TypeScript path aliases, and a contracts/domain/adapter/runtime package split. This historical evidence is rank-6 lineage, not future live authority.
+USF adopts hexagonal architecture as its own binding structural decision. The foundation-completeness audit (`docs/architecture/foundation-completeness-audit.md` section 7.1) records the supporting evidence for this structure — explicit `ports/` and `adapters/` boundaries, usecases depending on ports rather than adapters, dependency-direction enforcement, public-export-only imports, and a contracts/domain/adapter/runtime package split. That evidence is USF-internal historical lineage, not future live authority.
 
-The USF ontology already defines the relevant concepts: Port (section 5.15), Adapter (section 5.16), Interface (section 5.17), Application (section 5.12), Package / Module (section 5.13), and Service (section 5.14). The V2 implementation language and runtime are an **open decision** deferred to a future implementation directive; this ADR carries only the **language-agnostic** ports/adapters architecture as semantic information. `../react` is historical lineage only — its TypeScript implementation is evidence, not a V2 language commitment, and no `../react` source code is imported.
+The USF ontology already defines the relevant concepts: Port (section 5.15), Adapter (section 5.16), Interface (section 5.17), Application (section 5.12), Package / Module (section 5.13), and Service (section 5.14). The implementation language and runtime are an **open decision** deferred to a future implementation directive; this ADR carries only the **language-agnostic** ports/adapters architecture as semantic information. No external source code is imported and no external source path is mirrored.
 
 ## Decision
 
@@ -30,11 +30,11 @@ These are requirements on a future implementation. This ADR creates no implement
 
 ## Rationale
 
-Hexagonal structure is the load-bearing property that made React testable in isolation, swappable across provider modes (hermetic, composed-local, sandbox, live), and proof-honest. Reproducing the foundation from React input while preserving proof honesty and the hermetic-first ceiling requires the same boundaries. The alternative (leaving architecture implicit and inferring it later from generated code) would violate the semantic-first principle and risk drift, so it is rejected.
+Hexagonal structure is the load-bearing property that keeps the foundation testable in isolation, swappable across provider modes (hermetic, composed-local, sandbox, live), and proof-honest. Building the foundation while preserving proof honesty and the hermetic-first ceiling requires these boundaries. The alternative (leaving architecture implicit and inferring it later from generated code) would violate the semantic-first principle and risk drift, so it is rejected.
 
 ## Semantic References
 
-- `docs/architecture/react-l5-equivalence-audit.md`
+- `docs/architecture/foundation-completeness-audit.md`
 - `docs/architecture/charter.md`
 - `docs/architecture/ontology.md`
 - `docs/architecture/target-implementation-topology-plan.md`
@@ -91,4 +91,4 @@ Hexagonal structure is the load-bearing property that made React testable in iso
 
 ## Machine-Readable ADR Instance
 
-- `tools/validate-spec/fixtures/positive/adr/0005-react-hexagonal-architecture-carry-forward.json`
+- `tools/validate-spec/fixtures/positive/adr/0005-hexagonal-architecture.json`

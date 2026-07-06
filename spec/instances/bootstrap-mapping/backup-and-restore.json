@@ -31,7 +31,7 @@
   "sourceRefs": [
     "apps/platform-api/scripts/backup-local-runtime-proof.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "scripts/backup/postgres-backup.sh",
     "scripts/backup/postgres-restore.sh"
   ],

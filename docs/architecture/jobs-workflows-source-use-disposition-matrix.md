@@ -1,4 +1,4 @@
-# Parity Jobs/Workflows Source-Use Disposition Matrix
+# Jobs/Workflows Source-Use Disposition Matrix
 
 | | |
 |---|---|
@@ -18,8 +18,8 @@ ISO 27001-supporting technical control evidence only. No certification claim.
 
 ## Treatment Rules
 
-- **source-derived-rewrite** — behaviour recovered from `../react` lineage and rewritten clean
-  to USF semantics; no React runtime/application code is copied and no React path is mirrored.
+- **source-derived-rewrite** — behaviour authored against USF semantics with `../react` as lineage;
+  USF authors its own runtime, no external runtime/application code is copied, and no external source path is mirrored.
 - **new-with-rationale** — no direct historical antecedent; introduced to satisfy a USF
   semantic contract / ADR (the ADR 0011 two-port family realised under ADR 0013).
 - **evidence-only-support** — `../react` material consulted as behaviour evidence only.
@@ -40,7 +40,7 @@ Windmill are lineage/composed-test provider concerns; no live provider readiness
 | `tests/adapters/operational-job-store.test.ts` | new-with-rationale | evidence-only-support | Unit tests of lease exclusivity/re-acquire, claim eligibility, idempotency, tenant isolation. |
 | `tests/capabilities/jobs-workflows.test.ts` | source-derived-rewrite | `../react` job/workflow test lineage (evidence only) | Capability tests for authz, idempotency, retry/dead-letter, redaction, cancellation, approval SoD. No Playwright. |
 
-Extended (already source-dispositioned by prior parity matrices; no path change):
+Extended (already source-dispositioned by prior source-use disposition matrices; no path change):
 `packages/core/src/index.ts` (job/workflow types, failure taxonomy, backoff, service-actor,
 schedule, redaction, audit event types), `packages/ports/src/index.ts` (`OperationalJobPort`,
 `DurableWorkflowPort`), `adapters/wf/src/index.ts` (in-memory job store + durable workflow
@@ -53,19 +53,19 @@ mutation actions, workflow admin override, and service-worker/security-admin rol
 
 | Jobs/workflows concern | Status | Where | Notes |
 |---|---|---|---|
-| Durable workflow port (ADR 0011) | migrated | `packages/ports`, `adapters/wf` | `DurableWorkflowPort` + in-memory adapter; Temporal local composed-test binding proven by USF-183; live Temporal remains deferred. |
-| Operational job port (ADR 0011) | migrated | `packages/ports`, `adapters/wf` | `OperationalJobPort` + in-memory adapter; Windmill readiness deferred |
-| Job/workflow classification | migrated | `packages/core` | 13 classifications; unclassified fails validation |
-| Tenant-scoped execution | migrated | `capabilities/jobs` | tenant context required; cross-tenant denied (PDP) |
-| Concrete service actors | migrated | `packages/core`, `capabilities/tenant` | `urn:usf:service:` + service-worker role; not a global bypass |
-| PDP authorization for job/workflow actions | migrated | `capabilities/tenant` | job.*/workflow.* actions; default-deny |
-| Scheduling (deterministic, UTC, missed-run) | migrated | `packages/core`, `capabilities/jobs` | window dedupe; tenant-local + cron deferred |
-| Retry/backoff (bounded) + dead-letter | migrated | `packages/core`, `capabilities/jobs` | bounded retries; deterministic backoff; DLQ with evidence |
-| Idempotency / duplicate suppression | migrated | `capabilities/jobs`, `adapters/wf` | per-tenant key; duplicate submit suppressed |
+| Durable workflow port (ADR 0011) | covered | `packages/ports`, `adapters/wf` | `DurableWorkflowPort` + in-memory adapter; Temporal local composed-test binding proven by USF-183; live Temporal remains deferred. |
+| Operational job port (ADR 0011) | covered | `packages/ports`, `adapters/wf` | `OperationalJobPort` + in-memory adapter; Windmill readiness deferred |
+| Job/workflow classification | covered | `packages/core` | 13 classifications; unclassified fails validation |
+| Tenant-scoped execution | covered | `capabilities/jobs` | tenant context required; cross-tenant denied (PDP) |
+| Concrete service actors | covered | `packages/core`, `capabilities/tenant` | `urn:usf:service:` + service-worker role; not a global bypass |
+| PDP authorization for job/workflow actions | covered | `capabilities/tenant` | job.*/workflow.* actions; default-deny |
+| Scheduling (deterministic, UTC, missed-run) | covered | `packages/core`, `capabilities/jobs` | window dedupe; tenant-local + cron deferred |
+| Retry/backoff (bounded) + dead-letter | covered | `packages/core`, `capabilities/jobs` | bounded retries; deterministic backoff; DLQ with evidence |
+| Idempotency / duplicate suppression | covered | `capabilities/jobs`, `adapters/wf` | per-tenant key; duplicate submit suppressed |
 | Leases / heartbeat / concurrency | bounded-local-proof | `adapters/wf`, `capabilities/jobs/src/enterprise-workflow-controls.ts` | lease exclusivity + safe re-acquire; local heartbeat-miss and concurrency-key proof; distributed worker-cluster heartbeat/concurrency deferred |
-| Failure taxonomy + safe redaction | migrated | `packages/core` | 15-class taxonomy; secret-redacted messages |
-| Job/workflow audit events | migrated | `packages/core`, `capabilities/jobs` | lifecycle events emitted value-free |
-| Human approvals / separation of duties | migrated | `capabilities/jobs` | requester cannot self-approve |
+| Failure taxonomy + safe redaction | covered | `packages/core` | 15-class taxonomy; secret-redacted messages |
+| Job/workflow audit events | covered | `packages/core`, `capabilities/jobs` | lifecycle events emitted value-free |
+| Human approvals / separation of duties | covered | `capabilities/jobs` | requester cannot self-approve |
 | Provider config / secret refs / egress | bounded-local-proof | `packages/core`, `capabilities/jobs/src/enterprise-workflow-controls.ts` | payload redaction + secret-ref reuse; local endpoint-reference allow-list and circuit-breaker fail-closed proof; live provider egress deferred |
 | Safe job/workflow API surfaces | deferred | standard doc | `/v1/jobs`, `/v1/workflows` defined; HTTP wiring deferred |
 | Workflow versioning / deterministic replay | bounded-local-proof | `capabilities/jobs/src/enterprise-workflow-controls.ts`, proof | workflow definition hash, replay mismatch denial, and migration-policy gate proven locally; live Temporal replay/migration deferred |

@@ -97,7 +97,7 @@
   },
   "sourceRefs": [
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "apps/platform-api/scripts/tenant-storage-runtime-proof.ts",
     "apps/platform-api/src/usecases/tenant-storage.ts",
     "apps/platform-api/tests/unit/tenant-storage.test.ts",
@@ -111,6 +111,6 @@
     "packages/adapters-object-storage/tsconfig.json"
   ],
   "adrRefs": [
-    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
+    "docs/adr/0005-hexagonal-architecture.md"
   ]
 }

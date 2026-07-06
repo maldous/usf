@@ -37,7 +37,7 @@
     "apps/platform-api/tests/unit/platform-config.test.ts",
     "docs/api/openapi.json",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md"
+    "docs/architecture/foundation-completeness-audit.md"
   ],
   "capabilityTargets": [
     {

@@ -38,7 +38,7 @@
     "apps/platform-api/tests/unit/rate-limits.test.ts",
     "apps/platform-api/tests/unit/redis-rate-limit-repository.test.ts",
     "docs/architecture/capability-source-coverage-matrix.md",
-    "docs/architecture/react-l5-equivalence-audit.md",
+    "docs/architecture/foundation-completeness-audit.md",
     "docs/evidence/platform/phase-3-api-keys-rate-limits.md",
     "docs/evidence/platform/rate-limit-provider-foundation.md"
   ],

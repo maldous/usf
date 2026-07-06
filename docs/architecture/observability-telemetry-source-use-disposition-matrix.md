@@ -1,13 +1,13 @@
-# Parity Observability/Telemetry Source-Use Disposition Matrix
+# Observability/Telemetry Source-Use Disposition Matrix
 
-This matrix records source-use disposition for the USF-133 observability/telemetry parity slice. It uses `../react` only as historical semantic lineage and proof/test behaviour evidence. It does not copy React runtime/application code, does not mirror React paths, and does not claim live monitoring, SIEM, alerting, SOC, ISO, or production readiness.
+This matrix records source-use disposition for the USF-133 observability/telemetry slice. It uses `../react` only as historical semantic lineage and proof/test behaviour evidence. USF authors its own runtime; it does not copy external runtime/application code, does not mirror external source paths, and does not claim live monitoring, SIEM, alerting, SOC, ISO, or production readiness.
 
 Linear child issue: USF-158.
 
 | Target file | Treatment | Source-use basis | Rationale |
 | ----------- | --------- | ---------------- | --------- |
 | `docs/architecture/observability-telemetry-and-operational-evidence-standard.md` | source-derived-rewrite | React observability ADRs, proof scripts, tenant readiness evidence, log/metric/trace tests, and USF enterprise observability controls | Defines observability as a controlled local/dev/test evidence surface with signal categories, classifications, redaction, tenant safety, access control, provider modes, and deferred live depth. |
-| `docs/architecture/parity-observability-telemetry-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the observability/telemetry slice. |
+| `docs/architecture/observability-telemetry-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Domain-specific source-use disposition matrix for the observability/telemetry slice. |
 | `packages/core/src/index.ts` | source-derived-rewrite | React observability semantics, redaction, request context, metrics cardinality, and proof lineage | Adds telemetry categories, signal classifications, metric types, context fields, redaction helpers, validation errors, safe telemetry values, and observability audit event taxonomy. |
 | `packages/ports/src/index.ts` | source-derived-rewrite | React port/adapter boundary and ADR 0020 lineage | Adds TelemetryPort methods while preserving the existing ObservabilitySink compatibility path. |
 | `adapters/obs/src/index.ts` | source-derived-rewrite | React in-memory observability repository and local proof lineage | Implements the bounded in-memory telemetry collector with safe metrics, spans, structured logs, operational/security signals, health/readiness/liveness, tenant query isolation, and redacted status view. |
@@ -44,7 +44,7 @@ Lane 4 uses historical React observability evidence as lineage only:
 - `../react/docs/evidence/observability/tenant-observability-readiness.md` for tenant-safe query, label guard, dashboard reachability, and no-fake-readiness posture.
 - `../react/apps/platform-api/scripts/alerting-runtime-proof.ts` and `../react/apps/platform-api/scripts/incident-foundation-runtime-proof.ts` for alert/incident proof expectations and no secret-bearing-column checks.
 
-Lane 4 does not copy React runtime/application code. USF-159 converts the previous Lane 4 source
+Lane 4 does not copy external runtime/application code. USF-159 converts the previous Lane 4 source
 issue deferral into a bounded source-issue evidence gate. The USF deliverable is local operations
 evidence, validator coverage, planted defects, enterprise evidence rows, and explicit
 reclassification of live telemetry backends, alert delivery, dashboard runtime, incident workflow,
@@ -65,4 +65,4 @@ and not claimed.
 
 ## Boundary Confirmation
 
-No runtime/application code is copied from `../react`. No USF path mirrors a React path. No OpenTelemetry, Prometheus, Loki, Tempo, Sentry, SIEM, alerting, dashboard, incident-response, external provider, staging, production, SOC, ISO, full dev readiness, full product readiness, enterprise production readiness, or live monitoring readiness is claimed.
+USF authors its own runtime; no runtime/application code is copied from `../react` and no USF path mirrors an external source path. No OpenTelemetry, Prometheus, Loki, Tempo, Sentry, SIEM, alerting, dashboard, incident-response, external provider, staging, production, SOC, ISO, full dev readiness, full product readiness, enterprise production readiness, or live monitoring readiness is claimed.
