@@ -30,6 +30,15 @@ corepack pnpm proof-cockpit:serve
 
 The `proof-cockpit:serve` script (`package.json`) runs `node apps/staging-proof-cockpit/src/server.mjs`. Open the served cockpit in a browser. CSRF protection is a double-submit pair: a form token (`csrfToken` hidden input) and an HttpOnly, `SameSite=Strict` cookie (`proof_cockpit_csrf`, `Path=/proof`). Both are set and validated server-side, so no manual token handling is required — keep cookies enabled in the browser session.
 
+### Turnkey local operator surface: `make proof-review-up` / `make proof-review-down`
+
+For the fastest operator loop, two Make targets wrap the whole lifecycle (they drive the staging `staging-proof-cockpit` Compose service plus an ad-hoc operator-authenticated Caddy; they do not require the origin host):
+
+- `make proof-review-up` — prompts for an operator username and password, hashes the password with the Caddy image, seeds the acceptance-ledger volume from the committed corpus on first run, starts the loopback cockpit, and fronts it with HTTP basic authentication. It prints the local URL (`http://localhost:8446/proof`); the authenticated operator name is recorded as the acceptance/signoff actor. Review, accept (or Accept all), and sign off in the browser exactly as below.
+- `make proof-review-down` — reads the acceptance ledger back out of the volume, fails closed unless it is valid JSON with at least one action, overwrites `evidence/proof-evidence/proof-cockpit/human-review-actions.json`, and **git-commits** it (the manual operator reconciliation, now scripted — not pushed automatically), then stops the surface while preserving the ledger volume. Review the commit with `git show HEAD` and push when ready.
+
+The origin-host (`1e100.network`) deployment below remains the permanent public fixture; the Make targets are the same contract run locally.
+
 ### Staging access at `https://1e100.network/proof` (ADR 0015)
 
 For the permanent staging fixture, the same cockpit is reached at `https://1e100.network/proof` instead of a local serve. Per [ADR 0015](../adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md), the route is served by the profile-gated `staging-proof-cockpit` Compose service (loopback-only) behind a Caddy operator HTTP basic-authentication credential on the staging host; the edge configuration and the `USF_PROOF_COCKPIT_OPERATOR_USER` / `USF_PROOF_COCKPIT_OPERATOR_BCRYPT` credential are described in the self-hosted public proof origin runbook. Authenticate with the operator credential at the browser prompt; the authenticated operator name is recorded as the acceptance/signoff actor. The write guard, CSRF pair, and non-auto-completed signoff behave identically to the local serve. The route exposes hermetic, synthetic proof content only and upgrades no readiness claim. Acceptance and signoff persist to the service's durable volume; promote them into the committed `evidence/proof-evidence/proof-cockpit/human-review-actions.json` corpus by the manual reconciliation step (copy the volume ledger into the repo, review the diff, and commit) — the running service is never given repository write credentials.
