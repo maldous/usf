@@ -319,6 +319,7 @@ RULES = {
     "USF-INSTANCE-003": ("blocking", "Semantic corpus instance directory has no matching schema"),
     "USF-INSTANCE-004": ("blocking", "Semantic corpus instance reference does not resolve"),
     "USF-INSTANCE-005": ("blocking", "Semantic corpus instance id is duplicated"),
+    "USF-NATIVE-001":   ("blocking", "Semantic corpus instance reference uses a cross-repo legacy discriminator (must be USF-native repo-local)"),
     "USF-IMPORT-001":   ("blocking", "Source import manifest invalid against import-manifest schema"),
     "USF-IMPORT-002":   ("blocking", "Source import manifest entry count mismatch"),
     "USF-IMPORT-003":   ("blocking", "Source import manifest sourceRef.path values are missing or duplicated"),
@@ -860,6 +861,27 @@ INSTANCE_REF_SCALARS = {
     "producer", "source",
 }
 
+# USF-302 (owner decision): the discriminator convention for governed semantic /
+# ADR references is USF-native ONLY. A governed instance reference (the INSTANCE_REF_*
+# fields above) MUST be a canonical repo-local USF path (e.g. "docs/adr/0005-...md"),
+# never a cross-repo legacy discriminator. Historical react lineage is carried by the
+# source-import manifest + source-reference allowlist mechanism and by lineage-narrative
+# prose (description/aiGuidance), NOT by these governed reference fields. This guard is
+# scoped to the collected reference fields only; it does not inspect prose, the
+# allowlist/manifest mechanism files, or lineage docs.
+CROSS_REPO_DISCRIMINATORS = ("../react", "react-origin")
+
+
+def _cross_repo_discriminator(ref):
+    """Return the first cross-repo legacy discriminator present in ref, else None."""
+    if not isinstance(ref, str):
+        return None
+    low = ref.lower()
+    for token in CROSS_REPO_DISCRIMINATORS:
+        if token in low:
+            return token
+    return None
+
 
 def _collect_instance_refs(node, path="$"):
     if isinstance(node, dict):
@@ -993,6 +1015,12 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         if errs:
             continue
         for field, ref in _collect_instance_refs(data):
+            token = _cross_repo_discriminator(ref)
+            if token is not None:
+                F.add("USF-NATIVE-001", f"{p}:{field}",
+                      f"cross-repo legacy discriminator '{token}' in governed reference: {ref}; "
+                      f"use a canonical repo-local USF path")
+                continue
             if not resolves(ref):
                 F.add("USF-INSTANCE-004", f"{p}:{field}", f"unresolved reference: {ref}")
         if schema == "semantic-contract":
