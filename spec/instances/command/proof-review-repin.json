@@ -1,0 +1,51 @@
+{
+  "id": "command.proof-review-repin",
+  "commandKind": "make-target",
+  "title": "Re-Pin Proof Cockpit Machine Evidence",
+  "description": "Convenience command that regenerates the proof-cockpit machine-QA evidence and promotes it, re-pinning the committed evidence to the current commit so the acceptance gate is fresh after scoped source changes.",
+  "purpose": "Give developers a single command to regenerate and re-pin proof-cockpit machine evidence when scoped source, compose, or catalogue files change, so the fail-closed acceptance freshness gate returns to green before merge.",
+  "invocation": "make proof-review-repin",
+  "inputs": [
+    "apps/staging-proof-cockpit/src/machine-qa.mjs",
+    "apps/staging-proof-cockpit/src/promote.mjs",
+    "spec/instances/compose-service/service-catalogue.json",
+    "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+  ],
+  "outputs": [
+    "Regenerated machine-QA run artifacts under artifacts/proof-cockpit/machine-runs",
+    "Updated evidence/proof-evidence/proof-cockpit/staging-evidence-store.json pinned to the current commit",
+    "Guidance to commit the regenerated evidence on standard output"
+  ],
+  "environmentScope": [
+    "local",
+    "hermetic"
+  ],
+  "sideEffects": [
+    "Runs the Playwright machine-QA harness against the proof cockpit and writes run artifacts",
+    "Promotes the newest run into the committed evidence store and prunes superseded run payloads"
+  ],
+  "failureSemantics": "Fails closed if the machine-QA run reports failures, warnings, or gaps, or if promotion cannot resolve the newest run; a failed re-pin leaves the committed evidence unchanged and does not itself commit. It records hermetic, synthetic proof evidence only and upgrades no readiness claim.",
+  "emitsEvidence": true,
+  "sourceRefs": [
+    "tools/proof-review/proof-review.sh",
+    "Makefile",
+    "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+    "apps/staging-proof-cockpit/src/machine-qa.mjs",
+    "apps/staging-proof-cockpit/src/promote.mjs"
+  ],
+  "disposition": "preserve",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Use this command to re-pin proof-cockpit machine evidence to the current commit after changing scoped source, compose, or catalogue files, then commit the regenerated evidence. It records hermetic synthetic evidence only; do not treat a successful re-pin as human acceptance or as any staging, deployment, or production readiness claim."
+}

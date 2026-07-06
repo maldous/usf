@@ -37,9 +37,28 @@ require() { command -v "$1" >/dev/null 2>&1 || die "required command not found: 
 
 compose() { docker compose -f "${COMPOSE_FILE}" --profile proof-cockpit "$@"; }
 
+# Detect (do not mutate) stale/red proof-cockpit acceptance evidence and warn the
+# operator so they never unknowingly sign off on stale evidence. Pure Python, no
+# Chromium — safe to run at bring-up. Staleness is a build/release-time concern
+# (re-pin with `make proof-review-repin`), not something up should auto-commit.
+check_freshness() {
+  command -v python3 >/dev/null 2>&1 || return 0
+  local status
+  status="$(cd "${REPO_ROOT}" && python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json 2>/dev/null \
+    | python3 -c 'import json,sys; print(json.load(sys.stdin).get("status","unknown"))' 2>/dev/null || echo unknown)"
+  if [ "${status}" != "pass" ]; then
+    log "WARNING: proof-cockpit acceptance evidence is not fresh/green (status=${status})."
+    log "         You may be about to review or sign off on STALE evidence."
+    log "         Re-pin it to the current commit first, then commit the result:"
+    log "           make proof-review-repin"
+    log "         Bringing the surface up anyway (warning only)."
+  fi
+}
+
 up() {
   require docker
   [ -f "${COMPOSE_FILE}" ] || die "missing compose file: ${COMPOSE_FILE}"
+  check_freshness
 
   # 1. Operator credential (never written to a tracked file).
   local user pass hash
