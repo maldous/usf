@@ -938,6 +938,23 @@ function serviceClaimSupport(service) {
   return "Compose-backed service state supporting evidence for capability QA.";
 }
 
+// Approved local secret placeholders sourced from
+// spec/instances/compose-service/service-catalogue.json#approvedLocalSecretPlaceholders.
+// These are dev-only compose placeholder values; if any of them surface verbatim in a
+// live service response body it means a compose env value leaked into the rendered UI,
+// so machine QA must fail closed. This is detection only and never prints a real secret.
+const APPROVED_LOCAL_SECRET_PLACEHOLDER_VALUES = [
+  "admin_password",
+  "dev-root-token",
+  "foundation_app_password",
+  "keycloak_password",
+  "minio_password",
+  "sonar_password",
+  "temporal_password",
+  "windmill_password",
+  "usf-local-windmill-superadmin-placeholder",
+];
+
 function serviceSensitiveFinding(text) {
   const patterns = [
     /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
@@ -945,8 +962,17 @@ function serviceSensitiveFinding(text) {
     /\bNETLIFY_AUTH_TOKEN\b/,
     /\bCLOUDFLARE[_A-Z]*TOKEN\b/,
     /\bAWS_SECRET_ACCESS_KEY\b/,
-    /\b(admin|foundation_app|keycloak)_password\b/i,
-    /\b[a-z0-9_]*token[a-z0-9_]*\s*[:=]\s*[A-Za-z0-9._~+/=-]{24,}\b/i,
+    // Known *_password families surfacing as a bare identifier in the response body.
+    /\b(?:admin|foundation_app|keycloak|minio|temporal|sonar|windmill)_password\b/i,
+    // Any local compose placeholder value surfacing verbatim in the response body
+    // means a dev compose env value leaked into the rendered UI.
+    new RegExp(
+      `\\b(?:${APPROVED_LOCAL_SECRET_PLACEHOLDER_VALUES.map((value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})\\b`,
+    ),
+    // KEY=VALUE / KEY: VALUE raw secret assignment with a literal value. Detection is
+    // keyed on secret-ish key names plus a substantial literal value so that ordinary
+    // login-form labels (a bare "Password:") do not trip the scan.
+    /\b(?:[a-z0-9_]*(?:token|password|secret|api_?key)[a-z0-9_]*|client_secret|private_key|aws_secret_access_key)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{16,}["']?/i,
   ];
   const match = patterns.find((pattern) => pattern.test(text));
   return match ? match.source : "";
