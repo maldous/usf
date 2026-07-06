@@ -10,10 +10,10 @@
     "../warning-inventory.md",
     "README.md",
     "manifest.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/external-review-bundle/external-review-report.md",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/proof-cockpit-machine-qa-run.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/service-evidence-manifest.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/proof-cockpit-screenshot-manifest.json"
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/external-review-bundle/external-review-report.md",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/proof-cockpit-machine-qa-run.json",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/service-evidence-manifest.json",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/proof-cockpit-screenshot-manifest.json"
   ],
   "generatedReportsAreAuthority": false,
   "finalAcceptanceAutomatic": false,
@@ -32,9 +32,9 @@
   ],
   "latestMachineRun": {
     "runId": "qa-run-2026-07-05T16-28-26-360Z",
-    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z",
-    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/proof-cockpit-machine-qa-run.json",
-    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/external-review-bundle",
+    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z",
+    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/proof-cockpit-machine-qa-run.json",
+    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/external-review-bundle",
     "passCount": 1278,
     "warnCount": 0,
     "failCount": 0,
@@ -65,6 +65,6 @@
     "authenticatedServiceUiCaptureCount": 6,
     "resolutionMethod": "Regenerated current-main machine QA after audit-gap hardening; service evidence now includes run context, source SHA, capturedAt, screenshot linkage, auth posture comparison, target-system observation, leaf JSON parity, and validator planted-defect coverage.",
     "validationCommand": "corepack pnpm proof-cockpit:machine-qa -- --output-dir artifacts/proof-cockpit/machine-runs",
-    "finalMachineRunPath": "artifacts/proof-cockpit/machine-runs/2026-07-06T08-56-34-227Z/proof-cockpit-machine-qa-run.json"
+    "finalMachineRunPath": "artifacts/proof-cockpit/machine-runs/2026-07-06T09-10-25-253Z/proof-cockpit-machine-qa-run.json"
   }
 }
