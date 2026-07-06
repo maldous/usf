@@ -185,6 +185,24 @@
     "firstLoginPasswordRotationCompleted",
     "passwordChangeAuditEvidence"
   ],
+  "serviceEvidenceRequiredPerRecordFields": [
+    "runId",
+    "targetObservation"
+  ],
+  "targetObservationFields": [
+    "method",
+    "sourceUrlOrCommand",
+    "status",
+    "observedAt",
+    "runId",
+    "outputExcerpt"
+  ],
+  "targetObservationMethods": [
+    "http-get",
+    "tcp-connect",
+    "container-exec",
+    "none"
+  ],
   "manifestFiles": [
     "qa-run.json",
     "evidence-index.json",

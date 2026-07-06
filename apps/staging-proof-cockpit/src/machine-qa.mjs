@@ -2,6 +2,7 @@ import { chromium } from "playwright-core";
 import { execFileSync } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { connect as netConnect } from "node:net";
 import { join } from "node:path";
 import { buildData, getProofCockpitManifest, startProofCockpitServer } from "./server.mjs";
 
@@ -978,6 +979,154 @@ function serviceSensitiveFinding(text) {
   return match ? match.source : "";
 }
 
+const TARGET_OBSERVATION_EXCERPT_LIMIT = 500;
+
+// Bound and redact a raw target-system response/output excerpt before it is stored on
+// an evidence record. This reuses the machine QA secret-scan path (serviceSensitiveFinding)
+// so that no secret, token, private key, or literal KEY=VALUE assignment can leak into the
+// persisted targetObservation.outputExcerpt. It never prints a real secret: on any hit the
+// offending span is replaced with a bounded [REDACTED-...] marker.
+function redactObservationExcerpt(rawText) {
+  const text = typeof rawText === "string" ? rawText : String(rawText ?? "");
+  // Collapse whitespace so excerpts stay compact and human-readable in the artifact.
+  let excerpt = text.replace(/\s+/g, " ").trim().slice(0, TARGET_OBSERVATION_EXCERPT_LIMIT);
+  // Proactively mask KEY=VALUE / KEY: VALUE secret-ish assignments with a substantial
+  // literal value; this mirrors the validator SECRET_ASSIGNMENT scan so a probed body
+  // cannot surface a compose env value verbatim.
+  excerpt = excerpt.replace(
+    /\b([a-z0-9_]*(?:token|password|secret|api_?key)[a-z0-9_]*|client_secret|private_key|aws_secret_access_key)\s*[:=]\s*["']?[A-Za-z0-9._~+/=-]{8,}["']?/gi,
+    "$1=[REDACTED-SECRET-ASSIGNMENT]",
+  );
+  excerpt = excerpt.replace(/-----BEGIN [A-Z ]*PRIVATE KEY-----/g, "[REDACTED-PRIVATE-KEY-BLOCK]");
+  // Final fail-closed check against the shared detector. If anything still matches, drop the
+  // body entirely rather than risk a leak; the observation still records the real attempt.
+  const residual = serviceSensitiveFinding(excerpt);
+  if (residual) {
+    return {
+      outputExcerpt: "[REDACTED-SENSITIVE-CONTENT-DETECTED]",
+      redacted: true,
+      redactionFinding: residual,
+    };
+  }
+  const redacted = excerpt !== text.slice(0, TARGET_OBSERVATION_EXCERPT_LIMIT).replace(/\s+/g, " ").trim();
+  return { outputExcerpt: excerpt, redacted, redactionFinding: "" };
+}
+
+// Perform a genuine live TCP connect to a host:port and report the real outcome. This is a
+// real runtime observation of the target service socket, not catalogue metadata.
+function tcpConnectProbe(host, port, timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    const startedAt = Date.now();
+    const socket = netConnect({ host, port });
+    let settled = false;
+    const finish = (result) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      try {
+        socket.destroy();
+      } catch {
+        // ignore
+      }
+      resolve({ ...result, latencyMs: Date.now() - startedAt });
+    };
+    socket.setTimeout(timeoutMs);
+    socket.once("connect", () => finish({ status: "tcp-connect-ok", reason: "" }));
+    socket.once("timeout", () => finish({ status: "tcp-connect-timeout", reason: `no TCP connect within ${timeoutMs}ms` }));
+    socket.once("error", (error) => finish({ status: "tcp-connect-error", reason: error.message }));
+  });
+}
+
+// Capture a REAL target-system observation from the composed service during the run:
+//   - HTTP/HTTPS ports  -> live HTTP GET against the service, recording status + redacted body
+//   - other ports (tcp/postgresql/redis/...) -> live TCP connect check
+//   - no host-published port -> recorded as a real "no reachable target" attempt
+// The returned object is the structured targetObservation stored on every service-evidence
+// record. It always reflects a genuine attempt against the target, never fabricated data, and
+// its outputExcerpt is bounded and routed through the redaction path above.
+async function probeTargetObservation(service, report) {
+  const observedAt = new Date().toISOString();
+  const runId = report?.qaRun ?? "";
+  const httpCandidates = serviceUiCandidates(service);
+  if (httpCandidates.length) {
+    const candidate = httpCandidates[0];
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      let response;
+      let bodyText = "";
+      try {
+        response = await fetch(candidate.url, { method: "GET", redirect: "manual", signal: controller.signal });
+        try {
+          bodyText = await response.text();
+        } catch {
+          bodyText = "";
+        }
+      } finally {
+        clearTimeout(timer);
+      }
+      const { outputExcerpt, redacted, redactionFinding } = redactObservationExcerpt(bodyText);
+      return {
+        method: "http-get",
+        sourceUrlOrCommand: candidate.url,
+        status: `http-${response.status}`,
+        reachable: true,
+        outputExcerpt,
+        outputRedacted: redacted,
+        redactionFinding,
+        observedAt,
+        runId,
+      };
+    } catch (error) {
+      return {
+        method: "http-get",
+        sourceUrlOrCommand: candidate.url,
+        status: "http-get-failed",
+        reachable: false,
+        reason: error.name === "AbortError" ? "http-get-timeout-8000ms" : error.message,
+        outputExcerpt: "",
+        outputRedacted: false,
+        redactionFinding: "",
+        observedAt,
+        runId,
+      };
+    }
+  }
+  // No HTTP/HTTPS UI candidate: probe the first host-published port via a real TCP connect.
+  const publishedPort = (service.ports ?? []).find((port) => port.publishedPort);
+  if (publishedPort) {
+    const host = !publishedPort.hostIp || publishedPort.hostIp === "0.0.0.0" ? "127.0.0.1" : publishedPort.hostIp;
+    const target = `tcp://${host}:${publishedPort.publishedPort} (${publishedPort.appProtocol ?? publishedPort.protocol ?? "tcp"})`;
+    const result = await tcpConnectProbe(host, Number(publishedPort.publishedPort));
+    return {
+      method: "tcp-connect",
+      sourceUrlOrCommand: target,
+      status: result.status,
+      reachable: result.status === "tcp-connect-ok",
+      reason: result.reason,
+      latencyMs: result.latencyMs,
+      outputExcerpt: `TCP connect to ${host}:${publishedPort.publishedPort} => ${result.status}`,
+      outputRedacted: false,
+      redactionFinding: "",
+      observedAt,
+      runId,
+    };
+  }
+  return {
+    method: "none",
+    sourceUrlOrCommand: `service:${service.serviceId}`,
+    status: "no-host-published-port",
+    reachable: false,
+    reason: "Service catalogue exposes no host-published port to probe from the machine QA host.",
+    outputExcerpt: "",
+    outputRedacted: false,
+    redactionFinding: "",
+    observedAt,
+    runId,
+  };
+}
+
 function openBaoLogicalRef(serviceId) {
   return `${OPENBAO_LOGICAL_ROOT}/${serviceId}/credential`;
 }
@@ -1457,6 +1606,11 @@ function writeServiceEvidenceArtifact(report, evidence) {
   evidence.runId ||= report.qaRun;
   evidence.sourceSha ||= report.sourceSha;
   evidence.capturedAt ||= evidence.timestamp;
+  // Every service-evidence record MUST carry the current run's runId on its structured
+  // target observation as well (USF-300 per-record runId requirement).
+  if (evidence.targetObservation && !evidence.targetObservation.runId) {
+    evidence.targetObservation.runId = report.qaRun;
+  }
   evidence.screenshotId ||= serviceEvidenceScreenshotId(evidence.serviceId);
   evidence.screenshotManifestRef ||= serviceEvidenceScreenshotManifestRef(evidence.serviceId);
   const payload = {
@@ -1531,6 +1685,7 @@ function writeServiceEvidenceArtifact(report, evidence) {
     humanReenactmentInstruction: evidence.humanReenactmentInstruction,
     targetSystemObservation: evidence.targetSystemObservation,
     targetSystemObservationRationale: evidence.targetSystemObservationRationale,
+    targetObservation: evidence.targetObservation,
     observationRationale: evidence.observationRationale,
     humanReviewStatus: evidence.humanReviewStatus,
     gaps: evidence.gaps,
@@ -1562,6 +1717,9 @@ function serviceEvidenceHtml(evidence) {
     ["Screenshot ID", evidence.screenshotId],
     ["Screenshot manifest reference", evidence.screenshotManifestRef],
     ["Target-system observation", evidence.targetSystemObservation],
+    ["Live target probe", evidence.targetObservation
+      ? `${evidence.targetObservation.method} ${evidence.targetObservation.sourceUrlOrCommand} => ${evidence.targetObservation.status} @ ${evidence.targetObservation.observedAt} (run ${evidence.targetObservation.runId})`
+      : "not-probed"],
     ["Observation rationale", evidence.targetSystemObservationRationale || evidence.observationRationale],
     ["Actual auth posture", evidence.actualAuthPosture || evidence.authPosture],
     ["Auth posture mismatch", String(evidence.authPostureMismatch)],
@@ -1702,6 +1860,7 @@ async function captureGeneratedServiceEvidenceScreenshot(page, report, evidence)
       humanReenactmentInstruction: evidence.humanReenactmentInstruction,
       targetSystemObservation: evidence.targetSystemObservation,
       targetSystemObservationRationale: evidence.targetSystemObservationRationale,
+      targetObservation: evidence.targetObservation,
       result: evidence.evidenceStatus === "machine-fail" ? "fail" : "pass",
     };
     report.screenshots.push(entry);
@@ -1758,6 +1917,7 @@ async function captureCurrentServicePageScreenshot(page, report, service, url, m
     openBaoLogicalSecretRef: evidenceState.openBaoLogicalSecretRef,
     targetSystemObservation: evidenceState.targetSystemObservation,
     targetSystemObservationRationale: evidenceState.targetSystemObservationRationale,
+    targetObservation: evidenceState.targetObservation,
   };
   report.screenshots.push(entry);
   report.counts.screenshots = report.screenshots.length;
@@ -1871,6 +2031,16 @@ async function verifyComposeServiceEvidence(page, data, report) {
         humanReviewStatus: "human-review-required",
         gaps: [],
       };
+
+      // Real target-system observation (USF-300): a genuine live probe FROM the composed
+      // service during this run, stamped with the current runId. This is distinct from the
+      // descriptive targetSystemObservation narrative below; it is not a rendering of the
+      // catalogue. Every branch that follows persists this structured field via
+      // writeServiceEvidenceArtifact.
+      evidence.targetObservation = await probeTargetObservation(service, report);
+      if (evidence.targetObservation.redactionFinding) {
+        evidence.redactionStatus = "target-observation-excerpt-redacted";
+      }
 
       if (!composeStarted) {
         evidence.evidenceClass = "blocked";
@@ -1995,6 +2165,7 @@ async function verifyComposeServiceEvidence(page, data, report) {
               authenticatedCaptureStatus: authenticatedStatus,
               credentialSourceRef: evidence.credentialSourceRef,
               openBaoLogicalSecretRef: evidence.openBaoLogicalSecretRef,
+              targetObservation: evidence.targetObservation,
               targetSystemObservation:
                 `${evidence.serviceName} target ${currentServiceUrl} responded with HTTP ${status}; direct screenshot capture was requested.`,
               targetSystemObservationRationale:
