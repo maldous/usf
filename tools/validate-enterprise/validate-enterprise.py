@@ -317,6 +317,23 @@ ASSURANCE_CONTROL_PLANES = {
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 PINNED_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+){1,3}(?:[-+][0-9A-Za-z.-]+)?$")
 DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+# An enterprise owner registry entry MUST resolve to a concrete accountable
+# identity. It MUST NOT resolve to a placeholder / pending-organisation label,
+# and its resolution MUST NOT be a self-label deferral. These tokens mark the
+# forbidden, non-accountable resolutions that fail closed under USF-ENTERPRISE-032.
+OWNER_REGISTRY_PLACEHOLDER_RESOLUTIONS = {
+    "logical-foundation-owner-label-pending-formal-organisational-directory",
+    "unassigned-pending-org",
+    "pending-formal-organisational-directory",
+    "owner-label-pending-formal-organisational-directory",
+}
+OWNER_REGISTRY_PLACEHOLDER_IDENTITY_TOKENS = (
+    "pending",
+    "unassigned",
+    "tbd",
+    "to-be-determined",
+    "placeholder",
+)
 EFFECTIVENESS_STATES = {
     "defined-only",
     "implemented",
@@ -1234,6 +1251,18 @@ def apply_enterprise_iso_style_foundation_defect(
         registry = out.get("ownerRegistry")
         if isinstance(registry, dict):
             registry.pop(owner_id, None)
+    for patch in defect.get("enterpriseIsoOwnerRegistryPatch", []):
+        registry = out.get("ownerRegistry")
+        if not isinstance(registry, dict):
+            continue
+        owner_id = patch.get("ownerId")
+        row = registry.get(owner_id)
+        if not isinstance(row, dict):
+            continue
+        for key in patch.get("drop", []):
+            row.pop(key, None)
+        for key, value in patch.get("set", {}).items():
+            row[key] = value
     for patch in defect.get("enterpriseIsoControlPatch", []):
         for row in out.get("controlMatrix", []):
             if row.get("issueId") == patch.get("issueId") or row.get("controlId") == patch.get("controlId"):
@@ -5177,11 +5206,38 @@ def check_enterprise_iso_style_evidence_foundation(F: Findings, state: dict[str,
             if not isinstance(owner_row, dict):
                 F.add("USF-ENTERPRISE-032", subject, "owner registry row must be an object")
                 continue
-            for field in ("ownerId", "ownerKind", "resolution", "reviewCadence", "nextReviewDate", "sourceFields"):
+            for field in ("ownerId", "ownerKind", "resolution", "reviewCadence", "nextReviewDate", "sourceFields", "accountableIdentity"):
                 if not owner_row.get(field):
                     F.add("USF-ENTERPRISE-032", f"{subject}.{field}", "owner registry field is missing")
             if owner_row.get("ownerId") != owner_id:
                 F.add("USF-ENTERPRISE-032", f"{subject}.ownerId", "owner registry key and ownerId differ")
+            # An owner registry entry MUST resolve to a concrete accountable identity.
+            # It MUST NOT resolve to a placeholder / pending-organisation label, and
+            # its accountable identity MUST NOT be a self-label deferral marker.
+            resolution = owner_row.get("resolution")
+            if isinstance(resolution, str) and resolution in OWNER_REGISTRY_PLACEHOLDER_RESOLUTIONS:
+                F.add(
+                    "USF-ENTERPRISE-032",
+                    f"{subject}.resolution",
+                    "owner registry entry lacks an accountable identity: resolution is a pending-organisation placeholder",
+                )
+            accountable = owner_row.get("accountableIdentity")
+            if isinstance(accountable, str):
+                lowered = accountable.strip().lower()
+                if not accountable.strip():
+                    F.add("USF-ENTERPRISE-032", f"{subject}.accountableIdentity", "owner accountable identity is empty")
+                elif accountable.strip() == owner_id or lowered == owner_id.lower():
+                    F.add(
+                        "USF-ENTERPRISE-032",
+                        f"{subject}.accountableIdentity",
+                        "owner registry entry resolves to its own label rather than an accountable identity",
+                    )
+                elif any(token in lowered for token in OWNER_REGISTRY_PLACEHOLDER_IDENTITY_TOKENS):
+                    F.add(
+                        "USF-ENTERPRISE-032",
+                        f"{subject}.accountableIdentity",
+                        "owner accountable identity is a placeholder / pending marker, not an accountable owner",
+                    )
             if not isinstance(owner_row.get("sourceFields"), list):
                 F.add("USF-ENTERPRISE-032", f"{subject}.sourceFields", "owner source fields must be a list")
             if isinstance(owner_row.get("nextReviewDate"), str) and not DATE_RE.match(owner_row["nextReviewDate"]):
