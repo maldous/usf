@@ -197,6 +197,7 @@ REQUIRED_PLANTED_KINDS = [
     "secret-literal-value-exposed",
     "artifact-hash-mismatch",
     "readme-marketing-overclaim",
+    "action-source-sha-unresolvable",
 ]
 
 AUTH_POSTURES = {
@@ -272,6 +273,22 @@ def git_output(args: list[str]) -> str:
 
 def current_head() -> str:
     return git_output(["rev-parse", "HEAD"])
+
+
+def commit_exists(sha: str) -> bool:
+    """True only when sha resolves to a real commit object in this repository."""
+    if not re.fullmatch(r"[0-9a-f]{7,40}", sha or ""):
+        return False
+    try:
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 
 def changed_paths_since(commit: str) -> list[str]:
@@ -677,6 +694,21 @@ def rule_008_human_acceptance_separate(data: dict[str, Any]) -> list[dict[str, s
     failures: list[dict[str, str]] = []
     human_review = data["store"].get("humanReview", {})
     latest = data["store"].get("latestMachineRun", {})
+    # Every recorded human-review action must cite a source SHA that resolves to a
+    # real commit, so acceptance provenance can never be fabricated or padded.
+    resolved: dict[str, bool] = {}
+    for action in data["humanActions"].get("actions", []):
+        sha = action.get("sourceSha", "")
+        if sha not in resolved:
+            resolved[sha] = commit_exists(sha)
+        if not resolved[sha]:
+            failures.append(
+                finding(
+                    "USF-PROOF-COCKPIT-008",
+                    f"Human-review action sourceSha does not resolve to a real commit: {action.get('id', '?')} -> {sha}",
+                    str(HUMAN_ACTIONS_PATH.relative_to(ROOT)),
+                )
+            )
     if human_review.get("finalSignoffCompleted") is not False:
         failures.append(finding("USF-PROOF-COCKPIT-008", "Persistent evidence store must not auto-complete final signoff", str(STORE_PATH.relative_to(ROOT))))
     if human_review.get("finalSignoffAvailable") is not False and (
@@ -1011,6 +1043,11 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["bundleManifest"].setdefault("plantedNestedOverclaim", {})["status"] = "<span>Production</span>/readiness is APPROVED"
     elif kind == "readme-marketing-overclaim":
         mutated["readme"] += "\n\n![status](https://img.shields.io/badge/status-delivered-34d399)\nThis is the reasoning and rigour, fully realised.\n"
+    elif kind == "action-source-sha-unresolvable":
+        actions = mutated["humanActions"].setdefault("actions", [])
+        if not actions:
+            actions.append({"id": "planted", "outcome": "human-accepted", "evidenceId": "planted"})
+        actions[0]["sourceSha"] = "0" * 40
     elif kind == "foundation-closure-validator-stale":
         mutated["foundationImport"]["validatorEvidence"]["allResult"] = "stale"
     elif kind == "artifact-manifest-missing":

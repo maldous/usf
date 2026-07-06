@@ -1,0 +1,7 @@
+{
+  "id": "032-action-source-sha-unresolvable",
+  "expectedRule": "USF-PROOF-COCKPIT-008",
+  "fixture": {
+    "kind": "action-source-sha-unresolvable"
+  }
+}
