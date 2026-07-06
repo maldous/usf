@@ -37649,7 +37649,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -37670,7 +37670,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -37712,7 +37712,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -37733,7 +37733,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -37775,7 +37775,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -37796,7 +37796,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -37838,7 +37838,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -37859,7 +37859,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -37964,7 +37964,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -37985,7 +37985,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38027,7 +38027,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38048,7 +38048,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38090,7 +38090,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38111,7 +38111,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38217,7 +38217,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38238,7 +38238,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38344,7 +38344,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38365,7 +38365,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38471,7 +38471,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38492,7 +38492,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38662,7 +38662,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38683,7 +38683,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38725,7 +38725,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38746,7 +38746,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -38918,7 +38918,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -38939,7 +38939,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39046,7 +39046,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39067,7 +39067,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39109,7 +39109,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39130,7 +39130,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39172,7 +39172,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39193,7 +39193,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39235,7 +39235,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39256,7 +39256,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39363,7 +39363,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39384,7 +39384,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39426,7 +39426,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39447,7 +39447,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -39489,7 +39489,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -39510,7 +39510,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -45932,7 +45932,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -45953,7 +45953,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46060,7 +46060,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46081,7 +46081,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46123,7 +46123,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46144,7 +46144,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46186,7 +46186,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46207,7 +46207,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46313,7 +46313,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46334,7 +46334,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46376,7 +46376,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46397,7 +46397,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46439,7 +46439,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46460,7 +46460,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46566,7 +46566,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46587,7 +46587,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46757,7 +46757,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46778,7 +46778,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46820,7 +46820,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46841,7 +46841,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46883,7 +46883,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46904,7 +46904,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -46946,7 +46946,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -46967,7 +46967,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -47009,7 +47009,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -47030,7 +47030,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -47072,7 +47072,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -47093,7 +47093,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -49249,7 +49249,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -49270,7 +49270,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -49312,7 +49312,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -49333,7 +49333,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -49375,7 +49375,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -49396,7 +49396,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -49438,7 +49438,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -49459,7 +49459,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -49501,7 +49501,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -49522,7 +49522,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -50218,7 +50218,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -50239,7 +50239,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -50281,7 +50281,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -50302,7 +50302,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -50344,7 +50344,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -50365,7 +50365,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -50407,7 +50407,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -50428,7 +50428,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -50470,7 +50470,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -50491,7 +50491,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"
@@ -50533,7 +50533,7 @@
       "sourceLineageTestsOrProofs": [],
       "category": "ui-out-of-scope",
       "sourceKind": "app-ui-source",
-      "behaviourSummary": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "behaviourSummary": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "disposition": "not-applicable-with-rationale",
       "uiClassification": "ui-only-out-of-scope",
       "usfSemanticContracts": [
@@ -50554,7 +50554,7 @@
       "usfServices": [],
       "usfRoutes": [],
       "adapterProviderReplacement": "USF semantic ports and provider bindings replace historical implementation details where applicable.",
-      "equivalenceRationale": "React UI/UX implementation path excluded from this gate and preserved as lineage only.",
+      "equivalenceRationale": "Product UI/UX implementation path excluded from this gate and preserved as lineage only.",
       "evidenceIds": [
         "non-ui-completeness-assurance-case",
         "current-usf-proof-surface"

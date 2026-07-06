@@ -38,7 +38,7 @@ The USF foundation has **no UI/UX runtime**. "Full functional completeness" does
 
 3.2 Foundation readiness MUST NOT require browser UI implementation, source-lineage component migration, visual/UX migration, or Playwright/browser end-to-end testing.
 
-3.3 React UI/UX artefacts — components, pages, browser flows, DOM behaviours, visual states, CSS, layout, interaction flows — are **NOT** foundation artefacts. They MUST be **classified**, not migrated into the foundation.
+3.3 Product UI/UX artefacts — components, pages, browser flows, DOM behaviours, visual states, CSS, layout, interaction flows — are **NOT** foundation artefacts. They MUST be **classified**, not migrated into the foundation.
 
 3.4 Any business, API, authorization, tenant-isolation, workflow, provider, audit, data, notification, file/storage, observability, or validation behaviour currently proven **only** through a UI or Playwright/browser test MUST be **rewritten as a foundation-level test** (API / capability / port / adapter / contract / proof). The UI assertions of such a test are out of foundation scope; the underlying behaviour is in scope.
 
@@ -118,7 +118,7 @@ The phrases "full application ready", "UI ready", "UX ready", "Playwright comple
 
 ## 9. Stop conditions
 
-An agent MUST stop and request human decision on: any attempt to implement runtime/product/provider scope without a new directive; any attempt to treat the local dev/test bootstrap as full dev readiness; any attempt to commit `.codex/` artefacts as source authority; any attempt to migrate React UI/UX into the foundation; any attempt to require Playwright/browser E2E for foundation readiness; a `requires-human-decision` (missing semantic authority) item; an unclassified source-lineage test/proof; or any validation failure.
+An agent MUST stop and request human decision on: any attempt to implement runtime/product/provider scope without a new directive; any attempt to treat the local dev/test bootstrap as full dev readiness; any attempt to commit `.codex/` artefacts as source authority; any attempt to migrate product UI/UX into the foundation; any attempt to require Playwright/browser E2E for foundation readiness; a `requires-human-decision` (missing semantic authority) item; an unclassified source-lineage test/proof; or any validation failure.
 
 ## 10. Boundary statement
 
