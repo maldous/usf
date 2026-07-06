@@ -184,6 +184,20 @@ const OPENBAO_OPERATOR_TOKEN =
   process.env.USF_PROOF_COCKPIT_OPENBAO_TOKEN || composeEnvironmentValue("openbao", "BAO_DEV_ROOT_TOKEN_ID");
 
 const AUTH_POSTURE_OVERRIDES = Object.freeze({
+  "staging-proof-cockpit": {
+    authPosture: "unsafe-to-capture",
+    loginMethod:
+      "Staging proof cockpit is an operator-authenticated fixture reached through the edge Caddy reverse proxy per ADR 0015; it is not part of the test-target composed runtime, so the machine run records a redacted screenshot-equivalent instead of a direct authenticated UI capture.",
+    configPath:
+      "spec/instances/compose-service/service-catalogue.json#staging-proof-cockpit",
+    capturePath: "/proof",
+    expectedAuthEvidence:
+      "Edge operator-authenticated reverse-proxy access recorded as a redacted screenshot-equivalent; the cockpit write guard and CSRF are exercised by proof-cockpit:smoke, not by direct machine capture.",
+    firstLoginPasswordRotationRequired: false,
+    screenshotEquivalentAllowed: true,
+    screenshotEquivalentReason:
+      "The staging proof cockpit is a staging-only, edge-authenticated operator fixture that is not started in the test-target composed runtime; a hash-addressed screenshot-equivalent records its service mapping, operator-access posture, source SHA, run ID, and reenactment path without claiming a direct authenticated capture.",
+  },
   grafana: {
     authPosture: "service-login required",
     loginMethod: "Grafana local admin login through scoped QA screenshot credential",

@@ -6509,6 +6509,58 @@
         "browser-e2e-readiness",
         "v2-proof-tag-authorization"
       ]
+    },
+    {
+      "id": "soa-service-staging-proof-cockpit",
+      "mappedType": "service",
+      "controlPurpose": "Preserve service disposition, owner/risk/control accountability, access posture, evidence posture, and readiness non-claims for the staging proof cockpit operator fixture.",
+      "riskTreated": "Service failure affects only its classified staging environment scope and the operator proof review workflow.",
+      "assetServiceAffected": "staging-proof-cockpit",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "implementationStatus": "requirementState=True; environmentDisposition=environment-specific; readinessTier=compose-target-catalogued",
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
+      "validationCommand": "python3 tools/validate-compose/validate-compose.py all --json",
+      "deferredReason": "missingEvidence=external edge Caddy operator-authenticated reverse-proxy route delivery and executed operator access-review/deprovisioning proof per ADR 0015",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness"
+      ]
+    },
+    {
+      "id": "soa-deferred-boundary-staging-proof-cockpit",
+      "mappedType": "deferred-boundary",
+      "controlPurpose": "Govern explicit deferred boundary for staging-proof-cockpit.",
+      "riskTreated": "Deferred work must remain linked to follow-up evidence and must not be hidden behind broad readiness claims.",
+      "assetServiceAffected": "staging-proof-cockpit",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "implementationStatus": "requirementState=True; environmentDisposition=environment-specific; readinessTier=compose-target-catalogued",
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "missingEvidence=external edge Caddy operator-authenticated reverse-proxy route delivery and executed operator access-review/deprovisioning proof per ADR 0015",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness"
+      ]
     }
   ],
   "evidenceRegister": [
@@ -16820,6 +16872,40 @@
         "browser-e2e-readiness",
         "full-product-readiness"
       ]
+    },
+    {
+      "id": "access-posture-staging-proof-cockpit",
+      "targetType": "service",
+      "target": "staging-proof-cockpit",
+      "posture": [
+        "accessModel=operator-access",
+        "authRequirement=admin-auth-required",
+        "breakGlassRelevance=admin-relevant",
+        "auditRequirement=operator-action-audit-required",
+        "reviewCadence=deferred-to-USF-221-before-any-readiness-claim",
+        "deprovisioningPosture=deferred-to-USF-221-before-any-readiness-claim",
+        "no-public-exposure-claim",
+        "sourceIssue=USF-217",
+        "accessReviewExecutionEvidence=not-proven",
+        "deprovisioningExecutionEvidence=not-proven",
+        "followUpIssue=USF-221",
+        "closureTierDisposition=explicitly-deferred-with-owner"
+      ],
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json; docs/architecture/operator-access-gateway-posture-matrix.json; docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "USF-217 records explicit current disposition; recurring access-review execution, identity lifecycle revocation, provider-console deprovisioning, clickthrough SSO, and stronger operator readiness remain deferred to USF-221; owner=platform-assurance-foundation; reviewDate=2026-09-30; followUpIssue=USF-221",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness"
+      ]
     }
   ],
   "backupRestoreResiliencePosture": [
@@ -20272,6 +20358,34 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "v2-proof-tag-authorization"
+      ]
+    },
+    {
+      "id": "resilience-posture-staging-proof-cockpit",
+      "targetType": "service",
+      "target": "staging-proof-cockpit",
+      "posture": [
+        "backupRequirement=not-required",
+        "restoreProofRequirement=required-before-readiness-claim",
+        "rpoRtoTarget=not-claimed-until-proven",
+        "corruptionFailureScenario=must-be-recorded-before-readiness-claim",
+        "cleanupTeardownProof=required-where-proof-writes-data",
+        "deferredDrBoundary=explicit-non-claim"
+      ],
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "The acceptance ledger persists to a durable Compose volume; restore/DR proof is deferred and promoting recorded acceptances into evidence is a manual operator step per ADR 0015",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness"
       ]
     }
   ],
@@ -24320,6 +24434,34 @@
         "product-ui-readiness",
         "browser-e2e-readiness",
         "v2-proof-tag-authorization"
+      ]
+    },
+    {
+      "id": "incident-vulnerability-staging-proof-cockpit",
+      "targetType": "service",
+      "target": "staging-proof-cockpit",
+      "posture": [
+        "incidentDetectionHook=local-evidence-only-or-deferred",
+        "alertingPosture=no-production-alerting-claim",
+        "escalationOwner=platform-assurance-risk-owner",
+        "vulnerabilityAdvisoryReview=required-before-stronger-readiness",
+        "dependencyUpdatePosture=owner-reviewed",
+        "correctiveActionEvidence=PR-and-validator-output"
+      ],
+      "evidenceSource": "spec/instances/compose-service/service-catalogue.json",
+      "validationCommand": "python3 tools/validate-enterprise/validate-enterprise.py all --json",
+      "deferredReason": "missingEvidence=external edge Caddy operator-authenticated reverse-proxy route delivery and executed operator access-review/deprovisioning proof per ADR 0015",
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness"
       ]
     }
   ],
