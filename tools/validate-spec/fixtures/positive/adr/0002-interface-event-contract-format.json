@@ -41,8 +41,8 @@
     "spec/schemas/event-contract.schema.json"
   ],
   "sourceRefs": [
-    "../react/docs/evidence/api/openapi-drift-hard-gate.md",
-    "../react/docs/v2-foundation/event-semantics.json"
+    "usf/docs/evidence/api/openapi-drift-hard-gate.md",
+    "usf/docs/v2-foundation/event-semantics.json"
   ],
   "validatorRefs": [
     "tools/validate-spec/validate-spec.py"

@@ -29,10 +29,10 @@
   "environment": "hermetic",
   "liveExternalProviderClaim": false,
   "emittedEvidence": [
-    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#auditEventIds",
-    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#metricSamples",
-    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#traceIds",
-    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#logCorrelationIds"
+    "usf/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#auditEventIds",
+    "usf/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#metricSamples",
+    "usf/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#traceIds",
+    "usf/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json#logCorrelationIds"
   ],
   "collectedEvidence": [
     "evidence.runtime-proof.observability-signals-runtime-proof",

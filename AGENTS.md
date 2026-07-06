@@ -16,11 +16,9 @@ This repository is the clean Universal Service Foundation repository.
 
 Short name: USF.
 
-This repository is not a branch of `../react`.
+USF is self-originating and self-defined. It is not a branch, fork, or continuation of any other repository, and it claims no external repository as its lineage or authority.
 
-The sibling repository `../react` is historical semantic/source evidence and lineage. It is not the future live authority.
-
-USF is semantic-first, evidence-backed, internally provable, externally adaptable, AI-safe, source-aware but not source-subordinate, and validator-enforced.
+USF is semantic-first, evidence-backed, internally provable, externally adaptable, AI-safe, semantics-defined (not implementation-defined), and validator-enforced.
 
 ## Mandatory Agent Bootstrap
 
@@ -106,10 +104,9 @@ I understand the USF authority order:
 3. USF validator rules
 4. Runtime proof evidence
 5. USF source implementation
-6. Historical ../react source and semantic evidence
-7. Generated reports
+6. Generated reports
 
-I understand that ../react is historical semantic/source evidence, not future live authority.
+I understand that USF is self-defined and claims no external repository as its authority.
 I understand that generated reports are lowest authority.
 I understand that AGENTS.md, CLAUDE.md and CODEX.md guide agent behaviour but do not override the USF constitutional layer.
 I will not create implementation/runtime code unless explicitly instructed by an approved directive.
@@ -128,8 +125,7 @@ Agents MUST apply this authority order:
 3. USF validator rules
 4. Runtime proof evidence
 5. USF source implementation
-6. Historical `../react` source and semantic evidence
-7. Generated reports
+6. Generated reports
 
 A lower-authority artefact MUST NOT override a higher-authority artefact.
 
@@ -139,7 +135,7 @@ Passing proof MUST NOT define intended behaviour by itself.
 
 Source implementation MUST NOT invent new semantics unless the semantic definitions, ADRs, validators, and proof expectations are updated where applicable.
 
-Historical `../react` behaviour MUST be treated as evidence and lineage, not future live authority.
+USF is self-defined; no external repository is USF authority.
 
 ## Current Foundational File Set
 
@@ -485,7 +481,7 @@ Agents MUST stop before modifying Linear if:
 * the requested Linear item conflicts with USF authority
 * the requested issue would require implementation work before semantic authority exists
 * the requested issue would encode forbidden naming
-* the requested issue would treat `../react` as future live authority
+* the requested issue would treat any external repository as USF authority
 * the requested issue would treat generated reports as canonical
 * issue dependencies are unresolved
 * the user has not explicitly authorised Linear mutation
@@ -575,43 +571,15 @@ usf.vocabulary-catalog
 usf.schema-registry
 ```
 
-## Source Repository Policy
+## Self-Defined Source Policy
 
-The sibling repository `../react` is historical semantic/source evidence.
+USF is self-defined. Its semantics, contracts, decisions, validators, and proof evidence are USF's own governed artefacts, and no external repository is a USF source of authority or lineage.
 
-Agents MAY inspect `../react` to understand:
+Agents MUST NOT admit source or artefacts unexamined: every USF artefact MUST be justified by a USF semantic definition, a decision, and (where it asserts behaviour) proof evidence.
 
-* source files
-* semantic artefacts
-* proof evidence
-* runtime proof scripts
-* Make targets
-* package scripts
-* env/config files
-* compose services
-* package structure
-* tests
-* e2e journeys
-* generated reports
-* readiness gates
-* operational semantics
-* event semantics
-* cross-capability interactions
-* UI semantics
-* environment semantics
-* data/migration semantics
-* observability/audit semantics
-* validation tooling
+Agents MUST NOT create implementation/runtime code except under an approved implementation directive, and MUST NOT introduce new behaviour, permissions, routes, states, validation, errors, events, or provider semantics that are not first defined in USF semantics.
 
-Agents MUST NOT blindly copy from `../react`.
-
-Agents MUST NOT import runtime/application code from `../react` unless explicitly instructed by a later source-import directive.
-
-Agents MUST preserve source lineage when deriving USF artefacts from `../react`.
-
-No source element from `../react` should disappear without later disposition.
-
-Source paths from `../react` MUST NOT dictate future USF paths.
+Agents MUST NOT infer missing semantics from implementation structure. Where a needed semantic definition is absent, an agent MUST propose the USF semantic definition (with its ADR and validator rule) rather than reconstruct it.
 
 ## Post-Baseline Current-State Routing
 
@@ -626,10 +594,10 @@ It identifies the current canonical entry points and classifies historical React
 source-use, parity, closure, bootstrap, and generated artefacts as lineage,
 transitional scaffolding, or generated projections where appropriate.
 
-Agents MUST NOT use historical `../react`, source-use matrices, parity migration
+Agents MUST NOT use source-use matrices, parity migration
 matrices, or closure-tier artefacts as active future authority unless the current
 issue explicitly requires lineage review and the higher-authority USF artefacts
-permit the use. Historical lineage remains retained evidence, not a shortcut for
+permit the use. Such lineage-adjacent artefacts remain retained evidence, not a shortcut for
 copying source paths, implementation structure, readiness claims, or product
 parity claims.
 
@@ -751,7 +719,7 @@ Agents MUST NOT invent taxonomy categories or vocabulary values without updating
 
 Agents MUST NOT treat aliases as canonical values.
 
-Agents MUST NOT treat historical `../react` labels as future canonical values unless explicitly justified by the vocabulary catalogue.
+Agents MUST NOT treat non-canonical or lineage-adjacent labels as future canonical values unless explicitly justified by the vocabulary catalogue.
 
 ## ADR Rules
 
@@ -829,7 +797,7 @@ src/
 services/
 ```
 
-Agents MUST NOT create implementation-shaped structure merely because similar structure exists in `../react`.
+Agents MUST NOT create implementation-shaped structure merely because a similar structure exists elsewhere.
 
 Implementation must follow semantic contracts, not source resemblance.
 
@@ -844,7 +812,7 @@ find . -path './.git' -prune -o -type f -print | sort
 
 For JSON work, agents MUST parse relevant JSON files before and after modification.
 
-For source-grounded work, agents MUST inspect relevant parts of `../react`.
+For semantics-grounded work, agents MUST inspect the relevant USF semantic definitions, decisions, validators, and proof evidence.
 
 For foundational work, agents MUST read the current foundational governance artefacts first (the constitutional layer plus the foundational governance / semantic-definition set listed under "Mandatory Agent Bootstrap").
 
@@ -866,8 +834,7 @@ USF distinguishes **agent execution precedence** (what an agent obeys while carr
 3. USF validator rules
 4. runtime proof evidence
 5. USF source implementation
-6. historical `../react` evidence
-7. generated reports
+6. generated reports
 
 An explicit user instruction defines **task scope**; it does **not** silently override USF constitutional or safety constraints. If a user instruction conflicts with the constitutional layer (Charter, Authority Model) or a non-negotiable safety rule, the agent MUST stop and report the conflict — unless the user explicitly invokes a constitutional amendment process (a deliberate, recorded decision to change the constitutional layer).
 
@@ -875,7 +842,7 @@ The Charter and Authority Model govern USF constitutional semantics. Domain-spec
 
 `AGENTS.md`, `CLAUDE.md` and `CODEX.md` MUST NOT be used to authorise — and an agent MUST refuse and report if instructed — to:
 
-* blindly import or copy runtime/application code from `../react`;
+* blindly import or copy runtime/application code from any external repository;
 * create implementation/runtime code without an approved directive;
 * treat generated reports as canonical;
 * treat `hermetic-mock` proof as `live-external-provider` proof;
@@ -902,7 +869,6 @@ At the end of any modifying task, the agent MUST report:
 * files not modified but relevant
 * JSON parse results, if applicable
 * validation commands run, if applicable
-* whether `../react` was inspected
 * whether implementation/runtime code was imported
 * whether new directories were created
 * assumptions
@@ -941,19 +907,18 @@ Agents MUST stop and ask for human decision if:
 * authority order is contradictory
 * taxonomy and vocabulary conflict
 * schema registry conflicts with vocabulary or taxonomy
-* source evidence from `../react` contradicts accepted USF semantics
 * a task requires implementation code but no implementation directive exists
 * a task would require creating files outside the requested scope
 * a task would treat generated reports as canonical
 * a task would upgrade hermetic proof to live external proof
 * a task would treat production-shaped as production-live
 * a task would use forbidden canonical names
-* a task would silently discard source lineage
+* a task would silently discard artefact traceability
 * a task would mark planned work as active without artefacts and validation
 
 ## Final Rule
 
-When in doubt, preserve USF semantic authority, source lineage, proof honesty, provider/environment safety, and AI drift control.
+When in doubt, preserve USF semantic authority, artefact traceability, proof honesty, provider/environment safety, and AI drift control.
 
 Do not guess.
 

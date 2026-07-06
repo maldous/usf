@@ -41,8 +41,8 @@
     "docs/architecture/target-implementation-topology-plan.md"
   ],
   "sourceRefs": [
-    "../react/.dependency-cruiser.cjs",
-    "../react/docs/v2-foundation/v2-directory-contracts.json"
+    "usf/.dependency-cruiser.cjs",
+    "usf/docs/v2-foundation/v2-directory-contracts.json"
   ],
   "proofRefs": [],
   "validatorRefs": [

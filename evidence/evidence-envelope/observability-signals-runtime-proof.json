@@ -18,7 +18,7 @@
   "aiGuidance": "Use this envelope as historical runtime proof evidence only. Its stale freshness pin must not satisfy current readiness or live-provider claims.",
   "evidenceKind": "runtime-proof-evidence",
   "sourceRefs": [
-    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json"
+    "usf/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json"
   ],
   "providerMode": "hermetic-mock",
   "environment": "hermetic",

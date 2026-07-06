@@ -41,9 +41,9 @@
     "spec/schemas/observability-signal.schema.json"
   ],
   "sourceRefs": [
-    "../react/docs/v2-foundation/operational-semantics.json",
-    "../react/docs/evidence/e2e/prod-observability-correlation-latest.json",
-    "../react/usf-audit/proof-evidence/"
+    "usf/docs/v2-foundation/operational-semantics.json",
+    "usf/docs/evidence/e2e/prod-observability-correlation-latest.json",
+    "usf/usf-audit/proof-evidence/"
   ],
   "proofRefs": [],
   "validatorRefs": [

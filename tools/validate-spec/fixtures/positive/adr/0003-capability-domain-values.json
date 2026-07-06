@@ -5,7 +5,7 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-26",
-  "context": "The capability-domains value set was deferred and described the historical category dimension as 12 categories, but the current source file ../react/docs/v2-foundation/v1-capability-closure.json contains 75 capability records across 14 observed category values.",
+  "context": "The capability-domains value set was deferred and described the historical category dimension as 12 categories, but the current source file usf/docs/v2-foundation/v1-capability-closure.json contains 75 capability records across 14 observed category values.",
   "decision": "USF adopts the 14 observed source category values as the active canonical capability-domains value set, constrains semantic-contract capabilityDomain to that value set, and binds the enum to the vocabulary catalogue in the validator.",
   "consequences": [
     "capability-domains is no longer deferred.",
@@ -38,7 +38,7 @@
     "docs/architecture/ontology.md#section-5-2"
   ],
   "sourceRefs": [
-    "../react/docs/v2-foundation/v1-capability-closure.json"
+    "usf/docs/v2-foundation/v1-capability-closure.json"
   ],
   "validatorRefs": [
     "tools/validate-spec/validate-spec.py"

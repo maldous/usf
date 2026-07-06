@@ -176,10 +176,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["postgres"],
@@ -531,10 +531,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["keycloak-postgres"],
@@ -828,10 +828,10 @@
       "accessModel": "admin-only",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["keycloak"],
@@ -1516,10 +1516,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["temporal"],
@@ -1874,10 +1874,10 @@
       "accessModel": "admin-only",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["minio"],
@@ -2281,10 +2281,10 @@
       "accessModel": "admin-only",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["openbao"],
@@ -2614,10 +2614,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["otel-collector"],
@@ -3002,10 +3002,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["prometheus"],
@@ -3331,10 +3331,10 @@
       "accessModel": "developer-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["grafana"],
@@ -3664,10 +3664,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["loki"],
@@ -3992,10 +3992,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["tempo"],
@@ -4321,10 +4321,10 @@
       "accessModel": "developer-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["mailpit"],
@@ -5036,10 +5036,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["redis"],
@@ -5362,10 +5362,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["meilisearch"],
@@ -5693,10 +5693,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["clickhouse"],
@@ -6068,10 +6068,10 @@
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["pgadmin"],
@@ -6407,10 +6407,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["sonar-postgres"],
@@ -6699,10 +6699,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["sonar-oidc-plugin"],
@@ -6959,10 +6959,10 @@
       "accessModel": "developer-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["sonarqube"],
@@ -7298,10 +7298,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["mock-oidc"],
@@ -7539,10 +7539,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["localstack"],
@@ -7864,10 +7864,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["wiremock"],
@@ -8189,10 +8189,10 @@
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["alertmanager"],
@@ -8517,10 +8517,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["alloy"],
@@ -8846,10 +8846,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["windmill-postgres"],
@@ -9134,10 +9134,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["windmill-redis"],
@@ -9411,10 +9411,10 @@
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["windmill"],
@@ -9781,10 +9781,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["windmill-worker"],
@@ -10088,10 +10088,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["temporal-postgres"],
@@ -10373,10 +10373,10 @@
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["temporal-ui"],
@@ -10713,10 +10713,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["pgbackrest"],
@@ -11027,10 +11027,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["clamav"],
@@ -11295,10 +11295,10 @@
       "accessModel": "external-provider-console",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": [
@@ -11928,10 +11928,10 @@
       "accessModel": "operator-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["external-caddy"],
@@ -12307,10 +12307,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["platform-api"],
@@ -12545,10 +12545,10 @@
       "accessModel": "no-human-access",
       "sourceEvidence": [
         {
-          "sourceKind": "historical-compose",
-          "sourcePath": "../react/compose.yaml",
+          "sourceKind": "usf-compose",
+          "sourcePath": "compose/compose.yaml",
           "evidenceRole": "candidate-service",
-          "notes": "Historical React Compose service evidence is source evidence, not USF authority."
+          "notes": "USF self-defined Compose service evidence; source evidence, not a readiness claim."
         }
       ],
       "reactComposeServiceNames": ["react-app"],
