@@ -8,7 +8,7 @@
   "rawProofCommand": "corepack pnpm proof:authz",
   "rawProofCommandBoundary": "requires Compose Postgres to be running; make authz-proof owns startup and teardown",
   "validatorCommand": "python3 tools/validate-parity/validate-authz.py all --json",
-  "sourceUseMatrix": "docs/architecture/parity-tenant-authz-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/tenant-authz-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [

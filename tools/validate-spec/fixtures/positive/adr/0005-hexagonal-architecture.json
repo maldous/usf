@@ -1,11 +1,11 @@
 {
-  "id": "0005-react-hexagonal-architecture-carry-forward",
+  "id": "0005-hexagonal-architecture",
   "kind": "adr",
-  "title": "React Hexagonal Architecture Carry Forward",
+  "title": "Hexagonal Architecture",
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-27",
-  "context": "The React L5 equivalence audit inventoried strong evidence that the historical repository was materially hexagonal: explicit ports and adapters directories, usecases depending on ports rather than adapters, dependency-direction enforcement in the dependency-cruiser and lint configuration, public-export-only imports, and a contracts, domain, adapter, and runtime package split. This historical evidence is rank-6 lineage, not future live authority. The decision is made under the readiness-acceleration directive recorded in Linear USF-113 with the human decision delegated to the agent. The V2 implementation language and runtime are an open decision deferred to a future implementation directive; this ADR carries only the language-agnostic ports and adapters architecture as semantic information, and no historical source code is imported.",
+  "context": "USF adopts hexagonal architecture as its own binding structural decision. The foundation-completeness audit records the supporting evidence for this structure: explicit ports and adapters boundaries, usecases depending on ports rather than adapters, dependency-direction enforcement, public-export-only imports, and a contracts, domain, adapter, and runtime package split. Any historical material referenced there is rank-6 lineage, not future live authority. The decision is made under the readiness-acceleration directive recorded in Linear USF-113 with the human decision delegated to the agent. The implementation language and runtime are an open decision deferred to a future implementation directive; this ADR carries only the language-agnostic ports and adapters architecture as semantic information, and no external source code is imported.",
   "decision": "USF treats hexagonal architecture as a binding implementation constraint. The future extracted implementation must separate a framework-agnostic domain core from inbound and outbound ports, implement every external dependency as an adapter behind a port, keep the dependency direction acyclic with domain depending on ports and never on adapters, isolate frameworks at the edges, keep the UI layer dependent only on contract artefacts, and expose modules through public exports only. This ADR defines requirements only and creates no implementation code, directory, or schema activation.",
   "consequences": [
     "USF-113 has a recorded binding architecture decision.",
@@ -48,8 +48,8 @@
   "validatorRefs": [
     "tools/validate-spec/validate-spec.py"
   ],
-  "rationale": "Hexagonal structure is the property that made the historical repository testable in isolation, swappable across provider modes, and proof-honest. Reproducing the foundation from React input while preserving proof honesty and the hermetic-first ceiling requires the same boundaries. Leaving architecture implicit and inferring it later from generated code would violate the semantic-first principle and risk drift, so it is rejected.",
-  "description": "Records the decision that USF carries the React hexagonal ports-and-adapters architecture forward as an explicit binding constraint and names the boundaries and dependency-direction rules a future implementation must satisfy.",
+  "rationale": "Hexagonal structure is the property that keeps the foundation testable in isolation, swappable across provider modes, and proof-honest. Building the foundation while preserving proof honesty and the hermetic-first ceiling requires these boundaries. Leaving architecture implicit and inferring it later from generated code would violate the semantic-first principle and risk drift, so it is rejected.",
+  "description": "Records USF's decision to adopt a hexagonal ports-and-adapters architecture as an explicit binding constraint and names the boundaries and dependency-direction rules a future implementation must satisfy.",
   "lifecycleState": "active",
   "ontologyConcepts": [
     "ADR",

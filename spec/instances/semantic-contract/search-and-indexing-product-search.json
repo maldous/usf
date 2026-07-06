@@ -117,6 +117,6 @@
     "apps/react-enterprise-app/src/features/admin-search/admin-search-client.ts"
   ],
   "adrRefs": [
-    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md"
+    "docs/adr/0005-hexagonal-architecture.md"
   ]
 }

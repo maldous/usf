@@ -1,4 +1,4 @@
-# Parity API Contracts Source-Use Disposition Matrix
+# API Contracts Source-Use Disposition Matrix
 
 |                    |                                                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------------------- |
@@ -8,7 +8,7 @@
 | Issue scope        | USF-154, child of USF-133                                                                                   |
 | Historical lineage | `../react` is rank-6 evidence only                                                                          |
 
-This matrix records the treatment of files touched for the API/routes/OpenAPI/contracts parity domain. No React runtime/application code is copied. No React path is mirrored. No public API or production readiness is claimed. No staging, deployment, gateway, external-client SDK, external developer platform, production-live, or regulatory/certification readiness is claimed.
+This source-use disposition matrix records the treatment of files touched for the API/routes/OpenAPI/contracts domain. USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No public API or production readiness is claimed. No staging, deployment, gateway, external-client SDK, external developer platform, production-live, or regulatory/certification readiness is claimed.
 
 ## Runtime And Contract Files
 
@@ -47,8 +47,8 @@ This matrix records the treatment of files touched for the API/routes/OpenAPI/co
 
 | Target file                                                               | Treatment              | Source-use basis                                                              | Rationale                                                                                                                   |
 | ------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `docs/architecture/api-and-contract-surface-standard.md`                  | source-derived-rewrite | React API semantic contract plus enterprise API/contract-governance follow-up | Defines USF API as a security and contract boundary for this parity slice.                                                  |
-| `docs/architecture/parity-api-contracts-source-use-disposition-matrix.md` | evidence-only-support  | USF source-use policy                                                         | Records lineage/disposition for this domain.                                                                                |
+| `docs/architecture/api-and-contract-surface-standard.md`                  | source-derived-rewrite | React API semantic contract plus enterprise API/contract-governance follow-up | Defines USF API as a security and contract boundary for this API contracts slice.                                                  |
+| `docs/architecture/api-contracts-source-use-disposition-matrix.md` | evidence-only-support  | USF source-use policy                                                         | Records lineage/disposition for this domain.                                                                                |
 | `docs/architecture/bootstrap-source-use-disposition-matrix.md`            | evidence-only-support  | Existing bootstrap source-use matrix                                          | Updates prior API/OpenAPI rows and adds new proof/validator/test/doc rows.                                                  |
 | `docs/architecture/react-parity-scope-classification-matrix.json`         | evidence-only-support  | Existing parity matrix                                                        | Marks the API/contracts domain authorised under USF-154 and backs it with tests/proofs; item rows classify domain subareas. |
 | `docs/architecture/react-parity-scope-classification-matrix.md`           | evidence-only-support  | Human-readable parity matrix                                                  | Mirrors the JSON status truthfully.                                                                                         |
@@ -78,4 +78,4 @@ This matrix records the treatment of files touched for the API/routes/OpenAPI/co
 
 ## Boundary Confirmation
 
-No React runtime/application code is copied. No target path mirrors a historical React path. Runtime files are source-derived rewrites or new-with-rationale. Generated reports are not treated as canonical. No public API or production readiness is claimed.
+USF authors its own runtime; no external runtime/application code is copied and no target path mirrors a historical React source path. Runtime files are source-derived rewrites or new-with-rationale. Generated reports are not treated as canonical. No public API or production readiness is claimed.

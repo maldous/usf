@@ -26,7 +26,7 @@ Validating Keycloak-issued tokens locally keeps the authentication boundary insi
 - `docs/architecture/authority-model.md`
 - `docs/adr/0010-authorization-policy-decision-point.md`
 - `docs/architecture/auth-and-identity-standard.md`
-- `docs/architecture/parity-auth-identity-source-use-disposition-matrix.md`
+- `docs/architecture/auth-identity-source-use-disposition-matrix.md`
 - `spec/instances/semantic-contract/authentication-platform.json`
 - `spec/instances/interface-contract/authentication-login-api.json`
 - `spec/instances/audit-event/authentication-login.json`

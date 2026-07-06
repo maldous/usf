@@ -102,7 +102,7 @@
     "docs/architecture/react-l5-equivalence-audit.md"
   ],
   "adrRefs": [
-    "docs/adr/0005-react-hexagonal-architecture-carry-forward.md",
+    "docs/adr/0005-hexagonal-architecture.md",
     "docs/adr/0011-workflow-and-job-port-family.md"
   ]
 }

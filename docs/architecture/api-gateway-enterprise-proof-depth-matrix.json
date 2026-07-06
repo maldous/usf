@@ -10,7 +10,7 @@
   "validatorCommand": "python3 tools/validate-parity/validate-api.py all --json",
   "proofFile": "packages/proof/src/api-contracts-proof.ts",
   "validatorFile": "tools/validate-parity/validate-api.py",
-  "sourceUseMatrix": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/api-contracts-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [
@@ -190,7 +190,7 @@
       "followUpIssue": "USF-214",
       "reviewDate": "2026-09-30",
       "evidenceRefs": [
-        "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
         "docs/architecture/react-parity-scope-classification-matrix.json"
       ],
       "nonClaimBoundary": "GraphQL and federation lineage is inventoried only. It is not implemented, not required for current local REST contract proof, and not public API readiness."
@@ -223,7 +223,7 @@
       "reviewDate": "2026-09-30",
       "evidenceRefs": [
         "docs/architecture/import-export-and-bulk-operations-standard.md",
-        "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+        "docs/architecture/import-export-bulk-source-use-disposition-matrix.md",
         "packages/proof/src/import-export-bulk-proof.ts"
       ],
       "nonClaimBoundary": "API route metadata and local idempotency proof are not broad import/export/bulk HTTP surface readiness, production migration readiness, legal export readiness, or regulatory export readiness."

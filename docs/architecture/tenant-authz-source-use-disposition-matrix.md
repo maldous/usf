@@ -1,17 +1,17 @@
-# Parity Tenant-Authz Source-Use Disposition Matrix
+# Tenant-Authz Source-Use Disposition Matrix
 
 | | |
 |---|---|
 | Document type | Architecture / source-use governance matrix |
-| Status | Draft / parity-tenant-authz (USF-140) implementation coverage |
+| Status | Draft / tenant-authz slice (USF-140) implementation coverage |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-140 under USF-133 |
 | Source row basis | ADR 0010, docs/architecture/tenant-authorization-standard.md, and historical `../react` tenant/authz/RBAC/ABAC/break-glass evidence as lineage only |
-| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no live/production claim |
+| Repository state | USF authors its own runtime; no external runtime/application code is copied; no external source path is mirrored; no UI; no live/production claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` means the behaviour was recovered from historical `../react` evidence and freshly authored against USF semantics (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (packages/core, packages/ports, packages/contracts, packages/openapi, apps/api, capabilities/tenant/src/index.ts) are not re-listed here.
+`source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (packages/core, packages/ports, packages/contracts, packages/openapi, apps/api, capabilities/tenant/src/index.ts) are not re-listed here.
 
 ## Implementation Target Files
 
@@ -27,4 +27,4 @@
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No full authorization parity, full dev readiness, full product readiness, SOC readiness, ISO certification, enterprise production readiness, or USF-133 closure claim.
+USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No full authorization parity, full dev readiness, full product readiness, SOC readiness, ISO certification, enterprise production readiness, or USF-133 closure claim.

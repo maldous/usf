@@ -12,7 +12,7 @@
   "proofFile": "packages/proof/src/import-export-bulk-proof.ts",
   "validatorFile": "tools/validate-parity/validate-bulk.py",
   "standardFile": "docs/architecture/import-export-and-bulk-operations-standard.md",
-  "sourceUseMatrix": "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/import-export-bulk-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [
     "soa-usf-163-import-export-bulk-deep-runtime",

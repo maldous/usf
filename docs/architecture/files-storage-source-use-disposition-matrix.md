@@ -1,17 +1,17 @@
-# Parity Files/Storage Source-Use Disposition Matrix
+# Files/Storage Source-Use Disposition Matrix
 
 | | |
 |---|---|
 | Document type | Architecture / source-use governance matrix |
-| Status | Draft / parity-files-storage (USF-146) plus USF-147 bounded enterprise depth coverage |
+| Status | Draft / files-storage slice (USF-146) plus USF-147 bounded enterprise depth coverage |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-146 under USF-133; deferred depth tracked in USF-147 |
 | Source row basis | `docs/architecture/files-and-object-storage-standard.md`, the Enterprise Persistence Metadata and Classification Standard, ADR 0010 (PDP), the audit-evidence and config-and-secrets standards, and historical `../react` files/storage behaviour as lineage only |
-| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; bounded local MinIO and ClamAV composed-test proof/reconciliation only; no live S3/object-store, live scanner, KMS, DLP, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim |
+| Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no Playwright; bounded local MinIO and ClamAV composed-test proof/reconciliation only; no live S3/object-store, live scanner, KMS, DLP, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` = behaviour recovered from historical `../react` evidence and freshly authored against USF semantics (no copy, no path mirroring). `new-with-rationale` = USF-defined. `evidence-only-support` = a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `adapters/store/src/index.ts`, `capabilities/files/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/db/src/generated-types.ts`, `adapters/db/migrations/manifest.json`) are not re-listed here.
+`source-derived-rewrite` = behaviour authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` = USF-defined. `evidence-only-support` = a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `adapters/store/src/index.ts`, `capabilities/files/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/db/src/generated-types.ts`, `adapters/db/migrations/manifest.json`) are not re-listed here.
 
 ## Implementation Target Files
 
@@ -30,21 +30,21 @@
 
 | Files/storage concern | Status | Where | Notes |
 | --- | --- | --- | --- |
-| File metadata (authoritative, tenant-scoped) | migrated | `adapters/db/migrations/0003-files.sql`, `packages/core` (FileMetadata), `adapters/store` | RLS + FORCE RLS proven (make files-proof). |
-| Object storage provider | migrated for bounded local proof | `packages/ports` (ObjectStore), `adapters/store`, `packages/proof/src/files-storage-proof.ts` | In-memory adapter plus bounded MinIO composed-test registry/proof reconciliation. Live S3, provider-managed object store, and presigned URL runtime readiness remain non-claims requiring separate source issues before stronger claims. |
-| Object key safety | migrated | `packages/core` (generateObjectKey/assertSafeObjectKey/objectKeyLeaksSensitive) | Opaque, traversal-safe, no tenant/email/filename/secret leakage (tests). |
-| Tenant file isolation | migrated | metadata store + RLS + PDP | Tenant A cannot read/list/download tenant B (tests + proof). |
-| Upload validation | migrated | `packages/core` (validateUpload) | Size/content-type/checksum/zero-byte fail closed. |
-| Download authorization | migrated | `capabilities/files` + PDP | PDP-gated; sensitive classification needs stronger auth; scan/lifecycle gate. |
+| File metadata (authoritative, tenant-scoped) | covered | `adapters/db/migrations/0003-files.sql`, `packages/core` (FileMetadata), `adapters/store` | RLS + FORCE RLS proven (make files-proof). |
+| Object storage provider | covered for bounded local proof | `packages/ports` (ObjectStore), `adapters/store`, `packages/proof/src/files-storage-proof.ts` | In-memory adapter plus bounded MinIO composed-test registry/proof reconciliation. Live S3, provider-managed object store, and presigned URL runtime readiness remain non-claims requiring separate source issues before stronger claims. |
+| Object key safety | covered | `packages/core` (generateObjectKey/assertSafeObjectKey/objectKeyLeaksSensitive) | Opaque, traversal-safe, no tenant/email/filename/secret leakage (tests). |
+| Tenant file isolation | covered | metadata store + RLS + PDP | Tenant A cannot read/list/download tenant B (tests + proof). |
+| Upload validation | covered | `packages/core` (validateUpload) | Size/content-type/checksum/zero-byte fail closed. |
+| Download authorization | covered | `capabilities/files` + PDP | PDP-gated; sensitive classification needs stronger auth; scan/lifecycle gate. |
 | Signed URL posture | explicitly reclassified | `packages/ports` (SignedUrlIssuer), USF-147 matrix | Port-only; no live presigned URLs or production download readiness. |
-| Checksum/integrity | migrated | `packages/core` (sha256/metadataHash), `file-service.verify` | Checksum + metadata hash; tamper detected. |
-| Scan/quarantine | migrated for bounded local proof | `packages/ports` (ScanProvider), `adapters/store` (InMemoryScanProvider, ClamAvScanProvider), `packages/proof/src/clamav-composed-proof.ts` | Status model + fail-closed gate; USF-200 proves bounded local Compose ClamAV clean/infected and provider-unavailable quarantine behaviour for synthetic payloads; USF-147 reconciles this as bounded local scanner evidence. Live ClamAV readiness, DLP, signature freshness operation, and release workflow remain non-claims. |
+| Checksum/integrity | covered | `packages/core` (sha256/metadataHash), `file-service.verify` | Checksum + metadata hash; tamper detected. |
+| Scan/quarantine | covered for bounded local proof | `packages/ports` (ScanProvider), `adapters/store` (InMemoryScanProvider, ClamAvScanProvider), `packages/proof/src/clamav-composed-proof.ts` | Status model + fail-closed gate; USF-200 proves bounded local Compose ClamAV clean/infected and provider-unavailable quarantine behaviour for synthetic payloads; USF-147 reconciles this as bounded local scanner evidence. Live ClamAV readiness, DLP, signature freshness operation, and release workflow remain non-claims. |
 | Derived objects | explicitly reclassified | USF-147 matrix | Preview/thumbnail/OCR/index inherit-classification rule defined in the standard; generation deferred to a future source issue before any readiness claim. |
-| Retention/legal hold | migrated | DB legal-hold trigger + `file-service.purge` | Legal hold blocks purge (proof + test). |
+| Retention/legal hold | covered | DB legal-hold trigger + `file-service.purge` | Legal hold blocks purge (proof + test). |
 | Object versioning | explicitly reclassified | USF-147 matrix | Fields/rules in the standard; provider object versioning and delete-marker readiness are not claimed. |
 | Backup/restore/DR | explicitly reclassified | USF-147 matrix, `docs/architecture/pgbackrest-configured-proof-boundary.json` | DB backup/restore evidence is non-equivalent to object-store backup/DR; object backup, restore, DR, RPO, and RTO readiness are not claimed. |
 | DLP/exfiltration hooks | explicitly reclassified | USF-147 matrix | Reserved detection events; live DLP/SIEM and exfiltration-control readiness are not claimed. |
-| File audit evidence | migrated | `capabilities/files` + PR 94 audit model | file.upload/downloaded/denied/deleted/restored/purged/quarantined; value-free. |
+| File audit evidence | covered | `capabilities/files` + PR 94 audit model | file.upload/downloaded/denied/deleted/restored/purged/quarantined; value-free. |
 | Provider config/secret refs | covered | PR 95 config/secrets | Provider credentials are secret references (config slice); never embedded. |
 | Encryption/KMS posture | explicitly reclassified | standard fields, USF-147 matrix | At-rest/in-transit/key_ref reserved; live KMS, customer-managed key, and production encryption readiness are not claimed. |
 | Quotas/abuse | explicitly reclassified | standard fields, USF-147 matrix | Size validation is proven; storage quota runtime, upload/download rate limiting, multipart, and temporary-upload cleanup remain non-claims. |
@@ -55,4 +55,4 @@ The historical `../react` files/storage inventory (`.claude/runs/.../react-files
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live S3/object-store, live ClamAV/antivirus/DLP, presigned URL runtime, KMS, backup/restore readiness, object-lock/WORM, storage quota runtime, staging, production, deployment, production-live, SOC, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure claim.
+No external runtime/application code copy. No external source path mirroring. No UI/UX. No Playwright. No live S3/object-store, live ClamAV/antivirus/DLP, presigned URL runtime, KMS, backup/restore readiness, object-lock/WORM, storage quota runtime, staging, production, deployment, production-live, SOC, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure claim.

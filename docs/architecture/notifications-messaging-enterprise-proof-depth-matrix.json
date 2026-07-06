@@ -10,7 +10,7 @@
   "validatorCommand": "python3 tools/validate-parity/validate-notify.py all --json",
   "proofFile": "packages/proof/src/notifications-messaging-proof.ts",
   "validatorFile": "tools/validate-parity/validate-notify.py",
-  "sourceUseMatrix": "docs/architecture/parity-notifications-messaging-source-use-disposition-matrix.md",
+  "sourceUseMatrix": "docs/architecture/notifications-messaging-source-use-disposition-matrix.md",
   "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
   "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [

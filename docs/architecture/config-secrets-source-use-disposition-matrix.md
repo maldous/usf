@@ -1,17 +1,17 @@
-# Parity Config/Secrets Source-Use Disposition Matrix
+# Config/Secrets Source-Use Disposition Matrix
 
 | | |
 |---|---|
 | Document type | Architecture / source-use governance matrix |
-| Status | Draft / parity-config-secrets (USF-144) implementation coverage plus bounded enterprise depth (USF-145) |
+| Status | Draft / config-secrets slice (USF-144) implementation coverage plus bounded enterprise depth (USF-145) |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-144 under USF-133; deferred depth tracked in USF-145 |
 | Source row basis | `docs/architecture/config-and-secrets-standard.md`, ADR 0010 (PDP), the audit-evidence standard, and historical `../react` config/secrets behaviour as lineage only |
-| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no Playwright; local OpenBao remains bounded composed-test evidence only; no live Vault/Key Vault/KMS/OpenBao, staging, production, or certification claim |
+| Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no Playwright; local OpenBao remains bounded composed-test evidence only; no live Vault/Key Vault/KMS/OpenBao, staging, production, or certification claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` means the behaviour was recovered from historical `../react` evidence and freshly authored against USF semantics (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `capabilities/config/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/secrets/src/index.ts`) are not re-listed here.
+`source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `capabilities/config/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/secrets/src/index.ts`) are not re-listed here.
 
 ## Implementation Target Files
 
@@ -55,4 +55,4 @@ The historical `../react` config/secrets inventory (`.claude/runs/.../react-conf
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No live external Vault/Key Vault/KMS/OpenBao/secret-manager. No live-external-provider. No staging/production/deployment/production-live claim. No SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure claim.
+USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No UI/UX. No Playwright. No live external Vault/Key Vault/KMS/OpenBao/secret-manager. No live-external-provider. No staging/production/deployment/production-live claim. No SOC readiness, ISO certification, enterprise production readiness, full dev readiness, full product readiness, or USF-133 closure claim.

@@ -1,17 +1,17 @@
-# Parity-DB Source-Use Disposition Matrix
+# DB Source-Use Disposition Matrix
 
 | | |
 |---|---|
 | Document type | Architecture / source-use governance matrix |
-| Status | Draft / parity-db (USF-138) implementation coverage |
+| Status | Draft / DB slice (USF-138) implementation coverage |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-138 under USF-133 |
 | Source row basis | `docs/architecture/enterprise-persistence-metadata-and-classification-standard.md`, `docs/architecture/persistent-object-classification-registry.json`, ADR 0010, and historical `../react` DB/RLS/migration/audit evidence as lineage only |
-| Repository state | No React runtime/application code copied; no React path mirroring; no UI; no live/production database claim |
+| Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no live/production database claim |
 
 ## Treatment Rules
 
-Every implementation target file added by the parity-db slice is listed here with a treatment and rationale. `source-derived-rewrite` means the behaviour was recovered from historical `../react` evidence and freshly authored against USF semantics (no copy, no path mirroring). `new-with-rationale` means USF-defined with no source antecedent. `evidence-only-support` means a test/proof artefact.
+Every implementation target file added by the DB slice is listed here with a treatment and rationale. `source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined with no source antecedent. `evidence-only-support` means a test/proof artefact.
 
 ## Implementation Target Files
 
@@ -27,4 +27,4 @@ Every implementation target file added by the parity-db slice is listed here wit
 
 ## Non-goals
 
-No React runtime/application code copy. No React path mirroring. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No backup readiness, restore readiness, disaster recovery readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim. No real customer/tenant data; fixtures are deterministic synthetic only.
+USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No UI/UX. No Playwright. No staging/production/deployment/live-external-provider/production-live claim. No backup readiness, restore readiness, disaster recovery readiness, SOC readiness, ISO certification, full dev readiness, full product readiness, or USF-133 closure claim. No real customer/tenant data; fixtures are deterministic synthetic only.

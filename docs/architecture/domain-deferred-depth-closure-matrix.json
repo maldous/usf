@@ -65,7 +65,7 @@
       "linearParentKnown": "USF-133",
       "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
       "standardPath": "docs/architecture/jobs-and-workflows-standard.md",
-      "sourceUseMatrixPath": "docs/architecture/parity-jobs-workflows-source-use-disposition-matrix.md",
+      "sourceUseMatrixPath": "docs/architecture/jobs-workflows-source-use-disposition-matrix.md",
       "enterpriseEvidenceRefs": [
         "usf-191-soa-domain-deferred-depth",
         "usf-191-evidence-jobs-workflows-proof",
@@ -122,7 +122,7 @@
       "doNotReparent": true,
       "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
       "standardPath": "docs/architecture/notifications-and-messaging-standard.md",
-      "sourceUseMatrixPath": "docs/architecture/parity-notifications-messaging-source-use-disposition-matrix.md",
+      "sourceUseMatrixPath": "docs/architecture/notifications-messaging-source-use-disposition-matrix.md",
       "enterpriseEvidenceRefs": [
         "usf-191-soa-domain-deferred-depth",
         "usf-191-evidence-notifications-proof",
@@ -178,7 +178,7 @@
       "linearParentKnown": "USF-133",
       "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
       "standardPath": "docs/architecture/api-and-contract-surface-standard.md",
-      "sourceUseMatrixPath": "docs/architecture/parity-api-contracts-source-use-disposition-matrix.md",
+      "sourceUseMatrixPath": "docs/architecture/api-contracts-source-use-disposition-matrix.md",
       "enterpriseEvidenceRefs": [
         "usf-191-soa-domain-deferred-depth",
         "usf-191-evidence-api-contracts-proof",
@@ -234,7 +234,7 @@
       "linearParentKnown": "USF-133",
       "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
       "standardPath": "docs/architecture/provider-adapters-and-modes-standard.md",
-      "sourceUseMatrixPath": "docs/architecture/parity-provider-adapters-source-use-disposition-matrix.md",
+      "sourceUseMatrixPath": "docs/architecture/provider-adapters-source-use-disposition-matrix.md",
       "enterpriseEvidenceRefs": [
         "usf-191-soa-domain-deferred-depth",
         "usf-191-evidence-providers-proof",
@@ -290,7 +290,7 @@
       "linearParentKnown": "USF-133",
       "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
       "standardPath": "docs/architecture/rate-limits-quotas-and-abuse-controls-standard.md",
-      "sourceUseMatrixPath": "docs/architecture/parity-rate-limits-abuse-controls-source-use-disposition-matrix.md",
+      "sourceUseMatrixPath": "docs/architecture/rate-limits-abuse-controls-source-use-disposition-matrix.md",
       "enterpriseEvidenceRefs": [
         "usf-191-soa-domain-deferred-depth",
         "usf-191-evidence-guardrails-proof",
@@ -346,7 +346,7 @@
       "linearParentKnown": "USF-133",
       "proofOrAcceptedDeferral": "local-proof-with-accepted-deferrals",
       "standardPath": "docs/architecture/import-export-and-bulk-operations-standard.md",
-      "sourceUseMatrixPath": "docs/architecture/parity-import-export-bulk-source-use-disposition-matrix.md",
+      "sourceUseMatrixPath": "docs/architecture/import-export-bulk-source-use-disposition-matrix.md",
       "enterpriseEvidenceRefs": [
         "usf-191-soa-domain-deferred-depth",
         "usf-191-evidence-import-export-bulk-proof",
