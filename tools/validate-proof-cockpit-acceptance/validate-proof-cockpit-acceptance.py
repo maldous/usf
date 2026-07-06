@@ -194,6 +194,8 @@ REQUIRED_PLANTED_KINDS = [
     "openbao-credential-evidence-missing",
     "service-evidence-missing-run-context",
     "service-evidence-missing-target-observation",
+    "service-evidence-missing-structured-target-observation",
+    "service-evidence-missing-per-record-run-id",
     "secret-literal-value-exposed",
     "artifact-hash-mismatch",
     "readme-marketing-overclaim",
@@ -544,6 +546,14 @@ def rule_001_model(data: dict[str, Any]) -> list[dict[str, str]]:
     for manifest_file in REQUIRED_MANIFEST_FILES:
         if manifest_file not in model.get("manifestFiles", []):
             failures.append(finding("USF-PROOF-COCKPIT-001", f"Manifest file missing from model: {manifest_file}", str(MODEL_PATH.relative_to(ROOT))))
+    # USF-300: the model must require a per-record runId and a real structured
+    # target-system observation on every service-evidence record.
+    for field in ["runId", "targetObservation"]:
+        if field not in model.get("serviceEvidenceRequiredPerRecordFields", []):
+            failures.append(finding("USF-PROOF-COCKPIT-001", f"Service-evidence per-record required field missing from model: {field}", str(MODEL_PATH.relative_to(ROOT))))
+    for field in ["method", "sourceUrlOrCommand", "status", "observedAt", "runId", "outputExcerpt"]:
+        if field not in model.get("targetObservationFields", []):
+            failures.append(finding("USF-PROOF-COCKPIT-001", f"targetObservation field missing from model: {field}", str(MODEL_PATH.relative_to(ROOT))))
     return failures
 
 
@@ -884,6 +894,23 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
         ]:
             if not service.get(field):
                 failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence missing {field}", service_id))
+        # USF-300: require a real structured target-system observation (genuine live probe
+        # output), and require the current run's runId to be stamped on that observation.
+        observation = service.get("targetObservation")
+        if not isinstance(observation, dict) or not observation:
+            failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence missing structured targetObservation", service_id))
+        else:
+            for obs_field in ["method", "sourceUrlOrCommand", "status", "observedAt", "runId"]:
+                if not observation.get(obs_field):
+                    failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence targetObservation missing {obs_field}", service_id))
+            if "outputExcerpt" not in observation:
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence targetObservation missing outputExcerpt field", service_id))
+            elif len(str(observation.get("outputExcerpt", ""))) > 800:
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence targetObservation outputExcerpt exceeds bounded length", service_id))
+            if observation.get("method") not in {"http-get", "tcp-connect", "container-exec", "none"}:
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence targetObservation method is not a recognized probe method", service_id))
+            if service.get("runId") and observation.get("runId") and observation.get("runId") != service.get("runId"):
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence targetObservation runId does not match record runId", service_id))
         if "authPostureMismatch" not in service or not isinstance(service.get("authPostureMismatch"), bool):
             failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence missing boolean authPostureMismatch flag", service_id))
         if not service.get("authPostureMismatchReason"):
@@ -918,6 +945,13 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
                     failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence leaf artifact missing {field}", service_id))
                 elif service.get(field) and leaf.get(field) != service.get(field):
                     failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence leaf artifact {field} does not match manifest row", service_id))
+            leaf_observation = leaf.get("targetObservation")
+            if not isinstance(leaf_observation, dict) or not leaf_observation:
+                failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence leaf artifact missing structured targetObservation", service_id))
+            else:
+                for obs_field in ["method", "sourceUrlOrCommand", "status", "observedAt", "runId"]:
+                    if not leaf_observation.get(obs_field):
+                        failures.append(finding("USF-PROOF-COCKPIT-010", f"Service evidence leaf artifact targetObservation missing {obs_field}", service_id))
             if "authPostureMismatch" not in leaf or not isinstance(leaf.get("authPostureMismatch"), bool):
                 failures.append(finding("USF-PROOF-COCKPIT-010", "Service evidence leaf artifact missing boolean authPostureMismatch flag", service_id))
             if not leaf.get("authPostureMismatchReason"):
@@ -1144,6 +1178,18 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         service["targetSystemObservation"] = ""
         service["targetSystemObservationRationale"] = ""
         service.pop("authPostureMismatch", None)
+    elif kind == "service-evidence-missing-structured-target-observation":
+        # USF-300: the structured, real target-system observation must be present and
+        # non-empty on every service-evidence record.
+        service = mutated["serviceEvidenceManifest"]["services"][0]
+        service["targetObservation"] = {}
+    elif kind == "service-evidence-missing-per-record-run-id":
+        # USF-300: every service-evidence record and its target observation must carry the
+        # current run's runId.
+        service = mutated["serviceEvidenceManifest"]["services"][0]
+        service["runId"] = ""
+        if isinstance(service.get("targetObservation"), dict):
+            service["targetObservation"]["runId"] = ""
     elif kind == "secret-literal-value-exposed":
         mutated["store"]["secretLeak"] = "API_TOKEN=abcdefghijklmnopqrstuvwxyz123456"
     elif kind == "artifact-hash-mismatch":

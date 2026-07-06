@@ -1,0 +1,7 @@
+{
+  "id": "034-service-evidence-missing-per-record-run-id",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "service-evidence-missing-per-record-run-id"
+  }
+}

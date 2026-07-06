@@ -1,0 +1,7 @@
+{
+  "id": "033-service-evidence-missing-structured-target-observation",
+  "expectedRule": "USF-PROOF-COCKPIT-010",
+  "fixture": {
+    "kind": "service-evidence-missing-structured-target-observation"
+  }
+}
