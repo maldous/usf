@@ -36,7 +36,7 @@ No React UI test may disappear silently. Every React UI/Playwright/browser artef
 
 2.2 Playwright MUST NOT be added to the USF foundation unless a separate UI/runtime scope is explicitly authorised.
 
-2.3 The concrete classification of USF's own recorded UI/Playwright/E2E source lineage — and the focused list of foundation behaviours currently proven only via UI/Playwright that MUST be rewritten — lives in `docs/architecture/react-parity-scope-classification-matrix.md`.
+2.3 The concrete classification of USF's own recorded UI/Playwright/E2E source lineage — and the focused list of foundation behaviours currently proven only via UI/Playwright that MUST be rewritten — lives in `docs/architecture/functional-scope-classification-matrix.md`.
 
 ## 3. AI-UI integration readiness surface (per capability)
 

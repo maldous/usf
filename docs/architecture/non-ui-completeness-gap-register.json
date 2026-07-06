@@ -1,0 +1,30 @@
+{
+  "id": "non-ui-completeness-gap-register",
+  "issueId": "USF-291",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-05T04:50:07Z",
+  "sourceGitSha": "775650cc2387091a89fdf82c5f63eff937c6028c",
+  "sourceLineageGitSha": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+  "rows": [],
+  "summary": {
+    "openGapCount": 0,
+    "blockedWithLinearCarrierCount": 0,
+    "requiresHumanDecisionCount": 0
+  },
+  "policy": "Any future residual gap must use blocked-with-linear-carrier or requires-human-decision, with owner, retry condition, review cadence, non-claim, and acceptance boundary.",
+  "nonClaims": [
+    "React UI parity",
+    "visual parity",
+    "UX parity",
+    "product UI readiness",
+    "Staging readiness for real users",
+    "Production readiness",
+    "deployment readiness",
+    "live-provider readiness",
+    "SOC readiness",
+    "ISO certification",
+    "enterprise production readiness",
+    "browser E2E readiness",
+    "full product parity"
+  ]
+}

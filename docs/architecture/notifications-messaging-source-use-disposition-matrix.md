@@ -42,8 +42,8 @@ This matrix records the treatment of files touched for the notifications/messagi
 | `docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-153 enterprise proof-depth requirement | Records machine-checkable bounded-local proof, explicit non-equivalence boundaries, deferred live-provider/API/UI boundaries, enterprise evidence refs, validator refs, and non-claims. |
 | `docs/architecture/notifications-messaging-source-use-disposition-matrix.md` | evidence-only-support | USF source-use policy | Records lineage/disposition for this domain. |
 | `docs/architecture/bootstrap-source-use-disposition-matrix.md` | evidence-only-support | Existing bootstrap source-use matrix | Updates prior thin notify/mail rows and adds new proof/validator/test/doc rows. |
-| `docs/architecture/react-parity-scope-classification-matrix.json` | evidence-only-support | Existing parity matrix | Marks the notifications domain authorised under USF-152 and backs it with tests/proofs; item rows classify domain subareas. |
-| `docs/architecture/react-parity-scope-classification-matrix.md` | evidence-only-support | Human-readable parity matrix | Mirrors the JSON status truthfully. |
+| `docs/architecture/functional-scope-classification-matrix.json` | evidence-only-support | Existing parity matrix | Marks the notifications domain authorised under USF-152 and backs it with tests/proofs; item rows classify domain subareas. |
+| `docs/architecture/functional-scope-classification-matrix.md` | evidence-only-support | Human-readable parity matrix | Mirrors the JSON status truthfully. |
 
 ## Historical React Behaviour Disposition
 

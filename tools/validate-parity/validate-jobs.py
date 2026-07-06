@@ -94,7 +94,7 @@ SOURCE_FILES = (
     OPENAPI,
     STANDARD,
 )
-MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX_PATH = "docs/architecture/functional-scope-classification-matrix.json"
 USF151_MATRIX_PATH = "docs/architecture/jobs-workflows-enterprise-proof-depth-matrix.json"
 SELFTEST_DIR = "tools/validate-parity/jobs-planted-defects"
 

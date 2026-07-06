@@ -34,8 +34,8 @@ Workflow-like work in the historical stack is not homogeneous: durable, evidence
 
 - `docs/architecture/charter.md`
 - `docs/architecture/authority-model.md`
-- `docs/architecture/full-react-parity-readiness-directive.md`
-- `docs/architecture/react-parity-scope-classification-matrix.md`
+- `docs/architecture/functional-completeness-readiness-directive.md`
+- `docs/architecture/functional-scope-classification-matrix.md`
 - `spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json`
 - `spec/instances/semantic-contract/background-workers-job-runner.json`
 - `spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json`

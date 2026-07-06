@@ -11,8 +11,8 @@
   "proofFile": "packages/proof/src/jobs-workflows-proof.ts",
   "validatorFile": "tools/validate-parity/validate-jobs.py",
   "sourceUseMatrix": "docs/architecture/jobs-workflows-source-use-disposition-matrix.md",
-  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
-  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "parityMatrix": "docs/architecture/usf-functionality-completeness-matrix.json",
+  "classificationMatrix": "docs/architecture/functional-scope-classification-matrix.json",
   "enterpriseEvidenceRefs": [
     "soa-usf-151-jobs-workflows-enterprise-depth",
     "evidence-usf-151-jobs-workflows-enterprise-depth",

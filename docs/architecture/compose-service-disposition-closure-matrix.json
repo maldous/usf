@@ -11,7 +11,7 @@
     "USF-182"
   ],
   "service_catalogue_authority": "spec/instances/compose-service/service-catalogue.json",
-  "react_compose_parity_matrix": "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+  "react_compose_parity_matrix": "docs/architecture/usf-compose-service-completeness-matrix.json",
   "closure_claimed": false,
   "closure_blocking_dispositions": [
     "bounded-local-proof-with-deferred-readiness-boundaries",
@@ -70,7 +70,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#postgres",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#postgres"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#postgres"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -143,7 +143,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#keycloak-db",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak-db"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak-db"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -215,7 +215,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#keycloak",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#keycloak"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#keycloak"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -286,7 +286,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#nats",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#nats"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#nats"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -360,7 +360,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#temporal"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -435,7 +435,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#minio",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#minio"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#minio"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -510,7 +510,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#openbao",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#openbao"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#openbao"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -585,7 +585,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#otel-collector",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#otel-collector"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#otel-collector"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -676,7 +676,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#prometheus",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#prometheus"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#prometheus"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -768,7 +768,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#grafana",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#grafana"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#grafana"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -861,7 +861,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#loki",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#loki"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#loki"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -953,7 +953,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#tempo",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#tempo"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#tempo"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1045,7 +1045,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#mailpit",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mailpit"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#mailpit"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1116,7 +1116,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#webhook-sink",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#webhook-sink"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#webhook-sink"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1203,7 +1203,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#redis",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#redis"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#redis"
         ],
         "proof_evidence_refs": [
           "corepack pnpm proof:cache:redis",
@@ -1319,7 +1319,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#meilisearch",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#meilisearch"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#meilisearch"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1416,7 +1416,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clickhouse",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clickhouse"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#clickhouse"
         ],
         "proof_evidence_refs": [
           "corepack pnpm proof:analytics:clickhouse",
@@ -1533,7 +1533,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgadmin",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgadmin"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#pgadmin"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1623,7 +1623,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-postgres",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-postgres"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-postgres"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1725,7 +1725,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonar-oidc-plugin",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonar-oidc-plugin"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#sonar-oidc-plugin"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1820,7 +1820,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sonarqube",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sonarqube"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#sonarqube"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -1937,7 +1937,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#mock-oidc",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#mock-oidc"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#mock-oidc"
         ],
         "proof_evidence_refs": [
           "spec/instances/compose-service/service-catalogue.json",
@@ -2029,7 +2029,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#localstack",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#localstack"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#localstack"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2138,7 +2138,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#wiremock",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#wiremock"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#wiremock"
         ],
         "proof_evidence_refs": [
           "corepack pnpm proof:wiremock",
@@ -2245,7 +2245,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#alertmanager",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alertmanager"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#alertmanager"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2348,7 +2348,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#alloy",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#alloy"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#alloy"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2449,7 +2449,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-postgres",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-postgres"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-postgres"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2563,7 +2563,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-redis",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-redis"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-redis"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2677,7 +2677,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#windmill"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2793,7 +2793,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#windmill-worker",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#windmill-worker"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#windmill-worker"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2908,7 +2908,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-postgres",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-postgres"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-postgres"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -2992,7 +2992,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#temporal-ui",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#temporal-ui"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#temporal-ui"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -3086,7 +3086,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#pgbackrest",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#pgbackrest"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#pgbackrest"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -3210,7 +3210,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#clamav",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#clamav"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#clamav"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -3308,7 +3308,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#sentry",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#sentry"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#sentry"
         ],
         "proof_evidence_refs": [
           "usf-187-sentry-error-monitoring-evidence",
@@ -3465,7 +3465,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#caddy",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#caddy"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#caddy"
         ],
         "proof_evidence_refs": [
           "corepack pnpm compose:check-generated",
@@ -3653,7 +3653,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#platform-api",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#platform-api"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#platform-api"
         ],
         "proof_evidence_refs": [
           "spec/instances/compose-service/service-catalogue.json",
@@ -3720,7 +3720,7 @@
         "service_catalogue_authority": true,
         "service_catalogue_ref": "spec/instances/compose-service/service-catalogue.json#react-app",
         "react_parity_refs": [
-          "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md#react-app"
+          "docs/architecture/usf-compose-service-completeness-matrix.md#react-app"
         ],
         "proof_evidence_refs": [],
         "tracking_issues": [

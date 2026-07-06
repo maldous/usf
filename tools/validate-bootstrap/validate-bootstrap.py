@@ -112,7 +112,7 @@ AUTH_GOVERNANCE_INPUTS = [
     "docs/architecture/proof-and-evidence-pipeline-plan.md",
     "docs/architecture/authentication-slice-source-use-disposition-matrix.md",
     "docs/architecture/proof-execution-substrate-authorization.md",
-    "docs/architecture/react-foundation-artifact-reuse-assessment.md",
+    "docs/architecture/foundation-artefact-reuse-assessment.md",
 ]
 
 AUTH_HISTORICAL_INPUTS = [

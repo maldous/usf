@@ -2253,8 +2253,8 @@ def check_operator_access_gateway_matrix(F: Findings, state: dict[str, Any]) -> 
             if row.get("surfaceKind") != "gateway":
                 F.add("USF-ENTERPRISE-014", row_id, "caddy row must be the gateway row")
             source_refs = set(row.get("sourceRefs", []))
-            if "../react/docker/caddy/Caddyfile" not in source_refs:
-                F.add("USF-ENTERPRISE-014", row_id, "gateway row lacks React gateway lineage reference")
+            if "docker/caddy/Caddyfile" not in source_refs:
+                F.add("USF-ENTERPRISE-014", row_id, "gateway row lacks gateway source-lineage reference")
 
         risk = row.get("deferredRisk", {})
         if not isinstance(risk, dict):

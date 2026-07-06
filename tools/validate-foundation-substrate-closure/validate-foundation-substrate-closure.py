@@ -66,7 +66,7 @@ FORBIDDEN_REACT_PRODUCT_PARITY_TOKEN = "no-full-" + "react-product-" + "parity"
 ALLOWED_FORBIDDEN_TOKEN_PATH_PREFIXES = (
     "docs/architecture/react-",
     "docs/architecture/superseded-lineage-closure-provenance.",
-    "tools/validate-react-non-ui-parity/",
+    "tools/validate-non-ui-completeness/",
     "tools/validate-parity/",
 )
 

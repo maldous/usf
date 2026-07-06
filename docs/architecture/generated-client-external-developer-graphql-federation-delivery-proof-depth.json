@@ -25,7 +25,7 @@
   "apiDispositionMatrix": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
   "publicCompatibilityMatrix": "docs/architecture/api-public-compatibility-release-governance-matrix.json",
   "sourceUseMatrix": "docs/architecture/api-contracts-source-use-disposition-matrix.md",
-  "functionalityParityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+  "functionalityParityMatrix": "docs/architecture/usf-functionality-completeness-matrix.json",
   "closureReconciliation": "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json",
   "proofCommand": "make api-proof",
   "rawProofCommand": "corepack pnpm proof:api",

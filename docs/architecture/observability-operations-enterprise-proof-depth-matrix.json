@@ -11,8 +11,8 @@
   "proofFile": "packages/proof/src/observability-telemetry-proof.ts",
   "validatorFile": "tools/validate-parity/validate-observability.py",
   "sourceUseMatrix": "docs/architecture/observability-telemetry-source-use-disposition-matrix.md",
-  "parityMatrix": "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
-  "classificationMatrix": "docs/architecture/react-parity-scope-classification-matrix.json",
+  "parityMatrix": "docs/architecture/usf-functionality-completeness-matrix.json",
+  "classificationMatrix": "docs/architecture/functional-scope-classification-matrix.json",
   "operationsPostureInstance": "spec/instances/observability-signal/observability-operations-posture.json",
   "enterpriseEvidenceRefs": [
     "soa-usf-159-observability-operations-depth",
@@ -180,7 +180,7 @@
       ],
       "evidenceRefs": [
         "docs/architecture/observability-telemetry-and-operational-evidence-standard.md",
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+        "docs/architecture/usf-compose-service-completeness-matrix.json",
         "docs/architecture/sentry-service-semantic-proof-boundary.json"
       ],
       "nonClaimBoundary": "Prometheus, Loki, Tempo, Grafana, Alertmanager, Alloy, Sentry service ingestion, OpenTelemetry collector export, SIEM export, and external observability providers are not proven or claimed by USF-159."

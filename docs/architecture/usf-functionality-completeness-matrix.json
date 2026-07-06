@@ -1,0 +1,651 @@
+{
+  "authority_note": "Review matrix only; it does not update semantic authority, accepted ADRs, validators, or runtime proof evidence.",
+  "capabilities": [
+    {
+      "blocking_level": "none",
+      "capability_group": "database and tenancy persistence",
+      "capability_id": "db-rls-migrations",
+      "capability_name": "DB/RLS/migrations",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Postgres, migrations, RLS proof lineage",
+      "readiness_impact": "USF-139 adds bounded local enterprise DB proof depth and reclassifies backup/restore, DR, production, and live-provider DB readiness as non-claims with linked follow-ups.",
+      "tracking_carrier_or_recommendation": "USF-138/USF-139 with backup/restore linkage to USF-211 and broader readiness non-claims",
+      "usf_evidence_summary": "USF DB/RLS slice, proof:db, validate-db USF-DB-001..016, and db enterprise controls proof-depth matrix",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "tenant isolation, RBAC, ABAC, break-glass",
+      "capability_id": "tenant-authz-pdp",
+      "capability_name": "Tenant/PDP authorization",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Tenant/RBAC/ABAC lineage",
+      "readiness_impact": "Core PDP migrated; USF-141 adds bounded enterprise authorization proof depth and reclassifies remaining delegation, impersonation, token/session, rate-limit, field-level, workflow, and gateway depth to linked source issues without readiness overclaim.",
+      "tracking_carrier_or_recommendation": "USF-140/USF-141 plus linked source-depth follow-ups",
+      "usf_evidence_summary": "USF PDP, make authz-proof, authz enterprise proof-depth matrix, validate-authz USF-AUTHZ-001..013 with planted defects",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "audit ledger, tamper evidence, retrieval",
+      "capability_id": "audit-evidence",
+      "capability_name": "Audit/evidence",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Audit event and evidence lineage",
+      "readiness_impact": "USF-143 adds bounded local enterprise audit proof depth for signing/key boundary, value-free evidence package, retention/disposal, outbox delivery, Postgres outcome mapping, forensic refs, SIEM envelope posture, detection mapping, and multi-version readers. Live KMS/SIEM, public export API, production operations, SOC, ISO certification, full dev readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-142/USF-143 plus remaining broader API/operations/export surfaces linked to USF-155, USF-159, and USF-163",
+      "usf_evidence_summary": "USF audit proof, audit enterprise proof-depth matrix, validate-audit USF-AUDIT-001..019 with planted defects, and enterprise evidence rows",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "typed config and secret references",
+      "capability_id": "config-secrets",
+      "capability_name": "Config/secrets",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Config/runtime secret lineage",
+      "readiness_impact": "USF-145 adds bounded local enterprise config/secrets proof depth for OpenBao composed-test reconciliation, secret rotation posture, tenant settings, value-free change history, override separation-of-duties, runtime reload/cache invalidation, provider config plane, data residency, schema migration, and secret-reference redaction. Live secret-manager, KMS, staging, production, SOC, ISO certification, full dev readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-144/USF-145 plus environment semantics in USF-193 for stronger readiness claims",
+      "usf_evidence_summary": "USF config proof, config-secrets enterprise proof-depth matrix, validate-config USF-CONFIG-001..022 with planted defects, and enterprise evidence rows",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "file metadata, object storage, scan posture",
+      "capability_id": "files-storage",
+      "capability_name": "Files/storage",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "MinIO/object storage and file lineage",
+      "readiness_impact": "USF-147 adds bounded local enterprise files/storage proof depth for MinIO composed-test reconciliation, ClamAV scanner boundary reconciliation, file metadata RLS, legal-hold purge blocking, object-key uniqueness, scanner/backup/KMS/DLP/non-equivalence boundaries, and explicit reclassification of stronger storage controls. Live object-store, live scanner, DLP, KMS, backup/restore readiness, staging, production, SOC, ISO certification, full dev readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-146/USF-147/USF-175/USF-200 plus separate future source issues for stronger provider or environment claims",
+      "usf_evidence_summary": "USF files proof, files-storage enterprise proof-depth matrix, validate-files USF-FILES-001..020 with planted defects, bounded MinIO and ClamAV composed-test reconciliations, and enterprise evidence rows",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "Keycloak-brokered auth and stable actor mapping",
+      "capability_id": "auth-identity",
+      "capability_name": "Auth/session/identity",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "A",
+      "react_evidence_summary": "Keycloak/mock OIDC/session lineage",
+      "readiness_impact": "USF-149 adds bounded local enterprise identity proof depth for tenant SSO lifecycle, requester/approver separation, JIT policy, domain collision fail-closed, invitations, assurance step-up policy, account linking, attribute/group mapping without direct role grants, privileged SSO PDP actions, browser-flow security semantics, and local threat-signal audit posture. Live Keycloak admin API, live external broker/upstream IdP, browser UI/callback/cookie runtime, refresh-token runtime, email delivery, SCIM, SIEM forwarding, environment promotion, and production operation remain deferred and non-claimed.",
+      "tracking_carrier_or_recommendation": "USF-148/USF-149",
+      "usf_evidence_summary": "USF auth proof plus auth identity enterprise proof-depth matrix and validate-auth USF-AUTH-001..023",
+      "usf_status": "migrated"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "durable jobs, workflows, retries, dead-letter",
+      "capability_id": "jobs-workflows",
+      "capability_name": "Jobs/workflows",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Temporal and Windmill lineage",
+      "readiness_impact": "Temporal local is present; USF-151 adds bounded local enterprise workflow controls for replay, migration policy, outbox/inbox, quota/backpressure, pause/drain, dry-run impact gates, heartbeat/concurrency, egress circuit breakers, and snapshot replay authorization; USF-212 adds bounded local Windmill configured proof. Windmill readiness, operator automation readiness, API/worker runtime integration, HTTP job API readiness, environment promotion, and live/provider-managed operation remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-150/USF-151",
+      "usf_evidence_summary": "USF jobs proof plus jobs workflows enterprise proof-depth matrix and validate-jobs USF-JOBS-001..025",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "controlled communications and delivery evidence",
+      "capability_id": "notifications",
+      "capability_name": "Notifications/messaging",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Mailpit/Brevo/template lineage",
+      "readiness_impact": "USF-153 adds bounded local enterprise notifications proof depth for persistence/outbox, provider feedback ingestion, unsubscribe ingestion, retention purge, legal-hold denial, bulk campaign runtime, rate-limit denial, address verification, provider circuit posture, value-free audit evidence, tenant/access/secret/redaction evidence, and explicit API/UI/live-provider non-equivalence boundaries. Live providers, provider deliverability, public notification API readiness, browser UI readiness, environment promotion, production operation, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-152/USF-153",
+      "usf_evidence_summary": "USF notify proof plus notifications messaging enterprise proof-depth matrix and validate-notify USF-NOTIFY-001..021",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "route contracts and safe envelopes",
+      "capability_id": "api-contracts",
+      "capability_name": "API/OpenAPI/contracts",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "REST/GraphQL/OpenAPI lineage",
+      "readiness_impact": "OpenAPI/local REST covered and USF-155 records bounded API/gateway proof depth. USF-213 adds bounded public API compatibility and release-governance evidence through a deterministic local compatibility snapshot and explicit non-equivalence boundaries. USF-214 classifies GraphQL/federation and generated-client boundaries. USF-220 records the selected closure-tier delivery-depth disposition. USF-224 adds bounded local generated SDK/client compile/runtime, external developer surface, public documentation operation, API-key onboarding/support workflow, GraphQL runtime, federation-style gateway/stitching, persisted-query, subscription, and GraphQL client compatibility proof using synthetic data and the exact-pinned official graphql package. Browser-session runtime, public launch, consumer contracts, gateway-live, edge/WAF/TLS, deployment, package publication, customer distribution, staging, production, SOC, ISO, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain explicitly reclassified, transferred, deferred, or non-claimed.",
+      "tracking_carrier_or_recommendation": "USF-154/USF-155/USF-213/USF-214/USF-220/USF-224; USF-193 remains owner for environment promotion semantics",
+      "usf_evidence_summary": "USF API proof plus api-gateway enterprise proof-depth matrix, public API compatibility release-governance matrix, GraphQL/generated-client disposition matrix, USF-220 delivery-depth disposition, USF-224 generated-client external-developer GraphQL federation execution proof, official graphql SDK governance row, and validate-api USF-API-001..034 plus final reconciliation coverage",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "provider registry, modes, readiness",
+      "capability_id": "providers",
+      "capability_name": "Provider adapters/modes",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Provider adapter packages and compose lineage",
+      "readiness_impact": "USF-157 records a machine-checkable provider risk/resilience aggregate: active and profile-gated local composed-provider proof scope is reconciled, while live-provider authority, supplier/subprocessor approval, live egress, live TLS/certificates, drift, incident hooks, failover, DR, promotion readiness, and USF-133 closure remain explicit non-claims or deferred controls.",
+      "tracking_carrier_or_recommendation": "USF-156/USF-157; docs/architecture/provider-risk-resilience-depth-matrix.json",
+      "usf_evidence_summary": "USF providers proof plus USF-157 aggregate matrix, provider validator rules USF-PROVIDERS-011 through USF-PROVIDERS-015, enterprise evidence rows, and planted defects.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "metrics, traces, logs, signals",
+      "capability_id": "observability",
+      "capability_name": "Observability/telemetry",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "OTEL/Prometheus/Loki/Tempo/Grafana/Sentry lineage",
+      "readiness_impact": "USF-159 adds bounded local observability operations proof depth. USF-218 records current observability service, alerting, dashboard, incident workflow, retention purge, SLI/SLO, cross-tenant aggregate, and live monitoring disposition evidence. USF-222 proves bounded local alert/dashboard/incident operations execution. USF-225 proves a minimal Faro-style browser telemetry capture harness with official Grafana Faro browser SDK and Playwright Core, synthetic browser event/log/error/trace/measurement/session evidence, backend/root-cause correlation, redaction, and no UI/live monitoring readiness claim. No product UI, broad browser E2E, live monitoring, dashboard, alerting, incident-response, staging, production, SOC, ISO certification, full dev readiness, full React parity, or USF-133 closure claim is made.",
+      "tracking_carrier_or_recommendation": "USF-158/USF-159 plus USF-218, USF-222, and USF-225 bounded observability/browser telemetry evidence; USF-193 remains owner for environment promotion semantics.",
+      "usf_evidence_summary": "USF observability proof, observability operations enterprise proof-depth matrix, USF-218 disposition gate, USF-222 execution proof, USF-225 browser telemetry Faro foundation proof, validate-observability USF-OBSERVABILITY-013 through USF-OBSERVABILITY-025, enterprise evidence rows, and explicit live/deep operations/UI non-claims.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "quotas, throttles, abuse controls",
+      "capability_id": "guardrails",
+      "capability_name": "Rate limits/guardrails",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Rate limit/quota lineage",
+      "readiness_impact": "USF-161 adds bounded synthetic distributed guardrails proof for durable counters, multi-node consistency, route/domain rollout, operator policy approval, cost quota, IP-derived privacy, tenant fairness, audit, retention, and provider fail-closed evidence. Live edge, WAF, CDN, bot, fraud, gateway, production abuse-control operations, and environment readiness remain explicit non-claims.",
+      "tracking_carrier_or_recommendation": "USF-160/USF-161; docs/architecture/guardrails-distributed-enforcement-proof-depth-matrix.json",
+      "usf_evidence_summary": "USF guardrails proof plus guardrails distributed enforcement proof-depth matrix, validate-guardrails USF-GUARDRAILS-010 through USF-GUARDRAILS-014, enterprise evidence rows, and planted defects.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "bulk operations and evidence packages",
+      "capability_id": "import-export-bulk",
+      "capability_name": "Import/export/bulk",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Import/export/batch lineage",
+      "readiness_impact": "USF-163 adds bounded local import/export/bulk deep-runtime proof for partial-success retry/resume, provider-transfer fail-closed posture, parser/decompression safety, rollback/compensation, separate approval, purge, legal-hold denial, tenant/access/audit/redaction evidence, and explicit API/live-provider/legal/regulatory/production migration non-equivalence boundaries. Production migration, legal export, eDiscovery, regulatory export, broad public bulk API, live external provider, environment readiness, SOC readiness, ISO certification, full dev readiness, full React parity, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-162/USF-163; docs/architecture/import-export-bulk-deep-runtime-proof-depth-matrix.json",
+      "usf_evidence_summary": "USF bulk proof plus import/export/bulk deep runtime proof-depth matrix, validate-bulk USF-BULK-009 through USF-BULK-013, enterprise evidence rows, and planted defects.",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "tenant-safe search and reindex",
+      "capability_id": "search-indexing",
+      "capability_name": "Search/indexing/discovery",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Meilisearch/search/index lineage",
+      "readiness_impact": "USF-199 proves bounded SDK-backed local Compose Meilisearch service semantics for synthetic adapter-level indexing, tenant-filtered query, async task visibility, update/reindex boundary, deletion, cleanup, readiness retry, and redaction. API/worker runtime binding, ranking equivalence, vector search, AI/RAG, live-provider, environment readiness, provider-compatibility readiness, and broader search readiness remain unclaimed.",
+      "tracking_carrier_or_recommendation": "USF-164/USF-174/USF-199; future explicit runtime binding issue required before API or worker runtime search-binding claims",
+      "usf_evidence_summary": "USF in-memory search proof remains hermetic and non-equivalent; USF-199 adds bounded profile-gated Meilisearch SDK-backed local Compose adapter proof.",
+      "usf_status": "profile-gated-bounded-proof"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "resource mutation, relationships, retention",
+      "capability_id": "resource-lifecycle",
+      "capability_name": "Resource lifecycle",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "Record/resource/entity lineage",
+      "readiness_impact": "Broad HTTP resource surfaces and eDiscovery depth remain deferred.",
+      "tracking_carrier_or_recommendation": "USF-165",
+      "usf_evidence_summary": "USF resources proof",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "none",
+      "capability_group": "GraphQL API runtime and browser client",
+      "capability_id": "graphql-surface",
+      "capability_name": "GraphQL/contracts/client",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "contracts-graphql, graphql-api-runtime, graphql-browser-client",
+      "readiness_impact": "USF-214 classifies GraphQL runtime, federation, generated SDK/client, external developer platform, and distribution boundaries. USF-220 records selected closure-tier delivery-depth disposition. USF-224 now proves bounded local generated TypeScript GraphQL client creation, compile, runtime execution, public documentation operation, API-key onboarding/support workflow, GraphQL query/mutation/subscription execution, persisted-query execution and fail-closed unknown persisted query, resolver authorization denial, GraphQL client compatibility, and federation-style gateway/schema stitching through a hermetic in-process executor with synthetic data. Public package publication, deployed GraphQL service, deployed federation gateway, live subscription transport, external developer platform readiness, public API readiness, environment readiness, SOC, ISO, full dev readiness, full React parity, enterprise production readiness, and USF-133 closure remain non-claims.",
+      "tracking_carrier_or_recommendation": "USF-214/USF-220/USF-224; USF-193 remains owner for environment promotion semantics before any test/staging/production claim",
+      "usf_evidence_summary": "USF-224 execution proof artefact, packages/proof/src/graphql-generated-client-execution-proof.ts, tests/packages/proof.test.ts, official graphql 17.0.1 SDK governance, enterprise evidence rows, and validate-api USF-API-025..034; no deployed GraphQL, federation gateway, generated SDK/client readiness, public API readiness, or USF-133 closure claim is made",
+      "usf_status": "bounded-local-proof-and-reclassified-depth"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "ClickHouse-backed analytics and event exploration",
+      "capability_id": "analytics-event-store",
+      "capability_name": "Analytics/event store",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "ClickHouse and contracts-analytics lineage",
+      "readiness_impact": "USF-206 proves bounded SDK-backed local Compose ClickHouse analytics event-store semantics for synthetic ingestion, tenant-safe query, aggregation, invalid-classification denial, retention deletion, audit-shaped evidence, readiness retry, redaction, teardown, and unavailable-provider fail-closed behaviour. API/worker analytics binding, live/provider-managed ClickHouse, environment readiness, provider compatibility, and analytics/event-store readiness remain unclaimed.",
+      "tracking_carrier_or_recommendation": "USF-172/USF-197/USF-206",
+      "usf_evidence_summary": "ClickHouse is catalogued as a profile-gated bounded local Compose proof with in-memory analytics evidence kept non-equivalent to ClickHouse persisted event-store semantics.",
+      "usf_status": "profile-gated-bounded-proof"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "Redis cache and composed event-bus semantics",
+      "capability_id": "cache-eventing",
+      "capability_name": "Cache/eventing",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "audit/evidence",
+        "provider-mode",
+        "secret-redaction",
+        "resilience"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "Redis compose service and cache/session/queue local dependency lineage",
+      "readiness_impact": "USF-173 records bounded cache/eventing disposition and USF-198 records the Redis proof boundary. USF-207 adds bounded SDK-backed local Compose Redis cache proof for synthetic tenant-safe write/read/delete, TTL expiration, readiness retry, timeout, cleanup, unavailable fail-closed behaviour, redaction, metrics/tracing, and audit-shaped evidence. No Redis/cache readiness, API/worker runtime cache binding, live/provider-managed Redis, provider compatibility, or environment readiness claim is made.",
+      "tracking_carrier_or_recommendation": "USF-173/USF-198/USF-207",
+      "usf_evidence_summary": "NATS is proven only as a bounded local composed event-bus provider. Redis is now represented by cache-redis-composed-test for profile-gated local Compose proof and cache-redis-deferred for remaining live/provider-managed and runtime-integration boundaries.",
+      "usf_status": "profile-gated-bounded-proof"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "self-hosted Sentry stack",
+      "capability_id": "error-monitoring",
+      "capability_name": "Error monitoring",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Sentry adapter and 20 compose services",
+      "readiness_impact": "USF-170 records bounded Sentry/error-monitoring disposition, USF-196 records the service-semantic boundary, USF-205 proves an accepted official Sentry SDK envelope, and USF-218 records current service, alert, dashboard, incident, retention, aggregate, and live monitoring disposition evidence. USF-222 owns future execution proof. No Sentry service readiness or live monitoring readiness is claimed.",
+      "tracking_carrier_or_recommendation": "USF-170/USF-196/USF-205 plus USF-218 disposition evidence and USF-222 future execution follow-up",
+      "usf_evidence_summary": "Local observability evidence plus bounded Sentry SDK-envelope proof and USF-218 service-operation disposition; Sentry service readiness, alert handoff, incident workflow, dashboard runtime, SLI/SLO operation, retention purge, cross-tenant aggregate analytics, and live-provider evidence remain deferred to USF-222.",
+      "usf_status": "bounded-sdk-envelope-proof"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "SonarQube quality gate and SSO posture",
+      "capability_id": "quality-gate",
+      "capability_name": "Quality gate/static analysis",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "SonarQube compose profile and tooling-ci lineage",
+      "readiness_impact": "USF-204 proves bounded local Compose SonarQube scan submission and quality-gate readback for synthetic source only; this is not scanner readiness, vulnerability clearance, environment readiness, or full React parity.",
+      "tracking_carrier_or_recommendation": "USF-171/USF-195/USF-204 with residual USF-169 and USF-193 boundaries.",
+      "usf_evidence_summary": "Local deterministic validation remains mandatory and non-equivalent; USF-204 adds official SonarSource npm scanner proof against local Compose SonarQube with redacted evidence and cleanup.",
+      "usf_status": "profile-gated-bounded-proof"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "pgBackRest and restore drill posture",
+      "capability_id": "backup-restore",
+      "capability_name": "Backup/restore",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "pgbackrest compose service lineage",
+      "readiness_impact": "USF-177 records backup/restore provider disposition, USF-202 records the proof boundary, USF-211 proves bounded pgBackRest configured local cold backup/restore, and USF-219 records the selected closure-tier DR, RPO/RTO, PITR, scheduled backup, corruption/failure drill, operational recovery, and promotion-impact disposition with execution proof deferred to USF-223. No backup/restore readiness is claimed.",
+      "tracking_carrier_or_recommendation": "USF-177/USF-202/USF-211/USF-219 with future execution proof tracked by USF-223",
+      "usf_evidence_summary": "Bounded local pgBackRest cold backup/restore evidence exists and USF-219 records data-bearing service promotion impact; online backup, WAL archive, PITR, DR rehearsal, RPO/RTO, provider-managed operation, API/worker backup integration, and environment readiness remain deferred to USF-223 or later owner issues.",
+      "usf_status": "deferred-with-owner"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "pgAdmin, MinIO console, Temporal UI, Grafana, Sonar, Sentry, Windmill",
+      "capability_id": "operator-admin-surfaces",
+      "capability_name": "Operator/admin surfaces",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Compose admin services and forward-auth comments",
+      "readiness_impact": "USF-169 proves bounded included operator access posture, USF-180 owns gateway/clickthrough substrate depth, and USF-217 records access-review/deprovisioning disposition for every in-scope surface. USF-221 owns future executed access-review, deprovisioning, revocation, and operator-console workflow proof. No operator-console readiness or public exposure claim is made.",
+      "tracking_carrier_or_recommendation": "USF-169/USF-180 plus USF-217 disposition evidence and USF-221 future execution follow-up",
+      "usf_evidence_summary": "Operator/admin surfaces have bounded access posture evidence and explicit access-review/deprovisioning disposition; executed console access review, deprovisioning, clickthrough, and public exposure remain deferred to USF-221 or existing gateway follow-ups.",
+      "usf_status": "deferred-with-owner"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "LocalStack and WireMock provider doubles plus mock OIDC selected-tier supersession",
+      "capability_id": "external-mocks",
+      "capability_name": "External provider mocks",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "localstack/wiremock lineage",
+      "readiness_impact": "USF-201 proves bounded webhook-sink local capture. USF-209 proves bounded WireMock configured HTTP mock semantics through profile-gated local Compose proof and adapter-contained SDK evidence. USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through profile-gated local Compose proof and adapter-contained SDK evidence. USF-210 records historical mock OIDC service operation as superseded for the selected closure tier by hermetic identity and composed Keycloak proof evidence, without standalone mock OIDC service equivalence, SSO readiness, or live-provider compatibility.",
+      "tracking_carrier_or_recommendation": "USF-176/USF-201 plus USF-208/USF-209 and USF-210 selected-tier supersession",
+      "usf_evidence_summary": "provider modes, webhook-sink bounded capture proof, hermetic provider proof, composed Keycloak proof evidence, USF-176 disposition matrix, USF-210 mock OIDC selected-tier reclassification, and explicit remaining LocalStack/WireMock mock-substrate follow-ups",
+      "usf_status": "deferred-with-owner"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "ClamAV scan/quarantine execution",
+      "capability_id": "file-scanning",
+      "capability_name": "File scanning",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "clamav service lineage",
+      "readiness_impact": "USF-200 proves bounded SDK-backed local Compose ClamAV clean/infected scan outcomes, readiness retry, provider-unavailable fail-closed quarantine routing, quarantined download denial, deletion, tenant isolation, value-free audit evidence, redaction, and teardown; no live scanner or DLP readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-175/USF-200",
+      "usf_evidence_summary": "USF-175 bounded scanner provider disposition plus USF-200 profile-gated ClamAV composed proof; deterministic scan posture remains non-equivalent.",
+      "usf_status": "profile-gated-bounded-proof"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "Windmill automation control plane",
+      "capability_id": "workflow-automation",
+      "capability_name": "Operator automation",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "D",
+      "react_evidence_summary": "Windmill services and worker lineage",
+      "readiness_impact": "USF-212 proves bounded local Windmill bootstrap, official SDK use, synthetic workspace and script execution, audit, invalid credential fail-closed behaviour, readiness retry, and teardown. Temporal/jobs remains non-equivalent outside this bounded proof; readiness and live/provider-managed operation remain unclaimed.",
+      "tracking_carrier_or_recommendation": "USF-178/USF-203/USF-212",
+      "usf_evidence_summary": "USF-212 bounded local Windmill configured proof",
+      "usf_status": "profile-gated-bounded-proof"
+    },
+    {
+      "blocking_level": "P2",
+      "capability_group": "AWS/Cloudflare/Terraform packages",
+      "capability_id": "infra-cloud",
+      "capability_name": "Cloud/edge infra",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "infra-aws, infra-cloudflare, tooling-terraform",
+      "readiness_impact": "No live cloud, edge, deployment, staging, or production readiness is claimed. USF-193 owns environment promotion definitions and readiness gates; USF-220 owns generated-client and external developer delivery depth where it touches platform delivery posture.",
+      "tracking_carrier_or_recommendation": "USF-193 plus USF-220 where external developer delivery posture is implicated",
+      "usf_evidence_summary": "Out of local foundation runtime scope for USF-133; environment promotion and external delivery boundaries are explicit non-claims with current owner issues.",
+      "usf_status": "deferred-with-owner"
+    },
+    {
+      "blocking_level": "non-blocking",
+      "capability_group": "React SPA and design system",
+      "capability_id": "ui-runtime",
+      "capability_name": "UI/UX app",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "react-app and ui-design-system lineage",
+      "readiness_impact": "UI/UX remains future non-foundation scope. USF-225 adds only the absolute minimum transient browser telemetry harness needed for Faro-style browser telemetry proof; it does not create product UI, React application delivery, page/component architecture, visual snapshots, accessibility journeys, broad browser E2E, or user journey parity.",
+      "tracking_carrier_or_recommendation": "USF-134 remains a disposition record for future UI/UX context; USF-225 covers only bounded browser telemetry proof and does not reopen UI backlog.",
+      "usf_evidence_summary": "USF-225 browser telemetry proof artefact and validator coverage record browser telemetry evidence without UI readiness or React parity claims.",
+      "usf_status": "not-applicable"
+    },
+    {
+      "blocking_level": "P2",
+      "capability_group": "i18n runtime and locale resources",
+      "capability_id": "i18n-runtime",
+      "capability_name": "Internationalisation",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "i18n-runtime package lineage",
+      "readiness_impact": "Foundation i18n contract depth remains outside the current local runtime proof. USF-134 owns non-foundation UI/UX context and USF-220 owns generated client or external developer delivery surfaces if i18n becomes an API/client contract requirement.",
+      "tracking_carrier_or_recommendation": "USF-134 plus USF-220 if external client contract delivery is implicated",
+      "usf_evidence_summary": "Future UI/API posture only; no i18n runtime, generated client i18n, or UI readiness claim is made.",
+      "usf_status": "deferred-with-owner"
+    },
+    {
+      "blocking_level": "P1",
+      "capability_group": "Make/script proof ladder",
+      "capability_id": "dev-commands",
+      "capability_name": "Developer command parity",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "B",
+      "react_evidence_summary": "React package scripts and Makefile lineage",
+      "readiness_impact": "Commands exist for bounded local proof lanes, but operator/admin, backup/restore DR, generated-client delivery, and environment-promotion proof depth remain separate owner issues before any broad command or readiness claim.",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219/USF-223, and USF-220, with USF-222 as future observability execution-proof follow-up",
+      "usf_evidence_summary": "USF make proof ladder plus bounded provider/service proof commands; universal React command parity and environment readiness remain unclaimed.",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P0",
+      "capability_group": "service ownership, criticality, data flows",
+      "capability_id": "service-catalog-cmdb",
+      "capability_name": "Service catalogue/CMDB",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "React compose and todo enterprise requirements",
+      "readiness_impact": "USF-168 created the semantic service catalogue authority, USF-167 records the service disposition execution gate, and USF-216 reconciles final stale matrix and blocker wording. The catalogue remains evidence organization and does not close USF-133.",
+      "tracking_carrier_or_recommendation": "USF-168/USF-167/USF-216",
+      "usf_evidence_summary": "Semantic service catalogue, service disposition closure matrix, closure-tier gate, and final reconciliation evidence exist; broader readiness remains open.",
+      "usf_status": "partial"
+    },
+    {
+      "blocking_level": "P0",
+      "capability_group": "tenant data, provider egress, admin access",
+      "capability_id": "data-flow-trust-boundaries",
+      "capability_name": "Data flows/trust boundaries",
+      "control_mapping_themes": [
+        "tenant-isolation",
+        "PDP/authz",
+        "audit/evidence",
+        "observability",
+        "provider-mode",
+        "guardrails"
+      ],
+      "evidence_grade": "C",
+      "react_evidence_summary": "React compose comments and packages",
+      "readiness_impact": "Data-flow and trust-boundary depth is represented through service catalogue posture, enterprise evidence, runtime proof manifests, and the remaining owner issues for operator/admin, observability operations, backup/restore DR, generated-client delivery, and environment promotion.",
+      "tracking_carrier_or_recommendation": "USF-193, USF-217, USF-219/USF-223, and USF-220, with USF-222 as future observability execution-proof follow-up",
+      "usf_evidence_summary": "Standards plus governed service, provider, runtime, and enterprise evidence rows; residual cross-boundary depth remains deferred with current owner issues.",
+      "usf_status": "partial"
+    }
+  ],
+  "capability_count": 31,
+  "evidence_grade_counts": {
+    "A": 6,
+    "B": 12,
+    "C": 9,
+    "D": 4
+  },
+  "id": "usf-functionality-completeness-matrix",
+  "react_head": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+  "readiness_assessments": {
+    "dev_compose_minimal_ready": "conditionally-ready-for-current-USF-compose-substrate; not universal React service parity",
+    "dev_compose_universal_ready": "not-ready; multiple React compose services are deferred, substituted, or decision-bound",
+    "dev_in_memory_ready": "conditionally-ready-for-authorised-local-proof-slices-only; not full React parity readiness",
+    "usf_133_close_ready": "not-ready"
+  },
+  "run_id": "20260629T053504Z-a285187",
+  "status": "review-draft",
+  "status_counts": {
+    "bounded-local-proof-and-reclassified-depth": 5,
+    "bounded-sdk-envelope-proof": 1,
+    "deferred-with-owner": 5,
+    "migrated": 6,
+    "not-applicable": 1,
+    "partial": 7,
+    "profile-gated-bounded-proof": 6
+  },
+  "usf_head": "a285187b177a922ff422858c1bf8f180336f1dff"
+}

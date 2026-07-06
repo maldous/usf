@@ -98,7 +98,7 @@ SOURCE_FILES = (
     USF149_MATRIX,
     ENTERPRISE_EVIDENCE,
 )
-MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX_PATH = "docs/architecture/functional-scope-classification-matrix.json"
 SELFTEST_DIR = "tools/validate-parity/auth-planted-defects"
 
 OPENAPI_SECRET_NEEDLES = ["Bearer ", "secret://", "-----BEGIN", "client_secret", "eyJ"]

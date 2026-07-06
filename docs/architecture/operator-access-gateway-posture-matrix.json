@@ -16,10 +16,10 @@
     "USF-217",
     "USF-221"
   ],
-  "reactLineageReferences": [
-    "../react/compose.yaml",
-    "../react/docker/caddy/Caddyfile",
-    "../react/docker/caddy/Caddyfile.external"
+  "sourceLineageReferences": [
+    "compose.yaml",
+    "docker/caddy/Caddyfile",
+    "docker/caddy/Caddyfile.external"
   ],
   "effectivenessStatesAllowed": [
     "defined-only",
@@ -1064,9 +1064,9 @@
       "publicExposureAllowed": false,
       "lanExposureAllowed": false,
       "sourceRefs": [
-        "../react/docker/caddy/Caddyfile",
-        "../react/docker/caddy/Caddyfile.external",
-        "../react/compose.yaml"
+        "docker/caddy/Caddyfile",
+        "docker/caddy/Caddyfile.external",
+        "compose.yaml"
       ],
       "deferredRisk": {
         "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",

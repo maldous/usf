@@ -66,8 +66,11 @@
       "id": "historical-matrices-and-closure-docs",
       "pathsOrPatterns": [
         "docs/architecture/parity-*",
-        "docs/architecture/complete-react-to-usf-*",
-        "docs/architecture/react-*",
+        "docs/architecture/usf-compose-service-completeness-matrix.*",
+        "docs/architecture/usf-functionality-completeness-matrix.*",
+        "docs/architecture/functional-scope-classification-matrix.*",
+        "docs/architecture/functional-completeness-readiness-directive.md",
+        "docs/architecture/foundation-artefact-reuse-assessment.md",
         "docs/architecture/usf-133-*",
         "docs/architecture/usf-dev-readiness-cleanup-orchestration.md",
         "docs/architecture/usf-dev-foundation-gap-register.md"

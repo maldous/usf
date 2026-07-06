@@ -32,8 +32,8 @@ Combining RBAC and ABAC in a USF-owned PDP keeps the application-layer authoriza
 
 - `docs/architecture/charter.md`
 - `docs/architecture/authority-model.md`
-- `docs/architecture/full-react-parity-readiness-directive.md`
-- `docs/architecture/react-parity-scope-classification-matrix.md`
+- `docs/architecture/functional-completeness-readiness-directive.md`
+- `docs/architecture/functional-scope-classification-matrix.md`
 - `spec/instances/semantic-contract/abac-policy-decision-point.json`
 - `spec/instances/semantic-contract/rbac-roles-and-permissions.json`
 - `spec/instances/semantic-contract/tenant-isolation-proof.json`

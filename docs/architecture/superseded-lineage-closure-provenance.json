@@ -12,17 +12,17 @@
     "mergeSha": "ec37409ddd779661569f8e5f8e4c835695efea96"
   },
   "provenanceOnlySources": [
-    "docs/architecture/react-non-ui-parity-test-closure-gate.json",
-    "docs/architecture/react-non-ui-baseline-inventory.json",
-    "docs/architecture/react-service-equivalence-matrix.json",
-    "docs/architecture/react-route-port-adapter-provider-equivalence.json",
-    "docs/architecture/react-test-proof-disposition-ledger.json",
-    "docs/architecture/react-ui-derived-foundation-behaviour-rewrite-ledger.json",
-    "docs/architecture/react-operator-admin-surface-equivalence.json",
-    "docs/architecture/react-parity-assurance-case.json",
-    "docs/architecture/react-non-ui-parity-gap-register.json",
-    "docs/architecture/react-non-ui-parity-external-review-report.md",
-    "tools/validate-react-non-ui-parity/"
+    "docs/architecture/non-ui-completeness-closure-gate.json",
+    "docs/architecture/non-ui-source-lineage-inventory.json",
+    "docs/architecture/service-completeness-matrix.json",
+    "docs/architecture/route-port-adapter-provider-completeness-matrix.json",
+    "docs/architecture/test-proof-disposition-ledger.json",
+    "docs/architecture/ui-derived-foundation-behaviour-rewrite-ledger.json",
+    "docs/architecture/operator-admin-surface-completeness-matrix.json",
+    "docs/architecture/non-ui-completeness-assurance-case.json",
+    "docs/architecture/non-ui-completeness-gap-register.json",
+    "docs/architecture/non-ui-completeness-external-review-report.md",
+    "tools/validate-non-ui-completeness/"
   ],
   "currentStateReplacement": [
     "docs/architecture/usf-current-state-foundation-closure-record.json",

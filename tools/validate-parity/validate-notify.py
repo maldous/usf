@@ -52,7 +52,7 @@ STANDARD = "docs/architecture/notifications-and-messaging-standard.md"
 SOURCE_USE = "docs/architecture/notifications-messaging-source-use-disposition-matrix.md"
 DEPTH_MATRIX_PATH = "docs/architecture/notifications-messaging-enterprise-proof-depth-matrix.json"
 ENTERPRISE_EVIDENCE_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
-MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX_PATH = "docs/architecture/functional-scope-classification-matrix.json"
 SOURCE_FILES = (
     CORE,
     PORTS,

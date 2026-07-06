@@ -53,7 +53,7 @@
       "evidenceRefs": [
         "docs/architecture/superseded-lineage-closure-provenance.md",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
-        "docs/architecture/react-parity-scope-classification-matrix.md",
+        "docs/architecture/functional-scope-classification-matrix.md",
         "docs/architecture/usf-final-semantic-completeness-audit.json"
       ],
       "remainingBlocker": null,
@@ -64,7 +64,7 @@
       "criterion": "Every foundation domain has a disposition; none is unknown-unclassified.",
       "classification": "mapped-with-current-follow-up-blockers",
       "evidenceRefs": [
-        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
+        "docs/architecture/usf-functionality-completeness-matrix.json",
         "docs/architecture/domain-deferred-depth-closure-matrix.json",
         "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
       ],
@@ -77,7 +77,7 @@
       "classification": "mapped-to-existing-classification-evidence",
       "evidenceRefs": [
         "docs/architecture/usf-functionality-coverage-review.md",
-        "docs/architecture/react-parity-scope-classification-matrix.json",
+        "docs/architecture/functional-scope-classification-matrix.json",
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md"
       ],
       "remainingBlocker": null,
@@ -128,8 +128,8 @@
       "criterion": "Semantic-authority decisions required for parity are tracked.",
       "classification": "mapped-with-current-owner-issues",
       "evidenceRefs": [
-        "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+        "docs/architecture/usf-functionality-completeness-matrix.json",
+        "docs/architecture/usf-compose-service-completeness-matrix.json",
         "docs/architecture/compose-service-disposition-closure-matrix.json",
         "docs/architecture/usf-133-closure-tier-evidence-gate.json"
       ],
@@ -364,8 +364,8 @@
   },
   "validationCommands": [
     "python3 -m json.tool docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json",
-    "python3 -m json.tool docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
-    "python3 -m json.tool docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
+    "python3 -m json.tool docs/architecture/usf-functionality-completeness-matrix.json",
+    "python3 -m json.tool docs/architecture/usf-compose-service-completeness-matrix.json",
     "python3 -m json.tool docs/architecture/compose-service-disposition-closure-matrix.json",
     "python3 -m json.tool docs/architecture/usf-133-closure-tier-evidence-gate.json",
     "corepack pnpm verify",

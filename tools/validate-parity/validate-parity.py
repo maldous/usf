@@ -5,7 +5,7 @@ Governance tooling only. It creates no implementation/runtime files, imports no
 React source, and publishes no evidence. It fails closed on the parity-matrix
 invariants that keep a foundation-readiness claim
 honest: the machine-readable matrix
-(docs/architecture/react-parity-scope-classification-matrix.json) must exist and
+(docs/architecture/functional-scope-classification-matrix.json) must exist and
 match its shape; every status must be canonical; every partial/missing/deferred/
 requires-human-decision item must be carried by an allowed blocker; no migrated
 item may lack USF tests/proofs; runtime rows must carry a source-use disposition
@@ -78,12 +78,12 @@ RULES = {
     "USF-PARITY-SELFTEST": ("blocking", "planted parity defect did not raise its expected rule"),
 }
 
-MATRIX_PATH = "docs/architecture/react-parity-scope-classification-matrix.json"
+MATRIX_PATH = "docs/architecture/functional-scope-classification-matrix.json"
 COMPOSE_CLOSURE_MATRIX_PATH = "docs/architecture/compose-service-disposition-closure-matrix.json"
 USF133_CLOSURE_TIER_GATE_PATH = "docs/architecture/usf-133-closure-tier-evidence-gate.json"
 USF133_FINAL_RECONCILIATION_PATH = "docs/architecture/usf-133-final-blocker-and-matrix-reconciliation.json"
-COMPLETE_FUNCTIONALITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json"
-COMPOSE_PARITY_MATRIX_PATH = "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
+COMPLETE_FUNCTIONALITY_MATRIX_PATH = "docs/architecture/usf-functionality-completeness-matrix.json"
+COMPOSE_PARITY_MATRIX_PATH = "docs/architecture/usf-compose-service-completeness-matrix.json"
 COMPOSE_CATALOGUE_PATH = "spec/instances/compose-service/service-catalogue.json"
 ENTERPRISE_EVIDENCE_MODEL_PATH = "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
 ENVIRONMENT_PROMOTION_STANDARD_PATH = "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json"

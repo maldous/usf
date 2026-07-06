@@ -2724,7 +2724,7 @@
       "requiredBecause": "Every historical React Compose service must be classified before generated Compose can be treated as derivative output.",
       "sourceInputs": [
         "compose.yaml",
-        "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
+        "docs/architecture/usf-compose-service-completeness-matrix.md",
         "user directive: schema-driven Compose service classification and generation"
       ],
       "taxonomyRefs": [

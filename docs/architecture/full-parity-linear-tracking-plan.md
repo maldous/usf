@@ -5,7 +5,7 @@
 | Document type | Architecture / work-tracking plan (planning) |
 | Status | Draft / planning |
 | Authority level | Reviewable planning plan; Linear tracks work only and is not USF semantic authority (AGENTS.md, Authority Model) |
-| Follows | `docs/architecture/superseded-lineage-closure-provenance.md`, `docs/architecture/react-parity-scope-classification-matrix.md` |
+| Follows | `docs/architecture/superseded-lineage-closure-provenance.md`, `docs/architecture/functional-scope-classification-matrix.md` |
 | Canonical team | Universal Service Foundation; project Foundation & Governance |
 | Repository state | Planning only; introduces no new implementation/runtime code. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89). |
 

@@ -18,7 +18,7 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE_PATH = ROOT / "spec/instances/compose-service/service-catalogue.json"
 SCHEMA_PATH = ROOT / "spec/schemas/compose-service.schema.json"
-REACT_COMPOSE_EVIDENCE_PATH = ROOT / "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json"
+REACT_COMPOSE_EVIDENCE_PATH = ROOT / "docs/architecture/usf-compose-service-completeness-matrix.json"
 PLANTED_DEFECT_DIR = ROOT / "tools/validate-compose/planted-defects"
 
 GENERATOR_PATH = ROOT / "tools/generate-compose/generate-compose.py"

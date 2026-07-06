@@ -6,7 +6,7 @@
 | **Status** | Draft / implementation-gate planning |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter, Authority Model, accepted ADRs, validators, runtime proof evidence, and the later filled implementation directive |
 | **Issue scope** | USF-71 |
-| **Primary inputs** | `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/react-foundation-artifact-reuse-assessment.md`, `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/schema-validator-posture-decision.md`, `docs/architecture/generated-report-readiness-policy.md`, `tools/validate-spec/validate-spec.py` |
+| **Primary inputs** | `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/foundation-artefact-reuse-assessment.md`, `docs/architecture/production-proof-posture-matrix.md`, `docs/architecture/schema-validator-posture-decision.md`, `docs/architecture/generated-report-readiness-policy.md`, `tools/validate-spec/validate-spec.py` |
 
 This document defines the human-filled directive template required before USF-39 can leave Backlog. It does not fill the directive, choose an implementation slice, create implementation files, create implementation directories, import runtime code, produce evidence, emit generated reports, or promote schemas.
 

@@ -24,9 +24,9 @@
       "paths": [
         "docs/architecture/superseded-lineage-closure-provenance.json",
         "docs/architecture/superseded-lineage-closure-provenance.md",
-        "docs/architecture/react-non-ui-parity-test-closure-gate.json",
-        "docs/architecture/react-non-ui-parity-external-review-report.md",
-        "tools/validate-react-non-ui-parity/"
+        "docs/architecture/non-ui-completeness-closure-gate.json",
+        "docs/architecture/non-ui-completeness-external-review-report.md",
+        "tools/validate-non-ui-completeness/"
       ],
       "activeAuthority": false
     },
