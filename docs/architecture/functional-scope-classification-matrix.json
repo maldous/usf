@@ -555,8 +555,8 @@
       "category": "route",
       "source_paths": [
         "apps/platform-api/src/server/routes.ts",
-        "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx",
-        "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx",
+        "apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
       ],
       "behaviour_summary": "source-lineage exposes preference, readiness, test-send, email sender, and webhook control-plane routes plus UI tests.",
       "usf_status": "deferred",
@@ -2068,8 +2068,8 @@
       "source_paths": [
         "apps/platform-api/src/usecases/observability.ts",
         "apps/platform-api/src/usecases/tenant-observability.ts",
-        "apps/react-enterprise-app/src/features/admin-observability",
-        "apps/react-enterprise-app/src/routes/admin/observability.tsx"
+        "apps/enterprise-app/src/features/admin-observability",
+        "apps/enterprise-app/src/routes/admin/observability.tsx"
       ],
       "behaviour_summary": "Future ops/API observability surfaces are PDP-protected, tenant-guarded, OpenAPI-covered, redacted, non-enumerating, and do not expose raw logs or unrestricted telemetry.",
       "usf_status": "migrated",
@@ -3716,7 +3716,7 @@
     {
       "category": "service",
       "source_paths": [
-        "apps/react-enterprise-app/src/routes/admin/search.tsx",
+        "apps/enterprise-app/src/routes/admin/search.tsx",
         "apps/platform-api/scripts/search-routes-runtime-proof.ts"
       ],
       "semantic_authority": "known",
@@ -3961,7 +3961,7 @@
       "domain_authorised": true,
       "source_item_id": "resource.ui-playwright-behaviours",
       "category": "service",
-      "source_paths": ["apps/react-enterprise-app", "e2e", "tests"],
+      "source_paths": ["apps/enterprise-app", "e2e", "tests"],
       "behaviour_summary": "Foundation resource lifecycle behaviours from UI/API lineage are rewritten as capability/proof tests; UI assertions remain out of scope.",
       "usf_status": "foundation-behaviour-rewritten-from-ui-test",
       "usf_paths": [
@@ -3982,8 +3982,8 @@
   ],
   "uiArtefacts": [
     {
-      "item": "react-enterprise-app SPA",
-      "source_paths": ["apps/react-enterprise-app"],
+      "item": "enterprise-app SPA",
+      "source_paths": ["apps/enterprise-app"],
       "usf_status": "ui-ux-only-out-of-foundation-scope",
       "ui_needed": false,
       "rationale": "React SPA (TanStack Router/Query, Tailwind); downstream consumer; classified, not migrated."
@@ -4064,7 +4064,7 @@
     },
     {
       "group": "component unit tests",
-      "source_paths": ["apps/react-enterprise-app/src/tests", "packages/ui-design-system/tests"],
+      "source_paths": ["apps/enterprise-app/src/tests", "packages/ui-design-system/tests"],
       "classification": "ui-ux-only-out-of-foundation-scope",
       "foundation_behaviour": false,
       "action": "Classified out of foundation scope."

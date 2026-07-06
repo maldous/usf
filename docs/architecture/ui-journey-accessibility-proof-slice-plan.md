@@ -30,11 +30,11 @@ Historical source-lineage source may be used only as source evidence and design 
 
 Primary source lineage for this slice:
 
-- `apps/react-enterprise-app/src/auth/login-providers.ts`
-- `apps/react-enterprise-app/src/routes/__tests__/login.test.tsx`
-- `apps/react-enterprise-app/src/hooks/use-session.ts`
-- `apps/react-enterprise-app/src/tests/use-session.test.ts`
-- `apps/react-enterprise-app/src/components/RequirePermission.tsx`
+- `apps/enterprise-app/src/auth/login-providers.ts`
+- `apps/enterprise-app/src/routes/__tests__/login.test.tsx`
+- `apps/enterprise-app/src/hooks/use-session.ts`
+- `apps/enterprise-app/src/tests/use-session.test.ts`
+- `apps/enterprise-app/src/components/RequirePermission.tsx`
 - `docs/evidence/frontend/source-lineage-component-platform-baseline.md`
 - `docs/evidence/auth/oidc-login-mapping-proof.md`
 - `docs/evidence/identity/keycloak-login-callback.md`

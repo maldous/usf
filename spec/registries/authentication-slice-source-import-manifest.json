@@ -473,7 +473,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/auth/login-providers.ts",
+        "path": "apps/enterprise-app/src/auth/login-providers.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -484,51 +484,51 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/AuthenticatedLayout.tsx",
+        "path": "apps/enterprise-app/src/components/AuthenticatedLayout.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 _authenticated layout wraps Outlet in AppShell; session gating preserved. Retained interfaces: authenticated layout route wrapper. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 _authenticated layout wraps Outlet in AppShell; session gating preserved. Retained interfaces: authenticated layout route wrapper. Protecting tests: apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+        "path": "apps/enterprise-app/src/components/RequirePermission.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V2 permission-gate preserves deny/allow semantics; gating behaviour proven. Retained interfaces: RequirePermission props (permission gating), client-side permission check contract. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-0036. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V2 permission-gate preserves deny/allow semantics; gating behaviour proven. Retained interfaces: RequirePermission props (permission gating), client-side permission check contract. Protecting tests: apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-0036. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.rbac-roles-and-permissions"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/AdminAuthPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/AdminAuthPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 auth page reproduces IdP journeys; page test green; redaction preserved. Retained interfaces: auth config journeys, permission gating, typed error states, secret redaction (no raw KC config). Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0036. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 auth page reproduces IdP journeys; page test green; redaction preserved. Retained interfaces: auth config journeys, permission gating, typed error states, secret redaction (no raw KC config). Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0036. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/IdpManager.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/IdpManager.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 IdP manager reproduces OIDC config behaviour; oidc test green. Retained interfaces: IdP CRUD journeys, OIDC option fields, form validation. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 IdP manager reproduces OIDC config behaviour; oidc test green. Retained interfaces: IdP CRUD journeys, OIDC option fields, form validation. Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -539,7 +539,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -550,62 +550,62 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/admin-auth-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-auth/admin-auth-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-auth/IdP REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx, apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-auth/IdP REST client. Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx, apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/use-admin-auth.ts",
+        "path": "apps/enterprise-app/src/features/admin-auth/use-admin-auth.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/hooks/use-session.ts",
+        "path": "apps/enterprise-app/src/hooks/use-session.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession, sessionQueryKey, SessionFetchError, hasPermission. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0021. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession, sessionQueryKey, SessionFetchError, hasPermission. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0021. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/fixtures/session.ts",
+        "path": "apps/enterprise-app/src/msw/fixtures/session.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: SessionPersona personas (tenantAdmin/viewer/systemAdmin/noMembership). Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: SessionPersona personas (tenantAdmin/viewer/systemAdmin/noMembership). Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "workflow.authentication-login; semantic-contract.user-identity-and-tenant-membership"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+        "path": "apps/enterprise-app/src/routes/__tests__/login.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LoginRoute. Protecting tests: apps/react-enterprise-app/src/routes/__tests__/login.test.tsx. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LoginRoute. Protecting tests: apps/enterprise-app/src/routes/__tests__/login.test.tsx. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.authentication-platform; interface.authentication-login-api; workflow.authentication-login"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/_authenticated.tsx",
+        "path": "apps/enterprise-app/src/routes/_authenticated.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -616,7 +616,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/auth.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/auth.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -627,7 +627,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/login.tsx",
+        "path": "apps/enterprise-app/src/routes/login.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -638,24 +638,24 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx",
+        "path": "apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: _authenticated layout guard. Protecting tests: apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx. Historical decision refs: ADR-ACT-0203. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: _authenticated layout guard. Protecting tests: apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx. Historical decision refs: ADR-ACT-0203. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "command.authentication-slice-proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/use-session.test.ts",
+        "path": "apps/enterprise-app/src/tests/use-session.test.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession hook. Protecting tests: apps/react-enterprise-app/src/tests/use-session.test.ts. Historical decision refs: ADR-ACT-0278. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession hook. Protecting tests: apps/enterprise-app/src/tests/use-session.test.ts. Historical decision refs: ADR-ACT-0278. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "command.authentication-slice-proof"
     },
     {

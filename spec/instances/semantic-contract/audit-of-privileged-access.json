@@ -93,8 +93,8 @@
       "status": "complete",
       "description": "Audit panels with logical-resource, action, actor, and time filters, pagination, forbidden/invalid states, and redacted metadata.",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/features/admin/audit-client.ts",
-        "apps/react-enterprise-app/src/features/admin/use-audit.ts"
+        "apps/enterprise-app/src/features/admin/audit-client.ts",
+        "apps/enterprise-app/src/features/admin/use-audit.ts"
       ]
     }
   },

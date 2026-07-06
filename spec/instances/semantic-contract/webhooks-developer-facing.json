@@ -97,8 +97,8 @@
       "status": "complete",
       "description": "UI semantics recovered from cited UI source.",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/features/admin-webhooks/AdminWebhooksPage.tsx",
-        "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
+        "apps/enterprise-app/src/features/admin-webhooks/AdminWebhooksPage.tsx",
+        "apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx"
       ]
     }
   },

@@ -982,8 +982,8 @@
       "enterpriseExceptionRef": "exception-service-platform-api"
     },
     {
-      "serviceId": "react-app",
-      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#react-app",
+      "serviceId": "web-app",
+      "matrixRowRef": "docs/architecture/compose-service-disposition-closure-matrix.json#web-app",
       "enterpriseEvidenceSource": "closure-matrix-row",
       "serviceCatalogueOwnerSource": "service-catalogue-row",
       "sourceIssueRefs": [
@@ -995,7 +995,7 @@
         "enterprise-readiness",
         "iso-supporting-evidence-completeness"
       ],
-      "enterpriseExceptionRef": "exception-service-react-app"
+      "enterpriseExceptionRef": "exception-service-web-app"
     }
   ],
   "requiredCapabilityDispositionRefs": [
@@ -2727,9 +2727,9 @@
       ]
     },
     {
-      "id": "exception-service-react-app",
+      "id": "exception-service-web-app",
       "targetType": "service",
-      "targetId": "react-app",
+      "targetId": "web-app",
       "disposition": "out-of-foundation-scope",
       "reason": "current runtime proof stronger than catalogue classification for this service; future implementation authority if this historical service becomes in scope; Historical source-lineage UI service is not the USF gateway or forward-auth semantic authority.; Runtime UI code is outside this foundation-scope Compose classification.",
       "owner": "platform-architecture-foundation",

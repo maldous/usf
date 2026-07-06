@@ -40,7 +40,7 @@
       "description": "Routes enforce explicit required permissions such as tenant.members.*, tenant.groups.*, tenant.suborgs.*, and platform.* and never the role name directly, with platform.admin.access kept distinct from tenant.admin.access. Permission resolution is tenant-scoped so a tenant role only yields that tenant's permissions.",
       "sourceRefs": [
         "apps/platform-api/src/server/authorize-resource.ts",
-        "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+        "apps/enterprise-app/src/components/RequirePermission.tsx",
         "packages/authorisation-runtime/src/index.ts"
       ]
     },
@@ -97,7 +97,7 @@
       "status": "complete",
       "description": "UI permission gating renders an accessible forbidden state when the actor lacks the required permission and must not duplicate authentication semantics.",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+        "apps/enterprise-app/src/components/RequirePermission.tsx"
       ]
     }
   },
@@ -105,7 +105,7 @@
     "apps/platform-api/src/server/authorize-resource.ts",
     "apps/platform-api/tests/unit/audit.test.ts",
     "apps/platform-api/tests/unit/authorize-resource.test.ts",
-    "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+    "apps/enterprise-app/src/components/RequirePermission.tsx",
     "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md",
     "packages/authorisation-runtime/src/index.ts",
     "packages/authorisation-runtime/tests/authorisation-runtime.test.ts",

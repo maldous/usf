@@ -2276,9 +2276,9 @@
       "nonClaimBoundary": "Fixture corpus disposition for public-proof-origin does not claim final Test readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorization."
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "fixtureSeedId": "not-applicable",
-      "sourceObligationEvidenceId": "evidence.usf-239.service.react-app",
+      "sourceObligationEvidenceId": "evidence.usf-239.service.web-app",
       "sourceManifestPath": "docs/architecture/semantic-service-test-obligation-manifest.json",
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "not-generated",

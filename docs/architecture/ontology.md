@@ -211,7 +211,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 ### 5.12 Application
 **Definition.** A deployable or user-facing runtime surface.
 **Authority role.** Rank 5 (implementation), realising capabilities.
-**Source evidence role.** Historically two canonical apps: `apps/platform-api` (hexagonal BFF/API) and the web app (`apps/web` target, historically `apps/react-enterprise-app`); rule R15 fixes the canonical app roots.
+**Source evidence role.** Historically two canonical apps: `apps/platform-api` (hexagonal BFF/API) and the web app (`apps/web` target, historically `apps/enterprise-app`); rule R15 fixes the canonical app roots.
 **Future artefacts.** Application directory contracts; capability-coverage map.
 **Relationships.** An Application **realises** Capabilities; **exposes** Interfaces and UI Semantic Models; **runs in** Environments; **has** proof requirements.
 **AI guidance.** Distinguish its **semantic role** (which capabilities it serves) from its **implementation role** (how it is built). Capability coverage and environment scope MUST be explicit.

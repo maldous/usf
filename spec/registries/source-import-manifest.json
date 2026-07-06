@@ -3520,7 +3520,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/Dockerfile",
+        "path": "apps/enterprise-app/Dockerfile",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -3531,7 +3531,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/index.html",
+        "path": "apps/enterprise-app/index.html",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3542,18 +3542,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/package.json",
+        "path": "apps/enterprise-app/package.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: n/a — dependency set updated for V2 UI; package identity and export contract preserved. Retained interfaces: @platform/react-enterprise-app package id, exports ./src/index.ts.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: n/a — dependency set updated for V2 UI; package identity and export contract preserved. Retained interfaces: @platform/enterprise-app package id, exports ./src/index.ts.",
       "targetUsfConcept": "Package / Module"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/package-lock.json",
+        "path": "apps/enterprise-app/package-lock.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
@@ -3564,7 +3564,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/public/.gitkeep",
+        "path": "apps/enterprise-app/public/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
@@ -3575,7 +3575,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/README.md",
+        "path": "apps/enterprise-app/README.md",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
@@ -3586,7 +3586,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/app/.gitkeep",
+        "path": "apps/enterprise-app/src/app/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
@@ -3597,7 +3597,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/app/query-client.ts",
+        "path": "apps/enterprise-app/src/app/query-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3608,7 +3608,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/app/router.ts",
+        "path": "apps/enterprise-app/src/app/router.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3619,7 +3619,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/app/shell-store.ts",
+        "path": "apps/enterprise-app/src/app/shell-store.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3630,7 +3630,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/auth/login-providers.ts",
+        "path": "apps/enterprise-app/src/auth/login-providers.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3641,7 +3641,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/AdminLayout.tsx",
+        "path": "apps/enterprise-app/src/components/AdminLayout.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3652,29 +3652,29 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/AppShell.tsx",
+        "path": "apps/enterprise-app/src/components/AppShell.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 AppShell renders brand/actor/logout chrome with same testids and a11y; AdminLayout test green. Retained interfaces: AppShellProps, data-testid:app-shell-home, data-testid:actor-display, data-testid:logout-button, data-testid:app-shell-main. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0195, ADR-ACT-0203, ADR-0029.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 AppShell renders brand/actor/logout chrome with same testids and a11y; AdminLayout test green. Retained interfaces: AppShellProps, data-testid:app-shell-home, data-testid:actor-display, data-testid:logout-button, data-testid:app-shell-main. Protecting tests: apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0195, ADR-ACT-0203, ADR-0029.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/AuthenticatedLayout.tsx",
+        "path": "apps/enterprise-app/src/components/AuthenticatedLayout.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 _authenticated layout wraps Outlet in AppShell; session gating preserved. Retained interfaces: authenticated layout route wrapper. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 _authenticated layout wraps Outlet in AppShell; session gating preserved. Retained interfaces: authenticated layout route wrapper. Protecting tests: apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/DefaultErrorComponent.tsx",
+        "path": "apps/enterprise-app/src/components/DefaultErrorComponent.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3685,7 +3685,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/DefaultNotFoundComponent.tsx",
+        "path": "apps/enterprise-app/src/components/DefaultNotFoundComponent.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3696,7 +3696,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/DefaultPendingComponent.tsx",
+        "path": "apps/enterprise-app/src/components/DefaultPendingComponent.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3707,7 +3707,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/.gitkeep",
+        "path": "apps/enterprise-app/src/components/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -3718,7 +3718,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/index.ts",
+        "path": "apps/enterprise-app/src/components/index.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3729,18 +3729,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/RequirePermission.tsx",
+        "path": "apps/enterprise-app/src/components/RequirePermission.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V2 permission-gate preserves deny/allow semantics; gating behaviour proven. Retained interfaces: RequirePermission props (permission gating), client-side permission check contract. Protecting tests: apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-0036.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Historical deletion condition: V2 permission-gate preserves deny/allow semantics; gating behaviour proven. Retained interfaces: RequirePermission props (permission gating), client-side permission check contract. Protecting tests: apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx. Historical decision refs: ADR-0019, ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/components/__tests__/AdminLayout.test.tsx",
+        "path": "apps/enterprise-app/src/components/__tests__/AdminLayout.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -3751,29 +3751,29 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-account/admin-account-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-account/admin-account-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-account REST client (BFF over fetch). Protecting tests: apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx. Historical decision refs: ADR-0036, ADR-0013.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-account REST client (BFF over fetch). Protecting tests: apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx. Historical decision refs: ADR-0036, ADR-0013.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-account/AdminAccountPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-account/AdminAccountPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 page reproduces account journeys; page test green. Retained interfaces: account view/edit behaviour, form validation, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 page reproduces account journeys; page test green. Retained interfaces: account view/edit behaviour, form validation, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -3784,18 +3784,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-account/use-admin-account.ts",
+        "path": "apps/enterprise-app/src/features/admin-account/use-admin-account.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-account/__tests__/AdminAccountPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/admin-error.ts",
+        "path": "apps/enterprise-app/src/features/admin/admin-error.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3806,7 +3806,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/admin-fetch.ts",
+        "path": "apps/enterprise-app/src/features/admin/admin-fetch.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3817,7 +3817,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/AdminQueryError.tsx",
+        "path": "apps/enterprise-app/src/features/admin/AdminQueryError.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3828,7 +3828,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/audit-client.ts",
+        "path": "apps/enterprise-app/src/features/admin/audit-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3839,7 +3839,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/AuditTrailPanel.tsx",
+        "path": "apps/enterprise-app/src/features/admin/AuditTrailPanel.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3850,40 +3850,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/admin-auth-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-auth/admin-auth-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-auth/IdP REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx, apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0157.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-auth/IdP REST client. Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx, apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0157.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/AdminAuthPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/AdminAuthPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 auth page reproduces IdP journeys; page test green; redaction preserved. Retained interfaces: auth config journeys, permission gating, typed error states, secret redaction (no raw KC config). Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0036.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 auth page reproduces IdP journeys; page test green; redaction preserved. Retained interfaces: auth config journeys, permission gating, typed error states, secret redaction (no raw KC config). Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/IdpManager.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/IdpManager.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 IdP manager reproduces OIDC config behaviour; oidc test green. Retained interfaces: IdP CRUD journeys, OIDC option fields, form validation. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 IdP manager reproduces OIDC config behaviour; oidc test green. Retained interfaces: IdP CRUD journeys, OIDC option fields, form validation. Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-ACT-0220.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -3894,7 +3894,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -3905,18 +3905,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-auth/use-admin-auth.ts",
+        "path": "apps/enterprise-app/src/features/admin-auth/use-admin-auth.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-clickthrough/admin-clickthrough-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-clickthrough/admin-clickthrough-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3927,7 +3927,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-clickthrough/AdminClickthroughPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-clickthrough/AdminClickthroughPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3938,7 +3938,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-clickthrough/use-admin-clickthrough.ts",
+        "path": "apps/enterprise-app/src/features/admin-clickthrough/use-admin-clickthrough.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -3949,29 +3949,29 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-config/admin-config-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-config/admin-config-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: listConfig, setConfigValue, clearConfigValue. Protecting tests: apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: listConfig, setConfigValue, clearConfigValue. Protecting tests: apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-config/AdminConfigPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-config/AdminConfigPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 config page reproduces config journeys; page test green. Retained interfaces: config view/set/clear journeys, permission gating, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 config page reproduces config journeys; page test green. Retained interfaces: config view/set/clear journeys, permission gating, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -3982,40 +3982,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-config/use-admin-config.ts",
+        "path": "apps/enterprise-app/src/features/admin-config/use-admin-config.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useConfig, useSetConfigValue, useClearConfigValue, adminConfigQueryKey, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useConfig, useSetConfigValue, useClearConfigValue, adminConfigQueryKey, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-config/__tests__/AdminConfigPage.test.tsx. Historical decision refs: ADR-0036, ADR-0040.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-developer/admin-developer-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-developer/admin-developer-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: developer platform (API keys/rate limits) REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx. Historical decision refs: ADR-0036, ADR-0065.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: developer platform (API keys/rate limits) REST client. Protecting tests: apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx. Historical decision refs: ADR-0036, ADR-0065.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-developer/AdminDeveloperPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-developer/AdminDeveloperPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 developer page reproduces key/rate journeys; page test green. Retained interfaces: API key + rate limit journeys, permission gating, secret reveal-once semantics, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx. Historical decision refs: ADR-0065, ADR-ACT-0250.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 developer page reproduces key/rate journeys; page test green. Retained interfaces: API key + rate limit journeys, permission gating, secret reveal-once semantics, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx. Historical decision refs: ADR-0065, ADR-ACT-0250.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4026,40 +4026,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-developer/use-admin-developer.ts",
+        "path": "apps/enterprise-app/src/features/admin-developer/use-admin-developer.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx. Historical decision refs: ADR-0036, ADR-0065.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-developer/__tests__/AdminDeveloperPage.test.tsx. Historical decision refs: ADR-0036, ADR-0065.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-domains/admin-domains-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-domains/admin-domains-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: tenant domains REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0230.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: tenant domains REST client. Protecting tests: apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0230.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-domains/AdminDomainsPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-domains/AdminDomainsPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 domains page reproduces domain lifecycle journeys; page test green. Retained interfaces: domain lifecycle journeys, permission gating, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx. Historical decision refs: ADR-ACT-0230, ADR-ACT-0234.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 domains page reproduces domain lifecycle journeys; page test green. Retained interfaces: domain lifecycle journeys, permission gating, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx. Historical decision refs: ADR-ACT-0230, ADR-ACT-0234.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4070,40 +4070,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-domains/use-admin-domains.ts",
+        "path": "apps/enterprise-app/src/features/admin-domains/use-admin-domains.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0230.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-domains/__tests__/AdminDomainsPage.test.tsx. Historical decision refs: ADR-0036, ADR-ACT-0230.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-email/admin-email-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-email/admin-email-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: email settings REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: email settings REST client. Protecting tests: apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-email/AdminEmailPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-email/AdminEmailPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 email page reproduces email config journeys; page test green. Retained interfaces: email config journeys, permission gating, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 email page reproduces email config journeys; page test green. Retained interfaces: email config journeys, permission gating, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4114,40 +4114,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-email/use-admin-email.ts",
+        "path": "apps/enterprise-app/src/features/admin-email/use-admin-email.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-email/__tests__/AdminEmailPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-entitlements/admin-entitlements-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-entitlements/admin-entitlements-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: entitlements REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: entitlements REST client. Protecting tests: apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-entitlements/AdminEntitlementsPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-entitlements/AdminEntitlementsPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 entitlements page reproduces entitlement journeys; page test green. Retained interfaces: entitlements journeys, permission gating, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 entitlements page reproduces entitlement journeys; page test green. Retained interfaces: entitlements journeys, permission gating, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4158,40 +4158,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-entitlements/use-admin-entitlements.ts",
+        "path": "apps/enterprise-app/src/features/admin-entitlements/use-admin-entitlements.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-entitlements/__tests__/AdminEntitlementsPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-events/admin-events-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-events/admin-events-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: events/event-bus REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx. Historical decision refs: ADR-0036, ADR-0068.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: events/event-bus REST client. Protecting tests: apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx. Historical decision refs: ADR-0036, ADR-0068.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-events/AdminEventsPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-events/AdminEventsPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 events page reproduces event journeys; page test green. Retained interfaces: event listing journeys, permission gating, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx. Historical decision refs: ADR-0068.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 events page reproduces event journeys; page test green. Retained interfaces: event listing journeys, permission gating, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx. Historical decision refs: ADR-0068.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4202,40 +4202,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-events/use-admin-events.ts",
+        "path": "apps/enterprise-app/src/features/admin-events/use-admin-events.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys. Protecting tests: apps/react-enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx. Historical decision refs: ADR-0036, ADR-0068.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys. Protecting tests: apps/enterprise-app/src/features/admin-events/__tests__/AdminEventsPage.test.tsx. Historical decision refs: ADR-0036, ADR-0068.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-features/admin-features-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-features/admin-features-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: feature flags REST client. Protecting tests: apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: feature flags REST client. Protecting tests: apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-features/AdminFeaturesPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-features/AdminFeaturesPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 features page reproduces flag journeys; page test green. Retained interfaces: feature flag toggle journeys, permission gating, typed error states. Protecting tests: apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 features page reproduces flag journeys; page test green. Retained interfaces: feature flag toggle journeys, permission gating, typed error states. Protecting tests: apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4246,29 +4246,29 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-features/use-admin-features.ts",
+        "path": "apps/enterprise-app/src/features/admin-features/use-admin-features.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/react-enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx. Historical decision refs: ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: TanStack Query hooks, query keys, audit invalidation. Protecting tests: apps/enterprise-app/src/features/admin-features/__tests__/AdminFeaturesPage.test.tsx. Historical decision refs: ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/admin-logs-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-logs/admin-logs-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: searchLogs, LogSearchFilters, LogEntry, LogSearchResult. Protecting tests: apps/react-enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-0035, ADR-ACT-0195, ADR-0022, ADR-ACT-0284.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: searchLogs, LogSearchFilters, LogEntry, LogSearchResult. Protecting tests: apps/enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-0035, ADR-ACT-0195, ADR-0022, ADR-ACT-0284.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/AdminLogsPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-logs/AdminLogsPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -4279,29 +4279,29 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/admin-logs.query-state.ts",
+        "path": "apps/enterprise-app/src/features/admin-logs/admin-logs.query-state.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: paramsToBffFilters. Protecting tests: apps/react-enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-0001, ADR-0019.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: paramsToBffFilters. Protecting tests: apps/enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-0001, ADR-0019.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/admin-logs.schema.ts",
+        "path": "apps/enterprise-app/src/features/admin-logs/admin-logs.schema.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LogSearchParamsSchema, parseLogSearchParams, DEFAULT_LOG_SEARCH_PARAMS, LOG_LEVELS, LOG_RANGES, LOG_DIRECTIONS. Protecting tests: apps/react-enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-0019.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LogSearchParamsSchema, parseLogSearchParams, DEFAULT_LOG_SEARCH_PARAMS, LOG_LEVELS, LOG_RANGES, LOG_DIRECTIONS. Protecting tests: apps/enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-0019.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/components/LogEntryDetails.tsx",
+        "path": "apps/enterprise-app/src/features/admin-logs/components/LogEntryDetails.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -4312,7 +4312,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/components/LogLevelBadge.tsx",
+        "path": "apps/enterprise-app/src/features/admin-logs/components/LogLevelBadge.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -4323,7 +4323,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/components/LogResultsTable.tsx",
+        "path": "apps/enterprise-app/src/features/admin-logs/components/LogResultsTable.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -4334,7 +4334,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/components/LogSearchForm.tsx",
+        "path": "apps/enterprise-app/src/features/admin-logs/components/LogSearchForm.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -4345,84 +4345,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-logs/use-log-search.ts",
+        "path": "apps/enterprise-app/src/features/admin-logs/use-log-search.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useLogSearch. Protecting tests: apps/react-enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-ACT-0195.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useLogSearch. Protecting tests: apps/enterprise-app/src/features/admin-logs/__tests__. Historical decision refs: ADR-ACT-0195.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-members/admin-members-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-members/admin-members-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: listMembers, inviteMember, updateMemberRole, removeMember, setMemberUsername, setMemberStatus, resendInvite, listExternalIdentities. Protecting tests: apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx. Historical decision refs: ADR-0035, ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: listMembers, inviteMember, updateMemberRole, removeMember, setMemberUsername, setMemberStatus, resendInvite, listExternalIdentities. Protecting tests: apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx. Historical decision refs: ADR-0035, ADR-0036.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-members/AdminMembersPage.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "source-file",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminMembersPage. Protecting tests: apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0026.",
-      "targetUsfConcept": "Source Reference"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0203.",
-      "targetUsfConcept": "Proof"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-members/use-admin-members.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "source-file",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useMembers, adminMembersQueryKey. Protecting tests: apps/react-enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
-      "targetUsfConcept": "Source Reference"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-monitoring/admin-monitoring-client.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "source-file",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-monitoring BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx. Historical decision refs: ADR-0035.",
-      "targetUsfConcept": "Source Reference"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-monitoring/AdminMonitoringPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-members/AdminMembersPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminMonitoringPage. Protecting tests: apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0026.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminMembersPage. Protecting tests: apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0026.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4433,40 +4389,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-monitoring/use-admin-monitoring.ts",
+        "path": "apps/enterprise-app/src/features/admin-members/use-admin-members.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminMonitoring. Protecting tests: apps/react-enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useMembers, adminMembersQueryKey. Protecting tests: apps/enterprise-app/src/features/admin-members/__tests__/AdminMembersPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-observability/admin-observability-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-monitoring/admin-monitoring-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-observability BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx. Historical decision refs: ADR-0035, ADR-ACT-0284.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-monitoring BFF client. Protecting tests: apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx. Historical decision refs: ADR-0035.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-observability/AdminObservabilityPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-monitoring/AdminMonitoringPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminObservabilityPage. Protecting tests: apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-ACT-0284.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminMonitoringPage. Protecting tests: apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0026.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4477,40 +4433,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-observability/use-admin-observability.ts",
+        "path": "apps/enterprise-app/src/features/admin-monitoring/use-admin-monitoring.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminObservability. Protecting tests: apps/react-enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminMonitoring. Protecting tests: apps/enterprise-app/src/features/admin-monitoring/__tests__/AdminMonitoringPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-platform/admin-platform-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-observability/admin-observability-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-platform BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx. Historical decision refs: ADR-0035, ADR-ACT-0227.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-observability BFF client. Protecting tests: apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx. Historical decision refs: ADR-0035, ADR-ACT-0284.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-platform/AdminPlatformPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-observability/AdminObservabilityPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminPlatformPage. Protecting tests: apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-ACT-0227.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminObservabilityPage. Protecting tests: apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-ACT-0284.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4521,40 +4477,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-platform/use-admin-platform.ts",
+        "path": "apps/enterprise-app/src/features/admin-observability/use-admin-observability.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminPlatform. Protecting tests: apps/react-enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminObservability. Protecting tests: apps/enterprise-app/src/features/admin-observability/__tests__/AdminObservabilityPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-readiness/admin-readiness-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-platform/admin-platform-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-readiness BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx. Historical decision refs: ADR-0035.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-platform BFF client. Protecting tests: apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx. Historical decision refs: ADR-0035, ADR-ACT-0227.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-readiness/AdminReadinessPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-platform/AdminPlatformPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminReadinessPage. Protecting tests: apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminPlatformPage. Protecting tests: apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-ACT-0227.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4565,40 +4521,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-readiness/use-admin-readiness.ts",
+        "path": "apps/enterprise-app/src/features/admin-platform/use-admin-platform.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminReadiness. Protecting tests: apps/react-enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminPlatform. Protecting tests: apps/enterprise-app/src/features/admin-platform/__tests__/AdminPlatformPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-scheduled-jobs/admin-scheduled-jobs-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-readiness/admin-readiness-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-scheduled-jobs BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx. Historical decision refs: ADR-0035, ADR-0068.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-readiness BFF client. Protecting tests: apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx. Historical decision refs: ADR-0035.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-scheduled-jobs/AdminScheduledJobsPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-readiness/AdminReadinessPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminScheduledJobsPage. Protecting tests: apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0068.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminReadinessPage. Protecting tests: apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4609,40 +4565,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-scheduled-jobs/use-admin-scheduled-jobs.ts",
+        "path": "apps/enterprise-app/src/features/admin-readiness/use-admin-readiness.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminScheduledJobs. Protecting tests: apps/react-enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminReadiness. Protecting tests: apps/enterprise-app/src/features/admin-readiness/__tests__/AdminReadinessPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-search/admin-search-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-scheduled-jobs/admin-scheduled-jobs-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-search BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx. Historical decision refs: ADR-0035.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-scheduled-jobs BFF client. Protecting tests: apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx. Historical decision refs: ADR-0035, ADR-0068.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-search/AdminSearchPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-scheduled-jobs/AdminScheduledJobsPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminSearchPage. Protecting tests: apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminScheduledJobsPage. Protecting tests: apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0068.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4653,40 +4609,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-search/use-admin-search.ts",
+        "path": "apps/enterprise-app/src/features/admin-scheduled-jobs/use-admin-scheduled-jobs.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminSearch. Protecting tests: apps/react-enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminScheduledJobs. Protecting tests: apps/enterprise-app/src/features/admin-scheduled-jobs/__tests__/AdminScheduledJobsPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-storage/admin-storage-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-search/admin-search-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-storage BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx. Historical decision refs: ADR-0035.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-search BFF client. Protecting tests: apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx. Historical decision refs: ADR-0035.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-storage/AdminStoragePage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-search/AdminSearchPage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminStoragePage. Protecting tests: apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminSearchPage. Protecting tests: apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4697,62 +4653,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-storage/use-admin-storage.ts",
+        "path": "apps/enterprise-app/src/features/admin-search/use-admin-search.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminStorage. Protecting tests: apps/react-enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminSearch. Protecting tests: apps/enterprise-app/src/features/admin-search/__tests__/AdminSearchPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/__tests__/admin-error.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0203.",
-      "targetUsfConcept": "Proof"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "test",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0203.",
-      "targetUsfConcept": "Proof"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-usage/admin-usage-client.ts",
+        "path": "apps/enterprise-app/src/features/admin-storage/admin-storage-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-usage BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx. Historical decision refs: ADR-0035.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-storage BFF client. Protecting tests: apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx. Historical decision refs: ADR-0035.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-usage/AdminUsagePage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-storage/AdminStoragePage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminUsagePage. Protecting tests: apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminStoragePage. Protecting tests: apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4763,51 +4697,62 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-usage/use-admin-usage.ts",
+        "path": "apps/enterprise-app/src/features/admin-storage/use-admin-storage.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminUsage. Protecting tests: apps/react-enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminStorage. Protecting tests: apps/enterprise-app/src/features/admin-storage/__tests__/AdminStoragePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin/use-audit.ts",
+        "path": "apps/enterprise-app/src/features/admin/__tests__/admin-error.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0203.",
+      "targetUsfConcept": "Proof"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0203.",
+      "targetUsfConcept": "Proof"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/admin-usage/admin-usage-client.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAudit. Protecting tests: apps/react-enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0036.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-usage BFF client. Protecting tests: apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx. Historical decision refs: ADR-0035.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-webhooks/admin-webhooks-client.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
-      },
-      "sourceKind": "source-file",
-      "sourceRole": "behavioural-evidence",
-      "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-webhooks BFF client. Protecting tests: apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx. Historical decision refs: ADR-0035, ADR-0068.",
-      "targetUsfConcept": "Source Reference"
-    },
-    {
-      "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-webhooks/AdminWebhooksPage.tsx",
+        "path": "apps/enterprise-app/src/features/admin-usage/AdminUsagePage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminWebhooksPage. Protecting tests: apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0068.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminUsagePage. Protecting tests: apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx",
+        "path": "apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4818,18 +4763,73 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/admin-webhooks/use-admin-webhooks.ts",
+        "path": "apps/enterprise-app/src/features/admin-usage/use-admin-usage.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminWebhooks. Protecting tests: apps/react-enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminUsage. Protecting tests: apps/enterprise-app/src/features/admin-usage/__tests__/AdminUsagePage.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/.gitkeep",
+        "path": "apps/enterprise-app/src/features/admin/use-audit.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAudit. Protecting tests: apps/enterprise-app/src/features/admin/__tests__/AuditTrailPanel.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0036.",
+      "targetUsfConcept": "Source Reference"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/admin-webhooks/admin-webhooks-client.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: admin-webhooks BFF client. Protecting tests: apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx. Historical decision refs: ADR-0035, ADR-0068.",
+      "targetUsfConcept": "Source Reference"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/admin-webhooks/AdminWebhooksPage.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "replace",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: AdminWebhooksPage. Protecting tests: apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx. Historical decision refs: ADR-ACT-0203, ADR-0068.",
+      "targetUsfConcept": "Source Reference"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "test",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical decision refs: ADR-ACT-0203.",
+      "targetUsfConcept": "Proof"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/admin-webhooks/use-admin-webhooks.ts",
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
+      },
+      "sourceKind": "source-file",
+      "sourceRole": "behavioural-evidence",
+      "disposition": "preserve",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useAdminWebhooks. Protecting tests: apps/enterprise-app/src/features/admin-webhooks/__tests__/AdminWebhooksPage.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "targetUsfConcept": "Source Reference"
+    },
+    {
+      "sourceRef": {
+        "path": "apps/enterprise-app/src/features/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -4840,40 +4840,40 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/organisation/organisation.mutations.ts",
+        "path": "apps/enterprise-app/src/features/organisation/organisation.mutations.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useUpdateOrganisationProfile. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__. Historical decision refs: ADR-ACT-0203, ADR-0013.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useUpdateOrganisationProfile. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__. Historical decision refs: ADR-ACT-0203, ADR-0013.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/organisation/OrganisationProfilePage.tsx",
+        "path": "apps/enterprise-app/src/features/organisation/OrganisationProfilePage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: OrganisationProfilePage. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__. Historical decision refs: ADR-ACT-0203, ADR-0013, ADR-0026.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Retained interfaces: OrganisationProfilePage. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__. Historical decision refs: ADR-ACT-0203, ADR-0013, ADR-0026.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/organisation/organisation.queries.ts",
+        "path": "apps/enterprise-app/src/features/organisation/organisation.queries.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: organisationQueryKey, useOrganisationProfile query hook. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0013, ADR-0019.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: organisationQueryKey, useOrganisationProfile query hook. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0013, ADR-0019.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx",
+        "path": "apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4884,62 +4884,62 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/components/WidgetTable.tsx",
+        "path": "apps/enterprise-app/src/features/_template/components/WidgetTable.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 feature generator emits an equivalent template proven by the regenerated FeaturePage test. Retained interfaces: feature-table scaffold pattern (TanStack Query + design-system table). Protecting tests: apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 feature generator emits an equivalent template proven by the regenerated FeaturePage test. Retained interfaces: feature-table scaffold pattern (TanStack Query + design-system table). Protecting tests: apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/feature.mutations.ts",
+        "path": "apps/enterprise-app/src/features/_template/feature.mutations.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 feature generator emits equivalent mutations scaffold. Retained interfaces: mutation scaffold pattern (RHF+Zod + contextual audit refresh). Protecting tests: apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 feature generator emits equivalent mutations scaffold. Retained interfaces: mutation scaffold pattern (RHF+Zod + contextual audit refresh). Protecting tests: apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/FeaturePage.tsx",
+        "path": "apps/enterprise-app/src/features/_template/FeaturePage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 generator-emitted page passes regenerated test. Retained interfaces: feature page scaffold (route+query+form+permission gating). Protecting tests: apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 generator-emitted page passes regenerated test. Retained interfaces: feature page scaffold (route+query+form+permission gating). Protecting tests: apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/feature.queries.ts",
+        "path": "apps/enterprise-app/src/features/_template/feature.queries.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 generator emits equivalent queries scaffold. Retained interfaces: query scaffold pattern (queryKey + TanStack Query hook). Protecting tests: apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 generator emits equivalent queries scaffold. Retained interfaces: query scaffold pattern (queryKey + TanStack Query hook). Protecting tests: apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/feature.schema.ts",
+        "path": "apps/enterprise-app/src/features/_template/feature.schema.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 generator emits equivalent schema scaffold. Retained interfaces: Zod feature-schema scaffold mirroring contract bounds. Protecting tests: apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: V2 generator emits equivalent schema scaffold. Retained interfaces: Zod feature-schema scaffold mirroring contract bounds. Protecting tests: apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/README.md",
+        "path": "apps/enterprise-app/src/features/_template/README.md",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
@@ -4950,7 +4950,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx",
+        "path": "apps/enterprise-app/src/features/_template/__tests__/FeaturePage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -4961,7 +4961,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/hooks/.gitkeep",
+        "path": "apps/enterprise-app/src/hooks/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -4972,18 +4972,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/hooks/use-session.ts",
+        "path": "apps/enterprise-app/src/hooks/use-session.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession, sessionQueryKey, SessionFetchError, hasPermission. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0021.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession, sessionQueryKey, SessionFetchError, hasPermission. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-ACT-0157, ADR-0021.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/index.ts",
+        "path": "apps/enterprise-app/src/index.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -4994,7 +4994,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/lib/as-text.ts",
+        "path": "apps/enterprise-app/src/lib/as-text.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5005,7 +5005,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/main.tsx",
+        "path": "apps/enterprise-app/src/main.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5016,7 +5016,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/fixtures/admin.ts",
+        "path": "apps/enterprise-app/src/msw/fixtures/admin.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5027,18 +5027,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/fixtures/organisation.ts",
+        "path": "apps/enterprise-app/src/msw/fixtures/organisation.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: organisation fixture data. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: organisation fixture data. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/fixtures/providers.ts",
+        "path": "apps/enterprise-app/src/msw/fixtures/providers.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5049,18 +5049,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/fixtures/session.ts",
+        "path": "apps/enterprise-app/src/msw/fixtures/session.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: SessionPersona personas (tenantAdmin/viewer/systemAdmin/noMembership). Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: SessionPersona personas (tenantAdmin/viewer/systemAdmin/noMembership). Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/fixtures/theme.ts",
+        "path": "apps/enterprise-app/src/msw/fixtures/theme.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5071,7 +5071,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/graphql/factories.ts",
+        "path": "apps/enterprise-app/src/msw/graphql/factories.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5082,7 +5082,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/graphql/handlers.ts",
+        "path": "apps/enterprise-app/src/msw/graphql/handlers.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5093,18 +5093,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/handlers.ts",
+        "path": "apps/enterprise-app/src/msw/handlers.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: REST MSW handlers (session/admin/org/theme). Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: REST MSW handlers (session/admin/org/theme). Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0021, ADR-0022.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/index.ts",
+        "path": "apps/enterprise-app/src/msw/index.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5115,7 +5115,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/msw/server.ts",
+        "path": "apps/enterprise-app/src/msw/server.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -5126,7 +5126,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/observability/faro.ts",
+        "path": "apps/enterprise-app/src/observability/faro.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5137,7 +5137,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/account.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/account.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5148,7 +5148,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/auth.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/auth.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5159,7 +5159,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/clickthrough.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/clickthrough.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5170,7 +5170,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/config.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/config.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5181,7 +5181,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/developer.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/developer.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5192,7 +5192,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/domains.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/domains.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5203,7 +5203,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/email.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/email.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5214,7 +5214,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/entitlements.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/entitlements.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5225,7 +5225,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/events.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/events.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5236,7 +5236,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/features.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/features.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5247,7 +5247,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/index.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/index.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5258,7 +5258,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/layout.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/layout.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5269,7 +5269,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/logs.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/logs.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5280,7 +5280,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/members.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/members.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5291,7 +5291,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/monitoring.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/monitoring.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5302,7 +5302,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/observability.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/observability.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5313,7 +5313,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/platform.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/platform.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5324,7 +5324,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/readiness.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/readiness.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5335,7 +5335,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/scheduled-jobs.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/scheduled-jobs.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5346,7 +5346,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/search.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/search.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5357,7 +5357,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/storage.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/storage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5368,7 +5368,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/usage.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/usage.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5379,7 +5379,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/admin/webhooks.tsx",
+        "path": "apps/enterprise-app/src/routes/admin/webhooks.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5390,7 +5390,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/_authenticated.tsx",
+        "path": "apps/enterprise-app/src/routes/_authenticated.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5401,7 +5401,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/e2e-harness.tsx",
+        "path": "apps/enterprise-app/src/routes/e2e-harness.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5412,7 +5412,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/.gitkeep",
+        "path": "apps/enterprise-app/src/routes/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -5423,7 +5423,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/index.tsx",
+        "path": "apps/enterprise-app/src/routes/index.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5434,7 +5434,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/login.tsx",
+        "path": "apps/enterprise-app/src/routes/login.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5445,18 +5445,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/organisation/profile.tsx",
+        "path": "apps/enterprise-app/src/routes/organisation/profile.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition replace-retain-contract normalized to replace. Retained interfaces: /organisation/profile route, profile query/mutation/permission behaviour. Protecting tests: apps/react-enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition replace-retain-contract normalized to replace. Retained interfaces: /organisation/profile route, profile query/mutation/permission behaviour. Protecting tests: apps/enterprise-app/src/features/organisation/__tests__/OrganisationProfilePage.test.tsx. Historical decision refs: ADR-0019, ADR-ACT-0203.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/__root.tsx",
+        "path": "apps/enterprise-app/src/routes/__root.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
@@ -5467,29 +5467,29 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+        "path": "apps/enterprise-app/src/routes/__tests__/login.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LoginRoute. Protecting tests: apps/react-enterprise-app/src/routes/__tests__/login.test.tsx. Historical decision refs: ADR-ACT-0157.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: LoginRoute. Protecting tests: apps/enterprise-app/src/routes/__tests__/login.test.tsx. Historical decision refs: ADR-ACT-0157.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/routeTree.gen.ts",
+        "path": "apps/enterprise-app/src/routeTree.gen.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: regenerated by tanstack router codegen in V2. Protecting tests: apps/react-enterprise-app/src/tests/app.test.tsx. Historical decision refs: ADR-0027.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: regenerated by tanstack router codegen in V2. Protecting tests: apps/enterprise-app/src/tests/app.test.tsx. Historical decision refs: ADR-0027.",
       "targetUsfConcept": "Generated Report"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/services/.gitkeep",
+        "path": "apps/enterprise-app/src/services/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
@@ -5500,7 +5500,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/styles/.gitkeep",
+        "path": "apps/enterprise-app/src/styles/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
@@ -5511,62 +5511,62 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/styles/globals.css",
+        "path": "apps/enterprise-app/src/styles/globals.css",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "replace",
-      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: superseded by AI-generated V2 visual layer; token contract retained. Retained interfaces: theme-token CSS variables. Protecting tests: apps/react-enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
+      "rationale": "Historical inventory disposition regenerate normalized to replace. Historical deletion condition: superseded by AI-generated V2 visual layer; token contract retained. Retained interfaces: theme-token CSS variables. Protecting tests: apps/enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts",
+        "path": "apps/enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: adminLogsClient. Protecting tests: apps/react-enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts. Historical decision refs: ADR-ACT-0284.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: adminLogsClient. Protecting tests: apps/enterprise-app/src/tests/admin-logs/admin-logs-client.test.ts. Historical decision refs: ADR-ACT-0284.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx",
+        "path": "apps/enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: AdminLogsPage behaviour contract. Protecting tests: apps/react-enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx. Historical decision refs: ADR-ACT-0284.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: AdminLogsPage behaviour contract. Protecting tests: apps/enterprise-app/src/tests/admin-logs/AdminLogsPage.test.tsx. Historical decision refs: ADR-ACT-0284.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/app.test.tsx",
+        "path": "apps/enterprise-app/src/tests/app.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: App root bootstrap. Protecting tests: apps/react-enterprise-app/src/tests/app.test.tsx.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: App root bootstrap. Protecting tests: apps/enterprise-app/src/tests/app.test.tsx.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/as-text.test.ts",
+        "path": "apps/enterprise-app/src/tests/as-text.test.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: asText helper. Protecting tests: apps/react-enterprise-app/src/tests/as-text.test.ts.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: asText helper. Protecting tests: apps/enterprise-app/src/tests/as-text.test.ts.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/test-setup.ts",
+        "path": "apps/enterprise-app/src/test-setup.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -5577,7 +5577,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/.gitkeep",
+        "path": "apps/enterprise-app/src/tests/.gitkeep",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
@@ -5588,95 +5588,95 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/msw/msw-substrate.test.ts",
+        "path": "apps/enterprise-app/src/tests/msw/msw-substrate.test.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: MSW handler substrate. Protecting tests: apps/react-enterprise-app/src/tests/msw/msw-substrate.test.ts. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: MSW handler substrate. Protecting tests: apps/enterprise-app/src/tests/msw/msw-substrate.test.ts. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx",
+        "path": "apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: _authenticated layout guard. Protecting tests: apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: _authenticated layout guard. Protecting tests: apps/enterprise-app/src/tests/substrate/authenticated-layout.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/substrate/require-permission.test.tsx",
+        "path": "apps/enterprise-app/src/tests/substrate/require-permission.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: requirePermission guard. Protecting tests: apps/react-enterprise-app/src/tests/substrate/require-permission.test.tsx. Historical decision refs: ADR-ACT-0203.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: requirePermission guard. Protecting tests: apps/enterprise-app/src/tests/substrate/require-permission.test.tsx. Historical decision refs: ADR-ACT-0203.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/theme/theme.test.tsx",
+        "path": "apps/enterprise-app/src/tests/theme/theme.test.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ThemeProvider behaviour contract. Protecting tests: apps/react-enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: ThemeProvider behaviour contract. Protecting tests: apps/enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/tests/use-session.test.ts",
+        "path": "apps/enterprise-app/src/tests/use-session.test.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession hook. Protecting tests: apps/react-enterprise-app/src/tests/use-session.test.ts. Historical decision refs: ADR-ACT-0278.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useSession hook. Protecting tests: apps/enterprise-app/src/tests/use-session.test.ts. Historical decision refs: ADR-ACT-0278.",
       "targetUsfConcept": "Proof"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/theme/ThemeProvider.tsx",
+        "path": "apps/enterprise-app/src/theme/ThemeProvider.tsx",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: ThemeProvider, theme context. Protecting tests: apps/react-enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: ThemeProvider, theme context. Protecting tests: apps/enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/theme/theme.ts",
+        "path": "apps/enterprise-app/src/theme/theme.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: themeSchema (zod tenant theme contract). Protecting tests: apps/react-enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: themeSchema (zod tenant theme contract). Protecting tests: apps/enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/theme/use-theme.ts",
+        "path": "apps/enterprise-app/src/theme/use-theme.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useTheme hook. Protecting tests: apps/react-enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Retained interfaces: useTheme hook. Protecting tests: apps/enterprise-app/src/tests/theme/theme.test.tsx. Historical decision refs: ADR-0029.",
       "targetUsfConcept": "Source Reference"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/src/vite-env.d.ts",
+        "path": "apps/enterprise-app/src/vite-env.d.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -5687,7 +5687,7 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/tsconfig.json",
+        "path": "apps/enterprise-app/tsconfig.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -5698,18 +5698,18 @@
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/vite.config.ts",
+        "path": "apps/enterprise-app/vite.config.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
       "disposition": "refactor",
-      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: dev server port 5173, tanstack router plugin. Protecting tests: apps/react-enterprise-app/src/tests/app.test.tsx. Historical decision refs: ADR-0027.",
+      "rationale": "Historical inventory disposition refactor-behind-contract normalized to refactor. Retained interfaces: dev server port 5173, tanstack router plugin. Protecting tests: apps/enterprise-app/src/tests/app.test.tsx. Historical decision refs: ADR-0027.",
       "targetUsfConcept": "Configuration"
     },
     {
       "sourceRef": {
-        "path": "apps/react-enterprise-app/vitest.config.ts",
+        "path": "apps/enterprise-app/vitest.config.ts",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
@@ -15829,7 +15829,7 @@
     },
     {
       "sourceRef": {
-        "path": "tools/architecture/generate-package-readmes/tests/fixtures/representative/golden/react-app/README.md",
+        "path": "tools/architecture/generate-package-readmes/tests/fixtures/representative/golden/web-app/README.md",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
@@ -15928,7 +15928,7 @@
     },
     {
       "sourceRef": {
-        "path": "tools/architecture/generate-package-readmes/tests/fixtures/representative/valid/react-app/package.json",
+        "path": "tools/architecture/generate-package-readmes/tests/fixtures/representative/valid/web-app/package.json",
         "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",

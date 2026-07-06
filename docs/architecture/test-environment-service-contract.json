@@ -922,7 +922,7 @@
       "followUpIssue": "USF-234"
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "dependencyClass": "historical/dev-only proof",
       "composeTarget": "not-generated",
       "composeProfiles": [],

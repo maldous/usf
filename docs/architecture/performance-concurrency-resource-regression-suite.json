@@ -515,7 +515,7 @@
       "unsupportedReason": "post-Test public FQDN proof-origin service is outside the canonical Test readiness composed target and does not make a service-backed load or performance claim"
     },
     {
-      "serviceId": "react-app",
+      "serviceId": "web-app",
       "budgetProfileId": null,
       "budgetDisposition": "out-of-scope-budget-disposition",
       "baselineRef": "baseline.performance-concurrency-resource.out-of-scope-disposition",

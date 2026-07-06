@@ -534,7 +534,7 @@
         "guardrails"
       ],
       "evidence_grade": "C",
-      "source_evidence_summary": "react-app and ui-design-system lineage",
+      "source_evidence_summary": "web-app and ui-design-system lineage",
       "readiness_impact": "UI/UX remains future non-foundation scope. USF-225 adds only the absolute minimum transient browser telemetry harness needed for Faro-style browser telemetry proof; it does not create product UI, source-lineage application delivery, page/component architecture, visual snapshots, accessibility journeys, broad browser E2E, or user journey parity.",
       "tracking_carrier_or_recommendation": "USF-134 remains a disposition record for future UI/UX context; USF-225 covers only bounded browser telemetry proof and does not reopen UI backlog.",
       "usf_evidence_summary": "USF-225 browser telemetry proof artefact and validator coverage record browser telemetry evidence without UI readiness or functional completeness claims.",

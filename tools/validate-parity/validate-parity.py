@@ -610,7 +610,7 @@ def check_rows(F, state):
         # TSX) rather than any path containing "e2e" (which also matches tooling like
         # tools/e2e correlation scripts).
         joined = " ".join(row.get("source_paths") or []).lower()
-        looks_ui = any(m in joined for m in ("playwright", "react-enterprise-app", "ui-design-system", "ui-reference-harness", ".tsx"))
+        looks_ui = any(m in joined for m in ("playwright", "enterprise-app", "ui-design-system", "ui-reference-harness", ".tsx"))
         if looks_ui and classification not in UI_AWARE_STATUSES:
             F.add("USF-PARITY-014", f"test:{group}", f"UI/Playwright group lacks a UI-aware classification: {classification}")
         # 015 mixed/foundation classified wholly UI-only

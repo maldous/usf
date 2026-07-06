@@ -36,7 +36,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f3636e697595dbfd6132ab1e851052d8a69c692da4c77b401bb11b8d8546e45c"
+      "sha256": "0b04d176dbdf68591278d1ed988c81dd56e43192cb37a2430f78bf8a745dac57"
     },
     {
       "path": "spec/instances/bootstrap-mapping/background-workers-job-runner.json",
@@ -80,7 +80,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "db2b1c77da9dd5f565ee9f46a0fcdb65d78404b6dd1e64a9a6fc9453f73610b3"
+      "sha256": "31e0b2df63c51387ea45ed557085de42351b0406e73b47ee4efe00f74be0b8bf"
     },
     {
       "path": "spec/instances/bootstrap-mapping/configuration-registry-and-history.json",
@@ -542,7 +542,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "d2ad7ad609595e72f88a6a0ed4cce9dfb1cfd8e952b5a0cf650f3c04a6e06eca"
+      "sha256": "213167dda1b99e34a4fb287b9f0c384aca5962f1f5ee8d18a56bb1c1e651579c"
     },
     {
       "path": "spec/instances/bootstrap-mapping/sub-organisations.json",
@@ -608,7 +608,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "f8224759aae7f481b92f133b6514d65956b5df3dba29b0769c2469413d33cd8a"
+      "sha256": "8996cf547dd867dd59a476a433a0edcdd8428cb38a071a6f8519645a8966c9f7"
     },
     {
       "path": "spec/instances/bootstrap-mapping/alerting-incident-management-on-call-status-page.json",
@@ -696,7 +696,7 @@
       "blockerCount": 1,
       "deferralCount": 2,
       "persistentObjectExpectationCount": 1,
-      "sha256": "d9ad30e0b0c3b63eb66961b184a7c3209aeec454c4e4291538f7330072fc3ef2"
+      "sha256": "648b471985b490ad2e1bf6b40c89f8712e81872c33c6c2e9e90b7e0edc94c20e"
     },
     {
       "path": "spec/instances/bootstrap-mapping/code-quality-and-secret-and-dependency-scanning.json",

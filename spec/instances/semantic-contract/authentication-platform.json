@@ -34,7 +34,7 @@
         "apps/platform-api/src/server/auth.ts",
         "apps/platform-api/src/server/session.ts",
         "apps/platform-api/src/usecases/auth.ts",
-        "apps/react-enterprise-app/src/hooks/use-session.ts",
+        "apps/enterprise-app/src/hooks/use-session.ts",
         "docs/evidence/identity/keycloak-login-callback.md",
         "e2e/identity/broker-login.spec.ts"
       ]
@@ -42,7 +42,7 @@
     "permissions": {
       "status": "complete",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/components/RequirePermission.tsx"
+        "apps/enterprise-app/src/components/RequirePermission.tsx"
       ],
       "description": "The login/session path establishes the actor rather than requiring a permission, converting resolved roles into an explicit permission bundle where tenant roles come from membership and system-admin comes from realm roles without tenant membership. All authentication-administration routes are tenant-scoped and require read or write auth-settings permission with the matching admin scope, resolving the tenant credential from the FQDN-derived tenant context so one tenant can never read or mutate another tenant's provider, policy, or mapping configuration. Custom-domain callback eligibility is gated by tenant domain-write lifecycle operations."
     },
@@ -59,7 +59,7 @@
       "sourceRefs": [
         "apps/platform-api/tests/substrate/auth-routes.test.ts",
         "apps/platform-api/tests/unit/auth-usecase.test.ts",
-        "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+        "apps/enterprise-app/src/routes/__tests__/login.test.tsx",
         "docs/evidence/auth/custom-domain-auth-origin.md",
         "docs/evidence/auth/oidc-login-mapping-proof.md"
       ]
@@ -99,7 +99,7 @@
     "uiSemanticDefinition": {
       "status": "complete",
       "sourceRefs": [
-        "apps/react-enterprise-app/src/auth/login-providers.ts"
+        "apps/enterprise-app/src/auth/login-providers.ts"
       ]
     }
   },
@@ -111,15 +111,15 @@
     "apps/platform-api/tests/substrate/auth-routes.test.ts",
     "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
     "apps/platform-api/tests/unit/auth-usecase.test.ts",
-    "apps/react-enterprise-app/src/hooks/use-session.ts",
-    "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
+    "apps/enterprise-app/src/hooks/use-session.ts",
+    "apps/enterprise-app/src/routes/__tests__/login.test.tsx",
     "docs/api/openapi.json",
     "docs/evidence/auth/custom-domain-auth-origin.md",
     "docs/evidence/auth/oidc-login-mapping-proof.md",
     "docs/evidence/identity/keycloak-login-callback.md",
     "e2e/external/auth-negative.spec.ts",
     "e2e/identity/broker-login.spec.ts",
-    "apps/react-enterprise-app/src/auth/login-providers.ts"
+    "apps/enterprise-app/src/auth/login-providers.ts"
   ],
   "adrRefs": [
     "docs/adr/0001-validator-deferral-lift.md",
