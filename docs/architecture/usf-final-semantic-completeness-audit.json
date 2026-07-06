@@ -38,7 +38,7 @@
     "docs/architecture/usf-133-closure-tier-evidence-gate.md",
     "docs/architecture/usf-dev-foundation-gap-register.md",
     "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json",
-    "docs/architecture/complete-react-to-usf-functionality-parity-review.md",
+    "docs/architecture/usf-functionality-coverage-review.md",
     "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.json",
     "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
     "docs/architecture/compose-service-disposition-closure-matrix.json",
@@ -135,7 +135,7 @@
       "criterion": "Every historical test and proof group is classified; no UI or Playwright test disappears silently.",
       "classification": "partially-proven",
       "evidence": [
-        "docs/architecture/complete-react-to-usf-functionality-parity-review.md",
+        "docs/architecture/usf-functionality-coverage-review.md",
         "docs/architecture/react-parity-scope-classification-matrix.json"
       ],
       "blockerIssue": "USF-216",
@@ -146,7 +146,7 @@
       "classification": "partially-proven",
       "evidence": [
         "docs/architecture/foundation-ui-agnostic-readiness-boundary.md",
-        "docs/architecture/complete-react-to-usf-functionality-parity-review.md"
+        "docs/architecture/usf-functionality-coverage-review.md"
       ],
       "blockerIssue": "USF-216",
       "reason": "The boundary is established, but matrix and blocker reconciliation remains open before closure."
@@ -216,7 +216,7 @@
       "evidence": [
         "USF-133 remains Backlog with unchecked acceptance criteria",
         "docs/architecture/complete-react-to-usf-functionality-parity-matrix.json contains requires-human-decision rows",
-        "docs/architecture/complete-react-to-usf-functionality-parity-review.md contains stale requires-human-decision summary text",
+        "docs/architecture/usf-functionality-coverage-review.md contains stale requires-human-decision summary text",
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md contains requires-human-decision rows"
       ],
       "followUpIssueId": "USF-216",
@@ -241,7 +241,7 @@
       "classification": "deferred-with-owner",
       "evidence": [
         "USF-159, USF-170, USF-179, USF-196, and USF-205 provide bounded evidence but preserve non-equivalence and deferred operations boundaries",
-        "docs/architecture/complete-react-to-usf-functionality-parity-review.md still records observability depth as non-closure work"
+        "docs/architecture/usf-functionality-coverage-review.md still records observability depth as non-closure work"
       ],
       "followUpIssueId": "USF-218",
       "blocksUsf133": true,

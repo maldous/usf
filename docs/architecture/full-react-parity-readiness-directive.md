@@ -6,7 +6,7 @@
 | Status | Draft / planning — no implementation authorised by this document |
 | Authority level | Reviewable planning directive; subordinate to the Charter, Authority Model, accepted ADRs, validators, runtime proof evidence, and any future implementation directive |
 | Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `AGENTS.md` |
-| Primary inputs | `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/react-readiness-rule-parity-matrix.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/bootstrap-source-use-disposition-matrix.md`, `docs/architecture/complete-readiness-blocker-register.md`, the `spec/instances/` corpus, and historical `../react` evidence |
+| Primary inputs | `docs/architecture/capability-source-coverage-matrix.md`, `docs/architecture/usf-readiness-rule-coverage-matrix.md`, `docs/architecture/react-l5-equivalence-audit.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/bootstrap-source-use-disposition-matrix.md`, `docs/architecture/complete-readiness-blocker-register.md`, the `spec/instances/` corpus, and historical `../react` evidence |
 | Companions | `docs/architecture/foundation-ui-agnostic-readiness-boundary.md`, `docs/architecture/react-parity-scope-classification-matrix.md`, `docs/architecture/full-parity-linear-tracking-plan.md` |
 | Repository state | The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89, USF-39). This directive and this pass introduce no new implementation/runtime code, no schema promotion, no proof execution, no React copy, and no React path mirroring. |
 
@@ -28,7 +28,7 @@ This directive defines, before any further implementation resumes, the complete 
 
 2.3 This directive MUST NOT be used to upgrade bootstrap proof to broader readiness, to treat `hermetic-mock` as `live-external-provider`, to treat `production-shaped` as `production-live`, or to claim staging/production/deployment/live-provider readiness. Those remain separately authorised and separately proven (Charter §6; Authority Model §4.4).
 
-2.4 **Naming and structure conformance.** Per Charter §1.3 and the Strict Naming Rules in `AGENTS.md`, the tokens `v2`, `legacy`, `old`, `new`, `temp`, `transitional`, and a redundant `usf` segment MUST NOT appear in canonical USF path names. The artefacts named by this directive therefore use the established `react-*` convention (as in `react-readiness-rule-parity-matrix.md`) and omit the forbidden `legacy` token from filenames. The word is retained only where this document quotes the forbidden-token list.
+2.4 **Naming and structure conformance.** Per Charter §1.3 and the Strict Naming Rules in `AGENTS.md`, the tokens `v2`, `legacy`, `old`, `new`, `temp`, `transitional`, and a redundant `usf` segment MUST NOT appear in canonical USF path names. The artefacts named by this directive therefore use the established `react-*` convention (as in `usf-readiness-rule-coverage-matrix.md`) and omit the forbidden `legacy` token from filenames. The word is retained only where this document quotes the forbidden-token list.
 
 ## 3. The foundation-vs-UI scope rule
 
@@ -46,7 +46,7 @@ The USF foundation has **no UI/UX runtime**. "Full React functional parity" does
 
 ## 4. Disposition model (the bar)
 
-Every implementation-relevant historical `../react` item, and every historical test/proof, MUST be assigned exactly one **disposition status**. The model reuses the existing controlled coverage vocabulary (see `react-l5-equivalence-audit.md`, `react-readiness-rule-parity-matrix.md`) and adds two UI-scope statuses.
+Every implementation-relevant historical `../react` item, and every historical test/proof, MUST be assigned exactly one **disposition status**. The model reuses the existing controlled coverage vocabulary (see `react-l5-equivalence-audit.md`, `usf-readiness-rule-coverage-matrix.md`) and adds two UI-scope statuses.
 
 Foundation-behaviour statuses:
 
@@ -79,7 +79,7 @@ UI-scope statuses (new):
 The historical inventory required to populate the parity model **already exists** across these artefacts, which are the authoritative substrate. This directive references them rather than re-deriving them (Charter non-goal: no duplication; AGENTS.md: reuse existing artefacts):
 
 - `capability-source-coverage-matrix.md` — 75 historical capabilities → USF semantic targets/gaps (67 with semantic-contract instances).
-- `react-readiness-rule-parity-matrix.md` — 60 historical readiness rules → USF coverage (covered/partial/deferred/not-applicable).
+- `usf-readiness-rule-coverage-matrix.md` — 60 historical readiness rules → USF coverage (covered/partial/deferred/not-applicable).
 - `react-l5-equivalence-audit.md` — comprehensive per-asset-class equivalence audit over the frozen React base (`v1-final`), using the controlled coverage vocabulary.
 - `bootstrap-source-use-disposition-matrix.md` and `authentication-slice-source-use-disposition-matrix.md` — source-use disposition for the bootstrap and authentication slices.
 - `semantic-source-use-closure-ledger.md`, `source-import-coverage-plan.md`, `complete-readiness-blocker-register.md` — closure ledger, import coverage, and current blocker state.
