@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-// @ts-expect-error server.mjs is a runtime ESM module without a TypeScript declaration file.
 import {
   buildData,
   buildReviewItems,
