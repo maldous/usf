@@ -239,6 +239,15 @@ def resolve_artifact_path(value: str, artifact_dir: Path | None = None) -> Path 
         return None
     candidate = Path(value)
     if candidate.is_absolute():
+        if artifact_dir:
+            parts = candidate.parts
+            marker = "usf-proof-cockpit-machine-qa"
+            if marker in parts:
+                marker_index = parts.index(marker)
+                run_index = marker_index + 1
+                if run_index < len(parts) and parts[run_index] == artifact_dir.name:
+                    remainder = parts[run_index + 1 :]
+                    return artifact_dir.joinpath(*remainder) if remainder else artifact_dir
         return candidate
     if artifact_dir and (artifact_dir / candidate).exists():
         return artifact_dir / candidate
