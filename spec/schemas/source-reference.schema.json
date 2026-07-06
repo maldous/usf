@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:source-reference",
   "title": "USF Source Reference Schema",
-  "description": "Draft JSON Schema for references to historical (../react) and current source evidence (rank-6 historical-source-evidence). Each reference declares the repository, a resolvable path and/or commit/tag, a source kind (source-kinds), a source role (source-roles), and a disposition (disposition-values), so lineage is traceable and source paths never become USF target architecture. Governs the ontology concepts Source Reference and Evidence. Historical forbidden tokens (v2, legacy, ...) are permitted inside the path field because it is quoted historical evidence. Reference resolution is validator-deferred per schema-authoring-standard §24. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
+  "description": "Draft JSON Schema for references to USF's own historical and current self-defined source evidence (historical-source-evidence). Each reference declares the repository, a resolvable path and/or commit/tag, a source kind (source-kinds), a source role (source-roles), and a disposition (disposition-values), so lineage is traceable and source paths never become USF target architecture. Governs the ontology concepts Source Reference and Evidence. Historical forbidden tokens (v2, legacy, ...) are permitted inside the path field because it is quoted historical evidence. Reference resolution is validator-deferred per schema-authoring-standard §24. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -91,7 +91,7 @@
     "repository": {
       "type": "string",
       "minLength": 1,
-      "$comment": "Originating repository, e.g. '../react' / 'maldous/react'. Marked external so historical paths are not mistaken for USF targets."
+      "$comment": "Originating repository, e.g. 'usf' for USF's own self-defined source lineage. Marked so historical source paths are not mistaken for USF target architecture."
     },
     "path": {
       "type": "string",
