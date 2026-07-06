@@ -22,13 +22,34 @@
     "serviceCatalogueServiceId": "caddy",
     "composeProfile": "gateway",
     "localComposeTargets": ["compose/compose.dev.generated.yaml", "compose/compose.test.generated.yaml", "compose/compose.staging.generated.yaml"],
-    "localHostPublication": "loopback-only",
-    "publicExposureAllowed": false,
+    "localHostPublication": "non-loopback-present",
+    "publicExposureAllowed": true,
     "lanExposureAllowed": false,
     "productionExposureAllowedByThisIssue": false,
     "gatewayReadinessClaim": false,
     "deploymentReadinessClaim": false,
-    "evidenceBoundary": "Service catalogue and generated Compose evidence define local loopback/profile-gated gateway substrate only; no runtime route, final clickthrough UX, public exposure, staging readiness, production readiness, deployment readiness, or live-provider gateway readiness is proven."
+    "acceptedPublicProofOriginEdgeRef": "acceptedPublicProofOriginEdge",
+    "evidenceBoundary": "Dev/test reach the composed external-caddy edge over the compose network with no host port; the staging FQDN edge binds public 0.0.0.0:80/443 as the accepted public proof origin edge (see acceptedPublicProofOriginEdge). Service catalogue and generated Compose evidence define the profile-gated gateway substrate and the accepted public edge only; no runtime route, final clickthrough UX, staging readiness, production readiness, deployment readiness, or live-provider gateway readiness is proven, and public reachability of hermetic synthetic proof content is not any readiness claim."
+  },
+  "acceptedPublicProofOriginEdge": {
+    "authorised": true,
+    "authorityKind": "public-proof-origin-edge",
+    "serviceId": "caddy",
+    "decision": "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+    "publicFqdnAuthority": "docs/architecture/public-fqdn-semantic-contract.md",
+    "authorityIssues": ["USF-263", "USF-264"],
+    "operatorAccessMatrixAuthority": "docs/architecture/operator-access-gateway-posture-matrix.json#acceptedPublicProofOriginEdge",
+    "directPublicHostPort": true,
+    "operatorGatedRoute": "/proof",
+    "operatorGate": "Caddy operator HTTP basic authentication via the reload-managed include; committed default CLOSED (503); imported only into the staging FQDN site.",
+    "publicRoutes": ["/.well-known/usf-public-edge.json", "/__proof/public-route"],
+    "authorisedPorts": [
+      {"portId": "gateway-http", "publishedPort": 80, "hostIp": "0.0.0.0", "bindScope": "public"},
+      {"portId": "gateway-https", "publishedPort": 443, "hostIp": "0.0.0.0", "bindScope": "public"}
+    ],
+    "behindEdgeLoopbackOnly": "staging-proof-cockpit and all operator/admin/control-plane services remain loopback-only behind this edge; only the caddy gateway ports are internet-exposed.",
+    "publicExposureReadinessClaim": false,
+    "nonClaimPreservation": "Public reachability of hermetic synthetic proof content and an operator-authenticated proof cockpit is not a platform go-live and upgrades no readiness claim; live public deployment remains a separate operator step recorded in the runbooks."
   },
   "trustedProxyPolicy": {
     "trustedProxySources": ["local-compose-caddy-loopback"],
@@ -45,14 +66,14 @@
     "requiredBeforeTestReadiness": ["SSO decision proof or accepted deferral per routed service", "tenant-safe denial proof", "audit evidence for access decision"]
   },
   "localTransportBoundary": {
-    "hostIp": "127.0.0.1",
+    "hostIp": "0.0.0.0",
     "httpPublishedPort": 80,
     "httpsPublishedPort": 443,
-    "tlsTerminationPolicy": "TLS/local HTTPS port is catalogued for the composed edge (external-caddy) bound loopback-only on 127.0.0.1:80/443; certificate issuance, trust store, production TLS termination, mTLS, and live gateway TLS posture are not proven.",
+    "tlsTerminationPolicy": "The composed edge (external-caddy) binds public 0.0.0.0:80/443 on the staging FQDN edge as the accepted public proof origin edge (see acceptedPublicProofOriginEdge); certificate issuance, trust store, production TLS termination, mTLS, and live gateway TLS posture are not proven.",
     "wafPolicy": "No WAF, edge, bot, rate-limit edge, or production gateway control is claimed by this issue.",
     "requestSizeLimitPolicy": "Route-specific limits must be proven before gateway readiness; this matrix records posture only.",
     "bodyTimeoutPolicy": "Route-specific timeout behaviour must be proven before gateway readiness; this matrix records posture only.",
-    "publicExposureAllowed": false,
+    "publicExposureAllowed": true,
     "lanExposureAllowed": false
   },
   "serviceRoutingBoundary": {

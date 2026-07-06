@@ -1,7 +1,7 @@
 {
   "expectedRule": "USF-ENTERPRISE-020",
-  "description": "USF-180 gateway substrate incorrectly permits public exposure.",
-  "gatewayClickthroughSet": {
-    "gatewayInclusion.publicExposureAllowed": true
-  }
+  "description": "USF-180 gateway substrate permits public exposure but the accepted public proof origin edge authority is dropped, so public exposure must fail closed.",
+  "gatewayClickthroughDrop": [
+    "acceptedPublicProofOriginEdge"
+  ]
 }
