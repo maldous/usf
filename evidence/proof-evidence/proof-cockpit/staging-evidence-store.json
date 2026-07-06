@@ -4,18 +4,18 @@
   "linearIssue": "USF-293",
   "acceptanceIssue": "USF-290",
   "purpose": "Durable staging proof cockpit evidence store for machine QA history, screenshot-equivalent manifests, human review decisions, final reports, exported bundles, supersession history, and non-claim preservation.",
-  "sourceSha": "01cbcbe7b0cdb128062e558e6ee0ac233137cd74",
-  "deploymentSha": "01cbcbe7b0cdb128062e558e6ee0ac233137cd74",
+  "sourceSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
+  "deploymentSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
   "latestMachineRun": {
-    "runId": "qa-run-2026-07-06T01-40-56-336Z",
-    "sourceSha": "01cbcbe7b0cdb128062e558e6ee0ac233137cd74",
-    "deploymentSha": "01cbcbe7b0cdb128062e558e6ee0ac233137cd74",
+    "runId": "qa-run-2026-07-06T02-13-15-648Z",
+    "sourceSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
+    "deploymentSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
     "environment": "local-machine-qa",
-    "generatedAt": "2026-07-06T01:43:34.292Z",
-    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z",
-    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z/proof-cockpit-machine-qa-run.json",
-    "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z/proof-cockpit-screenshot-manifest.json",
-    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z/external-review-bundle",
+    "generatedAt": "2026-07-06T02:15:58.599Z",
+    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z",
+    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z/proof-cockpit-machine-qa-run.json",
+    "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z/proof-cockpit-screenshot-manifest.json",
+    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z/external-review-bundle",
     "routeCount": 827,
     "capabilityCount": 75,
     "serviceCount": 39,
@@ -410,7 +410,7 @@
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
       "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
-      "payloadPruned": false
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-06T01-40-56-336Z",
@@ -422,6 +422,30 @@
       "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z/proof-cockpit-machine-qa-run.json",
       "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z/proof-cockpit-screenshot-manifest.json",
       "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z/external-review-bundle",
+      "routeCount": 827,
+      "capabilityCount": 75,
+      "serviceCount": 39,
+      "screenshotCount": 93,
+      "serviceEvidenceCount": 39,
+      "passCount": 1278,
+      "warnCount": 0,
+      "gapCount": 0,
+      "failCount": 0,
+      "humanDecisionRequired": 1,
+      "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": false
+    },
+    {
+      "runId": "qa-run-2026-07-06T02-13-15-648Z",
+      "sourceSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
+      "deploymentSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
+      "environment": "local-machine-qa",
+      "generatedAt": "2026-07-06T02:15:58.599Z",
+      "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z",
+      "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z/proof-cockpit-machine-qa-run.json",
+      "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z/proof-cockpit-screenshot-manifest.json",
+      "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z/external-review-bundle",
       "routeCount": 827,
       "capabilityCount": 75,
       "serviceCount": 39,
@@ -493,7 +517,7 @@
     "targetSystemObservationCount": 39
   },
   "humanReview": {
-    "accepted": 0,
+    "accepted": 516,
     "rejected": 0,
     "retestRequested": 0,
     "correctiveActions": 0,
@@ -509,7 +533,12 @@
       "create corrective action",
       "accept residual risk",
       "record final human signoff when criteria are satisfied"
-    ]
+    ],
+    "baselineMode": "simulated-one-time-current-fingerprint-baseline",
+    "baselineRunId": "qa-run-2026-07-06T02-13-15-648Z",
+    "baselineAcceptedAt": "2026-07-06T02:15:58.599Z",
+    "baselineReviewItemCount": 516,
+    "baselineNote": "Simulated one-time baseline acceptance generated on Matthew's explicit instruction on 2026-07-06. This is not an item-by-item human review and does not complete final signoff. It clears the current proof review queue by accepting the current fingerprinted evidence state only; future evidence, screenshot, route, report, or source changes alter affected fingerprints and return only those items to human review. Non-claims remain preserved."
   },
   "storageModel": {
     "pathOrService": "repository path evidence/proof-evidence/proof-cockpit plus generated external-review bundle",
@@ -662,6 +691,16 @@
       "toArtifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z",
       "toSourceSha": "01cbcbe7b0cdb128062e558e6ee0ac233137cd74",
       "supersededAt": "2026-07-06T01:43:34.292Z",
+      "reason": "Automated promotion of a newer current-source machine QA run via promote.mjs."
+    },
+    {
+      "fromRunId": "qa-run-2026-07-06T01-40-56-336Z",
+      "fromArtifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T01-40-56-299Z",
+      "fromSourceSha": "01cbcbe7b0cdb128062e558e6ee0ac233137cd74",
+      "toRunId": "qa-run-2026-07-06T02-13-15-648Z",
+      "toArtifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-06T02-13-15-607Z",
+      "toSourceSha": "6d0f95efa3faf5789361bc2b41135d4db58daca0",
+      "supersededAt": "2026-07-06T02:15:58.599Z",
       "reason": "Automated promotion of a newer current-source machine QA run via promote.mjs."
     }
   ],
