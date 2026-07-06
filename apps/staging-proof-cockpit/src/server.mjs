@@ -38,6 +38,7 @@ const RELATED_ISSUES = Object.freeze([
 const PERSISTENT_EVIDENCE_ROOT = join(ROOT, "evidence/proof-evidence/proof-cockpit");
 const PERSISTENT_EVIDENCE_STORE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "staging-evidence-store.json");
 const FINAL_REPORT_PATH = join(PERSISTENT_EVIDENCE_ROOT, "final-external-review-report.md");
+const WARNING_INVENTORY_PATH = join(PERSISTENT_EVIDENCE_ROOT, "warning-inventory.json");
 const EXTERNAL_REVIEW_BUNDLE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "external-review-bundle");
 const DEFAULT_STATE_PATH =
   process.env.USF_PROOF_COCKPIT_STATE_PATH ?? "/var/lib/usf-proof-cockpit/human-review-actions.json";
@@ -1365,6 +1366,7 @@ export function buildData() {
     });
   }
   const persistentEvidence = loadPersistentEvidenceStore();
+  const warningInventory = readJsonOrNull(WARNING_INVENTORY_PATH) ?? {};
   const claims = buildClaims(capabilities, serviceCatalogue.services, foundationClosure, persistentEvidence);
   const screenshots = buildScreenshotRecords(capabilities, serviceCatalogue.services, persistentEvidence);
   const enterpriseDomains = buildEnterpriseDomains(claims);
@@ -1376,6 +1378,7 @@ export function buildData() {
     evidence,
     foundationClosure,
     persistentEvidence,
+    warningInventory,
     claims,
     claimsById: new Map(claims.map((claim) => [claim.id, claim])),
     screenshots,
@@ -2812,6 +2815,10 @@ ${nonClaimsBlock()}`,
 function finalReportSections(data, state) {
   const store = data.persistentEvidence;
   const latest = store.latestMachineRun;
+  const inventorySummary = data.warningInventory?.summary ?? {};
+  const originalWarningCount = inventorySummary.originalWarningCount ?? "unknown";
+  const finalWarningCount = inventorySummary.finalWarningCount ?? latest.warnCount;
+  const finalUnresolvedGapCount = inventorySummary.finalUnresolvedGapCount ?? latest.gapCount;
   return [
     ["Executive summary", `USF-293 delivers an acceptance-grade proof cockpit over ${data.claims.length} claims, ${data.semanticDefinitions.length} semantic definitions, ${data.capabilities.length} capabilities, ${data.services.length} services, ${ROUTES.length} route patterns, ${data.screenshots.length} screenshot or equivalent artifacts, and ${data.enterpriseDomains.length} enterprise domains. Matthew's final ${ACCEPTANCE_ISSUE} acceptance remains a separate human decision.`],
     ["Scope and non-claims", `Scope is proof-cockpit assurance review and evidence portfolio presentation. Non-claims: ${NON_CLAIMS.join(", ")}.`],
@@ -2832,7 +2839,7 @@ function finalReportSections(data, state) {
     ["Enterprise/ISO-style support mapping", `${data.enterpriseDomains.length} enterprise domains map claims, evidence, screenshots/equivalents, owners, validation method, result, residual risk, cadence, human review, and non-claim boundary without certification claim.`],
     ["Risk and control mapping", "Claims map to enterprise controls and risks; residual risks require explicit human action and cannot be silently accepted."],
     ["Warnings, gaps, corrective actions, and retest status", `Latest machine run records ${latest.warnCount} warnings, ${latest.gapCount} unresolved gaps, and ${latest.failCount} failures. Corrective actions recorded: ${data.persistentEvidence.humanReview.correctiveActions}. Retest requests: ${data.persistentEvidence.humanReview.retestRequested}.`],
-    ["Warning resolution", "Original warning count: 68. Final warning count: 0. Final unresolved gap count: 0. Resolution inventory: evidence/proof-evidence/proof-cockpit/warning-inventory.json. Resolution method: service screenshot-equivalent evidence was completed, alert fields were exposed, and enterprise Evidence status fields were rendered. Proof: latest machine QA has zero warnings, zero failures, and zero unresolved gaps."],
+    ["Warning resolution", `Original warning count: ${originalWarningCount}. Final warning count: ${finalWarningCount}. Final unresolved gap count: ${finalUnresolvedGapCount}. Resolution inventory: evidence/proof-evidence/proof-cockpit/warning-inventory.json. Resolution method: service screenshot-equivalent evidence was completed, alert fields were exposed, and enterprise Evidence status fields were rendered. Proof: latest machine QA has zero warnings, zero failures, and zero unresolved gaps.`],
     ["Evidence freshness and historical audit artefact retention", data.persistentEvidence.storageModel.staleEvidenceBehaviour],
     ["Human acceptance result", data.persistentEvidence.humanReview.finalSignoffCompleted ? "Final human acceptance recorded." : "Final human acceptance is not auto-completed and remains unavailable until Matthew records the required decision."],
     ["Final handoff statement", "The cockpit supports selective review and assertion. It does not claim staging readiness, production readiness, deployment readiness, live-provider readiness, SOC readiness, ISO certification, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or automatic USF-290 completion."],
