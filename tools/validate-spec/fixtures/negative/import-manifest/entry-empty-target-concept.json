@@ -1,7 +1,7 @@
 {
   "id": "import-manifest-entry-empty-target",
   "title": "Import manifest: entry with empty targetUsfConcept",
-  "sourceRepository": "../react",
+  "sourceRepository": "../external-source",
   "entries": [
     {
       "sourceRef": "src-ref-auth-service-path",

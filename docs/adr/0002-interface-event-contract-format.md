@@ -37,8 +37,8 @@ The draft USF schemas already encode the governance envelope, controlled vocabul
 
 ## Source References
 
-- `../react/docs/evidence/api/openapi-drift-hard-gate.md`
-- `../react/docs/v2-foundation/event-semantics.json`
+- USF's own OpenAPI contract-drift check requirement, held in USF's source-import registry.
+- USF's own event-semantics definitions, held in USF's source-import registry.
 
 ## Proof References
 

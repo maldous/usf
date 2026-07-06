@@ -5,11 +5,11 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-25",
-  "context": "Historical login semantics in ../react are scattered across controllers and middleware, with no single normative source.",
+  "context": "Historical login semantics in ../external-source are scattered across controllers and middleware, with no single normative source.",
   "decision": "The USF authentication contract is the sole normative source for login semantics; historical implementations are evidence only.",
   "consequences": [
     "Login behaviour must be derived from the authentication contract, not from historical controllers.",
-    "Historical ../react login code is retained as evidence and lineage, never as live authority."
+    "Historical ../external-source login code is retained as evidence and lineage, never as live authority."
   ],
   "invariants": [
     "Login semantics are defined exclusively by the authentication contract."

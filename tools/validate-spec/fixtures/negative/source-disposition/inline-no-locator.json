@@ -9,7 +9,7 @@
   "vocabularyRefs": ["disposition-values"],
   "aiGuidance": "This instance must be rejected because the inline source reference has no locator.",
   "sourceRef": {
-    "repository": "../react"
+    "repository": "../external-source"
   },
   "disposition": "preserve",
   "rationale": "Inline reference lacks any resolvable locator."

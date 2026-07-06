@@ -7,7 +7,7 @@
 | **Repository** | `usf` (this repository) — the clean canonical target |
 | **Created after** | [`charter.md`](./charter.md) and [`authority-model.md`](./authority-model.md), which it operationalizes and **MUST NOT** redefine |
 | **Authority** | Subordinate to the constitutional layer (Charter + Authority Model). It governs the **form and quality** of lower artefacts; it does not change the authority order. |
-| **Evidence basis** | Grounded in the historical repository `../react` → `/home/user/src/react` (the *historical repository*). Citations to `../react/...` reference existing historical paths and introduce no historical naming into USF. |
+| **Evidence basis** | Grounded in USF's own self-defined artefacts — the semantic corpus, ADRs, validators, and recorded proof evidence in this repository. Source paths are held in USF's own source-import registry and introduce no external naming into USF. |
 
 > **Normative language.** Requirement words follow **BCP 14** (RFC 2119 + RFC 8174) as defined in §6. Only the uppercase forms carry normative meaning.
 
@@ -43,7 +43,7 @@ This document defines how USF chooses, adapts, defines, and enforces standards. 
 - **Which external standards are adopted, adapted, or only used as inspiration?** Classified honestly in §7 and §8, with no false compliance claims.
 - **How do standards connect to the authority model?** Standards define the required *form and quality* at each authority level (§5); they never alter the authority order.
 - **How do standards prevent AI drift?** By making the Charter's AI-safety principle enforceable: required source-references, provider-mode honesty, evidence freshness, ADR linkage, and coupled-change rules (§4, §9, §20), backed by fail-closed validators (§18).
-- **How do standards preserve knowledge from `../react`?** By defining the source-evidence role (§10): every historical asset is carried only through an explicit source reference and disposition, so no semantic intent is lost (Charter §5.8).
+- **How do standards preserve USF's own source lineage?** By defining the source-evidence role (§10): every recorded source asset is carried only through an explicit source reference and disposition, so no semantic intent is lost (Charter §5.8).
 - **How do standards become enforceable later?** Through the maturity ladder (§21): documented → structured → machine-readable (schemas) → validator-enforced → proof-backed → release-blocking.
 
 3.3 This profile is specific to USF. It does not restate general enterprise-architecture practice; it states what USF requires and why, grounded in concrete historical evidence.
@@ -61,7 +61,7 @@ This profile operationalizes the [Charter](./charter.md). It does not repeat the
 | **AI-safe** (§5.3) | AI agent operating standard (§20) plus required references and fail-closed validation remove "infer from code" as a permitted path. |
 | **Internally provable** (§5.4) | Proof-level (§9) and provider-mode (§12) standards make hermetic, offline proof the default substrate and a recorded property of every proof. |
 | **External-provider adaptable** (§5.5) | Provider-mode (§12) and environment (§13) standards add live-provider evidence as a *higher rung*, never a replacement. |
-| **Source-aware but not source-subordinate** (§5.6) | Source-evidence standard (§10) defines `../react` as rank-6 lineage consulted to recover intent, never as live authority. |
+| **Source-aware but not source-subordinate** (§5.6) | Source-evidence standard (§10) defines USF's own source registry as rank-5 source lineage consulted to recover intent, never as live authority. |
 | **Clean final-state naming** (§5.7) | Directory and naming standard (§17) forbids migration-phase tokens in USF paths. |
 | **No knowledge loss** (§5.8) | Import/disposition standard (§9) + source-evidence standard (§10): no source element disappears without a recorded disposition. |
 | **Proof does not replace semantics** (§5.9) | Evidence (§11) and ADR (§19) standards keep proof as evidence-of-fact, distinct from the semantic definition of intent. |
@@ -84,9 +84,8 @@ This profile uses the authority order defined in [`authority-model.md`](./author
 | **2 — ADRs** (`docs/adr/`) | Normative, evidence-derived, with semantic/source/proof/validator references, invariants, permitted-change, forbidden-drift, consequences, and AI-alignment rules (§19). |
 | **3 — Validator rules** (`tools/`) | Executable; fail closed on ambiguity; check schema validity, reference resolution, evidence completeness, disposition, provider-mode and environment honesty, ADR linkage, and proof-claim consistency (§18). |
 | **4 — Runtime proof evidence** (`evidence/`) | Typed, source-referenced, provider-mode- and environment-declared, level-classified, fresh/stale-detectable, non-overclaiming; emitted fields preserved through collection and reporting (§11, §12). |
-| **5 — USF source implementation** | Conforms to semantic contracts; introduces no behaviour, route, permission, state, error, event, or provider semantics absent from semantics; import boundaries enforced (§9, §15). |
-| **6 — Historical `../react` evidence** | Used only through explicit source references and dispositions; never carried as live authority or as a new path name (§10, §17). |
-| **7 — Generated reports** | Machine-readable, regenerable, lower authority than the artefacts they summarize; must not hide missing raw evidence (§11, §18). |
+| **5 — USF source implementation** | Conforms to semantic contracts; introduces no behaviour, route, permission, state, error, event, or provider semantics absent from semantics; import boundaries enforced (§9, §15). Source references and dispositions are USF's own self-defined source-import registry, used never as live authority or as a new path name (§10, §17). |
+| **6 — Generated reports** | Machine-readable, regenerable, lower authority than the artefacts they summarize; must not hide missing raw evidence (§11, §18). |
 
 5.1 Standards **MUST** help resolve conflicts, not create new ones. A standard that contradicts the Authority Model is a defect in the standard. Where a standard is silent, the Authority Model's conflict-resolution (§4) and AI operating rule (§6) govern.
 
@@ -128,7 +127,7 @@ Every standard referenced by USF **MUST** be assigned exactly one class. The cla
 
 **USF-defined standard.** *Meaning:* a standard USF owns and defines itself (§9). *Authority:* binding at the authority level of the artefacts it governs once ratified by an ADR and/or expressed as a schema. *When usable:* where no external standard fits, or USF needs domain-specific control. *Recorded in:* this profile, an ADR, and a schema/validator. *AI treatment:* primary input alongside semantics. *Validators:* MUST enforce it as it matures (§21).
 
-**Historical source convention.** *Meaning:* a convention observed in `../react` (e.g. a field name, a Make-target pattern, a disposition vocabulary). *Authority:* rank-6 evidence (Authority Model §2.6); informative, not binding on USF. *When usable:* to recover intent and to justify a USF-defined standard. *Recorded in:* a source reference (§10), never as a new USF path or name. *AI treatment:* consult and cite as lineage; never adopt unexamined. *Validators:* not enforced directly; the USF standard derived from it is.
+**Historical source convention.** *Meaning:* a convention recorded in USF's own source lineage (e.g. a field name, a Make-target pattern, a disposition vocabulary). *Authority:* rank-5 source evidence (Authority Model §2.5); informative, not binding on USF. *When usable:* to recover intent and to justify a USF-defined standard. *Recorded in:* a source reference (§10), never as a new USF path or name. *AI treatment:* consult and cite as lineage; never adopt unexamined. *Validators:* not enforced directly; the USF standard derived from it is.
 
 **Deprecated historical convention.** *Meaning:* a historical convention USF has examined and chosen not to carry forward. *Authority:* none; retained only as documented lineage. *When usable:* never as a target form. *Recorded in:* an ADR or source reference stating why it is deprecated. *AI treatment:* MUST NOT reintroduce it. *Validators:* SHOULD detect and reject reintroduction where feasible.
 
@@ -147,13 +146,13 @@ USF does **not** claim full compliance with any external standard unless it crea
 *USF status:* **Adopted as the mechanism**; the **dialect is resolved** by `docs/architecture/schema-authoring-standard.md` as **JSON Schema Draft 2020-12** (`$schema`: `https://json-schema.org/draft/2020-12/schema`); validator package/tooling is **partially resolved by directive** (a draft/advisory validator with `jsonschema==4.10.3` — see §23 Amendment and schema-authoring-standard §26 Amendment A); meta-schema wiring and active maturity remain **deferred** (§23). *Scope:* every USF JSON artefact (semantics, registries, evidence envelope, validator reports). *Use for:* explicit, versioned, identifiable shape validation that a validator can execute. *Will not use for:* schemas that merely *document* structure without enforcing it — such schemas are forbidden (a schema MUST be validator-testable). *Future artefacts:* `spec/schemas/` schema files; per-artefact `$id` and `version`. *Validator expectation:* validators MUST run schema validation and fail closed on invalidity. *AI relevance:* agents MUST validate generated JSON against its schema before claiming completion.
 
 **OpenAPI-style — synchronous HTTP/API contracts.**
-*USF status:* **Adapted principle; artefact not yet adopted.** *Scope:* HTTP/API route and contract semantics. *Use for:* the principle that API interfaces are **contract-first or contract-reconciled**, not implementation-guessed (§15). *Will not use for:* claiming OpenAPI compliance or requiring OpenAPI files now; that decision is deferred (§23). *Future artefacts:* possibly OpenAPI documents or a USF interface contract artefact; an API contract-drift check (the historical repository runs an OpenAPI drift hard gate — `../react/docs/evidence/api/openapi-drift-hard-gate.md`). *Validator expectation:* once adopted, contract-vs-runtime drift MUST be checkable. *AI relevance:* agents MUST NOT infer API contracts from handlers when a semantic interface contract exists.
+*USF status:* **Adapted principle; artefact not yet adopted.** *Scope:* HTTP/API route and contract semantics. *Use for:* the principle that API interfaces are **contract-first or contract-reconciled**, not implementation-guessed (§15). *Will not use for:* claiming OpenAPI compliance or requiring OpenAPI files now; that decision is deferred (§23). *Future artefacts:* possibly OpenAPI documents or a USF interface contract artefact; an API contract-drift check (USF requires an OpenAPI drift hard gate). *Validator expectation:* once adopted, contract-vs-runtime drift MUST be checkable. *AI relevance:* agents MUST NOT infer API contracts from handlers when a semantic interface contract exists.
 
 **AsyncAPI-style — event/message contracts.**
-*USF status:* **Adapted principle; artefact not yet adopted.** *Scope:* events, messages, queues, topics. *Use for:* the principle that event/message contracts are explicit (schema, ordering, idempotency, DLQ, retention) before or during implementation (§15), grounded in `../react/docs/v2-foundation/event-semantics.json`. *Will not use for:* claiming AsyncAPI compliance or requiring AsyncAPI files now (deferred, §23). *Future artefacts:* a USF event-contract artefact, possibly AsyncAPI-shaped. *Validator expectation:* event payloads and policies MUST be checkable against the contract. *AI relevance:* events MUST NOT be invented in code without an event contract.
+*USF status:* **Adapted principle; artefact not yet adopted.** *Scope:* events, messages, queues, topics. *Use for:* the principle that event/message contracts are explicit (schema, ordering, idempotency, DLQ, retention) before or during implementation (§15), grounded in USF's own event-semantics definitions. *Will not use for:* claiming AsyncAPI compliance or requiring AsyncAPI files now (deferred, §23). *Future artefacts:* a USF event-contract artefact, possibly AsyncAPI-shaped. *Validator expectation:* event payloads and policies MUST be checkable against the contract. *AI relevance:* events MUST NOT be invented in code without an event contract.
 
 **OpenTelemetry-style — observability semantic conventions.**
-*USF status:* **Adapted (principles only).** USF does **not** claim OpenTelemetry compliance. *Scope:* naming and shape of logs, metrics, traces, spans, attributes, events, and service/resource identity. *Use for:* informing a USF-defined, controlled, validator-checkable observability vocabulary (§16). *Will not use for:* asserting OTel conformance, or treating arbitrary OTel attributes as automatically valid. *Future artefacts:* a USF observability vocabulary/registry; an observability-correlation evidence form (the historical repository correlates Loki/Tempo/Sentry — `../react/docs/evidence/e2e/prod-observability-correlation-latest.json`). *Validator expectation:* observability names MUST be drawn from the controlled vocabulary once defined. *AI relevance:* agents MUST NOT rename or remove observability/audit semantics as an incidental refactor (§16).
+*USF status:* **Adapted (principles only).** USF does **not** claim OpenTelemetry compliance. *Scope:* naming and shape of logs, metrics, traces, spans, attributes, events, and service/resource identity. *Use for:* informing a USF-defined, controlled, validator-checkable observability vocabulary (§16). *Will not use for:* asserting OTel conformance, or treating arbitrary OTel attributes as automatically valid. *Future artefacts:* a USF observability vocabulary/registry; an observability-correlation evidence form (USF correlates Loki/Tempo/Sentry). *Validator expectation:* observability names MUST be drawn from the controlled vocabulary once defined. *AI relevance:* agents MUST NOT rename or remove observability/audit semantics as an incidental refactor (§16).
 
 **ADR practice — decision records.**
 *USF status:* **Adapted.** *Scope:* all architectural decisions. *Use for:* an adapted, stronger ADR form (§19) that adds semantic/source/proof/validator references, invariants, forbidden-drift, and AI-alignment rules beyond a generic ADR. *Will not use for:* informal notes or generic prose decisions — forbidden (Charter §4). *Future artefacts:* `docs/adr/` ADRs and an ADR schema (draft `adr.schema.json` now exists — see §23 Amendment; ADR canon deferred). The historical repository splits decision (`v2-decision-catalog.json`) from lineage (`v2-decision-lineage.json`); USF will define its unified ADR form. *Validator expectation:* every ADR's references MUST resolve; untraced decisions fail (historical rule R13). *AI relevance:* agents MUST record decisions as ADRs and obey them as rank-2 authority.
@@ -165,7 +164,7 @@ USF does **not** claim full compliance with any external standard unless it crea
 
 ## 9. Internal USF Standards Profile
 
-These standards are **USF-defined** (§7) unless noted. Each lists *purpose*, *source inputs from `../react`*, *expected future artefacts*, *enforcement method*, *drift risk if absent*, and *AI alignment rule*. No artefact below is created by this document.
+These standards are **USF-defined** (§7) unless noted. Each lists *purpose*, *source inputs from USF's own source lineage*, *expected future artefacts*, *enforcement method*, *drift risk if absent*, and *AI alignment rule*. No artefact below is created by this document.
 
 **Semantic definition standard.** *Purpose:* define platform behaviour as a typed, identifiable, versioned semantic corpus. *Source inputs:* `v1-capability-closure.json` (75 capabilities), the `capability-*.json` facet templates (ten facets: lifecycle, stateModel, permissions, contracts, validation, errorModel, auditModel, readinessModel, proof, uiSemanticDefinition), `operational-semantics.json`, `event-semantics.json`, `cross-capability-interactions.json`, `ui-capability-model.json`, `authentication-authorisation-matrix.json`. *Future artefacts:* `spec/schemas/` + `spec/registries/` semantic corpus. *Enforcement:* JSON Schema validation + completeness validator; a capability MUST drop from "proven" to "gap" if any facet lacks authoritative backing. *Drift risk:* behaviour defined only in code; AI guessing intent. *AI rule:* read semantics first; never invent a facet.
 
@@ -207,23 +206,23 @@ These standards are **USF-defined** (§7) unless noted. Each lists *purpose*, *s
 
 ## 10. Source Evidence Standard
 
-This section is critical. It defines how `../react` is used.
+This section is critical. It defines how USF's own source lineage is used.
 
-10.1 **`../react` is evidence and lineage, not future live authority** (Authority Model §2.6). It is consulted to recover intent; it never overrides accepted USF semantics.
+10.1 **USF's own source lineage is evidence and lineage, not live authority** (Authority Model §2.5). It is consulted to recover intent; it never overrides accepted USF semantics.
 
 10.2 The following are all **semantic evidence** and MUST be treated as recoverable intent, not as copyable targets:
 
-- `../react` **source files** — behavioural evidence.
-- `../react` **Makefile commands** and `make/*.mk` includes — operational/command semantics.
-- `../react` **package scripts** (`package.json`, the `proof:*` family) — command and proof semantics.
-- `../react` **env/config files** (`config/environments/*.json`, the generated `.env` projections, the config-contract catalogue) — configuration semantics.
-- `../react` **compose services** (`compose.yaml`, ~54 services including `mock-oidc`, Keycloak, OpenBao, observability, workflow engines) — substrate and provider semantics.
-- `../react` **tests and e2e journeys** (`e2e/` profiles internal/build/identity/discovery/external/prod; the suite/persona/scenario/ui-contract registries) — behavioural and proof semantics, including the hermetic-vs-live profile split.
-- `../react` **proof scripts** (`apps/platform-api/scripts/*-runtime-proof.*`, the `tools/v2-readiness` collectors) — proof semantics.
+- **source files** in USF's source lineage — behavioural evidence.
+- **Makefile commands** and `make/*.mk` includes in USF's source lineage — operational/command semantics.
+- **package scripts** (`package.json`, the `proof:*` family) in USF's source lineage — command and proof semantics.
+- **env/config files** (`config/environments/*.json`, the generated `.env` projections, the config-contract catalogue) in USF's source lineage — configuration semantics.
+- **compose services** (`compose.yaml`, ~54 services including `mock-oidc`, Keycloak, OpenBao, observability, workflow engines) in USF's source lineage — substrate and provider semantics.
+- **tests and e2e journeys** (`e2e/` profiles internal/build/identity/discovery/external/prod; the suite/persona/scenario/ui-contract registries) in USF's source lineage — behavioural and proof semantics, including the hermetic-vs-live profile split.
+- **proof scripts** (`apps/platform-api/scripts/*-runtime-proof.*`, the readiness collectors) in USF's source lineage — proof semantics.
 
-10.3 **`../react` generated reports are evidence but of lower authority** than source semantic artefacts and raw proof evidence. A historical report (for example a readiness summary) MUST NOT be used to override what the historical source semantics or the raw proof evidence show. This mirrors the USF authority order (ranks 6 then 7) inside the historical corpus itself.
+10.3 **Generated reports in USF's source lineage are evidence but of lower authority** than source semantic artefacts and raw proof evidence. A recorded report (for example a readiness summary) MUST NOT be used to override what the source semantics or the raw proof evidence show. This mirrors the USF authority order (rank 6 is lowest) inside the source corpus itself.
 
-10.4 **`../react` MUST be imported through explicit source references and dispositions.** No historical asset may enter USF by copy-paste. Each enters as a referenced, dispositioned, and (where it asserts behaviour) proof-backed USF artefact.
+10.4 **Source lineage MUST be imported through explicit source references and dispositions.** No recorded source asset may enter USF by copy-paste. Each enters as a referenced, dispositioned, and (where it asserts behaviour) proof-backed USF artefact.
 
 10.5 **No source element may disappear without a disposition.** Every historical file, command, test, config key, and proof MUST be accounted for by a disposition (drawn from the import/disposition standard, §9). Silent omission is knowledge loss and is forbidden (Charter §5.8).
 
@@ -255,7 +254,7 @@ The `source-reference` draft schema now exists (see §23 Amendment); active matu
 - **raw evidence** — directly emitted output (command output, runtime proof fields).
 - **normalised evidence** — raw evidence reshaped for indexing, with the raw retained.
 - **proof evidence** — evidence that exercises a defined behaviour at a stated proof level.
-- **generated reports** — summaries of the above (rank 7).
+- **generated reports** — summaries of the above (rank 6).
 - **attestations** — human-or-tool statements of status, which MUST reference the underlying evidence.
 
 The historical repository shows this layering concretely: per-domain `docs/evidence/**` (machine `.json` + human `.md`), per-proof `usf-audit/proof-evidence/*.json`, the `proof-evidence-index.json` roll-up, and the attestation documents.
@@ -268,7 +267,7 @@ The historical repository shows this layering concretely: per-domain `docs/evide
 
 11.7 Evidence **MUST NOT overclaim readiness.** A readiness claim MUST NOT exceed observed evidence; claimed level MUST be ≤ observed level.
 
-11.8 **The `../react` L6 evidence lesson (binding for USF):**
+11.8 **The L6 evidence lesson (binding for USF):**
 
 - If a proof **emits** evidence, collection **MUST preserve** it (11.4).
 - **Missing collected evidence MUST fail closed** — absence is a failure, never a silent pass.
@@ -317,7 +316,7 @@ These align with the historical four-stage ladder (dev/test/staging/prod) and it
 
 13.2 **Each class means a different evidence expectation.** Hermetic/local evidence proves behaviour and contracts; integration adds real-local substrate; staging/production-shaped add migration/rollback/observability rehearsal; production permits only non-destructive health and synthetic smoke evidence (destructive proof belongs to lower environments — Authority Model §2.4).
 
-13.3 **`../react` Make/env/config semantics MUST be preserved** (§14): per-environment isolation, the manifest→generated-`.env` model, readiness gates, and the per-environment provider matrix are governed assets, not incidental files.
+13.3 **Make/env/config semantics MUST be preserved** (§14): per-environment isolation, the manifest→generated-`.env` model, readiness gates, and the per-environment provider matrix are governed assets, not incidental files.
 
 13.4 **Production-shaped is not automatically production-live.** A production-shaped certification (e.g. the historical `prod-shaped-certification`) demonstrates *shape and rehearsal*, not live-provider operation. USF MUST NOT treat production-shaped evidence as live go-live evidence (§12.4).
 
@@ -363,9 +362,9 @@ These align with the historical four-stage ladder (dev/test/staging/prod) and it
 
 15.2 **OpenAPI-style principles** (§8) guide synchronous HTTP/API contracts; **AsyncAPI-style principles** (§8) guide event/message contracts. USF adopts the *principle* of contract-first/contract-reconciled interfaces; it does not yet require OpenAPI/AsyncAPI files (deferred, §23).
 
-15.3 **`../react` semantic evidence MUST be mined** for these contracts: `operational-semantics.json` (operations, runtime command links), `event-semantics.json` (event schemas, idempotency, ordering, DLQ, retention), `cross-capability-interactions.json` (8 interaction types: sync-api, event, workflow, data-reference, readiness-dependency, provider-dependency, audit-dependency, lifecycle-dependency), the tests/e2e journeys, and the proof scripts.
+15.3 **USF's own source semantic evidence MUST be mined** for these contracts: `operational-semantics.json` (operations, runtime command links), `event-semantics.json` (event schemas, idempotency, ordering, DLQ, retention), `cross-capability-interactions.json` (8 interaction types: sync-api, event, workflow, data-reference, readiness-dependency, provider-dependency, audit-dependency, lifecycle-dependency), the tests/e2e journeys, and the proof scripts.
 
-15.4 **Interfaces and events MUST NOT be inferred from code alone when semantic artefacts exist.** Where a semantic contract exists, it is rank-1 authority; code conforms to it (Authority Model §4.1). Where none exists, the intent is recovered from `../react` and promoted to a USF contract before implementation (§20, Authority Model §6.4) — not guessed from handlers.
+15.4 **Interfaces and events MUST NOT be inferred from code alone when semantic artefacts exist.** Where a semantic contract exists, it is rank-1 authority; code conforms to it (Authority Model §4.1). Where none exists, the intent is recovered from USF's own source lineage and promoted to a USF contract before implementation (§20, Authority Model §6.4) — not guessed from handlers.
 
 ---
 
@@ -399,7 +398,7 @@ These align with the historical four-stage ladder (dev/test/staging/prod) and it
 
 17.3 Path names **MUST** support the long-term final-state architecture. The historical directory-contract model (`v2-directory-contracts.json`: responsibility, allowedContents, forbiddenContents, owner, dependencyDirection, architectureRule) is the pattern USF will adopt for its own directory contracts.
 
-17.4 **Historical names from `../react` MAY appear only as source references or quoted evidence** (§10), never as new USF path names. Citing `../react/docs/v2-foundation/...` is a reference; creating a `v2-foundation/` directory in USF is forbidden.
+17.4 **Historical names MAY appear only as source references or quoted evidence** (§10), never as new USF path names. Citing a historical source path such as `../external-source/docs/v2-foundation/...` is a reference; creating a `v2-foundation/` directory in USF is forbidden.
 
 17.5 Validators MUST detect forbidden tokens and reject reintroduction of deprecated historical conventions (§7) where feasible.
 
@@ -424,7 +423,7 @@ These align with the historical four-stage ladder (dev/test/staging/prod) and it
 
 18.4 **Validators MUST NOT silently downgrade or silently accept missing evidence.** A downgrade or a tolerated gap MUST be an explicit, recorded finding.
 
-18.5 **Validators MUST produce machine-readable reports.** Reports are rank-7 (Authority Model §2.7): regenerable, freshness-stamped, and **lower authority than the evidence they summarize**. A report MUST NOT assert a status the artefacts do not support.
+18.5 **Validators MUST produce machine-readable reports.** Reports are rank-6 (Authority Model §2.6): regenerable, freshness-stamped, and **lower authority than the evidence they summarize**. A report MUST NOT assert a status the artefacts do not support.
 
 18.6 **Validators MUST be falsifiable.** Negative controls (deliberately broken fixtures) MUST demonstrate that each enforcement actually catches the violation it claims to catch.
 
@@ -439,7 +438,7 @@ These align with the historical four-stage ladder (dev/test/staging/prod) and it
 19.3 **Every ADR MUST include:**
 
 - **semantic references** — the semantic definitions it governs.
-- **source references** — the `../react` lineage it derives from (§10).
+- **source references** — the source lineage it derives from (§10).
 - **proof references** — the proof evidence supporting it, where applicable.
 - **validator references** — the rule(s) that enforce it.
 - **invariants** — what MUST remain true.
@@ -466,9 +465,9 @@ Future AI agents (and humans) working on USF **MUST**:
 
 20.2 **Inspect the relevant semantic definitions before source code.** Semantics are the primary input; source is the thing made to conform (Authority Model §2.1, §6.2).
 
-20.3 **Preserve source lineage.** Keep and cite traceability to `../react` and to USF semantics/decisions (§10; Authority Model §6.3).
+20.3 **Preserve source lineage.** Keep and cite traceability to USF's own source lineage and to USF semantics/decisions (§10; Authority Model §6.3).
 
-20.4 **Not infer missing semantics from implementation alone.** Absent intent is recovered from `../react` and promoted via a proposed semantic definition + ADR + validator, then stopped for acceptance — never guessed from code (Authority Model §6.4).
+20.4 **Not infer missing semantics from implementation alone.** Absent intent is recovered from USF's own source lineage and promoted via a proposed semantic definition + ADR + validator, then stopped for acceptance — never guessed from code (Authority Model §6.4).
 
 20.5 **Not treat generated reports as canonical.** Verify against artefacts; regenerate from current state (Authority Model §6.5).
 
@@ -508,8 +507,8 @@ Future AI agents (and humans) working on USF **MUST**:
 This profile is acceptable when **all** hold:
 
 - **Consistent with the Charter and Authority Model** — operationalizes them (§4, §5); does not redefine or contradict them.
-- **Grounded in `../react`** — every internal standard cites concrete historical inputs (§9, §10).
-- **No application/runtime code imported** — this document copies no source or runtime code from `../react`.
+- **Grounded in USF's own source lineage** — every internal standard cites concrete recorded source inputs (§9, §10).
+- **No application/runtime code imported** — this document copies no source or runtime code from any external repository.
 - **No extra files created** — only `docs/architecture/standards-profile.md` is created.
 - **No false compliance claims** — external standards are classified honestly as adopted/adapted/inspired-by/not-yet (§7, §8); no full-compliance claim is made without substantiating artefacts.
 - **Normative language defined** — §6 defines BCP 14 usage and the uppercase-only rule.

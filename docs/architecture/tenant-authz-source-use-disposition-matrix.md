@@ -6,12 +6,12 @@
 | Status | Draft / tenant-authz slice (USF-140) implementation coverage |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-140 under USF-133 |
-| Source row basis | ADR 0010, docs/architecture/tenant-authorization-standard.md, and historical `../react` tenant/authz/RBAC/ABAC/break-glass evidence as lineage only |
+| Source row basis | ADR 0010, docs/architecture/tenant-authorization-standard.md, and USF's own self-defined tenant/authz/RBAC/ABAC/break-glass source lineage |
 | Repository state | USF authors its own runtime; no external runtime/application code is copied; no external source path is mirrored; no UI; no live/production claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (packages/core, packages/ports, packages/contracts, packages/openapi, apps/api, capabilities/tenant/src/index.ts) are not re-listed here.
+`source-derived-rewrite` means the behaviour was authored against USF semantics with USF's own self-defined source lineage as evidence (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (packages/core, packages/ports, packages/contracts, packages/openapi, apps/api, capabilities/tenant/src/index.ts) are not re-listed here.
 
 ## Implementation Target Files
 

@@ -6,7 +6,7 @@
 | Status              | Draft / USF-152 implementation evidence and USF-153 proof-depth evidence          |
 | Authority level     | Reviewable source-use matrix; subordinate to Charter, Authority Model, ADRs, validators, and proof evidence |
 | Issue scope         | USF-152, child of USF-133                                                        |
-| Historical lineage  | `../react` is rank-6 evidence only                                               |
+| Source lineage      | USF is self-defined; source paths are held in USF's own source-import registry (rank-5 source lineage), not an external authority |
 
 This matrix records the treatment of files touched for the notifications/messaging domain. USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored. No live external delivery provider readiness is claimed. No staging, production, deployment, live email, live SMS, live push, live webhook, live SMTP, deliverability certification, ISO certification, legal compliance certification, or production-live readiness is claimed.
 

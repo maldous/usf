@@ -21,7 +21,7 @@ After the `v2-foundation` baseline, future developer and AI-agent work should st
 - `docs/architecture/current-state-foundation-authority-index.md`
 - `docs/architecture/current-state-foundation-authority-index.json`
 
-The index routes future work to the current semantic corpus, accepted ADRs, validators, proof evidence, enterprise evidence, and this handover path. Historical `../react` source, source-use matrices, parity migration matrices, closure-tier artefacts, and bootstrap mapping remain available as retained lineage and audit evidence, but they are not active future authority.
+The index routes future work to the current semantic corpus, accepted ADRs, validators, proof evidence, enterprise evidence, and this handover path. USF's own recorded source lineage, source-use matrices, source-disposition matrices, closure-tier artefacts, and bootstrap mapping remain available as retained lineage and audit evidence, but they are not active future authority.
 
 Do not infer implementation shape, readiness state, or full product readiness from historical lineage or closure scaffolding. Use current semantic contracts, proof commands, validators, and enterprise evidence first, then inspect lineage only when the current issue explicitly requires it.
 

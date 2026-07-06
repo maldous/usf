@@ -8,7 +8,7 @@
 | **Issue scope**      | USF-39                                                                                                                                                                                                                                                                                           |
 | **Source row basis** | `docs/architecture/bootstrap-readiness-governance.md`, `docs/architecture/implementation-extraction-directive.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, React evidence paths cited in ADR 0009 |
 
-This matrix records the target-file treatment for the local dev/test bootstrap implementation files created after the separate USF-39 start action. It does not authorise direct runtime import from `../react`, does not mirror React paths, does not claim staging, production, live-external-provider, deployment, or production-live readiness, and does not promote schemas.
+This matrix records the target-file treatment for the local dev/test bootstrap implementation files created after the separate USF-39 start action. It does not authorise direct runtime import from an external sibling repository, does not mirror external source paths, does not claim staging, production, live-external-provider, deployment, or production-live readiness, and does not promote schemas.
 
 ## Resource Lifecycle Parity Additions (USF-165)
 
@@ -290,4 +290,4 @@ This matrix records the target-file treatment for the local dev/test bootstrap i
 
 ## Boundary Confirmation
 
-No file in this matrix is copied from `../react`; no target path mirrors a historical source path; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.
+No file in this matrix is copied from an external source; no target path mirrors a source path held in USF's own source-import registry; no evidence-only row produces runtime code; and no generated report is treated as semantic authority or proof evidence.

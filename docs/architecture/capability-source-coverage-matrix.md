@@ -6,7 +6,7 @@
 | Status | Draft / planning |
 | Issue scope | USF-65 |
 | Authority level | Reviewable planning artefact; subordinate to the Charter, Authority Model, ADRs, schemas, validators, proof evidence, and source import manifest |
-| Historical evidence basis | `../react/docs/v2-foundation/v1-capability-closure.json`, `operational-semantics.json`, `event-semantics.json`, `cross-capability-interactions.json`, `ui-capability-model.json`, and the committed USF source import manifest |
+| Source lineage basis | USF's own v1 capability closure, operational semantics, event semantics, cross-capability interactions, and UI capability model, and the committed USF source import manifest |
 | Repository state | No implementation/runtime code, no schema promotion, no proof execution |
 
 ## Purpose
@@ -17,15 +17,15 @@ This document creates no implementation files, imports no runtime code, executes
 
 ## Coverage status reconciliation (post Wave-3)
 
-The per-row USF-status values below were authored before the Wave-3 corpus completion and several still read `deferred` ("defer until a semantic target exists"). That predates the current corpus: every `semantic-contract` target in this matrix now has a committed instance — 64 complete-facet draft contracts (43 source-backed by manifest rows, 21 coverage-complete from the React semantic corpus; proof deferred), 1 deprecated, and 2 non-applicable (see `docs/architecture/semantic-source-use-closure-ledger.md`). Read a `deferred` row as "the semantic contract exists as a complete-facet draft; per-domain source-use disposition and fresh proof remain the open work," not as "no semantic target exists." Any `delivered-and-proven` note describes the historical `../react` state captured as lineage, not USF proof.
+The per-row USF-status values below were authored before the Wave-3 corpus completion and several still read `deferred` ("defer until a semantic target exists"). That predates the current corpus: every `semantic-contract` target in this matrix now has a committed instance — 64 complete-facet draft contracts (43 source-backed by manifest rows, 21 coverage-complete from USF's own semantic corpus; proof deferred), 1 deprecated, and 2 non-applicable (see `docs/architecture/semantic-source-use-closure-ledger.md`). Read a `deferred` row as "the semantic contract exists as a complete-facet draft; per-domain source-use disposition and fresh proof remain the open work," not as "no semantic target exists." Any `delivered-and-proven` note describes the state captured in USF's own source lineage, not USF proof.
 
 ## Inputs
 
-- Historical capability records: `../react/docs/v2-foundation/v1-capability-closure.json` (75 records).
-- Historical operational semantic records: `../react/docs/v2-foundation/operational-semantics.json` (75 capability records and 92 command links).
-- Historical event semantic records: `../react/docs/v2-foundation/event-semantics.json` (10 events).
-- Historical cross-capability interaction records: `../react/docs/v2-foundation/cross-capability-interactions.json` (10 interactions).
-- Historical UI capability model: `../react/docs/v2-foundation/ui-capability-model.json` (28 UI capabilities and 12 personas).
+- USF's own capability records: v1 capability closure (75 records).
+- USF's own operational semantic records: operational semantics (75 capability records and 92 command links).
+- USF's own event semantic records: event semantics (10 events).
+- USF's own cross-capability interaction records: cross-capability interactions (10 interactions).
+- USF's own UI capability model (28 UI capabilities and 12 personas).
 - USF baseline source import manifest: `spec/registries/source-import-manifest.json` (1673 rows).
 
 ## Coverage Summary

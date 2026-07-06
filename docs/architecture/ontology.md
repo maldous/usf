@@ -7,7 +7,7 @@
 | **Repository** | `usf` (this repository) — the clean canonical target |
 | **Follows** | [`charter.md`](./charter.md), [`authority-model.md`](./authority-model.md), [`standards-profile.md`](./standards-profile.md) — and MUST be consistent with all three |
 | **Authority level** | Belongs to **USF semantic definitions** (Authority Model §1, rank 1). It is the *meta-model* of the semantic corpus — it defines the concepts the concrete corpus instantiates; it is not the corpus itself. |
-| **Evidence basis** | Grounded in the historical repository `../react` → `/home/user/src/react`. Citations to `../react/...` reference existing historical paths and introduce no historical naming into USF. |
+| **Evidence basis** | Grounded in USF's own self-defined artefacts — the semantic corpus, ADRs, validators, and recorded proof evidence held inside this repository. Source paths are held in USF's own source-import registry and introduce no external naming into USF. |
 
 > **Normative language.** Requirement words follow BCP 14 as defined in [`standards-profile.md`](./standards-profile.md) §6. Only uppercase forms are normative.
 >
@@ -35,7 +35,7 @@
 
 2.3 The ontology exists to **prevent future AI agents from guessing concepts from source files alone.** A concept is real because it is defined here and (later) in the semantic corpus — not because a directory or a class happens to exist.
 
-2.4 The ontology **preserves knowledge from `../react`** by giving that knowledge **stable USF concepts**. The historical repository proves and documents a large platform; the ontology is the vocabulary into which that proven intent is mapped without copying it.
+2.4 The ontology **preserves USF's own source lineage** by giving that knowledge **stable USF concepts**. USF's self-defined source-import registry records a large platform; the ontology is the vocabulary into which that intent is mapped as clean semantics.
 
 2.5 The ontology lets **source evidence be transformed into clean USF semantics**: every historical element enters USF as a referenced, dispositioned concept instance, never as an unexamined copy (Standards Profile §10).
 
@@ -54,7 +54,7 @@ The ontology is how the Charter's principles ([`charter.md`](./charter.md) §5�
 - **External-provider adaptability** — the provider/environment meta-model (§9) treats live-provider evidence as a higher rung, never a replacement.
 - **Clean final-state naming** — §4 forbids migration-phase concepts; *Disposition* + *Source Reference* keep historical names out of USF paths.
 - **No knowledge loss** — *Source Reference* + *Disposition* require that no historical element disappears without a recorded treatment.
-- **Source-aware but not source-subordinate** — *Source Reference* is rank-6 lineage; it grounds concepts but never defines authority.
+- **Source-aware but not source-subordinate** — *Source Reference* is rank-5 source lineage held in USF's own source-import registry; it grounds concepts but never defines authority.
 - **Make/env/config as semantic assets** — *Command* and *Configuration* are first-class concepts, not incidental scripts.
 
 ### 3.2 Relationship to the Authority Model
@@ -67,9 +67,8 @@ The ontology fits the authority order ([`authority-model.md`](./authority-model.
 | **2 — USF ADRs** | ADR |
 | **3 — USF validator rules** | Validator |
 | **4 — Runtime proof evidence** | Proof, Proof Level, Evidence (proof-evidence kind), Observability Signal (as evidence), Audit Event (as evidence) |
-| **5 — USF source implementation** | Application, Package/Module, Service, Adapter, Command (as executable), Backup/Restore (as operation) |
-| **6 — Historical `../react` evidence** | Source Reference, Disposition (the act of mapping rank-6 into USF) |
-| **7 — Generated reports** | Generated Report |
+| **5 — USF source implementation** | Application, Package/Module, Service, Adapter, Command (as executable), Backup/Restore (as operation), Source Reference, Disposition (the act of dispositioning an entry in USF's own source-path registry) |
+| **6 — Generated reports** | Generated Report |
 | **cross-cutting actor** | AI Agent |
 
 The ontology **belongs to USF semantic definitions** and is therefore **high authority** (rank 1). It does not change the order; it organises concepts within it.
@@ -101,13 +100,13 @@ The ontology supplies the concepts that the Standards Profile's later artefacts 
 
 4.4 Concepts **MAY** preserve historical names **only** as source references or quoted evidence (§8), never as USF concept or path names.
 
-4.5 Every concept imported from `../react` **MUST** have a **Disposition** (§5.5, §8).
+4.5 Every concept recorded in USF's source-import registry **MUST** have a **Disposition** (§5.5, §8).
 
-4.6 A concept is **not authoritative merely because a source file exists.** Existence of code is rank-5/rank-6 evidence, not rank-1 authority.
+4.6 A concept is **not authoritative merely because a source file exists.** Existence of code is rank-5 source evidence, not rank-1 authority.
 
 4.7 A **Proof** can demonstrate that behaviour was exercised but **MUST NOT** define intended semantics by itself (Charter §5.9).
 
-4.8 **Generated Reports** are summaries, never canonical ontology sources (Authority Model §2.7).
+4.8 **Generated Reports** are summaries, never canonical ontology sources (Authority Model §2.6).
 
 4.9 **Command** and **Configuration** concepts (Make targets, package scripts, env vars, config files, compose services) are **semantic assets** (Charter §5.13).
 
@@ -119,12 +118,12 @@ The ontology supplies the concepts that the Standards Profile's later artefacts 
 
 ## 5. Core Concept Catalogue
 
-Each concept lists: **Definition**, **Authority role**, **Source evidence role** (how `../react` grounds it), **Future artefacts**, **Relationships**, **AI guidance**. No artefact below is created here.
+Each concept lists: **Definition**, **Authority role**, **Source evidence role** (how USF's own source-import registry grounds it), **Future artefacts**, **Relationships**, **AI guidance**. No artefact below is created here.
 
 ### 5.1 Foundation
 **Definition.** The whole USF semantic system being built: the complete set of capabilities, contracts, evidence, decisions, validators, and the extracted implementation, governed as one foundation.
 **Authority role.** Rank 1 (the system the semantic definitions describe). Meta-concept; contains all others.
-**Source evidence role.** Historically the "Universal Service Foundation" assurance graph + the platform it governs (`../react/docs/v2-foundation/universal-service-foundation-assurance.md`).
+**Source evidence role.** Recorded in USF's own source lineage as the "Universal Service Foundation" assurance graph and the platform it governs.
 **Future artefacts.** The top-level USF spec index/registry under `spec/`.
 **Relationships.** Foundation **contains** Capabilities; is **governed by** the constitutional layer; is **proven by** Proof; is **summarised by** Generated Reports.
 **AI guidance.** Treat the Foundation as the bounded whole; never expand its scope by importing unmapped historical surface.
@@ -163,8 +162,8 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 
 ### 5.6 Evidence
 **Definition.** Information used to support a semantic, proof, source, or operational claim.
-**Authority role.** Rank 4 (proof evidence) down to rank 7 (reports), depending on kind.
-**Source evidence role.** Historically `../react/docs/evidence/` (267 files across 31 domains, each typically machine `.json` + human `.md`) and `usf-audit/proof-evidence/` (per-proof runtime JSON) indexed by `proof-evidence-index.json`.
+**Authority role.** Rank 4 (proof evidence) down to rank 6 (reports), depending on kind.
+**Source evidence role.** Recorded in USF's own source lineage as a per-domain evidence corpus (each typically machine `.json` + human `.md`) plus per-proof proof-evidence records indexed by a proof-evidence index.
 **Future artefacts.** An evidence envelope schema under `evidence/` (draft `evidence-envelope.schema.json` now exists — see §26 Amendment A; evidence instances deferred).
 **Relationships.** Evidence **supports** Semantic Contracts and Capabilities; **references** Source and Environment; **declares** Provider Mode; **is summarised by** Generated Reports.
 **AI guidance.** Distinguish kinds and never conflate them: **raw source evidence**, **semantic evidence**, **runtime proof evidence**, **normalised evidence**, **generated report**, **attestation**, **source import evidence**. Absence of evidence is not evidence of absence (§14).
@@ -324,7 +323,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 ### 5.26 Audit Event
 **Definition.** A semantically meaningful record of security-sensitive, state-changing, or accountability-relevant behaviour.
 **Authority role.** Rank 1 as an audit requirement; rank 4 as a recorded event.
-**Source evidence role.** Historically the `auditAction` field on capabilities, the assurance bar "0 mutations without audit", and `../react/docs/evidence/audit/`.
+**Source evidence role.** Recorded in USF's own source lineage as the `auditAction` field on capabilities, the assurance bar "0 mutations without audit", and the audit evidence corpus.
 **Future artefacts.** Audit-event contracts + coverage validator.
 **Relationships.** An Audit Event **records** a privileged/mutating operation; **is required by** Capability audit models.
 **AI guidance.** Every mutating or privileged action MUST have a defined audit semantic; never strip audit as a refactor (§13).
@@ -430,7 +429,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 | Environment | constrains | Provider Mode, evidence claim | production-shaped ≠ live |
 | ADR | decides/constrains | Contract, Disposition, policy, Validator rule | rank 2 |
 | Registry | resolves | Concept, Artefact, Schema, Source Reference, Evidence | indexing, not assertion |
-| Generated Report | summarises | Evidence, Proof, Validator output | rank 7, never overrides |
+| Generated Report | summarises | Evidence, Proof, Validator output | rank 6, never overrides |
 | AI Agent | consumes (per Authority Model) | all of the above | bound, holds no authority |
 
 ---
@@ -440,7 +439,7 @@ Each concept lists: **Definition**, **Authority role**, **Source evidence role**
 Conceptual and precise (not JSON Schema). "Authoritative" below means "treated as rank-1 truth".
 
 7.1 A **Capability MUST have at least one Semantic Contract** before its implementation is authoritative.
-7.2 A **Semantic Contract SHOULD have one or more Source References** when derived from `../react`.
+7.2 A **Semantic Contract SHOULD have one or more Source References** when derived from USF's own source lineage.
 7.3 A **Semantic Contract SHOULD have one or more Validator rules** once it is enforceable.
 7.4 A **Proof MUST identify the claim it exercises.**
 7.5 A **Proof MUST declare its Environment and Provider Mode.**
@@ -458,9 +457,9 @@ Conceptual and precise (not JSON Schema). "Authoritative" below means "treated a
 
 ## 8. Source Import Meta Model
 
-8.1 Source elements from `../react` become USF concepts through a recorded mapping with these conceptual fields (the `source-reference`/`source-disposition`/`import-manifest` draft schemas now exist — see §26 Amendment A; the import map deferred):
+8.1 Source elements in USF's own source-import registry become USF concepts through a recorded mapping with these conceptual fields (the `source-reference`/`source-disposition`/`import-manifest` draft schemas now exist — see §26 Amendment A; the import map deferred):
 
-- **Source element** — the concrete historical thing.
+- **Source element** — the concrete recorded source thing.
 - **Source reference** — repository, commit/tag, path (§5.4).
 - **Source kind** — see 8.2.
 - **Semantic role** — the USF meaning it carries.
@@ -521,8 +520,8 @@ Conceptual and precise (not JSON Schema). "Authoritative" below means "treated a
 
 11.3 Rules:
 
-- **Make targets and package scripts from `../react` are semantic evidence** (rank 6), promoted into USF Command concepts via Disposition.
-- **Env/config from `../react` is semantic evidence**, promoted into USF Configuration concepts; generated `.env` files are projections of manifests, never authoritative.
+- **Make targets and package scripts in USF's source lineage are semantic evidence** (rank-5 source lineage), promoted into USF Command concepts via Disposition.
+- **Env/config in USF's source lineage is semantic evidence**, promoted into USF Configuration concepts; generated `.env` files are projections of manifests, never authoritative.
 - **Commands and Configuration cannot be deleted or renamed without a Disposition and semantic review** (Authority Model §5; Standards Profile §14).
 
 ---
@@ -536,7 +535,7 @@ Conceptual and precise (not JSON Schema). "Authoritative" below means "treated a
 - **UI implementation may change.** The visual layer is rank-5 and regenerable.
 - **UI semantics MUST be preserved unless changed through coupled semantic/ADR/proof/validator updates** (Authority Model §5).
 - **Visual redesign is not semantic deletion.** Removing a journey, state, validation, permission, or accessibility requirement is a behaviour change, not a restyle.
-- Historical UI source (`../react` JSX) is **semantic evidence, not final design authority**; the UI semantic model is derived from behaviour, never from styling.
+- UI source in USF's source lineage is **semantic evidence, not final design authority**; the UI semantic model is derived from behaviour, never from styling.
 
 ---
 
@@ -558,7 +557,7 @@ The following **MUST NOT** become USF concepts, and **MUST NOT** be inferred:
 
 - **`v2`** as a future path or concept — forbidden (§4.2).
 - **`legacy` / `new` / `old` / `temp` / `transitional`** as semantic categories — forbidden.
-- **A Generated Report treated as a canonical source** — forbidden (rank 7).
+- **A Generated Report treated as a canonical source** — forbidden (rank 6).
 - **A passing Proof treated as intended behaviour** — forbidden (proof ≠ semantics).
 - **A source file treated as future authority** — forbidden (rank 5/6, not rank 1).
 - **Mock/hermetic proof treated as live external proof** — forbidden (§9).
@@ -578,7 +577,7 @@ A future AI agent **MUST**:
 15.1 **Read the Charter, Authority Model, Standards Profile, and this Ontology before major structural work.**
 15.2 **Identify the concept being changed** (which §5 concept).
 15.3 **Identify the authority level** of that concept (§3.2; Authority Model §1).
-15.4 **Check source lineage** — what `../react` evidence and what Disposition apply (§8).
+15.4 **Check source lineage** — what source evidence in USF's registry and what Disposition apply (§8).
 15.5 **Check the Semantic Contract** that governs the concept.
 15.6 **Check ADR constraints** that bind it.
 15.7 **Check validator expectations** that enforce it.
@@ -640,7 +639,7 @@ This ontology document is acceptable when **all** hold:
 - **Consistent with the Charter** (§3.1) — operationalizes, does not contradict it.
 - **Consistent with the Authority Model** (§3.2) — uses the authority order unchanged; tags concepts to levels.
 - **Consistent with the Standards Profile** (§3.3) — supplies concepts its standards will formalise.
-- **Grounded in `../react`** — every concept cites concrete historical evidence (§5).
+- **Grounded in USF's own source lineage** — every concept cites concrete recorded source evidence (§5).
 - **Defines core concepts clearly** — all required concepts present with the six fields (§5).
 - **Defines relationships clearly** — prose + relationship table (§6) and cardinality rules (§7).
 - **Distinguishes ontology from taxonomy/vocabulary/schema/registry** — explicitly (§2, §3.3, §18) and does not create those artefacts.

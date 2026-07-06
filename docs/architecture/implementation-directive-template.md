@@ -34,13 +34,13 @@ The filled directive must be recorded as a reviewed artefact and cited by implem
 | Destination directories | The exact target directories and target files allowed for the slice. | Every directory is listed in `docs/architecture/target-implementation-topology-plan.md` or in a later reviewed topology update. Every target file is named before creation. | `apps/platform-api/`, `apps/web/`, `services/`, `src/`, or any unlisted implementation-shaped root. |
 | Source-use policy | The policy for each source row or target file. | Each target file maps to source-derived-adapt, source-derived-rewrite, new-with-rationale, or evidence-only-support. Evidence-only-support cannot produce runtime code. | "Copy the source", "mirror the package", "use all auth files", or using evidence-only rows as runtime code. |
 | Source-disposition coverage | The source rows or new-with-rationale basis for every target file. | Every target file cites the source-use matrix row numbers or a reviewed new-with-rationale entry. No file is created solely because a source path exists. | A target file with no source rows, no rationale, or only a historical path as justification. |
-| Source import boundary | The direct import policy for runtime code. | States that direct runtime/application code import from `../react` is not authorised unless a later directive explicitly permits a specific file with disposition and proof rationale. | Blind copy, path mirroring, package mirroring, or importing generated reports as code. |
+| Source import boundary | The direct import policy for runtime code. | States that direct runtime/application code import from USF's own source lineage is not authorised unless a later directive explicitly permits a specific file with disposition and proof rationale. | Blind copy, path mirroring, package mirroring, or importing generated reports as code. |
 | Proof level | The proof floor required before starting and before merging. | Names the proof posture row for every slice. Hermetic internal proof is the floor and must be fresh for the claimed commit; local composed substrate proof is merge-blocking when composed-service behaviour is claimed. | Treating stale historical proof as current, treating a generated report as proof, or omitting proof level. |
 | Provider mode | The provider mode for each proof and implementation claim. | Uses controlled provider-mode values and keeps hermetic, local, sandbox, and live external claims separate. | Saying "production provider" without mode; treating hermetic mock as live external provider. |
 | Environment | The environment for each proof and readiness claim. | Uses controlled environment values and keeps production-shaped separate from production-live. | Treating production-shaped as production-live, or leaving environment implicit. |
 | Production/live requirements | Whether live external provider or production-live proof is in scope. | Explicitly says whether live external provider and production-live claims are out of scope, release-blocking, or required now. For the implementation merge they are not required unless a later directive raises the bar. | "Production ready" without evidence, "live enough", or any implicit upgrade from sandbox or production-shaped evidence. |
 | Schema posture | Whether schemas or validator maturity change. | States that all schemas remain draft and the validator remains advisory unless a separate promotion PR satisfying USF-30 is merged. | Marking schemas active, claiming active validator maturity, or requiring promotion without the promotion change. |
-| Generated reports | Whether reports may be cited. | Reports may be used only as rank-7 summaries with freshness and evidence references. Direct validators and proof records still govern. | A report pass used as authority, proof, schema promotion, or implementation authorisation. |
+| Generated reports | Whether reports may be cited. | Reports may be used only as rank-6 summaries with freshness and evidence references. Direct validators and proof records still govern. | A report pass used as authority, proof, schema promotion, or implementation authorisation. |
 | Validation commands | The exact commands required before PR and after merge. | Includes the repository validator, implementation guard, PR diff gate, evidence/proof modes where applicable, and any slice-specific proof command authorised by the directive. | "Run tests", "CI green", or relying only on a generated summary. |
 | Implementation boundaries | What may and may not be created. | Names exact directories and file classes allowed; states that unlisted roots are blocked and no runtime code can be imported without disposition. | Open-ended permission for apps, packages, services, infra, scripts, or source roots. |
 | Non-goals | Explicit exclusions. | Lists out-of-scope behaviours, providers, environments, schemas, generated reports, migrations, UI, services, and proof claims. | Omitting non-goals or using "later" without a stop condition. |
@@ -56,7 +56,7 @@ USF-39 must remain Backlog, or an implementation PR must stop, when any of these
 - A target path mirrors a historical source path.
 - A target file has no source-use matrix row or new-with-rationale treatment.
 - A source-use row marked evidence-only is used as runtime code.
-- Runtime/application code is copied from `../react` without a specific later source-import directive.
+- Runtime/application code is copied from USF's own source lineage without a specific later source-import directive.
 - Provider mode is missing, ambiguous, or upgraded by environment.
 - Environment is missing, ambiguous, or upgraded by provider mode.
 - Hermetic proof is treated as live-external-provider proof.
@@ -78,7 +78,7 @@ Every future implementation PR under USF-39 must cite:
 - the source-use matrix rows or new-with-rationale entries for each target file;
 - the proof/evidence records used for the claim;
 - the validator commands run on the PR head;
-- any generated reports, only as rank-7 summaries.
+- any generated reports, only as rank-6 summaries.
 
 The PR body must explicitly state that source-path mirroring, direct runtime code copy, schema activation, generated-report authority, hermetic-as-live proof, and production-shaped-as-production-live claims are not authorised.
 
@@ -100,7 +100,7 @@ USF-61 may use this template as its output contract by requiring the future impl
 - This template does not create implementation/runtime files.
 - This template does not create implementation/runtime directories.
 - This template does not import runtime/application code.
-- This template does not authorise direct copying from `../react`.
+- This template does not authorise direct copying from USF's own source lineage.
 - This template does not produce proof evidence.
 - This template does not emit or commit generated reports.
 - This template does not promote schemas or validators to active maturity.

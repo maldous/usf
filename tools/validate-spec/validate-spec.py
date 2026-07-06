@@ -843,7 +843,7 @@ def check_fixtures(ctx, F):
     return "ran"
 
 
-# USF is self-defined (constitutional amendment: react self-definition). The source-import
+# USF is self-defined (constitutional amendment: self-defining USF, external lineage retired). The source-import
 # manifest is USF's own source-path registry; external repository/tag attribution is
 # discarded. The audit base pins the self-defined top-level repository label, the freeze
 # commit the entries were captured at, and the fixed entry count. Per-entry sourceRefs carry
@@ -870,22 +870,43 @@ INSTANCE_REF_SCALARS = {
 # USF-302 (owner decision): the discriminator convention for governed semantic /
 # ADR references is USF-native ONLY. A governed instance reference (the INSTANCE_REF_*
 # fields above) MUST be a canonical repo-local USF path (e.g. "docs/adr/0005-...md"),
-# never a cross-repo legacy discriminator. Historical react lineage is carried by the
+# never a cross-repo legacy discriminator. Historical source lineage is carried by the
 # source-import manifest + source-reference allowlist mechanism and by lineage-narrative
 # prose (description/aiGuidance), NOT by these governed reference fields. This guard is
 # scoped to the collected reference fields only; it does not inspect prose, the
 # allowlist/manifest mechanism files, or lineage docs.
-CROSS_REPO_DISCRIMINATORS = ("../react", "react-origin")
+#
+# The discriminator is defined GENERICALLY (no hard-coded external repository name), so the
+# guard enforces the self-defined posture against any external/sibling-repository reference,
+# not one named legacy source. A cross-repo legacy discriminator is either:
+#   (a) a parent-relative sibling-repository path segment — "../<name>/" — reaching outside
+#       this repository into a sibling checkout; or
+#   (b) a "*-origin" cross-repo attribution token in the REPOSITORY POSITION — "<name>-origin"
+#       as the whole reference or its leading path segment — naming an external source
+#       repository as the origin of a governed reference.
+# Both forms are forbidden in a governed reference. A canonical repo-local USF path
+# ("docs/...", "spec/...", "tools/...", "urn:usf:...", "source:...") matches neither. The
+# "*-origin" form is anchored to the repository position (start of the reference) so a
+# repo-local path with an "-origin" domain component deeper in it (e.g. an
+# "auth-origin" evidence file under docs/) is NOT a cross-repo discriminator.
+CROSS_REPO_DISCRIMINATOR_PATTERNS = (
+    ("parent-relative sibling-repository path", re.compile(r"\.\./[A-Za-z0-9._-]+/")),
+    ("cross-repo '*-origin' repository attribution token", re.compile(r"^[A-Za-z0-9]+-origin(?:/|$)")),
+)
 
 
 def _cross_repo_discriminator(ref):
-    """Return the first cross-repo legacy discriminator present in ref, else None."""
+    """Return a description of the first cross-repo legacy discriminator in ref, else None.
+
+    Generic by construction: it recognises any external/sibling-repository discriminator
+    shape without naming a specific legacy source repository.
+    """
     if not isinstance(ref, str):
         return None
-    low = ref.lower()
-    for token in CROSS_REPO_DISCRIMINATORS:
-        if token in low:
-            return token
+    for label, pattern in CROSS_REPO_DISCRIMINATOR_PATTERNS:
+        match = pattern.search(ref)
+        if match is not None:
+            return f"{label} '{match.group(0)}'"
     return None
 
 
@@ -1021,10 +1042,10 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         if errs:
             continue
         for field, ref in _collect_instance_refs(data):
-            token = _cross_repo_discriminator(ref)
-            if token is not None:
+            discriminator = _cross_repo_discriminator(ref)
+            if discriminator is not None:
                 F.add("USF-NATIVE-001", f"{p}:{field}",
-                      f"cross-repo legacy discriminator '{token}' in governed reference: {ref}; "
+                      f"cross-repo legacy discriminator ({discriminator}) in governed reference: {ref}; "
                       f"use a canonical repo-local USF path")
                 continue
             if not resolves(ref):
@@ -1086,8 +1107,8 @@ def check_imports(ctx, F):
     This deliberately performs repository-owned checks only: schema validity, fixed
     manifest size, internal uniqueness/no-loss shape, canonical value preservation,
     path-safety, and known source-kind classification rules. External reconciliation
-    against ../react remains documented evidence until a source-evidence harness is
-    authorised.
+    against USF's own source lineage remains documented evidence until a source-evidence
+    harness is authorised.
     """
     baseline_path = "spec/registries/source-import-manifest.json"
     if not os.path.exists(baseline_path):

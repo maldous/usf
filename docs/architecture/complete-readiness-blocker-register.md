@@ -7,7 +7,7 @@
 | **Authority level** | Reviewable readiness classification; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, and semantic instances |
 | **Issue scope** | USF-39 readiness; USF-59; USF-73; USF-97; USF-98; USF-99; USF-100; USF-101; React L5 equivalence audit workstream USF-102–USF-119 |
 | **Base repository state reviewed** | `fabe47b8fc70d34b34d1fc05c39da998c74a6748` |
-| **Branch update scope** | Records the React L5 / USF V2 equivalence audit harvest, proof-anchor publication state, and final V2 readiness reconciliation; `../react` was inspected at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as historical evidence only; final merged commit is determined by Git history |
+| **Branch update scope** | Records the USF V2 foundation-completeness audit harvest, proof-anchor publication state, and final V2 readiness reconciliation; USF's own self-defined source-import baseline is frozen at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as recorded source lineage only; final merged commit is determined by Git history |
 
 This document records the current complete-readiness blocker state before implementation extraction. It creates no implementation code, implementation directory, product runtime, source import, proof evidence, generated report, schema activation, or implementation directive. It does not start USF-39.
 
@@ -31,9 +31,9 @@ The current repository remains valid as a semantic-first readiness foundation an
 
 After the bootstrap/toolchain movement (TypeScript/Node decision, ADR 0009 dev/test boundary, `tools/validate-bootstrap` clean), the agent-resolvable readiness inputs are in place. The remaining gates to a local dev/test bootstrap implementation start are exactly two, and both are human: a signed USF-100 directive, then a separate USF-39 start action (with a USF-75-equivalent revalidation rerun immediately before it). The final consolidated rollup is `docs/architecture/foundation-completeness-audit.md` section 12; the fresh revalidation is in `docs/architecture/final-pre-usf-39-readiness-revalidation.md`. USF-39 remains Backlog.
 
-## React L5 Equivalence Audit Harvest (USF-102 workstream)
+## Foundation-Completeness Audit Harvest (USF-102 workstream)
 
-`../react` was inspected at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as historical evidence only, and the harvest is recorded in `docs/architecture/foundation-completeness-audit.md`. That audit classifies every historical capability, proof, source-use, build, environment, CI, operational, data, configuration, governance, hexagonal-architecture, and UI artefact against the USF V2 corpus using the controlled equivalence and gap vocabularies.
+USF's own self-defined source lineage is frozen at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767` (tag `v1-final`) as recorded source lineage only, and the harvest is recorded in `docs/architecture/foundation-completeness-audit.md`. That audit classifies every recorded capability, proof, source-use, build, environment, CI, operational, data, configuration, governance, hexagonal-architecture, and UI artefact against the USF V2 corpus using the controlled classification and gap vocabularies.
 
 The harvest materially reduces and sharpens the blocker set without weakening any safety rule. The smallest truthful remaining NO-GO set is:
 

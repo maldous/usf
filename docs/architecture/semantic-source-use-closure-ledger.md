@@ -67,7 +67,7 @@ The authentication slice source-use matrix records 159 source rows and authorise
 - Do not move USF-39 out of Backlog.
 - Do not create implementation/runtime code.
 - Do not create implementation/runtime directories.
-- Do not import runtime/application code from `../react`.
+- Do not import runtime/application code from an external sibling repository such as `../external-source/`.
 - Do not mirror historical source paths as target paths.
 - Do not treat the baseline source manifest as implementation permission.
 - Do not treat generated reports as authority.
@@ -84,7 +84,7 @@ This ledger is reviewable planning evidence only. The accompanying validator rul
 
 Complete one-pass implementation readiness remains NO-GO.
 
-As of the Wave 3 corpus completion, all 67 semantic-contract instances are covered as semantic information: 64 are draft contracts with complete facets (43 cite manifest-verified React source rows as informational lineage; 21 are coverage-complete from React's semantic corpus via the USF coverage record and the equivalence audit), 1 is deprecated as superseded (on-call/status-page alerting), and 2 are not-applicable-final exclusions (serverless function runtime, mock providers). Coverage of everything `../react` covers is therefore complete at the semantic-contract level. `../react` is informational lineage only: no source code is imported, no source-import manifest expansion was performed, and the V2 implementation language is an open decision. Authentication proof freshness is anchored for current main by `proof-anchor-fabe47b`; broader proof remains hermetic lineage or missing until each slice has its own proof command and anchor. Per-facet detail is draft-level and is enriched before generation.
+As of the Wave 3 corpus completion, all 67 semantic-contract instances are covered as semantic information: 64 are draft contracts with complete facets (43 cite manifest-verified source rows as informational lineage; 21 are coverage-complete from USF's own semantic corpus via the USF coverage record and the coverage audit), 1 is deprecated as superseded (on-call/status-page alerting), and 2 are not-applicable-final exclusions (serverless function runtime, mock providers). Coverage across USF's own self-defined source lineage is therefore complete at the semantic-contract level. That source lineage is informational only: no source code is imported, no source-import manifest expansion was performed, and the V2 implementation language is an open decision. Authentication proof freshness is anchored for current main by `proof-anchor-fabe47b`; broader proof remains hermetic lineage or missing until each slice has its own proof command and anchor. Per-facet detail is draft-level and is enriched before generation.
 
 USF-97 is materially advanced by making every capability-matrix semantic-contract target validator-readable as either source-backed complete-facet draft, coverage-complete draft, deprecated, or non-applicable exclusion. The React L5 / USF V2 equivalence audit (`docs/architecture/foundation-completeness-audit.md`) further advances USF-97 by classifying all 75 historical capabilities against the controlled equivalence and gap vocabularies and reducing the remaining work to an enumerated, ranked authoring backlog. It is not complete. The next repository-workable step is to replace deferred gap facets with source-backed domain semantics and per-domain source-use matrices, or preserve explicit exclusions where authority says the capability is out of scope.
 

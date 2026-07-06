@@ -6,7 +6,7 @@
 | Status | Draft / parity-config-secrets (USF-144) plus bounded enterprise depth (USF-145) |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, ADR 0010; consistent with the audit-evidence standard and the Enterprise Persistence Metadata and Classification Standard |
 | Issue scope | USF-144 under USF-133; deferred depth tracked in USF-145 |
-| Evidence basis | Historical `../react` config/secrets behaviour as lineage only; PR 92 DB/RLS; PR 93 PDP; PR 94 audit/evidence |
+| Evidence basis | USF's own self-defined config/secrets semantics as source lineage; PR 92 DB/RLS; PR 93 PDP; PR 94 audit/evidence |
 | Compliance note | ISO 27001-supporting **technical control evidence** (configuration management, access control, secret handling). **Not** a certification claim. |
 
 > Normative language follows BCP 14; only uppercase keywords are normative.

@@ -6,7 +6,7 @@
 | **Status** | Draft / Foundational |
 | **Authority level** | semantic-definition (governs source-use of the jobs/workflows slice) |
 | **Issue scope** | USF-133 child: jobs, workflows, scheduling, and operational automation |
-| **Source row basis** | `../react` jobs/workers/schedulers/workflows/automation lineage (evidence only) and the existing USF jobs/workflows semantic corpus |
+| **Source row basis** | USF's own self-defined jobs/workers/schedulers/workflows/automation source lineage and the existing USF jobs/workflows semantic corpus |
 | **Repository state** | Implementation under existing authorised topology roots only (`capabilities/jobs`, `adapters/wf`, `packages/{core,ports,proof}`, `tests/*`); no new root introduced |
 | **Decision authority** | ADR 0011 (workflow/job port family) and ADR 0013 (jobs/workflows execution model) |
 
@@ -18,11 +18,11 @@ ISO 27001-supporting technical control evidence only. No certification claim.
 
 ## Treatment Rules
 
-- **source-derived-rewrite** — behaviour authored against USF semantics with `../react` as lineage;
+- **source-derived-rewrite** — behaviour authored against USF semantics with USF's own self-defined source lineage as evidence;
   USF authors its own runtime, no external runtime/application code is copied, and no external source path is mirrored.
-- **new-with-rationale** — no direct historical antecedent; introduced to satisfy a USF
+- **new-with-rationale** — no direct source antecedent; introduced to satisfy a USF
   semantic contract / ADR (the ADR 0011 two-port family realised under ADR 0013).
-- **evidence-only-support** — `../react` material consulted as behaviour evidence only.
+- **evidence-only-support** — USF's own source material consulted as behaviour evidence only.
 
 Port-family boundary (ADR 0011): capabilities depend only on the USF durable workflow port
 and the USF operational job port — never on Temporal or Windmill directly. Temporal and
@@ -32,13 +32,13 @@ Windmill are lineage/composed-test provider concerns; no live provider readiness
 
 | Target file | Treatment | Source-use basis | Rationale |
 |---|---|---|---|
-| `capabilities/jobs/src/job-service.ts` | source-derived-rewrite | `../react` job-runner / queue / scheduled-job / DLQ lineage (evidence only) | Operational job service: classification, tenant-scope, concrete service actor, PDP authz, bounded retry + deterministic backoff, idempotency, dead-letter with evidence, deterministic scheduling, value-redacted failure, audit. Depends only on USF ports. |
-| `capabilities/jobs/src/workflow-service.ts` | source-derived-rewrite | `../react` durable workflow / approval-chain lineage (evidence only) | Durable workflow + approval service: versioned, tenant-bound, PDP-authorized, separation-of-duties approvals, audited lifecycle. |
-| `capabilities/jobs/src/enterprise-workflow-controls.ts` | source-derived-rewrite | `../react` workflow replay, operational automation, scheduler, outbox, backpressure, and provider-egress lineage (evidence only) | USF-151 bounded local enterprise control plane: workflow definition hash, deterministic replay, migration policy, outbox/inbox dedupe, quota/backpressure, pause/resume/drain, dry-run impact gate, heartbeat/concurrency key, high-risk admin override, provider egress/circuit breaker, snapshot replay authorization, value-free audit, and explicit live-provider/API/operator non-claims. |
+| `capabilities/jobs/src/job-service.ts` | source-derived-rewrite | USF source lineage: job-runner / queue / scheduled-job / DLQ (evidence only) | Operational job service: classification, tenant-scope, concrete service actor, PDP authz, bounded retry + deterministic backoff, idempotency, dead-letter with evidence, deterministic scheduling, value-redacted failure, audit. Depends only on USF ports. |
+| `capabilities/jobs/src/workflow-service.ts` | source-derived-rewrite | USF source lineage: durable workflow / approval-chain (evidence only) | Durable workflow + approval service: versioned, tenant-bound, PDP-authorized, separation-of-duties approvals, audited lifecycle. |
+| `capabilities/jobs/src/enterprise-workflow-controls.ts` | source-derived-rewrite | USF source lineage: workflow replay, operational automation, scheduler, outbox, backpressure, and provider-egress (evidence only) | USF-151 bounded local enterprise control plane: workflow definition hash, deterministic replay, migration policy, outbox/inbox dedupe, quota/backpressure, pause/resume/drain, dry-run impact gate, heartbeat/concurrency key, high-risk admin override, provider egress/circuit breaker, snapshot replay authorization, value-free audit, and explicit live-provider/API/operator non-claims. |
 | `packages/proof/src/jobs-workflows-proof.ts` | new-with-rationale | evidence-only-support | Hermetic behaviour proof of the full job/workflow matrix. `make jobs-proof`. |
 | `adapters/wf/src/temporal-workflows.ts` | new-with-rationale | evidence-only-support | Minimal synthetic workflow definition for the adapter-bound Temporal local/dev/test proof. No capability or orchestration code imports the Temporal SDK. |
 | `tests/adapters/operational-job-store.test.ts` | new-with-rationale | evidence-only-support | Unit tests of lease exclusivity/re-acquire, claim eligibility, idempotency, tenant isolation. |
-| `tests/capabilities/jobs-workflows.test.ts` | source-derived-rewrite | `../react` job/workflow test lineage (evidence only) | Capability tests for authz, idempotency, retry/dead-letter, redaction, cancellation, approval SoD. No Playwright. |
+| `tests/capabilities/jobs-workflows.test.ts` | source-derived-rewrite | USF source lineage: job/workflow tests (evidence only) | Capability tests for authz, idempotency, retry/dead-letter, redaction, cancellation, approval SoD. No Playwright. |
 
 Extended (already source-dispositioned by prior source-use disposition matrices; no path change):
 `packages/core/src/index.ts` (job/workflow types, failure taxonomy, backoff, service-actor,
@@ -77,9 +77,9 @@ mutation actions, workflow admin override, and service-worker/security-admin rol
 | Observability hooks (queue depth, latency, lag) | deferred | standard doc | signals defined; live metrics/alerting deferred |
 | Live Temporal / Windmill / external queue / worker cluster | deferred | — | blocker; USF-183 proves only local composed-test Temporal binding through the adapter boundary. |
 
-## React UI/Playwright Job Behaviours
+## UI/Playwright Job Behaviours
 
-`../react` job/workflow behaviour proven via UI/admin routes or Playwright is **rewritten as
+Job/workflow behaviour in USF's own source lineage proven via UI/admin routes or Playwright is **rewritten as
 USF foundation behaviour** at the capability/port/proof level — not as browser E2E. No
 Playwright is added. The operator/admin surfaces (`/v1/jobs`, `/v1/workflows`) have their
 secure semantics **defined** in the Jobs & Workflows Standard and their HTTP wiring

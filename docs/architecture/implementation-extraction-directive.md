@@ -9,7 +9,7 @@
 | **Drafted by** | Agent draft under delegation, for human review; the agent does not self-authorise implementation |
 | **Primary inputs** | `docs/architecture/implementation-directive-template.md`, `docs/architecture/authentication-proof-substrate-implementation-directive-specification.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/semantic-source-use-closure-ledger.md`, `docs/architecture/foundation-completeness-audit.md`, `docs/architecture/final-v2-readiness-reconciliation.md`, `docs/adr/0005-hexagonal-architecture.md`, `docs/adr/0006-proof-freshness-anchor-carrier.md`, `docs/adr/0007-proof-anchor-ci-signing-identity.md`, `docs/adr/0008-proof-anchor-attested-tag-carrier-amendment.md`, `docs/architecture/complete-readiness-blocker-register.md`, `tools/validate-spec/validate-spec.py` |
 
-This is the human-filled implementation directive for the whole USF V2 implementation extraction. It governs the entire V2 migration across all slices. It does not itself create implementation code, create implementation directories, import `../react` runtime code, mirror source paths, emit proof evidence, emit generated reports, or promote schemas. It does not move USF-39 out of Backlog. USF-39 remains Backlog until this directive is signed and a separate explicit start action is authorised.
+This is the human-filled implementation directive for the whole USF V2 implementation extraction. It governs the entire V2 migration across all slices. It does not itself create implementation code, create implementation directories, import source-lineage runtime code, mirror source paths, emit proof evidence, emit generated reports, or promote schemas. It does not move USF-39 out of Backlog. USF-39 remains Backlog until this directive is signed and a separate explicit start action is authorised.
 
 ## Directive Status and Acceptance
 
@@ -65,13 +65,13 @@ The required validator extensions before broad implementation are: fail-closed c
 
 ## Governing Repository Artefacts
 
-The directive is governed by, and every implementation PR must remain consistent with: the Charter and Authority Model; accepted ADRs, including ADR-0005 (hexagonal architecture carried forward, language-agnostic), ADR-0006 (proof-freshness anchor carrier), and ADR-0007 (proof-anchor CI signing identity); the semantic-contract instances for the slice being implemented; `docs/architecture/target-implementation-topology-plan.md`; the per-slice source-use disposition matrices; `docs/architecture/semantic-source-use-closure-ledger.md`; `docs/architecture/production-proof-posture-matrix.md` where present; the schema/validator posture decision; the generated-report readiness policy; and the validator rules in `tools/validate-spec/validate-spec.py`. A generated report is never cited as authority, and historical `../react` evidence is never cited as live authority.
+The directive is governed by, and every implementation PR must remain consistent with: the Charter and Authority Model; accepted ADRs, including ADR-0005 (hexagonal architecture carried forward, language-agnostic), ADR-0006 (proof-freshness anchor carrier), and ADR-0007 (proof-anchor CI signing identity); the semantic-contract instances for the slice being implemented; `docs/architecture/target-implementation-topology-plan.md`; the per-slice source-use disposition matrices; `docs/architecture/semantic-source-use-closure-ledger.md`; `docs/architecture/production-proof-posture-matrix.md` where present; the schema/validator posture decision; the generated-report readiness policy; and the validator rules in `tools/validate-spec/validate-spec.py`. A generated report is never cited as authority, and USF's own recorded source lineage (rank-5 source evidence) is never cited as live authority.
 
 ## Target Directories and Target Files
 
 Every target file is named in the topology plan before it is created. Implementation is confined to hexagonal application/domain/adapter/configuration roots authorised in `docs/architecture/target-implementation-topology-plan.md` and enforced by the validator's authorised-implementation-roots set. The currently authorised roots are `apps/authentication-api/`, `packages/authentication-domain/`, `packages/identity-domain/`, `packages/authorization-policy/`, `packages/identity-provider-adapter/`, `packages/authentication-observability/`, and `config/authentication/`.
 
-Because this directive authorises all slices but the topology and authorised-roots set are presently enumerated only for the identity/authentication slice, each additional slice is gated: before any of its files are created, a reviewed topology update must add that slice's exact target directories and target files, the validator's authorised-implementation-roots set must be extended to include them, and the slice's source-use disposition matrix must exist. Any implementation-shaped directory not yet listed in the topology plan and the validator remains blocked. Blocked examples include `apps/platform-api/`, `apps/web/`, `services/`, `src/`, `infra/`, `scripts/`, `deploy/`, `docker/`, `k8s/`, and `terraform/`. No target path may mirror a historical `../react` source path.
+Because this directive authorises all slices but the topology and authorised-roots set are presently enumerated only for the identity/authentication slice, each additional slice is gated: before any of its files are created, a reviewed topology update must add that slice's exact target directories and target files, the validator's authorised-implementation-roots set must be extended to include them, and the slice's source-use disposition matrix must exist. Any implementation-shaped directory not yet listed in the topology plan and the validator remains blocked. Blocked examples include `apps/platform-api/`, `apps/web/`, `services/`, `src/`, `infra/`, `scripts/`, `deploy/`, `docker/`, `k8s/`, and `terraform/`. No target path may mirror an external sibling-repository source path such as `../external-source/...`.
 
 ## Source-Use Policy
 
@@ -82,7 +82,7 @@ Every target file is assigned exactly one source-use treatment in its slice's di
 - `new-with-rationale`: no source row drives the file; the directive records the semantic reason and source-disposition rationale;
 - `evidence-only-support`: source rows inform review or lineage only and cannot produce runtime code.
 
-`../react` is informational lineage only. Direct runtime or application code import from `../react` is not authorised by this directive for any slice. A specific file may be imported only if a later signed directive revision names that exact file with its source-use treatment, proof rationale, and target file. The target runtime is modern TypeScript/Node as recorded in bootstrap governance; this directive imports no `../react` source and creates no implementation or scaffold before bootstrap or before separate implementation authorisation.
+USF's own recorded source lineage is informational (rank-5 source evidence) only. Direct runtime or application code import from that source lineage is not authorised by this directive for any slice. A specific file may be imported only if a later signed directive revision names that exact file with its source-use treatment, proof rationale, and target file. The target runtime is modern TypeScript/Node as recorded in bootstrap governance; this directive imports no source lineage and creates no implementation or scaffold before bootstrap or before separate implementation authorisation.
 
 ## Source-Use Disposition Coverage
 
@@ -106,7 +106,7 @@ All schemas remain draft. No schema is promoted to active by this directive or b
 
 ## Generated Reports
 
-Generated reports may be cited only as rank-7 summaries with freshness and evidence references. A report never authorises implementation, never replaces proof evidence, never promotes schemas, never defines semantics, and never closes a source-disposition gap. Direct validators and proof records govern.
+Generated reports may be cited only as rank-6 summaries with freshness and evidence references. A report never authorises implementation, never replaces proof evidence, never promotes schemas, never defines semantics, and never closes a source-disposition gap. Direct validators and proof records govern.
 
 ## Validation Commands
 
@@ -127,13 +127,13 @@ Strict JSON parse is required for any changed JSON. If implementation files are 
 
 ## Implementation Boundaries
 
-Implementation is permitted only in topology-listed, validator-authorised roots, only for files named in the topology plan, and only for slices whose semantic facets and source-use disposition are complete. Unlisted roots are blocked. No runtime code is imported from `../react` without a specific signed source-import authorisation. No directory is created outside the authorised roots. No schema is activated. No proof claim exceeds the proof level observed.
+Implementation is permitted only in topology-listed, validator-authorised roots, only for files named in the topology plan, and only for slices whose semantic facets and source-use disposition are complete. Unlisted roots are blocked. No runtime code is imported from USF's own source lineage without a specific signed source-import authorisation. No directory is created outside the authorised roots. No schema is activated. No proof claim exceeds the proof level observed.
 
 ## Non-Goals
 
 - Starting USF-39 or moving USF-39 out of Backlog.
 - Creating implementation or runtime code or directories from this directive.
-- Importing `../react` runtime or application code.
+- Importing source-lineage runtime or application code.
 - Mirroring historical source paths.
 - Promoting any schema or the validator to active maturity.
 - Claiming live-external-provider or production-live readiness.
@@ -150,7 +150,7 @@ USF-39 remains Backlog, or an implementation PR must stop, when any of these is 
 - a target path mirrors a historical source path;
 - a target file has no source-use disposition row and no reviewed `new-with-rationale` entry;
 - an `evidence-only-support` row is used to produce runtime code;
-- `../react` runtime or application code is copied without a specific signed source-import authorisation;
+- source-lineage runtime or application code is copied without a specific signed source-import authorisation;
 - provider mode or environment is missing, ambiguous, or upgraded by the other;
 - hermetic proof is treated as live-external-provider proof, or production-shaped evidence as production-live;
 - a behaviour claim's proof is stale, missing for the claimed commit, or absent;
@@ -166,7 +166,7 @@ Every created implementation file includes a closure row in the PR body or a lin
 
 ## Required PR Citation
 
-Every implementation PR under this directive cites: this accepted directive; the target semantic instances it implements; the target files authorised by the topology plan; the source-use disposition rows or `new-with-rationale` entries for each target file; the proof and evidence records used for the claim; the validator commands run on the PR head; and any generated reports only as rank-7 summaries. The PR body states explicitly that source-path mirroring, direct runtime code copy, schema activation, generated-report authority, hermetic-as-live proof, and production-shaped-as-production-live claims are not authorised.
+Every implementation PR under this directive cites: this accepted directive; the target semantic instances it implements; the target files authorised by the topology plan; the source-use disposition rows or `new-with-rationale` entries for each target file; the proof and evidence records used for the claim; the validator commands run on the PR head; and any generated reports only as rank-6 summaries. The PR body states explicitly that source-path mirroring, direct runtime code copy, schema activation, generated-report authority, hermetic-as-live proof, and production-shaped-as-production-live claims are not authorised.
 
 ## Acceptance Signature Block
 

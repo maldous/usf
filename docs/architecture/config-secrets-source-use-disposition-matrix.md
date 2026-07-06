@@ -6,12 +6,12 @@
 | Status | Draft / config-secrets slice (USF-144) implementation coverage plus bounded enterprise depth (USF-145) |
 | Authority level | Reviewable implementation coverage; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the implementation directive |
 | Issue scope | USF-144 under USF-133; deferred depth tracked in USF-145 |
-| Source row basis | `docs/architecture/config-and-secrets-standard.md`, ADR 0010 (PDP), the audit-evidence standard, and historical `../react` config/secrets behaviour as lineage only |
+| Source row basis | `docs/architecture/config-and-secrets-standard.md`, ADR 0010 (PDP), the audit-evidence standard, and USF's own self-defined config/secrets source lineage |
 | Repository state | USF authors its own runtime; no external runtime/application code is copied and no external source path is mirrored; no UI; no Playwright; local OpenBao remains bounded composed-test evidence only; no live Vault/Key Vault/KMS/OpenBao, staging, production, or certification claim |
 
 ## Treatment Rules
 
-`source-derived-rewrite` means the behaviour was authored against USF semantics with historical `../react` evidence as lineage (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `capabilities/config/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/secrets/src/index.ts`) are not re-listed here.
+`source-derived-rewrite` means the behaviour was authored against USF semantics with USF's own self-defined source lineage as evidence (no copy, no path mirroring). `new-with-rationale` means USF-defined. `evidence-only-support` means a test/proof artefact. Files modified in this slice that already carry a disposition row in another matrix (`packages/core`, `packages/ports`, `packages/contracts`, `packages/openapi`, `apps/api`, `capabilities/config/src/index.ts`, `capabilities/tenant/src/authorization-policy.ts`, `adapters/secrets/src/index.ts`) are not re-listed here.
 
 ## Implementation Target Files
 
@@ -49,9 +49,9 @@
 | Data residency | bounded-local-proof | provider registry + `make config-proof` | Local-compose OpenBao region and allowed-region boundary are proven. Production residency and cross-border transfer governance remain non-claims. |
 | Future external secret manager ports | bounded-local-reconciled | `packages/ports` (ExternalSecretManager), OpenBao provider registry, runtime provider evidence | OpenBao composed-test binding is reconciled as local provider evidence only; no live Vault/Key Vault/KMS/OpenBao readiness. |
 
-## React UI/Playwright Config Behaviours
+## UI/Playwright Config Behaviours
 
-The historical `../react` config/secrets inventory (`.claude/runs/.../react-config-secrets-inventory.json`, 28 items) found **1 UI/Playwright-only** config behaviour: the stage-policy E2E that asserts auth-mode/credential and secret/provider readiness gates. It is classified **foundation-behaviour-rewritten-from-ui-test** and is re-proven at the foundation level by the config proof's fail-closed validation, provider-mode classification, and secret lifecycle checks (`make config-proof`) — not by Playwright. No UI/Playwright config test disappears silently.
+USF's own self-defined config/secrets source inventory (28 items) records **1 UI/Playwright-only** config behaviour: the stage-policy E2E that asserts auth-mode/credential and secret/provider readiness gates. It is classified **foundation-behaviour-rewritten-from-ui-test** and is re-proven at the foundation level by the config proof's fail-closed validation, provider-mode classification, and secret lifecycle checks (`make config-proof`) — not by Playwright. No UI/Playwright config test disappears silently.
 
 ## Non-goals
 

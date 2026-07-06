@@ -30,7 +30,7 @@ State what this ADR decides and the semantic area it governs.
 
 ## Context
 
-Describe the problem, the relevant USF semantic definitions, and the historical `../react` evidence being considered.
+Describe the problem, the relevant USF semantic definitions, and the USF source-lineage evidence being considered.
 
 ## Decision
 
@@ -46,7 +46,7 @@ Explain why this decision is selected over the alternatives. Distinguish source 
 
 ## Source References
 
-- `../react/path-or-evidence-id`
+- `source-import-registry-id` (USF's own source-import registry entry)
 
 ## Proof References
 

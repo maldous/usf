@@ -18,5 +18,5 @@
   "proofRefs": ["usf.proof-evidence.example.baseline"],
   "retention": "Retained for the lifetime of the proof evidence corpus.",
   "correlation": "trace-id",
-  "sourceRefs": ["../react/docs/v2-foundation/observability-semantics.json#auth-login-duration"]
+  "sourceRefs": ["../external-source/docs/v2-foundation/observability-semantics.json#auth-login-duration"]
 }

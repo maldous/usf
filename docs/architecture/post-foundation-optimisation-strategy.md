@@ -68,7 +68,7 @@ The marker count is a search signal, not a readiness finding. It identifies file
 
 ## Legacy and Evolution Findings
 
-`../react` references remain valid as historical lineage and source evidence only. They must not drive future implementation by source resemblance. USF-230 should move future agent workflows toward current semantic contracts, validators, proof commands, and dev-readiness handover evidence.
+USF's own recorded source lineage remains valid as rank-5 source evidence only. It must not drive future implementation by source resemblance. USF-230 should move future agent workflows toward current semantic contracts, validators, proof commands, and dev-readiness handover evidence.
 
 Bootstrap evolution wording remains useful for ancestry and should be treated as historical lineage. It should not be an active source of future development meaning.
 
@@ -84,9 +84,8 @@ Future developer and AI-agent work should use this order:
 2. ADRs: accepted decisions and constraints.
 3. Validators: fail-closed enforcement.
 4. Runtime and proof evidence: commit-pinned evidence and proof manifests.
-5. Source implementation: apps, packages, and adapters that conform to the above.
-6. Historical lineage: `../react`, source-use matrices, and parity migration matrices as audit/reference evidence only.
-7. Generated reports: summaries and deterministic projections only.
+5. Source implementation and source lineage: apps, packages, and adapters that conform to the above, together with USF's own source-import registry, source-use matrices, and source-disposition matrices as audit/reference evidence only.
+6. Generated reports: summaries and deterministic projections only.
 
 ## Safety Rules
 

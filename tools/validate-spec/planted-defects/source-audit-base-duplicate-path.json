@@ -2,11 +2,11 @@
   "target": "import-manifest-data",
   "expectedRule": "USF-IMPORT-013",
   "record": {
-    "sourceRepository": "../react",
+    "sourceRepository": "../external-source",
     "entries": [
       {
         "sourceRef": {
-          "repository": "../react",
+          "repository": "../external-source",
           "path": "apps/platform-api/src/server/auth.ts",
           "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
           "tag": "v1-final"
@@ -14,7 +14,7 @@
       },
       {
         "sourceRef": {
-          "repository": "../react",
+          "repository": "../external-source",
           "path": "apps/platform-api/src/server/auth.ts",
           "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
           "tag": "v1-final"
@@ -23,7 +23,7 @@
     ]
   },
   "expectedAuditBase": {
-    "repository": "../react",
+    "repository": "../external-source",
     "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
     "tag": "v1-final",
     "entryCount": 2

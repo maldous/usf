@@ -40,7 +40,7 @@ The implemented carrier avoids managed private keys while preserving the core in
 
 ## Source References
 
-- None. This is a USF governance amendment; `../react` proof remains historical lineage only.
+- None. This is a USF governance amendment; USF's own source lineage remains rank-5 source evidence only.
 
 ## Proof References
 

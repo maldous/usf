@@ -12,7 +12,7 @@ Records the capability-domain value-set decision and the choice to carry all 14 
 
 `spec/vocabularies/vocabulary-catalog.json` previously deferred the `capability-domains` value set and described the historical capability category dimension as a 12-category source input.
 
-The current source file `../react/docs/v2-foundation/v1-capability-closure.json` contains 75 capability records across 14 observed category values:
+USF's own capability-closure source lineage contains 75 capability records across 14 observed category values:
 
 - `authentication`
 - `compute-runtime`
@@ -49,7 +49,7 @@ The source file is historical evidence, not future authority, but no source cate
 
 ## Source References
 
-- `../react/docs/v2-foundation/v1-capability-closure.json`
+- USF's own capability-closure definitions, held in USF's source-import registry.
 
 ## Proof References
 

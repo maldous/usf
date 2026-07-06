@@ -16,7 +16,7 @@
 
 ## 1. Purpose
 
-Define a mandatory classification and metadata-field standard for every persisted database object in the USF foundation, so persisted rows carry the accountability, traceability, lifecycle, integrity, and retention metadata an enterprise platform and its future UI require. The standard is enforced by a validator and proven against a composed Postgres substrate. Historical `../react` evidence informed which behaviours existed; USF defines the final standard cleanly and does not omit a mature field merely because the historical stack lacked it.
+Define a mandatory classification and metadata-field standard for every persisted database object in the USF foundation, so persisted rows carry the accountability, traceability, lifecycle, integrity, and retention metadata an enterprise platform and its future UI require. The standard is enforced by a validator and proven against a composed Postgres substrate. USF's own self-defined source lineage informed which behaviours existed; USF defines the final standard cleanly and does not omit a mature field merely because earlier source lineage lacked it.
 
 ## 2. Persistent object classification (mandatory)
 

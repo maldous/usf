@@ -10,7 +10,7 @@ Records the human-approved decision (tracked as USF-136) that USF V2 owns an int
 
 ## Context
 
-Historical `../react` evidence expresses authorization across several layers: application-layer permission and resource-policy checks, attribute-based decisions, and database row-level security, with identity brokered through Keycloak. During the foundation-completeness readiness pass the exact USF authority for the policy decision point was recorded as a `requires-human-decision` item (scope-classification matrix; USF-136), because the Authority Model forbids inferring missing semantics from historical implementation.
+USF's own source lineage expresses authorization across several layers: application-layer permission and resource-policy checks, attribute-based decisions, and database row-level security, with identity brokered through Keycloak. During the foundation-completeness readiness pass the exact USF authority for the policy decision point was recorded as a `requires-human-decision` item (scope-classification matrix; USF-136), because the Authority Model forbids inferring missing semantics from source lineage.
 
 A human has now decided the authorization model. Under the Authority Model a decision of this weight needs rank-2 ADR coverage so it is durable repository authority, not tracker context or planning prose. Linear records the decision as work tracking only.
 
@@ -76,8 +76,8 @@ Combining RBAC and ABAC in a USF-owned PDP keeps the application-layer authoriza
 - Do not treat the identity provider as the authorization system of record.
 - Do not treat row-level security as the only authorization layer or remove it as the tenant-persistence backstop.
 - Do not allow a default-open authorization path; the PDP fails closed.
-- Do not infer PDP behaviour from historical `../react` source; implement against USF semantics.
-- Do not copy `../react` authorization code or mirror its paths.
+- Do not infer PDP behaviour from USF's own source lineage; implement against USF semantics.
+- Do not copy authorization code from an external sibling repository or mirror its paths.
 
 ## Consequences
 
@@ -91,7 +91,7 @@ Combining RBAC and ABAC in a USF-owned PDP keeps the application-layer authoriza
 - Agents must treat the USF-owned PDP as the application-layer authorization authority and must not delegate final authorization to an identity provider or the database alone.
 - Agents must preserve fail-closed default behaviour and the mandatory RLS tenant backstop.
 - Agents must not implement the PDP from this ADR alone; a separate authorised implementation directive is required.
-- Agents must not infer authorization semantics from historical `../react` code.
+- Agents must not infer authorization semantics from USF's own source-lineage code.
 
 ## Supersession
 

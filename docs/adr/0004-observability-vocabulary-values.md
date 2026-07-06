@@ -12,7 +12,7 @@ Records the initial controlled observability signal-name and attribute-name voca
 
 `docs/architecture/standards-profile.md` classifies OpenTelemetry-style observability semantic conventions as adapted principles only. USF does not claim OpenTelemetry compliance. The draft `spec/schemas/observability-signal.schema.json` already defines observability signals, and PR #6 activates `observability-signal-names` and `observability-attribute-names` in `spec/vocabularies/vocabulary-catalog.json`.
 
-Historical `../react` evidence includes operational observability signals, metrics, logs, traces, runtime proof outputs, and Loki/Tempo/Sentry correlation evidence. That evidence is source lineage, not future live authority.
+USF's own source lineage includes operational observability signals, metrics, logs, traces, runtime proof outputs, and Loki/Tempo/Sentry correlation evidence. That evidence is source lineage, not future live authority.
 
 ## Decision
 
@@ -35,9 +35,9 @@ USF needs a closed, validator-checkable observability vocabulary so arbitrary ob
 
 ## Source References
 
-- `../react/docs/v2-foundation/operational-semantics.json`
-- `../react/docs/evidence/e2e/prod-observability-correlation-latest.json`
-- `../react/usf-audit/proof-evidence/`
+- USF's own operational-semantics definitions, held in USF's source-import registry.
+- USF's own observability-correlation evidence, held in USF's source-import registry.
+- USF's own recorded proof-evidence lineage, held in USF's source-import registry.
 
 ## Proof References
 

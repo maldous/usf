@@ -6,9 +6,9 @@
 | **Status** | Draft / planning |
 | **Authority level** | Semantic-definition planning guidance; subordinate to the Charter and Authority Model |
 | **Issue scope** | USF-47; supports USF-33 |
-| **Historical evidence basis** | `../react` at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767`, tags `v1-final` and `v2-l6-foundation-proven` |
+| **Source lineage basis** | USF's own self-defined source lineage at commit `a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767`, tags `v1-final` and `v2-l6-foundation-proven` |
 
-This document defines the coverage boundary for source-evidence records before detailed per-domain import-manifest records are authored. This planning document alone creates no source import map; the baseline manifest is authored separately at `spec/registries/source-import-manifest.json`. The plan imports no runtime/application code and does not treat `../react` as live authority.
+This document defines the coverage boundary for source-evidence records before detailed per-domain import-manifest records are authored. This planning document alone creates no source import map; the baseline manifest is authored separately at `spec/registries/source-import-manifest.json`. The plan imports no runtime/application code and does not treat USF's own source lineage as live authority.
 
 ## Purpose
 
@@ -16,29 +16,29 @@ USF must preserve source lineage and avoid silent source loss. The controlled so
 
 ## Governing Rules
 
-- The Charter requires no knowledge loss and treats `../react` as evidence and lineage.
-- The Authority Model ranks historical `../react` evidence below USF semantic definitions, ADRs, validators, runtime proof evidence, and USF implementation.
+- The Charter requires no knowledge loss and treats USF's own source lineage as evidence.
+- The Authority Model places USF source implementation at rank 5, below USF semantic definitions, ADRs, validators, and runtime proof evidence.
 - The Standards Profile requires source references and dispositions for imported source elements.
 - `spec/schemas/import-manifest.schema.json`, `spec/schemas/source-reference.schema.json`, and `spec/schemas/source-disposition.schema.json` define draft instance shapes.
-- Source paths from `../react` MUST remain quoted historical evidence and MUST NOT dictate USF target paths.
+- Source paths held in USF's own source-import registry MUST remain quoted source evidence and MUST NOT dictate USF target paths.
 - Historical disposition aliases MUST resolve to canonical `disposition-values` before being emitted in USF JSON instances.
 
 ## Historical Inputs
 
-The coverage plan is grounded in these current historical artefacts:
+The coverage plan is grounded in USF's own self-defined source-lineage artefacts:
 
-| Historical artefact | Observed coverage role |
+| Source-lineage artefact | Observed coverage role |
 |---|---|
-| `../react/docs/v2-foundation/v1-file-inventory.json` | 1,673 source elements with path, file type, owner, authority marker, disposition, retained interfaces, tests, decisions, migration sequence, and deletion condition |
-| `../react/docs/v2-foundation/v1-to-v2-path-map.json` | 1,673 mapped source elements using the same source-element shape |
-| `../react/docs/v2-foundation/v2-decision-catalog.json` | 74 accepted historical decisions |
-| `../react/docs/v2-foundation/v2-decision-lineage.json` | 74 historical decision lineage records |
-| `../react/docs/v2-foundation/v1-capability-closure.json` | 75 capability records with semantic completeness, source references, and proof links |
-| `../react/docs/v2-foundation/capability-proof-definition.json` | Proof ladder and proof-definition semantics |
-| `../react/docs/v2-foundation/operational-semantics.json` | 75 operational capability records and 92 runtime command links |
-| `../react/docs/v2-foundation/event-semantics.json` | 10 event semantic records |
-| `../react/docs/v2-foundation/cross-capability-interactions.json` | 10 cross-capability interaction records |
-| `../react/docs/v2-foundation/ui-capability-model.json` | 12 personas and 28 UI capability records |
+| USF's own v1 file inventory | 1,673 source elements with path, file type, owner, authority marker, disposition, retained interfaces, tests, decisions, migration sequence, and deletion condition |
+| USF's own v1-to-v2 path map | 1,673 mapped source elements using the same source-element shape |
+| USF's own v2 decision catalogue | 74 accepted decisions |
+| USF's own v2 decision lineage | 74 decision lineage records |
+| USF's own v1 capability closure | 75 capability records with semantic completeness, source references, and proof links |
+| USF's own capability proof definition | Proof ladder and proof-definition semantics |
+| USF's own operational semantics | 75 operational capability records and 92 runtime command links |
+| USF's own event semantics | 10 event semantic records |
+| USF's own cross-capability interactions | 10 cross-capability interaction records |
+| USF's own UI capability model | 12 personas and 28 UI capability records |
 
 ## Coverage Classes
 
@@ -90,8 +90,8 @@ The following are excluded from source-import coverage unless a later issue expl
 
 | Exclusion | Rationale |
 |---|---|
-| `../react/.git/**` internals | Git internals are not source artefacts; commit and tag identifiers provide lineage instead |
-| `../react/node_modules/**` | Third-party installed dependencies are not authored historical source; package manifests capture dependency intent |
+| Source-lineage `.git/**` internals | Git internals are not source artefacts; commit and tag identifiers provide lineage instead |
+| Source-lineage `node_modules/**` | Third-party installed dependencies are not authored source; package manifests capture dependency intent |
 | Local caches and tool scratch state such as `.scannerwork/**`, `.playwright-mcp/**`, `.serena/**`, `.swarm/**`, and similar local state | These are generated or local operational byproducts, not canonical source evidence |
 | Secret-bearing local files such as `.password` and generated `.env` secret material | Secrets MUST NOT be imported; only configuration contract semantics are in scope |
 | Coverage output directories such as `coverage/**` and e2e runtime result output unless referenced by governed evidence records | Generated output is lower authority and must be linked to raw evidence before it can support a claim |
@@ -118,7 +118,7 @@ The USF-33 import map should be decomposed in this order:
 - A canonical-value check proving no historical disposition alias is emitted as a canonical value.
 - A path-safety check proving source paths appear only as source references and are not used as target USF paths.
 - `tools/validate-spec/validate-spec.py imports` validates the committed baseline manifest as a repeatable repository-owned check, including schema validity, entry count, unique source paths, canonical controlled values, path safety, package metadata classification, and runtime proof script classification.
-- External reconciliation against `../react` remains a documented manual evidence step until a later source-evidence harness is authorised.
+- Reconciliation against USF's own source lineage remains a documented manual evidence step until a later source-evidence harness is authorised.
 
 ## Non-Goals
 

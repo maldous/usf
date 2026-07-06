@@ -66,7 +66,7 @@ The allowed topology is conditional. A directory listed here is not created or a
 | `apps/authentication-api/` | HTTP/API entrypoint and orchestration for the authentication login slice. | `interface.authentication-login-api`, `workflow.authentication-login`, `workflow.authentication-identity-context`, `semantic-contract.authentication-platform` | Source-use rows for authentication server routes and use cases are adapt/rewrite only; direct copy is not authorised. |
 | `packages/authentication-domain/` | Domain rules for login, session, authentication settings, state, validation, and error handling. | `semantic-contract.authentication-platform`, `semantic-contract.user-identity-and-tenant-membership`, `semantic-contract.tenant-host-identity-resolution` | Source-use rows for auth/session/usecase files are adapt/rewrite only; evidence-only rows remain non-runtime. |
 | `packages/identity-domain/` | Tenant identity, user identity, membership, and host identity abstractions used by authentication. | `semantic-contract.user-identity-and-tenant-membership`, `semantic-contract.tenant-identity-record-and-fqdn`, `semantic-contract.tenant-host-identity-resolution` | Source-use rows for identity repository and identity data lineage are adapt/evidence-only; data migrations remain evidence-only unless later authorised separately. |
-| `packages/authorization-policy/` | RBAC and authorization policy decisions needed by the authentication slice. | `semantic-contract.rbac-roles-and-permissions` | Source-use rows for authorization behaviour are adapt only; package names from `../react` are lineage, not target names. |
+| `packages/authorization-policy/` | RBAC and authorization policy decisions needed by the authentication slice. | `semantic-contract.rbac-roles-and-permissions` | Source-use rows for authorization behaviour are adapt only; package names from USF's own source lineage are lineage, not target names. |
 | `packages/identity-provider-adapter/` | Provider-mode-aware identity-provider adapter boundary for mock and later external providers. | `provider-mode.mock-identity-provider`, `configuration.provider-mode-selector`, `semantic-contract.authentication-platform` | Source-use rows for provider and OIDC behaviour are adapt/rewrite only; hermetic mock evidence must not become live-provider evidence. |
 | `packages/authentication-observability/` | Audit, event, and observability emission contracts for authentication login. | `audit.authentication-login`, `event.authentication-login-audit`, `observability.authentication-login-audit` | Source-use rows for audit and observability files are adapt/evidence-only; generated reports and proof scripts remain evidence only. |
 | `config/authentication/` | Declarative configuration shape for authentication provider selection and environment binding. | `configuration.provider-mode-selector`, `environment.hermetic`, `environment.production-shaped`, `provider-mode.mock-identity-provider` | Configuration-file rows in the source-use matrix are evidence-only unless USF-61 marks a target file as new-with-rationale. |
@@ -96,7 +96,7 @@ Every future implementation file under an allowed directory must use one of the 
 - new-with-rationale;
 - evidence-only-support.
 
-No target file may be created solely because a historical source path exists. No target file may directly copy runtime/application code from `../react`. Evidence-only rows cannot produce runtime code. Generated-report rows cannot produce runtime code or authority. Data-migration rows remain evidence-only unless a later data/migration directive authorises migration artefacts.
+No target file may be created solely because a recorded source path exists. No target file may directly copy runtime/application code from USF's own source lineage. Evidence-only rows cannot produce runtime code. Generated-report rows cannot produce runtime code or authority. Data-migration rows remain evidence-only unless a later data/migration directive authorises migration artefacts.
 
 ## Directories That Remain Blocked
 
@@ -147,7 +147,7 @@ The PR validator must fail closed when:
 
 - No implementation directory is created.
 - No implementation/runtime code is created or imported.
-- No source file from `../react` is copied.
+- No source file from USF's own source lineage is copied.
 - No evidence record is created.
 - No generated report is created.
 - No schema lifecycle is changed.

@@ -6,7 +6,7 @@
 | Status | Draft / parity-audit (USF-142 core; USF-143 enterprise-depth proof gate) |
 | Authority level | semantic-definition; subordinate to the Charter, Authority Model, Standards Profile, and ADR 0010; consistent with the Enterprise Persistence Metadata and Classification Standard and the Tenant Authorization Standard |
 | Issue scope | USF-142 under USF-133; enterprise audit depth bounded by USF-143 |
-| Evidence basis | Historical `../react` audit/event/evidence behaviour as lineage only; PR 92 DB/RLS append-only ledger substrate; PR 93 authorization decision evidence |
+| Evidence basis | USF's own self-defined audit/event/evidence semantics as source lineage; PR 92 DB/RLS append-only ledger substrate; PR 93 authorization decision evidence |
 | Compliance note | This standard provides ISO 27001-supporting **technical control evidence** (logging/monitoring, access control, integrity). It is **not** a certification claim. |
 
 > Normative language follows BCP 14 (RFC 2119 + RFC 8174); only uppercase keywords are normative.

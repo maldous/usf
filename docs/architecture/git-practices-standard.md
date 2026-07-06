@@ -55,7 +55,7 @@ This standard exists to:
 
 3.4 **A passing commit, tag, or branch name does not prove correctness.** Naming a commit `fix(...)` does not make a fix correct; tagging a state does not make it valid; a green branch is not proof (Charter §5.9; AGENTS `Passing proof MUST NOT define intended behaviour by itself`).
 
-3.5 **Generated reports remain lower authority than the artefacts they summarise** (Authority Model §2.7). A report referencing a commit SHA is still rank 7.
+3.5 **Generated reports remain lower authority than the artefacts they summarise** (Authority Model §2.6). A report referencing a commit SHA is still rank 6.
 
 3.6 **A tag can identify a frozen state but cannot itself make that state semantically valid.** Validity comes from the semantic definitions, ADRs, validators, and proof — not from the existence of a tag (§9, §13).
 
@@ -102,7 +102,7 @@ The structure is machine-readable and supports later changelog/release reasoning
 - The summary MUST NOT overclaim readiness (no `complete`, `ready`, `proven`, `done` without backing — Charter §5.2).
 - The body SHOULD explain **why**, not merely restate **what** (§6).
 - Breaking-change markers (`!` after type/scope, or a `BREAKING CHANGE:` trailer) MUST NOT be used casually; they MUST correspond to a real, governed breaking change (and, where behaviour changes, the coupled artefacts of Authority Model §5).
-- Commit messages MUST NOT include forbidden canonical path tokens (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`) as canonical names, except inside quoted historical references (e.g. citing `../react/docs/v2-foundation/...`) — Naming Standard §18.
+- Commit messages MUST NOT include forbidden canonical path tokens (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`) as canonical names, except inside quoted historical references (e.g. citing `../external-source/docs/v2-foundation/...`) — Naming Standard §18.
 
 4.4 Future hooks (commitlint or a custom validator) MAY validate type and scope against this standard or a future commit-metadata value set (§11, §14). No hook is created now.
 
@@ -134,7 +134,7 @@ The structure is machine-readable and supports later changelog/release reasoning
 
 - A scope MUST map to a USF concept, directory, or artefact class (§5.1).
 - A scope MUST NOT be invented from implementation structure (Ontology §14; Authority Model §6.4).
-- A scope MUST NOT mirror a `../react` path (Naming Standard §20).
+- A scope MUST NOT mirror a source-lineage path (Naming Standard §20).
 - A scope MUST NOT use `v2`, `legacy`, `old`, `new`, `temp`, `transitional`, or a redundant local `usf` segment (Naming Standard §18; Vocabulary `forbiddenValues`).
 - New scopes SHOULD be added to this list (a coupled change) rather than improvised.
 
@@ -178,7 +178,7 @@ Source-Lineage: none
 - `USF-Stage:` is a USF-defined trailer convention (e.g. `foundation`); it is **not** yet a controlled vocabulary set — a future commit-metadata value set MAY formalise it (deferred, §14).
 - `Validated:` names checks that **actually ran** (e.g. `json-parse`).
 - `Generated:` is `false` unless the artefact is generated.
-- `Source-Lineage:` describes the `../react` relationship truthfully (e.g. `none`, or `../react-evidence-referenced-not-imported`).
+- `Source-Lineage:` describes the source-lineage relationship truthfully (e.g. `none`, or `source-evidence-referenced-not-imported`).
 
 6.4 Rules:
 
@@ -211,13 +211,13 @@ Purpose:
 Authority:
 - Creates the initial rank-1 / constitutional governance baseline.
 - Does not create implementation/runtime code.
-- Does not import application code from ../react.
+- Does not import application code from any external repository.
 
 Validation:
 - Foundational JSON catalogues parse strictly.
 - No schema files are active.
 - No implementation directories are created.
-- ../react remains historical semantic/source evidence only.
+- USF source lineage remains historical semantic/source evidence only.
 
 Deferred:
 - Actual schema files.
@@ -232,7 +232,7 @@ Artefact-Kind: architecture-document
 USF-Stage: foundation
 Validated: json-parse
 Generated: false
-Source-Lineage: ../react-evidence-referenced-not-imported
+Source-Lineage: source-evidence-referenced-not-imported
 ```
 
 7.4 Rules:
@@ -260,7 +260,7 @@ Source-Lineage: ../react-evidence-referenced-not-imported
 
 8.5 Branch names SHOULD describe a semantic purpose, not an implementation guess.
 
-8.6 Branch names MUST NOT reuse historical `../react` branch labels (Authority Model §2.6; §13).
+8.6 Branch names MUST NOT reuse historical source-lineage branch labels (Authority Model §2.5; §13).
 
 8.7 Do not create `v2` branches.
 
@@ -358,8 +358,8 @@ Includes:
 
 This tag does not certify implementation readiness.
 This tag does not create active schemas.
-This tag does not import runtime/application code from ../react.
-../react remains historical semantic/source evidence and lineage.
+This tag does not import runtime/application code from any external repository.
+USF source lineage remains historical semantic/source evidence and lineage.
 ```
 
 9.9.1 **Required `v2-foundation` annotated tag message shape.** The one-off `v2-foundation` tag MUST carry a message that identifies the dev-ready foundation baseline, the target commit, the USF-228 governance exception, and the non-claims in §9.6.1. The tag message MUST NOT claim staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness.
@@ -454,14 +454,14 @@ spec/registries/schema-registry.json
 The following MUST NOT occur:
 
 - committing implementation/runtime code before implementation extraction is authorised (AGENTS `Implementation Rules`; Charter §5.12);
-- committing generated reports as proof without underlying raw evidence (Authority Model §2.7, §4.3);
+- committing generated reports as proof without underlying raw evidence (Authority Model §2.6, §4.3);
 - committing secrets or `.env` files (§7.4);
 - committing unparsed/invalid JSON (§10.5; AGENTS `JSON ... Rules`);
 - using forbidden tokens (`v2`, `legacy`, `old`, `new`, `temp`, `transitional`, redundant local `usf`) as canonical names in branch/tag/commit scopes (Naming Standard §18);
 - force-pushing `main` without an explicit correction procedure (§10.10);
 - moving pushed foundational tags (§9.5);
 - using tags to overclaim readiness (§3.4, §3.6);
-- using historical `../react` branch labels as USF branch names (§8.6);
+- using historical source-lineage branch labels as USF branch names (§8.6);
 - creating `v2` branches or tags;
 - mixing unrelated changes into foundational commits (§7.4).
 
@@ -533,9 +533,9 @@ This document is acceptable only if **all** hold:
 - it defines push policy (§10);
 - it supports future Lefthook/Husky/commitlint/custom validators (§11, §14);
 - it does not overclaim SemVer release readiness (§9.7);
-- it does not import application/runtime code from `../react`;
+- it does not import application/runtime code from any external repository;
 - it does not create implementation directories.
 
 ---
 
-*End of USF Git Practices Standard (Draft / Foundational). This document creates only itself; it performs no commit, push, or tag, and creates no hook, Lefthook/Husky/commitlint/CI configuration, validator, schema, ADR, evidence file, import map, or implementation directory, and imports no runtime/application code from `../react`.*
+*End of USF Git Practices Standard (Draft / Foundational). This document creates only itself; it performs no commit, push, or tag, and creates no hook, Lefthook/Husky/commitlint/CI configuration, validator, schema, ADR, evidence file, import map, or implementation directory, and imports no runtime/application code from any external repository.*

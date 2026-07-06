@@ -6,7 +6,7 @@
 | Status | Draft / planning |
 | Authority level | Reviewable planning boundary; subordinate to the Charter, Authority Model, accepted ADRs, validators, and proof evidence |
 | Follows | `docs/architecture/charter.md`, `docs/architecture/authority-model.md`, `docs/architecture/superseded-lineage-closure-provenance.md` |
-| Primary inputs | Historical `../react` UI and test evidence; `spec/schemas/ui-semantic-model.schema.json`; `spec/instances/ui-semantic-model/`; `docs/architecture/ui-journey-accessibility-proof-slice-plan.md` |
+| Primary inputs | USF's own recorded UI and test source lineage; `spec/schemas/ui-semantic-model.schema.json`; `spec/instances/ui-semantic-model/`; `docs/architecture/ui-journey-accessibility-proof-slice-plan.md` |
 | Repository state | This pass introduces no UI/React/browser artefacts, no Playwright, and no new implementation code. The repository already contains the authorised local dev/test bootstrap runtime (PR #88/#89), which has no UI/browser surface. |
 
 > **Normative language.** **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, **MAY** carry BCP 14 / RFC 2119 intent.
@@ -36,7 +36,7 @@ No React UI test may disappear silently. Every React UI/Playwright/browser artef
 
 2.2 Playwright MUST NOT be added to the USF foundation unless a separate UI/runtime scope is explicitly authorised.
 
-2.3 The concrete classification of the historical `../react` UI/Playwright/E2E suites — and the focused list of foundation behaviours currently proven only via UI/Playwright that MUST be rewritten — lives in `docs/architecture/react-parity-scope-classification-matrix.md`.
+2.3 The concrete classification of USF's own recorded UI/Playwright/E2E source lineage — and the focused list of foundation behaviours currently proven only via UI/Playwright that MUST be rewritten — lives in `docs/architecture/react-parity-scope-classification-matrix.md`.
 
 ## 3. AI-UI integration readiness surface (per capability)
 

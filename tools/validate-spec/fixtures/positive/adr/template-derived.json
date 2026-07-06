@@ -31,8 +31,8 @@
     "docs/architecture/directory-and-file-naming-standard.md#13-adr-file-naming-rules"
   ],
   "sourceRefs": [
-    "../react/docs/v2-foundation/v2-decision-catalog.json",
-    "../react/docs/v2-foundation/v2-decision-lineage.json"
+    "../external-source/docs/v2-foundation/v2-decision-catalog.json",
+    "../external-source/docs/v2-foundation/v2-decision-lineage.json"
   ],
   "proofRefs": [],
   "validatorRefs": [

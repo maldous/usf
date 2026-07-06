@@ -21,14 +21,14 @@ This document records the current proof-execution state for the USF-73 productio
 
 ## Historical Proof Inputs
 
-The authentication-slice command semantics cite these historical proof inputs:
+The authentication-slice command semantics cite these source-lineage proof inputs (paths held in USF's own source-import registry):
 
-- `../react/apps/platform-api/scripts/auth-settings-runtime-proof.ts`
-- `../react/apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts`
-- `../react/apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts`
-- `../react/apps/platform-api/tests/substrate/auth-routes.test.ts`
+- `apps/platform-api/scripts/auth-settings-runtime-proof.ts`
+- `apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts`
+- `apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts`
+- `apps/platform-api/tests/substrate/auth-routes.test.ts`
 
-Those files are source evidence and proof-command lineage. They are not executable USF proof commands. Running them directly would require the historical runtime package graph and local substrates from `../react`, and would bypass USF source disposition and implementation-directory authorization rules.
+Those files are rank-5 source evidence and proof-command lineage. They are not executable USF proof commands. Running them directly would require the recorded runtime package graph and local substrates from USF's own source lineage, and would bypass USF source disposition and implementation-directory authorization rules.
 
 ## Matrix Assessment
 

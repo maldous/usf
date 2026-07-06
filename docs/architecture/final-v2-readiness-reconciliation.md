@@ -11,7 +11,7 @@
 | Current validation workflow run reviewed | `28286276335` |
 | Linear team reviewed | Universal Service Foundation |
 
-This document reconciles the current repository and Linear state before any USF-39 implementation start. It creates no implementation code, creates no runtime directory, imports no `../react` code, promotes no schema, emits no evidence, and treats no generated report as authority.
+This document reconciles the current repository and Linear state before any USF-39 implementation start. It creates no implementation code, creates no runtime directory, imports no source-lineage code, promotes no schema, emits no evidence, and treats no generated report as authority.
 
 Bootstrap marker readiness is READY_FOR_V2_BOOTSTRAP.
 
@@ -28,7 +28,7 @@ This reconciliation is a point-in-time review pinned to the repository commit re
 | USF-73 | Backlog | Multi-environment proof remains open. Hermetic authentication proof must not be upgraded to live-external-provider or production-live readiness. |
 | USF-97 | In Progress | Semantic-contract inventory is broad, but per-slice source-use matrices, exact topology roots, and file gates remain incomplete outside the authentication slice. |
 | USF-98 | Backlog | Validator hardening is materially advanced, including readiness stale-prose and directive pack checks, but full equivalence-ledger, aggregate posture, and source-use matrix enforcement remain follow-up. |
-| USF-99 | Backlog | Broad runtime proof is not complete. Proof may not be fabricated by creating product runtime or importing `../react` runtime. |
+| USF-99 | Backlog | Broad runtime proof is not complete. Proof may not be fabricated by creating product runtime or importing source-lineage runtime. |
 | USF-100 | Backlog | USF-100 is an unsigned whole-platform draft directive. It is not accepted authority and does not start USF-39. |
 | USF-101 | Done | Proof freshness publication model is complete for the implemented repository model: ADR 0006, ADR 0007, ADR 0008, trust root, validator anchor checks, workflow attestation, and `proof-anchor-fabe47b`. |
 | USF-113 | Done | ADR 0005 records the hexagonal architecture carry-forward decision as language-agnostic authority. |
@@ -85,7 +85,7 @@ The remaining complete-readiness blockers are:
 ## No-Go Rules Preserved
 
 - No source-path mirroring.
-- No runtime or application code import from `../react`.
+- No runtime or application code import from USF's own source lineage.
 - No implementation or runtime directory creation.
 - No schema activation.
 - No generated report treated as authority.
