@@ -77,7 +77,7 @@ Resource views expose minimum necessary fields. Restricted and security-sensitiv
 
 ## Source Provenance/Lineage
 
-Resources may record source_ref, source_hash, created_by_source, imported_by_operation_id, derived_from_resource_id, source_system, and source_timestamp. Source lineage is evidence metadata, not authority. Historical React paths remain lineage only and do not dictate USF paths.
+Resources may record source_ref, source_hash, created_by_source, imported_by_operation_id, derived_from_resource_id, source_system, and source_timestamp. Source lineage is evidence metadata, not authority. Historical source-lineage paths remain lineage only and do not dictate USF paths.
 
 ## Field Visibility/Mutability
 

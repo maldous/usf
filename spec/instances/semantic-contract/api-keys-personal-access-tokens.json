@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.api-keys-personal-access-tokens",
   "title": "API Keys And Personal Access Tokens Semantic Contract",
-  "description": "Source-backed draft semantic contract for the api keys personal access tokens capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the api keys personal access tokens capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -86,7 +86,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "A unit proof covers key lifecycle and authentication, and runtime proofs validate the live repository, crypto, and row-level isolation plus live route-handler behaviour including entitlement gating, demonstrated in React via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers key lifecycle and authentication, and runtime proofs validate the live repository, crypto, and row-level isolation plus live route-handler behaviour including entitlement gating, demonstrated in source lineage via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/api-keys-runtime-proof.ts",
         "apps/platform-api/scripts/api-key-routes-runtime-proof.ts",

@@ -74,7 +74,7 @@ Bootstrap evolution wording remains useful for ancestry and should be treated as
 
 USF-133 closure-tier, lane, and final reconciliation artefacts remain useful audit evidence. They must not imply future readiness, source issue completion, or current implementation authority.
 
-React parity and complete-react-to-USF artefacts document how the foundation was reconciled from historical source. They are not full product readiness claims. USF-230 should introduce a current capability and proof index so new work starts from present contracts and validators.
+functional completeness and complete-source-lineage-to-USF artefacts document how the foundation was reconciled from historical source. They are not full product readiness claims. USF-230 should introduce a current capability and proof index so new work starts from present contracts and validators.
 
 ## Canonical Current-State Authority Model
 

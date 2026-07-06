@@ -37,7 +37,7 @@ const SPAN_ID = "0123456789abcdef";
 
 const NON_CLAIMS = Object.freeze([
   "ui-readiness-not-claimed",
-  "react-readiness-not-claimed",
+  "source-lineage-readiness-not-claimed",
   "browser-e2e-readiness-not-claimed",
   "faro-production-readiness-not-claimed",
   "live-monitoring-readiness-not-claimed",
@@ -99,7 +99,7 @@ interface BrowserTelemetryFaroProofResult {
   readonly privacyBoundaryChecked: true;
   readonly noProductUiClaim: true;
   readonly uiReadinessClaim: false;
-  readonly reactReadinessClaim: false;
+  readonly sourceReadinessClaim: false;
   readonly browserE2EReadinessClaim: false;
   readonly faroProductionReadinessClaim: false;
   readonly liveMonitoringReadinessClaim: false;
@@ -308,7 +308,7 @@ export async function runBrowserTelemetryFaroProof(): Promise<BrowserTelemetryFa
       privacyBoundaryChecked: true,
       noProductUiClaim: true,
       uiReadinessClaim: false,
-      reactReadinessClaim: false,
+      sourceReadinessClaim: false,
       browserE2EReadinessClaim: false,
       faroProductionReadinessClaim: false,
       liveMonitoringReadinessClaim: false,

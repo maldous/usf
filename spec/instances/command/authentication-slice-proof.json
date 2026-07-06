@@ -17,7 +17,7 @@
     "environment-classes",
     "disposition-values"
   ],
-  "aiGuidance": "This command instance records proof-command semantics only. The USF proof harness may emit evidence when explicitly run with write mode. Historical React commands remain lineage evidence and must not be executed as USF proof commands or treated as implementation authority.",
+  "aiGuidance": "This command instance records proof-command semantics only. The USF proof harness may emit evidence when explicitly run with write mode. Historical source-lineage commands remain lineage evidence and must not be executed as USF proof commands or treated as implementation authority.",
   "purpose": "Represent the proof-command boundary for the authentication login API, audit event, workflow, hermetic mock provider, and hermetic environment slice before implementation extraction.",
   "invocation": "python3 tools/validate-bootstrap/validate-bootstrap.py proof-authentication-slice --claim-commit HEAD --write-evidence",
   "inputs": [

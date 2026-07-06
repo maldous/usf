@@ -127,7 +127,7 @@
   },
   "lineageRetention": [
     {
-      "id": "react-lineage",
+      "id": "source-lineage-lineage",
       "retained": true,
       "activeAuthority": false,
       "futureUse": "Historical semantic/source evidence only."

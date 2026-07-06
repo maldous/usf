@@ -64,7 +64,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -122,7 +122,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -180,7 +180,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -239,7 +239,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -295,7 +295,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -353,7 +353,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -411,7 +411,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -467,7 +467,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -517,7 +517,7 @@
       ],
       "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
       "residualGaps": [
-        "USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients against local Compose. This is not live cloud-provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full React parity, or USF-133 closure."
+        "USF-208 proves bounded LocalStack S3 SQS SNS and Secrets Manager emulator semantics through official AWS SDK v3 clients against local Compose. This is not live cloud-provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full functional completeness, or USF-133 closure."
       ],
       "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
       "linearCarrier": "USF-208 bounded service proof merged; any live cloud-provider compatibility, provider contract certification, or environment-promotion readiness claim remains separate.",
@@ -525,7 +525,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -583,7 +583,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -642,7 +642,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -700,7 +700,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -759,7 +759,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -817,7 +817,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -875,7 +875,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -935,7 +935,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -993,7 +993,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1049,7 +1049,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1077,7 +1077,7 @@
       "usfServiceOrReplacement": "apps/api",
       "disposition": "covered-by-existing-usf-proof",
       "sourceStatus": "covered-by-usf-runtime",
-      "capabilityCoverage": "React historical platform API process",
+      "capabilityCoverage": "source-lineage historical platform API process",
       "operationalEquivalence": "selected",
       "securityEquivalence": "covered by auth, secrets, provider-boundary, and enterprise evidence validators",
       "auditEquivalence": "covered by audit/observability evidence rows or marked not applicable by service scope",
@@ -1099,7 +1099,7 @@
       ],
       "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
       "residualGaps": [
-        "USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for Postgres, NATS, MinIO, and Keycloak composed provider bindings without copying React runtime code or claiming service/container equivalence."
+        "USF-181 proves bounded API dev runtime execution; USF-183 adds safe API evidence for Postgres, NATS, MinIO, and Keycloak composed provider bindings without copying source-lineage runtime code or claiming service/container equivalence."
       ],
       "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
       "linearCarrier": "covered by existing authorised foundation slice evidence",
@@ -1107,7 +1107,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1165,7 +1165,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1223,7 +1223,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1281,7 +1281,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1339,7 +1339,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1395,7 +1395,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1451,7 +1451,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1507,7 +1507,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1563,7 +1563,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1619,7 +1619,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1675,7 +1675,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1731,7 +1731,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1787,7 +1787,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1843,7 +1843,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1899,7 +1899,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -1955,7 +1955,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2011,7 +2011,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2067,7 +2067,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2123,7 +2123,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2179,7 +2179,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2235,7 +2235,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2291,7 +2291,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2347,7 +2347,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2405,7 +2405,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2461,7 +2461,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2517,7 +2517,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2575,7 +2575,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2633,7 +2633,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2691,7 +2691,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2747,7 +2747,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2805,7 +2805,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2863,7 +2863,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2919,7 +2919,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -2975,7 +2975,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3031,7 +3031,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3081,7 +3081,7 @@
       ],
       "screenshotOrServiceEvidence": "linked through USF-290 machine QA service evidence where safe; CLI/API evidence is used where UI screenshots would expose secrets or are unavailable",
       "residualGaps": [
-        "USF-209 proves bounded WireMock configured HTTP mock semantics through wiremock-captain against local Compose. This is not live external provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full React parity, or USF-133 closure."
+        "USF-209 proves bounded WireMock configured HTTP mock semantics through wiremock-captain against local Compose. This is not live external provider compatibility, provider contract certification, staging readiness, production readiness, full dev readiness, full functional completeness, or USF-133 closure."
       ],
       "acceptedRisk": "historical service gap is resolved by current USF bounded proof or lineage disposition; no readiness claim is upgraded by this row",
       "linearCarrier": "USF-209 bounded service proof merged; USF-208 bounded LocalStack proof now records the remaining local cloud-emulator service-semantic evidence without any live-provider or readiness claim.",
@@ -3089,7 +3089,7 @@
       "retryCondition": "Re-evaluate on service catalogue or Compose profile change.",
       "reviewCadence": "before Staging handoff and on service-catalogue change",
       "nonClaims": [
-        "React UI parity",
+        "UI parity",
         "visual parity",
         "UX parity",
         "product UI readiness",
@@ -3124,7 +3124,7 @@
     }
   },
   "nonClaims": [
-    "React UI parity",
+    "UI parity",
     "visual parity",
     "UX parity",
     "product UI readiness",

@@ -17,10 +17,10 @@
 
 | Target file | Treatment | Source-use basis | Rationale |
 | --- | --- | --- | --- |
-| `capabilities/tenant/src/authorization-policy.ts` | source-derived-rewrite | React ROLE_PERMISSION_MAP and policy evaluation lineage; ADR 0010 | USF-owned default-deny RBAC/ABAC policy: role->permission, action->permission, sensitive-classification gate, break-glass scope. |
-| `capabilities/tenant/src/pdp.ts` | source-derived-rewrite | React three-tier PDP lineage; ADR 0010 | USF-owned application-layer policy decision point combining RBAC and ABAC over membership, failing closed, with structured decisions and break-glass. |
-| `capabilities/tenant/src/membership.ts` | source-derived-rewrite | React tenant membership and identity-mapping lineage | In-memory tenant membership directory and identity directory (stable actor mapping; only active memberships authorize). |
-| `capabilities/tenant/src/authorize.ts` | source-derived-rewrite | React request-level authorization audit lineage | Authorizer capability: PDP decision plus authorization-decision audit evidence. |
+| `capabilities/tenant/src/authorization-policy.ts` | source-derived-rewrite | source-lineage ROLE_PERMISSION_MAP and policy evaluation lineage; ADR 0010 | USF-owned default-deny RBAC/ABAC policy: role->permission, action->permission, sensitive-classification gate, break-glass scope. |
+| `capabilities/tenant/src/pdp.ts` | source-derived-rewrite | source-lineage three-tier PDP lineage; ADR 0010 | USF-owned application-layer policy decision point combining RBAC and ABAC over membership, failing closed, with structured decisions and break-glass. |
+| `capabilities/tenant/src/membership.ts` | source-derived-rewrite | source-lineage tenant membership and identity-mapping lineage | In-memory tenant membership directory and identity directory (stable actor mapping; only active memberships authorize). |
+| `capabilities/tenant/src/authorize.ts` | source-derived-rewrite | source-lineage request-level authorization audit lineage | Authorizer capability: PDP decision plus authorization-decision audit evidence. |
 | `packages/proof/src/authz-rls-consistency-proof.ts` | evidence-only-support | PDP/RLS consistency requirement | Composed-Postgres proof that the PDP and RLS agree on tenant boundaries. |
 | `docs/architecture/authz-enterprise-proof-depth-matrix.json` | evidence-only-support | USF-141 enterprise authorization depth requirement | Machine-readable control disposition for synchronous PDP, membership lifecycle, cache/revalidation posture, ABAC depth, delegation/impersonation deferral, field-level boundaries, token/session transfer, rate-limit transfer, workflow revalidation transfer, and non-claims. |
 | `tests/capabilities/authorization.test.ts` | evidence-only-support | Tenant/authz behaviour proof requirement | Hermetic PDP/RBAC/ABAC/membership/break-glass decision-matrix tests. |

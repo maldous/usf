@@ -1,6 +1,6 @@
 {
   "expectedRule": "USF-PARITY-011",
-  "description": "runtime row dispositioned as a React copy",
+  "description": "runtime row dispositioned as a source-lineage copy",
   "mutation": {
     "domainPatch": {
       "index": 0,

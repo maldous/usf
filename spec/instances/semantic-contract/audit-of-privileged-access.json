@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.audit-of-privileged-access",
   "title": "Audit Of Privileged Access Semantic Contract",
-  "description": "Source-backed draft semantic contract for the audit of privileged access capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the audit of privileged access capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -83,7 +83,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "A unit proof covers the contextual audit semantics and an adjacent runtime history proof validates live read-only audit/history projection, demonstrated in React via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the contextual audit semantics and an adjacent runtime history proof validates live read-only audit/history projection, demonstrated in source lineage via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/audit.test.ts",
         "packages/audit-events/tests/audit-events.test.ts"

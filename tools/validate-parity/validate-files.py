@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF files/object-storage posture validator (parity-files-storage, USF-146).
 
-Governance tooling only. Creates no runtime files, imports no React source, publishes
+Governance tooling only. Creates no runtime files, imports no source lineage, publishes
 no evidence. Fails closed on the files/storage invariants that keep files tenant-safe
 information assets (ISO 27001-supporting technical control evidence only; no cert claim):
 
@@ -206,7 +206,7 @@ def files_row(matrix):
     if not isinstance(matrix, dict):
         return None
     for row in matrix.get("domains", []):
-        if isinstance(row, dict) and row.get("react_item_id") == "files-storage":
+        if isinstance(row, dict) and row.get("source_item_id") == "files-storage":
             return row
     return None
 

@@ -879,7 +879,7 @@
         "artefact-kinds"
       ],
       "expectedSchemas": [],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "USF self-defined source lineage treats validators as enforcement, proofs as evidence, code as implementation of canonical semantic artefacts."
       ],
       "futureValidatorExpectations": "Governance artefacts carry authority and lineage metadata.",
@@ -910,7 +910,7 @@
       "expectedSchemas": [
         "semantic-contract.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf v1-capability-closure.json (75 capabilities, 10 facets) and capability-*.json templates ground semantic contracts."
       ],
       "futureValidatorExpectations": "A capability is proven only when every facet cites authoritative evidence.",
@@ -937,7 +937,7 @@
         "taxonomy.schema.json",
         "vocabulary.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf validator normalises no aliases and fails closed; USF records aliases explicitly so normalisation is controlled."
       ],
       "futureValidatorExpectations": "Taxonomy classification modes and vocabulary aliases validate against their schemas.",
@@ -964,7 +964,7 @@
       "expectedSchemas": [
         "schema-registry.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf universal-service-foundation-registry.json is data-only and asserts no implementation; registries index, they do not prove."
       ],
       "futureValidatorExpectations": "The registry validates against schema-registry.schema.json (self-validation).",
@@ -993,7 +993,7 @@
       "expectedSchemas": [
         "source-reference.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf v1-file-inventory.json (~1673 files) and v1-to-v2-path-map.json show every source element must be mapped; nothing disappears without a disposition."
       ],
       "futureValidatorExpectations": "Every source reference resolves and carries a disposition.",
@@ -1026,7 +1026,7 @@
         "evidence-envelope.schema.json",
         "proof-evidence.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4) and the 172 proof-evidence records: emitted evidence preserved through collection; missing evidence fails closed; claimed <= observed."
       ],
       "futureValidatorExpectations": "Proof fails closed on missing emitted/collected evidence; readiness does not exceed observed evidence.",
@@ -1057,7 +1057,7 @@
         "provider-mode.schema.json",
         "environment.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf provider classes and USF_PROVIDER_MODE; e2e profiles split hermetic (internal/identity) from live (external/prod); environment-readiness-gates forbid mocks in prod."
       ],
       "futureValidatorExpectations": "hermetic-mock cannot satisfy live-external-provider; production-shaped cannot satisfy production-live.",
@@ -1085,7 +1085,7 @@
         "command.schema.json",
         "configuration.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf Makefile/make/*.mk, 212 npm scripts incl ~110 proof:* scripts, v2-command-map.json (377 commands), and v1-config-contract-catalogue.json (64 typed keys) show commands/config are semantic assets, not incidental files."
       ],
       "futureValidatorExpectations": "Commands declare purpose/scope/evidence/failure; config declares secret class and provider/environment/proof relevance.",
@@ -1117,7 +1117,7 @@
         "event-contract.schema.json",
         "workflow.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf operational-semantics.json (~235 routes), event-semantics.json (10 events; idempotency/ordering/DLQ/retention), cross-capability-interactions.json (8 interaction types) must become contract-governed, not source-path-governed."
       ],
       "futureValidatorExpectations": "Interfaces/events have contracts before implementation; runtime drift is detectable.",
@@ -1144,7 +1144,7 @@
       "expectedSchemas": [
         "data-migration.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf data-and-migration-plan.json: PostgreSQL schema-per-tenant, RLS, forward-only checksum-immutable migrations, backup/restore evidence; backup/restore proof must preserve emitted and collected evidence."
       ],
       "futureValidatorExpectations": "Migrations forward-only and checksum-immutable; tenancy isolation preserved; backup/restore evidence checkable.",
@@ -1171,7 +1171,7 @@
         "observability-signal.schema.json",
         "audit-event.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf operational-semantics observabilitySignals/metrics/logs/traces/auditAction; assurance bars 0 routes without tracing/logging/metrics and 0 mutations without audit; Loki/Tempo/Sentry correlation."
       ],
       "futureValidatorExpectations": "Controlled observability vocabulary; audit required for security-sensitive and state-changing actions.",
@@ -1196,7 +1196,7 @@
       "expectedSchemas": [
         "ui-semantic-model.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf ui-capability-model.json (28 capabilities, 12 personas) and ui-definition.schema.json; the generator must never read old JSX; UI source is semantic evidence, not final design authority."
       ],
       "futureValidatorExpectations": "Journeys map to capabilities and proofs; accessibility preserved.",
@@ -1224,7 +1224,7 @@
       "expectedSchemas": [
         "adr.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf v2-decision-catalog.json (74 accepted) + v2-decision-lineage.json (74 evidence-backed); untraced decisions are rejected (rule R13); a roadmap carries no governance force."
       ],
       "futureValidatorExpectations": "Every ADR reference resolves; decisions carry invariants, forbidden-drift, and AI-alignment rules.",
@@ -1251,7 +1251,7 @@
       "expectedSchemas": [
         "validator-report.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf tools/v2-readiness fails closed, normalises no aliases, writes no runtime file, exit codes 0/1/2; reports are reported separately from formal proof so closure is not mistaken for proof."
       ],
       "futureValidatorExpectations": "unknown/stale never satisfy pass; reports reference evidence and are rank-7.",
@@ -1280,7 +1280,7 @@
         "source-disposition.schema.json",
         "import-manifest.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf file-disposition vocabulary (9 values), command dispositions (carry/merge/retire), test migrationType (4) show every element needs a controlled disposition; bijection rule R10 ensures no silent loss."
       ],
       "futureValidatorExpectations": "Every imported element has a disposition; import is incomplete without one.",
@@ -1304,7 +1304,7 @@
       "expectedSchemas": [
         "ai-governance.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "USF charter section 7, authority-model section 6, standards-profile section 20, ontology sections 14-15 define AI alignment rules, forbidden inferences, and stop conditions."
       ],
       "futureValidatorExpectations": "AI-generated artefacts carry rationale and references; stop conditions are explicit.",
@@ -1340,7 +1340,7 @@
       "expectedSchemas": [
         "bootstrap-mapping.schema.json"
       ],
-      "reactSourceLearnings": [
+      "sourceLineageLearnings": [
         "usf source, proof scripts, tests, compose/config, and semantic artefacts remain lineage only and must be mapped before implementation extraction."
       ],
       "futureValidatorExpectations": "One mapping per semantic contract; generated aggregate indexes and Markdown summaries must match the authoritative mapping corpus; staging/production/live proof remains explicitly deferred.",
@@ -2721,7 +2721,7 @@
         "Source Reference"
       ],
       "purpose": "Validates semantic Compose service requirements, service-level CMDB-style governance metadata, per-environment realisation policies, and generated Compose targets.",
-      "requiredBecause": "Every historical React Compose service must be classified before generated Compose can be treated as derivative output.",
+      "requiredBecause": "Every historical source-lineage Compose service must be classified before generated Compose can be treated as derivative output.",
       "sourceInputs": [
         "compose.yaml",
         "docs/architecture/usf-compose-service-completeness-matrix.md",
@@ -2773,7 +2773,7 @@
         "governance reviewers"
       ],
       "validationResponsibilities": [
-        "every React Compose service classified",
+        "every source-lineage Compose service classified",
         "generated Compose files match catalogue",
         "environment realisation does not overclaim provider readiness",
         "production external or cloud realisation is explicit",
@@ -2853,7 +2853,7 @@
       "aiGuidance": "Use view thinking to organise understanding; views are explanatory."
     }
   ],
-  "reactSourceLearnings": [
+  "sourceLineageLearnings": [
     {
       "id": "source-files-evidence",
       "learning": "Source files are semantic evidence.",
@@ -3170,7 +3170,7 @@
       "satisfied": true
     },
     {
-      "criterion": "Captures React source learnings.",
+      "criterion": "Captures source lineage learnings.",
       "satisfied": true
     },
     {

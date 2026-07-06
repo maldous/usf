@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.search-and-indexing-product-search",
   "title": "Search And Indexing Product Search Semantic Contract",
-  "description": "Source-backed draft semantic contract for the search and indexing product search capability, recovered from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the search and indexing product search capability, recovered from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage, not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -93,7 +93,7 @@
     },
     "uiSemanticDefinition": {
       "status": "complete",
-      "description": "UI semantics recovered from cited React UI source.",
+      "description": "UI semantics recovered from cited UI source.",
       "sourceRefs": [
         "apps/react-enterprise-app/src/features/admin-logs/use-log-search.ts",
         "apps/react-enterprise-app/src/features/admin-search/AdminSearchPage.tsx"

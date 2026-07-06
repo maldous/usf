@@ -96,7 +96,7 @@
       "expectedFutureTaxonomies": ["authority-classification", "artefact-classification"],
       "expectedFutureVocabularyDependencies": ["authority-levels", "artefact-kinds"],
       "expectedFutureSchemaDependencies": ["schema-registry.schema.json", "adr.schema.json", "validator-report.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/v2-readiness-final-attestation.md (validators enforce, proofs are evidence, code implements)", "source-lineage/docs/v2-foundation/v2-decision-catalog.json (74 accepted decisions)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/v2-readiness-final-attestation.md (validators enforce, proofs are evidence, code implements)", "source-lineage/docs/v2-foundation/v2-decision-catalog.json (74 accepted decisions)"],
       "aiGuidance": "Determine an artefact's authority level before reasoning about it; never let a lower-authority artefact override a higher one."
     },
     {
@@ -108,7 +108,7 @@
       "expectedFutureTaxonomies": ["semantic-architecture-classification"],
       "expectedFutureVocabularyDependencies": ["capability-domains", "lifecycle-states"],
       "expectedFutureSchemaDependencies": ["semantic-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/v1-capability-closure.json (75 capabilities, 10 semanticCompleteness facets)", "source-lineage/docs/v2-foundation/capability-*.json facet templates", "capability category dimension of 12 values (identity-access, authentication, entitlements-billing, events-workflow, security-governance, observability-ops, data-platform, developer-platform, compute-runtime, configuration, search, foundation)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/v1-capability-closure.json (75 capabilities, 10 semanticCompleteness facets)", "source-lineage/docs/v2-foundation/capability-*.json facet templates", "capability category dimension of 12 values (identity-access, authentication, entitlements-billing, events-workflow, security-governance, observability-ops, data-platform, developer-platform, compute-runtime, configuration, search, foundation)"],
       "aiGuidance": "Treat these concepts as authoritative; the capability-domain value set is recognised from USF source lineage but its canonical USF values remain explicitly deferred in the vocabulary catalogue."
     },
     {
@@ -120,7 +120,7 @@
       "expectedFutureTaxonomies": ["source-evidence-classification", "source-role-classification"],
       "expectedFutureVocabularyDependencies": ["source-kinds", "source-roles", "disposition-values"],
       "expectedFutureSchemaDependencies": ["source-reference.schema.json", "source-disposition.schema.json", "import-manifest.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/v1-file-inventory.json (~1673 tracked files)", "source-lineage/docs/v2-foundation/v1-to-v2-path-map.json", "file disposition vocabulary of 9 historical values"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/v1-file-inventory.json (~1673 tracked files)", "source-lineage/docs/v2-foundation/v1-to-v2-path-map.json", "file disposition vocabulary of 9 historical values"],
       "aiGuidance": "Classify a source element as evidence before importing; record a disposition; never treat the source as future authority."
     },
     {
@@ -132,7 +132,7 @@
       "expectedFutureTaxonomies": ["evidence-classification", "proof-classification"],
       "expectedFutureVocabularyDependencies": ["evidence-kinds", "proof-levels"],
       "expectedFutureSchemaDependencies": ["evidence-envelope.schema.json", "proof-evidence.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/capability-proof-definition.json (L0-L6 ladder; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4)", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence-index.json", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence/ (per-proof runtime JSON)", "source-lineage/docs/evidence/ (267 files across 31 domains)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/capability-proof-definition.json (L0-L6 ladder; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4)", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence-index.json", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence/ (per-proof runtime JSON)", "source-lineage/docs/evidence/ (267 files across 31 domains)"],
       "aiGuidance": "A passing proof is evidence of fact, not a definition of intent; readiness claims MUST NOT exceed observed evidence; missing collected evidence MUST fail closed."
     },
     {
@@ -144,7 +144,7 @@
       "expectedFutureTaxonomies": ["provider-classification", "environment-classification"],
       "expectedFutureVocabularyDependencies": ["provider-modes", "environment-classes"],
       "expectedFutureSchemaDependencies": ["provider-mode.schema.json", "environment.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/environment-readiness-gates.json (4 gates)", "source-lineage/docs/v2-foundation/environment-capability-matrix.json (70 capabilities x 4 environments)", "provider classes hermetic/compose-local/sandbox-external/live-external/none", "USF_PROVIDER_MODE selector", "source-lineage/services/mock-oidc (hermetic IdP)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/environment-readiness-gates.json (4 gates)", "source-lineage/docs/v2-foundation/environment-capability-matrix.json (70 capabilities x 4 environments)", "provider classes hermetic/compose-local/sandbox-external/live-external/none", "USF_PROVIDER_MODE selector", "source-lineage/services/mock-oidc (hermetic IdP)"],
       "aiGuidance": "Never infer a stronger provider mode or environment than the substrate used; hermetic mock proof is valid internal proof but not live external proof."
     },
     {
@@ -156,7 +156,7 @@
       "expectedFutureTaxonomies": ["command-classification", "configuration-classification"],
       "expectedFutureVocabularyDependencies": ["command-kinds", "configuration-kinds"],
       "expectedFutureSchemaDependencies": ["command.schema.json", "configuration.schema.json"],
-      "reactSourceInputs": ["source-lineage/Makefile and make/*.mk (make all is the authoritative full-confidence command)", "source-lineage/package.json (212 npm scripts incl ~110 proof:* scripts)", "source-lineage/docs/v2-foundation/v2-command-map.json (377 commands; carry/merge/retire)", "source-lineage/docs/v2-foundation/v1-config-contract-catalogue.json (64 typed config keys)", "config/environments/*.json manifests generating .env (ADR-0072)"],
+      "sourceLineageInputs": ["source-lineage/Makefile and make/*.mk (make all is the authoritative full-confidence command)", "source-lineage/package.json (212 npm scripts incl ~110 proof:* scripts)", "source-lineage/docs/v2-foundation/v2-command-map.json (377 commands; carry/merge/retire)", "source-lineage/docs/v2-foundation/v1-config-contract-catalogue.json (64 typed config keys)", "config/environments/*.json manifests generating .env (ADR-0072)"],
       "aiGuidance": "Commands and configuration are semantic assets, not incidental scripts; regenerate config from manifests; never hand-edit generated config."
     },
     {
@@ -168,7 +168,7 @@
       "expectedFutureTaxonomies": ["interface-classification", "event-workflow-classification"],
       "expectedFutureVocabularyDependencies": ["interface-kinds", "event-workflow-kinds"],
       "expectedFutureSchemaDependencies": ["interface-contract.schema.json", "event-contract.schema.json", "workflow.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (runtimeCommandLinks; ~235 routes)", "source-lineage/docs/v2-foundation/event-semantics.json (10 events; canonical vs test-only; idempotency/ordering/DLQ/retention)", "source-lineage/docs/v2-foundation/cross-capability-interactions.json (8 interaction types; 10 interactions)", "OpenAPI drift hard gate (source-lineage/docs/evidence/api/openapi-drift-hard-gate.md)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (runtimeCommandLinks; ~235 routes)", "source-lineage/docs/v2-foundation/event-semantics.json (10 events; canonical vs test-only; idempotency/ordering/DLQ/retention)", "source-lineage/docs/v2-foundation/cross-capability-interactions.json (8 interaction types; 10 interactions)", "OpenAPI drift hard gate (source-lineage/docs/evidence/api/openapi-drift-hard-gate.md)"],
       "aiGuidance": "Where a semantic interface/event contract exists, code conforms to it; do not invent routes or events in code."
     },
     {
@@ -180,7 +180,7 @@
       "expectedFutureTaxonomies": ["data-migration-classification"],
       "expectedFutureVocabularyDependencies": ["data-migration-kinds"],
       "expectedFutureSchemaDependencies": ["semantic-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/data-and-migration-plan.json (PostgreSQL schema-per-tenant; RLS and rlsBypass; forward-only checksum-immutable migration chain 001..034 then 035+; backupRestore; destructiveOpControls; dataVerification)", "source-lineage/apps/platform-api/src/db (migrate.ts, seed.ts, reset.ts, migrations/)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/data-and-migration-plan.json (PostgreSQL schema-per-tenant; RLS and rlsBypass; forward-only checksum-immutable migration chain 001..034 then 035+; backupRestore; destructiveOpControls; dataVerification)", "source-lineage/apps/platform-api/src/db (migrate.ts, seed.ts, reset.ts, migrations/)"],
       "aiGuidance": "Never edit a committed migration; preserve tenancy invariants; classify backup and restore so emitted and collected evidence can be checked."
     },
     {
@@ -192,7 +192,7 @@
       "expectedFutureTaxonomies": ["observability-audit-classification"],
       "expectedFutureVocabularyDependencies": ["observability-signal-kinds", "audit-event-kinds"],
       "expectedFutureSchemaDependencies": ["observability-signal.schema.json", "audit-event.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (observabilitySignals, metrics, logs, traces, alertConditions, auditAction)", "source-lineage/docs/evidence/observability and source-lineage/docs/evidence/audit", "e2e observability-correlation across Loki/Tempo/Sentry", "adapters-opentelemetry, adapters-loki"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (observabilitySignals, metrics, logs, traces, alertConditions, auditAction)", "source-lineage/docs/evidence/observability and source-lineage/docs/evidence/audit", "e2e observability-correlation across Loki/Tempo/Sentry", "adapters-opentelemetry, adapters-loki"],
       "aiGuidance": "Observability and audit are semantic assets; removal requires semantic review, never an incidental refactor."
     },
     {
@@ -204,7 +204,7 @@
       "expectedFutureTaxonomies": ["ui-semantic-classification"],
       "expectedFutureVocabularyDependencies": ["ui-semantic-kinds"],
       "expectedFutureSchemaDependencies": ["ui-semantic-model.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/ui-capability-model.json (28 UI capabilities; 12 personas; routes, forms, tables, commands, states, a11y, telemetry)", "source-lineage/docs/v2-foundation/ui-definition.schema.json", "rule that the generator must never read old JSX"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/ui-capability-model.json (28 UI capabilities; 12 personas; routes, forms, tables, commands, states, a11y, telemetry)", "source-lineage/docs/v2-foundation/ui-definition.schema.json", "rule that the generator must never read old JSX"],
       "aiGuidance": "Visual redesign is not semantic deletion; preserve UI semantics unless changed through coupled semantic/ADR/proof/validator updates."
     },
     {
@@ -216,7 +216,7 @@
       "expectedFutureTaxonomies": ["implementation-realisation-classification"],
       "expectedFutureVocabularyDependencies": ["source-kinds", "source-roles", "artefact-kinds"],
       "expectedFutureSchemaDependencies": ["semantic-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/apps (platform-api hexagonal BFF; web app)", "source-lineage/packages (~41 packages; core leaves domain-identity, authorisation-runtime, platform-errors, platform-runtime-context; adapters-* are the only packages permitted to import external SDKs)", "source-lineage/services/mock-oidc"],
+      "sourceLineageInputs": ["source-lineage/apps (platform-api hexagonal BFF; web app)", "source-lineage/packages (~41 packages; core leaves domain-identity, authorisation-runtime, platform-errors, platform-runtime-context; adapters-* are the only packages permitted to import external SDKs)", "source-lineage/services/mock-oidc"],
       "aiGuidance": "Implementation realisation is rank-5 and lower authority than semantics; a package boundary is not a capability boundary."
     },
     {
@@ -228,7 +228,7 @@
       "expectedFutureTaxonomies": ["validation-reporting-classification"],
       "expectedFutureVocabularyDependencies": ["validation-severities", "report-statuses"],
       "expectedFutureSchemaDependencies": ["validator-report.schema.json"],
-      "reactSourceInputs": ["source-lineage/tools/v2-readiness (~60 rules R1-R62; fails closed; normalises no aliases; writes no runtime file; exit codes; golden and negative-control tests)", "source-lineage/tools/architecture (validate-* suite)", "source-lineage/docs/v2-foundation/usf-audit/*-report.json"],
+      "sourceLineageInputs": ["source-lineage/tools/v2-readiness (~60 rules R1-R62; fails closed; normalises no aliases; writes no runtime file; exit codes; golden and negative-control tests)", "source-lineage/tools/architecture (validate-* suite)", "source-lineage/docs/v2-foundation/usf-audit/*-report.json"],
       "aiGuidance": "Validators enforce but never define product semantics; reports summarise but never override evidence or semantic definitions."
     },
     {
@@ -240,7 +240,7 @@
       "expectedFutureTaxonomies": ["ai-governance-classification"],
       "expectedFutureVocabularyDependencies": ["ai-governance-kinds"],
       "expectedFutureSchemaDependencies": ["adr.schema.json"],
-      "reactSourceInputs": ["docs/architecture/charter.md section 7", "docs/architecture/authority-model.md section 6", "docs/architecture/standards-profile.md section 20", "docs/architecture/ontology.md sections 14 and 15"],
+      "sourceLineageInputs": ["docs/architecture/charter.md section 7", "docs/architecture/authority-model.md section 6", "docs/architecture/standards-profile.md section 20", "docs/architecture/ontology.md sections 14 and 15"],
       "aiGuidance": "An AI agent holds no authority; it is bound by the authority order and its claims are checked by validators, not trusted."
     }
   ],
@@ -265,7 +265,7 @@
       "categoryRules": ["Categories are exclusive: an artefact holds one authority role.", "These categories mirror the Authority Model section 1 ranks; the exact value tokens used by schema fields are deferred to the authority-levels vocabulary.", "Categories are stable."],
       "futureVocabularyDependencies": ["authority-levels"],
       "futureSchemaDependencies": ["schema-registry.schema.json", "adr.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/semantic-source-of-truth-transition.md (validators enforce; proofs are evidence; code implements canonical semantic artefacts)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/semantic-source-of-truth-transition.md (validators enforce; proofs are evidence; code implements canonical semantic artefacts)"],
       "validationExpectations": ["Once vocabulary exists, every governed artefact carries exactly one authority-level value from the authority-levels vocabulary."],
       "driftRisks": ["Treating a source file or report as semantic authority.", "Letting a lower rank override a higher rank."],
       "aiGuidance": "Identify authority role first; never let rank-5/6/7 override rank-1/2.",
@@ -299,7 +299,7 @@
       "categoryRules": ["Categories are exclusive by primary kind.", "Stable.", "An artefact's kind selects its governing schema family."],
       "futureVocabularyDependencies": ["artefact-kinds"],
       "futureSchemaDependencies": ["schema-registry.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/ (semantic artefacts, runbooks, reports)", "source-lineage/docs/v2-foundation/v2-branch-cut-runbook.md", "source-lineage/tools (validators)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/ (semantic artefacts, runbooks, reports)", "source-lineage/docs/v2-foundation/v2-branch-cut-runbook.md", "source-lineage/tools (validators)"],
       "validationExpectations": ["Artefact kind resolves to a known future schema."],
       "driftRisks": ["Conflating a generated report with a semantic artefact.", "Treating a runbook as a contract."],
       "aiGuidance": "Classify artefact kind before choosing how to validate or author it.",
@@ -329,7 +329,7 @@
       "categoryRules": ["Relational: building blocks reference each other (capability is defined by contracts; ports are fulfilled by adapters).", "Stable.", "The capability-domain value set (12 historical categories) is recognised as evidence but its canonical USF values are deferred to vocabulary."],
       "futureVocabularyDependencies": ["capability-domains", "lifecycle-states"],
       "futureSchemaDependencies": ["semantic-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/v1-capability-closure.json (75 capabilities; 10 facets)", "capability category dimension of 12 values"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/v1-capability-closure.json (75 capabilities; 10 facets)", "capability category dimension of 12 values"],
       "validationExpectations": ["Every capability has at least one semantic contract before its implementation is authoritative."],
       "driftRisks": ["Inferring a semantic building block from a folder.", "Letting implementation define a contract."],
       "aiGuidance": "Read the semantic building block before its implementation; never invent a contract from code resemblance.",
@@ -368,7 +368,7 @@
       "categoryRules": ["Non-exclusive: an element may carry more than one source-evidence kind.", "Stable.", "Source kind does not dictate target path or authority."],
       "futureVocabularyDependencies": ["source-kinds"],
       "futureSchemaDependencies": ["source-reference.schema.json", "import-manifest.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/v1-file-inventory.json", "source-lineage/docs/v2-foundation/v1-to-v2-path-map.json", "source-lineage/Makefile, source-lineage/package.json, source-lineage/compose.yaml, source-lineage/config, source-lineage/e2e"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/v1-file-inventory.json", "source-lineage/docs/v2-foundation/v1-to-v2-path-map.json", "source-lineage/Makefile, source-lineage/package.json, source-lineage/compose.yaml, source-lineage/config, source-lineage/e2e"],
       "validationExpectations": ["Every source reference declares at least one source kind from the source-kinds vocabulary once it exists."],
       "driftRisks": ["Deriving architecture from source path.", "Losing an element by failing to classify it."],
       "aiGuidance": "Classify before import; no source element disappears without a disposition.",
@@ -400,7 +400,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Role determines which USF semantic concept the element informs, not where its file lives."],
       "futureVocabularyDependencies": ["source-roles"],
       "futureSchemaDependencies": ["source-reference.schema.json", "import-manifest.schema.json"],
-      "reactSourceInputs": ["sourceFileRefs/evidence fields throughout source-lineage/docs/v2-foundation"],
+      "sourceLineageInputs": ["sourceFileRefs/evidence fields throughout source-lineage/docs/v2-foundation"],
       "validationExpectations": ["Every source reference declares at least one role."],
       "driftRisks": ["Treating generated-summary-evidence as semantic-source.", "Treating historical-lineage as live authority."],
       "aiGuidance": "Use role to recover intent into USF semantics; preserve lineage citations.",
@@ -429,7 +429,7 @@
       "categoryRules": ["Exclusive by primary kind.", "Stable.", "Reports and attestations are distinct from raw and proof evidence."],
       "futureVocabularyDependencies": ["evidence-kinds"],
       "futureSchemaDependencies": ["evidence-envelope.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/evidence/ (machine .json plus human .md per domain)", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence-index.json"],
+      "sourceLineageInputs": ["source-lineage/docs/evidence/ (machine .json plus human .md per domain)", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence-index.json"],
       "validationExpectations": ["Evidence identifies its source or generation process; generated reports reference the evidence they summarise."],
       "driftRisks": ["Hiding missing raw evidence behind a green report."],
       "aiGuidance": "Never conflate kinds; absence of evidence is not evidence of absence.",
@@ -458,7 +458,7 @@
       "categoryRules": ["Relational: claim -> script -> execution -> emitted -> collected -> normalised -> readiness.", "Stable.", "Proof levels are NOT defined here; they are a vocabulary dependency."],
       "futureVocabularyDependencies": ["proof-levels"],
       "futureSchemaDependencies": ["proof-evidence.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4)", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence/ (172 runtime proofs)", "claimed-vs-observed and 19-case negative-control discipline"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4)", "source-lineage/docs/v2-foundation/usf-audit/proof-evidence/ (172 runtime proofs)", "claimed-vs-observed and 19-case negative-control discipline"],
       "validationExpectations": ["A proof identifies its claim, environment, and provider mode; readiness claims do not exceed observed evidence; missing emitted/collected evidence fails closed."],
       "driftRisks": ["Treating a readiness-claim as observed evidence.", "Overclaiming a proof level."],
       "aiGuidance": "Never relabel a proof upward; classify claim separately from readiness summary.",
@@ -484,7 +484,7 @@
       "categoryRules": ["Relational.", "Stable.", "Provider-mode VALUES (hermetic, compose-local, sandbox-external, live-external, none) are deferred to vocabulary, not enumerated here."],
       "futureVocabularyDependencies": ["provider-modes"],
       "futureSchemaDependencies": ["provider-mode.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/usf-audit/runtime-provider-inventory.json (~69 providers)", "in-memory to real provider parity reports", "source-lineage/services/mock-oidc; compose.yaml providers (keycloak, openbao, redis, minio, temporal, windmill, clamav, pgbackrest)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/usf-audit/runtime-provider-inventory.json (~69 providers)", "in-memory to real provider parity reports", "source-lineage/services/mock-oidc; compose.yaml providers (keycloak, openbao, redis, minio, temporal, windmill, clamav, pgbackrest)"],
       "validationExpectations": ["A provider adapter identifies the port and provider mode it fulfils."],
       "driftRisks": ["Mislabelling a hermetic provider as live.", "Inferring a provider mode from the adapter name."],
       "aiGuidance": "Record provider mode; mock/hermetic providers (including mock IdP) are valid internal proof but not live external proof.",
@@ -510,7 +510,7 @@
       "categoryRules": ["Relational.", "Stable.", "Production-shaped is distinct from production/live.", "Environment-class VALUES (local, hermetic, integration, staging, production-shaped, production-live) are deferred to vocabulary."],
       "futureVocabularyDependencies": ["environment-classes"],
       "futureSchemaDependencies": ["environment.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/environment-readiness-gates.json (4 gates)", "source-lineage/docs/v2-foundation/environment-capability-matrix.json (70x4)", "e2e profiles internal/build/identity (hermetic) vs discovery/external/prod (live)", "provider modes semantic-dev/compose-real-local/prod-shaped-sandbox/live-readiness-only"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/environment-readiness-gates.json (4 gates)", "source-lineage/docs/v2-foundation/environment-capability-matrix.json (70x4)", "e2e profiles internal/build/identity (hermetic) vs discovery/external/prod (live)", "provider modes semantic-dev/compose-real-local/prod-shaped-sandbox/live-readiness-only"],
       "validationExpectations": ["Every evidence and proof claim declares its environment; environment claims do not exceed evidence."],
       "driftRisks": ["Treating an environment name as a readiness claim.", "Treating production-shaped as production-live."],
       "aiGuidance": "Keep environment distinct from provider mode; never infer a stronger environment claim than evidence supports.",
@@ -538,7 +538,7 @@
       "categoryRules": ["Non-exclusive: a command may serve multiple purposes.", "Stable.", "Classify by purpose, not by script path."],
       "futureVocabularyDependencies": ["command-kinds"],
       "futureSchemaDependencies": ["command.schema.json"],
-      "reactSourceInputs": ["source-lineage/Makefile + make/*.mk (make all)", "~110 proof:* scripts; 212 npm scripts", "source-lineage/docs/v2-foundation/v2-command-map.json (377 commands; carry/merge/retire)"],
+      "sourceLineageInputs": ["source-lineage/Makefile + make/*.mk (make all)", "~110 proof:* scripts; 212 npm scripts", "source-lineage/docs/v2-foundation/v2-command-map.json (377 commands; carry/merge/retire)"],
       "validationExpectations": ["A command declares purpose, environment scope, evidence outputs, and failure semantics; no command is deleted/renamed without disposition."],
       "driftRisks": ["Silent loss/rename of a command.", "Classifying a command by its file path only."],
       "aiGuidance": "Commands are semantic assets, not incidental scripts.",
@@ -567,7 +567,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Classify by meaning, not by file location.", "Generated env files are projections of manifests, never authoritative."],
       "futureVocabularyDependencies": ["configuration-kinds"],
       "futureSchemaDependencies": ["configuration.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/v1-config-contract-catalogue.json (64 typed keys; key/type/required/secret/secretTier/consumerProjection/restartOrReload)", "config/environments/*.json manifests; .env generated (ADR-0072)", "source-lineage/docs/v2-foundation/environment-and-config-catalog.json (39 assets)"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/v1-config-contract-catalogue.json (64 typed keys; key/type/required/secret/secretTier/consumerProjection/restartOrReload)", "config/environments/*.json manifests; .env generated (ADR-0072)", "source-lineage/docs/v2-foundation/environment-and-config-catalog.json (39 assets)"],
       "validationExpectations": ["A config key declares source, requiredness, environment applicability, secret classification, provider relevance, and proof relevance."],
       "driftRisks": ["Hand-editing generated config.", "Misclassifying a secret-bearing setting."],
       "aiGuidance": "Regenerate config from manifests; never hand-edit generated config; never leak secret values into evidence.",
@@ -596,7 +596,7 @@
       "categoryRules": ["Exclusive by primary kind.", "Stable.", "Contract-first or contract-reconciled; not inferred from handlers when a contract exists."],
       "futureVocabularyDependencies": ["interface-kinds"],
       "futureSchemaDependencies": ["interface-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (runtimeCommandLinks; ~235 routes)", "api-runtime, graphql-api-runtime packages", "OpenAPI drift hard gate"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (runtimeCommandLinks; ~235 routes)", "api-runtime, graphql-api-runtime packages", "OpenAPI drift hard gate"],
       "validationExpectations": ["An interface resolves to a semantic contract; runtime drift from the contract is detectable."],
       "driftRisks": ["Inferring an interface from code when a contract exists."],
       "aiGuidance": "Define or reconcile the contract first; never invent routes in code.",
@@ -624,7 +624,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Event/workflow semantics (ordering, idempotency, DLQ, retention, compensation) are contract-level."],
       "futureVocabularyDependencies": ["event-workflow-kinds"],
       "futureSchemaDependencies": ["event-contract.schema.json", "workflow.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/event-semantics.json (10 events; canonical vs test-only; idempotencyKey/orderingExpectation/retryPolicy/dlqPolicy/retention)", "source-lineage/docs/v2-foundation/cross-capability-interactions.json (8 interaction types: sync-api, event, workflow, data-reference, readiness-dependency, provider-dependency, audit-dependency, lifecycle-dependency)", "temporal/windmill workflow providers"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/event-semantics.json (10 events; canonical vs test-only; idempotencyKey/orderingExpectation/retryPolicy/dlqPolicy/retention)", "source-lineage/docs/v2-foundation/cross-capability-interactions.json (8 interaction types: sync-api, event, workflow, data-reference, readiness-dependency, provider-dependency, audit-dependency, lifecycle-dependency)", "temporal/windmill workflow providers"],
       "validationExpectations": ["An event has a contract before emission; a workflow declares ordering, consistency, and compensation."],
       "driftRisks": ["Inventing events in code.", "Losing DLQ/ordering semantics in a refactor."],
       "aiGuidance": "Classify the failure-path and compensation-path explicitly; do not infer them from orchestration code.",
@@ -653,7 +653,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Migrations are forward-only and checksum-immutable; committed migrations are never edited."],
       "futureVocabularyDependencies": ["data-migration-kinds"],
       "futureSchemaDependencies": ["semantic-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/data-and-migration-plan.json (PostgreSQL schema-per-tenant; RLS/rlsBypass; migration chain 001..034 then 035+; backupRestore; destructiveOpControls; dataVerification)", "source-lineage/docs/evidence/data/retention-runtime-proof.json and legal-hold-runtime-proof.json", "in-memory-backup-restore-provider to pgbackrest parity"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/data-and-migration-plan.json (PostgreSQL schema-per-tenant; RLS/rlsBypass; migration chain 001..034 then 035+; backupRestore; destructiveOpControls; dataVerification)", "source-lineage/docs/evidence/data/retention-runtime-proof.json and legal-hold-runtime-proof.json", "in-memory-backup-restore-provider to pgbackrest parity"],
       "validationExpectations": ["Backup/restore emitted evidence is preserved through collection; missing collected evidence fails closed; committed migrations are checksum-immutable."],
       "driftRisks": ["Editing a committed migration.", "Tenant data leakage from broken RLS.", "Hiding missing backup/restore evidence."],
       "aiGuidance": "Preserve tenancy invariants and migration immutability; classify backup and restore evidence so it can be checked.",
@@ -684,7 +684,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Naming/shape will be guided by an OpenTelemetry-adapted controlled vocabulary.", "Audit is required for security-sensitive and state-changing operations."],
       "futureVocabularyDependencies": ["observability-signal-kinds", "audit-event-kinds"],
       "futureSchemaDependencies": ["observability-signal.schema.json", "audit-event.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (observabilitySignals/metrics/logs/traces/alertConditions/auditAction)", "e2e observability-correlation across Loki/Tempo/Sentry", "assurance bars: 0 routes without tracing/logging/metrics; 0 mutations without audit"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/operational-semantics.json (observabilitySignals/metrics/logs/traces/alertConditions/auditAction)", "e2e observability-correlation across Loki/Tempo/Sentry", "assurance bars: 0 routes without tracing/logging/metrics; 0 mutations without audit"],
       "validationExpectations": ["Every mutating/privileged action has a defined audit semantic; observability supports proof and drift detection."],
       "driftRisks": ["Removing a signal or audit event as an incidental refactor."],
       "aiGuidance": "Removal of observability/audit requires semantic review, never a silent cleanup.",
@@ -714,7 +714,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "UI semantics are derived from behaviour, never from JSX styling."],
       "futureVocabularyDependencies": ["ui-semantic-kinds"],
       "futureSchemaDependencies": ["ui-semantic-model.schema.json"],
-      "reactSourceInputs": ["source-lineage/docs/v2-foundation/ui-capability-model.json (28 UI capabilities; 12 personas; routes/forms/tables/commands/states/a11y/telemetry)", "source-lineage/docs/v2-foundation/ui-definition.schema.json", "e2e suite/persona/scenario/ui-contract registries"],
+      "sourceLineageInputs": ["source-lineage/docs/v2-foundation/ui-capability-model.json (28 UI capabilities; 12 personas; routes/forms/tables/commands/states/a11y/telemetry)", "source-lineage/docs/v2-foundation/ui-definition.schema.json", "e2e suite/persona/scenario/ui-contract registries"],
       "validationExpectations": ["A UI journey maps to capability semantics and to proof evidence where available."],
       "driftRisks": ["Treating a UI component as a capability.", "Deleting a journey/state/permission/a11y requirement as a restyle."],
       "aiGuidance": "Visual redesign is not semantic deletion; preserve UI semantics through coupled updates only.",
@@ -744,7 +744,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Implementation realisation is rank-5 and lower authority than semantic classification.", "A directory does not become a category without semantic rationale."],
       "futureVocabularyDependencies": ["source-kinds", "source-roles", "artefact-kinds"],
       "futureSchemaDependencies": ["semantic-contract.schema.json"],
-      "reactSourceInputs": ["source-lineage/apps (platform-api, web)", "source-lineage/packages (~41; adapters-* import external SDKs only)", "source-lineage/services/mock-oidc", "source-lineage/infra, source-lineage/docker"],
+      "sourceLineageInputs": ["source-lineage/apps (platform-api, web)", "source-lineage/packages (~41; adapters-* import external SDKs only)", "source-lineage/services/mock-oidc", "source-lineage/infra, source-lineage/docker"],
       "validationExpectations": ["An implementation may realise multiple capabilities but must not erase their semantic boundaries."],
       "driftRisks": ["Treating a package boundary as a capability boundary.", "Letting code define behaviour."],
       "aiGuidance": "Make implementation conform to semantics; never learn intent from code structure.",
@@ -773,7 +773,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "Validators fail closed; reports are rank-7 and never override evidence."],
       "futureVocabularyDependencies": ["validation-severities", "report-statuses"],
       "futureSchemaDependencies": ["validator-report.schema.json"],
-      "reactSourceInputs": ["source-lineage/tools/v2-readiness (R1-R62; fails closed; exit codes 0/1/2; normalises no aliases; golden and negative-control tests)", "source-lineage/tools/architecture (validate-* suite)", "source-lineage/docs/v2-foundation/usf-audit/*-report.json"],
+      "sourceLineageInputs": ["source-lineage/tools/v2-readiness (R1-R62; fails closed; exit codes 0/1/2; normalises no aliases; golden and negative-control tests)", "source-lineage/tools/architecture (validate-* suite)", "source-lineage/docs/v2-foundation/usf-audit/*-report.json"],
       "validationExpectations": ["A validator report identifies the evidence it summarises; staleness is detectable by commit-pin."],
       "driftRisks": ["Believing a stale report.", "Downgrading a blocking failure to advisory to pass."],
       "aiGuidance": "Never weaken a rule to pass; never treat a report as canonical.",
@@ -800,7 +800,7 @@
       "categoryRules": ["Non-exclusive.", "Stable.", "AI actions are governed artefacts subject to the authority order."],
       "futureVocabularyDependencies": ["ai-governance-kinds"],
       "futureSchemaDependencies": ["adr.schema.json"],
-      "reactSourceInputs": ["docs/architecture/charter.md section 7; authority-model.md section 6; standards-profile.md section 20; ontology.md sections 14-15"],
+      "sourceLineageInputs": ["docs/architecture/charter.md section 7; authority-model.md section 6; standards-profile.md section 20; ontology.md sections 14-15"],
       "validationExpectations": ["AI-generated artefacts carry rationale and references; forbidden inferences are detectable; stop conditions are explicit."],
       "driftRisks": ["Treating AI output as authoritative without checks.", "Proceeding through an unresolved authority conflict."],
       "aiGuidance": "Stop or fail on unresolved authority conflict; never self-grant authority.",
@@ -853,7 +853,7 @@
       {"id": "capability-domains", "backsTaxonomy": "semantic-architecture-classification", "status": "deferred", "note": "Recognised from the source-lineage 12-category capability dimension; canonical USF values remain deferred."}
     ]
   },
-  "reactSourceLearnings": [
+  "sourceLineageLearnings": [
     {"learning": "Source files must be classified as evidence before import.", "taxonomyImpact": "source-evidence-classification, source-role-classification"},
     {"learning": "Make targets must be classified as semantic command evidence.", "taxonomyImpact": "command-classification (make-target); source-role-classification (command-evidence)"},
     {"learning": "Package scripts must be classified as command evidence.", "taxonomyImpact": "command-classification (package-script)"},
@@ -946,7 +946,7 @@
     {"criterion": "Defines taxonomy families.", "satisfied": true},
     {"criterion": "Defines required taxonomies.", "satisfied": true},
     {"criterion": "Includes source, evidence, proof, provider, environment, command, configuration, interface, event, workflow, data, observability, audit, UI, implementation, validation, reporting, and AI governance classification.", "satisfied": true},
-    {"criterion": "Captures React source learnings.", "satisfied": true},
+    {"criterion": "Captures source lineage learnings.", "satisfied": true},
     {"criterion": "Includes future vocabulary dependencies.", "satisfied": true},
     {"criterion": "Includes validation expectations.", "satisfied": true},
     {"criterion": "Includes AI agent rules.", "satisfied": true},

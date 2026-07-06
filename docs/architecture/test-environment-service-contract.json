@@ -911,7 +911,7 @@
       "validationCommands": [
         "corepack pnpm proof:api"
       ],
-      "readinessEvidence": "Historical platform-api row is out of scope; USF API proof is current-state authority and does not mirror React platform-api",
+      "readinessEvidence": "Historical platform-api row is out of scope; USF API proof is current-state authority and does not mirror source-lineage platform-api",
       "resetSeedCleanup": {
         "seed": "not applicable",
         "reset": "not generated",
@@ -931,7 +931,7 @@
       "validationCommands": [
         "corepack pnpm proof:observability:browser-telemetry"
       ],
-      "readinessEvidence": "Historical React app row is out of scope; minimal Faro browser telemetry proof is not product UI or browser E2E readiness",
+      "readinessEvidence": "Historical source-lineage app row is out of scope; minimal Faro browser telemetry proof is not product UI or browser E2E readiness",
       "resetSeedCleanup": {
         "seed": "not applicable",
         "reset": "not generated",

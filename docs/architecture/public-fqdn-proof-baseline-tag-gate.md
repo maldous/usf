@@ -50,7 +50,7 @@ The tag does not mean:
 - Enterprise production readiness.
 - Product UI readiness.
 - Browser E2E readiness.
-- Full React product parity.
+- Full source-lineage product parity.
 - Caddy, Netlify, Cloudflare Worker, nginx, or any gateway product as a semantic requirement.
 
 This gate records a baseline state for the future Staging-entry track. It does not start Staging implementation.

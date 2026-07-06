@@ -717,7 +717,7 @@ LANE5_RISK_TOKENS = (
 )
 LANE5_OVERCLAIM_RE = re.compile(
     r"production-ready\b|staging-ready\b|test-ready\b|live-provider-ready\b|provider proof complete|"
-    r"full dev readiness|full react parity|satisfies live|(?<!non-)equivalent to live|ready for production",
+    r"full dev readiness|full functional completeness|satisfies live|(?<!non-)equivalent to live|ready for production",
     re.IGNORECASE,
 )
 LANE5_HIDDEN_FALLBACK_RE = re.compile(

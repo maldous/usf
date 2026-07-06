@@ -5,7 +5,7 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-28",
-  "context": "The historical react stack expresses authorization across application-layer permission and resource-policy checks, attribute-based decisions, and database row-level security, with identity brokered through Keycloak. During the React functional parity readiness pass the exact USF authority for the policy decision point was recorded as a requires-human-decision item (USF-136) because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided the authorization model, so it needs rank-2 ADR coverage rather than tracker context or planning prose.",
+  "context": "The historical source lineage expresses authorization across application-layer permission and resource-policy checks, attribute-based decisions, and database row-level security, with identity brokered through Keycloak. During the functional completeness readiness pass the exact USF authority for the policy decision point was recorded as a requires-human-decision item (USF-136) because the Authority Model forbids inferring missing semantics from historical implementation. A human has now decided the authorization model, so it needs rank-2 ADR coverage rather than tracker context or planning prose.",
   "decision": "USF V2 uses a USF-owned internal policy decision point for application-layer authorization. The PDP combines RBAC and ABAC inputs and fails closed by default. An identity provider supplies identity claims only and is not the sole authorization system; final authorization decisions are owned by the USF PDP. Postgres row-level security remains mandatory for tenant-scoped persistence and acts as the database isolation backstop, not as the only authorization layer. Policy assignments, resource attributes, break-glass grants, and authorization evidence are represented in USF semantic contracts and persisted through authorised adapters. Capabilities must not delegate final authorization solely to the identity provider or to the database.",
   "consequences": [
     "The USF authorization model has rank-2 ADR coverage and unblocks the authorization portion of USF-136.",
@@ -32,14 +32,14 @@
     "Do not treat the identity provider as the authorization system of record.",
     "Do not treat row-level security as the only authorization layer or remove it as the tenant-persistence backstop.",
     "Do not allow a default-open authorization path; the PDP fails closed.",
-    "Do not infer PDP behaviour from historical react source; implement against USF semantics.",
-    "Do not copy react authorization code or mirror its paths."
+    "Do not infer PDP behaviour from historical source-lineage source; implement against USF semantics.",
+    "Do not copy source-lineage authorization code or mirror its paths."
   ],
   "aiAlignmentRules": [
     "Agents must treat the USF-owned PDP as the application-layer authorization authority and must not delegate final authorization to an identity provider or the database alone.",
     "Agents must preserve fail-closed default behaviour and the mandatory RLS tenant backstop.",
     "Agents must not implement the PDP from this ADR alone; a separate authorised implementation directive is required.",
-    "Agents must not infer authorization semantics from historical react code."
+    "Agents must not infer authorization semantics from historical source-lineage code."
   ],
   "semanticRefs": [
     "docs/architecture/charter.md",
@@ -81,5 +81,5 @@
     "provider-modes",
     "environment-classes"
   ],
-  "aiGuidance": "Use this ADR when evaluating USF authorization: the USF-owned PDP combines RBAC and ABAC and fails closed, the identity provider supplies identity only, and Postgres RLS is a mandatory tenant-persistence backstop and not the sole authorization layer. Do not implement from this ADR alone or infer authorization semantics from historical react code."
+  "aiGuidance": "Use this ADR when evaluating USF authorization: the USF-owned PDP combines RBAC and ABAC and fails closed, the identity provider supplies identity only, and Postgres RLS is a mandatory tenant-persistence backstop and not the sole authorization layer. Do not implement from this ADR alone or infer authorization semantics from historical source-lineage code."
 }

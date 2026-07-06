@@ -34,7 +34,7 @@ Equivalence classification:
 - `v2-equivalent-stale-proof` — USF has a source-backed semantic equivalent, but current proof is stale/hermetic-only and blocked by the freshness model.
 - `v2-semantic-only` — USF has (or this audit authorises) a semantic record only; no fresh proof and, for deferred items, no completed source-backed facets yet.
 - `v2-source-use-only` — carried only as source lineage/disposition evidence; no USF semantic contract yet.
-- `react-only-gap` — present in USF's recorded source lineage, absent from the current USF corpus with no current representation.
+- `source-lineage-only-gap` — present in USF's recorded source lineage, absent from the current USF corpus with no current representation.
 - `deferred-post-v2` — intentionally deferred beyond whole-platform V2 scope.
 - `excluded-not-applicable` — explicitly out of scope / not-applicable-final.
 - `obsolete-do-not-carry` — examined and deliberately not carried forward.
@@ -186,7 +186,7 @@ USF-110/111/112/115/116 status: equivalence matrices complete; each names the ow
 
 Activation is blocked (no schema for an equivalence ledger is authorised, and the validator is intentionally clean). This audit therefore records a draft/proposed ledger shape and a stable vocabulary, without activating a schema or a validator rule (consistent with USF-117 allowing draft/proposed artefacts).
 
-Proposed per-row fields: `reactArtefactPathOrId`, `reactClaimType`, `reactProofLevelObserved`, `reactEvidenceOrSourceKind`, `sourceImportRowOrMissingMarker`, `usfSemanticEquivalent`, `usfProofOrEvidenceEquivalent`, `usfValidatorCoverage`, `equivalenceClassification` (section 2 set), `gapType` (section 2 set), `requiredNextAction`, `linkedUsfIssue`, `usf39BlockerStatus`.
+Proposed per-row fields: `sourceArtefactPathOrId`, `sourceClaimType`, `sourceProofLevelObserved`, `sourceEvidenceOrSourceKind`, `sourceImportRowOrMissingMarker`, `usfSemanticEquivalent`, `usfProofOrEvidenceEquivalent`, `usfValidatorCoverage`, `equivalenceClassification` (section 2 set), `gapType` (section 2 set), `requiredNextAction`, `linkedUsfIssue`, `usf39BlockerStatus`.
 
 Stability: the equivalence and gap vocabularies in section 2 are stable and documented. Fail-closed candidates for a FUTURE validator rule (not implemented here; each would require a planted defect and a selftest, per `USF-SELFTEST-001` discipline): a rule asserting every equivalence row carries a classification token from the controlled set; a rule asserting `liveExternalProviderClaim`/`productionLiveClaim` in any equivalence row obeys the same posture floor already enforced for proof evidence (`USF-EVIDENCE-007`, `USF-ANCHOR-005/006`). These are recorded as USF-117/USF-98 follow-up, not activated.
 

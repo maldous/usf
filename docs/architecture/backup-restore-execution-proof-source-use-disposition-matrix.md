@@ -3,7 +3,7 @@
 This matrix records source-use treatment for the USF-223 backup/restore DR,
 PITR, and RPO/RTO execution proof. It uses existing USF backup/restore service
 catalogue, provider registry, pgBackRest proof boundary, enterprise evidence,
-and validator patterns as authority. Historical React artefacts remain lineage
+and validator patterns as authority. Historical source-lineage artefacts remain lineage
 only and are not copied, imported, mirrored, or treated as live authority.
 
 Linear source issue: USF-223.

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:usf:tooling:react-parity-matrix-shape",
-  "title": "React Parity Matrix Shape (validator tooling)",
-  "description": "Draft JSON Schema used by tools/validate-parity/validate-parity.py to shape-check the machine-readable React parity scope classification matrix. This is validator tooling shape data (analogous to tools/validate-spec manifests), NOT a rank-1 semantic-corpus schema, and is deliberately not registered in spec/registries/schema-registry.json: the parity matrix is a governance tracking artefact and the rank-1 authority-levels ladder has no fitting value for it. Cross-field rules (status carriers, mirroring, UI classification, readiness-claim consistency) are enforced in Python by the validator, not by this schema.",
+  "$id": "urn:usf:tooling:source-lineage-parity-matrix-shape",
+  "title": "source-lineage Parity Matrix Shape (validator tooling)",
+  "description": "Draft JSON Schema used by tools/validate-parity/validate-parity.py to shape-check the machine-readable functional completeness scope classification matrix. This is validator tooling shape data (analogous to tools/validate-spec manifests), NOT a rank-1 semantic-corpus schema, and is deliberately not registered in spec/registries/schema-registry.json: the parity matrix is a governance tracking artefact and the rank-1 authority-levels ladder has no fitting value for it. Cross-field rules (status carriers, mirroring, UI classification, readiness-claim consistency) are enforced in Python by the validator, not by this schema.",
   "type": "object",
   "required": [
     "id",
@@ -41,9 +41,9 @@
       "items": {
         "type": "object",
         "required": [
-          "react_item_id",
+          "source_item_id",
           "category",
-          "react_paths",
+          "source_paths",
           "behaviour_summary",
           "usf_status",
           "usf_paths",
@@ -58,9 +58,9 @@
           "retry_condition"
         ],
         "properties": {
-          "react_item_id": { "type": "string", "minLength": 1 },
+          "source_item_id": { "type": "string", "minLength": 1 },
           "category": { "type": "string", "minLength": 1 },
-          "react_paths": { "type": "array", "items": { "type": "string" } },
+          "source_paths": { "type": "array", "items": { "type": "string" } },
           "behaviour_summary": { "type": "string", "minLength": 1 },
           "usf_status": { "type": "string", "minLength": 1 },
           "usf_paths": { "type": "array", "items": { "type": "string" } },
@@ -80,10 +80,10 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["item", "react_paths", "usf_status", "ui_needed", "rationale"],
+        "required": ["item", "source_paths", "usf_status", "ui_needed", "rationale"],
         "properties": {
           "item": { "type": "string", "minLength": 1 },
-          "react_paths": { "type": "array", "items": { "type": "string" } },
+          "source_paths": { "type": "array", "items": { "type": "string" } },
           "usf_status": { "type": "string", "minLength": 1 },
           "ui_needed": { "type": "boolean" },
           "surface": { "type": "array", "items": { "type": "string" } },
@@ -96,10 +96,10 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["group", "react_paths", "classification", "foundation_behaviour", "action"],
+        "required": ["group", "source_paths", "classification", "foundation_behaviour", "action"],
         "properties": {
           "group": { "type": "string", "minLength": 1 },
-          "react_paths": { "type": "array", "items": { "type": "string" } },
+          "source_paths": { "type": "array", "items": { "type": "string" } },
           "classification": { "type": "string", "minLength": 1 },
           "foundation_behaviour": { "type": "boolean" },
           "requiredForFoundation": { "type": "boolean" },

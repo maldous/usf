@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.sub-organisations",
   "title": "Sub Organisations Semantic Contract",
-  "description": "Source-backed draft semantic contract for the sub organisations capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the sub organisations capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -83,14 +83,14 @@
     },
     "proof": {
       "status": "complete",
-      "description": "A unit proof covers the state machine and validation and a UI semantic harness proves the headless journey, demonstrated in React via hermetic state/validation proof plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "A unit proof covers the state machine and validation and a UI semantic harness proves the headless journey, demonstrated in source lineage via hermetic state/validation proof plus a semantic harness for future UI generation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/tests/unit/sub-organisations.test.ts"
       ]
     },
     "uiSemanticDefinition": {
       "status": "gap",
-      "description": "No verified UI source path in the manifest yet; the React headless sub-organisation journey is lineage only. Author the UI semantic model before generation."
+      "description": "No verified UI source path in the manifest yet; the source-lineage headless sub-organisation journey is lineage only. Author the UI semantic model before generation."
     }
   },
   "sourceRefs": [

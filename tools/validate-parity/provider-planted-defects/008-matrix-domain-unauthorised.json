@@ -4,8 +4,8 @@
   "edits": [
     {
       "target": "matrix",
-      "old": "\"react_item_id\": \"provider-adapters-modes\"",
-      "new": "\"react_item_id\": \"provider-adapters-modes-missing\""
+      "old": "\"source_item_id\": \"provider-adapters-modes\"",
+      "new": "\"source_item_id\": \"provider-adapters-modes-missing\""
     }
   ]
 }

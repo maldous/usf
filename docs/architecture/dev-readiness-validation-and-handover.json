@@ -503,7 +503,7 @@
       "runtime implementation",
       "provider implementation",
       "product UI",
-      "React migration",
+      "source-lineage migration",
       "USF-39 mutation"
     ],
     "doneStateRule": "USF-226 can move Done only after merged evidence maps to every acceptance criterion and post-merge validation is recorded."

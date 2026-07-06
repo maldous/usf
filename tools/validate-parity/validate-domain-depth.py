@@ -2,7 +2,7 @@
 """USF-191 domain deferred-depth closure validator.
 
 Governance tooling only. It creates no implementation/runtime files, imports no
-React source, and publishes no evidence. It fails closed on Lane 7 domain-depth
+source lineage, and publishes no evidence. It fails closed on Lane 7 domain-depth
 invariants: every required domain must have either local proof or an accepted
 deferral; every deferred or partial control must carry risk, threat/failure,
 asset/service, impact, likelihood, owner, treatment, review date, and a follow-up

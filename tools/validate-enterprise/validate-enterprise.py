@@ -4066,8 +4066,8 @@ def check_sentry_service_proof_boundary(F: Findings, state: dict[str, Any]) -> N
 
     if set(boundary.get("serviceIds", [])) != SENTRY_BOUNDARY_REQUIRED_SERVICES:
         F.add("USF-ENTERPRISE-024", "serviceIds", "Sentry boundary service ids are incomplete")
-    if len(boundary.get("reactServiceIds", [])) < 10:
-        F.add("USF-ENTERPRISE-024", "reactServiceIds", "Sentry boundary must list React Sentry service cluster rows")
+    if len(boundary.get("sourceServiceIds", [])) < 10:
+        F.add("USF-ENTERPRISE-024", "sourceServiceIds", "Sentry boundary must list source-lineage Sentry service cluster rows")
     if SENTRY_BOUNDARY_REQUIRED_ISSUES - set(boundary.get("issueLinks", [])):
         F.add("USF-ENTERPRISE-024", "issueLinks", "Sentry boundary issue links are incomplete")
     if REQUIRED_NON_CLAIMS - set(boundary.get("nonClaims", [])):

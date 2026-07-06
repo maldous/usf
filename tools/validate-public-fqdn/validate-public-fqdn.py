@@ -736,7 +736,7 @@ def check_contract_shape(F: Findings, contract: Any) -> None:
     for key in (
         "generatedComposeAuthority",
         "generatedGatewayConfigAuthority",
-        "historicalReactAuthority",
+        "historicalsource lineageAuthority",
         "linearAuthority",
     ):
         if authority.get(key) is not False:

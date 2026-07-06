@@ -8,7 +8,7 @@
 | **Issue scope** | USF-61 |
 | **Primary inputs** | `docs/architecture/implementation-directive-template.md`, `docs/architecture/target-implementation-topology-plan.md`, `docs/architecture/authentication-slice-source-use-disposition-matrix.md`, `docs/architecture/proof-slice-readiness-rollup.md`, `docs/architecture/proof-and-evidence-pipeline-plan.md`, `docs/architecture/generated-report-readiness-policy.md`, `docs/architecture/schema-validator-posture-decision.md`, `docs/architecture/ai-agent-work-packet-and-review-contract.md` |
 
-This specification defines the required content for a later human-filled implementation directive for the authentication proof substrate. It is not the filled directive. It starts no implementation, creates no implementation/runtime code, creates no implementation directory, imports no React runtime/application code, emits no proof evidence, emits no generated report, and promotes no schema.
+This specification defines the required content for a later human-filled implementation directive for the authentication proof substrate. It is not the filled directive. It starts no implementation, creates no implementation/runtime code, creates no implementation directory, imports no source-lineage runtime/application code, emits no proof evidence, emits no generated report, and promotes no schema.
 
 ## Directive Status
 
@@ -156,7 +156,7 @@ The PR must state:
 - Moving USF-39 out of Backlog.
 - Creating implementation/runtime code.
 - Creating implementation/runtime directories.
-- Importing React runtime/application code.
+- Importing source-lineage runtime/application code.
 - Copying historical source paths.
 - Promoting schemas or validators to active maturity.
 - Running new proof.

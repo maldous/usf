@@ -62,7 +62,7 @@ ALLOWED_DISPOSITIONS = {
 }
 
 FORBIDDEN_CLAIMS = [
-    "React UI parity",
+    "UI parity",
     "visual parity",
     "UX parity",
     "product UI readiness",
@@ -538,7 +538,7 @@ def mutate(data: dict[str, Any], rule_id: str) -> dict[str, Any]:
     elif rule_id == "USF-NON-UI-018":
         mutated["md"]["externalReport"] = mutated["md"]["externalReport"].replace("## Non-claims", "## Claim boundaries")
     elif rule_id == "USF-NON-UI-019":
-        mutated["json"]["closure"]["boundedClaim"] = "Full React UI parity and full product parity is proven."
+        mutated["json"]["closure"]["boundedClaim"] = "Full UI parity and full product parity is proven."
     elif rule_id == "USF-NON-UI-020":
         mutated["planted"] = [
             {"expectedRuleIds": ["USF-NON-UI-001"], "mustBeDistinct": True, "_path": "duplicate-a"},

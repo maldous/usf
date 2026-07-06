@@ -51,7 +51,7 @@ The authorised post-start roots are:
 
 The exact target files and their source-use treatments are named in `docs/architecture/bootstrap-source-use-disposition-matrix.md`. Any implementation file outside those roots or not named in that matrix remains blocked.
 
-This section does not authorise staging, production, live-external-provider, deployment, or production-live readiness. It does not authorise direct React runtime/application copy, React path mirroring, generated-report authority, or schema activation.
+This section does not authorise staging, production, live-external-provider, deployment, or production-live readiness. It does not authorise direct source-lineage runtime/application copy, source-lineage path mirroring, generated-report authority, or schema activation.
 
 ## Decision
 

@@ -2,7 +2,7 @@
 """USF audit/evidence posture validator (parity-audit, USF-142).
 
 Governance tooling only. It creates no implementation/runtime files, imports no
-React source, and publishes no evidence. It fails closed on the audit/evidence
+source lineage, and publishes no evidence. It fails closed on the audit/evidence
 invariants that keep the audit domain honest as tamper-evident, tenant-safe,
 queryable evidence (ISO 27001-supporting technical control evidence only; no
 certification claim):
@@ -207,7 +207,7 @@ def audit_row(matrix):
     if not isinstance(matrix, dict):
         return None
     for row in matrix.get("domains", []):
-        if isinstance(row, dict) and row.get("react_item_id") == "audit-events":
+        if isinstance(row, dict) and row.get("source_item_id") == "audit-events":
             return row
     return None
 

@@ -114,7 +114,7 @@
     "apps/react-enterprise-app/src/hooks/use-session.ts",
     "apps/react-enterprise-app/src/tests/use-session.test.ts",
     "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
-    "docs/evidence/frontend/react-component-platform-baseline.md",
+    "docs/evidence/frontend/source-lineage-component-platform-baseline.md",
     "docs/evidence/auth/oidc-login-mapping-proof.md",
     "docs/evidence/identity/keycloak-login-callback.md"
   ]

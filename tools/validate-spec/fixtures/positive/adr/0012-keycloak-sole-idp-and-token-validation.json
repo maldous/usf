@@ -5,7 +5,7 @@
   "authorityLevel": "adr",
   "decisionStatus": "accepted",
   "date": "2026-06-28",
-  "context": "During the React functional parity readiness pass the exact USF authentication/identity stance was a requires-human-decision item under USF-133, because the Authority Model forbids inferring missing semantics from historical implementation. The historical react stack trusted Keycloak-brokered identity by confidential exchange and read userinfo, and did not locally verify token signature, issuer, audience, expiry, or not-before on its session-login path; it also carried external upstream providers behind Keycloak. A human has now decided the USF V2 identity boundary, so it needs rank-2 ADR coverage rather than tracker context or planning prose. This ADR builds on ADR 0010 (the USF policy decision point).",
+  "context": "During the functional completeness readiness pass the exact USF authentication/identity stance was a requires-human-decision item under USF-133, because the Authority Model forbids inferring missing semantics from historical implementation. The historical source lineage trusted Keycloak-brokered identity by confidential exchange and read userinfo, and did not locally verify token signature, issuer, audience, expiry, or not-before on its session-login path; it also carried external upstream providers behind Keycloak. A human has now decided the USF V2 identity boundary, so it needs rank-2 ADR coverage rather than tracker context or planning prose. This ADR builds on ADR 0010 (the USF policy decision point).",
   "decision": "USF V2 treats Keycloak as the only USF-facing identity provider and token issuer. USF validates Keycloak-issued OIDC/JWT tokens locally against the Keycloak realm key set: issuer (the Keycloak realm issuer only), audience, signature, algorithm allow-list, key id, expiry, and not-before, failing closed on every invalid value. External upstream identity providers exist only as opaque brokered provenance behind Keycloak; their tokens are never accepted directly, and no individual upstream provider is modelled, named, configured, credentialed, or special-cased in USF. A token whose issuer is a brokered-upstream source presented directly is rejected. Identity is an authentication input only: the USF PDP (ADR 0010) makes the authorization decision, and a Keycloak claim, role, group, or broker alias never authorizes on its own. A stable internal actor is keyed by Keycloak realm plus subject, never by email; duplicate emails do not collapse actors and an email change is an attribute update rather than a new actor. Disabled, suspended, revoked, and deleted identities fail closed. Sessions are explicit, expiring (absolute and idle), revocable, and audited, and never store raw tokens, cookies, refresh tokens, or credentials.",
   "consequences": [
     "The USF authentication/identity boundary has rank-2 ADR coverage and advances the authentication portion of USF-133.",
@@ -39,7 +39,7 @@
     "Do not use email as the primary actor identity or merge actors by email.",
     "Do not allow a disabled, suspended, revoked, or deleted identity to obtain or keep a session.",
     "Do not present hermetic-mock proof as live-external-provider or production-live evidence.",
-    "Do not copy react authentication code or mirror its paths."
+    "Do not copy source-lineage authentication code or mirror its paths."
   ],
   "aiAlignmentRules": [
     "Agents must treat Keycloak as the only USF-facing issuer and validate Keycloak-issued tokens only, failing closed.",

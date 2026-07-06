@@ -51,14 +51,14 @@ The following gaps are explicit and blocking for broader implementation extracti
 - Provider modes beyond hermetic mock are not proven here.
 - Production-live and live-external-provider readiness are not proven here.
 - Runtime storage, migrations, backup, restore, retention execution, and legal-hold proof are not proven here.
-- Generated reports, historical proof outputs, and historical React inventories remain lower-authority review aids only.
+- Generated reports, historical proof outputs, and historical source-lineage inventories remain lower-authority review aids only.
 - No schema is promoted active by this closure check.
 
 If a later task needs any of those gaps for its claim, the gap must fail closed or be recorded as a blocking dependency. It must not be silently filled from historical source structure or generated reports.
 
-## React Source Boundary
+## source-lineage Source Boundary
 
-React source is not used as hidden authority in this closure check. The historical repository may supply source evidence, proof lineage, or validator inspiration only through recorded USF artefacts.
+source lineage is not used as hidden authority in this closure check. The historical repository may supply source evidence, proof lineage, or validator inspiration only through recorded USF artefacts.
 
 Allowed use:
 
@@ -72,7 +72,7 @@ Forbidden use:
 - source-path mirroring;
 - direct runtime/application source copy;
 - treating historical package, service, app, or script structure as target topology;
-- treating generated React reports as semantic authority or current proof;
+- treating generated source-lineage reports as semantic authority or current proof;
 - treating stale historical evidence as current readiness.
 
 ## Validator Rule Treatment

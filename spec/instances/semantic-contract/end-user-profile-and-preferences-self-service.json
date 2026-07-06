@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.end-user-profile-and-preferences-self-service",
   "title": "End User Profile And Preferences Self Service Semantic Contract",
-  "description": "Source-backed draft semantic contract for the end user profile and preferences self service capability, derived from historical React evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
+  "description": "Source-backed draft semantic contract for the end user profile and preferences self service capability, derived from historical source-lineage evidence as lineage. Facets cite verified source-import manifest rows; proof is hermetic/runtime lineage and not fresh USF proof.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -88,7 +88,7 @@
     },
     "proof": {
       "status": "complete",
-      "description": "Unit proofs cover the profile and notification usecases, and runtime proofs validate live profile self-service, notification preferences, and dispatch against the data substrate with row-level tenant isolation, demonstrated in React via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
+      "description": "Unit proofs cover the profile and notification usecases, and runtime proofs validate live profile self-service, notification preferences, and dispatch against the data substrate with row-level tenant isolation, demonstrated in source lineage via hermetic/runtime validation. Proof is hermetic/runtime lineage; fresh USF proof pending USF-101/USF-59.",
       "sourceRefs": [
         "apps/platform-api/scripts/profile-self-service-runtime-proof.ts",
         "apps/platform-api/scripts/notification-dispatch-runtime-proof.ts",

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:compose-service",
   "title": "USF Compose Service Classification Schema",
-  "description": "Draft JSON Schema for semantic Compose service classification, service-level CMDB-style governance metadata, environment-specific realisation, deployment form, and generated Compose targets. The catalogue records every historical React Compose service as evidence and derives dev, test, staging, and production Compose realisations without treating generated Compose as authority. lifecycleState draft; not active.",
+  "description": "Draft JSON Schema for semantic Compose service classification, service-level CMDB-style governance metadata, environment-specific realisation, deployment form, and generated Compose targets. The catalogue records every historical source-lineage Compose service as evidence and derives dev, test, staging, and production Compose realisations without treating generated Compose as authority. lifecycleState draft; not active.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,7 @@
     "vocabularyRefs",
     "aiGuidance",
     "environmentDefinitions",
-    "reactComposeServiceCount",
+    "sourceComposeServiceCount",
     "sourceRefs",
     "approvedLocalSecretPlaceholders",
     "services",
@@ -919,8 +919,8 @@
         "serviceAuthorityLevels",
         "accessModel",
         "sourceEvidence",
-        "reactComposeServiceNames",
-        "reactParityRows",
+        "sourceComposeServiceNames",
+        "sourceCompletenessRows",
         "usfCapabilityRefs",
         "environmentPolicies",
         "composeProfiles",
@@ -988,10 +988,10 @@
           },
           "uniqueItems": true
         },
-        "reactComposeServiceNames": {
+        "sourceComposeServiceNames": {
           "$ref": "#/$defs/possiblyEmptyStringList"
         },
-        "reactParityRows": {
+        "sourceCompletenessRows": {
           "$ref": "#/$defs/stringList"
         },
         "usfCapabilityRefs": {
@@ -1575,7 +1575,7 @@
       "uniqueItems": true,
       "minItems": 4
     },
-    "reactComposeServiceCount": {
+    "sourceComposeServiceCount": {
       "type": "integer",
       "minimum": 1
     },

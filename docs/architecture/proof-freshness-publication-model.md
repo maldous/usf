@@ -58,7 +58,7 @@ Complete one-pass implementation readiness can still remain NO-GO even when a pr
 
 The proof harness may run without writing evidence and may emit execution signal. That signal is not committed proof authority.
 
-Future proof publication support may emit a deterministic anchor payload for the target commit. Creating or signing the anchor is a publication step, not product implementation. It must not import React runtime code, create product runtime, or upgrade hermetic evidence to live-external-provider or production-live evidence.
+Future proof publication support may emit a deterministic anchor payload for the target commit. Creating or signing the anchor is a publication step, not product implementation. It must not import source-lineage runtime code, create product runtime, or upgrade hermetic evidence to live-external-provider or production-live evidence.
 
 The current authentication proof harness emits the deterministic payload used by the proof-anchor workflow. Local unsigned payloads remain non-authoritative; proof freshness requires the CI-attested payload and published annotated tag for the merge commit being claimed.
 

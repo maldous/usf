@@ -43,7 +43,7 @@
   "minimalHarnessScope": {
     "surface": "transient loopback-only static browser page",
     "productUiCreated": false,
-    "reactApplicationCreated": false,
+    "sourceApplicationCreated": false,
     "routeArchitectureCreated": false,
     "componentSystemCreated": false,
     "visualSnapshotCoverageCreated": false,
@@ -103,7 +103,7 @@
     "backendRootCauseCorrelationRecorded": true,
     "redactionProofRecorded": true,
     "uiReadinessClaim": false,
-    "reactReadinessClaim": false,
+    "sourceReadinessClaim": false,
     "browserE2EReadinessClaim": false,
     "faroProductionReadinessClaim": false,
     "liveMonitoringReadinessClaim": false,
@@ -135,7 +135,7 @@
         "production-readiness",
         "enterprise-readiness"
       ],
-      "nonClaimBoundary": "USF-225 proves only a minimal telemetry harness and does not build product UI, React application delivery, component/page systems, broad browser E2E, or user journey parity."
+      "nonClaimBoundary": "USF-225 proves only a minimal telemetry harness and does not build product UI, source-lineage application delivery, component/page systems, broad browser E2E, or user journey parity."
     },
     {
       "id": "live-faro-ingestion-and-observability-provider-readiness",
@@ -157,7 +157,7 @@
     }
   ],
   "negativeEvidence": [
-    "No product UI, route/page/component architecture, visual snapshots, accessibility journeys, broad Playwright E2E, or React application delivery is created.",
+    "No product UI, route/page/component architecture, visual snapshots, accessibility journeys, broad Playwright E2E, or source-lineage application delivery is created.",
     "No live Faro ingestion, live monitoring, observability backend readiness, alerting, dashboard, incident response, staging, production, deployment, SOC, ISO certification, full dev readiness, full product readiness, enterprise production readiness, or USF-133 closure evidence is produced.",
     "REST/OpenAPI, local observability, and server-side telemetry evidence remain non-equivalent to browser telemetry capture unless the USF-225 proof command runs."
   ],

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """USF notifications/messaging posture validator (parity-notifications-messaging, USF-133).
 
-Governance tooling only. It creates no implementation/runtime files, imports no React
+Governance tooling only. It creates no implementation/runtime files, imports no external
 source, and publishes no evidence. It fails closed on controlled-communication
 invariants: classified tenant-scoped notifications, PDP-guarded actions, secret-ref
 provider config, safe versioned templates, recipient address redaction, consent and
@@ -161,7 +161,7 @@ def notification_rows(matrix):
     return [
         row
         for row in matrix.get("domains", [])
-        if isinstance(row, dict) and "notification" in str(row.get("react_item_id", ""))
+        if isinstance(row, dict) and "notification" in str(row.get("source_item_id", ""))
     ]
 
 
@@ -391,7 +391,7 @@ def run_checks(F, state=None):
     if not rows:
         F.add("USF-NOTIFY-014", MATRIX_PATH, "notifications parity rows missing")
     else:
-        main = next((row for row in rows if row.get("react_item_id") == "notifications"), rows[0])
+        main = next((row for row in rows if row.get("source_item_id") == "notifications"), rows[0])
         if main.get("domain_authorised") is not True:
             F.add("USF-NOTIFY-014", MATRIX_PATH, "notifications row must be domain_authorised=true")
         if not main.get("usf_tests") or not main.get("usf_proofs"):

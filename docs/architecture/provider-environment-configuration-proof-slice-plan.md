@@ -25,7 +25,7 @@ Related proof posture authority:
 
 ## Historical Source Evidence
 
-Historical React source may be used only as source evidence and design input. It is not future live authority, and its paths do not determine USF implementation paths.
+Historical source-lineage source may be used only as source evidence and design input. It is not future live authority, and its paths do not determine USF implementation paths.
 
 Primary source lineage for this slice:
 
@@ -84,7 +84,7 @@ Generated reports are never authority for this slice.
 - No product implementation extraction.
 - No product runtime code.
 - No source-path mirroring.
-- No React runtime or application code import.
+- No source-lineage runtime or application code import.
 - No runtime code import without disposition.
 - No schema activation.
 - No live-external-provider claim.
