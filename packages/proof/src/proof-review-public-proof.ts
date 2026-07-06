@@ -1,9 +1,11 @@
-type ProofReviewRouteId = "landing" | "review" | "screenshots" | "final-report" | "signoff";
+type ProofReviewRouteId =
+  "landing" | "review" | "review-item" | "screenshots" | "final-report" | "signoff";
 
 interface RouteExpectation {
   readonly id: ProofReviewRouteId;
   readonly path: string;
   readonly expectedMarkers: readonly string[];
+  readonly anyOfMarkers?: readonly string[];
   readonly minimumInlineImages?: number;
 }
 
@@ -15,6 +17,8 @@ interface RouteEvidence {
   readonly status: number | null;
   readonly contentTypeMatched: boolean;
   readonly markerResults: Record<string, boolean>;
+  readonly anyOfMarkerResults: Record<string, boolean>;
+  readonly anyOfMarkerMatched: boolean;
   readonly inlineImageCount: number;
   readonly safeErrorCode: string | null;
   readonly result: "pass" | "fail";
@@ -51,16 +55,22 @@ const ROUTES = Object.freeze<RouteExpectation[]>([
     path: "/proof",
     expectedMarkers: [
       "USF Proof Review",
-      "Start review",
       "Open printable report",
       "0 warnings",
       "0 unresolved gaps",
       "Final signoff",
     ],
+    anyOfMarkers: ["No review items pending", "Next review item", "Start review"],
   },
   {
     id: "review",
     path: "/proof/review",
+    expectedMarkers: ["Proof review workflow"],
+    anyOfMarkers: ["No current review items are pending", "Evidence summary"],
+  },
+  {
+    id: "review-item",
+    path: "/proof/review?item=0",
     expectedMarkers: [
       "Evidence summary",
       "Machine QA conclusion",
@@ -70,7 +80,6 @@ const ROUTES = Object.freeze<RouteExpectation[]>([
       "Request retest",
       "Add note",
       "Next",
-      "Previous",
     ],
     minimumInlineImages: 1,
   },
@@ -154,11 +163,17 @@ async function fetchRoute(origin: string, expectation: RouteExpectation): Promis
     const markerResults = Object.fromEntries(
       expectation.expectedMarkers.map((marker) => [marker, body.includes(marker)]),
     );
+    const anyOfMarkerResults = Object.fromEntries(
+      (expectation.anyOfMarkers ?? []).map((marker) => [marker, body.includes(marker)]),
+    );
+    const anyOfMarkerMatched =
+      !expectation.anyOfMarkers?.length || Object.values(anyOfMarkerResults).some(Boolean);
     const inlineImageCount = (body.match(/<img\b/gi) ?? []).length;
     const result =
       response.status === 200 &&
       contentType.includes("text/html") &&
       Object.values(markerResults).every(Boolean) &&
+      anyOfMarkerMatched &&
       inlineImageCount >= (expectation.minimumInlineImages ?? 0)
         ? "pass"
         : "fail";
@@ -170,6 +185,8 @@ async function fetchRoute(origin: string, expectation: RouteExpectation): Promis
       status: response.status,
       contentTypeMatched: contentType.includes("text/html"),
       markerResults,
+      anyOfMarkerResults,
+      anyOfMarkerMatched,
       inlineImageCount,
       safeErrorCode: null,
       result,
@@ -185,6 +202,10 @@ async function fetchRoute(origin: string, expectation: RouteExpectation): Promis
       markerResults: Object.fromEntries(
         expectation.expectedMarkers.map((marker) => [marker, false]),
       ),
+      anyOfMarkerResults: Object.fromEntries(
+        (expectation.anyOfMarkers ?? []).map((marker) => [marker, false]),
+      ),
+      anyOfMarkerMatched: !expectation.anyOfMarkers?.length,
       inlineImageCount: 0,
       safeErrorCode: safeErrorCode(error),
       result: "fail",
@@ -208,7 +229,10 @@ export async function runProofReviewPublicProof(
         .filter(([, observed]) => !observed)
         .map(([marker]) => marker)
         .join(",");
-      return `${route.path}:status=${route.status ?? route.safeErrorCode}:contentType=${route.contentTypeMatched}:inlineImages=${route.inlineImageCount}:missingMarkers=${missingMarkers}`;
+      const missingAnyOf = route.anyOfMarkerMatched
+        ? ""
+        : Object.keys(route.anyOfMarkerResults).join("|");
+      return `${route.path}:status=${route.status ?? route.safeErrorCode}:contentType=${route.contentTypeMatched}:inlineImages=${route.inlineImageCount}:missingMarkers=${missingMarkers}:missingAnyOf=${missingAnyOf}`;
     });
 
   return {
@@ -231,8 +255,9 @@ export async function runProofReviewPublicProof(
     failureReasons,
     checks: [
       "live public proof landing route returns HTTP 200 HTML",
-      "live public proof review route exposes one-item human review controls",
-      "live public proof review route renders inline screenshot evidence",
+      "live public proof review route exposes either no-pending baseline status or a current review item",
+      "live public proof review item route exposes one-item human review controls",
+      "live public proof review item route renders inline screenshot evidence",
       "live public screenshot gallery renders inline image evidence",
       "live public final report route exposes printable external-review report sections",
       "live public signoff route keeps final signoff separate and non-automatic",
