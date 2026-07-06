@@ -1,0 +1,52 @@
+{
+  "id": "command.proof-review-up",
+  "commandKind": "make-target",
+  "title": "Bring Up Operator-Authenticated Proof Review Surface",
+  "description": "Operator lifecycle command that brings up the ADR 0015 staging proof-cockpit review surface behind an HTTP basic-authentication operator credential.",
+  "purpose": "Let the accountable operator start the loopback staging-proof-cockpit service, front it with an operator-authenticated Caddy, and reach the human proof review, bulk acceptance, and signoff controls at /proof, prompting for the operator credential at invocation.",
+  "invocation": "make proof-review-up",
+  "inputs": [
+    "tools/proof-review/proof-review.sh",
+    "compose/compose.staging.generated.yaml",
+    "evidence/proof-evidence/proof-cockpit/human-review-actions.json"
+  ],
+  "outputs": [
+    "Running staging-proof-cockpit Compose service on loopback 127.0.0.1:18085",
+    "Running operator-authenticated Caddy exposing http://localhost:8446/proof",
+    "Console URL and credential guidance on standard output"
+  ],
+  "environmentScope": [
+    "local",
+    "staging"
+  ],
+  "sideEffects": [
+    "Prompts for an operator username and password and hashes the password with the Caddy image",
+    "Writes a runtime Caddyfile containing the operator credential under .proof-review (gitignored, never committed)",
+    "Seeds the acceptance ledger Docker volume from the committed evidence corpus on first run only",
+    "Starts the staging-proof-cockpit Compose service and an ad-hoc operator-authenticated Caddy container"
+  ],
+  "failureSemantics": "Fails closed if Docker is unavailable, the staging Compose file is missing, or the credential is empty; a failed bring-up records no acceptance and starts no unauthenticated surface. This command does not itself accept or sign off anything and upgrades no readiness claim.",
+  "emitsEvidence": false,
+  "sourceRefs": [
+    "tools/proof-review/proof-review.sh",
+    "Makefile",
+    "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+    "docs/runbooks/proof-cockpit-human-signoff.md",
+    "compose/compose.staging.generated.yaml"
+  ],
+  "disposition": "preserve",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command"
+  ],
+  "taxonomyRefs": [
+    "command-classification"
+  ],
+  "vocabularyRefs": [
+    "command-kinds",
+    "environment-classes",
+    "disposition-values"
+  ],
+  "aiGuidance": "Use this command to stand up the operator-authenticated proof review surface per ADR 0015. It requires an operator credential and enforces HTTP basic authentication in front of the loopback cockpit; do not remove the authentication gate or the cockpit write guard, and do not treat a running review surface as a staging, deployment, production, or product-UI readiness claim."
+}

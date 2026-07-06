@@ -535,7 +535,7 @@ services:
     image: node:24.16.0-alpine3.22
     command:
       - node
-      - /srv/staging-proof-cockpit/server.mjs
+      - /srv/usf/apps/staging-proof-cockpit/src/server.mjs
     environment:
       PROOF_COCKPIT_HOST: 0.0.0.0
       PROOF_COCKPIT_PORT: 8080
@@ -544,6 +544,7 @@ services:
       USF_PROOF_COCKPIT_REVIEW_ACTOR: "Matthew Aldous"
       USF_PROOF_COCKPIT_TRUST_FORWARD_AUTH: yes
       USF_PROOF_COCKPIT_STATE_PATH: /var/lib/usf-proof-cockpit/human-review-actions.json
+      USF_SOURCE_SHA: "${USF_SOURCE_SHA}"
     ports:
       -
         name: staging-proof-cockpit-http
@@ -553,7 +554,7 @@ services:
         protocol: tcp
         app_protocol: http
     volumes:
-      - ../apps/staging-proof-cockpit/src/server.mjs:/srv/staging-proof-cockpit/server.mjs:ro
+      - ../:/srv/usf:ro
       - proof-cockpit-ledger:/var/lib/usf-proof-cockpit
     healthcheck:
       test:

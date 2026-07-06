@@ -9,7 +9,7 @@ SHELL := /bin/bash
 	proof-cockpit-validate proof-cockpit-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
-	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public \
+	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public proof-review-up proof-review-down proof-review-repin \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
@@ -63,6 +63,9 @@ help:
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
 		'  make public-route-proof    Narrow public browser route and telemetry bootstrap proof' \
 		'  make proof-review-public   Verify live /proof human review surface availability' \
+		'  make proof-review-up       Bring up the operator-authenticated /proof review surface (prompts for credential)' \
+		'  make proof-review-down     Commit the acceptance ledger from the review volume and tear the surface down' \
+		'  make proof-review-repin    Regenerate and re-pin proof-cockpit machine evidence to the current commit (then commit)' \
 		'  make external-http-behaviour-proof  Validate external HTTP behaviour contract' \
 		'  make external-http-cache-proof  Prove cache policy for public proof routes' \
 		'  make external-http-observability-proof  Prove bounded external HTTP observability evidence' \
@@ -153,6 +156,19 @@ public-route-proof-production:
 
 proof-review-public:
 	corepack pnpm proof:proof-review-public
+
+proof-review-up:
+	bash tools/proof-review/proof-review.sh up
+
+proof-review-down:
+	bash tools/proof-review/proof-review.sh down
+
+proof-review-repin:
+	corepack pnpm proof-cockpit:machine-qa
+	corepack pnpm proof-cockpit:promote
+	@printf '%s\n' '[proof-review] Machine evidence regenerated and re-pinned to the current commit.' \
+		'[proof-review] Review git status and commit the regenerated evidence, e.g.:' \
+		'[proof-review]   git add evidence/proof-evidence/proof-cockpit artifacts/proof-cockpit && git commit -m "chore(proof): re-pin machine evidence"'
 
 external-http-behaviour-proof:
 	corepack pnpm proof:external-http-behaviour
