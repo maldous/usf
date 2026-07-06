@@ -3165,6 +3165,35 @@ function reviewRows(kind) {
 </tr>`);
 }
 
+function reviewAcceptAllForm(openCount, returnTo) {
+  const policy = writePolicyFromOptions();
+  const disabled = policy.allowWrites ? "" : " disabled";
+  return `<section class="review-accept-all" aria-label="Accept all open review items">
+<h2>Accept all open review items</h2>
+<p class="muted">${escapeHtml(
+    `${openCount} review item(s) are currently open. Accepting all records one human acceptance per open item at its current evidence fingerprint. This does not perform final signoff; final signoff remains a separate explicit action on the signoff page.`,
+  )}</p>
+<form class="review-accept-all-form" method="post" action="/proof/review/accept-all">
+${hiddenInput("csrfToken", csrfTokenForPolicy(policy))}
+${hiddenInput("returnTo", returnTo)}
+<fieldset>
+<legend>Bulk acceptance</legend>
+<p class="decision-help">These confirmation checkboxes are explicit human assertions applied to every open item; none are hidden or prefilled.</p>
+<div class="review-confirmations">
+${checkboxInput("devEvidenceConfirmed", "I confirmed the relevant dev-readiness prerequisite evidence for these items.")}
+${checkboxInput("testEvidenceConfirmed", "I confirmed the relevant test-readiness prerequisite evidence for these items.")}
+${checkboxInput("noRealTenantData", "These items used no real tenant data, real secrets, or private local state.")}
+${checkboxInput("nonClaimsConfirmed", "Accepting these items makes no staging, production, SOC, ISO, enterprise-readiness, product UI, browser E2E, or full Foundation closure claim.")}
+</div>
+<div class="decision-buttons">
+<button class="primary" type="submit"${disabled}>Accept all ${escapeHtml(openCount)} open items</button>
+</div>
+</fieldset>
+</form>
+${writePolicyNotice(policy)}
+</section>`;
+}
+
 function renderReview(data, state, url = new URL("/proof/review", "http://127.0.0.1"), kind = "index", explicitId = "") {
   if (kind === "gaps") {
     return layout("Machine QA gap register", `${table(["Gap", "Description", "Owner", "Next action"], reviewRows("gaps"))}${nonClaimsBlock()}`);
@@ -3226,6 +3255,7 @@ ${nonClaimsBlock()}`,
 <p class="muted">Item ${index + 1} of ${items.length}. ${escapeHtml(displayValue(decision.action?.createdAt, "No human decision recorded for this item yet."))}</p>
 <div class="hero-actions">${previous} ${next}</div>
 </section>
+${openCount > 0 ? reviewAcceptAllForm(openCount, `/proof/review?item=${index}`) : ""}
 ${reviewItemActionForms(item, `/proof/review?item=${index}`)}
 <div class="review-shell">
 <article class="review-main">
@@ -4487,8 +4517,8 @@ function csrfValid(request, params, policy) {
 async function handleProofPost(request, statePath, policy = writePolicyFromOptions(), data = buildData()) {
   const url = new URL(request.url ?? "/", "http://127.0.0.1");
   const routePath = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, "") : url.pathname;
-  if (!["/proof/actions", "/proof/signoff"].includes(routePath)) {
-    return { status: 405, body: layout("Method not allowed", "<p>Only QA action and final signoff form submissions are supported.</p>") };
+  if (!["/proof/actions", "/proof/signoff", "/proof/review/accept-all"].includes(routePath)) {
+    return { status: 405, body: layout("Method not allowed", "<p>Only QA action, accept-all, and final signoff form submissions are supported.</p>") };
   }
   if (!policy.allowWrites) {
     return forbiddenWriteResponse(
@@ -4503,6 +4533,59 @@ async function handleProofPost(request, statePath, policy = writePolicyFromOptio
     return forbiddenWriteResponse("The proof-cockpit CSRF/session token was missing or invalid.");
   }
   const state = loadProofState(statePath);
+  if (routePath === "/proof/review/accept-all") {
+    const confirmations = {
+      devEvidenceConfirmed: params.has("devEvidenceConfirmed"),
+      testEvidenceConfirmed: params.has("testEvidenceConfirmed"),
+      noRealTenantData: params.has("noRealTenantData"),
+      nonClaimsConfirmed: params.has("nonClaimsConfirmed"),
+    };
+    const missing = Object.entries(confirmations)
+      .filter(([, value]) => !value)
+      .map(([name]) => name);
+    if (missing.length) {
+      return forbiddenWriteResponse(`Accept all requires every confirmation checkbox to be ticked: ${missing.join(", ")}.`);
+    }
+    const actor = actorFromRequest(request, policy);
+    const role = ROLES.includes(params.get("role")) ? params.get("role") : "auditor";
+    const openStatuses = new Set(["human-review-required", "re-review-required"]);
+    const openItems = buildReviewItems(data).filter((item) => openStatuses.has(reviewItemDecision(state, item).status));
+    const now = new Date().toISOString();
+    const sha = getSourceSha();
+    openItems.forEach((item, offset) => {
+      state.actions.unshift({
+        id: `qa-acceptall-${Date.now().toString(36)}-${offset.toString(36)}`,
+        createdAt: now,
+        updatedAt: now,
+        sourceSha: sha,
+        actionType: "machine-evidence-accepted",
+        outcome: "human-accepted",
+        role,
+        actor: String(actor ?? "authenticated-qa-operator").slice(0, 160),
+        tenant: String(params.get("tenant") ?? "synthetic-proof-review").slice(0, 160),
+        actionName: `Accept (accept-all): ${item.title}`.slice(0, 240),
+        capabilityId: item.capabilityId ?? "",
+        serviceId: item.serviceId ?? "",
+        scenarioId: "",
+        evidenceId: item.id,
+        enterpriseTopic: "",
+        correlationId: "",
+        traceId: "",
+        auditEventId: "",
+        evidenceUrl: "",
+        sourceUrl: item.sourceUrl ?? "",
+        serviceUrl: item.route ?? "",
+        screenshotUrl: item.screenshots?.[0]?.screenshotPath ?? "",
+        notes:
+          "Bulk acceptance recorded via the /proof/review Accept all control for every currently open review item at its current evidence fingerprint. Final signoff remains a separate explicit action.",
+        acceptanceFingerprint: item.acceptanceFingerprint ?? "",
+        confirmations,
+        finalAcceptanceClaimed: false,
+      });
+    });
+    saveProofState(state, statePath);
+    return redirect(safeReturnTo(params.get("returnTo")) || "/proof/review");
+  }
   if (routePath === "/proof/signoff") {
     const result = normalizeFinalSignoffAction(params, actorFromRequest(request, policy), finalSignoffState(data, state));
     if (result.error) {

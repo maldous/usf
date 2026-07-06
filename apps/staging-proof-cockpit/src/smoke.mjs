@@ -136,6 +136,8 @@ try {
     "Request retest",
     "Inline screenshot evidence",
     "Machine QA conclusion",
+    'action="/proof/review/accept-all"',
+    "Accept all open review items",
   ]) {
     if (!review.includes(required)) {
       throw new Error(`proof-cockpit-smoke-review-missing-${required}`);
