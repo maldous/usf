@@ -16,7 +16,7 @@
   "aiGuidance": "Normalisation preserves lineage only. The historical raw proof and index remain evidence inputs, not USF semantic authority.",
   "evidenceKind": "normalised-evidence",
   "sourceRefs": [
-    "../react/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json",
-    "../react/docs/v2-foundation/usf-audit/proof-evidence-index.json"
+    "usf/docs/v2-foundation/usf-audit/proof-evidence/apps-platform-api-scripts-observability-signals-runtime-proof.json",
+    "usf/docs/v2-foundation/usf-audit/proof-evidence-index.json"
   ]
 }

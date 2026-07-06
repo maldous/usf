@@ -10,7 +10,7 @@ Before any modifying task, Claude MUST perform the USF bootstrap described in `A
 
 Claude MUST NOT:
 - create implementation/runtime code unless explicitly instructed by an approved directive
-- copy application/runtime code from `../react`
+- copy application/runtime code from any external repository
 - create schemas, ADRs, validators, evidence files, import maps, or implementation directories unless explicitly instructed
 - infer semantics from implementation structure
 - treat generated reports as canonical

@@ -1,7 +1,7 @@
 {
   "id": "semantic-contract.support-tickets-customer-health-announcements",
   "title": "Support Tickets Customer Health Announcements Semantic Contract",
-  "description": "Coverage-complete semantic contract for the support tickets customer health announcements capability. Semantic information captured from ../react's semantic corpus as informational lineage via the USF coverage record and equivalence audit; no ../react source code is imported and the V2 implementation language is an open decision.",
+  "description": "Coverage-complete semantic contract for the support tickets customer health announcements capability. Semantic information captured as a USF coverage record via the coverage record and equivalence audit; no external source code is imported and the V2 implementation language is an open decision.",
   "authorityLevel": "semantic-definition",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -16,7 +16,7 @@
     "lifecycle-states",
     "capability-domains"
   ],
-  "aiGuidance": "Coverage-complete draft grounded in semantic information (../react informational lineage only; no source import; language open). Proof is hermetic/stale lineage, not current readiness. Enrich detail and publish fresh proof before generation; respect the hexagonal constraint in ADR 0005.",
+  "aiGuidance": "Coverage-complete draft grounded in semantic information (USF coverage record only; no source import; language open). Proof is hermetic/stale lineage, not current readiness. Enrich detail and publish fresh proof before generation; respect the hexagonal constraint in ADR 0005.",
   "capability": "support-tickets-customer-health-announcements",
   "capabilityDomain": "support-admin",
   "facets": {

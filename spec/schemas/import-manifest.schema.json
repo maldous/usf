@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:usf:schema:import-manifest",
   "title": "USF Import Manifest Schema",
-  "description": "Draft JSON Schema for controlled import manifests from ../react (rank-6 historical-source-evidence). Each entry pairs a source reference with a source kind (source-kinds), a source role (source-roles), and a mandatory disposition (disposition-values) plus rationale, so no source element disappears without a disposition and source paths never dictate target paths. Governs the ontology concepts Source Reference and Disposition. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
+  "description": "Draft JSON Schema for USF's self-defined controlled source-import manifests (historical-source-evidence). Each entry pairs a source reference with a source kind (source-kinds), a source role (source-roles), and a mandatory disposition (disposition-values) plus rationale, so no source element disappears without a disposition and source paths never dictate target paths. Governs the ontology concepts Source Reference and Disposition. lifecycleState draft; not active. GOVERNANCE ENVELOPE: instances MUST carry id, title, description, authorityLevel, lifecycleState, ontologyConcepts, taxonomyRefs, vocabularyRefs, and aiGuidance (schema-authoring-standard section 9/11). Envelope fields kind (artefact-kinds) and version are deviated and intentionally not required: this artefact is not a top-level artefact-kind and instance versioning is deferred to instance-topology definition (recorded deviation per schema-authoring-standard section 9.3).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -97,9 +97,6 @@
             {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "repository"
-              ],
               "properties": {
                 "repository": {
                   "type": "string",
