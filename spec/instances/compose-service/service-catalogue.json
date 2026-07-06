@@ -72,6 +72,7 @@
     "dev-root-token",
     "foundation_app_password",
     "keycloak_password",
+    "local-placeholder-proof-cockpit-review-secret",
     "minio_password",
     "postgres://windmill:windmill_password@windmill-postgres:5432/windmill",
     "sonar_password",
@@ -11824,6 +11825,420 @@
             "node",
             "-e",
             "const http=require('node:http');const hosts=['1e100.network','aldous.info'];let left=hosts.length;let failed=false;const done=ok=>{failed=failed||!ok;if(--left===0)process.exit(failed?1:0)};for(const Host of hosts){http.request({host:'127.0.0.1',port:8080,path:'/.well-known/usf-public-edge.json',headers:{Host}},r=>{let body='';r.setEncoding('utf8');r.on('data',c=>body+=c);r.on('end',()=>done(r.statusCode===200&&String(r.headers['content-type']||'').includes('application/json')&&body.includes('usf-public-edge')))}).on('error',()=>done(false)).end()}setTimeout(()=>process.exit(1),4000)"
+          ],
+          "interval": "10s",
+          "timeout": "5s",
+          "retries": 6
+        }
+      }
+    },
+    {
+      "serviceId": "staging-proof-cockpit",
+      "displayName": "Staging Proof Cockpit",
+      "serviceOwner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "purpose": "Serve the interactive staging proof cockpit (apps/staging-proof-cockpit/src/server.mjs) in guarded write mode as a bounded, profile-gated staging operator fixture. Public reachability at 1e100.network/proof is provided solely by the origin-host Caddy reverse proxy behind operator basic authentication per ADR 0015; the service port itself is loopback-only and never directly public.",
+      "environmentDisposition": "environment-specific",
+      "providerBoundary": {
+        "disposition": "local-composed",
+        "supplierBoundary": "Caddy provides the edge operator-authentication and reverse-proxy layer as deployment evidence only; no gateway product is USF semantic authority. The cockpit derives actor identity from a forwarded operator identity header or the configured operator actor.",
+        "evidenceBoundary": "Local Compose and cockpit response/write-guard proof only. The rendered proof content is hermetic and synthetic; external public route delivery (DNS, TLS, origin Caddyfile apply) remains a separate operator step recorded in the runbooks.",
+        "notes": "Provider boundary is local-composed for repository proof of an operator-access fixture. This does not claim staging, production, deployment, live-provider, SOC, ISO certification, enterprise production, product UI, browser E2E, or full product readiness."
+      },
+      "dataClassification": "synthetic-data",
+      "dataBoundary": "synthetic-data",
+      "readinessTier": "compose-target-catalogued",
+      "evidenceGrade": "b",
+      "controlPurpose": "Provide a profile-gated, loopback-only staging operator-access fixture for human proof review, bulk acceptance, and final signoff, with a guarded write policy and a durable acceptance ledger, while preserving all platform non-claims.",
+      "assetInventoryClass": "operator-surface",
+      "accessPosture": "admin-authenticated",
+      "authRequirement": "admin-auth-required",
+      "auditPosture": "operator-action-audit-required",
+      "auditRequirement": "operator-action-audit-required",
+      "secretPosture": "local-placeholder-only",
+      "backupRestorePosture": "local-reset-only",
+      "retentionPosture": "local-operational-logs",
+      "tenantBoundary": "The staging proof cockpit serves synthetic, hermetic proof content only. It does not process real tenant data, real secrets, or a live external provider, and it does not satisfy staging, production, live-provider, product UI, or browser E2E readiness.",
+      "operationalOwnerBoundary": "platform-assurance-foundation owns the cockpit fixture. The edge Caddy operator credential and reverse-proxy route on the 1e100.network staging host are operator-controlled deployment evidence per ADR 0015 and are not encoded as a gateway semantic requirement.",
+      "operatorAccessBoundary": "Operator access is edge-authenticated (Caddy basic authentication) and reverse-proxied to this loopback-only service on the 1e100.network staging host only; write actions require the cockpit write guard (allow-writes plus review secret plus CSRF) and final signoff is a deliberate, non-auto-completed human browser action.",
+      "sharedControlPlaneJustification": "not-applicable; service is profile-gated for the staging Compose target only and does not create a shared control plane.",
+      "breakGlassRelevance": "admin-relevant",
+      "missingEvidence": [
+        "external Caddy operator-authenticated reverse-proxy route delivery evidence for 1e100.network/proof (DNS, TLS, origin Caddyfile apply)",
+        "executed operator access-review and deprovisioning workflow proof for the operator fixture"
+      ],
+      "iso27001Support": {
+        "statementOfApplicabilitySupport": true,
+        "supportAreas": [
+          "asset-inventory",
+          "access-boundary",
+          "operator-action-audit-boundary",
+          "change-evidence-boundary",
+          "non-claim-preservation"
+        ],
+        "supportStatement": "staging-proof-cockpit metadata supports ISO/IEC 27001-style evidence organisation for the operator-access fixture boundary tracking only.",
+        "certificationClaimed": false,
+        "nonClaim": "No ISO/IEC 27001 certification, SOC readiness, staging readiness, production readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorization is claimed."
+      },
+      "enterpriseFeatureSupport": {
+        "assetInventory": "staging-proof-cockpit is registered as an operator-surface runtime service in the semantic service catalogue.",
+        "riskOwnership": "Risk ownership is assigned to platform-assurance-risk-owner; Linear remains tracking only.",
+        "controlOwnership": "Control ownership is assigned to platform-assurance-control-owner; generated Compose does not define control authority.",
+        "accessControlBoundary": "Access posture is admin-authenticated; the operator credential is enforced at the edge Caddy reverse proxy and the service port stays loopback-only.",
+        "privilegedAccessBoundary": "Cockpit write actions are gated by the write policy (allow-writes plus non-empty review secret) and CSRF double-submit; final signoff requires the four confirmations and the exact signoff phrase and is never auto-completed.",
+        "auditEvidence": "Audit posture is operator-action-audit-required; recorded human-review actions cite actor, source SHA, and timestamp in the durable acceptance ledger.",
+        "backupRestoreResilience": "The acceptance ledger persists to a durable Compose volume; promoting recorded acceptances into the committed evidence corpus is a manual operator reconciliation step, not an automatic service write.",
+        "supplierProviderBoundary": "Caddy and hosting products are implementation evidence sources only, not semantic requirements.",
+        "secretCredentialBoundary": "Only local placeholder review secret and configured operator actor are used; no real secrets or tenant credentials are required.",
+        "changePromotionEvidence": "Change evidence is limited to service catalogue validation, generated Compose determinism, cockpit smoke and machine QA proof output, git history, and PR checks.",
+        "incidentResponseEvidence": "Incident response readiness is not claimed; route or write-guard failures are blocker evidence only.",
+        "statementOfApplicabilitySupport": true,
+        "certificationOrReadinessClaims": "Supports evidence organisation only; does not claim SOC readiness, ISO/IEC 27001 certification, staging readiness, production readiness, deployment readiness, live-provider readiness, enterprise production readiness, product UI readiness, browser E2E readiness, full product readiness, or v2-proof tag authorization."
+      },
+      "readinessClaimsAllowed": [
+        "service-catalogue-validation",
+        "generated-compose-derivation",
+        "operator-access-fixture",
+        "local-compose-config",
+        "classification-validation"
+      ],
+      "readinessClaimsProhibited": [
+        "full-product-readiness",
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "product-ui-readiness",
+        "browser-e2e-readiness",
+        "v2-proof-tag-authorization"
+      ],
+      "semanticRoles": [
+        "staging-proof-cockpit"
+      ],
+      "serviceKind": "operator-admin",
+      "requirementState": true,
+      "classificationStates": [
+        "implemented",
+        "profile-gated",
+        "required-for-staging-compose"
+      ],
+      "serviceAuthorityLevels": [
+        "executes-code"
+      ],
+      "accessModel": "operator-access",
+      "sourceEvidence": [
+        {
+          "sourceKind": "current-source",
+          "sourcePath": "apps/staging-proof-cockpit/src/server.mjs",
+          "evidenceRole": "staging-proof-cockpit-implementation",
+          "notes": "Current USF staging proof cockpit implementation with guarded write mode, CSRF double-submit, and forward-auth-or-configured actor derivation."
+        },
+        {
+          "sourceKind": "decision",
+          "sourcePath": "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+          "evidenceRole": "decision-authority",
+          "notes": "ADR 0015 authorises the bounded, edge-authenticated staging operator proof fixture and preserves all platform non-claims."
+        }
+      ],
+      "sourceComposeServiceNames": [],
+      "sourceCompletenessRows": [],
+      "usfCapabilityRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness"
+      ],
+      "environmentPolicies": {
+        "dev": {
+          "environmentScope": "dev",
+          "required": false,
+          "realisationMode": "prohibited",
+          "deploymentForm": "prohibited",
+          "lifecycle": "ephemeral-per-run",
+          "dataBoundary": "none",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "no-substitute-allowed",
+          "composePolicy": "do-not-generate-deferred",
+          "composeProfiles": [],
+          "generated": false,
+          "seedReset": "not-required",
+          "proofObligation": "dev realisation must preserve the edge operator-authentication gate, loopback-only port, guarded write mode, non-auto-completed signoff, and non-claims.",
+          "selectedComposeTarget": "not-generated",
+          "rationale": "The owner scoped the operator proof cockpit fixture to the staging Compose target only; dev does not generate it.",
+          "environmentScopeMechanism": "dev does not require staging proof cockpit generation",
+          "projectBoundary": "dev staging proof cockpit is not generated",
+          "tenantBoundary": "dev staging proof cockpit would serve synthetic hermetic proof only and no real tenant data",
+          "accessBoundary": "dev access follows accessModel operator-access behind loopback-only publication where generated",
+          "productionExposureBoundary": "No local generated port is a production exposure; public reachability requires the separate edge Caddy operator-authenticated reverse proxy per ADR 0015 and does not imply readiness."
+        },
+        "test": {
+          "environmentScope": "test",
+          "required": false,
+          "realisationMode": "prohibited",
+          "deploymentForm": "prohibited",
+          "lifecycle": "ephemeral-per-run",
+          "dataBoundary": "none",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "no-substitute-allowed",
+          "composePolicy": "do-not-generate-deferred",
+          "composeProfiles": [],
+          "generated": false,
+          "seedReset": "not-required",
+          "proofObligation": "test realisation must preserve the edge operator-authentication gate, loopback-only port, guarded write mode, non-auto-completed signoff, and non-claims.",
+          "selectedComposeTarget": "not-generated",
+          "rationale": "The owner scoped the operator proof cockpit fixture to the staging Compose target only; test does not generate it.",
+          "environmentScopeMechanism": "test does not require staging proof cockpit generation",
+          "projectBoundary": "test staging proof cockpit is not generated",
+          "tenantBoundary": "test staging proof cockpit would serve synthetic hermetic proof only and no real tenant data",
+          "accessBoundary": "test access follows accessModel operator-access behind loopback-only publication where generated",
+          "productionExposureBoundary": "No local generated port is a production exposure; public reachability requires the separate edge Caddy operator-authenticated reverse proxy per ADR 0015 and does not imply readiness."
+        },
+        "staging": {
+          "environmentScope": "staging",
+          "required": true,
+          "realisationMode": "composed-environment-isolated",
+          "deploymentForm": "composed",
+          "lifecycle": "persistent-per-environment",
+          "dataBoundary": "synthetic-data",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "no-substitute-allowed",
+          "composePolicy": "generate-profile-gated-service",
+          "composeProfiles": [
+            "proof-cockpit"
+          ],
+          "generated": true,
+          "seedReset": "seeded-once-or-evolving",
+          "proofObligation": "staging realisation must preserve the edge operator-authentication gate, loopback-only port, guarded write mode, non-auto-completed signoff, and non-claims.",
+          "selectedComposeTarget": "compose/compose.staging.generated.yaml",
+          "rationale": "Profile-gated loopback-only staging operator proof cockpit fixture is required per ADR 0015 so the accountable operator can perform human proof review, bulk acceptance, and final signoff behind edge operator authentication.",
+          "environmentScopeMechanism": "staging generated Compose target/profile proof-cockpit isolates staging-proof-cockpit",
+          "projectBoundary": "staging Compose project/profile boundary for staging-proof-cockpit",
+          "tenantBoundary": "staging proof cockpit serves synthetic hermetic proof only and no real tenant data",
+          "accessBoundary": "staging access follows accessModel operator-access behind loopback-only publication; public reach is via the edge Caddy operator-authenticated reverse proxy per ADR 0015",
+          "productionExposureBoundary": "No local generated port is a production exposure; public reachability requires the separate edge Caddy operator-authenticated reverse proxy per ADR 0015 and does not imply readiness."
+        },
+        "production": {
+          "environmentScope": "production",
+          "required": false,
+          "realisationMode": "prohibited",
+          "deploymentForm": "prohibited",
+          "lifecycle": "ephemeral-per-run",
+          "dataBoundary": "none",
+          "sharingModel": "environment-isolated",
+          "substitutionPolicy": "no-substitute-allowed",
+          "composePolicy": "do-not-generate-deferred",
+          "composeProfiles": [],
+          "generated": false,
+          "seedReset": "not-required",
+          "proofObligation": "production realisation must preserve the edge operator-authentication gate, loopback-only port, guarded write mode, non-auto-completed signoff, and non-claims.",
+          "selectedComposeTarget": "not-generated",
+          "rationale": "ADR 0015 scopes the operator proof cockpit fixture to the staging host only and forbids importing the /proof cockpit route on the aldous.info production host; production does not generate it.",
+          "environmentScopeMechanism": "production does not require staging proof cockpit generation",
+          "projectBoundary": "production staging proof cockpit is not generated",
+          "tenantBoundary": "production staging proof cockpit is not generated and serves no real tenant data",
+          "accessBoundary": "production access is not applicable; the operator fixture is staging-host-only per ADR 0015",
+          "productionExposureBoundary": "The /proof cockpit route is never imported on the aldous.info production host per ADR 0015; no production exposure is generated."
+        }
+      },
+      "composeProfiles": [
+        "proof-cockpit"
+      ],
+      "dependencies": [],
+      "volumes": [
+        {
+          "name": "proof-cockpit-ledger",
+          "purpose": "durable staging proof cockpit acceptance ledger (human-review actions)",
+          "dataBoundary": "synthetic-data",
+          "lifecycle": "persistent-per-environment",
+          "composeVolumeName": "proof-cockpit-ledger"
+        }
+      ],
+      "networks": [],
+      "ports": [
+        {
+          "portId": "staging-proof-cockpit-http",
+          "name": "staging-proof-cockpit-http",
+          "containerPort": 8080,
+          "publishedPort": 18085,
+          "protocol": "tcp",
+          "appProtocol": "http",
+          "hostIp": "127.0.0.1",
+          "bindScope": "loopback-only",
+          "exposureClass": "operator-admin",
+          "accessModel": "operator-access",
+          "environmentScopes": [
+            "staging"
+          ],
+          "composeProfiles": [
+            "proof-cockpit"
+          ],
+          "profileScope": [
+            "proof-cockpit"
+          ],
+          "required": true,
+          "collisionGroup": "host-published",
+          "concurrentEnvironmentPolicy": "single-environment-only",
+          "portAllocationMode": "fixed",
+          "productionExposure": "prohibited",
+          "rationale": "Loopback-only generated Compose exposure for the staging operator proof cockpit fixture.",
+          "exposureRationale": "Operator-admin proof fixture; loopback-only and never a direct public host port. Public reachability is via the edge Caddy operator-authenticated reverse proxy per ADR 0015.",
+          "accessPolicy": "Access is edge-authenticated at the Caddy reverse proxy (operator basic authentication) on the 1e100.network staging host; the service port itself is loopback-only and requires the cockpit write guard plus CSRF for write actions.",
+          "authRequired": true,
+          "tlsRequired": false,
+          "auditRequired": true,
+          "secretExposureRisk": "none",
+          "dataClassification": "synthetic-data",
+          "adminSurface": false,
+          "operatorSurface": true,
+          "internetExposureAllowed": false,
+          "defaultDenyReason": "Host publication defaults to 127.0.0.1; LAN/public bind is denied. Public reach is only via the edge Caddy operator-authenticated reverse proxy per ADR 0015.",
+          "productionExposureBoundary": "No local generated port is a production exposure; the /proof cockpit route is never imported on the aldous.info production host per ADR 0015.",
+          "iso27001SupportStatement": "Supports operator-access fixture evidence organisation without claiming ISO/IEC 27001 certification.",
+          "readinessClaimsAllowed": [
+            "local-compose-config",
+            "local-port-availability",
+            "classification-validation",
+            "operator-access-fixture"
+          ],
+          "readinessClaimsProhibited": [
+            "full-dev-readiness",
+            "production-readiness",
+            "staging-readiness",
+            "deployment-readiness",
+            "live-provider-readiness",
+            "product-ui-readiness",
+            "browser-e2e-readiness",
+            "iso27001-certification",
+            "soc-readiness"
+          ],
+          "controlPurpose": "Control local staging proof cockpit operator-access exposure.",
+          "riskOwner": "platform-assurance-risk-owner",
+          "retentionLoggingPosture": "Generated Compose logs are local operational evidence only and must not contain raw secrets.",
+          "breakGlassRelevance": "admin-relevant",
+          "evidenceProduced": [
+            "compose-validator-report",
+            "docker-compose-config",
+            "port-availability-check",
+            "proof-cockpit-smoke-proof"
+          ],
+          "deferredControls": [
+            "External edge Caddy operator-authenticated reverse-proxy route delivery and TLS remain ADR 0015 operator evidence, not local Compose evidence."
+          ]
+        }
+      ],
+      "secrets": [],
+      "configs": [],
+      "healthchecks": [
+        "HTTP 200 check on loopback GET 127.0.0.1:8080/proof"
+      ],
+      "readinessChecks": [
+        "compose catalogue validation",
+        "generated Compose freshness",
+        "proof-cockpit smoke proof"
+      ],
+      "identityBoundary": "Operator identity is derived from the edge-authenticated forwarded identity header (USF_PROOF_COCKPIT_TRUST_FORWARD_AUTH) or the configured operator actor (USF_PROOF_COCKPIT_REVIEW_ACTOR).",
+      "secretBoundary": "Only a local placeholder review secret (USF_PROOF_COCKPIT_REVIEW_SECRET) is used to enable the guarded write mode; no real secrets or tenant credentials are present.",
+      "adminSurface": {
+        "present": false,
+        "model": "none",
+        "notes": "No separate admin surface; the operator surface below is the human access surface."
+      },
+      "operatorSurface": {
+        "present": true,
+        "model": "edge-authenticated-reverse-proxy",
+        "notes": "Interactive operator proof cockpit reached via the edge Caddy operator-authenticated reverse proxy on the staging host per ADR 0015; write actions require the cockpit write guard plus CSRF and final signoff is a deliberate non-auto-completed human browser action."
+      },
+      "observability": {
+        "logs": true,
+        "metrics": false,
+        "traces": false,
+        "auditRequired": true,
+        "notes": "Local HTTP access logs and recorded human-review actions (actor, source SHA, timestamp) are operator-action audit evidence; no production telemetry or incident readiness claim."
+      },
+      "backupRestore": {
+        "required": false,
+        "model": "local-reset-only",
+        "notes": "The acceptance ledger persists to a durable Compose volume; promoting recorded acceptances into the committed evidence corpus is a manual operator reconciliation step, not an automatic service write."
+      },
+      "seedReset": "ledger-volume-persistent-local-reset",
+      "failureImpact": "Service failure blocks operator human proof review, bulk acceptance, and final signoff via the cockpit fixture, but does not affect Test readiness, product UI readiness, or the public read-only proof edge.",
+      "proofRequirements": [
+        "classification present",
+        "environment policy explicit",
+        "generated Compose freshness when generated",
+        "corepack pnpm proof-cockpit:smoke passes locally",
+        "edge Caddy operator-authenticated reverse-proxy route delivery remains ADR 0015 operator evidence"
+      ],
+      "nonEquivalenceBoundaries": [
+        "A reachable operator proof fixture is not a platform go-live and upgrades no readiness claim.",
+        "Loopback-only local Compose exposure is not external public route proof; public reach requires the edge Caddy operator-authenticated reverse proxy per ADR 0015.",
+        "Hermetic synthetic proof content rendered by the cockpit is not live-provider, staging, deployment, or production readiness."
+      ],
+      "deferredDepth": 1,
+      "outOfScopeRationale": "External edge Caddy operator-authenticated reverse-proxy route delivery (DNS, TLS, origin Caddyfile apply) and executed operator access-review/deprovisioning workflow proof are operator-controlled evidence per ADR 0015 and are not implemented as staging work here.",
+      "humanDecisionState": "accepted",
+      "generatedComposeTargets": [
+        {
+          "environmentScope": "staging",
+          "path": "compose/compose.staging.generated.yaml",
+          "purpose": "Generated profile-gated Compose target for the staging operator proof cockpit fixture."
+        }
+      ],
+      "composeService": {
+        "serviceName": "staging-proof-cockpit",
+        "image": "node:24.16.0-alpine3.22",
+        "profiles": [
+          "proof-cockpit"
+        ],
+        "command": [
+          "node",
+          "/srv/staging-proof-cockpit/server.mjs"
+        ],
+        "environment": [
+          {
+            "name": "PROOF_COCKPIT_HOST",
+            "value": "0.0.0.0"
+          },
+          {
+            "name": "PROOF_COCKPIT_PORT",
+            "value": "8080"
+          },
+          {
+            "name": "USF_PROOF_COCKPIT_ALLOW_WRITES",
+            "value": "yes"
+          },
+          {
+            "name": "USF_PROOF_COCKPIT_REVIEW_SECRET",
+            "value": "local-placeholder-proof-cockpit-review-secret"
+          },
+          {
+            "name": "USF_PROOF_COCKPIT_REVIEW_ACTOR",
+            "value": "Matthew Aldous"
+          },
+          {
+            "name": "USF_PROOF_COCKPIT_TRUST_FORWARD_AUTH",
+            "value": "yes"
+          },
+          {
+            "name": "USF_PROOF_COCKPIT_STATE_PATH",
+            "value": "/var/lib/usf-proof-cockpit/human-review-actions.json"
+          }
+        ],
+        "ports": [],
+        "volumes": [
+          "../apps/staging-proof-cockpit/src/server.mjs:/srv/staging-proof-cockpit/server.mjs:ro",
+          "proof-cockpit-ledger:/var/lib/usf-proof-cockpit"
+        ],
+        "dependsOn": [],
+        "healthcheck": {
+          "test": [
+            "CMD",
+            "node",
+            "-e",
+            "const http=require('node:http');http.request({host:'127.0.0.1',port:8080,path:'/proof'},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).end();setTimeout(()=>process.exit(1),4000)"
           ],
           "interval": "10s",
           "timeout": "5s",

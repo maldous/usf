@@ -300,6 +300,21 @@
       "riskOwner": "platform-access-risk-owner",
       "controlOwner": "platform-access-control-owner",
       "nonEquivalenceBoundary": "Local synthetic PDP, membership, and audit proof is not equivalent to provider-console SSO, external IdP lifecycle integration, public gateway exposure, environment promotion, or production operator readiness."
+    },
+    {
+      "serviceId": "staging-proof-cockpit",
+      "matrixRowId": "usf-186-access-posture-staging-proof-cockpit",
+      "serviceCatalogueRow": "spec/instances/compose-service/service-catalogue.json#staging-proof-cockpit",
+      "status": "proven-local",
+      "accessReviewWorkflowEvidence": "corepack pnpm proof:operator-lifecycle proves security-admin review execution, tenant-admin denial, cross-tenant denial, and value-free audit evidence for this service row",
+      "deprovisioningWorkflowEvidence": "corepack pnpm proof:operator-lifecycle proves PDP-authorized local deprovisioning and revoked-membership fail-closed behaviour for this service row",
+      "providerConsoleIntegrationStatus": "not-proven",
+      "publicExposureClaim": false,
+      "operatorConsoleReadinessClaim": false,
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "nonEquivalenceBoundary": "Local synthetic PDP, membership, and audit proof is not equivalent to provider-console SSO, external IdP lifecycle integration, public gateway exposure, environment promotion, or production operator readiness."
     }
   ],
   "remainingBoundaries": [

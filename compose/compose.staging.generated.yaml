@@ -531,6 +531,41 @@ services:
       retries: 6
     profiles:
       - public-proof-origin
+  staging-proof-cockpit:
+    image: node:24.16.0-alpine3.22
+    command:
+      - node
+      - /srv/staging-proof-cockpit/server.mjs
+    environment:
+      PROOF_COCKPIT_HOST: 0.0.0.0
+      PROOF_COCKPIT_PORT: 8080
+      USF_PROOF_COCKPIT_ALLOW_WRITES: yes
+      USF_PROOF_COCKPIT_REVIEW_SECRET: local-placeholder-proof-cockpit-review-secret
+      USF_PROOF_COCKPIT_REVIEW_ACTOR: "Matthew Aldous"
+      USF_PROOF_COCKPIT_TRUST_FORWARD_AUTH: yes
+      USF_PROOF_COCKPIT_STATE_PATH: /var/lib/usf-proof-cockpit/human-review-actions.json
+    ports:
+      -
+        name: staging-proof-cockpit-http
+        target: 8080
+        published: 18085
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+    volumes:
+      - ../apps/staging-proof-cockpit/src/server.mjs:/srv/staging-proof-cockpit/server.mjs:ro
+      - proof-cockpit-ledger:/var/lib/usf-proof-cockpit
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "const http=require('node:http');http.request({host:'127.0.0.1',port:8080,path:'/proof'},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1)).end();setTimeout(()=>process.exit(1),4000)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    profiles:
+      - proof-cockpit
   external-caddy:
     image: caddy:2-alpine
     ports:
@@ -556,3 +591,4 @@ volumes:
   sonar-postgres-data: {}
   pgbackrest-repo: {}
   pgbackrest-restore: {}
+  proof-cockpit-ledger: {}

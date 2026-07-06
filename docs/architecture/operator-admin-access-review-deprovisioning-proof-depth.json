@@ -65,7 +65,8 @@
     "windmill",
     "temporal-ui",
     "sentry",
-    "caddy"
+    "caddy",
+    "staging-proof-cockpit"
   ],
   "boundarySummary": "USF-217 makes every in-scope operator/admin/control-plane surface disposition machine-checkable for the selected closure tier. It does not prove recurring review execution, provider-console revocation, identity lifecycle integration, public exposure, environment promotion, or production operator readiness.",
   "rows": [
@@ -1252,6 +1253,86 @@
         "impact": "public exposure, unauthorised administrative action, or readiness overclaim",
         "likelihood": "medium-before-runtime-access-proof",
         "owner": "platform-access-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "nonClaims": [
+        "full-dev-readiness",
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness"
+      ]
+    },
+    {
+      "id": "usf-217-access-review-deprovisioning-staging-proof-cockpit",
+      "serviceId": "staging-proof-cockpit",
+      "sourceMatrixRowId": "usf-186-access-posture-staging-proof-cockpit",
+      "surfaceKind": "admin-operator-surface",
+      "accessModel": "operator-access",
+      "authRequirement": "admin-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "breakGlassRelevance": "admin-relevant",
+      "owner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "closureTierDisposition": "explicitly-deferred-with-owner",
+      "defaultBindScope": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-assurance-foundation",
+        "riskOwner": "platform-assurance-risk-owner",
+        "controlOwner": "platform-assurance-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-assurance-foundation",
+        "riskOwner": "platform-assurance-risk-owner",
+        "controlOwner": "platform-assurance-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "proofEvidence": {
+        "operatorAccessPostureMatrixed": true,
+        "accessReviewExecutionProven": false,
+        "deprovisioningExecutionProven": false,
+        "consoleLoginProofProven": false,
+        "clickthroughProofProven": false,
+        "nonEquivalenceBoundary": "Posture metadata is not equivalent to executed console access review, identity lifecycle revocation, provider-console deprovisioning, public exposure, environment promotion, or production operator readiness."
+      },
+      "deferredRisk": {
+        "riskStatement": "access review and deprovisioning execution are not proven for this operator/admin/control-plane surface",
+        "threatFailureScenario": "future edge or clickthrough work bypasses the access matrix",
+        "affectedAssetService": "staging-proof-cockpit",
+        "impact": "unauthorised operator access or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-assurance-foundation",
         "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
         "reviewDate": "2026-09-30",
         "linkedFollowUpIssue": "USF-221"

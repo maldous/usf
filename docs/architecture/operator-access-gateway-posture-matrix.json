@@ -44,7 +44,8 @@
     "windmill",
     "temporal-ui",
     "sentry",
-    "caddy"
+    "caddy",
+    "staging-proof-cockpit"
   ],
   "readinessClaimsAllowed": [
     "access-posture-defined-only",
@@ -1115,6 +1116,87 @@
       "deprovisioningExecutionClaim": false,
       "runtimeConsoleReadinessClaim": false,
       "accessReviewDeprovisioningDispositionRef": "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json#caddy"
+    },
+    {
+      "id": "usf-186-access-posture-staging-proof-cockpit",
+      "serviceId": "staging-proof-cockpit",
+      "surfaceKind": "operator-surface",
+      "effectivenessState": "implemented",
+      "accessModel": "operator-access",
+      "authRequirement": "admin-auth-required",
+      "auditRequirement": "operator-action-audit-required",
+      "accessReviewOwner": "platform-assurance-foundation",
+      "riskOwner": "platform-assurance-risk-owner",
+      "controlOwner": "platform-assurance-control-owner",
+      "breakGlassRelevance": "admin-relevant",
+      "defaultBindScope": "loopback-only",
+      "localHostPublication": "loopback-only",
+      "publicExposureAllowed": false,
+      "lanExposureAllowed": false,
+      "adr0015AuthorisedExposure": {
+        "authorised": true,
+        "decision": "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+        "exposureModel": "edge-authenticated-reverse-proxy",
+        "edgeAuthentication": "Caddy operator HTTP basic authentication on the 1e100.network staging host only",
+        "route": "https://1e100.network/proof",
+        "servicePortBindScope": "loopback-only",
+        "directPublicHostPort": false,
+        "productionHostImportForbidden": "The /proof cockpit route is never imported on the aldous.info production host per ADR 0015.",
+        "nonClaimPreservation": "A reachable operator proof fixture is not a platform go-live and upgrades no readiness claim; the service port stays loopback-only and public reach is only via the authenticated edge proxy."
+      },
+      "sourceRefs": [
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+        "docs/runbooks/self-hosted-public-proof-origin.md",
+        "compose/compose.staging.generated.yaml"
+      ],
+      "deferredRisk": {
+        "riskStatement": "operator access-review and deprovisioning execution are not proven for this operator proof-cockpit fixture surface",
+        "threatFailureScenario": "future edge or route work bypasses the operator-authentication gate, publishes a direct public port, misses operator audit, or implies readiness",
+        "affectedAssetService": "staging-proof-cockpit",
+        "impact": "unauthorised operator access, public exposure, or readiness overclaim",
+        "likelihood": "medium-before-runtime-access-proof",
+        "owner": "platform-assurance-foundation",
+        "treatment": "defer executed access-review and deprovisioning workflow proof to USF-221 and fail closed through validator",
+        "reviewDate": "2026-09-30",
+        "linkedFollowUpIssue": "USF-221"
+      },
+      "accessReviewCadence": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed periodic access-review workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-assurance-foundation",
+        "riskOwner": "platform-assurance-risk-owner",
+        "controlOwner": "platform-assurance-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "deprovisioningPosture": {
+        "status": "deferred-to-USF-221",
+        "currentEvidence": "service-catalogue and Lane 2 matrix posture only; no executed deprovisioning or revocation workflow is proven",
+        "requiredBeforeClaims": [
+          "operator-console-readiness",
+          "test-readiness",
+          "staging-readiness",
+          "production-readiness",
+          "enterprise-production-readiness"
+        ],
+        "owner": "platform-assurance-foundation",
+        "riskOwner": "platform-assurance-risk-owner",
+        "controlOwner": "platform-assurance-control-owner",
+        "reviewDate": "2026-09-30",
+        "followUpIssue": "USF-221"
+      },
+      "accessReviewExecutionClaim": false,
+      "deprovisioningExecutionClaim": false,
+      "runtimeConsoleReadinessClaim": false,
+      "accessReviewDeprovisioningDispositionRef": "docs/architecture/operator-admin-access-review-deprovisioning-proof-depth.json#staging-proof-cockpit"
     }
   ],
   "accessReviewDeprovisioningBoundary": {
@@ -1127,5 +1209,14 @@
     "publicExposureClaim": false,
     "runtimeConsoleReadinessClaim": false,
     "boundary": "USF-217 records current access-review and deprovisioning posture for the selected closure tier. Executed recurring review, provider-console revocation, identity lifecycle integration, and stronger operator readiness remain deferred to USF-221."
+  },
+  "adr0015AuthorisedExposures": {
+    "decision": "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+    "summary": "ADR 0015 authorises a single edge-authenticated (Caddy HTTP basic authentication) reverse-proxy exposure of the /proof staging proof cockpit at https://1e100.network/proof on the staging host only. The staging-proof-cockpit service port stays loopback-only; there is no direct public host port. The /proof cockpit route is never imported on the aldous.info production host. All platform non-claims are preserved and the reachable operator fixture is not a platform go-live.",
+    "authorisedServiceIds": [
+      "staging-proof-cockpit"
+    ],
+    "servicePortBindScope": "loopback-only",
+    "directPublicExposureClaim": false
   }
 }

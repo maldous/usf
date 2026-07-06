@@ -125,7 +125,22 @@ http://1e100.network, http://aldous.info {
 	}
 }
 
+(proof_cockpit_handlers) {
+	@proofCockpit path /proof /proof/*
+	handle @proofCockpit {
+		basic_auth {
+			{$USF_PROOF_COCKPIT_OPERATOR_USER} {$USF_PROOF_COCKPIT_OPERATOR_BCRYPT}
+		}
+		reverse_proxy 127.0.0.1:18085 {
+			header_up X-Forwarded-Host {host}
+			header_up X-Forwarded-User {http.auth.user.id}
+			header_up X-Real-IP {remote_host}
+		}
+	}
+}
+
 1e100.network {
+	import proof_cockpit_handlers
 	import proof_route_handlers staging 1e100.network
 }
 
@@ -141,6 +156,19 @@ http:// {
 ```
 
 This runbook intentionally records Caddy as implementation evidence only. Equivalent nginx, Node, or other HTTP origin implementations may satisfy the same repository contract if they preserve the same route, method, TLS, cache, header, host-mismatch, and non-claim boundaries.
+
+## Operator Proof Cockpit Route (ADR 0015)
+
+Per [ADR 0015](../adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md), the interactive staging proof cockpit is exposed at `https://1e100.network/proof` as a bounded operator fixture. The `proof_cockpit_handlers` snippet above is imported into the `1e100.network` (staging) host only; it MUST NOT be imported into the `aldous.info` (production) host. It requires an HTTP basic-authentication operator credential before proxying any `/proof` request, and reverse-proxies to the `staging-proof-cockpit` Compose service, published loopback-only at `127.0.0.1:18085`.
+
+Operator credential (set on the origin host, never committed):
+
+- `USF_PROOF_COCKPIT_OPERATOR_USER` — the operator login name (forwarded to the cockpit as `X-Forwarded-User` and recorded as the acceptance/signoff actor).
+- `USF_PROOF_COCKPIT_OPERATOR_BCRYPT` — the bcrypt hash of the operator password (generate with `caddy hash-password`).
+
+The cockpit's own write guard remains in force behind this edge: it serves write actions only when `USF_PROOF_COCKPIT_ALLOW_WRITES=yes` and a non-empty `USF_PROOF_COCKPIT_REVIEW_SECRET` are set on the service, and every write is CSRF-double-submit validated. Final signoff is never auto-completed. This route exposes hermetic, synthetic proof content to an authenticated operator; it claims no staging, deployment, production, live-provider, SOC, ISO, enterprise-production, product-UI, browser-E2E, or full-product readiness.
+
+Bringing the fixture up (origin host): start the staging Compose profile that includes the cockpit (`docker compose --profile proof-cockpit ... up -d staging-proof-cockpit`), set the two operator-credential env vars for Caddy, validate the Caddyfile (`caddy validate`), reload Caddy, then confirm `https://1e100.network/proof` prompts for the operator credential and, once authenticated, serves the cockpit. Acceptance and signoff recorded through this route persist to the cockpit's durable volume; promoting them into the committed `evidence/` corpus is the manual reconciliation step described in the human-signoff runbook.
 
 ## Availability
 
