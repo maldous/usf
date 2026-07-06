@@ -1,8 +1,8 @@
 {
   "id": "authentication-slice-source-import-manifest",
   "title": "Authentication Slice Source Import Manifest",
-  "sourceRepository": "../react",
-  "description": "Controlled authentication-slice source import sub-manifest for authentication, identity-access, provider-mode, UI, proof, event, audit, observability, and data rows selected by the USF-65 capability/source coverage matrix. Rows reconcile to the baseline source import manifest and refine broad target concepts to authored semantic instances or specific governed slice concepts. This is historical-source-evidence only and imports no runtime/application code.",
+  "sourceRepository": "usf",
+  "description": "Controlled self-defined authentication-slice source import sub-manifest for authentication, identity-access, provider-mode, UI, proof, event, audit, observability, and data rows selected by the USF-65 capability/source coverage matrix. Every row carries an inline USF-native source reference. Rows reconcile to the baseline source import manifest and refine broad target concepts to authored semantic instances or specific governed slice concepts. This is USF's own source-path registry and imports no runtime/application code.",
   "authorityLevel": "historical-source-evidence",
   "lifecycleState": "draft",
   "ontologyConcepts": [
@@ -22,10 +22,8 @@
   "entries": [
     {
       "sourceRef": {
-        "repository": "../react",
         "path": ".claude/skills/auth-redaction-review/SKILL.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -35,10 +33,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -48,10 +44,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/composed-provider-readiness-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -61,10 +55,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/domain-identity-matrix-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -74,10 +66,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/observability-signals-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -87,10 +77,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/oidc-enterprise-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -100,10 +88,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/provider-environment-classification-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -113,10 +99,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/scripts/tenant-custom-domain-auth-origin-runtime-proof.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -126,10 +110,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/db/migrations/001-identity-schema.sql",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "data-migration-artefact",
       "sourceRole": "data-evidence",
@@ -139,10 +121,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/db/migrations/004-rls-policies.sql",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "data-migration-artefact",
       "sourceRole": "data-evidence",
@@ -152,10 +132,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/db/migrations/009-tenant-auth-settings-credentials.sql",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "data-migration-artefact",
       "sourceRole": "data-evidence",
@@ -165,10 +143,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/db/migrations/016-membership-identity-v2.sql",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "data-migration-artefact",
       "sourceRole": "data-evidence",
@@ -178,10 +154,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/db/migrations/017-auth-settings-credential-lifecycle.sql",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "data-migration-artefact",
       "sourceRole": "data-evidence",
@@ -191,10 +165,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/ports/identity-repository.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -204,10 +176,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/auth-providers.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -217,10 +187,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/auth.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -230,10 +198,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/authorize-resource.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -243,10 +209,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/forward-auth.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -256,10 +220,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/observability.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -269,10 +231,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/oidc-http-fetcher.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -282,10 +242,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/routes.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -295,10 +253,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/server/session.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -308,10 +264,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/usecases/audit.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -321,10 +275,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/usecases/auth-provider-config.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -334,10 +286,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/usecases/auth-settings-readiness.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -347,10 +297,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/usecases/auth-settings.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -360,10 +308,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/usecases/auth.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -373,10 +319,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/src/usecases/oidc-discovery.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -386,10 +330,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/substrate/auth-routes.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -399,10 +341,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/substrate/postgres-identity-repository.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -412,10 +352,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/substrate/session-fixture.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -425,10 +363,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/auth-provider-config.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -438,10 +374,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/auth-providers.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -451,10 +385,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/auth-settings-audit.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -464,10 +396,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/auth-settings-readiness.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -477,10 +407,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/auth-usecase.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -490,10 +418,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/authorize-resource.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -503,10 +429,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/forward-auth.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -516,10 +440,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/keycloak-mapper-readiness.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -529,10 +451,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/oidc-discovery.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -542,10 +462,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/platform-api/tests/unit/oidc-mapping.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -555,23 +473,19 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/auth/login-providers.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
       "disposition": "preserve",
-      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical deletion condition: n/a \u2014 BFF provider contract is the semantic source for the V2 login UI. Retained interfaces: LoginProvider, loginProvidersQueryKey, login providers query hook (mirrors GET /api/auth/providers). Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition reuse-unchanged normalized to preserve. Historical deletion condition: n/a — BFF provider contract is the semantic source for the V2 login UI. Retained interfaces: LoginProvider, loginProvidersQueryKey, login providers query hook (mirrors GET /api/auth/providers). Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/components/AuthenticatedLayout.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -581,10 +495,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/components/RequirePermission.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -594,10 +506,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/features/admin-auth/AdminAuthPage.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -607,10 +517,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/features/admin-auth/IdpManager.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -620,10 +528,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/AdminAuthPage.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -633,10 +539,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/features/admin-auth/__tests__/IdpManager.oidc.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -646,10 +550,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/features/admin-auth/admin-auth-client.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -659,10 +561,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/features/admin-auth/use-admin-auth.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -672,10 +572,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/hooks/use-session.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -685,10 +583,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/msw/fixtures/session.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -698,10 +594,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/routes/__tests__/login.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -711,10 +605,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/routes/_authenticated.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -724,10 +616,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/routes/admin/auth.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -737,10 +627,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/routes/login.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -750,10 +638,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/tests/substrate/authenticated-layout.test.tsx",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -763,10 +649,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "apps/react-enterprise-app/src/tests/use-session.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -776,10 +660,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docker/keycloak/themes/platform/login/error.ftl",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -789,10 +671,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docker/keycloak/themes/platform/login/login.ftl",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -802,10 +682,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docker/keycloak/themes/platform/login/resources/css/brand-6.css",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -815,10 +693,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docker/keycloak/themes/platform/login/theme.properties",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -828,10 +704,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0021-define-identity-tenancy-roles-and-permissions-model.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -841,10 +715,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0022-define-authentication-session-and-sso-integration-boundary.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -854,10 +726,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0030-define-dynamic-authorisation-and-tenant-admin-self-service.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -867,10 +737,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0037-per-tenant-authentication-provider-configuration.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -880,10 +748,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0038-tenant-identity-and-membership-v2.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -893,10 +759,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0041-per-tenant-auth-settings-credential-provisioning.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -906,10 +770,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0042-writable-mfa-policy-and-auth-settings-runtime-proof.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -919,10 +781,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0044-auth-settings-credential-lifecycle.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -932,10 +792,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0046-oidc-enterprise-hardening.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -945,10 +803,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/adr/0073-composed-service-sso-via-keycloak-oidc.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -958,10 +814,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/api/openapi.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "semantic-artefact",
       "sourceRole": "semantic-source",
@@ -971,10 +825,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/auth-settings-credential-lifecycle.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -984,10 +836,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/custom-domain-auth-origin.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -997,10 +847,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/oidc-enterprise-hardening.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1010,10 +858,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/oidc-login-mapping-proof.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1023,10 +869,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/per-tenant-auth-settings-credential-provisioning.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1036,10 +880,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/real-keycloak-login.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1049,10 +891,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/writable-idp-management-secret-redaction.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1062,10 +902,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/auth/writable-mfa-policy-and-runtime-proof.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1075,114 +913,96 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/identity-access-baseline.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a \u2014 historical identity baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a — historical identity baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/identity-access-baseline.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical identity baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a — historical identity baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/keycloak-login-callback.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a \u2014 historical login-callback proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a — historical login-callback proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/keycloak-login-callback.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical login-callback proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a — historical login-callback proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/keycloak-provisioning-baseline.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a \u2014 historical provisioning baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical record marks this element generated; retain only as lower-authority lineage unless later source evidence supports it. Historical deletion condition: n/a — historical provisioning baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/keycloak-provisioning-baseline.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical provisioning baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a — historical provisioning baseline proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/identity/tenant-identity-membership-v2.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
       "disposition": "rename",
-      "rationale": "Historical inventory disposition git-move normalized to rename. Historical deletion condition: n/a \u2014 rename drops transitional -v2 suffix to clean V2 name. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157, ADR-ACT-0230. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition git-move normalized to rename. Historical deletion condition: n/a — rename drops transitional -v2 suffix to clean V2 name. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0157, ADR-ACT-0230. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "semantic-contract.user-identity-and-tenant-membership; semantic-contract.tenant-identity-record-and-fqdn"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/infrastructure/mock-oidc-broker-tests.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
       "disposition": "retire",
-      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a \u2014 historical mock-oidc broker proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0220. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
+      "rationale": "Historical inventory disposition archive-evidence normalized to retire. Historical deletion condition: n/a — historical mock-oidc broker proof. Protecting tests: npm run test:platform-api. Historical decision refs: ADR-ACT-0220. Authentication sub-manifest row reconciled from the baseline manifest and refined for USF-74.",
       "targetUsfConcept": "provider-mode.mock-identity-provider; configuration.provider-mode-selector; semantic-contract.authentication-platform"
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/evidence/platform/domain-identity-capability-permutation-review.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1192,10 +1012,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/local-development/mock-identity.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1205,10 +1023,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/local-development/real-login-e2e.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1218,10 +1034,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "docs/specs/2026-05-29-keycloak-auth-e2e.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "semantic-artefact",
       "sourceRole": "semantic-source",
@@ -1231,10 +1045,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/discovery/persona-authz.spec.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "e2e-journey",
       "sourceRole": "behavioural-evidence",
@@ -1244,10 +1056,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/external/auth-negative.spec.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "e2e-journey",
       "sourceRole": "behavioural-evidence",
@@ -1257,10 +1067,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/external/login.spec.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "e2e-journey",
       "sourceRole": "behavioural-evidence",
@@ -1270,10 +1078,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/identity/broker-login.spec.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "e2e-journey",
       "sourceRole": "behavioural-evidence",
@@ -1283,10 +1089,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/identity/global-setup.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1296,10 +1100,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/identity/redirect-merge.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1309,10 +1111,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "e2e/identity/redirect-merge.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1322,10 +1122,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/ci-oidc/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1335,10 +1133,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/ci-oidc/main.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1348,10 +1144,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/ci-oidc/outputs.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1361,10 +1155,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/ci-oidc/variables.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1374,10 +1166,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/keycloak/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1387,10 +1177,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/keycloak/main.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1400,10 +1188,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/keycloak/outputs.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1413,10 +1199,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/keycloak/variables.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1426,10 +1210,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "infra/modules/keycloak/versions.tf",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1439,10 +1221,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-keycloak/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1452,10 +1232,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-keycloak/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1465,10 +1243,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-keycloak/src/index.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1478,10 +1254,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-keycloak/tests/.gitkeep",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1491,10 +1265,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-keycloak/tests/adapters-keycloak.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1504,10 +1276,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-keycloak/tsconfig.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1517,10 +1287,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/adapters-postgres/src/postgres-identity-repository.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1530,10 +1298,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/authorisation-runtime/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1543,10 +1309,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/authorisation-runtime/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1556,10 +1320,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/authorisation-runtime/src/index.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1569,10 +1331,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/authorisation-runtime/tests/authorisation-runtime.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1582,10 +1342,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/authorisation-runtime/tsconfig.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1595,10 +1353,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/contracts-auth/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1608,10 +1364,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/contracts-auth/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1621,10 +1375,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/contracts-auth/src/index.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1634,10 +1386,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/contracts-auth/tests/contracts-auth.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1647,10 +1397,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/contracts-auth/tsconfig.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1660,10 +1408,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/domain-identity/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1673,10 +1419,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/domain-identity/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1686,10 +1430,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/domain-identity/src/index.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1699,10 +1441,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/domain-identity/tests/domain-identity.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1712,10 +1452,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/domain-identity/tsconfig.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1725,10 +1463,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/platform-errors/tests/platform-errors-auth.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1738,10 +1474,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/security-auth/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
@@ -1751,10 +1485,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/security-auth/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1764,10 +1496,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/security-auth/src/index.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1777,10 +1507,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/security-auth/tests/.gitkeep",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1790,10 +1518,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/security-auth/tests/security-auth.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1803,10 +1529,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/session-runtime/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
@@ -1816,10 +1540,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/session-runtime/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1829,10 +1551,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/session-runtime/src/index.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1842,10 +1562,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/session-runtime/tests/.gitkeep",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1855,10 +1573,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/session-runtime/tests/session-runtime.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1868,10 +1584,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "packages/session-runtime/tsconfig.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1881,10 +1595,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "playwright.identity.config.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1894,10 +1606,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "scripts/keycloak/provision-bff-authz.sh",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -1907,10 +1617,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "scripts/sonar/provision-oidc.sh",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "proof-script",
       "sourceRole": "proof-evidence",
@@ -1920,10 +1628,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "scripts/tests/tests/sonar-oidc-honesty.test.mjs",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -1933,10 +1639,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/Dockerfile",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",
@@ -1946,10 +1650,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/README.md",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "documentation",
       "sourceRole": "historical-lineage",
@@ -1959,10 +1661,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/package-lock.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "generated-report",
       "sourceRole": "generated-summary-evidence",
@@ -1972,10 +1672,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/package.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "package",
       "sourceRole": "behavioural-evidence",
@@ -1985,10 +1683,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/config.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -1998,10 +1694,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/logger.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -2011,10 +1705,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/providers.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -2024,10 +1716,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/scenarios.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -2037,10 +1727,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/server.test.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -2050,10 +1738,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/server.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "source-file",
       "sourceRole": "behavioural-evidence",
@@ -2063,10 +1749,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/src/users.ts",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "test",
       "sourceRole": "behavioural-evidence",
@@ -2076,10 +1760,8 @@
     },
     {
       "sourceRef": {
-        "repository": "../react",
         "path": "services/mock-oidc/tsconfig.json",
-        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
-        "tag": "v1-final"
+        "commit": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767"
       },
       "sourceKind": "configuration-file",
       "sourceRole": "configuration-evidence",

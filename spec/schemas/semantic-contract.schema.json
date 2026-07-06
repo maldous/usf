@@ -204,7 +204,7 @@
           "$ref": "#/$defs/facet"
         }
       },
-      "$comment": "The ten capability facets (../react v1-capability-closure). All ten are required; each facet marked complete must cite evidence (see $defs/facet)."
+      "$comment": "The ten capability facets (USF self-defined v1-capability-closure source lineage). All ten are required; each facet marked complete must cite evidence (see $defs/facet)."
     },
     "sourceRefs": {
       "type": "array",

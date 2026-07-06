@@ -82,8 +82,8 @@
       "Schema renames MUST preserve lineage.",
       "Schema IDs MUST be stable.",
       "Generated reports are not schema authority.",
-      "../react source files are evidence, not future schema authority.",
-      "Source paths from ../react MUST NOT dictate schema paths.",
+      "USF self-defined source files are evidence, not future schema authority.",
+      "USF self-defined source paths MUST NOT dictate schema paths.",
       "Active schemas MUST exist and be validator-checkable.",
       "Planned schemas MAY be referenced but MUST NOT be enforced as if present.",
       "Schema registry changes MUST be reviewed as semantic-definition changes.",
@@ -94,10 +94,10 @@
     "schemaDirectory": "spec/schemas/",
     "filenameRule": "Schema files MUST live under spec/schemas/ and end with .schema.json.",
     "filenameSemantics": "Schema filenames MUST use stable semantic names describing the governed concept, not the producing tool.",
-    "idRule": "Schema IDs MUST use stable semantic IDs and MUST NOT depend on ../react source paths.",
+    "idRule": "Schema IDs MUST use stable semantic IDs and MUST NOT depend on usf source paths.",
     "idNamespacePolicy": "Global, machine-readable artefact IDs MAY use the 'usf.' namespace (e.g. usf.schema-registry, usf.taxonomy-catalog, usf.vocabulary-catalog) because they may be consumed outside the repository context. The 'usf.' namespace on a global artefact ID is NOT a redundant-usf violation. The redundant-usf prohibition applies to repository path segments, package and implementation names, and unnecessary repeated local names and value IDs, never to deliberate globally scoped artefact-ID namespaces.",
     "lifecycleInPathRule": "Schema paths MUST NOT encode lifecycle state.",
-    "historicalNamesRule": "Historical names from ../react MAY appear only as source references, aliases, or quoted evidence; never as canonical schema IDs, paths, or families.",
+    "historicalNamesRule": "Historical USF self-defined source names MAY appear only as source references, aliases, or quoted evidence; never as canonical schema IDs, paths, or families.",
     "forbiddenCanonicalTerms": [
       "v2",
       "legacy",
@@ -380,7 +380,7 @@
     {
       "id": "import-manifest-schema",
       "sourceValueSet": "schema-classes",
-      "description": "Shapes controlled import manifests from ../react.",
+      "description": "Shapes controlled import manifests from usf.",
       "authorityRole": "historical-source-evidence",
       "expectedConsumers": [
         "validators",
@@ -516,7 +516,7 @@
     ]
   },
   "commonEnvelope": {
-    "note": "A standard conceptual metadata pattern for governed artefacts. Not every schema requires every field; deviations MUST be explicit in the relevant schema entry. Source-lineage fields are mandatory for artefacts derived from ../react; providerMode and environment are mandatory where evidence/proof/provider claims depend on them.",
+    "note": "A standard conceptual metadata pattern for governed artefacts. Not every schema requires every field; deviations MUST be explicit in the relevant schema entry. Source-lineage fields are mandatory for artefacts derived from usf; providerMode and environment are mandatory where evidence/proof/provider claims depend on them.",
     "fields": [
       {
         "field": "id",
@@ -658,7 +658,7 @@
         "field": "sourceRefs",
         "purpose": "References to source evidence.",
         "expectedTypeConceptual": "array of source references",
-        "requiredByDefault": "conditional: mandatory if derived from ../react",
+        "requiredByDefault": "conditional: mandatory if derived from usf",
         "relatedOntologyConcepts": [
           "Source Reference"
         ],
@@ -776,7 +776,7 @@
         "field": "createdFrom",
         "purpose": "Source element(s) the artefact derives from.",
         "expectedTypeConceptual": "array of source references",
-        "requiredByDefault": "conditional: mandatory if derived from ../react",
+        "requiredByDefault": "conditional: mandatory if derived from usf",
         "relatedOntologyConcepts": [
           "Source Reference",
           "Disposition"
@@ -851,7 +851,7 @@
     "rules": [
       "Not every schema will require every common envelope field.",
       "Deviations MUST be explicit in the relevant schema entry.",
-      "Source lineage fields are mandatory for artefacts derived from ../react.",
+      "Source lineage fields are mandatory for artefacts derived from usf.",
       "providerMode and environment are mandatory where evidence/proof/provider claims depend on them.",
       "Generated reports MUST identify the evidence they summarise.",
       "Schema families MUST NOT invent incompatible metadata patterns."
@@ -880,7 +880,7 @@
       ],
       "expectedSchemas": [],
       "reactSourceLearnings": [
-        "../react treats validators as enforcement, proofs as evidence, code as implementation of canonical semantic artefacts."
+        "USF self-defined source lineage treats validators as enforcement, proofs as evidence, code as implementation of canonical semantic artefacts."
       ],
       "futureValidatorExpectations": "Governance artefacts carry authority and lineage metadata.",
       "aiGuidance": "Constitutional docs are currently markdown-governed; a governance schema is deferred. Never weaken constitutional constraints."
@@ -911,7 +911,7 @@
         "semantic-contract.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react v1-capability-closure.json (75 capabilities, 10 facets) and capability-*.json templates ground semantic contracts."
+        "usf v1-capability-closure.json (75 capabilities, 10 facets) and capability-*.json templates ground semantic contracts."
       ],
       "futureValidatorExpectations": "A capability is proven only when every facet cites authoritative evidence.",
       "aiGuidance": "Read semantics before source; never invent a facet."
@@ -938,7 +938,7 @@
         "vocabulary.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react validator normalises no aliases and fails closed; USF records aliases explicitly so normalisation is controlled."
+        "usf validator normalises no aliases and fails closed; USF records aliases explicitly so normalisation is controlled."
       ],
       "futureValidatorExpectations": "Taxonomy classification modes and vocabulary aliases validate against their schemas.",
       "aiGuidance": "Taxonomy classifies; vocabulary enumerates; do not collapse them."
@@ -965,7 +965,7 @@
         "schema-registry.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react universal-service-foundation-registry.json is data-only and asserts no implementation; registries index, they do not prove."
+        "usf universal-service-foundation-registry.json is data-only and asserts no implementation; registries index, they do not prove."
       ],
       "futureValidatorExpectations": "The registry validates against schema-registry.schema.json (self-validation).",
       "aiGuidance": "Registers before referencing; indexing is not assertion."
@@ -994,7 +994,7 @@
         "source-reference.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react v1-file-inventory.json (~1673 files) and v1-to-v2-path-map.json show every source element must be mapped; nothing disappears without a disposition."
+        "usf v1-file-inventory.json (~1673 files) and v1-to-v2-path-map.json show every source element must be mapped; nothing disappears without a disposition."
       ],
       "futureValidatorExpectations": "Every source reference resolves and carries a disposition.",
       "aiGuidance": "Classify as evidence before import; never treat source as future authority."
@@ -1027,7 +1027,7 @@
         "proof-evidence.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4) and the 172 proof-evidence records: emitted evidence preserved through collection; missing evidence fails closed; claimed <= observed."
+        "usf capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4) and the 172 proof-evidence records: emitted evidence preserved through collection; missing evidence fails closed; claimed <= observed."
       ],
       "futureValidatorExpectations": "Proof fails closed on missing emitted/collected evidence; readiness does not exceed observed evidence.",
       "aiGuidance": "Proof is evidence of fact, not a definition of intent."
@@ -1058,7 +1058,7 @@
         "environment.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react provider classes and USF_PROVIDER_MODE; e2e profiles split hermetic (internal/identity) from live (external/prod); environment-readiness-gates forbid mocks in prod."
+        "usf provider classes and USF_PROVIDER_MODE; e2e profiles split hermetic (internal/identity) from live (external/prod); environment-readiness-gates forbid mocks in prod."
       ],
       "futureValidatorExpectations": "hermetic-mock cannot satisfy live-external-provider; production-shaped cannot satisfy production-live.",
       "aiGuidance": "Never infer a stronger provider mode or environment than the substrate used."
@@ -1086,7 +1086,7 @@
         "configuration.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react Makefile/make/*.mk, 212 npm scripts incl ~110 proof:* scripts, v2-command-map.json (377 commands), and v1-config-contract-catalogue.json (64 typed keys) show commands/config are semantic assets, not incidental files."
+        "usf Makefile/make/*.mk, 212 npm scripts incl ~110 proof:* scripts, v2-command-map.json (377 commands), and v1-config-contract-catalogue.json (64 typed keys) show commands/config are semantic assets, not incidental files."
       ],
       "futureValidatorExpectations": "Commands declare purpose/scope/evidence/failure; config declares secret class and provider/environment/proof relevance.",
       "aiGuidance": "Disposition before deleting or renaming a command or config key."
@@ -1118,7 +1118,7 @@
         "workflow.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react operational-semantics.json (~235 routes), event-semantics.json (10 events; idempotency/ordering/DLQ/retention), cross-capability-interactions.json (8 interaction types) must become contract-governed, not source-path-governed."
+        "usf operational-semantics.json (~235 routes), event-semantics.json (10 events; idempotency/ordering/DLQ/retention), cross-capability-interactions.json (8 interaction types) must become contract-governed, not source-path-governed."
       ],
       "futureValidatorExpectations": "Interfaces/events have contracts before implementation; runtime drift is detectable.",
       "aiGuidance": "Do not infer interfaces or events from code when a contract exists."
@@ -1145,7 +1145,7 @@
         "data-migration.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react data-and-migration-plan.json: PostgreSQL schema-per-tenant, RLS, forward-only checksum-immutable migrations, backup/restore evidence; backup/restore proof must preserve emitted and collected evidence."
+        "usf data-and-migration-plan.json: PostgreSQL schema-per-tenant, RLS, forward-only checksum-immutable migrations, backup/restore evidence; backup/restore proof must preserve emitted and collected evidence."
       ],
       "futureValidatorExpectations": "Migrations forward-only and checksum-immutable; tenancy isolation preserved; backup/restore evidence checkable.",
       "aiGuidance": "Never edit a committed migration; preserve tenancy invariants."
@@ -1172,7 +1172,7 @@
         "audit-event.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react operational-semantics observabilitySignals/metrics/logs/traces/auditAction; assurance bars 0 routes without tracing/logging/metrics and 0 mutations without audit; Loki/Tempo/Sentry correlation."
+        "usf operational-semantics observabilitySignals/metrics/logs/traces/auditAction; assurance bars 0 routes without tracing/logging/metrics and 0 mutations without audit; Loki/Tempo/Sentry correlation."
       ],
       "futureValidatorExpectations": "Controlled observability vocabulary; audit required for security-sensitive and state-changing actions.",
       "aiGuidance": "Removal of a signal or audit event requires semantic review, not a refactor."
@@ -1197,7 +1197,7 @@
         "ui-semantic-model.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react ui-capability-model.json (28 capabilities, 12 personas) and ui-definition.schema.json; the generator must never read old JSX; UI source is semantic evidence, not final design authority."
+        "usf ui-capability-model.json (28 capabilities, 12 personas) and ui-definition.schema.json; the generator must never read old JSX; UI source is semantic evidence, not final design authority."
       ],
       "futureValidatorExpectations": "Journeys map to capabilities and proofs; accessibility preserved.",
       "aiGuidance": "Visual redesign is not semantic deletion."
@@ -1225,7 +1225,7 @@
         "adr.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react v2-decision-catalog.json (74 accepted) + v2-decision-lineage.json (74 evidence-backed); untraced decisions are rejected (rule R13); a roadmap carries no governance force."
+        "usf v2-decision-catalog.json (74 accepted) + v2-decision-lineage.json (74 evidence-backed); untraced decisions are rejected (rule R13); a roadmap carries no governance force."
       ],
       "futureValidatorExpectations": "Every ADR reference resolves; decisions carry invariants, forbidden-drift, and AI-alignment rules.",
       "aiGuidance": "ADRs are binding; never generic prose."
@@ -1252,14 +1252,14 @@
         "validator-report.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react tools/v2-readiness fails closed, normalises no aliases, writes no runtime file, exit codes 0/1/2; reports are reported separately from formal proof so closure is not mistaken for proof."
+        "usf tools/v2-readiness fails closed, normalises no aliases, writes no runtime file, exit codes 0/1/2; reports are reported separately from formal proof so closure is not mistaken for proof."
       ],
       "futureValidatorExpectations": "unknown/stale never satisfy pass; reports reference evidence and are rank-7.",
       "aiGuidance": "Never weaken a rule to pass; never treat a report as canonical."
     },
     {
       "id": "import-and-disposition",
-      "purpose": "Controlled import of ../react source elements with explicit disposition.",
+      "purpose": "Controlled import of usf source elements with explicit disposition.",
       "relatedOntologyConcepts": [
         "Source Reference",
         "Disposition"
@@ -1281,7 +1281,7 @@
         "import-manifest.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react file-disposition vocabulary (9 values), command dispositions (carry/merge/retire), test migrationType (4) show every element needs a controlled disposition; bijection rule R10 ensures no silent loss."
+        "usf file-disposition vocabulary (9 values), command dispositions (carry/merge/retire), test migrationType (4) show every element needs a controlled disposition; bijection rule R10 ensures no silent loss."
       ],
       "futureValidatorExpectations": "Every imported element has a disposition; import is incomplete without one.",
       "aiGuidance": "Disposition every source element; source path does not dictate target path."
@@ -1341,7 +1341,7 @@
         "bootstrap-mapping.schema.json"
       ],
       "reactSourceLearnings": [
-        "../react source, proof scripts, tests, compose/config, and semantic artefacts remain lineage only and must be mapped before implementation extraction."
+        "usf source, proof scripts, tests, compose/config, and semantic artefacts remain lineage only and must be mapped before implementation extraction."
       ],
       "futureValidatorExpectations": "One mapping per semantic contract; generated aggregate indexes and Markdown summaries must match the authoritative mapping corpus; staging/production/live proof remains explicitly deferred.",
       "aiGuidance": "Mappings are bootstrap planning authority only; they create no implementation files and claim no production readiness."
@@ -1364,7 +1364,7 @@
       "requiredBecause": "The registry is rank-1 governance and must be self-validating to be externally auditable.",
       "sourceInputs": [
         "spec/registries/schema-registry.json",
-        "../react universal-service-foundation-registry.json (data-only registry precedent)"
+        "usf universal-service-foundation-registry.json (data-only registry precedent)"
       ],
       "taxonomyRefs": [
         "artefact-classification"
@@ -1504,8 +1504,8 @@
       "purpose": "Validates semantic contracts (capability facets and other rank-1 contracts).",
       "requiredBecause": "Semantic contracts are the primary authority; they must be complete and evidence-backed.",
       "sourceInputs": [
-        "../react v1-capability-closure.json (75 capabilities, 10 facets)",
-        "../react capability-*.json facet templates"
+        "usf v1-capability-closure.json (75 capabilities, 10 facets)",
+        "usf capability-*.json facet templates"
       ],
       "taxonomyRefs": [
         "semantic-architecture-classification",
@@ -1547,12 +1547,12 @@
         "Source Reference",
         "Evidence"
       ],
-      "purpose": "Validates references to ../react and later source evidence.",
+      "purpose": "Validates references to usf and later source evidence.",
       "requiredBecause": "Lineage must be traceable and resolvable.",
       "sourceInputs": [
-        "../react v1-file-inventory.json",
-        "../react v1-to-v2-path-map.json",
-        "../react sourceFileRefs fields"
+        "usf v1-file-inventory.json",
+        "usf v1-to-v2-path-map.json",
+        "usf sourceFileRefs fields"
       ],
       "taxonomyRefs": [
         "source-evidence-classification",
@@ -1597,8 +1597,8 @@
       "purpose": "Validates the treatment of imported, deferred, transformed, rejected, or retired source elements.",
       "requiredBecause": "No source element may disappear without a disposition.",
       "sourceInputs": [
-        "../react file disposition vocabulary (9 values)",
-        "../react command/test dispositions"
+        "usf file disposition vocabulary (9 values)",
+        "usf command/test dispositions"
       ],
       "taxonomyRefs": [
         "source-role-classification"
@@ -1642,8 +1642,8 @@
       "purpose": "Validates the common evidence envelope across evidence kinds.",
       "requiredBecause": "Evidence must be typed, source-referenced, and freshness-checkable.",
       "sourceInputs": [
-        "../react docs/evidence (267 files; machine + human)",
-        "../react usf-audit/proof-evidence-index.json"
+        "usf docs/evidence (267 files; machine + human)",
+        "usf usf-audit/proof-evidence-index.json"
       ],
       "taxonomyRefs": [
         "evidence-classification"
@@ -1691,8 +1691,8 @@
       "purpose": "Validates proof claim, execution, emitted evidence, collected evidence, provider mode, environment, and readiness claim consistency.",
       "requiredBecause": "Proof must be honest: claimed level <= observed; missing evidence fails closed.",
       "sourceInputs": [
-        "../react capability-proof-definition.json (L0-L6; liveProviderMinimumLevel 4)",
-        "../react usf-audit/proof-evidence (172 records)"
+        "usf capability-proof-definition.json (L0-L6; liveProviderMinimumLevel 4)",
+        "usf usf-audit/proof-evidence (172 records)"
       ],
       "taxonomyRefs": [
         "proof-classification",
@@ -1746,7 +1746,7 @@
         "apps/api/src/main.ts",
         "apps/work/src/main.ts",
         "packages/proof/src/runtime-application-proof.ts",
-        "../react compose runtime and proof command evidence"
+        "usf compose runtime and proof command evidence"
       ],
       "taxonomyRefs": [
         "proof-classification",
@@ -1942,9 +1942,9 @@
       "purpose": "Validates provider mode declarations and prevents hermetic/live confusion.",
       "requiredBecause": "Provider mode is proof-relevant and must be explicit and honest.",
       "sourceInputs": [
-        "../react runtime-provider-inventory.json (~69 providers)",
-        "../react in-memory-to-real parity reports",
-        "../react services/mock-oidc"
+        "usf runtime-provider-inventory.json (~69 providers)",
+        "usf in-memory-to-real parity reports",
+        "usf services/mock-oidc"
       ],
       "taxonomyRefs": [
         "provider-classification"
@@ -1986,9 +1986,9 @@
       "purpose": "Validates environment class declarations and prevents production-shaped/production-live confusion.",
       "requiredBecause": "Environment is proof-relevant and must be explicit.",
       "sourceInputs": [
-        "../react environment-readiness-gates.json (4 gates)",
-        "../react environment-capability-matrix.json (70x4)",
-        "../react e2e profiles"
+        "usf environment-readiness-gates.json (4 gates)",
+        "usf environment-capability-matrix.json (70x4)",
+        "usf e2e profiles"
       ],
       "taxonomyRefs": [
         "environment-classification"
@@ -2085,9 +2085,9 @@
       "purpose": "Validates Make targets, package scripts, CLI commands, validation/proof/import/build/runtime/report-generation commands.",
       "requiredBecause": "Commands are semantic assets, not incidental scripts.",
       "sourceInputs": [
-        "../react Makefile and make/*.mk",
-        "../react package.json (212 scripts)",
-        "../react v2-command-map.json (377 commands)"
+        "usf Makefile and make/*.mk",
+        "usf package.json (212 scripts)",
+        "usf v2-command-map.json (377 commands)"
       ],
       "taxonomyRefs": [
         "command-classification"
@@ -2113,7 +2113,7 @@
       ],
       "aiGuidance": "Disposition before deleting or renaming a command.",
       "deferredDetails": [
-        "Exact command catalogue import from ../react."
+        "Exact command catalogue import from usf."
       ]
     },
     {
@@ -2130,9 +2130,9 @@
       "purpose": "Validates env vars, config files, config keys, secret-bearing settings, provider/environment/proof/runtime/compose configuration.",
       "requiredBecause": "Configuration is a governed semantic asset; secret handling must be explicit.",
       "sourceInputs": [
-        "../react v1-config-contract-catalogue.json (64 keys)",
-        "../react config/environments manifests",
-        "../react compose.yaml"
+        "usf v1-config-contract-catalogue.json (64 keys)",
+        "usf config/environments manifests",
+        "usf compose.yaml"
       ],
       "taxonomyRefs": [
         "configuration-classification"
@@ -2159,7 +2159,7 @@
       ],
       "aiGuidance": "Regenerate from manifests; never leak secret values.",
       "deferredDetails": [
-        "Exact configuration catalogue import from ../react."
+        "Exact configuration catalogue import from usf."
       ]
     },
     {
@@ -2178,8 +2178,8 @@
       "purpose": "Validates API routes, commands, queries, event handlers, service boundaries, CLI interfaces, provider ports, adapter interfaces, internal and external contracts.",
       "requiredBecause": "Interfaces must be contract-first or contract-reconciled, not implementation-guessed.",
       "sourceInputs": [
-        "../react operational-semantics.json (~235 routes)",
-        "../react OpenAPI drift hard gate"
+        "usf operational-semantics.json (~235 routes)",
+        "usf OpenAPI drift hard gate"
       ],
       "taxonomyRefs": [
         "interface-classification"
@@ -2220,7 +2220,7 @@
       "purpose": "Validates event/message contracts and event semantics.",
       "requiredBecause": "Events must have contracts (schema, idempotency, ordering, DLQ, retention) before emission.",
       "sourceInputs": [
-        "../react event-semantics.json (10 events; canonical vs test-only)"
+        "usf event-semantics.json (10 events; canonical vs test-only)"
       ],
       "taxonomyRefs": [
         "event-workflow-classification"
@@ -2261,8 +2261,8 @@
       "purpose": "Validates workflows, cross-capability interactions, state transitions, async/sync operations, failure paths, and compensation paths.",
       "requiredBecause": "Workflow ordering, consistency, and compensation are contract-level semantics.",
       "sourceInputs": [
-        "../react cross-capability-interactions.json (8 interaction types)",
-        "../react temporal/windmill workflow providers"
+        "usf cross-capability-interactions.json (8 interaction types)",
+        "usf temporal/windmill workflow providers"
       ],
       "taxonomyRefs": [
         "event-workflow-classification"
@@ -2285,7 +2285,7 @@
       ],
       "aiGuidance": "Declare compensation and failure paths explicitly.",
       "deferredDetails": [
-        "Exact event/workflow contract import from ../react."
+        "Exact event/workflow contract import from usf."
       ]
     },
     {
@@ -2304,7 +2304,7 @@
       "purpose": "Validates data models, persistence contracts, identifiers, relationships, migrations, seed data, fixtures, backup evidence, restore evidence, and retention/deletion concerns.",
       "requiredBecause": "Migrations are forward-only and checksum-immutable; tenancy isolation must be preserved; backup/restore evidence must be preserved. Classed as semantic-schema because data models, migrations, and backup/restore are rank-1 semantic contracts (data semantics), which the semantic-schema class explicitly covers; no dedicated data-schema vocabulary class is needed.",
       "sourceInputs": [
-        "../react data-and-migration-plan.json (schema-per-tenant; RLS; migration chain 001..034 then 035+; backupRestore; destructiveOpControls)"
+        "usf data-and-migration-plan.json (schema-per-tenant; RLS; migration chain 001..034 then 035+; backupRestore; destructiveOpControls)"
       ],
       "taxonomyRefs": [
         "data-migration-classification"
@@ -2330,7 +2330,7 @@
       ],
       "aiGuidance": "Never edit a committed migration; preserve tenancy invariants.",
       "deferredDetails": [
-        "Exact data/migration/backup/restore import from ../react."
+        "Exact data/migration/backup/restore import from usf."
       ]
     },
     {
@@ -2347,8 +2347,8 @@
       "purpose": "Validates logs, metrics, traces, spans, runtime events, runtime proof outputs, service/resource attributes, and correlation identifiers.",
       "requiredBecause": "Observability is a semantic asset that supports proof, debugging, and drift detection.",
       "sourceInputs": [
-        "../react operational-semantics observabilitySignals/metrics/logs/traces",
-        "../react Loki/Tempo/Sentry correlation"
+        "usf operational-semantics observabilitySignals/metrics/logs/traces",
+        "usf Loki/Tempo/Sentry correlation"
       ],
       "taxonomyRefs": [
         "observability-audit-classification"
@@ -2389,9 +2389,9 @@
       "purpose": "Validates audit events, security-sensitive audits, state-changing audits, and accountability records.",
       "requiredBecause": "Audit is required for security-sensitive and state-changing operations.",
       "sourceInputs": [
-        "../react auditAction field",
-        "../react assurance bar 0 mutations without audit",
-        "../react docs/evidence/audit"
+        "usf auditAction field",
+        "usf assurance bar 0 mutations without audit",
+        "usf docs/evidence/audit"
       ],
       "taxonomyRefs": [
         "observability-audit-classification"
@@ -2414,7 +2414,7 @@
       ],
       "aiGuidance": "Every mutating/privileged action needs a defined audit semantic.",
       "deferredDetails": [
-        "Exact observability/audit import from ../react."
+        "Exact observability/audit import from usf."
       ]
     },
     {
@@ -2432,8 +2432,8 @@
       "purpose": "Validates UI surfaces, pages, journeys, states, validation, errors, permissions, accessibility concerns, user actions, command/query mappings, and e2e proof mappings.",
       "requiredBecause": "UI behaviour and proof expectations must be preserved so the visual layer can be regenerated without inventing behaviour.",
       "sourceInputs": [
-        "../react ui-capability-model.json (28 capabilities, 12 personas)",
-        "../react ui-definition.schema.json"
+        "usf ui-capability-model.json (28 capabilities, 12 personas)",
+        "usf ui-definition.schema.json"
       ],
       "taxonomyRefs": [
         "ui-semantic-classification"
@@ -2457,7 +2457,7 @@
       ],
       "aiGuidance": "Visual redesign is not semantic deletion; derive from behaviour, not JSX.",
       "deferredDetails": [
-        "Exact UI semantic import from ../react."
+        "Exact UI semantic import from usf."
       ]
     },
     {
@@ -2475,8 +2475,8 @@
       "purpose": "Validates ADR structure: semantic refs, source refs, proof refs, validator refs, invariants, permitted changes, forbidden drift, consequences, and AI-alignment rules.",
       "requiredBecause": "ADRs are rank-2 binding decisions and must be traceable, not generic prose.",
       "sourceInputs": [
-        "../react v2-decision-catalog.json (74 accepted)",
-        "../react v2-decision-lineage.json (74 evidence-backed)",
+        "usf v2-decision-catalog.json (74 accepted)",
+        "usf v2-decision-lineage.json (74 evidence-backed)",
         "rule R13"
       ],
       "taxonomyRefs": [
@@ -2522,8 +2522,8 @@
       "purpose": "Validates validator report shape: severities, statuses, stale/unknown/pass distinctions, evidence references, and blocking/advisory findings.",
       "requiredBecause": "Reports are rank-7; unknown/stale must never satisfy pass and reports must reference evidence.",
       "sourceInputs": [
-        "../react tools/v2-readiness finding shape {ruleId, severity, subject, message}; exit codes 0/1/2",
-        "../react usf-audit reports"
+        "usf tools/v2-readiness finding shape {ruleId, severity, subject, message}; exit codes 0/1/2",
+        "usf usf-audit reports"
       ],
       "taxonomyRefs": [
         "validation-reporting-classification"
@@ -2566,11 +2566,11 @@
         "Source Reference",
         "Disposition"
       ],
-      "purpose": "Validates controlled import manifests from ../react.",
+      "purpose": "Validates controlled import manifests from usf.",
       "requiredBecause": "Imports must be complete and traceable; no source element disappears without a disposition.",
       "sourceInputs": [
-        "../react v1-to-v2-path-map.json",
-        "../react v1-file-inventory.json",
+        "usf v1-to-v2-path-map.json",
+        "usf v1-file-inventory.json",
         "bijection rule R10"
       ],
       "taxonomyRefs": [
@@ -2598,7 +2598,7 @@
       ],
       "aiGuidance": "Source path does not dictate target schema/path; disposition every element.",
       "deferredDetails": [
-        "Exact source import manifest mapping from ../react."
+        "Exact source import manifest mapping from usf."
       ]
     },
     {
@@ -2723,7 +2723,7 @@
       "purpose": "Validates semantic Compose service requirements, service-level CMDB-style governance metadata, per-environment realisation policies, and generated Compose targets.",
       "requiredBecause": "Every historical React Compose service must be classified before generated Compose can be treated as derivative output.",
       "sourceInputs": [
-        "../react/compose.yaml",
+        "compose.yaml",
         "docs/architecture/complete-react-to-usf-compose-service-parity-matrix.md",
         "user directive: schema-driven Compose service classification and generation"
       ],
@@ -2800,7 +2800,7 @@
       "id": "json-schema",
       "status": "adopted",
       "affectsSchemas": "JSON Schema is the mechanism for validating all USF JSON artefacts; every schema is a JSON Schema with explicit $schema and $id.",
-      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring \u00a726 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
+      "willNotClaimYet": "Active/validator-enforced maturity is not yet reached; a draft/advisory validator (jsonschema==4.10.3) now exists and is CI-enforced for the corpus (see schema-authoring §26 Amendment A). The Draft 2020-12 dialect is resolved by docs/architecture/schema-authoring-standard.md (https://json-schema.org/draft/2020-12/schema).",
       "validatorImplications": "Validators run JSON Schema validation and fail closed on invalidity.",
       "aiGuidance": "Validate generated JSON against its schema before claiming completion."
     },
@@ -3072,31 +3072,31 @@
       "safety": "safe"
     },
     {
-      "item": "Exact source import manifest mapping from ../react.",
+      "item": "Exact source import manifest mapping from usf.",
       "safety": "safe"
     },
     {
-      "item": "Exact command catalogue import from ../react.",
+      "item": "Exact command catalogue import from usf.",
       "safety": "safe"
     },
     {
-      "item": "Exact configuration catalogue import from ../react.",
+      "item": "Exact configuration catalogue import from usf.",
       "safety": "safe"
     },
     {
-      "item": "Exact UI semantic import from ../react.",
+      "item": "Exact UI semantic import from usf.",
       "safety": "safe"
     },
     {
-      "item": "Exact event/workflow contract import from ../react.",
+      "item": "Exact event/workflow contract import from usf.",
       "safety": "safe"
     },
     {
-      "item": "Exact data/migration/backup/restore import from ../react.",
+      "item": "Exact data/migration/backup/restore import from usf.",
       "safety": "safe"
     },
     {
-      "item": "Exact observability/audit import from ../react.",
+      "item": "Exact observability/audit import from usf.",
       "safety": "safe"
     },
     {
@@ -3138,7 +3138,7 @@
       "satisfied": true
     },
     {
-      "criterion": "Grounded in ../react.",
+      "criterion": "Grounded in usf.",
       "satisfied": true
     },
     {
@@ -3186,7 +3186,7 @@
       "satisfied": true
     },
     {
-      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring \u00a726 Amendment A).",
+      "criterion": "At initial registry authoring this artefact did not create schema files; later PR work authored the 23 schema files at draft lifecycle (see schema-authoring §26 Amendment A).",
       "satisfied": true
     },
     {

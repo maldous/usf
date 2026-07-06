@@ -26,7 +26,7 @@
     "specVocabularies": "exists; contained only .gitkeep before this artefact",
     "thisIsFirstAuthoredVocabularyArtefact": true,
     "specTaxonomiesTaxonomyCatalog": "exists and parses as valid JSON (13 families, 19 taxonomies, 22 declared vocabulary dependencies)",
-    "specSchemas": "contains 23 authored schema files at lifecycleState draft (was .gitkeep-only at initial authoring; see schema-authoring \u00a726 Amendment A)",
+    "specSchemas": "contains 23 authored schema files at lifecycleState draft (was .gitkeep-only at initial authoring; see schema-authoring §26 Amendment A)",
     "specRegistries": "contains schema-registry.json with 23 entries at draft (was .gitkeep-only at initial authoring)",
     "gitkeepNote": ".gitkeep is a git placeholder used to retain otherwise-empty directories; it is NOT a semantic artefact and MUST NOT be treated as one",
     "observation": "State observed during authoring of this artefact; no timestamp is recorded because freshness of governance artefacts is tracked by commit, not wall-clock."
@@ -46,7 +46,7 @@
       "Vocabulary renames MUST preserve aliases and lineage.",
       "Vocabulary values MUST use stable semantic names.",
       "Vocabulary values MUST NOT use migration-phase names.",
-      "../react names MAY appear as historical aliases or source references, not as future canonical values unless semantically justified.",
+      "USF self-defined source names MAY appear as historical aliases or source references, not as future canonical values unless semantically justified.",
       "Future AI agents MUST use vocabulary values where available instead of inventing free text."
     ],
     "aliasConvention": "Aliases are recorded in each value set's 'aliases' array as objects mapping an alias id to a canonical value id, with a sourceNote. Aliases are not listed again in the 'values' array. An alias MUST resolve to a canonical value present in the same set."
@@ -79,7 +79,7 @@
     "Values MUST be unique within a value set.",
     "Value set IDs MUST be unique.",
     "Value IDs MUST be stable.",
-    "Value IDs MUST NOT be inferred from ../react paths.",
+    "Value IDs MUST NOT be inferred from USF self-defined source paths.",
     "Generated reports MUST NOT introduce new canonical values.",
     "Future schemas MUST reference value sets rather than duplicate enums independently."
   ],
@@ -198,7 +198,7 @@
       "expectedValidatorUse": "Assert every governed artefact carries exactly one authority level and that no lower level overrides a higher one.",
       "sourceInputs": [
         "docs/architecture/authority-model.md section 1",
-        "../react/docs/v2-foundation/semantic-source-of-truth-transition.md"
+        "usf docs/v2-foundation/semantic-source-of-truth-transition.md"
       ],
       "values": [
         {
@@ -254,7 +254,7 @@
         {
           "id": "historical-source-evidence",
           "label": "Historical Source Evidence",
-          "description": "Rank 6; ../react lineage consulted to recover intent.",
+          "description": "Rank 6; USF self-defined source lineage consulted to recover intent.",
           "lifecycle": "canonical",
           "canonical": true,
           "precedence": 6,
@@ -317,7 +317,7 @@
       "expectedValidatorUse": "Resolve an artefact's kind to its governing schema.",
       "sourceInputs": [
         "spec/taxonomies/taxonomy-catalog.json (artefact-classification)",
-        "../react/docs/v2-foundation/ artefacts and runbooks"
+        "usf docs/v2-foundation/ artefacts and runbooks"
       ],
       "values": [
         {
@@ -380,7 +380,7 @@
           "description": "Information supporting a claim.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/docs/evidence",
+          "sourceNotes": "usf docs/evidence",
           "aiGuidance": "Typed; source-referenced."
         },
         {
@@ -389,7 +389,7 @@
           "description": "Execution-backed evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof scripts and proof-evidence",
+          "sourceNotes": "usf proof scripts and proof-evidence",
           "aiGuidance": "Declares level, provider mode, environment."
         },
         {
@@ -398,7 +398,7 @@
           "description": "Executable enforcement.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/tools/v2-readiness",
+          "sourceNotes": "usf tools/v2-readiness",
           "aiGuidance": "Fails closed."
         },
         {
@@ -407,7 +407,7 @@
           "description": "Machine-readable validator output.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit reports",
+          "sourceNotes": "usf usf-audit reports",
           "aiGuidance": "Rank-7; references evidence."
         },
         {
@@ -416,7 +416,7 @@
           "description": "Reference to historical/current source evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react sourceFileRefs",
+          "sourceNotes": "usf sourceFileRefs",
           "aiGuidance": "Carries a disposition."
         },
         {
@@ -425,7 +425,7 @@
           "description": "Maps source elements to USF concepts via disposition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-to-v2-path-map.json",
+          "sourceNotes": "usf v1-to-v2-path-map.json",
           "aiGuidance": "Requires source disposition."
         },
         {
@@ -434,7 +434,7 @@
           "description": "Code realising contracts.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react apps/packages/services",
+          "sourceNotes": "usf apps/packages/services",
           "aiGuidance": "Rank-5; conforms to semantics."
         },
         {
@@ -443,7 +443,7 @@
           "description": "Derived summary.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit",
+          "sourceNotes": "usf usf-audit",
           "aiGuidance": "Lowest authority."
         },
         {
@@ -452,7 +452,7 @@
           "description": "Operational procedure.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/docs/v2-foundation/v2-branch-cut-runbook.md",
+          "sourceNotes": "usf docs/v2-foundation/v2-branch-cut-runbook.md",
           "aiGuidance": "Procedure; not a contract."
         }
       ],
@@ -472,7 +472,7 @@
       "id": "source-kinds",
       "title": "Source Kinds",
       "status": "active",
-      "description": "The kind of source element from ../react that a source reference points at.",
+      "description": "The kind of source element from usf that a source reference points at.",
       "governedTaxonomies": [
         "source-evidence-classification"
       ],
@@ -486,8 +486,8 @@
       ],
       "expectedValidatorUse": "Require each source reference to declare at least one source kind.",
       "sourceInputs": [
-        "../react/docs/v2-foundation/v1-file-inventory.json",
-        "../react/Makefile, package.json, compose.yaml, config, e2e"
+        "usf docs/v2-foundation/v1-file-inventory.json",
+        "usf Makefile, package.json, compose.yaml, config, e2e"
       ],
       "values": [
         {
@@ -496,7 +496,7 @@
           "description": "Application/library source code file.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react apps/packages",
+          "sourceNotes": "usf apps/packages",
           "aiGuidance": "Behavioural evidence, not authority."
         },
         {
@@ -505,7 +505,7 @@
           "description": "A machine-readable semantic definition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/docs/v2-foundation/*.json",
+          "sourceNotes": "usf docs/v2-foundation/*.json",
           "aiGuidance": "High-value intent source."
         },
         {
@@ -514,7 +514,7 @@
           "description": "Prose docs, runbooks, attestations.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/docs",
+          "sourceNotes": "usf docs",
           "aiGuidance": "Recover intent and rationale."
         },
         {
@@ -523,7 +523,7 @@
           "description": "A Makefile target.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/Makefile and make/*.mk",
+          "sourceNotes": "usf Makefile and make/*.mk",
           "aiGuidance": "Command evidence; semantic asset."
         },
         {
@@ -532,7 +532,7 @@
           "description": "An npm/package script.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/package.json (212 scripts)",
+          "sourceNotes": "usf package.json (212 scripts)",
           "aiGuidance": "Command evidence."
         },
         {
@@ -541,7 +541,7 @@
           "description": "An environment variable.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react .env generated from manifests",
+          "sourceNotes": "usf .env generated from manifests",
           "aiGuidance": "Configuration evidence; never leak secret values."
         },
         {
@@ -550,7 +550,7 @@
           "description": "A configuration file or manifest.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/config/environments/*.json",
+          "sourceNotes": "usf config/environments/*.json",
           "aiGuidance": "Configuration evidence."
         },
         {
@@ -559,7 +559,7 @@
           "description": "A single typed configuration key.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-config-contract-catalogue.json (64 keys)",
+          "sourceNotes": "usf v1-config-contract-catalogue.json (64 keys)",
           "aiGuidance": "Typed config contract evidence."
         },
         {
@@ -568,7 +568,7 @@
           "description": "A service defined in compose.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/compose.yaml (54 services)",
+          "sourceNotes": "usf compose.yaml (54 services)",
           "aiGuidance": "Runtime/provider/environment evidence."
         },
         {
@@ -577,7 +577,7 @@
           "description": "A deployable app.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/apps",
+          "sourceNotes": "usf apps",
           "aiGuidance": "Realisation, not authority."
         },
         {
@@ -586,7 +586,7 @@
           "description": "A workspace library.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/packages (~41)",
+          "sourceNotes": "usf packages (~41)",
           "aiGuidance": "Implementation unit."
         },
         {
@@ -595,7 +595,7 @@
           "description": "A unit within a package.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react packages/*/src",
+          "sourceNotes": "usf packages/*/src",
           "aiGuidance": "Implementation unit."
         },
         {
@@ -604,7 +604,7 @@
           "description": "A unit/integration test.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react tests and package tests",
+          "sourceNotes": "usf tests and package tests",
           "aiGuidance": "Behavioural/proof evidence."
         },
         {
@@ -613,7 +613,7 @@
           "description": "An end-to-end journey/spec.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/e2e profiles",
+          "sourceNotes": "usf e2e profiles",
           "aiGuidance": "Behavioural/UI/proof evidence."
         },
         {
@@ -622,7 +622,7 @@
           "description": "A runtime proof script.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react apps/platform-api/scripts/*-runtime-proof",
+          "sourceNotes": "usf apps/platform-api/scripts/*-runtime-proof",
           "aiGuidance": "Proof evidence; distinct from reports."
         },
         {
@@ -631,7 +631,7 @@
           "description": "A derived report.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit",
+          "sourceNotes": "usf usf-audit",
           "aiGuidance": "Lower-authority summary."
         },
         {
@@ -640,7 +640,7 @@
           "description": "A per-environment readiness gate definition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react environment-readiness-gates.json (4 gates)",
+          "sourceNotes": "usf environment-readiness-gates.json (4 gates)",
           "aiGuidance": "Environment/proof policy evidence."
         },
         {
@@ -649,7 +649,7 @@
           "description": "An operational-semantics definition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react operational-semantics.json",
+          "sourceNotes": "usf operational-semantics.json",
           "aiGuidance": "Semantic evidence."
         },
         {
@@ -658,7 +658,7 @@
           "description": "An event-semantics definition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react event-semantics.json",
+          "sourceNotes": "usf event-semantics.json",
           "aiGuidance": "Semantic evidence."
         },
         {
@@ -667,7 +667,7 @@
           "description": "A UI semantic definition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react ui-capability-model.json",
+          "sourceNotes": "usf ui-capability-model.json",
           "aiGuidance": "Behaviour, not visual design."
         },
         {
@@ -676,7 +676,7 @@
           "description": "A data/migration plan or migration file.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react data-and-migration-plan.json; apps/platform-api/src/db",
+          "sourceNotes": "usf data-and-migration-plan.json; apps/platform-api/src/db",
           "aiGuidance": "Persistence/migration evidence."
         },
         {
@@ -685,7 +685,7 @@
           "description": "An observability or audit definition/evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/docs/evidence/observability and audit",
+          "sourceNotes": "usf docs/evidence/observability and audit",
           "aiGuidance": "Signal/audit evidence."
         }
       ],
@@ -738,7 +738,7 @@
       ],
       "expectedValidatorUse": "Require each source reference to declare at least one role.",
       "sourceInputs": [
-        "../react sourceFileRefs/evidence fields"
+        "usf sourceFileRefs/evidence fields"
       ],
       "values": [
         {
@@ -747,7 +747,7 @@
           "description": "Carries intended behaviour/contract.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react semantic artefacts",
+          "sourceNotes": "usf semantic artefacts",
           "aiGuidance": "Promote into USF semantics."
         },
         {
@@ -756,7 +756,7 @@
           "description": "Demonstrates how behaviour worked.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react source and tests",
+          "sourceNotes": "usf source and tests",
           "aiGuidance": "Evidence, not authority."
         },
         {
@@ -765,7 +765,7 @@
           "description": "Execution-backed evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof scripts",
+          "sourceNotes": "usf proof scripts",
           "aiGuidance": "Declares level/provider/environment."
         },
         {
@@ -774,7 +774,7 @@
           "description": "Deploy/rollback/recovery knowledge.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react operational-semantics.json",
+          "sourceNotes": "usf operational-semantics.json",
           "aiGuidance": "Preserve operational knowledge."
         },
         {
@@ -783,7 +783,7 @@
           "description": "Config meaning and contracts.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react config catalogue",
+          "sourceNotes": "usf config catalogue",
           "aiGuidance": "Preserve config semantics."
         },
         {
@@ -792,7 +792,7 @@
           "description": "Command meaning and semantics.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Makefile and scripts",
+          "sourceNotes": "usf Makefile and scripts",
           "aiGuidance": "Commands are semantic assets."
         },
         {
@@ -801,7 +801,7 @@
           "description": "UI behaviour and journeys.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react ui-capability-model.json",
+          "sourceNotes": "usf ui-capability-model.json",
           "aiGuidance": "Behaviour, not styling."
         },
         {
@@ -810,7 +810,7 @@
           "description": "Route/contract semantics.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react operational-semantics routes",
+          "sourceNotes": "usf operational-semantics routes",
           "aiGuidance": "Contract-first."
         },
         {
@@ -819,7 +819,7 @@
           "description": "Event and workflow semantics.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react event-semantics and cross-capability-interactions",
+          "sourceNotes": "usf event-semantics and cross-capability-interactions",
           "aiGuidance": "Preserve ordering/idempotency/DLQ."
         },
         {
@@ -828,7 +828,7 @@
           "description": "Data model and migration semantics.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react data-and-migration-plan.json",
+          "sourceNotes": "usf data-and-migration-plan.json",
           "aiGuidance": "Preserve tenancy and migration invariants."
         },
         {
@@ -837,7 +837,7 @@
           "description": "Signals and audit semantics.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react operational-semantics and evidence",
+          "sourceNotes": "usf operational-semantics and evidence",
           "aiGuidance": "Semantic assets."
         },
         {
@@ -846,7 +846,7 @@
           "description": "Derived summaries; lower authority.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit",
+          "sourceNotes": "usf usf-audit",
           "aiGuidance": "Never treat as semantic-source."
         },
         {
@@ -855,7 +855,7 @@
           "description": "Provenance only; no live authority.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react frozen commit/tag",
+          "sourceNotes": "usf frozen commit/tag",
           "aiGuidance": "Cite as lineage; never live authority."
         }
       ],
@@ -887,8 +887,8 @@
       ],
       "expectedValidatorUse": "Require evidence to declare its kind; keep reports distinct from raw/proof evidence.",
       "sourceInputs": [
-        "../react/docs/evidence (267 files)",
-        "../react usf-audit/proof-evidence-index.json"
+        "usf docs/evidence (267 files)",
+        "usf usf-audit/proof-evidence-index.json"
       ],
       "values": [
         {
@@ -906,7 +906,7 @@
           "description": "Evidence carried in a semantic artefact.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react semantic artefacts",
+          "sourceNotes": "usf semantic artefacts",
           "aiGuidance": "Distinct from proof."
         },
         {
@@ -915,7 +915,7 @@
           "description": "Evidence from an executed proof.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof-evidence/*.json",
+          "sourceNotes": "usf proof-evidence/*.json",
           "aiGuidance": "Commit-pinned; level-classified."
         },
         {
@@ -924,7 +924,7 @@
           "description": "Raw evidence reshaped for indexing; raw retained.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof-evidence-index.json",
+          "sourceNotes": "usf proof-evidence-index.json",
           "aiGuidance": "Never discard the raw form."
         },
         {
@@ -933,7 +933,7 @@
           "description": "A derived summary.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit",
+          "sourceNotes": "usf usf-audit",
           "aiGuidance": "Lowest authority; references evidence."
         },
         {
@@ -942,7 +942,7 @@
           "description": "A status statement referencing underlying evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react attestation docs",
+          "sourceNotes": "usf attestation docs",
           "aiGuidance": "Must cite evidence."
         },
         {
@@ -951,7 +951,7 @@
           "description": "Evidence about a source import/disposition.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react path-map",
+          "sourceNotes": "usf path-map",
           "aiGuidance": "Backs disposition decisions."
         },
         {
@@ -960,7 +960,7 @@
           "description": "Validator output evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v2-readiness output",
+          "sourceNotes": "usf v2-readiness output",
           "aiGuidance": "Distinct from semantic definition."
         },
         {
@@ -969,7 +969,7 @@
           "description": "Operational/runtime knowledge evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react operations evidence",
+          "sourceNotes": "usf operations evidence",
           "aiGuidance": "Supports runbooks."
         },
         {
@@ -978,7 +978,7 @@
           "description": "Audit-trail evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react/docs/evidence/audit",
+          "sourceNotes": "usf docs/evidence/audit",
           "aiGuidance": "Required for sensitive actions."
         }
       ],
@@ -1010,8 +1010,8 @@
       ],
       "expectedValidatorUse": "Enforce ordering (each level requires the lower); claimed level must be <= observed level; missing emitted/collected evidence fails closed.",
       "sourceInputs": [
-        "../react/docs/v2-foundation/capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4)",
-        "../react usf-audit/proof-strength-matrix.json"
+        "usf docs/v2-foundation/capability-proof-definition.json (L0-L6; deliveredAndProvenMinimumLevel 3; liveProviderMinimumLevel 4)",
+        "usf usf-audit/proof-strength-matrix.json"
       ],
       "values": [
         {
@@ -1026,7 +1026,7 @@
             "executable-proven"
           ],
           "requiresEvidence": false,
-          "sourceNotes": "../react L0",
+          "sourceNotes": "usf L0",
           "aiGuidance": "Never present as behavioural proof."
         },
         {
@@ -1040,7 +1040,7 @@
             "contract-proven"
           ],
           "requiresEvidence": true,
-          "sourceNotes": "../react L1",
+          "sourceNotes": "usf L1",
           "aiGuidance": "No behavioural guarantee."
         },
         {
@@ -1054,7 +1054,7 @@
             "behaviour-proven"
           ],
           "requiresEvidence": true,
-          "sourceNotes": "../react L2",
+          "sourceNotes": "usf L2",
           "aiGuidance": "No state-transition guarantee."
         },
         {
@@ -1068,7 +1068,7 @@
             "substrate-proven"
           ],
           "requiresEvidence": true,
-          "sourceNotes": "../react L3; deliveredAndProvenMinimumLevel",
+          "sourceNotes": "usf L3; deliveredAndProvenMinimumLevel",
           "aiGuidance": "Minimum for delivered-and-proven on hermetic substrate."
         },
         {
@@ -1082,7 +1082,7 @@
             "resilience-proven"
           ],
           "requiresEvidence": true,
-          "sourceNotes": "../react L4; liveProviderMinimumLevel",
+          "sourceNotes": "usf L4; liveProviderMinimumLevel",
           "aiGuidance": "Minimum floor for live-provider claims."
         },
         {
@@ -1096,7 +1096,7 @@
             "foundation-proven"
           ],
           "requiresEvidence": true,
-          "sourceNotes": "../react L5",
+          "sourceNotes": "usf L5",
           "aiGuidance": "Operational survivability confidence."
         },
         {
@@ -1108,7 +1108,7 @@
           "order": 6,
           "weakerThan": [],
           "requiresEvidence": true,
-          "sourceNotes": "../react L6",
+          "sourceNotes": "usf L6",
           "aiGuidance": "Strongest; do not start post-foundation work without a new objective."
         }
       ],
@@ -1116,37 +1116,37 @@
         {
           "id": "l0",
           "canonical": "discovery-proven",
-          "sourceNote": "../react ladder label L0"
+          "sourceNote": "usf ladder label L0"
         },
         {
           "id": "l1",
           "canonical": "executable-proven",
-          "sourceNote": "../react ladder label L1"
+          "sourceNote": "usf ladder label L1"
         },
         {
           "id": "l2",
           "canonical": "contract-proven",
-          "sourceNote": "../react ladder label L2"
+          "sourceNote": "usf ladder label L2"
         },
         {
           "id": "l3",
           "canonical": "behaviour-proven",
-          "sourceNote": "../react ladder label L3"
+          "sourceNote": "usf ladder label L3"
         },
         {
           "id": "l4",
           "canonical": "substrate-proven",
-          "sourceNote": "../react ladder label L4"
+          "sourceNote": "usf ladder label L4"
         },
         {
           "id": "l5",
           "canonical": "resilience-proven",
-          "sourceNote": "../react ladder label L5"
+          "sourceNote": "usf ladder label L5"
         },
         {
           "id": "l6",
           "canonical": "foundation-proven",
-          "sourceNote": "../react ladder label L6"
+          "sourceNote": "usf ladder label L6"
         }
       ],
       "forbiddenValues": [],
@@ -1186,9 +1186,9 @@
       ],
       "expectedValidatorUse": "Require provider mode on provider-dependent proof/evidence; reject hermetic-mock satisfying a live-external-provider claim.",
       "sourceInputs": [
-        "../react provider classes hermetic/compose-local/sandbox-external/live-external/none",
-        "../react/services/mock-oidc",
-        "../react usf-audit/runtime-provider-inventory.json (~69 providers)"
+        "usf provider classes hermetic/compose-local/sandbox-external/live-external/none",
+        "usf services/mock-oidc",
+        "usf usf-audit/runtime-provider-inventory.json (~69 providers)"
       ],
       "values": [
         {
@@ -1198,7 +1198,7 @@
           "lifecycle": "canonical",
           "canonical": true,
           "requiresEvidence": true,
-          "sourceNotes": "../react hermetic class; mock-oidc IdP",
+          "sourceNotes": "usf hermetic class; mock-oidc IdP",
           "aiGuidance": "Valid for internal platform proof; mock IdP permitted; MUST NOT be treated as live-external-provider."
         },
         {
@@ -1208,7 +1208,7 @@
           "lifecycle": "canonical",
           "canonical": true,
           "requiresEvidence": true,
-          "sourceNotes": "../react compose-local class",
+          "sourceNotes": "usf compose-local class",
           "aiGuidance": "Supports substrate-proven and above."
         },
         {
@@ -1218,7 +1218,7 @@
           "lifecycle": "canonical",
           "canonical": true,
           "requiresEvidence": true,
-          "sourceNotes": "../react sandbox-external class",
+          "sourceNotes": "usf sandbox-external class",
           "aiGuidance": "Not production; do not treat as live."
         },
         {
@@ -1229,7 +1229,7 @@
           "canonical": true,
           "requiresEvidence": true,
           "requiresADR": true,
-          "sourceNotes": "../react live-external class",
+          "sourceNotes": "usf live-external class",
           "aiGuidance": "Requires explicit live external evidence; substrate-proven is the minimum floor."
         }
       ],
@@ -1237,22 +1237,22 @@
         {
           "id": "hermetic",
           "canonical": "hermetic-mock",
-          "sourceNote": "../react provider class"
+          "sourceNote": "usf provider class"
         },
         {
           "id": "compose-local",
           "canonical": "local-composed-real-service",
-          "sourceNote": "../react provider class"
+          "sourceNote": "usf provider class"
         },
         {
           "id": "sandbox-external",
           "canonical": "external-sandbox",
-          "sourceNote": "../react provider class"
+          "sourceNote": "usf provider class"
         },
         {
           "id": "live-external",
           "canonical": "live-external-provider",
-          "sourceNote": "../react provider class"
+          "sourceNote": "usf provider class"
         }
       ],
       "forbiddenValues": [],
@@ -1415,9 +1415,9 @@
       ],
       "expectedValidatorUse": "Require environment on proof/evidence; reject production-shaped satisfying production-live; reject environment-implied provider upgrades.",
       "sourceInputs": [
-        "../react four-stage ladder dev/test/staging/prod",
-        "../react provider modes semantic-dev/compose-real-local/prod-shaped-sandbox/live-readiness-only",
-        "../react e2e profiles internal/build/identity (hermetic) vs discovery/external/prod (live)"
+        "usf four-stage ladder dev/test/staging/prod",
+        "usf provider modes semantic-dev/compose-real-local/prod-shaped-sandbox/live-readiness-only",
+        "usf e2e profiles internal/build/identity (hermetic) vs discovery/external/prod (live)"
       ],
       "values": [
         {
@@ -1426,7 +1426,7 @@
           "description": "A developer machine; fast iteration; hermetic or composed providers.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react dev/tilt",
+          "sourceNotes": "usf dev/tilt",
           "aiGuidance": "Not a readiness claim."
         },
         {
@@ -1435,7 +1435,7 @@
           "description": "Fully isolated, deterministic, offline; the default proof substrate.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react e2e internal/identity profiles; mock-oidc",
+          "sourceNotes": "usf e2e internal/identity profiles; mock-oidc",
           "aiGuidance": "Default for internal provability."
         },
         {
@@ -1444,7 +1444,7 @@
           "description": "Composed real local services exercised together.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react test stage / compose-real-local",
+          "sourceNotes": "usf test stage / compose-real-local",
           "aiGuidance": "Adds real-local substrate."
         },
         {
@@ -1453,7 +1453,7 @@
           "description": "A production-shaped rehearsal environment.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react staging stage",
+          "sourceNotes": "usf staging stage",
           "aiGuidance": "Rehearses migration/rollback/observability."
         },
         {
@@ -1462,7 +1462,7 @@
           "description": "Topology mirroring production with sandbox providers.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react prod-shaped-sandbox",
+          "sourceNotes": "usf prod-shaped-sandbox",
           "aiGuidance": "NOT production-live; shape and rehearsal only."
         },
         {
@@ -1472,7 +1472,7 @@
           "lifecycle": "canonical",
           "canonical": true,
           "requiresEvidence": true,
-          "sourceNotes": "../react prod/live-readiness-only",
+          "sourceNotes": "usf prod/live-readiness-only",
           "aiGuidance": "Only non-destructive health/synthetic smoke evidence; destructive proof belongs to lower environments."
         }
       ],
@@ -1480,22 +1480,22 @@
         {
           "id": "dev",
           "canonical": "local",
-          "sourceNote": "../react dev stage (approximate mapping)"
+          "sourceNote": "usf dev stage (approximate mapping)"
         },
         {
           "id": "test",
           "canonical": "integration",
-          "sourceNote": "../react test stage / compose-real-local (approximate mapping)"
+          "sourceNote": "usf test stage / compose-real-local (approximate mapping)"
         },
         {
           "id": "prod",
           "canonical": "production-live",
-          "sourceNote": "../react prod stage"
+          "sourceNote": "usf prod stage"
         },
         {
           "id": "prod-shaped-sandbox",
           "canonical": "production-shaped",
-          "sourceNote": "../react provider mode for staging rehearsal"
+          "sourceNote": "usf provider mode for staging rehearsal"
         }
       ],
       "forbiddenValues": [],
@@ -1530,9 +1530,9 @@
       ],
       "expectedValidatorUse": "Require a disposition on every imported source element; reject import as complete without one.",
       "sourceInputs": [
-        "../react file disposition vocabulary (9 values)",
-        "../react command dispositions carry/merge/retire",
-        "../react test migrationType carry/retarget/promote-to-conformance/retire"
+        "usf file disposition vocabulary (9 values)",
+        "usf command dispositions carry/merge/retire",
+        "usf test migrationType carry/retarget/promote-to-conformance/retire"
       ],
       "values": [
         {
@@ -1541,7 +1541,7 @@
           "description": "Carry the element forward substantially unchanged.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react reuse-unchanged; command carry",
+          "sourceNotes": "usf reuse-unchanged; command carry",
           "aiGuidance": "Preserve does not by itself confer authority."
         },
         {
@@ -1550,7 +1550,7 @@
           "description": "Carry forward under a clean final-state name.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react git-move",
+          "sourceNotes": "usf git-move",
           "aiGuidance": "Use clean naming; record the historical name as an alias."
         },
         {
@@ -1559,7 +1559,7 @@
           "description": "Restructure behind a preserved contract.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react refactor-behind-contract; test retarget",
+          "sourceNotes": "usf refactor-behind-contract; test retarget",
           "aiGuidance": "Contract must be preserved."
         },
         {
@@ -1568,7 +1568,7 @@
           "description": "Combine multiple source elements into one USF concept.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react merge",
+          "sourceNotes": "usf merge",
           "aiGuidance": "Preserve all merged intent."
         },
         {
@@ -1577,7 +1577,7 @@
           "description": "Divide one source element into multiple USF concepts.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react split",
+          "sourceNotes": "usf split",
           "aiGuidance": "Preserve all split intent."
         },
         {
@@ -1586,7 +1586,7 @@
           "description": "Substitute with a new implementation while retaining the contract.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react replace-retain-contract; regenerate",
+          "sourceNotes": "usf replace-retain-contract; regenerate",
           "aiGuidance": "Retain contract and proof expectations."
         },
         {
@@ -1595,7 +1595,7 @@
           "description": "Remove from active use; retain as archived evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react delete-after-proof; archive-evidence; command retire",
+          "sourceNotes": "usf delete-after-proof; archive-evidence; command retire",
           "aiGuidance": "Record rationale and any proof preconditions."
         },
         {
@@ -1613,7 +1613,7 @@
           "description": "Decline to carry the element, with rationale.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react rejected-final (capability status analogue)",
+          "sourceNotes": "usf rejected-final (capability status analogue)",
           "aiGuidance": "Rejection still requires a recorded disposition."
         }
       ],
@@ -1621,52 +1621,52 @@
         {
           "id": "reuse-unchanged",
           "canonical": "preserve",
-          "sourceNote": "../react file disposition"
+          "sourceNote": "usf file disposition"
         },
         {
           "id": "git-move",
           "canonical": "rename",
-          "sourceNote": "../react file disposition"
+          "sourceNote": "usf file disposition"
         },
         {
           "id": "refactor-behind-contract",
           "canonical": "refactor",
-          "sourceNote": "../react file disposition"
+          "sourceNote": "usf file disposition"
         },
         {
           "id": "replace-retain-contract",
           "canonical": "replace",
-          "sourceNote": "../react file disposition"
+          "sourceNote": "usf file disposition"
         },
         {
           "id": "regenerate",
           "canonical": "replace",
-          "sourceNote": "../react file disposition (regenerate maps to replace; confirm during import)"
+          "sourceNote": "usf file disposition (regenerate maps to replace; confirm during import)"
         },
         {
           "id": "archive-evidence",
           "canonical": "retire",
-          "sourceNote": "../react file disposition"
+          "sourceNote": "usf file disposition"
         },
         {
           "id": "delete-after-proof",
           "canonical": "retire",
-          "sourceNote": "../react file disposition"
+          "sourceNote": "usf file disposition"
         },
         {
           "id": "carry",
           "canonical": "preserve",
-          "sourceNote": "../react command/test disposition"
+          "sourceNote": "usf command/test disposition"
         },
         {
           "id": "retarget",
           "canonical": "refactor",
-          "sourceNote": "../react test migrationType"
+          "sourceNote": "usf test migrationType"
         },
         {
           "id": "promote-to-conformance",
           "canonical": "refactor",
-          "sourceNote": "../react test migrationType (confirm; may warrant its own value)"
+          "sourceNote": "usf test migrationType (confirm; may warrant its own value)"
         }
       ],
       "forbiddenValues": [],
@@ -1703,7 +1703,7 @@
       ],
       "expectedValidatorUse": "Require a known lifecycle state on governed artefacts.",
       "sourceInputs": [
-        "../react capability statuses delivered-and-proven/requires-v1-completion/superseded/not-applicable-final/rejected-final",
+        "usf capability statuses delivered-and-proven/requires-v1-completion/superseded/not-applicable-final/rejected-final",
         "USF-defined progression"
       ],
       "values": [
@@ -1740,7 +1740,7 @@
           "description": "In force.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react delivered-and-proven analogue",
+          "sourceNotes": "usf delivered-and-proven analogue",
           "aiGuidance": "Use; conform to it."
         },
         {
@@ -1767,7 +1767,7 @@
           "description": "Superseded by a specific successor.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react superseded-by-proven-canonical analogue",
+          "sourceNotes": "usf superseded-by-proven-canonical analogue",
           "aiGuidance": "Follow replacedBy."
         },
         {
@@ -1784,22 +1784,22 @@
         {
           "id": "delivered-and-proven",
           "canonical": "active",
-          "sourceNote": "../react capability status (approximate)"
+          "sourceNote": "usf capability status (approximate)"
         },
         {
           "id": "superseded-by-proven-canonical",
           "canonical": "replaced",
-          "sourceNote": "../react capability status"
+          "sourceNote": "usf capability status"
         },
         {
           "id": "not-applicable-final",
           "canonical": "retired",
-          "sourceNote": "../react capability status (approximate)"
+          "sourceNote": "usf capability status (approximate)"
         },
         {
           "id": "rejected-final",
           "canonical": "retired",
-          "sourceNote": "../react capability status (approximate)"
+          "sourceNote": "usf capability status (approximate)"
         }
       ],
       "forbiddenValues": [],
@@ -1817,7 +1817,7 @@
       "id": "capability-domains",
       "title": "Capability Domains",
       "status": "active",
-      "description": "A controlled value set for classifying capabilities by domain. The canonical values are grounded in the current ../react v1-capability-closure.json category dimension and recorded by ADR 0003.",
+      "description": "A controlled value set for classifying capabilities by domain. The canonical values are grounded in the current usf v1-capability-closure.json category dimension and recorded by ADR 0003.",
       "governedTaxonomies": [
         "semantic-architecture-classification"
       ],
@@ -1830,7 +1830,7 @@
       ],
       "expectedValidatorUse": "Require semantic-contract capabilityDomain values to match this controlled value set exactly.",
       "sourceInputs": [
-        "../react/docs/v2-foundation/v1-capability-closure.json category dimension: authentication, compute-runtime, configuration, data-platform, developer-platform, entitlements-billing, events-workflow, foundation, identity-access, observability-ops, search, security-governance, storage, support-admin"
+        "usf docs/v2-foundation/v1-capability-closure.json category dimension: authentication, compute-runtime, configuration, data-platform, developer-platform, entitlements-billing, events-workflow, foundation, identity-access, observability-ops, search, security-governance, storage, support-admin"
       ],
       "values": [
         {
@@ -1839,7 +1839,7 @@
           "description": "Capabilities for login, sessions, credentials, and authentication-provider flows.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category authentication",
+          "sourceNotes": "usf v1-capability-closure category authentication",
           "aiGuidance": "Use only for authentication semantics; do not collapse identity or authorization into this domain."
         },
         {
@@ -1848,7 +1848,7 @@
           "description": "Capabilities for workers, job execution, runtime command execution, and compute substrates.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category compute-runtime",
+          "sourceNotes": "usf v1-capability-closure category compute-runtime",
           "aiGuidance": "Classify runtime execution semantics here, not deployment environment semantics."
         },
         {
@@ -1857,7 +1857,7 @@
           "description": "Capabilities for configuration registry, history, validation, and generated environment projections.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category configuration",
+          "sourceNotes": "usf v1-capability-closure category configuration",
           "aiGuidance": "Configuration is a semantic asset; do not treat generated projections as authority."
         },
         {
@@ -1866,7 +1866,7 @@
           "description": "Capabilities for relational storage, migrations, tenancy controls, data retention, backup, and restore.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category data-platform",
+          "sourceNotes": "usf v1-capability-closure category data-platform",
           "aiGuidance": "Preserve tenancy, migration, backup, and retention semantics explicitly."
         },
         {
@@ -1875,7 +1875,7 @@
           "description": "Capabilities for developer-facing integration surfaces, webhooks, and platform developer operations.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category developer-platform",
+          "sourceNotes": "usf v1-capability-closure category developer-platform",
           "aiGuidance": "Keep developer-facing capability semantics distinct from internal tooling implementation."
         },
         {
@@ -1884,7 +1884,7 @@
           "description": "Capabilities for product catalogues, plans, prices, subscriptions, billing, and entitlement enforcement.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category entitlements-billing",
+          "sourceNotes": "usf v1-capability-closure category entitlements-billing",
           "aiGuidance": "Preserve entitlement and billing semantics together only where the contract couples them."
         },
         {
@@ -1893,7 +1893,7 @@
           "description": "Capabilities for event buses, durable queues, workflows, DLQ/redrive, and cross-capability orchestration.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category events-workflow",
+          "sourceNotes": "usf v1-capability-closure category events-workflow",
           "aiGuidance": "Events and workflows require explicit contracts before implementation emission."
         },
         {
@@ -1902,7 +1902,7 @@
           "description": "Capabilities for the USF foundation scope, semantic governance, proof, validators, and source lineage.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category foundation",
+          "sourceNotes": "usf v1-capability-closure category foundation",
           "aiGuidance": "Use for governance/foundation semantics, not as a broad miscellaneous bucket."
         },
         {
@@ -1911,7 +1911,7 @@
           "description": "Capabilities for tenant identity, users, roles, permissions, authorization, and access policy.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category identity-access",
+          "sourceNotes": "usf v1-capability-closure category identity-access",
           "aiGuidance": "Keep identity/access semantics distinct from authentication session mechanics."
         },
         {
@@ -1920,7 +1920,7 @@
           "description": "Capabilities for logs, metrics, traces, alerting, operational readiness, and runtime observability correlation.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category observability-ops",
+          "sourceNotes": "usf v1-capability-closure category observability-ops",
           "aiGuidance": "Observability is a semantic asset; removal or rename requires semantic review."
         },
         {
@@ -1929,7 +1929,7 @@
           "description": "Capabilities for indexing, query, and searchable product/domain surfaces.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category search",
+          "sourceNotes": "usf v1-capability-closure category search",
           "aiGuidance": "Do not infer search semantics from storage or UI alone."
         },
         {
@@ -1938,7 +1938,7 @@
           "description": "Capabilities for security controls, quality gates, secret scanning, dependency scanning, and governance enforcement.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category security-governance",
+          "sourceNotes": "usf v1-capability-closure category security-governance",
           "aiGuidance": "Do not downgrade security governance findings to advisory without authority."
         },
         {
@@ -1947,7 +1947,7 @@
           "description": "Capabilities for object storage, tenant prefixes, signed URLs, and storage-provider behaviour.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category storage",
+          "sourceNotes": "usf v1-capability-closure category storage",
           "aiGuidance": "Keep object-storage semantics distinct from relational data-platform semantics."
         },
         {
@@ -1956,7 +1956,7 @@
           "description": "Capabilities for tenant lifecycle support actions such as provision, suspend, delete, and export.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v1-capability-closure category support-admin",
+          "sourceNotes": "usf v1-capability-closure category support-admin",
           "aiGuidance": "Treat support/admin operations as governed state-changing capabilities with audit expectations."
         }
       ],
@@ -2419,7 +2419,7 @@
       ],
       "expectedValidatorUse": "Classify each finding; blocking/error may prevent acceptance; advisory must not be hidden as pass.",
       "sourceInputs": [
-        "../react/tools/v2-readiness finding shape {ruleId, severity, subject, message}; exit codes 0/1/2; --strict makes warnings fatal"
+        "usf tools/v2-readiness finding shape {ruleId, severity, subject, message}; exit codes 0/1/2; --strict makes warnings fatal"
       ],
       "values": [
         {
@@ -2428,7 +2428,7 @@
           "description": "Prevents acceptance/promotion.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react fail-closed gate",
+          "sourceNotes": "usf fail-closed gate",
           "aiGuidance": "Do not downgrade to pass."
         },
         {
@@ -2437,7 +2437,7 @@
           "description": "A definite violation.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react exit 1",
+          "sourceNotes": "usf exit 1",
           "aiGuidance": "May block depending on context."
         },
         {
@@ -2446,7 +2446,7 @@
           "description": "A likely problem; fatal under strict mode.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react --strict makes warnings fatal",
+          "sourceNotes": "usf --strict makes warnings fatal",
           "aiGuidance": "Resolve or record rationale."
         },
         {
@@ -2496,7 +2496,7 @@
       ],
       "expectedValidatorUse": "unknown and stale MUST NOT be treated as pass; status must trace to evidence.",
       "sourceInputs": [
-        "../react usf-audit report statuses (PASS/FAIL/PARTIAL/PENDING); commit-pin staleness"
+        "usf usf-audit report statuses (PASS/FAIL/PARTIAL/PENDING); commit-pin staleness"
       ],
       "values": [
         {
@@ -2505,7 +2505,7 @@
           "description": "All checks passed over fresh evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react PASS",
+          "sourceNotes": "usf PASS",
           "aiGuidance": "Valid only over fresh, complete evidence."
         },
         {
@@ -2514,7 +2514,7 @@
           "description": "One or more checks failed.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react FAIL",
+          "sourceNotes": "usf FAIL",
           "aiGuidance": "Treat as failing."
         },
         {
@@ -2523,7 +2523,7 @@
           "description": "Some checks passed; coverage incomplete.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react PARTIAL",
+          "sourceNotes": "usf PARTIAL",
           "aiGuidance": "Not a full pass."
         },
         {
@@ -2532,7 +2532,7 @@
           "description": "Evidence commit no longer matches current.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react commit-pin staleness",
+          "sourceNotes": "usf commit-pin staleness",
           "aiGuidance": "MUST NOT be treated as pass."
         },
         {
@@ -2567,7 +2567,7 @@
         {
           "id": "pending",
           "canonical": "not-run",
-          "sourceNote": "../react PENDING (approximate)"
+          "sourceNote": "usf PENDING (approximate)"
         }
       ],
       "forbiddenValues": [],
@@ -2600,7 +2600,7 @@
       ],
       "expectedValidatorUse": "Classify each command by purpose; require purpose/environment scope/failure semantics.",
       "sourceInputs": [
-        "../react Makefile and make/*.mk; package.json scripts; v2-command-map.json (377 commands)"
+        "usf Makefile and make/*.mk; package.json scripts; v2-command-map.json (377 commands)"
       ],
       "values": [
         {
@@ -2609,7 +2609,7 @@
           "description": "A Makefile target.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Makefile",
+          "sourceNotes": "usf Makefile",
           "aiGuidance": "Semantic asset."
         },
         {
@@ -2618,7 +2618,7 @@
           "description": "An npm/package script.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react package.json",
+          "sourceNotes": "usf package.json",
           "aiGuidance": "Semantic asset."
         },
         {
@@ -2636,7 +2636,7 @@
           "description": "Runs validators.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react v2:readiness",
+          "sourceNotes": "usf v2:readiness",
           "aiGuidance": "Fails closed."
         },
         {
@@ -2645,7 +2645,7 @@
           "description": "Runs a runtime proof.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof:* scripts",
+          "sourceNotes": "usf proof:* scripts",
           "aiGuidance": "Emits proof evidence."
         },
         {
@@ -2663,7 +2663,7 @@
           "description": "Builds artefacts.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react build targets",
+          "sourceNotes": "usf build targets",
           "aiGuidance": "Declare outputs."
         },
         {
@@ -2672,7 +2672,7 @@
           "description": "Starts/operates a runtime.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react api:start",
+          "sourceNotes": "usf api:start",
           "aiGuidance": "Declare environment scope."
         },
         {
@@ -2681,7 +2681,7 @@
           "description": "Generates a derived report.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react generate-*-assurance",
+          "sourceNotes": "usf generate-*-assurance",
           "aiGuidance": "Reports are rank-7."
         }
       ],
@@ -2712,7 +2712,7 @@
       ],
       "expectedValidatorUse": "Require config to declare kind, secret classification, and provider/proof/environment relevance.",
       "sourceInputs": [
-        "../react v1-config-contract-catalogue.json (64 keys); config/environments manifests; .env (ADR-0072)"
+        "usf v1-config-contract-catalogue.json (64 keys); config/environments manifests; .env (ADR-0072)"
       ],
       "values": [
         {
@@ -2721,7 +2721,7 @@
           "description": "An environment variable.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react .env",
+          "sourceNotes": "usf .env",
           "aiGuidance": "Generated from manifests."
         },
         {
@@ -2730,7 +2730,7 @@
           "description": "A configuration file or manifest.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react config/environments",
+          "sourceNotes": "usf config/environments",
           "aiGuidance": "Source of truth for generated env."
         },
         {
@@ -2739,7 +2739,7 @@
           "description": "A single typed configuration key.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react config-contract-catalogue",
+          "sourceNotes": "usf config-contract-catalogue",
           "aiGuidance": "Typed; named consumer."
         },
         {
@@ -2748,7 +2748,7 @@
           "description": "Carries or references a secret.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react secret tiers",
+          "sourceNotes": "usf secret tiers",
           "aiGuidance": "Never leak secret values into evidence."
         },
         {
@@ -2757,7 +2757,7 @@
           "description": "Carries no secret.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react common.json",
+          "sourceNotes": "usf common.json",
           "aiGuidance": "Safe to record."
         },
         {
@@ -2766,7 +2766,7 @@
           "description": "Selects/configures a provider or provider mode.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react AUTH_PROVIDER_MODE",
+          "sourceNotes": "usf AUTH_PROVIDER_MODE",
           "aiGuidance": "Provider-mode relevant."
         },
         {
@@ -2775,7 +2775,7 @@
           "description": "Scopes behaviour to an environment.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react stage manifests",
+          "sourceNotes": "usf stage manifests",
           "aiGuidance": "Environment relevant."
         },
         {
@@ -2784,7 +2784,7 @@
           "description": "A setting a proof depends on.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof env",
+          "sourceNotes": "usf proof env",
           "aiGuidance": "Proof relevant."
         },
         {
@@ -2793,7 +2793,7 @@
           "description": "Influences runtime behaviour.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react runtime ports/urls",
+          "sourceNotes": "usf runtime ports/urls",
           "aiGuidance": "Declare reload/restart policy."
         },
         {
@@ -2802,7 +2802,7 @@
           "description": "A compose-level setting.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react compose.yaml",
+          "sourceNotes": "usf compose.yaml",
           "aiGuidance": "Profiles/services/ports."
         }
       ],
@@ -2851,7 +2851,7 @@
       ],
       "expectedValidatorUse": "Classify each interface; detect runtime drift from contract.",
       "sourceInputs": [
-        "../react operational-semantics routes (~235); api-runtime; OpenAPI drift gate"
+        "usf operational-semantics routes (~235); api-runtime; OpenAPI drift gate"
       ],
       "values": [
         {
@@ -2860,7 +2860,7 @@
           "description": "An HTTP/API route.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react route inventory",
+          "sourceNotes": "usf route inventory",
           "aiGuidance": "Contract-first."
         },
         {
@@ -2887,7 +2887,7 @@
           "description": "Consumes an event.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react event consumers",
+          "sourceNotes": "usf event consumers",
           "aiGuidance": "Bound to event contract."
         },
         {
@@ -2914,7 +2914,7 @@
           "description": "A semantic boundary to a provider.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react ports",
+          "sourceNotes": "usf ports",
           "aiGuidance": "Fulfilled by adapters."
         },
         {
@@ -2923,7 +2923,7 @@
           "description": "An adapter's concrete binding surface.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react adapters-*",
+          "sourceNotes": "usf adapters-*",
           "aiGuidance": "Binds a provider mode."
         },
         {
@@ -2932,7 +2932,7 @@
           "description": "An internal cross-module contract.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react contracts-*",
+          "sourceNotes": "usf contracts-*",
           "aiGuidance": "Enforced by import boundaries."
         },
         {
@@ -2941,7 +2941,7 @@
           "description": "A contract exposed to external consumers.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react public API",
+          "sourceNotes": "usf public API",
           "aiGuidance": "Stability matters."
         }
       ],
@@ -2973,7 +2973,7 @@
       ],
       "expectedValidatorUse": "Classify events/workflows; require contracts before emission.",
       "sourceInputs": [
-        "../react event-semantics.json (10 events); cross-capability-interactions.json (8 interaction types)"
+        "usf event-semantics.json (10 events); cross-capability-interactions.json (8 interaction types)"
       ],
       "values": [
         {
@@ -2982,7 +2982,7 @@
           "description": "A semantic occurrence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react canonical events",
+          "sourceNotes": "usf canonical events",
           "aiGuidance": "Has a contract."
         },
         {
@@ -3000,7 +3000,7 @@
           "description": "An ordered/conditional multi-step operation.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react temporal/windmill",
+          "sourceNotes": "usf temporal/windmill",
           "aiGuidance": "Declare compensation."
         },
         {
@@ -3009,7 +3009,7 @@
           "description": "A dependency edge between capabilities.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react 8 interaction types",
+          "sourceNotes": "usf 8 interaction types",
           "aiGuidance": "Preserve ownership boundaries."
         },
         {
@@ -3018,7 +3018,7 @@
           "description": "A change in a lifecycle state.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react state machines",
+          "sourceNotes": "usf state machines",
           "aiGuidance": "Respect allowed transitions."
         },
         {
@@ -3045,7 +3045,7 @@
           "description": "A defined failure route.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react failureBehaviour",
+          "sourceNotes": "usf failureBehaviour",
           "aiGuidance": "Define explicitly."
         },
         {
@@ -3054,7 +3054,7 @@
           "description": "A defined compensating action.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react compensationBehaviour",
+          "sourceNotes": "usf compensationBehaviour",
           "aiGuidance": "Define explicitly."
         }
       ],
@@ -3089,7 +3089,7 @@
       ],
       "expectedValidatorUse": "Classify data concepts; enforce migration immutability and backup/restore evidence preservation.",
       "sourceInputs": [
-        "../react data-and-migration-plan.json (PostgreSQL schema-per-tenant; RLS; forward-only checksum-immutable migrations; backupRestore; destructiveOpControls)"
+        "usf data-and-migration-plan.json (PostgreSQL schema-per-tenant; RLS; forward-only checksum-immutable migrations; backupRestore; destructiveOpControls)"
       ],
       "values": [
         {
@@ -3098,7 +3098,7 @@
           "description": "A conceptual data structure/record.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react schema-per-tenant",
+          "sourceNotes": "usf schema-per-tenant",
           "aiGuidance": "Contract-level."
         },
         {
@@ -3107,7 +3107,7 @@
           "description": "A contract for how data is stored.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react postgres roles/RLS",
+          "sourceNotes": "usf postgres roles/RLS",
           "aiGuidance": "Preserve tenancy isolation."
         },
         {
@@ -3116,7 +3116,7 @@
           "description": "A stable identifier/key.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react organisationId etc.",
+          "sourceNotes": "usf organisationId etc.",
           "aiGuidance": "Stable; semantic."
         },
         {
@@ -3134,7 +3134,7 @@
           "description": "A forward-only change to data shape/structure.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react migration chain 001..034 then 035+",
+          "sourceNotes": "usf migration chain 001..034 then 035+",
           "aiGuidance": "Never edit a committed migration."
         },
         {
@@ -3143,7 +3143,7 @@
           "description": "Baseline data for an environment.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react seed.ts",
+          "sourceNotes": "usf seed.ts",
           "aiGuidance": "Deterministic where possible."
         },
         {
@@ -3152,7 +3152,7 @@
           "description": "Deterministic test/proof data.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react fixtureConstants",
+          "sourceNotes": "usf fixtureConstants",
           "aiGuidance": "Hermetic determinism."
         },
         {
@@ -3161,7 +3161,7 @@
           "description": "Evidence that a backup occurred.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react backupRestore; pgbackrest",
+          "sourceNotes": "usf backupRestore; pgbackrest",
           "aiGuidance": "Emitted evidence must be preserved."
         },
         {
@@ -3170,7 +3170,7 @@
           "description": "Evidence that a restore succeeded.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react L5 backup-restore",
+          "sourceNotes": "usf L5 backup-restore",
           "aiGuidance": "Missing collected evidence fails closed."
         },
         {
@@ -3179,7 +3179,7 @@
           "description": "Retention, legal-hold, or deletion semantics.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react retention and legal-hold runtime proofs",
+          "sourceNotes": "usf retention and legal-hold runtime proofs",
           "aiGuidance": "Privacy and compliance relevant."
         }
       ],
@@ -3210,7 +3210,7 @@
       ],
       "expectedValidatorUse": "Classify signals using a controlled vocabulary (OpenTelemetry-adapted).",
       "sourceInputs": [
-        "../react operational-semantics observabilitySignals/metrics/logs/traces; Loki/Tempo/Sentry correlation"
+        "usf operational-semantics observabilitySignals/metrics/logs/traces; Loki/Tempo/Sentry correlation"
       ],
       "values": [
         {
@@ -3219,7 +3219,7 @@
           "description": "A structured log record.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Loki",
+          "sourceNotes": "usf Loki",
           "aiGuidance": "Structured JSON."
         },
         {
@@ -3228,7 +3228,7 @@
           "description": "A numeric measurement.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Prometheus",
+          "sourceNotes": "usf Prometheus",
           "aiGuidance": "Stable names."
         },
         {
@@ -3237,7 +3237,7 @@
           "description": "A distributed trace.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Tempo",
+          "sourceNotes": "usf Tempo",
           "aiGuidance": "Correlatable."
         },
         {
@@ -3246,7 +3246,7 @@
           "description": "A unit within a trace.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react OTel",
+          "sourceNotes": "usf OTel",
           "aiGuidance": "Attributes controlled."
         },
         {
@@ -3264,7 +3264,7 @@
           "description": "Observability output emitted by a proof.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react proof evidence",
+          "sourceNotes": "usf proof evidence",
           "aiGuidance": "Preserve through collection."
         },
         {
@@ -3273,7 +3273,7 @@
           "description": "Service/resource identity attributes.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react OTel resource",
+          "sourceNotes": "usf OTel resource",
           "aiGuidance": "Controlled vocabulary."
         },
         {
@@ -3282,7 +3282,7 @@
           "description": "An id linking signals across systems.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react request/trace correlation",
+          "sourceNotes": "usf request/trace correlation",
           "aiGuidance": "Enables causality."
         }
       ],
@@ -3314,8 +3314,8 @@
       ],
       "expectedValidatorUse": "Require observability-signal name to be drawn from this controlled value set; arbitrary signal names are not automatically valid.",
       "sourceInputs": [
-        "../react operational-semantics observabilitySignals/metrics/logs/traces",
-        "../react/docs/evidence/e2e/prod-observability-correlation-latest.json"
+        "usf operational-semantics observabilitySignals/metrics/logs/traces",
+        "usf docs/evidence/e2e/prod-observability-correlation-latest.json"
       ],
       "values": [
         {
@@ -3324,7 +3324,7 @@
           "description": "Metric measuring authentication login latency in seconds.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react observability auth login duration metric",
+          "sourceNotes": "usf observability auth login duration metric",
           "aiGuidance": "Use for login latency measurement; preserve correlation to readiness proof."
         },
         {
@@ -3333,7 +3333,7 @@
           "description": "Log signal recording authentication login attempts for accountability.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react authentication audit/logging semantics",
+          "sourceNotes": "usf authentication audit/logging semantics",
           "aiGuidance": "Use for login accountability; do not treat as a domain event contract."
         },
         {
@@ -3342,7 +3342,7 @@
           "description": "Trace signal linking request handling across service boundaries.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Tempo/request correlation evidence",
+          "sourceNotes": "usf Tempo/request correlation evidence",
           "aiGuidance": "Use where causality across services must be preserved."
         },
         {
@@ -3351,7 +3351,7 @@
           "description": "Signal emitted by a runtime proof and preserved as proof evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit proof evidence",
+          "sourceNotes": "usf usf-audit proof evidence",
           "aiGuidance": "Do not drop proof output during report generation."
         },
         {
@@ -3360,7 +3360,7 @@
           "description": "Signal describing service/resource identity for correlation.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react OpenTelemetry-style resource semantics",
+          "sourceNotes": "usf OpenTelemetry-style resource semantics",
           "aiGuidance": "Use controlled resource attributes; do not assert OpenTelemetry compliance."
         },
         {
@@ -3369,7 +3369,7 @@
           "description": "Signal carrying correlation identity across logs, metrics, traces, proof, and audit evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react request/trace correlation",
+          "sourceNotes": "usf request/trace correlation",
           "aiGuidance": "Preserve across evidence collection and generated reports."
         }
       ],
@@ -3404,8 +3404,8 @@
       ],
       "expectedValidatorUse": "Require declared observability-signal attributes to be drawn from this controlled value set; arbitrary attributes are not automatically valid.",
       "sourceInputs": [
-        "../react operational-semantics observability attributes",
-        "../react Loki/Tempo/Sentry correlation evidence",
+        "usf operational-semantics observability attributes",
+        "usf Loki/Tempo/Sentry correlation evidence",
         "OpenTelemetry-style service/resource identity principles from standards-profile section 8"
       ],
       "values": [
@@ -3415,7 +3415,7 @@
           "description": "Name of the service emitting or owning the signal.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "OpenTelemetry-style service.name principle; ../react service correlation",
+          "sourceNotes": "OpenTelemetry-style service.name principle; usf service correlation",
           "aiGuidance": "Service identity is controlled; do not invent alternate keys."
         },
         {
@@ -3433,7 +3433,7 @@
           "description": "Execution environment associated with the signal.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react environment readiness and OTel-style deployment.environment principle",
+          "sourceNotes": "usf environment readiness and OTel-style deployment.environment principle",
           "aiGuidance": "Do not infer environment from provider mode."
         },
         {
@@ -3442,7 +3442,7 @@
           "description": "Provider mode associated with proof or runtime evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react provider mode proof evidence",
+          "sourceNotes": "usf provider mode proof evidence",
           "aiGuidance": "Do not upgrade hermetic evidence to live-provider evidence."
         },
         {
@@ -3451,7 +3451,7 @@
           "description": "Tenant identity used for correlation and tenancy proof.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react tenant-scoped observability and RLS proof semantics",
+          "sourceNotes": "usf tenant-scoped observability and RLS proof semantics",
           "aiGuidance": "Preserve tenant isolation; do not expose sensitive values in generated reports."
         },
         {
@@ -3460,7 +3460,7 @@
           "description": "Trace correlation identifier.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react request/trace correlation",
+          "sourceNotes": "usf request/trace correlation",
           "aiGuidance": "Use for trace correlation only; preserve through evidence collection."
         },
         {
@@ -3469,7 +3469,7 @@
           "description": "Span correlation identifier inside a trace.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react Tempo span correlation",
+          "sourceNotes": "usf Tempo span correlation",
           "aiGuidance": "Use only in trace/span context."
         },
         {
@@ -3478,7 +3478,7 @@
           "description": "Request correlation identifier.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react request correlation",
+          "sourceNotes": "usf request correlation",
           "aiGuidance": "Preserve across logs and traces when present."
         },
         {
@@ -3487,7 +3487,7 @@
           "description": "Runtime proof identity linked to emitted evidence.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react usf-audit proof evidence",
+          "sourceNotes": "usf usf-audit proof evidence",
           "aiGuidance": "Use to link a signal to proof evidence; do not treat generated report IDs as proof IDs."
         },
         {
@@ -3496,7 +3496,7 @@
           "description": "Capability identity associated with a signal.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react capability closure and proof evidence linkage",
+          "sourceNotes": "usf capability closure and proof evidence linkage",
           "aiGuidance": "Use only for declared capability semantics."
         }
       ],
@@ -3531,7 +3531,7 @@
       ],
       "expectedValidatorUse": "Require an audit semantic for security-sensitive and state-changing operations.",
       "sourceInputs": [
-        "../react auditAction field; assurance bar 0 mutations without audit; docs/evidence/audit"
+        "usf auditAction field; assurance bar 0 mutations without audit; docs/evidence/audit"
       ],
       "values": [
         {
@@ -3540,7 +3540,7 @@
           "description": "A semantically meaningful accountability record.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react auditAction",
+          "sourceNotes": "usf auditAction",
           "aiGuidance": "Explicit and durable."
         },
         {
@@ -3549,7 +3549,7 @@
           "description": "Audit of a security-sensitive action.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react auth/identity audits",
+          "sourceNotes": "usf auth/identity audits",
           "aiGuidance": "Required for privileged actions."
         },
         {
@@ -3558,7 +3558,7 @@
           "description": "Audit of a state-changing action.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react 0 mutations without audit",
+          "sourceNotes": "usf 0 mutations without audit",
           "aiGuidance": "Required for mutations."
         },
         {
@@ -3598,7 +3598,7 @@
       ],
       "expectedValidatorUse": "Classify UI semantics; map journeys to capabilities and proofs.",
       "sourceInputs": [
-        "../react ui-capability-model.json (28 capabilities; 12 personas); ui-definition.schema.json"
+        "usf ui-capability-model.json (28 capabilities; 12 personas); ui-definition.schema.json"
       ],
       "values": [
         {
@@ -3607,7 +3607,7 @@
           "description": "A user-facing surface/area.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react UI model",
+          "sourceNotes": "usf UI model",
           "aiGuidance": "Behaviour, not styling."
         },
         {
@@ -3616,7 +3616,7 @@
           "description": "A routed page.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react routes",
+          "sourceNotes": "usf routes",
           "aiGuidance": "Maps to a route."
         },
         {
@@ -3625,7 +3625,7 @@
           "description": "An end-to-end user journey.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react playwright journeys",
+          "sourceNotes": "usf playwright journeys",
           "aiGuidance": "Maps to proof."
         },
         {
@@ -3634,7 +3634,7 @@
           "description": "A UI state.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react states (loading/success/auth-required)",
+          "sourceNotes": "usf states (loading/success/auth-required)",
           "aiGuidance": "Preserve through redesign."
         },
         {
@@ -3643,7 +3643,7 @@
           "description": "User-visible validation rule.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react UI validation",
+          "sourceNotes": "usf UI validation",
           "aiGuidance": "Maps to error model."
         },
         {
@@ -3652,7 +3652,7 @@
           "description": "A user-visible error mapping.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react failureStates",
+          "sourceNotes": "usf failureStates",
           "aiGuidance": "Preserve mappings."
         },
         {
@@ -3661,7 +3661,7 @@
           "description": "Allowed/denied/read-only persona behaviour.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react personas",
+          "sourceNotes": "usf personas",
           "aiGuidance": "Maps to authorization."
         },
         {
@@ -3670,7 +3670,7 @@
           "description": "Landmark, heading, accessible name, keyboard behaviour.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react a11y contracts",
+          "sourceNotes": "usf a11y contracts",
           "aiGuidance": "Preserve accessible names."
         },
         {
@@ -3679,7 +3679,7 @@
           "description": "An action a user can take.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react commands",
+          "sourceNotes": "usf commands",
           "aiGuidance": "Maps to command/query."
         },
         {
@@ -3688,7 +3688,7 @@
           "description": "Mapping of a UI action to a command/query/event.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react UI commands",
+          "sourceNotes": "usf UI commands",
           "aiGuidance": "Preserve mappings."
         },
         {
@@ -3697,7 +3697,7 @@
           "description": "Mapping of a UI journey to an e2e proof.",
           "lifecycle": "canonical",
           "canonical": true,
-          "sourceNotes": "../react suite/scenario registries",
+          "sourceNotes": "usf suite/scenario registries",
           "aiGuidance": "Maps journey to proof."
         }
       ],
@@ -7268,7 +7268,7 @@
   "forbiddenValues": [
     {
       "token": "v2",
-      "rationale": "Encodes migration phase, not stable semantic meaning; USF is not a version branch of ../react.",
+      "rationale": "Encodes migration phase, not stable semantic meaning; USF is self-defined and is not a version branch of any repository.",
       "allowedException": "Historical source references, quoted source evidence, and explanatory text discussing historical context.",
       "aiGuidance": "Never use as a canonical path name, schema id, value id, taxonomy id, package name, or implementation name."
     },
@@ -7311,7 +7311,7 @@
   ],
   "reactSourceLearnings": [
     {
-      "learning": "../react proof ladder labels (L0-L6) are preserved as historical aliases, not copied as canonical future names.",
+      "learning": "USF self-defined source proof ladder labels (L0-L6) are preserved as historical aliases, not copied as canonical future names.",
       "vocabularyImpact": "proof-levels aliases l0-l6"
     },
     {
@@ -7391,7 +7391,7 @@
       "vocabularyImpact": "aliases across provider-modes, environment-classes, disposition-values, proof-levels, lifecycle-states"
     },
     {
-      "learning": "The ../react validator normalises no aliases and fails closed; USF instead records aliases explicitly so normalisation is controlled, not silent.",
+      "learning": "The USF self-defined source validator normalises no aliases and fails closed; USF instead records aliases explicitly so normalisation is controlled, not silent.",
       "vocabularyImpact": "alias convention in governance"
     }
   ],
@@ -7425,22 +7425,22 @@
     "Do not infer proof level from report status alone.",
     "Do not treat unknown or stale as pass.",
     "Do not upgrade hermetic proof into live external proof.",
-    "Do not treat source names from ../react as future canonical names unless justified.",
+    "Do not treat USF self-defined source names as future canonical names unless justified.",
     "Preserve source aliases where they help lineage.",
     "Stop or fail when ontology, taxonomy, and vocabulary conflict."
   ],
   "deferredWork": [
-    "JSON Schema files (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Vocabulary schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Taxonomy schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Registry schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Source reference schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Evidence envelope schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Proof evidence schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Import manifest schema (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A).",
-    "Validator implementation (resolved at draft/advisory level \u2014 tools/validate-spec/; active maturity deferred; see \u00a726 Amendment A).",
-    "Exact field-level enum wiring in schemas (resolved at draft level \u2014 see schema-authoring \u00a726 Amendment A) (validator enforces bindings).",
-    "Exact alias import from ../react where exhaustive source mining is needed.",
+    "JSON Schema files (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Vocabulary schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Taxonomy schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Registry schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Source reference schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Evidence envelope schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Proof evidence schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Import manifest schema (resolved at draft level — see schema-authoring §26 Amendment A).",
+    "Validator implementation (resolved at draft/advisory level — tools/validate-spec/; active maturity deferred; see §26 Amendment A).",
+    "Exact field-level enum wiring in schemas (resolved at draft level — see schema-authoring §26 Amendment A) (validator enforces bindings).",
+    "Exact alias import from usf where exhaustive source mining is needed.",
     "Exact OpenAPI/AsyncAPI vocabulary mapping.",
     "Full OpenTelemetry attribute mapping beyond the initial USF-controlled observability values.",
     "Exact command catalogue import.",
@@ -7479,7 +7479,7 @@
       "satisfied": true
     },
     {
-      "criterion": "Grounded in ../react.",
+      "criterion": "Grounded in usf.",
       "satisfied": true
     },
     {
