@@ -1,6 +1,6 @@
 # Self-Hosted Public Proof Origin Runbook
 
-This runbook records the current self-hosted origin configuration and operating boundary for the public proof/control routes. It is implementation evidence, not semantic authority.
+This runbook records the composed-Caddy configuration and operating boundary for the public proof/control routes and the operator-authenticated `/proof` cockpit gate. It is implementation evidence, not semantic authority.
 
 ## Scope
 
@@ -9,19 +9,24 @@ Routes:
 - /.well-known/usf-public-edge.json
 - /__proof/public-route
 - /__proof/public-route/
+- /proof (operator-authenticated cockpit gate, staging FQDN only — ADR 0015)
 
-Hostnames:
+Hostnames (parameterised by env, not hard-coded in the config):
 
-- 1e100.network
-- aldous.info
+- USF_PROOF_STAGING_FQDN (default 1e100.network)
+- USF_PROOF_PROD_FQDN (default aldous.info)
 
 Protected record:
 
 - ssh.aldous.info must remain DNS-only A 103.138.244.121.
 
-## Caddy Configuration
+## Composed Caddy Edge (clone-and-go, no systemd)
 
-The active origin configuration lives at /etc/caddy/Caddyfile on ssh.aldous.info. The proof-route configuration applied during USF-289 is:
+The public proof edge is a **composed** Caddy service (`external-caddy` in the generated staging Compose target), not a system/systemd Caddy. Its config is committed at `docker/caddy/Caddyfile` and mounted read-only at `/etc/caddy/Caddyfile` inside the container. There is no host `/etc/caddy` or systemd requirement: `make caddy-up` (`docker compose --profile gateway up -d external-caddy`) brings the edge up, publishing 127.0.0.1:80 and 127.0.0.1:443, and `make caddy-down` stops it. ACME/TLS material persists in the `caddy-data` named volume.
+
+The two site addresses are parameterised by env — `{$USF_PROOF_STAGING_FQDN}` and `{$USF_PROOF_PROD_FQDN}` — supplied by the Makefile (`USF_PROOF_STAGING_FQDN ?= 1e100.network`, `USF_PROOF_PROD_FQDN ?= aldous.info`, both exported). The public read-only proof routes (`proof_no_store_headers`, `proof_route_handlers`, `/.well-known/usf-public-edge.json`, `/__proof/public-route`) are served always-on and are independent of the `/proof` cockpit gate.
+
+The committed `docker/caddy/Caddyfile` is:
 
 ```caddyfile
 {
@@ -44,11 +49,6 @@ The active origin configuration lives at /etc/caddy/Caddyfile on ssh.aldous.info
 	header -ETag
 	header -Last-Modified
 	header -Server
-}
-
-http://1e100.network, http://aldous.info {
-	import proof_no_store_headers
-	redir https://{host}{uri} 308
 }
 
 (proof_route_handlers) {
@@ -128,24 +128,25 @@ http://1e100.network, http://aldous.info {
 (proof_cockpit_handlers) {
 	@proofCockpit path /proof /proof/*
 	handle @proofCockpit {
-		basic_auth {
-			{$USF_PROOF_COCKPIT_OPERATOR_USER} {$USF_PROOF_COCKPIT_OPERATOR_BCRYPT}
-		}
-		reverse_proxy 127.0.0.1:18085 {
-			header_up X-Forwarded-Host {host}
-			header_up X-Forwarded-User {http.auth.user.id}
-			header_up X-Real-IP {remote_host}
-		}
+		# Managed include from a writable runtime mount. The committed default is
+		# CLOSED (503); make proof-review-up writes an authenticated include and
+		# reloads Caddy; make proof-review-down restores the closed default.
+		import /srv/caddy-runtime/proof-cockpit-auth.caddy
 	}
 }
 
-1e100.network {
-	import proof_cockpit_handlers
-	import proof_route_handlers staging 1e100.network
+http://{$USF_PROOF_STAGING_FQDN}, http://{$USF_PROOF_PROD_FQDN} {
+	import proof_no_store_headers
+	redir https://{host}{uri} 308
 }
 
-aldous.info {
-	import proof_route_handlers production aldous.info
+{$USF_PROOF_STAGING_FQDN} {
+	import proof_cockpit_handlers
+	import proof_route_handlers staging {$USF_PROOF_STAGING_FQDN}
+}
+
+{$USF_PROOF_PROD_FQDN} {
+	import proof_route_handlers production {$USF_PROOF_PROD_FQDN}
 }
 
 http:// {
@@ -155,36 +156,42 @@ http:// {
 }
 ```
 
+The committed CLOSED default include (`docker/caddy/proof-cockpit-auth.caddy`, seeded into the writable runtime mount on `make caddy-up`) is:
+
+```caddyfile
+respond "USF proof review surface is not currently open" 503
+```
+
 This runbook intentionally records Caddy as implementation evidence only. Equivalent nginx, Node, or other HTTP origin implementations may satisfy the same repository contract if they preserve the same route, method, TLS, cache, header, host-mismatch, and non-claim boundaries.
 
 ## Operator Proof Cockpit Route (ADR 0015)
 
-Per [ADR 0015](../adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md), the interactive staging proof cockpit is exposed at `https://1e100.network/proof` as a bounded operator fixture. The `proof_cockpit_handlers` snippet above is imported into the `1e100.network` (staging) host only; it MUST NOT be imported into the `aldous.info` (production) host. It requires an HTTP basic-authentication operator credential before proxying any `/proof` request, and reverse-proxies to the `staging-proof-cockpit` Compose service, published loopback-only at `127.0.0.1:18085`.
+Per [ADR 0015](../adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md), the interactive staging proof cockpit is exposed at `https://<USF_PROOF_STAGING_FQDN>/proof` (default `https://1e100.network/proof`) as a bounded operator fixture, served by the composed `external-caddy` edge. The `proof_cockpit_handlers` snippet above is imported into the staging FQDN site only; it MUST NOT be imported into the production FQDN (`{$USF_PROOF_PROD_FQDN}`) site. The snippet does not hold an inline credential: it `import`s a managed include from a writable runtime mount (`/srv/caddy-runtime/proof-cockpit-auth.caddy`). The committed default include is CLOSED (responds 503), so the `/proof` gate is fail-closed until a review session opens it. The gate reverse-proxies to the `staging-proof-cockpit` Compose service reachable only over the compose network as `staging-proof-cockpit:8080` — the service publishes no direct host port.
 
-Operator credential (set on the origin host, never committed):
+Opening and closing the gate is managed by `make proof-review-up` / `make proof-review-down` (see the human-signoff runbook), which write the authenticated include and reload Caddy rather than restarting the edge:
 
-- `USF_PROOF_COCKPIT_OPERATOR_USER` — the operator login name (forwarded to the cockpit as `X-Forwarded-User` and recorded as the acceptance/signoff actor).
-- `USF_PROOF_COCKPIT_OPERATOR_BCRYPT` — the bcrypt hash of the operator password (generate with `caddy hash-password`).
+- `make proof-review-up` prompts for the operator username and password, hashes the password with the Caddy image (`docker run --rm caddy:2-alpine caddy hash-password`), and writes an include of the form `basic_auth { <operator-user> <bcrypt-hash> }` then `reverse_proxy staging-proof-cockpit:8080` to the gitignored runtime mount. The operator credential lives only in that gitignored runtime include — never committed and never set in the `external-caddy` service environment. The operator login name is forwarded to the cockpit as `X-Forwarded-User` and recorded as the acceptance/signoff actor.
+- `make proof-review-down` restores the committed CLOSED (503) default include and reloads Caddy, closing the gate.
 
-The cockpit's own write guard remains in force behind this edge: it serves write actions only when `USF_PROOF_COCKPIT_ALLOW_WRITES=yes` and a non-empty `USF_PROOF_COCKPIT_REVIEW_SECRET` are set on the service, and every write is CSRF-double-submit validated. Final signoff is never auto-completed. This route exposes hermetic, synthetic proof content to an authenticated operator; it claims no staging, deployment, production, live-provider, SOC, ISO, enterprise-production, product-UI, browser-E2E, or full-product readiness.
+The cockpit's own write guard remains in force behind this edge: it serves write actions only when `USF_PROOF_COCKPIT_ALLOW_WRITES=yes` and a non-empty `USF_PROOF_COCKPIT_REVIEW_SECRET` are set on the service (both supplied by `make proof-review-up` at bring-up as compose interpolation, `${USF_PROOF_COCKPIT_ALLOW_WRITES:-}` / `${USF_PROOF_COCKPIT_REVIEW_SECRET:-}`, so an unset secret leaves the cockpit read-only — there is no committed placeholder secret), and every write is CSRF-double-submit validated. Final signoff is never auto-completed. This route exposes hermetic, synthetic proof content to an authenticated operator; it claims no staging, deployment, production, live-provider, SOC, ISO, enterprise-production, product-UI, browser-E2E, or full-product readiness.
 
-Bringing the fixture up (origin host): start the staging Compose profile that includes the cockpit (`docker compose --profile proof-cockpit ... up -d staging-proof-cockpit`), set the two operator-credential env vars for Caddy, validate the Caddyfile (`caddy validate`), reload Caddy, then confirm `https://1e100.network/proof` prompts for the operator credential and, once authenticated, serves the cockpit. Acceptance and signoff recorded through this route persist to the cockpit's durable volume; promoting them into the committed `evidence/` corpus is the manual reconciliation step described in the human-signoff runbook.
+Bringing the fixture up: `make caddy-up` starts the composed edge (no operator credential), then `make proof-review-up` opens the operator-authenticated `/proof` gate, brings up the cockpit, reloads Caddy, and fail-closed verifies (no credential ⇒ 401, operator credential ⇒ 200) at the staging FQDN. Acceptance and signoff recorded through this route persist to the cockpit's durable volume; promoting them into the committed `evidence/` corpus is the manual reconciliation step described in the human-signoff runbook.
 
 ## Availability
 
-Caddy is managed by systemd as caddy.service. It is expected to be active and enabled. After any change, validate the Caddyfile, reload or restart Caddy, and re-run direct origin and public proof checks.
+Caddy runs as the composed `external-caddy` Compose service (`make caddy-up` / `make caddy-down`), not as a systemd unit. It is expected to be up whenever the public edge should serve. After any change to `docker/caddy/Caddyfile`, regenerate the Compose targets, validate the config (`docker compose exec external-caddy caddy validate --config /etc/caddy/Caddyfile`), reload the running edge (`docker compose exec external-caddy caddy reload --config /etc/caddy/Caddyfile`, falling back to `docker compose restart external-caddy`), and re-run the public proof checks.
 
 ## TLS
 
-Caddy automatic certificate management is expected after DNS-only cutover. While 1e100.network and aldous.info still point to Cloudflare proxy records, public ACME validation cannot complete against the self-hosted origin. TLS expiry checks and certificate renewal monitoring are required after cutover.
+Caddy automatic certificate management is expected after DNS-only cutover; certificate material persists in the `caddy-data` named volume. While the FQDNs still point to Cloudflare proxy records, public ACME validation cannot complete against the composed origin. TLS expiry checks and certificate renewal monitoring are required after cutover.
 
 ## Access Control
 
-SSH access to ssh.aldous.info is privileged operational access. Changes to /etc/caddy/Caddyfile require sudo. Key-only SSH, privileged access review, and command audit evidence should be recorded by the later enterprise readiness track before any production readiness claim.
+The composed edge config is the committed `docker/caddy/Caddyfile`; changing it is an ordinary tracked repository edit (no sudo, no host `/etc/caddy`). The only credential-bearing artefact is the gitignored `/proof` gate include on the writable runtime mount (`.proof-review/caddy`), written at runtime by `make proof-review-up` and never committed. SSH access to any staging/production host that runs the composed edge remains privileged operational access; key-only SSH, privileged access review, and command audit evidence should be recorded by the later enterprise readiness track before any production readiness claim.
 
 ## Change Control
 
-Before editing /etc/caddy/Caddyfile, create a timestamped backup. After editing, validate the config, reload Caddy, and verify the routes. Roll back by restoring the previous Caddyfile backup and reloading Caddy.
+The composed `docker/caddy/Caddyfile` is version-controlled, so change control is the repository's Git history and validators — no timestamped host backup is required. After editing the Caddyfile, regenerate the Compose targets, run the validators, then validate and reload the running edge and verify the routes. Roll back by reverting the committed change and reloading. Never edit a host `/etc/caddy/Caddyfile` for this surface; the composed edge is authoritative.
 
 ## Logging And Privacy
 

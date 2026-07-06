@@ -2,36 +2,43 @@
   "id": "command.proof-review-up",
   "commandKind": "make-target",
   "title": "Bring Up Operator-Authenticated Proof Review Surface",
-  "description": "Operator lifecycle command that brings up the ADR 0015 staging proof-cockpit review surface behind an HTTP basic-authentication operator credential.",
-  "purpose": "Let the accountable operator start the loopback staging-proof-cockpit service, front it with an operator-authenticated Caddy, and reach the human proof review, bulk acceptance, and signoff controls at /proof, prompting for the operator credential at invocation.",
+  "description": "Operator lifecycle command that opens the ADR 0015 staging proof-cockpit /proof gate on the running composed public proof edge (external-caddy) behind an HTTP basic-authentication operator credential.",
+  "purpose": "Let the accountable operator open the /proof cockpit gate on the shared composed Caddy edge (brought up first by the caddy-up prerequisite) by writing a reload-managed operator-authenticated include and starting the compose-network-only staging-proof-cockpit service in write mode, then reach the human proof review, bulk acceptance, and signoff controls at the staging FQDN /proof, prompting for the operator credential at invocation.",
   "invocation": "make proof-review-up",
   "inputs": [
     "tools/proof-review/proof-review.sh",
     "compose/compose.staging.generated.yaml",
+    "docker/caddy/Caddyfile",
+    "docker/caddy/proof-cockpit-auth.caddy",
     "evidence/proof-evidence/proof-cockpit/human-review-actions.json"
   ],
   "outputs": [
-    "Running staging-proof-cockpit Compose service on loopback 127.0.0.1:18085",
-    "Running operator-authenticated Caddy exposing http://localhost:8446/proof",
-    "Console URL and credential guidance on standard output"
+    "Running staging-proof-cockpit Compose service reachable only over the compose network as staging-proof-cockpit:8080",
+    "An operator-authenticated /proof gate include written to the gitignored runtime mount and loaded via a Caddy reload on the running external-caddy edge",
+    "Fail-closed verification status codes (no-credential 401, operator-credential 200) and the review URL on standard output"
   ],
   "environmentScope": [
     "local",
     "staging"
   ],
   "sideEffects": [
+    "Requires the composed public proof edge to be up first (the caddy-up Make prerequisite); the edge itself needs no operator credential",
     "Prompts for an operator username and password and hashes the password with the Caddy image",
-    "Writes a runtime Caddyfile containing the operator credential under .proof-review (gitignored, never committed)",
+    "Writes an operator-authenticated /proof gate include (basic_auth plus reverse_proxy) to the gitignored .proof-review/caddy runtime mount, never committed",
+    "Generates a fresh USF_PROOF_COCKPIT_REVIEW_SECRET for the session and enables cockpit write mode; an unset secret leaves the cockpit read-only",
     "Seeds the acceptance ledger Docker volume from the committed evidence corpus on first run only",
-    "Starts the staging-proof-cockpit Compose service and an ad-hoc operator-authenticated Caddy container"
+    "Starts the staging-proof-cockpit Compose service and reloads external-caddy to open the /proof gate"
   ],
-  "failureSemantics": "Fails closed if Docker is unavailable, the staging Compose file is missing, or the credential is empty; a failed bring-up records no acceptance and starts no unauthenticated surface. This command does not itself accept or sign off anything and upgrades no readiness claim.",
+  "failureSemantics": "Fails closed if Docker is unavailable, the staging Compose file is missing, the composed edge is not running, or the credential is empty; if the fail-closed verification does not observe a 401 without credentials the gate is closed (503 default restored) and the cockpit is torn down. A failed bring-up records no acceptance and leaves no unauthenticated surface. This command does not itself accept or sign off anything and upgrades no readiness claim.",
   "emitsEvidence": false,
   "sourceRefs": [
     "tools/proof-review/proof-review.sh",
     "Makefile",
     "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
     "docs/runbooks/proof-cockpit-human-signoff.md",
+    "docs/runbooks/self-hosted-public-proof-origin.md",
+    "docker/caddy/Caddyfile",
+    "docker/caddy/proof-cockpit-auth.caddy",
     "compose/compose.staging.generated.yaml"
   ],
   "disposition": "preserve",
@@ -48,5 +55,5 @@
     "environment-classes",
     "disposition-values"
   ],
-  "aiGuidance": "Use this command to stand up the operator-authenticated proof review surface per ADR 0015. It requires an operator credential and enforces HTTP basic authentication in front of the loopback cockpit; do not remove the authentication gate or the cockpit write guard, and do not treat a running review surface as a staging, deployment, production, or product-UI readiness claim."
+  "aiGuidance": "Use this command to open the operator-authenticated /proof gate on the shared composed proof edge per ADR 0015. It depends on caddy-up (the shared public edge, which needs no credential), then writes a reload-managed operator basic-authentication include in front of the compose-network-only cockpit; do not remove the authentication gate or the cockpit write guard, do not bake operator credentials into the caddy service environment, and do not treat a running review surface as a staging, deployment, production, or product-UI readiness claim."
 }

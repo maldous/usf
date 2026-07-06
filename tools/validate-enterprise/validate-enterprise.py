@@ -3208,7 +3208,7 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
         F.add("USF-ENTERPRISE-020", "caddy.composeProfiles", "caddy must remain gateway-profile gated")
     ports = caddy.get("ports", [])
     port_map = {port.get("portId"): port for port in ports if isinstance(port, dict)}
-    for port_id, published_port in (("gateway-http", 8081), ("gateway-https", 8443)):
+    for port_id, published_port in (("gateway-http", 80), ("gateway-https", 443)):
         port = port_map.get(port_id, {})
         if port.get("hostIp") != "127.0.0.1" or port.get("bindScope") != "loopback-only":
             F.add("USF-ENTERPRISE-020", f"caddy.{port_id}", "gateway ports must remain loopback-only")
@@ -3245,8 +3245,8 @@ def check_gateway_clickthrough_substrate(F: Findings, state: dict[str, Any]) -> 
     else:
         expected_transport = {
             "hostIp": "127.0.0.1",
-            "httpPublishedPort": 8081,
-            "httpsPublishedPort": 8443,
+            "httpPublishedPort": 80,
+            "httpsPublishedPort": 443,
             "publicExposureAllowed": False,
             "lanExposureAllowed": False,
         }

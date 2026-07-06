@@ -2,6 +2,13 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := verify
 
+# Public proof edge FQDNs for the composed external-caddy edge (docker/caddy/Caddyfile).
+# Override per environment, e.g. make caddy-up USF_PROOF_STAGING_FQDN=localhost.
+USF_PROOF_STAGING_FQDN ?= 1e100.network
+USF_PROOF_PROD_FQDN ?= aldous.info
+export USF_PROOF_STAGING_FQDN
+export USF_PROOF_PROD_FQDN
+
 .PHONY: \
 	help commands setup foundation dev-ready test-ready test test-composed test-coverage test-assurance \
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
@@ -9,7 +16,7 @@ SHELL := /bin/bash
 	proof-cockpit-validate proof-cockpit-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
-	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public proof-review-up proof-review-down proof-review-repin \
+	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
@@ -63,7 +70,9 @@ help:
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
 		'  make public-route-proof    Narrow public browser route and telemetry bootstrap proof' \
 		'  make proof-review-public   Verify live /proof human review surface availability' \
-		'  make proof-review-up       Bring up the operator-authenticated /proof review surface (prompts for credential)' \
+		'  make caddy-up              Bring up the shared composed public proof edge (external-caddy; no operator credential)' \
+		'  make caddy-down            Stop the shared composed public proof edge' \
+		'  make proof-review-up       Open the operator-authenticated /proof gate on the running edge (prompts for credential)' \
 		'  make proof-review-down     Commit the acceptance ledger from the review volume and tear the surface down' \
 		'  make proof-review-repin    Regenerate and re-pin proof-cockpit machine evidence to the current commit (then commit)' \
 		'  make external-http-behaviour-proof  Validate external HTTP behaviour contract' \
@@ -157,7 +166,13 @@ public-route-proof-production:
 proof-review-public:
 	corepack pnpm proof:proof-review-public
 
-proof-review-up:
+caddy-up:
+	bash tools/proof-review/proof-review.sh caddy-up
+
+caddy-down:
+	bash tools/proof-review/proof-review.sh caddy-down
+
+proof-review-up: caddy-up
 	bash tools/proof-review/proof-review.sh up
 
 proof-review-down:

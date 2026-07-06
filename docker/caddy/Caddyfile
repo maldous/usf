@@ -1,0 +1,150 @@
+{
+	auto_https disable_redirects
+}
+
+# USF composed public proof origin + operator-authenticated /proof cockpit edge.
+# Served by the composed external-caddy service (docker/caddy/Caddyfile mounted at
+# /etc/caddy/Caddyfile). Caddy is implementation evidence only; the repository
+# contract remains semantic authority. No system/systemd Caddy is required.
+#
+# Site addresses are parameterised by env so the same composed edge serves the
+# staging and production FQDNs:
+#   USF_PROOF_STAGING_FQDN  (default 1e100.network, Makefile env)
+#   USF_PROOF_PROD_FQDN     (default aldous.info,   Makefile env)
+#
+# external-caddy is the SHARED, always-on environment edge: the public read-only
+# proof routes (proof_no_store_headers, proof_route_handlers, /.well-known,
+# /__proof) are served independently of any operator gate and never depend on an
+# operator credential. `make caddy-up` starts this edge with no operator secret.
+#
+# The /proof cockpit route is imported ONLY into the staging site (ADR 0015) and
+# is never imported on the production site. Its gate is NOT inline env-var
+# basic_auth; it `import`s a managed include from a WRITABLE mounted runtime path
+# (/srv/caddy-runtime/proof-cockpit-auth.caddy). The committed default include is
+# CLOSED (responds 503): the /proof gate is opened only when `make proof-review-up`
+# writes an authenticated include (basic_auth + reverse_proxy to the cockpit) and
+# reloads Caddy, and closed again when `make proof-review-down` restores the 503
+# default and reloads. Fail-closed: if the include is absent Caddy fails to load;
+# the committed default is closed, so there is no unauthenticated fallback.
+
+(proof_no_store_headers) {
+	header Cache-Control "no-store, no-cache, max-age=0, must-revalidate"
+	header CDN-Cache-Control "no-store"
+	header Pragma "no-cache"
+	header Expires "0"
+	header X-Content-Type-Options "nosniff"
+	header Referrer-Policy "no-referrer"
+	header X-Frame-Options "DENY"
+	header Cross-Origin-Resource-Policy "same-origin"
+	header Access-Control-Allow-Origin "https://{host}"
+	header Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+	header Access-Control-Allow-Headers "traceparent, tracestate, x-correlation-id"
+	header Vary "Host, Accept-Encoding"
+	header -ETag
+	header -Last-Modified
+	header -Server
+}
+
+(proof_route_handlers) {
+	@jsonOptions {
+		path /.well-known/usf-public-edge.json
+		method OPTIONS
+	}
+	handle @jsonOptions {
+		import proof_no_store_headers
+		header Content-Type "application/json; charset=utf-8"
+		header Allow "GET, HEAD, OPTIONS"
+		respond "" 204
+	}
+
+	@jsonAllowed {
+		path /.well-known/usf-public-edge.json
+		method GET HEAD
+	}
+	handle @jsonAllowed {
+		import proof_no_store_headers
+		header Content-Type "application/json; charset=utf-8"
+		respond `{"marker":"usf-public-edge","environment":"{args.0}","fqdn":"{args.1}","gatewayNeutral":true,"requiredGateway":"none","origin":"self-hosted-public-proof-origin","netlifyLiveServingPath":false,"persistentMutation":false}` 200
+	}
+
+	@jsonUnsupported {
+		path /.well-known/usf-public-edge.json
+		not method GET HEAD OPTIONS
+	}
+	handle @jsonUnsupported {
+		import proof_no_store_headers
+		header Content-Type "application/json; charset=utf-8"
+		header Allow "GET, HEAD, OPTIONS"
+		respond `{"error":"method-not-allowed","marker":"usf-public-edge","allowedMethods":["GET","HEAD","OPTIONS"],"persistentMutation":false}` 405
+	}
+
+	@routeOptions {
+		path /__proof/public-route /__proof/public-route/
+		method OPTIONS
+	}
+	handle @routeOptions {
+		import proof_no_store_headers
+		header Content-Type "text/html; charset=utf-8"
+		header Allow "GET, HEAD, OPTIONS"
+		respond "" 204
+	}
+
+	@routeAllowed {
+		path /__proof/public-route /__proof/public-route/
+		method GET HEAD
+	}
+	handle @routeAllowed {
+		import proof_no_store_headers
+		header Content-Type "text/html; charset=utf-8"
+		header Content-Security-Policy `default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'`
+		respond `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>USF public route proof</title><meta name="usf-public-route-marker" content="usf-public-route"><meta name="usf-telemetry-bootstrap" content="faro,sentry"></head><body><main data-proof-marker="usf-public-route" data-proof-surface="public-route-telemetry-bootstrap" data-usf-environment="{args.0}" data-usf-fqdn="{args.1}">USF public route proof only.</main><script type="application/json" id="usf-public-route-telemetry-bootstrap">{"marker":"usf-public-route","route":"/__proof/public-route","routeClass":"public-proof-control-route","proofSurface":"public-route-telemetry-bootstrap","issueId":"USF-264","environment":"{args.0}","fqdn":"{args.1}","telemetrySystems":["faro","sentry"],"telemetryBootstrapOnly":true,"productUiReadinessClaim":false,"browserE2eReadinessClaim":false}</script></body></html>` 200
+	}
+
+	@routeUnsupported {
+		path /__proof/public-route /__proof/public-route/
+		not method GET HEAD OPTIONS
+	}
+	handle @routeUnsupported {
+		import proof_no_store_headers
+		header Content-Type "application/json; charset=utf-8"
+		header Allow "GET, HEAD, OPTIONS"
+		respond `{"error":"method-not-allowed","marker":"usf-public-route","allowedMethods":["GET","HEAD","OPTIONS"],"persistentMutation":false}` 405
+	}
+
+	@proofMissing path /.well-known/* /__proof/*
+	handle @proofMissing {
+		import proof_no_store_headers
+		header Content-Type "application/json; charset=utf-8"
+		respond `{"error":"not-found","proofRoute":false,"persistentMutation":false}` 404
+	}
+}
+
+(proof_cockpit_handlers) {
+	@proofCockpit path /proof /proof/*
+	handle @proofCockpit {
+		# Managed include from a writable runtime mount. The committed default is
+		# CLOSED (503); make proof-review-up writes an authenticated include and
+		# reloads Caddy; make proof-review-down restores the closed default.
+		import /srv/caddy-runtime/proof-cockpit-auth.caddy
+	}
+}
+
+http://{$USF_PROOF_STAGING_FQDN}, http://{$USF_PROOF_PROD_FQDN} {
+	import proof_no_store_headers
+	redir https://{host}{uri} 308
+}
+
+{$USF_PROOF_STAGING_FQDN} {
+	import proof_cockpit_handlers
+	import proof_route_handlers staging {$USF_PROOF_STAGING_FQDN}
+}
+
+{$USF_PROOF_PROD_FQDN} {
+	import proof_route_handlers production {$USF_PROOF_PROD_FQDN}
+}
+
+http:// {
+	import proof_no_store_headers
+	header Content-Type "application/json; charset=utf-8"
+	respond `{"error":"host-not-authorised","proofRoute":false,"persistentMutation":false}` 404
+}

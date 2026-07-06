@@ -46,9 +46,9 @@
   },
   "localTransportBoundary": {
     "hostIp": "127.0.0.1",
-    "httpPublishedPort": 8081,
-    "httpsPublishedPort": 8443,
-    "tlsTerminationPolicy": "TLS/local HTTPS port is catalogued for local compose only; certificate issuance, trust store, production TLS termination, mTLS, and live gateway TLS posture are not proven.",
+    "httpPublishedPort": 80,
+    "httpsPublishedPort": 443,
+    "tlsTerminationPolicy": "TLS/local HTTPS port is catalogued for the composed edge (external-caddy) bound loopback-only on 127.0.0.1:80/443; certificate issuance, trust store, production TLS termination, mTLS, and live gateway TLS posture are not proven.",
     "wafPolicy": "No WAF, edge, bot, rate-limit edge, or production gateway control is claimed by this issue.",
     "requestSizeLimitPolicy": "Route-specific limits must be proven before gateway readiness; this matrix records posture only.",
     "bodyTimeoutPolicy": "Route-specific timeout behaviour must be proven before gateway readiness; this matrix records posture only.",
