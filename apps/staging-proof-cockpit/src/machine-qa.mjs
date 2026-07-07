@@ -14,6 +14,7 @@ const DEFAULT_ARTIFACT_ROOT = "/tmp/usf-proof-cockpit-machine-qa";
 const EXECUTOR = "codex-playwright-machine-qa";
 const REPO_ROOT = process.cwd();
 const COMPOSE_TARGET = "compose/compose.test.generated.yaml";
+const MACHINE_QA_ENVIRONMENT_SCOPE = "test";
 const COMPOSE_PROFILES_FOR_SERVICE_UI = Object.freeze([
   "runtime-providers",
   "operator-tools",
@@ -832,7 +833,7 @@ function serviceCapabilityMappings(data) {
 function serviceUiCandidates(service) {
   const posture = authPostureForService(service);
   const candidates = (service.ports ?? [])
-    .filter((port) => ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()))
+    .filter((port) => isHostPublishedPortForMachineQa(port) && ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()))
     .map((port) => {
       const scheme = String(port.appProtocol).toLowerCase() === "https" ? "https" : "http";
       const host = !port.hostIp || port.hostIp === "0.0.0.0" ? "127.0.0.1" : port.hostIp;
@@ -852,6 +853,15 @@ function serviceUiCandidates(service) {
     candidates.sort((left, right) => Number(right.authRequired) - Number(left.authRequired));
   }
   return candidates;
+}
+
+function portAppliesToMachineQaEnvironment(port) {
+  const scopes = Array.isArray(port.environmentScopes) ? port.environmentScopes.map((scope) => String(scope)) : [];
+  return !scopes.length || scopes.includes(MACHINE_QA_ENVIRONMENT_SCOPE);
+}
+
+function isHostPublishedPortForMachineQa(port) {
+  return Boolean(port?.publishedPort) && portAppliesToMachineQaEnvironment(port);
 }
 
 function serviceEvidenceScreenshotId(serviceId) {
@@ -1107,8 +1117,9 @@ async function probeTargetObservation(service, report) {
       };
     }
   }
-  // No HTTP/HTTPS UI candidate: probe the first host-published port via a real TCP connect.
-  const publishedPort = (service.ports ?? []).find((port) => port.publishedPort);
+  // No HTTP/HTTPS UI candidate: probe the first host-published port for the selected
+  // machine-QA environment via a real TCP connect.
+  const publishedPort = (service.ports ?? []).find((port) => isHostPublishedPortForMachineQa(port));
   if (publishedPort) {
     const host = !publishedPort.hostIp || publishedPort.hostIp === "0.0.0.0" ? "127.0.0.1" : publishedPort.hostIp;
     const target = `tcp://${host}:${publishedPort.publishedPort} (${publishedPort.appProtocol ?? publishedPort.protocol ?? "tcp"})`;
@@ -1132,7 +1143,7 @@ async function probeTargetObservation(service, report) {
     sourceUrlOrCommand: `service:${service.serviceId}`,
     status: "no-host-published-port",
     reachable: false,
-    reason: "Service catalogue exposes no host-published port to probe from the machine QA host.",
+    reason: `Service catalogue exposes no host-published port for the ${MACHINE_QA_ENVIRONMENT_SCOPE} machine QA environment to probe from the host.`,
     outputExcerpt: "",
     outputRedacted: false,
     redactionFinding: "",
@@ -1955,6 +1966,10 @@ async function verifyComposeServiceEvidence(page, data, report) {
       const mappings = mappingsByService.get(service.serviceId) ?? [];
       const posture = authPostureForService(service);
       const candidates = serviceUiCandidates(service);
+      const hasCatalogueHttpCandidate = (service.ports ?? []).some((port) =>
+        ["http", "https"].includes(String(port.appProtocol ?? "").toLowerCase()),
+      );
+      const noHostPublishedHttpCandidate = !candidates.length && hasCatalogueHttpCandidate;
       const credentialSummary = redactedCredentialSummary(posture, service.serviceId);
       const evidenceTimestamp = new Date().toISOString();
       const authPostureComparison = authPostureMismatchForService(service, posture.authPosture);
@@ -2085,21 +2100,28 @@ async function verifyComposeServiceEvidence(page, data, report) {
             evidence.gaps.push(`Required OpenBao credential could not be safely accessed for ${service.serviceId}.`);
           }
         }
-        evidence.evidenceClass = posture.authPosture === "unsafe-to-capture" ? "unsafe-to-screenshot" : "cli-equivalent";
-        evidence.evidenceKind = posture.authPosture === "unsafe-to-capture" ? "redacted-api-equivalent" : "service-catalogue-cli-equivalent";
+        evidence.evidenceClass = posture.authPosture === "unsafe-to-capture" ? "unsafe-to-screenshot" : noHostPublishedHttpCandidate ? "host-unpublished-equivalent" : "cli-equivalent";
+        evidence.evidenceKind = posture.authPosture === "unsafe-to-capture" ? "redacted-api-equivalent" : noHostPublishedHttpCandidate ? "service-catalogue-host-boundary-equivalent" : "service-catalogue-cli-equivalent";
         evidence.evidenceStatus = posture.screenshotEquivalentAllowed !== false && !evidence.gaps.length ? "machine-pass" : "machine-fail";
         evidence.artifactConfirmed = evidence.evidenceStatus === "machine-pass";
-        evidence.redactionStatus = posture.authPosture === "unsafe-to-capture" ? "screenshot-equivalent-redacted" : "not-applicable-service-catalogue-only";
-        evidence.directCaptureStatus = posture.authPosture === "unsafe-to-capture" ? "not-captured-unsafe-to-screenshot" : "not-applicable-api-cli-only";
+        evidence.redactionStatus = posture.authPosture === "unsafe-to-capture" ? "screenshot-equivalent-redacted" : noHostPublishedHttpCandidate ? "not-applicable-host-unpublished" : "not-applicable-service-catalogue-only";
+        evidence.directCaptureStatus = posture.authPosture === "unsafe-to-capture" ? "not-captured-unsafe-to-screenshot" : noHostPublishedHttpCandidate ? "not-applicable-no-host-published-port" : "not-applicable-api-cli-only";
         evidence.authenticatedCaptureStatus = "not-required-approved-equivalent";
         evidence.screenshotEquivalentReason =
-          posture.screenshotEquivalentReason ??
+          noHostPublishedHttpCandidate
+            ? `The ${COMPOSE_TARGET} target exposes no host-published HTTP/HTTPS candidate for ${service.serviceId} in the ${MACHINE_QA_ENVIRONMENT_SCOPE} machine QA environment, so machine QA records a hash-addressed screenshot-equivalent of the service mapping instead of inventing host reachability.`
+            : posture.screenshotEquivalentReason ??
           "The service has no safe direct UI capture target in the repository catalogue, so machine QA records a hash-addressed screenshot-equivalent page.";
-        evidence.nextSafeAction = "Human auditor reviews the equivalent evidence page, verifies the service catalogue mapping and proof command, and records the review decision.";
-        evidence.targetSystemObservation =
-          `${evidence.serviceName} was classified as ${posture.authPosture}; machine QA generated a hash-addressed screenshot-equivalent artifact at ${evidence.apiCliArtifactPath || serviceEvidenceArtifactPath(report, service.serviceId)}.`;
-        evidence.targetSystemObservationRationale =
-          "The repository catalogue has no safe direct UI capture target for this service class, so the equivalent artifact records the service mapping, auth posture, redaction boundary, source SHA, run ID, and reenactment path for human review.";
+        evidence.nextSafeAction = noHostPublishedHttpCandidate
+          ? "Human auditor reviews the equivalent evidence page, verifies that the selected generated Compose target has no host-published service URL for this environment, and records the review decision."
+          : "Human auditor reviews the equivalent evidence page, verifies the service catalogue mapping and proof command, and records the review decision.";
+        evidence.targetSystemObservation = noHostPublishedHttpCandidate
+          ? `${evidence.serviceName} has no host-published HTTP/HTTPS target in ${COMPOSE_TARGET} for ${MACHINE_QA_ENVIRONMENT_SCOPE}; targetObservation recorded ${evidence.targetObservation.status}. Machine QA generated a hash-addressed screenshot-equivalent artifact at ${evidence.apiCliArtifactPath || serviceEvidenceArtifactPath(report, service.serviceId)}.`
+          : `${evidence.serviceName} was classified as ${posture.authPosture}; machine QA generated a hash-addressed screenshot-equivalent artifact at ${evidence.apiCliArtifactPath || serviceEvidenceArtifactPath(report, service.serviceId)}.`;
+        evidence.targetSystemObservationRationale = noHostPublishedHttpCandidate
+          ? "The selected generated Compose target does not publish this service to the machine-QA host, so the equivalent artifact records the service mapping, environment boundary, source SHA, run ID, and reenactment path without upgrading it to direct UI evidence."
+          : posture.screenshotEquivalentReason ??
+            "The repository catalogue has no safe direct UI capture target for this service class, so the equivalent artifact records the service mapping, auth posture, redaction boundary, source SHA, run ID, and reenactment path for human review.";
         evidence.observationRationale = evidence.targetSystemObservationRationale;
         await captureGeneratedServiceEvidenceScreenshot(servicePage, report, evidence);
         writeServiceEvidenceArtifact(report, evidence);
