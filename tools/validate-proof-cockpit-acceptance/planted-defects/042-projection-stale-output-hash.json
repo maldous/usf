@@ -1,0 +1,8 @@
+{
+  "id": "042-projection-stale-output-hash",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-stale-output-hash"
+  },
+  "purpose": "Proves stale projection output hashes are rejected."
+}

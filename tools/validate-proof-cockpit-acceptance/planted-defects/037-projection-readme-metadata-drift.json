@@ -1,0 +1,8 @@
+{
+  "id": "037-projection-readme-metadata-drift",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-readme-metadata-drift"
+  },
+  "purpose": "Proves the projection-only bundle README cannot drift from retained latest machine-run metadata."
+}

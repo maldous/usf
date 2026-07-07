@@ -1,0 +1,8 @@
+{
+  "id": "043-projection-terminal-refresh-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-terminal-refresh-missing"
+  },
+  "purpose": "Proves projection-only review artifacts keep terminal fresh machine evidence refresh assigned to USF-966."
+}

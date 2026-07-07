@@ -1,0 +1,8 @@
+{
+  "id": "041-projection-fresh-machine-qa-overclaim",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-fresh-machine-qa-overclaim"
+  },
+  "purpose": "Proves projection-only review artifacts cannot claim fresh machine QA was generated."
+}

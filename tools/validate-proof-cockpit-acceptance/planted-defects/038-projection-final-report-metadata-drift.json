@@ -1,0 +1,8 @@
+{
+  "id": "038-projection-final-report-metadata-drift",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-final-report-metadata-drift"
+  },
+  "purpose": "Proves the projection-only final report cannot drift from retained latest machine-run metadata."
+}

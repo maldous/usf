@@ -1,0 +1,8 @@
+{
+  "id": "044-projection-repin-command-wiring-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-002",
+  "fixture": {
+    "kind": "projection-repin-command-wiring-missing"
+  },
+  "purpose": "Proves projection-only re-pin command and aggregate validation wiring cannot be removed silently."
+}

@@ -14,11 +14,12 @@ export USF_PROOF_PROD_FQDN
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
 	proof-cockpit-validate proof-cockpit-validate-current proof-cockpit-compare proof-cockpit-selftest \
+	proof-cockpit-projection-repin proof-cockpit-projection-repin-check \
 	evidence-invalidation-validate evidence-invalidation-selftest \
 	evidence-reuse-validate evidence-reuse-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
-	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
+	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin proof-review-projection-repin \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
@@ -77,6 +78,8 @@ help:
 		'  make public-route-proof    Narrow public browser route and telemetry bootstrap proof' \
 		'  make proof-review-public   Verify live /proof human review surface availability' \
 		'  make proof-cockpit-compare Compare two proof-cockpit artifact roots without re-running machine QA' \
+		'  make proof-cockpit-projection-repin  Regenerate proof-cockpit review projections from retained machine evidence' \
+		'  make proof-cockpit-projection-repin-check  Check proof-cockpit projection outputs are current' \
 		'  make caddy-up              Bring up the shared composed public proof edge (external-caddy; no operator credential)' \
 		'  make caddy-down            Stop the shared composed public proof edge' \
 		'  make proof-review-up       Open the operator-authenticated /proof gate on the running edge (prompts for credential)' \
@@ -142,6 +145,12 @@ proof-cockpit-compare:
 
 proof-cockpit-selftest:
 	corepack pnpm proof-cockpit:selftest
+
+proof-cockpit-projection-repin:
+	corepack pnpm proof-cockpit:projection-repin
+
+proof-cockpit-projection-repin-check:
+	corepack pnpm proof-cockpit:projection-repin:check
 
 evidence-invalidation-validate:
 	corepack pnpm evidence-invalidation:validate
@@ -209,6 +218,11 @@ proof-review-repin:
 	@printf '%s\n' '[proof-review] Machine evidence regenerated and re-pinned to the current commit.' \
 		'[proof-review] Review git status and commit the regenerated evidence, e.g.:' \
 		'[proof-review]   git add evidence/proof-evidence/proof-cockpit artifacts/proof-cockpit && git commit -m "chore(proof): re-pin machine evidence"'
+
+proof-review-projection-repin:
+	corepack pnpm proof-cockpit:projection-repin
+	@printf '%s\n' '[proof-review] Review projections regenerated from retained machine evidence only.' \
+		'[proof-review] Fresh machine QA was not run; terminal machine evidence refresh remains assigned to USF-966.'
 
 external-http-behaviour-proof:
 	corepack pnpm proof:external-http-behaviour

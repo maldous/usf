@@ -1,0 +1,8 @@
+{
+  "id": "040-projection-current-head-substituted",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-current-head-substituted"
+  },
+  "purpose": "Proves projection-only metadata cannot silently replace retained proof source SHA with current repository HEAD."
+}

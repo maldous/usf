@@ -1,0 +1,8 @@
+{
+  "id": "039-projection-missing-nonclaim",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-missing-nonclaim"
+  },
+  "purpose": "Proves projection-only review artifacts preserve required non-claim boundaries."
+}
