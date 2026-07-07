@@ -1,0 +1,114 @@
+{
+  "target": "workflow-guardrails",
+  "expectedRule": "USF-CI-GUARD-008",
+  "records": {
+    ".github/workflows/dispatch-proof.yml": {
+      "name": "dispatch-proof",
+      "on": {
+        "workflow_dispatch": {
+          "inputs": {
+            "target_ref": {
+              "required": true,
+              "type": "string"
+            },
+            "change_class": {
+              "required": true,
+              "type": "choice",
+              "options": [
+                "docs-metadata",
+                "semantic-definition",
+                "validator-tooling",
+                "unit-behaviour",
+                "in-memory-dev-proof",
+                "compose-test-proof",
+                "public-proof",
+                "pre-staging-external",
+                "terminal-proof-cockpit",
+                "ambiguous"
+              ]
+            },
+            "proof_family": {
+              "required": true,
+              "type": "choice",
+              "options": [
+                "proof-cockpit-retained-evidence",
+                "public-proof-route",
+                "pre-staging-external-smoke",
+                "compose-provider-deep",
+                "repo-aggregate-retained",
+                "terminal-proof-cockpit-machine-evidence"
+              ]
+            },
+            "selected_checks": {
+              "required": true,
+              "type": "string"
+            },
+            "reason": {
+              "required": true,
+              "type": "string"
+            },
+            "timeout_minutes": {
+              "required": true,
+              "type": "choice",
+              "options": [
+                "30",
+                "60",
+                "120",
+                "240"
+              ]
+            },
+            "retry_policy": {
+              "required": true,
+              "type": "choice",
+              "options": [
+                "none",
+                "one-retry-on-transient"
+              ]
+            },
+            "artifact_retention_days": {
+              "required": true,
+              "type": "choice",
+              "options": [
+                "7",
+                "14",
+                "30"
+              ]
+            },
+            "allow_terminal_machine_qa": {
+              "required": true,
+              "type": "choice",
+              "default": "no",
+              "options": [
+                "no",
+                "yes"
+              ]
+            }
+          }
+        }
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": {
+        "dispatch-proof": {
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@v4",
+              "with": {
+                "fetch-depth": 0,
+                "persist-credentials": false
+              }
+            },
+            {
+              "run": "python3 tools/dispatch-proof/dispatch-proof.py validate-inputs"
+            },
+            {
+              "run": "python3 /tmp/usf-dispatch-proof.py run"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
