@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.provider-mismatch-reuse-pass",
+  "description": "Evidence reuse no longer forces a full affected proof on provider mismatch.",
+  "expectedRule": "USF-ENV-LADDER-007",
+  "fixture": {
+    "target": "reuse",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/providerMismatchFallback",
+        "value": "none"
+      }
+    ]
+  }
+}

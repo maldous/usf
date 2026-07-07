@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.missing-collected-evidence-passes",
+  "description": "Missing collected evidence is incorrectly allowed to pass.",
+  "expectedRule": "USF-ENV-LADDER-006",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/missingCollectedEvidenceCanPass",
+        "value": true
+      }
+    ]
+  }
+}

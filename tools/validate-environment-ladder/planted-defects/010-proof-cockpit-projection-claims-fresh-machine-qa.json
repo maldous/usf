@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.proof-cockpit-projection-claims-fresh-machine-qa",
+  "description": "Projection-only proof-cockpit output is incorrectly allowed to claim fresh machine QA.",
+  "expectedRule": "USF-ENV-LADDER-008",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/proofCockpitProjectionOnlyCanClaimFreshMachineQa",
+        "value": true
+      }
+    ]
+  }
+}

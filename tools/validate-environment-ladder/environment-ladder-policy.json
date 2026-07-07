@@ -1,0 +1,261 @@
+{
+  "id": "environment-ladder-policy",
+  "version": 1,
+  "title": "Environment Ladder Discipline Policy",
+  "description": "Validator-owned machine-readable policy for USF-992 standalone environment ladder validation. This file supports enforcement only and does not define USF semantic authority.",
+  "issueId": "USF-992",
+  "parentIssueId": "USF-989",
+  "designIssueId": "USF-456",
+  "orchestrationIssueId": "USF-952",
+  "terminalFreshMachineQaIssue": "USF-966",
+  "nonAuthorityStatement": "This validator-owned machine format tracks enforcement only. It does not define USF semantic authority, readiness, staging, production, compliance, store, release, live-provider, or provider posture.",
+  "authorityReferences": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/registries/schema-registry.json",
+    "spec/instances/environment-promotion/environment-promotion-enterprise-standard.json",
+    "spec/instances/environment/hermetic.json",
+    "spec/instances/environment/production-shaped.json",
+    "spec/instances/provider-mode/mock-identity-provider.json",
+    "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+    "tools/validate-evidence-reuse/evidence-reuse-decisions.json"
+  ],
+  "requiredVocabularyValues": {
+    "provider-modes": [
+      "hermetic-mock",
+      "local-composed-real-service",
+      "external-sandbox",
+      "live-external-provider"
+    ],
+    "environment-classes": [
+      "local",
+      "hermetic",
+      "integration",
+      "staging",
+      "production-shaped",
+      "production-live"
+    ],
+    "proof-levels": [
+      "discovery-proven",
+      "executable-proven",
+      "contract-proven",
+      "behaviour-proven",
+      "substrate-proven",
+      "resilience-proven",
+      "foundation-proven"
+    ],
+    "report-statuses": [
+      "pass",
+      "fail",
+      "partial",
+      "stale",
+      "not-run",
+      "advisory",
+      "unknown"
+    ]
+  },
+  "stageStandards": [
+    {
+      "stage": "dev",
+      "environmentClass": "local",
+      "permittedProviderModes": [
+        "hermetic-mock",
+        "local-composed-real-service"
+      ],
+      "defaultProviderMode": "hermetic-mock",
+      "composeRequiredForRequiredServices": false,
+      "allowedClaims": [
+        "bounded-dev-evidence"
+      ],
+      "prohibitedClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "stage": "test",
+      "environmentClass": "integration",
+      "permittedProviderModes": [
+        "local-composed-real-service"
+      ],
+      "defaultProviderMode": "local-composed-real-service",
+      "composeRequiredForRequiredServices": true,
+      "allowedClaims": [],
+      "prohibitedClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "stage": "staging",
+      "environmentClass": "staging",
+      "permittedProviderModes": [
+        "local-composed-real-service",
+        "external-sandbox"
+      ],
+      "defaultProviderMode": "external-sandbox",
+      "composeRequiredForRequiredServices": true,
+      "allowedClaims": [],
+      "prohibitedClaims": [
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "full-dev-readiness",
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "usf-133-closure"
+      ]
+    },
+    {
+      "stage": "production",
+      "environmentClass": "production-live",
+      "permittedProviderModes": [
+        "live-external-provider"
+      ],
+      "defaultProviderMode": "live-external-provider",
+      "composeRequiredForRequiredServices": false,
+      "allowedClaims": [],
+      "prohibitedClaims": [
+        "soc-readiness",
+        "iso27001-certification",
+        "enterprise-production-readiness",
+        "full-product-readiness",
+        "usf-133-closure"
+      ]
+    }
+  ],
+  "freshnessStates": [
+    "current",
+    "stale",
+    "unknown",
+    "partial",
+    "mismatched",
+    "missing-collected-evidence",
+    "generated-report-only",
+    "superseded",
+    "human-review-required",
+    "terminal-refresh-deferred"
+  ],
+  "nonPassFreshnessStates": [
+    "stale",
+    "unknown",
+    "partial",
+    "mismatched",
+    "missing-collected-evidence",
+    "generated-report-only",
+    "superseded",
+    "human-review-required",
+    "terminal-refresh-deferred"
+  ],
+  "globalPolicies": {
+    "devEvidenceCanSatisfyTest": false,
+    "testEvidenceCanSatisfyStaging": false,
+    "stagingEvidenceCanSatisfyProduction": false,
+    "productionShapedCanSatisfyProductionLive": false,
+    "hermeticMockCanSatisfyComposedOrLive": false,
+    "providerMismatchCanPass": false,
+    "environmentMismatchCanPass": false,
+    "generatedReportsAreAuthority": false,
+    "generatedReportOnlyCanSatisfyProof": false,
+    "missingCollectedEvidenceCanPass": false,
+    "staleCanPass": false,
+    "unknownCanPass": false,
+    "unknownImpactFallback": "full-proof-for-affected-family-or-widen-to-all",
+    "proofOverclaimCanPass": false,
+    "automaticHumanSignoffAllowed": false,
+    "proofCockpitProjectionOnlyCanClaimFreshMachineQa": false,
+    "terminalRefreshDeferredCanPass": false,
+    "terminalFreshMachineQaIssue": "USF-966",
+    "stagingIsDefaultProofPath": false,
+    "linearDefinesSemanticAuthority": false
+  },
+  "proofBoundaries": [
+    {
+      "id": "dev-in-memory-first",
+      "environmentStage": "dev",
+      "permittedProviderModes": [
+        "hermetic-mock",
+        "local-composed-real-service"
+      ],
+      "cannotSatisfy": [
+        "test-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness"
+      ]
+    },
+    {
+      "id": "test-compose-required",
+      "environmentStage": "test",
+      "permittedProviderModes": [
+        "local-composed-real-service"
+      ],
+      "cannotSatisfy": [
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness"
+      ]
+    },
+    {
+      "id": "staging-non-destructive-rehearsal",
+      "environmentStage": "staging",
+      "permittedProviderModes": [
+        "local-composed-real-service",
+        "external-sandbox"
+      ],
+      "cannotSatisfy": [
+        "production-readiness",
+        "live-provider-readiness"
+      ]
+    },
+    {
+      "id": "production-live-explicit-only",
+      "environmentStage": "production",
+      "permittedProviderModes": [
+        "live-external-provider"
+      ],
+      "requiresExplicitApproval": true
+    }
+  ],
+  "nonClaims": [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-product-readiness",
+    "no-store-readiness",
+    "no-compliance-readiness",
+    "generated-reports-are-not-authority",
+    "linear-is-not-semantic-authority",
+    "terminal-proof-cockpit-machine-evidence-refresh-deferred-to-USF-966"
+  ],
+  "commandContracts": {
+    "validateScript": "python3 tools/validate-environment-ladder/validate-environment-ladder.py all --json",
+    "selftestScript": "python3 tools/validate-environment-ladder/validate-environment-ladder.py selftest --json",
+    "makeValidateTarget": "environment-ladder-validate",
+    "makeSelftestTarget": "environment-ladder-selftest",
+    "aggregateWiringDeferred": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.hermetic-provider-accepted-as-composed-or-live",
+  "description": "Hermetic mock provider evidence is incorrectly allowed to satisfy composed or live provider requirements.",
+  "expectedRule": "USF-ENV-LADDER-005",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/hermeticMockCanSatisfyComposedOrLive",
+        "value": true
+      }
+    ]
+  }
+}

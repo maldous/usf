@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.dev-evidence-accepted-as-test",
+  "description": "Dev evidence is incorrectly allowed to satisfy Test readiness.",
+  "expectedRule": "USF-ENV-LADDER-006",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/devEvidenceCanSatisfyTest",
+        "value": true
+      }
+    ]
+  }
+}

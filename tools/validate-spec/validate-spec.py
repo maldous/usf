@@ -139,6 +139,7 @@ AUTHORIZED_TOOLING = {
     "tools/validate-test-readiness/validate-test-readiness.py",
     "tools/validate-evidence-invalidation/validate-evidence-invalidation.py",
     "tools/validate-evidence-reuse/validate-evidence-reuse.py",
+    "tools/validate-environment-ladder/validate-environment-ladder.py",
     "tools/validate-public-fqdn/validate-public-fqdn.py",
     "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py",
     "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",

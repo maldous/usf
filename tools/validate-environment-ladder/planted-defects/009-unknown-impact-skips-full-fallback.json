@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.unknown-impact-skips-full-fallback",
+  "description": "Unknown change impact is incorrectly allowed to avoid full proof fallback.",
+  "expectedRule": "USF-ENV-LADDER-006",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/unknownImpactFallback",
+        "value": "skip"
+      }
+    ]
+  }
+}
