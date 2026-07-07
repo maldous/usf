@@ -9,6 +9,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -35,6 +36,7 @@ PROOF_ANCHOR_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "proof-anchor.yml"
 README_PATH = ROOT / "README.md"
 
 RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 13)]
+COMPARATOR_RULE_ID = "USF-PROOF-COCKPIT-COMPARE"
 
 REQUIRED_ROUTES = [
     "/proof",
@@ -215,6 +217,100 @@ AUTH_POSTURES = {
 }
 
 HEX_SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
+
+COMPARATOR_REQUIRED_JSON_FILES = [
+    "qa-run.json",
+    "proof-cockpit-machine-qa-run.json",
+    "route-manifest.json",
+    "semantic-capability-manifest.json",
+    "service-manifest.json",
+    "service-evidence-manifest.json",
+    "proof-cockpit-screenshot-manifest.json",
+    "evidence-index.json",
+    "chain-of-custody.json",
+    "gap-register.json",
+    "human-import-manifest.json",
+]
+
+COMPARATOR_OPTIONAL_FILES = [
+    "adapter-manifest.json",
+    "command-manifest.json",
+    "control-map.json",
+    "route-port-adapter-manifest.json",
+    "source-document-manifest.json",
+    "external-review-report.md",
+    "external-review-bundle/qa-run.json",
+    "external-review-bundle/evidence-index.json",
+    "external-review-bundle/chain-of-custody.json",
+    "external-review-bundle/non-claims.md",
+    "external-review-bundle/external-review-report.md",
+]
+
+COMPARATOR_PATH_HASH_PAIRS = [
+    ("screenshotPath", "screenshotHash"),
+    ("filePath", "screenshotHash"),
+    ("authenticatedUiScreenshotPath", "authenticatedUiScreenshotHash"),
+    ("artifactPath", "artifactHash"),
+    ("apiCliArtifactPath", "artifactHash"),
+    ("rawArtifactPath", "artifactHash"),
+    ("evidenceArtifact", "artifactHash"),
+]
+
+SCREENSHOT_HASH_KEYS = {"screenshotHash", "authenticatedUiScreenshotHash"}
+VOLATILE_JSON_KEYS = {
+    "qaRun",
+    "runId",
+    "startedAt",
+    "completedAt",
+    "generatedAt",
+    "capturedAt",
+    "observedAt",
+    "timestamp",
+    "artifactDir",
+    "screenshotDir",
+    "filePath",
+    "screenshotPath",
+    "rawArtifactPath",
+    "artifactPath",
+    "apiCliArtifactPath",
+    "authenticatedUiScreenshotPath",
+    "baseUrl",
+    "durationMs",
+    "latencyMs",
+    "elapsedMs",
+    "actionId",
+}
+
+COMPARATOR_INPUT_CONTRACT = {
+    "beforeArtifactRoot": "Directory containing a retained proof-cockpit machine-run artifact set.",
+    "afterArtifactRoot": "Directory containing the machine-run or projection artifact set being assessed.",
+    "beforeProjectionRoot": "Optional evidence-side projection root for before comparison context.",
+    "afterProjectionRoot": "Optional evidence-side projection root for after comparison context.",
+    "assessedCommit": "Commit context for the comparison; defaults to current HEAD when omitted.",
+}
+
+COMPARATOR_NORMALIZATION_CONTRACT = {
+    "allowedVolatileFields": [
+        "run ID",
+        "timestamps",
+        "temp paths",
+        "localhost ports",
+        "action IDs",
+        "latency or duration fields",
+        "generated artifact directory",
+        "screenshot bytes when screenshot identity and evidence posture remain stable",
+    ],
+    "failClosedFields": [
+        "non-claim tokens",
+        "warning, failure, or gap counts",
+        "capability IDs and statuses",
+        "service authentication posture",
+        "hash presence and hash validity",
+        "artifact path resolvability",
+        "current-run metadata consistency",
+        "generated-report authority overclaims",
+    ],
+}
 
 
 def load_json(path: Path) -> Any:
@@ -546,6 +642,507 @@ def secret_literal_markers(text: str) -> list[str]:
     return markers
 
 
+def path_label(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def compare_difference(status: str, category: str, subject: str, message: str) -> dict[str, str]:
+    severity = "blocking" if status in {"fail", "owner-review-required"} else status
+    return {
+        "ruleId": COMPARATOR_RULE_ID,
+        "status": status,
+        "severity": severity,
+        "category": category,
+        "subject": subject,
+        "message": message,
+    }
+
+
+def normalize_artifact_string(value: str, artifact_root: Path) -> str:
+    normalized = value
+    normalized = normalized.replace(str(artifact_root), "<artifact-root>")
+    normalized = re.sub(r"/tmp/usf-proof-cockpit-machine-qa/[A-Za-z0-9T_.:-]+", "<artifact-root>", normalized)
+    normalized = re.sub(r"artifacts/proof-cockpit/machine-runs/[A-Za-z0-9T_.:-]+", "artifacts/proof-cockpit/machine-runs/<artifact-run>", normalized)
+    normalized = re.sub(r"qa-run-\d{4}-\d{2}-\d{2}T[0-9:.:-]+Z", "qa-run-<run-id>", normalized)
+    normalized = re.sub(r"\d{4}-\d{2}-\d{2}T\d{2}[:\-]\d{2}[:\-]\d{2}(?:\.\d+)?Z", "<timestamp>", normalized)
+    normalized = re.sub(r"(https?://(?:127\.0\.0\.1|localhost)):\d+", r"\1:<port>", normalized)
+    return normalized
+
+
+def is_volatile_json_key(key: str) -> bool:
+    if key in VOLATILE_JSON_KEYS:
+        return True
+    lowered = key.lower()
+    return any(marker in lowered for marker in ["timestamp", "latency", "duration", "elapsed"])
+
+
+def normalize_artifact_json(value: Any, artifact_root: Path, key: str = "") -> Any:
+    if isinstance(value, dict):
+        return {nested_key: normalize_artifact_json(nested, artifact_root, nested_key) for nested_key, nested in sorted(value.items())}
+    if isinstance(value, list):
+        return [normalize_artifact_json(nested, artifact_root, key) for nested in value]
+    if isinstance(value, str):
+        if key in SCREENSHOT_HASH_KEYS:
+            return "<screenshot-bytes-hash>"
+        normalized = normalize_artifact_string(value, artifact_root)
+        if is_volatile_json_key(key):
+            return normalized
+        return normalized
+    if isinstance(value, (int, float)) and is_volatile_json_key(key):
+        return "<volatile-number>"
+    return value
+
+
+def comparator_load_json(
+    artifact_root: Path,
+    relative_path: str,
+    differences: list[dict[str, str]],
+    label: str,
+) -> Any:
+    path = artifact_root / relative_path
+    if not path.exists():
+        differences.append(compare_difference("fail", "missing-required-artifact", f"{label}:{relative_path}", "Required comparator input artifact is missing"))
+        return None
+    try:
+        return load_json(path)
+    except Exception as exc:
+        differences.append(compare_difference("fail", "strict-json", f"{label}:{relative_path}", f"Artifact is not strict JSON: {exc}"))
+        return None
+
+
+def comparator_load_text(artifact_root: Path, relative_path: str) -> str:
+    path = artifact_root / relative_path
+    if not path.exists() or not path.is_file():
+        return ""
+    return path.read_text(encoding="utf-8")
+
+
+def comparator_text_overclaims(text: str) -> list[str]:
+    normalized_text = normalized_scan_text(text)
+    patterns = [
+        r"staging readiness (is )?(complete|ready|approved|passed)",
+        r"production readiness (is )?(complete|ready|approved|passed)",
+        r"deployment readiness (is )?(complete|ready|approved|passed)",
+        r"live provider readiness (is )?(complete|ready|approved|passed)",
+        r"soc readiness (is )?(complete|ready|approved|passed)",
+        r"iso certification (is )?(complete|ready|approved|passed)",
+        r"enterprise production readiness (is )?(complete|ready|approved|passed)",
+        r"product ui readiness (is )?(complete|ready|approved|passed)",
+        r"browser e2e readiness (is )?(complete|ready|approved|passed)",
+        r"full product readiness (is )?(complete|ready|approved|passed)",
+        r"generated reports are authority",
+    ]
+    return [pattern for pattern in patterns if re.search(pattern, normalized_text)]
+
+
+def comparator_file_set(artifact_root: Path) -> list[str]:
+    return sorted(path_label(path.relative_to(artifact_root)) for path in artifact_root.rglob("*") if path.is_file())
+
+
+def comparator_nonclaim_tokens(snapshot_text: str) -> list[str]:
+    lowered = snapshot_text.lower()
+    return sorted(claim for claim in REQUIRED_NON_CLAIMS if claim in lowered)
+
+
+def comparator_counts(machine_run: dict[str, Any], gap_register: dict[str, Any]) -> dict[str, int]:
+    counts = machine_run.get("counts", {}) if isinstance(machine_run, dict) else {}
+    return {
+        "pass": int(counts.get("pass", 0) or 0),
+        "warn": int(counts.get("warn", 0) or 0),
+        "fail": int(counts.get("fail", 0) or 0),
+        "gap": int(counts.get("gap", counts.get("gaps", len(machine_run.get("gaps", [])))) or 0),
+        "gapRegister": len(gap_register.get("gaps", [])) if isinstance(gap_register, dict) else 0,
+    }
+
+
+def comparator_capability_status(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    capabilities = manifest.get("capabilities", []) if isinstance(manifest, dict) else []
+    return {
+        row.get("capabilityId", ""): {
+            "result": row.get("result"),
+            "evidenceStatus": row.get("evidenceStatus"),
+            "humanReviewStatus": row.get("humanReviewStatus"),
+        }
+        for row in capabilities
+        if row.get("capabilityId")
+    }
+
+
+def comparator_service_auth(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    services = manifest.get("services", []) if isinstance(manifest, dict) else []
+    fields = ["authPosture", "actualAuthPosture", "catalogueAuthExpectation", "authPostureMismatch"]
+    return {row.get("serviceId", ""): {field: row.get(field) for field in fields} for row in services if row.get("serviceId")}
+
+
+def comparator_screenshot_identity(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    screenshots = manifest.get("screenshots", []) if isinstance(manifest, dict) else []
+    volatile_fields = {"filePath", "screenshotPath", "screenshotHash", "authenticatedUiScreenshotPath", "authenticatedUiScreenshotHash", "artifactPath", "artifactHash"}
+    identities: dict[str, dict[str, Any]] = {}
+    for index, row in enumerate(screenshots):
+        if not isinstance(row, dict):
+            continue
+        screenshot_id = row.get("id") or row.get("screenshotId") or row.get("route") or f"screenshot-{index}"
+        identities[str(screenshot_id)] = {key: value for key, value in sorted(row.items()) if key not in volatile_fields}
+    return identities
+
+
+def comparator_screenshot_hashes(manifest: dict[str, Any]) -> dict[str, str]:
+    screenshots = manifest.get("screenshots", []) if isinstance(manifest, dict) else []
+    hashes: dict[str, str] = {}
+    for index, row in enumerate(screenshots):
+        if not isinstance(row, dict):
+            continue
+        screenshot_id = row.get("id") or row.get("screenshotId") or row.get("route") or f"screenshot-{index}"
+        screenshot_hash = row.get("screenshotHash") or row.get("authenticatedUiScreenshotHash") or row.get("artifactHash")
+        if screenshot_hash:
+            hashes[str(screenshot_id)] = str(screenshot_hash)
+    return hashes
+
+
+def validate_comparator_path_hashes(
+    value: Any,
+    artifact_root: Path,
+    differences: list[dict[str, str]],
+    subject: str,
+) -> None:
+    if isinstance(value, dict):
+        for path_field, hash_field in COMPARATOR_PATH_HASH_PAIRS:
+            path_value = value.get(path_field)
+            if not path_value:
+                continue
+            resolved = resolve_artifact_path(str(path_value), artifact_root)
+            if resolved is None:
+                continue
+            if resolved.exists() and resolved.is_dir():
+                metadata_hash = value.get("metadataHash")
+                if value.get("hashBasis") != "normalized-metadata-sha256" or not HEX_SHA256_RE.fullmatch(str(metadata_hash or "")):
+                    differences.append(compare_difference("fail", "missing-hash", subject, f"Directory artifact path lacks normalized metadata hash: {path_field}"))
+                continue
+            expected_hash = value.get(hash_field)
+            if not expected_hash:
+                differences.append(compare_difference("fail", "missing-hash", subject, f"Path-bearing field lacks hash: {path_field}"))
+                continue
+            if not HEX_SHA256_RE.fullmatch(str(expected_hash)):
+                differences.append(compare_difference("fail", "malformed-hash", subject, f"Hash field is not SHA-256 hex: {hash_field}"))
+                continue
+            if not resolved.exists() or not resolved.is_file():
+                differences.append(compare_difference("fail", "broken-path", subject, f"Hash-bearing artifact path is missing: {path_value}"))
+                continue
+            actual = sha256_file(resolved)
+            if actual != expected_hash:
+                differences.append(compare_difference("fail", "hash-mismatch", subject, f"Artifact hash mismatch for {path_value}"))
+        for nested_key, nested in value.items():
+            validate_comparator_path_hashes(nested, artifact_root, differences, f"{subject}.{nested_key}")
+    elif isinstance(value, list):
+        for index, nested in enumerate(value):
+            validate_comparator_path_hashes(nested, artifact_root, differences, f"{subject}[{index}]")
+
+
+def validate_snapshot_metadata(snapshot: dict[str, Any], differences: list[dict[str, str]]) -> None:
+    label = snapshot["label"]
+    qa_run = snapshot["rawJson"].get("qa-run.json", {})
+    machine_run = snapshot["rawJson"].get("proof-cockpit-machine-qa-run.json", {})
+    bundle_qa_run = snapshot["rawJson"].get("external-review-bundle/qa-run.json", {})
+    for left_key, right_key in [
+        ("qaRun", "qaRun"),
+        ("sourceGitSha", "sourceGitSha"),
+        ("deploymentSha", "deploymentSha"),
+        ("environment", "environment"),
+    ]:
+        left_value = qa_run.get(left_key)
+        right_value = machine_run.get(right_key)
+        if left_value in (None, "") or right_value in (None, ""):
+            differences.append(compare_difference("fail", "current-run-metadata", f"{label}:qa-run", f"Current-run metadata field missing: {left_key}"))
+        elif str(left_value) != str(right_value):
+            differences.append(compare_difference("fail", "current-run-metadata", f"{label}:qa-run", f"qa-run {left_key} does not match machine run {right_key}"))
+    if bundle_qa_run:
+        for field in ["qaRun", "sourceGitSha", "deploymentSha", "environment"]:
+            if bundle_qa_run.get(field) != qa_run.get(field):
+                differences.append(compare_difference("fail", "current-run-metadata", f"{label}:external-review-bundle/qa-run.json", f"Bundle qa-run {field} does not match artifact root qa-run"))
+    counts = snapshot["counts"]
+    for field in ["warn", "fail", "gap", "gapRegister"]:
+        if counts.get(field, 0) != 0:
+            differences.append(compare_difference("fail", "unresolved-warning-gap", f"{label}:counts", f"Comparator input has non-zero {field} count: {counts.get(field)}"))
+
+
+def build_comparator_snapshot(
+    artifact_root: Path,
+    label: str,
+    differences: list[dict[str, str]],
+) -> dict[str, Any] | None:
+    if not artifact_root.exists() or not artifact_root.is_dir():
+        differences.append(compare_difference("fail", "input-contract", label, f"Artifact root is not a directory: {artifact_root}"))
+        return None
+    raw_json: dict[str, Any] = {}
+    normalized_json: dict[str, Any] = {}
+    for relative_path in COMPARATOR_REQUIRED_JSON_FILES:
+        loaded = comparator_load_json(artifact_root, relative_path, differences, label)
+        if loaded is not None:
+            raw_json[relative_path] = loaded
+            normalized_json[relative_path] = normalize_artifact_json(loaded, artifact_root)
+    for relative_path in COMPARATOR_OPTIONAL_FILES:
+        path = artifact_root / relative_path
+        if path.suffix == ".json" and path.exists():
+            loaded = comparator_load_json(artifact_root, relative_path, differences, label)
+            if loaded is not None:
+                raw_json[relative_path] = loaded
+                normalized_json[relative_path] = normalize_artifact_json(loaded, artifact_root)
+    text_files = {
+        relative_path: comparator_load_text(artifact_root, relative_path)
+        for relative_path in COMPARATOR_OPTIONAL_FILES
+        if relative_path.endswith(".md")
+    }
+    snapshot_text = "\n".join([json.dumps(raw_json, sort_keys=True), *text_files.values()])
+    for pattern in comparator_text_overclaims(snapshot_text):
+        differences.append(compare_difference("fail", "generated-report-overclaim", label, f"Forbidden generated-report or readiness overclaim matched: {pattern}"))
+    for relative_path, value in raw_json.items():
+        validate_comparator_path_hashes(value, artifact_root, differences, f"{label}:{relative_path}")
+    snapshot = {
+        "label": label,
+        "root": artifact_root,
+        "fileSet": comparator_file_set(artifact_root),
+        "rawJson": raw_json,
+        "normalizedJson": normalized_json,
+        "textFiles": text_files,
+        "snapshotText": snapshot_text,
+        "nonClaims": comparator_nonclaim_tokens(snapshot_text),
+        "counts": comparator_counts(raw_json.get("proof-cockpit-machine-qa-run.json", {}), raw_json.get("gap-register.json", {})),
+        "capabilityStatus": comparator_capability_status(raw_json.get("semantic-capability-manifest.json", {})),
+        "serviceAuth": comparator_service_auth(raw_json.get("service-evidence-manifest.json", {})),
+        "screenshotIdentity": comparator_screenshot_identity(raw_json.get("proof-cockpit-screenshot-manifest.json", {})),
+        "screenshotHashes": comparator_screenshot_hashes(raw_json.get("proof-cockpit-screenshot-manifest.json", {})),
+    }
+    validate_snapshot_metadata(snapshot, differences)
+    return snapshot
+
+
+def compare_mapping(
+    before: dict[str, Any],
+    after: dict[str, Any],
+    field: str,
+    category: str,
+    differences: list[dict[str, str]],
+) -> None:
+    before_value = before.get(field)
+    after_value = after.get(field)
+    if before_value != after_value:
+        differences.append(compare_difference("fail", category, field, f"{field} changed between before and after comparator inputs"))
+
+
+def compare_artifact_snapshots(
+    before: dict[str, Any],
+    after: dict[str, Any],
+    differences: list[dict[str, str]],
+) -> None:
+    if before["fileSet"] != after["fileSet"]:
+        before_files = set(before["fileSet"])
+        after_files = set(after["fileSet"])
+        missing = sorted(before_files - after_files)
+        added = sorted(after_files - before_files)
+        differences.append(compare_difference("fail", "file-set", "artifact-root", f"Artifact file set changed; missing={missing[:10]} added={added[:10]}"))
+    compare_mapping(before, after, "nonClaims", "non-claim-token", differences)
+    compare_mapping(before, after, "counts", "warning-gap-count", differences)
+    compare_mapping(before, after, "capabilityStatus", "capability-status", differences)
+    compare_mapping(before, after, "serviceAuth", "service-auth-posture", differences)
+    compare_mapping(before, after, "screenshotIdentity", "screenshot-identity", differences)
+    if before.get("screenshotIdentity") == after.get("screenshotIdentity") and before.get("screenshotHashes") != after.get("screenshotHashes"):
+        screenshot_ids = sorted(set(before.get("screenshotHashes", {})) | set(after.get("screenshotHashes", {})))
+        for screenshot_id in screenshot_ids:
+            if before.get("screenshotHashes", {}).get(screenshot_id) != after.get("screenshotHashes", {}).get(screenshot_id):
+                differences.append(compare_difference("owner-review-required", "screenshot-byte-drift", screenshot_id, "Screenshot bytes changed while screenshot identity and evidence posture remained stable"))
+    for relative_path in sorted(set(before["normalizedJson"]) | set(after["normalizedJson"])):
+        before_raw = before["rawJson"].get(relative_path)
+        after_raw = after["rawJson"].get(relative_path)
+        before_normalized = before["normalizedJson"].get(relative_path)
+        after_normalized = after["normalizedJson"].get(relative_path)
+        if before_normalized == after_normalized:
+            if before_raw != after_raw:
+                differences.append(compare_difference("warn", "approved-volatile-difference", relative_path, "Only approved volatile fields changed after normalization"))
+            continue
+        differences.append(compare_difference("fail", "normalized-artifact-drift", relative_path, "Normalized artifact JSON changed outside approved volatile fields"))
+
+
+def run_compare(
+    before_artifact_dir: Path | None,
+    after_artifact_dir: Path | None,
+    before_projection_root: Path | None,
+    after_projection_root: Path | None,
+    assessed_commit: str,
+) -> dict[str, Any]:
+    differences: list[dict[str, str]] = []
+    if before_artifact_dir is None:
+        differences.append(compare_difference("fail", "input-contract", "beforeArtifactRoot", "Missing before artifact root"))
+    if after_artifact_dir is None:
+        differences.append(compare_difference("fail", "input-contract", "afterArtifactRoot", "Missing after artifact root"))
+    if not assessed_commit:
+        assessed_commit = current_head()
+    before = build_comparator_snapshot(before_artifact_dir, "before", differences) if before_artifact_dir else None
+    after = build_comparator_snapshot(after_artifact_dir, "after", differences) if after_artifact_dir else None
+    if before and after:
+        compare_artifact_snapshots(before, after, differences)
+    fail_count = len([item for item in differences if item["status"] == "fail"])
+    owner_review_count = len([item for item in differences if item["status"] == "owner-review-required"])
+    warning_count = len([item for item in differences if item["status"] == "warn"])
+    status = "fail" if fail_count else "owner-review-required" if owner_review_count else "pass"
+    return {
+        "validator": "validate-proof-cockpit-acceptance",
+        "mode": "compare",
+        "status": status,
+        "inputContract": COMPARATOR_INPUT_CONTRACT,
+        "normalizationContract": COMPARATOR_NORMALIZATION_CONTRACT,
+        "beforeArtifactRoot": str(before_artifact_dir) if before_artifact_dir else "",
+        "afterArtifactRoot": str(after_artifact_dir) if after_artifact_dir else "",
+        "beforeProjectionRoot": str(before_projection_root) if before_projection_root else "",
+        "afterProjectionRoot": str(after_projection_root) if after_projection_root else "",
+        "assessedCommit": assessed_commit,
+        "passCount": 1 if status == "pass" else 0,
+        "warningCount": warning_count,
+        "failureCount": fail_count,
+        "ownerReviewRequiredCount": owner_review_count,
+        "differences": differences,
+    }
+
+
+def write_json_fixture(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, sort_keys=True), encoding="utf-8")
+
+
+def write_text_fixture(path: Path, value: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(value, encoding="utf-8")
+
+
+def write_minimal_comparator_artifact(root: Path, run_id: str, port: int, auth_posture: str = "api/cli-only") -> None:
+    root.mkdir(parents=True, exist_ok=True)
+    screenshot_path = root / "screenshots" / "postgres.png"
+    service_artifact_path = root / "service-evidence" / "postgres.json"
+    screenshot_path.parent.mkdir(parents=True, exist_ok=True)
+    service_artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    screenshot_path.write_bytes(b"synthetic screenshot bytes")
+    service_artifact = {"serviceId": "postgres", "result": "pass"}
+    write_json_fixture(service_artifact_path, service_artifact)
+    screenshot_hash = sha256_file(screenshot_path)
+    service_artifact_hash = sha256_file(service_artifact_path)
+    qa_run = {
+        "qaRun": run_id,
+        "sourceGitSha": "8a959501dbc1ecc0390c1e50388b94e8fbe20e8e",
+        "deploymentSha": "8a959501dbc1ecc0390c1e50388b94e8fbe20e8e",
+        "environment": "local-machine-qa",
+        "baseUrl": f"http://127.0.0.1:{port}",
+        "startedAt": "2026-07-06T15:10:34.016Z",
+        "completedAt": "2026-07-06T15:13:15.267Z",
+    }
+    machine_run = {
+        **qa_run,
+        "sourceSha": qa_run["sourceGitSha"],
+        "artifactDir": str(root),
+        "screenshotDir": str(root / "screenshots"),
+        "counts": {"pass": 1, "warn": 0, "fail": 0, "gap": 0},
+        "gaps": [],
+    }
+    service_manifest = {
+        "services": [
+            {
+                "serviceId": "postgres",
+                "authPosture": auth_posture,
+                "actualAuthPosture": auth_posture,
+                "catalogueAuthExpectation": "api/cli-only",
+                "authPostureMismatch": auth_posture != "api/cli-only",
+                "screenshotPath": str(screenshot_path),
+                "screenshotHash": screenshot_hash,
+                "artifactPath": str(service_artifact_path),
+                "artifactHash": service_artifact_hash,
+            }
+        ]
+    }
+    write_json_fixture(root / "qa-run.json", qa_run)
+    write_json_fixture(root / "proof-cockpit-machine-qa-run.json", machine_run)
+    write_json_fixture(root / "route-manifest.json", {"routes": [{"route": "/proof", "result": "pass"}]})
+    write_json_fixture(root / "semantic-capability-manifest.json", {"capabilities": [{"capabilityId": "cap-001", "result": "pass", "evidenceStatus": "machine-pass", "humanReviewStatus": "human-review-required"}]})
+    write_json_fixture(root / "service-manifest.json", {"services": [{"serviceId": "postgres"}]})
+    write_json_fixture(root / "service-evidence-manifest.json", service_manifest)
+    write_json_fixture(root / "proof-cockpit-screenshot-manifest.json", {"screenshots": [{"id": "screenshot-service-postgres", "filePath": str(screenshot_path), "screenshotHash": screenshot_hash, "result": "pass"}]})
+    write_json_fixture(root / "evidence-index.json", {"evidenceRecords": []})
+    write_json_fixture(root / "chain-of-custody.json", {"chainOfCustody": []})
+    write_json_fixture(root / "gap-register.json", {"gaps": []})
+    write_json_fixture(root / "human-import-manifest.json", {"humanImportRequired": True})
+    write_json_fixture(root / "external-review-bundle" / "qa-run.json", qa_run)
+    write_text_fixture(root / "external-review-bundle" / "non-claims.md", "\n".join(REQUIRED_NON_CLAIMS))
+
+
+def mutate_comparator_screenshot_bytes(root: Path) -> None:
+    screenshot_path = root / "screenshots" / "postgres.png"
+    screenshot_path.write_bytes(b"synthetic screenshot bytes changed for owner review")
+    screenshot_hash = sha256_file(screenshot_path)
+    screenshot_manifest = load_json(root / "proof-cockpit-screenshot-manifest.json")
+    screenshot_manifest["screenshots"][0]["screenshotHash"] = screenshot_hash
+    write_json_fixture(root / "proof-cockpit-screenshot-manifest.json", screenshot_manifest)
+    service_manifest = load_json(root / "service-evidence-manifest.json")
+    service_manifest["services"][0]["screenshotHash"] = screenshot_hash
+    write_json_fixture(root / "service-evidence-manifest.json", service_manifest)
+
+
+def comparator_selftest() -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    results: list[dict[str, Any]] = []
+    failures: list[dict[str, str]] = []
+    with tempfile.TemporaryDirectory(prefix="usf-proof-cockpit-compare-") as temp_dir:
+        fixture_root = Path(temp_dir)
+        before = fixture_root / "before"
+        after_allowed = fixture_root / "after-allowed"
+        after_regression = fixture_root / "after-regression"
+        after_review = fixture_root / "after-review"
+        write_minimal_comparator_artifact(before, "qa-run-2026-07-06T15-10-34-016Z", 12177)
+        write_minimal_comparator_artifact(after_allowed, "qa-run-2026-07-06T15-11-34-016Z", 12178)
+        write_minimal_comparator_artifact(after_regression, "qa-run-2026-07-06T15-11-34-016Z", 12178, "intentionally anonymous/no-auth")
+        write_minimal_comparator_artifact(after_review, "qa-run-2026-07-06T15-11-34-016Z", 12178)
+        mutate_comparator_screenshot_bytes(after_review)
+        allowed = run_compare(before, after_allowed, None, None, current_head())
+        allowed_passed = allowed["status"] == "pass" and allowed["failureCount"] == 0
+        results.append(
+            {
+                "fixture": "comparator-allowed-volatile-difference",
+                "expectedStatus": "pass",
+                "observedStatus": allowed["status"],
+                "warningCount": allowed["warningCount"],
+                "passed": allowed_passed,
+            }
+        )
+        if not allowed_passed:
+            failures.append(compare_difference("fail", "comparator-selftest", "comparator-allowed-volatile-difference", "Allowed volatile comparator fixture did not pass"))
+        regression = run_compare(before, after_regression, None, None, current_head())
+        regression_passed = regression["status"] == "fail" and any(item["category"] == "service-auth-posture" for item in regression["differences"])
+        results.append(
+            {
+                "fixture": "comparator-hidden-service-auth-regression",
+                "expectedStatus": "fail",
+                "observedStatus": regression["status"],
+                "observedCategories": sorted({item["category"] for item in regression["differences"]}),
+                "passed": regression_passed,
+            }
+        )
+        if not regression_passed:
+            failures.append(compare_difference("fail", "comparator-selftest", "comparator-hidden-service-auth-regression", "Hidden regression comparator fixture did not fail closed"))
+        review = run_compare(before, after_review, None, None, current_head())
+        review_passed = review["status"] == "owner-review-required" and any(item["category"] == "screenshot-byte-drift" for item in review["differences"])
+        results.append(
+            {
+                "fixture": "comparator-screenshot-byte-owner-review",
+                "expectedStatus": "owner-review-required",
+                "observedStatus": review["status"],
+                "ownerReviewRequiredCount": review["ownerReviewRequiredCount"],
+                "observedCategories": sorted({item["category"] for item in review["differences"]}),
+                "passed": review_passed,
+            }
+        )
+        if not review_passed:
+            failures.append(compare_difference("fail", "comparator-selftest", "comparator-screenshot-byte-owner-review", "Screenshot byte drift comparator fixture did not require owner review"))
+    return results, failures
+
+
 def rule_001_model(data: dict[str, Any]) -> list[dict[str, str]]:
     model = data["model"]
     failures: list[dict[str, str]] = []
@@ -577,6 +1174,7 @@ def rule_002_wiring(data: dict[str, Any]) -> list[dict[str, str]]:
     expected = {
         "proof-cockpit:validate": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json",
         "proof-cockpit:selftest": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py selftest --json",
+        "proof-cockpit:compare": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py compare --json",
     }
     for name, required in expected.items():
         command = scripts.get(name, "")
@@ -585,7 +1183,7 @@ def rule_002_wiring(data: dict[str, Any]) -> list[dict[str, str]]:
     for name in ["proof-cockpit:serve", "proof-cockpit:smoke", "proof-cockpit:machine-qa", "proof-cockpit:evidence-bundle"]:
         if name not in scripts or "apps/staging-proof-cockpit" not in scripts[name]:
             failures.append(finding("USF-PROOF-COCKPIT-002", f"Existing proof cockpit alias missing: {name}", "package.json"))
-    for target in ["proof-cockpit-validate", "proof-cockpit-selftest"]:
+    for target in ["proof-cockpit-validate", "proof-cockpit-compare", "proof-cockpit-selftest"]:
         if f"{target}:" not in data["makefile"]:
             failures.append(finding("USF-PROOF-COCKPIT-002", f"Make target missing: {target}", "Makefile"))
     repo_validate = scripts.get("repo:validate", "")
@@ -1426,6 +2024,9 @@ def selftest(data: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str,
         if not passed:
             failures.append(finding("USF-PROOF-COCKPIT-012", "Planted defect did not trigger expected rule", fixture.get("_path", "")))
     failures.extend(rule_012_planted_coverage(data))
+    comparator_results, comparator_failures = comparator_selftest()
+    results.extend(comparator_results)
+    failures.extend(comparator_failures)
     return results, failures
 
 
@@ -1444,38 +2045,84 @@ def print_result(mode: str, failures: list[dict[str, str]], selftest_results: li
     return 0 if not failures else 1
 
 
-def parse_args(argv: list[str]) -> tuple[str, bool, Path | None, bool]:
+def print_compare_result(result: dict[str, Any]) -> int:
+    print(json.dumps(result, indent=2))
+    return 0 if result["status"] == "pass" else 1
+
+
+def parse_args(argv: list[str]) -> dict[str, Any]:
     mode = ""
     json_output = False
     artifact_dir: Path | None = None
+    before_artifact_dir: Path | None = None
+    after_artifact_dir: Path | None = None
+    before_projection_root: Path | None = None
+    after_projection_root: Path | None = None
+    assessed_commit = ""
     require_current_evidence = False
     index = 1
     while index < len(argv):
         arg = argv[index]
-        if arg in {"all", "selftest", "current"}:
+        if arg in {"all", "selftest", "current", "compare"}:
             mode = arg
         elif arg == "--json":
             json_output = True
         elif arg == "--artifact-dir":
             artifact_dir = Path(argv[index + 1])
             index += 1
+        elif arg == "--before-artifact-dir":
+            before_artifact_dir = Path(argv[index + 1])
+            index += 1
+        elif arg == "--after-artifact-dir":
+            after_artifact_dir = Path(argv[index + 1])
+            index += 1
+        elif arg == "--before-projection-root":
+            before_projection_root = Path(argv[index + 1])
+            index += 1
+        elif arg == "--after-projection-root":
+            after_projection_root = Path(argv[index + 1])
+            index += 1
+        elif arg == "--assessed-commit":
+            assessed_commit = argv[index + 1]
+            index += 1
         elif arg == "--require-current-evidence":
             require_current_evidence = True
         index += 1
     if mode == "current":
         require_current_evidence = True
-    return mode, json_output, artifact_dir, require_current_evidence
+    return {
+        "mode": mode,
+        "jsonOutput": json_output,
+        "artifactDir": artifact_dir,
+        "beforeArtifactDir": before_artifact_dir,
+        "afterArtifactDir": after_artifact_dir,
+        "beforeProjectionRoot": before_projection_root,
+        "afterProjectionRoot": after_projection_root,
+        "assessedCommit": assessed_commit,
+        "requireCurrentEvidence": require_current_evidence,
+    }
 
 
 def main(argv: list[str]) -> int:
-    mode, _json_output, artifact_dir, require_current_evidence = parse_args(argv)
-    if mode not in {"all", "selftest", "current"}:
+    args = parse_args(argv)
+    mode = args["mode"]
+    if mode not in {"all", "selftest", "current", "compare"}:
         print(
-            "usage: validate-proof-cockpit-acceptance.py all|current|selftest [--json] [--artifact-dir DIR] [--require-current-evidence]",
+            "usage: validate-proof-cockpit-acceptance.py all|current|selftest|compare [--json] [--artifact-dir DIR] [--before-artifact-dir DIR] [--after-artifact-dir DIR] [--before-projection-root DIR] [--after-projection-root DIR] [--assessed-commit SHA] [--require-current-evidence]",
             file=sys.stderr,
         )
         return 2
-    data = load_data(artifact_dir, require_current_evidence)
+    if mode == "compare":
+        return print_compare_result(
+            run_compare(
+                args["beforeArtifactDir"],
+                args["afterArtifactDir"],
+                args["beforeProjectionRoot"],
+                args["afterProjectionRoot"],
+                args["assessedCommit"],
+            )
+        )
+    data = load_data(args["artifactDir"], args["requireCurrentEvidence"])
     if mode == "selftest":
         results, failures = selftest(data)
         return print_result("selftest", failures, results)

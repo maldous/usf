@@ -13,7 +13,7 @@ export USF_PROOF_PROD_FQDN
 	help commands setup foundation dev-ready test-ready test test-composed test-coverage test-assurance \
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
-	proof-cockpit-validate proof-cockpit-selftest \
+	proof-cockpit-validate proof-cockpit-validate-current proof-cockpit-compare proof-cockpit-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
@@ -70,6 +70,7 @@ help:
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
 		'  make public-route-proof    Narrow public browser route and telemetry bootstrap proof' \
 		'  make proof-review-public   Verify live /proof human review surface availability' \
+		'  make proof-cockpit-compare Compare two proof-cockpit artifact roots without re-running machine QA' \
 		'  make caddy-up              Bring up the shared composed public proof edge (external-caddy; no operator credential)' \
 		'  make caddy-down            Stop the shared composed public proof edge' \
 		'  make proof-review-up       Open the operator-authenticated /proof gate on the running edge (prompts for credential)' \
@@ -129,6 +130,9 @@ proof-cockpit-validate:
 
 proof-cockpit-validate-current:
 	corepack pnpm proof-cockpit:validate-current
+
+proof-cockpit-compare:
+	corepack pnpm proof-cockpit:compare
 
 proof-cockpit-selftest:
 	corepack pnpm proof-cockpit:selftest
