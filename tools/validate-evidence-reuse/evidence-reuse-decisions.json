@@ -125,13 +125,13 @@
       "artifactHashes": [
         {
           "path": "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
-          "sha256": "98d02dd1673f6bdda87dcb51a571058145038fa3b100c5990de2c5c23234f6d6",
+          "sha256": "f6855d7b3f71ff87ac2b789f94366318f639e5f01d3cccd9c1cf9255d27b9152",
           "hashBasis": "validator-owned-policy-file"
         }
       ],
-      "inputManifestDigest": "174ce5b42d10d45cc2cf739659d01d2f8d4f5f48a2dcba96b35613be535e41ee",
-      "artifactSetDigest": "e3962ac5349876b5ff7488d7b3e3aa0b77e90bf8f6a38ca70dd4a9a3489af150",
-      "chainTipDigest": "9990ad42c6df5535032f8b731db67520ca137737058ae2f8d137d414094fc209",
+      "inputManifestDigest": "a21edd7c493616edbae9274d50c147c24a2a9ce95dd37ff38eaa17bde8f9cd58",
+      "artifactSetDigest": "16c7fb8cce8053e0d502665782335a7b1aa6935d4055cf2d15a6c7771aa03de2",
+      "chainTipDigest": "ba9aa99b0376da693c84661b3a8775c26e9bf48555a19ff748dfa3c5062a1e00",
       "freshnessState": "terminal-refresh-deferred",
       "eligibilityStatus": "blocked",
       "reusableScope": [],
@@ -146,8 +146,8 @@
       "bundleMetadata": {
         "sourceSha": "terminal-refresh-deferred",
         "targetSha": "current-head",
-        "inputManifestDigest": "174ce5b42d10d45cc2cf739659d01d2f8d4f5f48a2dcba96b35613be535e41ee",
-        "artifactSetDigest": "e3962ac5349876b5ff7488d7b3e3aa0b77e90bf8f6a38ca70dd4a9a3489af150",
+        "inputManifestDigest": "a21edd7c493616edbae9274d50c147c24a2a9ce95dd37ff38eaa17bde8f9cd58",
+        "artifactSetDigest": "16c7fb8cce8053e0d502665782335a7b1aa6935d4055cf2d15a6c7771aa03de2",
         "metadataState": "terminal-refresh-deferred"
       },
       "nonClaims": [

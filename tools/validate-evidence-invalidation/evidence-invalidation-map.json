@@ -644,6 +644,7 @@
       "assurancePreserved": "CI evidence stays tied to its workflow identity and commit.",
       "relatedIssueIds": [
         "USF-637",
+        "USF-639",
         "USF-640",
         "USF-643",
         "USF-645",
