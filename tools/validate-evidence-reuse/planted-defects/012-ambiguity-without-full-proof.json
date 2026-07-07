@@ -1,0 +1,16 @@
+{
+  "id": "planted-defect.evidence-reuse.ambiguity-without-full-proof",
+  "expectedRule": "USF-EVIDENCE-REUSE-010",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/ambiguityReason",
+      "value": "changed input could affect proof-cockpit evidence but matching family is unresolved"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "rerun-validator-only"
+    }
+  ]
+}

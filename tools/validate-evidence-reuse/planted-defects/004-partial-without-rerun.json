@@ -1,0 +1,28 @@
+{
+  "id": "planted-defect.evidence-reuse.partial-without-rerun",
+  "expectedRule": "USF-EVIDENCE-REUSE-004",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/freshnessState",
+      "value": "partial"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/eligibilityStatus",
+      "value": "partial"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/reusableScope",
+      "value": [
+        "validator-owned-policy"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "none"
+    }
+  ]
+}

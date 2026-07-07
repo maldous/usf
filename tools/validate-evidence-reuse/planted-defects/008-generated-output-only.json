@@ -1,0 +1,32 @@
+{
+  "id": "planted-defect.evidence-reuse.generated-output-only",
+  "expectedRule": "USF-EVIDENCE-REUSE-007",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/evidenceRefs",
+      "value": [
+        {
+          "path": "evidence/proof-cockpit/last-review/acceptance-ledger.json",
+          "type": "generated-report",
+          "authorityClass": "generated-report"
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/eligibilityStatus",
+      "value": "pass-current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/freshnessState",
+      "value": "current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "none"
+    }
+  ]
+}
