@@ -609,6 +609,10 @@
         {
           "pattern": ".github/workflows/**",
           "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/ci-*.md",
+          "selectorType": "path-glob"
         }
       ],
       "affectedProofFamilies": [
@@ -640,6 +644,8 @@
       "assurancePreserved": "CI evidence stays tied to its workflow identity and commit.",
       "relatedIssueIds": [
         "USF-637",
+        "USF-657",
+        "USF-658",
         "USF-952",
         "USF-976",
         "USF-984"
