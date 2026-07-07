@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.generated-report-accepted-as-proof",
+  "description": "Generated-report-only evidence is incorrectly allowed to satisfy proof.",
+  "expectedRule": "USF-ENV-LADDER-006",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/generatedReportOnlyCanSatisfyProof",
+        "value": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.test-evidence-accepted-as-staging",
+  "description": "Test evidence is incorrectly allowed to satisfy Staging readiness.",
+  "expectedRule": "USF-ENV-LADDER-006",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/testEvidenceCanSatisfyStaging",
+        "value": true
+      }
+    ]
+  }
+}

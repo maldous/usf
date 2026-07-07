@@ -1,0 +1,15 @@
+{
+  "id": "env-ladder-defect.production-shaped-accepted-as-production-live",
+  "description": "Production-shaped evidence is incorrectly allowed to satisfy production-live.",
+  "expectedRule": "USF-ENV-LADDER-005",
+  "fixture": {
+    "target": "policy",
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/globalPolicies/productionShapedCanSatisfyProductionLive",
+        "value": true
+      }
+    ]
+  }
+}

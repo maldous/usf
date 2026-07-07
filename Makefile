@@ -17,6 +17,7 @@ export USF_PROOF_PROD_FQDN
 	proof-cockpit-projection-repin proof-cockpit-projection-repin-check \
 	evidence-invalidation-validate evidence-invalidation-selftest \
 	evidence-reuse-validate evidence-reuse-selftest \
+	environment-ladder-validate environment-ladder-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin proof-review-projection-repin \
@@ -61,6 +62,7 @@ help:
 		'  make validate-bootstrap    Bootstrap governance validator (compatibility: corepack pnpm validate-bootstrap)' \
 		'  make evidence-invalidation-validate  Validate evidence invalidation map and fallback rules' \
 		'  make evidence-reuse-validate  Validate evidence reuse decision artifacts and fail-closed rules' \
+		'  make environment-ladder-validate  Validate Dev/Test/Staging ladder discipline without aggregate wiring' \
 		'' \
 		'Common proof groups:' \
 		'  make runtime-proof         API and worker runtime proof' \
@@ -72,6 +74,7 @@ help:
 		'  make test-readiness-selftest  Run planted-defect regression selftest' \
 		'  make evidence-invalidation-selftest  Run evidence invalidation planted-defect selftest' \
 		'  make evidence-reuse-selftest  Run evidence reuse planted-defect selftest' \
+		'  make environment-ladder-selftest  Run environment ladder planted-defect selftest' \
 		'  make public-fqdn-validate  Validate public FQDN semantic contract and non-claims' \
 		'  make public-proof-origin  Prove the gateway-neutral public proof origin locally' \
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
@@ -163,6 +166,12 @@ evidence-reuse-validate:
 
 evidence-reuse-selftest:
 	corepack pnpm evidence-reuse:selftest
+
+environment-ladder-validate:
+	corepack pnpm environment-ladder:validate
+
+environment-ladder-selftest:
+	corepack pnpm environment-ladder:selftest
 
 foundation-substrate-closure-validate:
 	corepack pnpm foundation-substrate-closure:validate

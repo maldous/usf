@@ -103,6 +103,8 @@
     "evidence-invalidation:selftest": "python3 tools/validate-evidence-invalidation/validate-evidence-invalidation.py selftest --json",
     "evidence-reuse:validate": "python3 tools/validate-evidence-reuse/validate-evidence-reuse.py all --json",
     "evidence-reuse:selftest": "python3 tools/validate-evidence-reuse/validate-evidence-reuse.py selftest --json",
+    "environment-ladder:validate": "python3 tools/validate-environment-ladder/validate-environment-ladder.py all --json",
+    "environment-ladder:selftest": "python3 tools/validate-environment-ladder/validate-environment-ladder.py selftest --json",
     "foundation-substrate-closure:validate": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json",
     "foundation-substrate-closure:selftest": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py selftest --json",
     "non-ui-completeness:validate": "python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py all --json",
