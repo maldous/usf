@@ -1,0 +1,185 @@
+name: dispatch-proof
+
+# Manual proof dispatch is issue-bound and additive. It does not replace PR or
+# main checks, and it does not make staging, product, release, compliance,
+# store, production, deployment, live-provider, or human-acceptance claims.
+on:
+  workflow_dispatch:
+    inputs:
+      owner_issue:
+        description: Owning USF issue key for this manual proof run.
+        required: true
+        type: string
+      target_ref:
+        description: Git ref or SHA to validate after input validation.
+        required: true
+        default: main
+        type: string
+      change_class:
+        description: Change classification that justified manual proof.
+        required: true
+        type: choice
+        options:
+          - docs-metadata
+          - semantic-definition
+          - validator-tooling
+          - unit-behaviour
+          - in-memory-dev-proof
+          - compose-test-proof
+          - public-proof
+          - pre-staging-external
+          - terminal-proof-cockpit
+          - ambiguous
+      proof_family:
+        description: Manual proof family to run.
+        required: true
+        type: choice
+        options:
+          - proof-cockpit-retained-evidence
+          - public-proof-route
+          - pre-staging-external-smoke
+          - compose-provider-deep
+          - repo-aggregate-retained
+          - terminal-proof-cockpit-machine-evidence
+      selected_checks:
+        description: family-default or a comma-separated subset of the selected proof family.
+        required: true
+        default: family-default
+        type: string
+      reason:
+        description: Why this manual proof is needed.
+        required: true
+        type: string
+      timeout_minutes:
+        description: Maximum runtime for the manual proof job.
+        required: true
+        default: "120"
+        type: choice
+        options:
+          - "30"
+          - "60"
+          - "120"
+          - "240"
+      retry_policy:
+        description: Retry policy for selected proof checks.
+        required: true
+        default: none
+        type: choice
+        options:
+          - none
+          - one-retry-on-transient
+      artifact_retention_days:
+        description: Retention window for value-free manual proof run artifacts.
+        required: true
+        default: "14"
+        type: choice
+        options:
+          - "7"
+          - "14"
+          - "30"
+      allow_terminal_machine_qa:
+        description: Must stay no except for USF-966 terminal proof-cockpit machine evidence.
+        required: true
+        default: "no"
+        type: choice
+        options:
+          - "no"
+          - "yes"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dispatch-proof-${{ inputs.owner_issue }}-${{ inputs.proof_family }}-${{ inputs.target_ref }}
+  cancel-in-progress: false
+
+jobs:
+  dispatch-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(inputs.timeout_minutes) }}
+    env:
+      USF_MANUAL_OWNER_ISSUE: ${{ inputs.owner_issue }}
+      USF_MANUAL_TARGET_REF: ${{ inputs.target_ref }}
+      USF_MANUAL_CHANGE_CLASS: ${{ inputs.change_class }}
+      USF_MANUAL_PROOF_FAMILY: ${{ inputs.proof_family }}
+      USF_MANUAL_SELECTED_CHECKS: ${{ inputs.selected_checks }}
+      USF_MANUAL_REASON: ${{ inputs.reason }}
+      USF_MANUAL_TIMEOUT_MINUTES: ${{ inputs.timeout_minutes }}
+      USF_MANUAL_RETRY_POLICY: ${{ inputs.retry_policy }}
+      USF_MANUAL_ARTIFACT_RETENTION_DAYS: ${{ inputs.artifact_retention_days }}
+      USF_MANUAL_ALLOW_TERMINAL_MACHINE_QA: ${{ inputs.allow_terminal_machine_qa }}
+      USF_MANUAL_OUTPUT_DIR: /tmp/usf-dispatch-proof
+    steps:
+      - name: Checkout dispatcher tooling
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate manual proof inputs
+        run: |
+          set -euo pipefail
+          python3 tools/dispatch-proof/dispatch-proof.py validate-inputs \
+            --owner-issue "$USF_MANUAL_OWNER_ISSUE" \
+            --target-ref "$USF_MANUAL_TARGET_REF" \
+            --change-class "$USF_MANUAL_CHANGE_CLASS" \
+            --proof-family "$USF_MANUAL_PROOF_FAMILY" \
+            --selected-checks "$USF_MANUAL_SELECTED_CHECKS" \
+            --reason "$USF_MANUAL_REASON" \
+            --timeout-minutes "$USF_MANUAL_TIMEOUT_MINUTES" \
+            --retry-policy "$USF_MANUAL_RETRY_POLICY" \
+            --artifact-retention-days "$USF_MANUAL_ARTIFACT_RETENTION_DAYS" \
+            --allow-terminal-machine-qa "$USF_MANUAL_ALLOW_TERMINAL_MACHINE_QA" \
+            --output-dir "$USF_MANUAL_OUTPUT_DIR"
+      - name: Preserve validated dispatcher
+        run: |
+          set -euo pipefail
+          cp tools/dispatch-proof/dispatch-proof.py /tmp/usf-dispatch-proof.py
+      - name: Checkout validated target ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_ref }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack pnpm install --frozen-lockfile
+          pip install -r tools/validate-spec/requirements.txt
+      - name: Run selected manual proof family
+        run: |
+          set -euo pipefail
+          python3 /tmp/usf-dispatch-proof.py run \
+            --owner-issue "$USF_MANUAL_OWNER_ISSUE" \
+            --target-ref "$USF_MANUAL_TARGET_REF" \
+            --change-class "$USF_MANUAL_CHANGE_CLASS" \
+            --proof-family "$USF_MANUAL_PROOF_FAMILY" \
+            --selected-checks "$USF_MANUAL_SELECTED_CHECKS" \
+            --reason "$USF_MANUAL_REASON" \
+            --timeout-minutes "$USF_MANUAL_TIMEOUT_MINUTES" \
+            --retry-policy "$USF_MANUAL_RETRY_POLICY" \
+            --artifact-retention-days "$USF_MANUAL_ARTIFACT_RETENTION_DAYS" \
+            --allow-terminal-machine-qa "$USF_MANUAL_ALLOW_TERMINAL_MACHINE_QA" \
+            --output-dir "$USF_MANUAL_OUTPUT_DIR"
+      - name: Check retained-proof workspace cleanliness
+        if: always() && inputs.proof_family != 'terminal-proof-cockpit-machine-evidence'
+        run: |
+          set -euo pipefail
+          git status --short
+          test -z "$(git status --short)"
+      - name: Upload manual proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dispatch-proof-${{ inputs.owner_issue }}-${{ inputs.proof_family }}
+          path: /tmp/usf-dispatch-proof
+          if-no-files-found: warn
+          retention-days: ${{ fromJSON(inputs.artifact_retention_days) }}

@@ -116,13 +116,70 @@ AUTHORITY_INDEX_BOUNDARY_NON_CLAIMS = {
 AUTHORIZED_WORKFLOWS = {
     ".github/workflows/validate-spec.yml",
     ".github/workflows/proof-anchor.yml",
+    ".github/workflows/dispatch-proof.yml",
 }
 PROOF_ANCHOR_WORKFLOW = ".github/workflows/proof-anchor.yml"
+MANUAL_PROOF_WORKFLOW = ".github/workflows/dispatch-proof.yml"
 VALIDATE_SPEC_REQUIRED_PERMISSIONS = {"contents": "read"}
 PROOF_ANCHOR_REQUIRED_PERMISSIONS = {
     "contents": "write",
     "id-token": "write",
     "attestations": "write",
+}
+MANUAL_PROOF_REQUIRED_PERMISSIONS = {"contents": "read"}
+MANUAL_PROOF_REQUIRED_INPUTS = {
+    "owner_issue": {"type": "string"},
+    "target_ref": {"type": "string"},
+    "change_class": {"type": "choice"},
+    "proof_family": {"type": "choice"},
+    "selected_checks": {"type": "string"},
+    "reason": {"type": "string"},
+    "timeout_minutes": {"type": "choice"},
+    "retry_policy": {"type": "choice"},
+    "artifact_retention_days": {"type": "choice"},
+    "allow_terminal_machine_qa": {"type": "choice", "default": "no", "options": {"no", "yes"}},
+}
+MANUAL_PROOF_FAMILIES = {
+    "proof-cockpit-retained-evidence",
+    "public-proof-route",
+    "pre-staging-external-smoke",
+    "compose-provider-deep",
+    "repo-aggregate-retained",
+    "terminal-proof-cockpit-machine-evidence",
+}
+MANUAL_PROOF_CHANGE_CLASSES = {
+    "docs-metadata",
+    "semantic-definition",
+    "validator-tooling",
+    "unit-behaviour",
+    "in-memory-dev-proof",
+    "compose-test-proof",
+    "public-proof",
+    "pre-staging-external",
+    "terminal-proof-cockpit",
+    "ambiguous",
+}
+MANUAL_PROOF_RETRY_POLICIES = {"none", "one-retry-on-transient"}
+MANUAL_PROOF_FORBIDDEN_DIRECT_COMMANDS = {
+    "proof-cockpit:machine-qa",
+    "proof-cockpit:playwright",
+    "proof-cockpit:evidence",
+    "proof-cockpit:qa-report",
+    "proof-cockpit:evidence-bundle",
+    "proof-cockpit:import-check",
+    "proof-cockpit:promote",
+    "proof-review-repin",
+}
+MANUAL_PROOF_FORBIDDEN_PUBLISH_TOKENS = {
+    "actions/attest-build-provenance",
+    "gh attestation",
+    "git push",
+    "git tag",
+    "proof-anchor",
+}
+MANUAL_PROOF_FORBIDDEN_INPUT_VALUES = {
+    "live-external-provider",
+    "production-live",
 }
 SECRET_EXPRESSION_RE = re.compile(r"\bsecrets\.", re.IGNORECASE)
 GITHUB_TOKEN_RE = re.compile(r"\bgithub\.token\b", re.IGNORECASE)
@@ -166,6 +223,8 @@ OPEN_EXTENSION_POINTS = {
 AUTHORIZED_TOOLING = {
     ".github/workflows/validate-spec.yml",
     ".github/workflows/proof-anchor.yml",
+    ".github/workflows/dispatch-proof.yml",
+    "tools/dispatch-proof/dispatch-proof.py",
     "tools/validate-bootstrap/validate-bootstrap.py",
     "tools/generate-compose/generate-compose.py",
     "tools/validate-compose/check-compose-ports.py",
@@ -414,6 +473,7 @@ RULES = {
     "USF-CI-GUARD-005": ("blocking", "Unsafe pull_request_target workflow trigger is present"),
     "USF-CI-GUARD-006": ("blocking", "CI workflow exposes secret or token values unsafely"),
     "USF-CI-GUARD-007": ("blocking", "CI cache or artifact configuration may include secret values"),
+    "USF-CI-GUARD-008": ("blocking", "Manual proof workflow dispatch boundary is invalid"),
     "USF-ANCHOR-001":   ("blocking", "Proof freshness anchor payload is incomplete or malformed"),
     "USF-ANCHOR-002":   ("blocking", "Proof freshness anchor target/freshness commit mismatch"),
     "USF-ANCHOR-003":   ("blocking", "Proof freshness anchor payload digest mismatch"),
@@ -2774,9 +2834,40 @@ def _dispatch_inputs(workflow):
     return {str(key) for key in inputs}
 
 
+def _dispatch_input_map(workflow):
+    dispatch = _workflow_event_config(workflow, "workflow_dispatch")
+    if not isinstance(dispatch, dict):
+        return {}
+    inputs = dispatch.get("inputs")
+    return inputs if isinstance(inputs, dict) else {}
+
+
 def _has_issue_context_input(workflow):
     allowed = {"issue", "issueId", "linearIssue", "linear_issue", "ownerIssue", "owner_issue"}
     return bool(_dispatch_inputs(workflow) & allowed)
+
+
+def _input_options(input_def):
+    options = input_def.get("options") if isinstance(input_def, dict) else None
+    if isinstance(options, list):
+        return {str(item) for item in options}
+    return set()
+
+
+def _required_input_is_present(workflow, input_name):
+    input_def = _dispatch_input_map(workflow).get(input_name)
+    if not isinstance(input_def, dict):
+        return False
+    return _truthy(input_def.get("required"))
+
+
+def _step_run_texts(workflow):
+    texts = []
+    for _, _, step in _workflow_steps(workflow):
+        run = step.get("run")
+        if isinstance(run, str):
+            texts.append(run)
+    return texts
 
 
 def _workflow_uses_cache_or_artifact(step):
@@ -2922,6 +3013,88 @@ def _validate_secret_dependent_workflow(F, path, workflow):
             F.add("USF-CI-GUARD-006", f"{path}#jobs.{job_name}.steps.{index}.continue-on-error", "secret-dependent workflow step must fail closed")
 
 
+def _validate_manual_proof_inputs(F, path, workflow):
+    inputs = _dispatch_input_map(workflow)
+    for name, requirement in MANUAL_PROOF_REQUIRED_INPUTS.items():
+        input_def = inputs.get(name)
+        if not isinstance(input_def, dict):
+            F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.{name}", "manual proof workflow is missing a required input")
+            continue
+        if not _truthy(input_def.get("required")):
+            F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.{name}.required", "manual proof workflow input must be required")
+        if input_def.get("type") != requirement["type"]:
+            F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.{name}.type", f"manual proof workflow input must use type {requirement['type']}")
+        if "default" in requirement and input_def.get("default") != requirement["default"]:
+            F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.{name}.default", f"manual proof workflow input must default to {requirement['default']}")
+        if "options" in requirement and _input_options(input_def) != requirement["options"]:
+            F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.{name}.options", "manual proof workflow input options drifted")
+
+    if _input_options(inputs.get("proof_family", {})) != MANUAL_PROOF_FAMILIES:
+        F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.proof_family.options", "manual proof families must stay explicit")
+    if _input_options(inputs.get("change_class", {})) != MANUAL_PROOF_CHANGE_CLASSES:
+        F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.change_class.options", "manual proof change classes must stay explicit")
+    if _input_options(inputs.get("retry_policy", {})) != MANUAL_PROOF_RETRY_POLICIES:
+        F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.retry_policy.options", "manual proof retry policies must stay explicit")
+
+    for input_name, input_def in inputs.items():
+        values = set()
+        if isinstance(input_def, dict):
+            values.update(str(item).lower() for item in _input_options(input_def))
+            if "default" in input_def:
+                values.add(str(input_def.get("default", "")).lower())
+        if values & MANUAL_PROOF_FORBIDDEN_INPUT_VALUES:
+            F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.{input_name}", "manual proof inputs must not encode live-provider or production-live proof values")
+
+
+def _validate_manual_proof_workflow(F, path, workflow):
+    events = _workflow_events(workflow)
+    if path != MANUAL_PROOF_WORKFLOW:
+        return
+    if events != {"workflow_dispatch"}:
+        F.add("USF-CI-GUARD-008", f"{path}#on", "manual proof workflow must be workflow_dispatch only")
+
+    permissions = _workflow_permissions(workflow)
+    if permissions != MANUAL_PROOF_REQUIRED_PERMISSIONS:
+        F.add("USF-CI-GUARD-008", f"{path}#permissions", "manual proof workflow must declare contents read permission only")
+
+    for job_name, job in _workflow_jobs(workflow).items():
+        if not isinstance(job, dict):
+            continue
+        job_permissions = _workflow_permissions(job)
+        if job_permissions is not None:
+            F.add("USF-CI-GUARD-008", f"{path}#jobs.{job_name}.permissions", "manual proof job permissions must not override workflow read-only permission")
+        if _truthy(job.get("continue-on-error")):
+            F.add("USF-CI-GUARD-008", f"{path}#jobs.{job_name}.continue-on-error", "manual proof job must fail closed")
+
+    for job_name, index, step in _workflow_steps(workflow):
+        if _truthy(step.get("continue-on-error")):
+            F.add("USF-CI-GUARD-008", f"{path}#jobs.{job_name}.steps.{index}.continue-on-error", "manual proof step must fail closed")
+        uses = step.get("uses")
+        if isinstance(uses, str) and uses.lower().startswith("actions/checkout"):
+            with_block = step.get("with")
+            persist = with_block.get("persist-credentials") if isinstance(with_block, dict) else None
+            if not (persist is False or (isinstance(persist, str) and persist.lower() == "false")):
+                F.add("USF-CI-GUARD-008", f"{path}#jobs.{job_name}.steps.{index}", "manual proof checkout must set persist-credentials: false")
+
+    _validate_manual_proof_inputs(F, path, workflow)
+    if not _required_input_is_present(workflow, "owner_issue"):
+        F.add("USF-CI-GUARD-008", f"{path}#on.workflow_dispatch.inputs.owner_issue", "manual proof workflow must require an owning USF issue")
+
+    run_text = "\n".join(_step_run_texts(workflow))
+    if "dispatch-proof.py validate-inputs" not in run_text:
+        F.add("USF-CI-GUARD-008", path, "manual proof workflow must validate inputs before target checkout")
+    if "dispatch-proof.py run" not in run_text:
+        F.add("USF-CI-GUARD-008", path, "manual proof workflow must route selected checks through the dispatcher")
+
+    lower_text = "\n".join(text.lower() for _, text in _walk_workflow_strings(workflow))
+    for token in sorted(MANUAL_PROOF_FORBIDDEN_DIRECT_COMMANDS):
+        if token in lower_text:
+            F.add("USF-CI-GUARD-008", path, "manual proof workflow must not invoke fresh machine QA or promotion commands directly")
+    for token in sorted(MANUAL_PROOF_FORBIDDEN_PUBLISH_TOKENS):
+        if token in lower_text:
+            F.add("USF-CI-GUARD-008", path, "manual proof workflow must not publish anchors, tags, pushes, or attestations")
+
+
 def validate_workflow_guardrails(F, records=None):
     records = _load_workflow_records(F, records=records)
     _validate_workflow_inventory(F, records)
@@ -2929,6 +3102,7 @@ def validate_workflow_guardrails(F, records=None):
         _validate_pr_workflow(F, path, workflow)
         _validate_secret_contexts(F, path, workflow)
         _validate_secret_dependent_workflow(F, path, workflow)
+        _validate_manual_proof_workflow(F, path, workflow)
     proof_anchor = records.get(PROOF_ANCHOR_WORKFLOW)
     if proof_anchor is not None:
         _validate_proof_anchor_workflow(F, PROOF_ANCHOR_WORKFLOW, proof_anchor)

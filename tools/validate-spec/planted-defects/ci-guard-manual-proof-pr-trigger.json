@@ -1,0 +1,39 @@
+{
+  "target": "workflow-guardrails",
+  "expectedRule": "USF-CI-GUARD-008",
+  "records": {
+    ".github/workflows/dispatch-proof.yml": {
+      "name": "dispatch-proof",
+      "on": {
+        "workflow_dispatch": {
+          "inputs": {
+            "owner_issue": {
+              "required": true,
+              "type": "string"
+            }
+          }
+        },
+        "pull_request": {}
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": {
+        "dispatch-proof": {
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@v4",
+              "with": {
+                "persist-credentials": false
+              }
+            },
+            {
+              "run": "python3 tools/dispatch-proof/dispatch-proof.py validate-inputs\npython3 /tmp/usf-dispatch-proof.py run"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
