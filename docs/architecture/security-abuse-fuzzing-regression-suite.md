@@ -15,7 +15,7 @@ Service-backed rows remain tied to composed-service evidence and deterministic f
 ## Evidence
 
 - Semantic contract rows: 67
-- Service boundary rows: 38
+- Service boundary rows: 40
 - Required boundary families: 20
 - Synthetic payload seeds: 20
 - Test suite: tests/packages/security-abuse-fuzzing-regression-suite.test.ts

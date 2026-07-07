@@ -354,7 +354,7 @@
   "imagePinningPosture": {
     "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
     "composeTargetPath": "compose/compose.test.generated.yaml",
-    "imageServiceCount": 35,
+    "imageServiceCount": 36,
     "composeImageLineCount": 33,
     "digestPinnedServiceIds": [
       "windmill",
@@ -378,6 +378,11 @@
         "serviceId": "public-proof-origin",
         "image": "node:24.16.0-alpine3.22",
         "blockerId": "usf266-compose-generated-target-missing-public-proof-origin"
+      },
+      {
+        "serviceId": "staging-proof-cockpit",
+        "image": "node:24.16.0-alpine3.22",
+        "blockerId": "usf292-compose-generated-target-missing-staging-proof-cockpit"
       }
     ],
     "partialTagReviewRequired": [

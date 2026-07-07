@@ -83,6 +83,12 @@ interface IntegrationMatrix {
     readonly proofCommand: string;
     readonly inMemoryServiceSubstituteAllowed: boolean;
   }[];
+  readonly serviceCatalogueDispositionRows: readonly {
+    readonly serviceCatalogueId: string;
+    readonly testDisposition: string;
+    readonly inMemoryServiceSubstituteAllowed: boolean;
+    readonly testReadinessClaimAllowed: boolean;
+  }[];
   readonly nonClaims: readonly string[];
   readonly testReadinessClaimAllowed: boolean;
 }
@@ -116,6 +122,25 @@ const manifestAuthContracts = manifest.semanticContractObligations.filter((row) 
 const manifestAuthServices = manifest.serviceObligations.filter((row) =>
   row.obligationClassIds.includes("auth-tenant-role-permission"),
 );
+const explicitNonGeneratedAuthServiceDispositions = new Map<
+  string,
+  { readonly dependencyDisposition: string; readonly testDisposition: string }
+>([
+  [
+    "sentry",
+    {
+      dependencyDisposition: "bounded-deferred-or-catalogue-only",
+      testDisposition: "external-live-out-of-scope",
+    },
+  ],
+  [
+    "staging-proof-cockpit",
+    {
+      dependencyDisposition: "out-of-scope",
+      testDisposition: "deferred-with-follow-up",
+    },
+  ],
+]);
 
 describe("USF-249 auth integration evidence linkage", () => {
   it("keeps the owned suite inventory aligned to the obligation manifest", () => {
@@ -156,32 +181,54 @@ describe("USF-249 auth integration evidence linkage", () => {
   it("requires composed evidence for service-backed auth surfaces without allowing in-memory substitutes", () => {
     const fixtureByService = byService(fixtures.serviceFixtures);
     const integrationByService = byService(integration.serviceIntegrationRows);
+    const dispositionByService = new Map(
+      integration.serviceCatalogueDispositionRows.map((row) => [row.serviceCatalogueId, row]),
+    );
     for (const row of manifestAuthServices) {
       expect(row.ownerIssueIds, row.serviceId).toContain("USF-249");
-      expect(row.requiredInTest, row.serviceId).toBe(true);
       expect(row.inMemoryServiceSubstituteAllowed, row.serviceId).not.toBe(true);
 
       const fixture = fixtureByService.get(row.serviceId);
       expect(fixture, row.serviceId).toBeDefined();
       expect(fixture?.fixtureSeedId, row.serviceId).toBe(row.fixtureSeedId);
+      expect(fixture?.requiredInTest, row.serviceId).toBe(row.requiredInTest);
+      expect(fixture?.generatedInTestCompose, row.serviceId).toBe(row.generatedInTestCompose);
       expect(fixture?.inMemoryServiceSubstituteAllowed, row.serviceId).toBe(false);
       expect(fixture?.testReadinessClaimAllowed, row.serviceId).toBe(false);
 
-      if (row.generatedInTestCompose) {
-        const integrationServiceId = row.serviceId === "caddy" ? "external-caddy" : row.serviceId;
-        const integrationRow = integrationByService.get(integrationServiceId);
-        expect(integrationRow, row.serviceId).toBeDefined();
-        expect(
-          ["tested", "profile-gated-tested", "composed-integration-required"].includes(
-            integrationRow?.integrationDisposition ?? "",
-          ),
-          row.serviceId,
-        ).toBe(true);
-        expect(integrationRow?.proofCommand, row.serviceId).toBe(
-          "corepack pnpm test-readiness:integration",
+      const integrationServiceId = row.serviceId === "caddy" ? "external-caddy" : row.serviceId;
+      const integrationRow = integrationByService.get(integrationServiceId);
+
+      if (!row.generatedInTestCompose) {
+        const expectedDisposition = explicitNonGeneratedAuthServiceDispositions.get(row.serviceId);
+        expect(expectedDisposition, row.serviceId).toBeDefined();
+        expect(row.dependencyDisposition, row.serviceId).toBe(
+          expectedDisposition?.dependencyDisposition,
         );
-        expect(integrationRow?.inMemoryServiceSubstituteAllowed, row.serviceId).toBe(false);
+        expect(integrationRow, row.serviceId).toBeUndefined();
+        const dispositionRow = dispositionByService.get(row.serviceId);
+        expect(dispositionRow, row.serviceId).toBeDefined();
+        expect(dispositionRow?.testDisposition, row.serviceId).toBe(
+          expectedDisposition?.testDisposition,
+        );
+        expect(dispositionRow?.inMemoryServiceSubstituteAllowed, row.serviceId).toBe(false);
+        expect(dispositionRow?.testReadinessClaimAllowed, row.serviceId).toBe(false);
+        continue;
       }
+
+      expect(row.requiredInTest, row.serviceId).toBe(true);
+      expect(row.generatedInTestCompose, row.serviceId).toBe(true);
+      expect(integrationRow, row.serviceId).toBeDefined();
+      expect(
+        ["tested", "profile-gated-tested", "composed-integration-required"].includes(
+          integrationRow?.integrationDisposition ?? "",
+        ),
+        row.serviceId,
+      ).toBe(true);
+      expect(integrationRow?.proofCommand, row.serviceId).toBe(
+        "corepack pnpm test-readiness:integration",
+      );
+      expect(integrationRow?.inMemoryServiceSubstituteAllowed, row.serviceId).toBe(false);
     }
   });
 

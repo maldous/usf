@@ -21,7 +21,7 @@ The gate is deliberately bounded. It records what the current repository can pro
 - Lockfile posture: `pnpm-lock.yaml` lockfile version `9.0`, root importer dependency alignment, and the `protobufjs` override pin.
 - Workspace posture: 32 workspace packages under `apps/*`, `capabilities/*`, `adapters/*`, and `packages/*`, with external dependencies centralised at the root package.
 - SDK governance linkage: provider SDK rows in `spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json` must retain licence posture, security advisory posture, and update owner fields.
-- Compose image posture: 34 image-bearing catalogue services, 33 generated test Compose image lines, three digest-pinned service IDs, and explicit blockers for the current `clamav/clamav:stable` moving tag and the missing generated `sonar-oidc-plugin` image line.
+- Compose image posture: 36 image-bearing catalogue services, 33 generated test Compose image lines, three digest-pinned service IDs, and explicit blockers for the current `clamav/clamav:stable` moving tag and the missing generated `sonar-oidc-plugin`, `public-proof-origin`, and `staging-proof-cockpit` image lines.
 - Validator boundary: the shared test-readiness validator already enforces the generic USF-255 expanded-category obligation row. The issue-local Vitest suite is the concrete USF-255 supply-chain gate for lockfile, licence, advisory, SBOM-boundary, provenance-boundary, signing-boundary, and image-policy regression checks.
 - Planted-defect coverage: the issue-local fixture covers floating dependency specifiers, missing lockfile evidence, missing licence posture, missing advisory posture, missing SBOM or bounded deferral evidence, unsupported readiness overclaims, floating image tags without blockers, missing image owners, and missing package-manager/toolchain posture.
 
@@ -31,6 +31,8 @@ The gate is deliberately bounded. It records what the current repository can pro
 - `usf255-licence-advisory-fresh-inventory-deferred`: current handover evidence records licence and audit posture, but this issue does not add fresh committed licence or advisory inventory artefacts.
 - `usf255-compose-image-moving-tag-clamav`: the current service catalogue records `clamav/clamav:stable`, which remains a moving-tag blocker.
 - `usf255-compose-generated-target-missing-sonar-oidc-plugin`: the service catalogue records `sonar-oidc-plugin` with `curlimages/curl:8.11.1`, but the generated test Compose file does not currently include that image line.
+- `usf266-compose-generated-target-missing-public-proof-origin`: the service catalogue records `public-proof-origin` with `node:24.16.0-alpine3.22`, but the generated test Compose file does not currently include that image line because the service is outside the canonical Test Compose target.
+- `usf292-compose-generated-target-missing-staging-proof-cockpit`: the service catalogue records `staging-proof-cockpit` with `node:24.16.0-alpine3.22`, but the generated test Compose file does not currently include that image line because the service is a staging-only proof cockpit fixture.
 - `usf255-release-and-container-provenance-deferred`: proof-anchor workflow evidence exists, but this issue does not claim package signing, release artefact provenance, or container signing.
 - `usf255-source-disposition-coverage-deferred`: `corepack pnpm verify` fails `USF-IMPL-002` because the two new test files require target-file source disposition coverage, and that matrix or validator-owned coverage path is outside this issue worker's owned paths.
 

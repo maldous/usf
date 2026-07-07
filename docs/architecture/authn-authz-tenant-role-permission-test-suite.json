@@ -17,7 +17,7 @@
   },
   "scope": {
     "semanticContractCount": 24,
-    "serviceSurfaceCount": 15,
+    "serviceSurfaceCount": 16,
     "serviceBackedClaimsRequireComposedEvidence": true,
     "inMemoryServiceSubstituteAllowedForServiceBackedClaims": false,
     "testReadinessClaimAllowed": false,
@@ -96,6 +96,7 @@
     "postgres",
     "prometheus",
     "sentry",
+    "staging-proof-cockpit",
     "sonarqube",
     "tempo",
     "temporal-ui",

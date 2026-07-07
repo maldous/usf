@@ -14,7 +14,7 @@ The inventory is derived from `docs/architecture/semantic-service-test-obligatio
 
 ## Service-Backed Boundary
 
-The USF-239 manifest contains 38 service rows. None assigns USF-241 as an owner. This unit suite therefore records those rows as excluded from USF-241 coverage claims.
+The USF-239 manifest contains 40 service rows. None assigns USF-241 as an owner. This unit suite therefore records those rows as excluded from USF-241 coverage claims.
 
 Process-local adapters may be unit-tested for tenant scoping, idempotency, redaction, safe failure, and non-claim behavior. Those tests do not satisfy composed-service obligations and do not replace USF-242, USF-248, USF-251, or final USF-234 acceptance.
 
