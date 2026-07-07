@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-07T23-03-57-259Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "08c846d17949739381274b01d5d7ba1740877c9f",
+  "deploymentSha": "08c846d17949739381274b01d5d7ba1740877c9f",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:19091",
+  "startedAt": "2026-07-07T23:03:57.259Z",
+  "completedAt": "2026-07-07T23:06:38.878Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "?? docs/architecture/app-surface-accessibility-semantics.json\n?? docs/architecture/app-surface-auth-session-security-semantics.json\n?? docs/architecture/app-surface-authority-model-extension.json\n?? docs/architecture/app-surface-capability-coverage-completion-semantics.json\n?? docs/architecture/app-surface-capability-coverage-matrix.json\n?? docs/architecture/app-surface-i18n-localisation-semantics.json\n?? docs/architecture/app-surface-observability-privacy-semantics.json\n?? docs/architecture/app-surface-platform-test-semantics.json\n?? docs/architecture/app-surface-proof-evidence-report-semantics.json\n?? docs/architecture/app-surface-release-provisioning-semantics.json\n?? docs/architecture/app-surface-security-proof-semantics.json\n?? docs/architecture/app-surface-store-provisioning-semantics.json\n?? docs/architecture/app-surface-test-strategy-semantics.json\n?? docs/architecture/app-surface-validator-planted-defect-matrix.json\n?? docs/architecture/app-surface-web-adapter-semantics.json\n?? docs/architecture/app-surface-web-cdn-release-semantics.json\n?? docs/architecture/client-query-cache-privacy-semantics.json\n?? docs/architecture/client-state-storage-sync-semantics.json\n?? docs/architecture/generated-client-contract-validation-semantics.json\n?? docs/architecture/generated-ui-renderer-composition-semantics.json\n?? docs/architecture/generated-ui-view-model-semantics.json\n?? docs/architecture/mobile-adapter-release-compliance-semantics.json\n?? docs/architecture/mobile-adapter-semantic-surface.json\n?? docs/architecture/monetisation-ad-placement-telemetry-semantics.json\n?? docs/architecture/notification-consent-data-inventory-semantics.json\n?? docs/architecture/privacy-compliance-consent-proof-semantics.json\n?? docs/architecture/privacy-disclosure-sdk-vendor-semantics.json\n?? docs/architecture/repository-aggregate-validator-command-manifest-governance.json\n?? docs/architecture/repository-app-surface-proof-integration-readiness-governance.json\n?? docs/architecture/repository-assurance-improvement-opportunities-governance.json\n?? docs/architecture/repository-build-package-and-contract-test-governance.json\n?? docs/architecture/repository-ci-optimisation-governance.json\n?? docs/architecture/repository-command-surface-target-governance.json\n?? docs/architecture/repository-compose-optimisation-governance.json\n?? docs/architecture/repository-compose-teardown-safety-governance.json\n?? docs/architecture/repository-developer-experience-guidance-governance.json\n?? docs/architecture/repository-developer-experience-proof-ladder-guide-governance.json\n?? docs/architecture/repository-environment-ladder-governance.json\n?? docs/architecture/repository-layout-and-fixture-governance.json\n?? docs/architecture/repository-optimisation-risk-management-governance.json\n?? docs/architecture/repository-performance-profiling-governance.json\n?? docs/architecture/repository-supply-chain-and-contract-conformance-governance.json\n?? docs/architecture/repository-test-suite-governance.json\n?? docs/architecture/repository-traceability-determinism-security-governance.json\n?? docs/architecture/repository-validator-regression-proofing-governance.json\n?? docs/architecture/shared-client-interaction-contract-semantics.json\n?? docs/architecture/shared-client-sdk-semantic-surface.json\n?? docs/architecture/staging-rehearsal-evidence-pack-definition.json",
+  "branch": "docs/usf-941-app-surface-validator-planted-defect-matrix",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}
