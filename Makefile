@@ -127,6 +127,9 @@ test-readiness-selftest:
 proof-cockpit-validate:
 	corepack pnpm proof-cockpit:validate
 
+proof-cockpit-validate-current:
+	corepack pnpm proof-cockpit:validate-current
+
 proof-cockpit-selftest:
 	corepack pnpm proof-cockpit:selftest
 

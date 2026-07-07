@@ -371,7 +371,7 @@ console.log(JSON.stringify({
     return json.loads(result.stdout)
 
 
-def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
+def load_data(artifact_dir: Path | None = None, require_current_evidence: bool = False) -> dict[str, Any]:
     store = load_json(STORE_PATH)
     latest = store.get("latestMachineRun", {})
     stored_artifact_dir = ROOT / latest.get("artifactDir", "") if latest.get("artifactDir") else None
@@ -422,6 +422,7 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "artifactDir": effective_artifact_dir,
         "currentHead": current_head(),
         "dirtyPaths": dirty_paths(),
+        "requireCurrentEvidence": require_current_evidence,
         "planted": [],
     }
     for path in sorted(PLANTED.glob("*.json")):
@@ -837,17 +838,18 @@ def rule_009_gaps_corrective_actions(data: dict[str, Any]) -> list[dict[str, str
                 failures.append(finding("USF-PROOF-COCKPIT-009", f"Warning inventory item missing {field}", warning_id))
         if item.get("finalStatus") != "fixed":
             failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory item is not fixed", warning_id))
-    source_sha = latest.get("sourceSha", "")
-    if source_sha and source_sha != data.get("currentHead"):
-        evidence_only, non_evidence = evidence_only_since(source_sha)
-        if not evidence_only:
-            failures.append(
-                finding(
-                    "USF-PROOF-COCKPIT-009",
-                    f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
-                    ",".join(non_evidence[:10]),
+    if data.get("requireCurrentEvidence"):
+        source_sha = latest.get("sourceSha", "")
+        if source_sha and source_sha != data.get("currentHead"):
+            evidence_only, non_evidence = evidence_only_since(source_sha)
+            if not evidence_only:
+                failures.append(
+                    finding(
+                        "USF-PROOF-COCKPIT-009",
+                        f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
+                        ",".join(non_evidence[:10]),
+                    )
                 )
-            )
     gaps = store.get("gaps", [])
     corrective = store.get("correctiveActions", [])
     if gaps and not corrective:
@@ -1195,7 +1197,8 @@ def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     failures: list[dict[str, str]] = []
     artifact_dir = data.get("artifactDir")
     report = data["finalReport"]
-    failures.extend(validate_current_bundle_metadata(data))
+    if data.get("requireCurrentEvidence"):
+        failures.extend(validate_current_bundle_metadata(data))
     for section in REQUIRED_FINAL_REPORT_SECTIONS:
         if section not in report:
             failures.append(finding("USF-PROOF-COCKPIT-011", f"Final report section missing: {section}", str(FINAL_REPORT_PATH.relative_to(ROOT))))
@@ -1297,6 +1300,7 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
             actions.append({"id": "planted", "outcome": "human-accepted", "evidenceId": "planted"})
         actions[0]["sourceSha"] = "0" * 40
     elif kind == "external-review-bundle-current-run-metadata-drift":
+        mutated["requireCurrentEvidence"] = True
         stale_sha = "1" * 40
         mutated["bundleManifest"].setdefault("latestMachineRun", {})["runId"] = "qa-run-planted-stale"
         mutated["bundleManifest"].setdefault("latestMachineRun", {})["sourceSha"] = stale_sha
@@ -1352,6 +1356,7 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
     elif kind == "service-evidence-missing-reenactment":
         mutated["serviceEvidenceManifest"]["services"][0]["humanReenactmentInstruction"] = ""
     elif kind == "stale-evidence-treated-current":
+        mutated["requireCurrentEvidence"] = True
         mutated["store"]["latestMachineRun"]["sourceSha"] = "0000000000000000000000000000000000000000"
     elif kind == "dirty-proof-cockpit-state":
         mutated["dirtyPaths"] = ["apps/staging-proof-cockpit/src/server.mjs"]
@@ -1439,34 +1444,42 @@ def print_result(mode: str, failures: list[dict[str, str]], selftest_results: li
     return 0 if not failures else 1
 
 
-def parse_args(argv: list[str]) -> tuple[str, bool, Path | None]:
+def parse_args(argv: list[str]) -> tuple[str, bool, Path | None, bool]:
     mode = ""
     json_output = False
     artifact_dir: Path | None = None
+    require_current_evidence = False
     index = 1
     while index < len(argv):
         arg = argv[index]
-        if arg in {"all", "selftest"}:
+        if arg in {"all", "selftest", "current"}:
             mode = arg
         elif arg == "--json":
             json_output = True
         elif arg == "--artifact-dir":
             artifact_dir = Path(argv[index + 1])
             index += 1
+        elif arg == "--require-current-evidence":
+            require_current_evidence = True
         index += 1
-    return mode, json_output, artifact_dir
+    if mode == "current":
+        require_current_evidence = True
+    return mode, json_output, artifact_dir, require_current_evidence
 
 
 def main(argv: list[str]) -> int:
-    mode, _json_output, artifact_dir = parse_args(argv)
-    if mode not in {"all", "selftest"}:
-        print("usage: validate-proof-cockpit-acceptance.py all|selftest [--json] [--artifact-dir DIR]", file=sys.stderr)
+    mode, _json_output, artifact_dir, require_current_evidence = parse_args(argv)
+    if mode not in {"all", "selftest", "current"}:
+        print(
+            "usage: validate-proof-cockpit-acceptance.py all|current|selftest [--json] [--artifact-dir DIR] [--require-current-evidence]",
+            file=sys.stderr,
+        )
         return 2
-    data = load_data(artifact_dir)
+    data = load_data(artifact_dir, require_current_evidence)
     if mode == "selftest":
         results, failures = selftest(data)
         return print_result("selftest", failures, results)
-    return print_result("all", run_all(data))
+    return print_result(mode, run_all(data))
 
 
 if __name__ == "__main__":
