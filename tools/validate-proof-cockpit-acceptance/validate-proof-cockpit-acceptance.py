@@ -24,6 +24,7 @@ HUMAN_ACTIONS_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "h
 FINAL_REPORT_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "final-external-review-report.md"
 WARNING_INVENTORY_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "warning-inventory.json"
 BUNDLE_MANIFEST_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "external-review-bundle" / "manifest.json"
+BUNDLE_README_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "external-review-bundle" / "README.md"
 PACKAGE_PATH = ROOT / "package.json"
 MAKEFILE_PATH = ROOT / "Makefile"
 SERVER_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "server.mjs"
@@ -200,6 +201,7 @@ REQUIRED_PLANTED_KINDS = [
     "artifact-hash-mismatch",
     "readme-marketing-overclaim",
     "action-source-sha-unresolvable",
+    "external-review-bundle-current-run-metadata-drift",
 ]
 
 AUTH_POSTURES = {
@@ -369,7 +371,7 @@ console.log(JSON.stringify({
     return json.loads(result.stdout)
 
 
-def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
+def load_data(artifact_dir: Path | None = None, require_current_evidence: bool = False) -> dict[str, Any]:
     store = load_json(STORE_PATH)
     latest = store.get("latestMachineRun", {})
     stored_artifact_dir = ROOT / latest.get("artifactDir", "") if latest.get("artifactDir") else None
@@ -414,11 +416,13 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "validateSpecWorkflow": VALIDATE_SPEC_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "proofAnchorWorkflow": PROOF_ANCHOR_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "finalReport": FINAL_REPORT_PATH.read_text(encoding="utf-8"),
+        "bundleReadme": BUNDLE_README_PATH.read_text(encoding="utf-8") if BUNDLE_README_PATH.exists() else "",
         "readme": README_PATH.read_text(encoding="utf-8") if README_PATH.exists() else "",
         "nodeData": node_data(),
         "artifactDir": effective_artifact_dir,
         "currentHead": current_head(),
         "dirtyPaths": dirty_paths(),
+        "requireCurrentEvidence": require_current_evidence,
         "planted": [],
     }
     for path in sorted(PLANTED.glob("*.json")):
@@ -478,6 +482,7 @@ def text_blob(data: dict[str, Any]) -> str:
         data["validateSpecWorkflow"],
         data["proofAnchorWorkflow"],
         data["finalReport"],
+        data.get("bundleReadme", ""),
         data.get("readme", ""),
     ]
     strings: list[str] = []
@@ -833,17 +838,18 @@ def rule_009_gaps_corrective_actions(data: dict[str, Any]) -> list[dict[str, str
                 failures.append(finding("USF-PROOF-COCKPIT-009", f"Warning inventory item missing {field}", warning_id))
         if item.get("finalStatus") != "fixed":
             failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory item is not fixed", warning_id))
-    source_sha = latest.get("sourceSha", "")
-    if source_sha and source_sha != data.get("currentHead"):
-        evidence_only, non_evidence = evidence_only_since(source_sha)
-        if not evidence_only:
-            failures.append(
-                finding(
-                    "USF-PROOF-COCKPIT-009",
-                    f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
-                    ",".join(non_evidence[:10]),
+    if data.get("requireCurrentEvidence"):
+        source_sha = latest.get("sourceSha", "")
+        if source_sha and source_sha != data.get("currentHead"):
+            evidence_only, non_evidence = evidence_only_since(source_sha)
+            if not evidence_only:
+                failures.append(
+                    finding(
+                        "USF-PROOF-COCKPIT-009",
+                        f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
+                        ",".join(non_evidence[:10]),
+                    )
                 )
-            )
     gaps = store.get("gaps", [])
     corrective = store.get("correctiveActions", [])
     if gaps and not corrective:
@@ -1008,10 +1014,191 @@ def rule_010_screenshots_and_redaction(data: dict[str, Any]) -> list[dict[str, s
     return failures
 
 
+def compare_current_field(
+    failures: list[dict[str, str]],
+    subject: str,
+    left_label: str,
+    left_value: Any,
+    right_label: str,
+    right_value: Any,
+) -> None:
+    if left_value in (None, ""):
+        failures.append(finding("USF-PROOF-COCKPIT-011", f"Current evidence field missing: {left_label}", subject))
+        return
+    if right_value in (None, ""):
+        failures.append(finding("USF-PROOF-COCKPIT-011", f"Current evidence field missing: {right_label}", subject))
+        return
+    if str(left_value) != str(right_value):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-011",
+                f"Current evidence metadata mismatch: {left_label}={left_value} but {right_label}={right_value}",
+                subject,
+            )
+        )
+
+
+def require_current_text_value(
+    failures: list[dict[str, str]],
+    subject: str,
+    text: str,
+    label: str,
+    expected: Any,
+) -> None:
+    if expected in (None, ""):
+        return
+    if str(expected) not in text:
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-011",
+                f"Current evidence text does not reference {label}: {expected}",
+                subject,
+            )
+        )
+
+
+def validate_current_bundle_metadata(data: dict[str, Any]) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    latest = data["store"].get("latestMachineRun", {})
+    machine_run = data.get("machineRunReport", {})
+    machine_counts = machine_run.get("counts", {})
+    bundle_latest = data["bundleManifest"].get("latestMachineRun", {})
+
+    compare_current_field(
+        failures,
+        str(STORE_PATH.relative_to(ROOT)),
+        "store.latestMachineRun.runId",
+        latest.get("runId"),
+        "machineRunReport.qaRun",
+        machine_run.get("qaRun"),
+    )
+    for field in ["sourceSha", "deploymentSha"]:
+        compare_current_field(
+            failures,
+            str(STORE_PATH.relative_to(ROOT)),
+            f"store.latestMachineRun.{field}",
+            latest.get(field),
+            f"machineRunReport.{field}",
+            machine_run.get(field),
+        )
+    for store_field, report_field in [("environment", "environment"), ("generatedAt", "completedAt")]:
+        compare_current_field(
+            failures,
+            str(STORE_PATH.relative_to(ROOT)),
+            f"store.latestMachineRun.{store_field}",
+            latest.get(store_field),
+            f"machineRunReport.{report_field}",
+            machine_run.get(report_field),
+        )
+    if machine_run.get("sourceGitSha"):
+        compare_current_field(
+            failures,
+            str(data.get("artifactDir") or ""),
+            "machineRunReport.sourceSha",
+            machine_run.get("sourceSha"),
+            "machineRunReport.sourceGitSha",
+            machine_run.get("sourceGitSha"),
+        )
+    machine_artifact_dir = resolve_artifact_path(str(machine_run.get("artifactDir", "")), data.get("artifactDir"))
+    if data.get("artifactDir") and machine_artifact_dir and machine_artifact_dir != data.get("artifactDir"):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-011",
+                f"Retained machine-run artifactDir does not resolve to current artifact directory: {machine_run.get('artifactDir')}",
+                str(data.get("artifactDir") or ""),
+            )
+        )
+
+    machine_count_values = {
+        "pass": machine_counts.get("pass"),
+        "warn": machine_counts.get("warn"),
+        "fail": machine_counts.get("fail"),
+        "gap": machine_counts.get("gap", machine_counts.get("gaps", len(machine_run.get("gaps", [])))),
+        "screenshots": machine_counts.get("screenshots"),
+        "serviceEvidenceScreenshots": machine_counts.get("serviceEvidenceScreenshots", machine_counts.get("serviceEvidence")),
+        "testedRoutes": machine_counts.get("testedRoutes", machine_counts.get("routes")),
+        "capabilities": machine_counts.get("capabilities"),
+        "services": machine_counts.get("services"),
+        "humanDecisionRequired": machine_counts.get("humanDecisionRequired"),
+    }
+    for store_field, count_field in [
+        ("routeCount", "testedRoutes"),
+        ("capabilityCount", "capabilities"),
+        ("serviceCount", "services"),
+        ("passCount", "pass"),
+        ("warnCount", "warn"),
+        ("failCount", "fail"),
+        ("gapCount", "gap"),
+        ("screenshotCount", "screenshots"),
+        ("serviceEvidenceCount", "serviceEvidenceScreenshots"),
+        ("humanDecisionRequired", "humanDecisionRequired"),
+    ]:
+        compare_current_field(
+            failures,
+            str(STORE_PATH.relative_to(ROOT)),
+            f"store.latestMachineRun.{store_field}",
+            latest.get(store_field),
+            f"machineRunReport.counts.{count_field}",
+            machine_count_values.get(count_field),
+        )
+
+    for field in ["runId", "sourceSha", "deploymentSha", "artifactDir", "reportJson", "externalReviewBundle"]:
+        compare_current_field(
+            failures,
+            str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+            f"bundleManifest.latestMachineRun.{field}",
+            bundle_latest.get(field),
+            f"store.latestMachineRun.{field}",
+            latest.get(field),
+        )
+    for bundle_field, store_field in [
+        ("passCount", "passCount"),
+        ("warnCount", "warnCount"),
+        ("failCount", "failCount"),
+        ("unresolvedGapCount", "gapCount"),
+        ("screenshotCount", "screenshotCount"),
+        ("serviceEvidenceCount", "serviceEvidenceCount"),
+    ]:
+        compare_current_field(
+            failures,
+            str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+            f"bundleManifest.latestMachineRun.{bundle_field}",
+            bundle_latest.get(bundle_field),
+            f"store.latestMachineRun.{store_field}",
+            latest.get(store_field),
+        )
+
+    final_report = data["finalReport"]
+    for label, expected in [
+        ("source SHA", latest.get("sourceSha")),
+        ("deployment SHA", latest.get("deploymentSha")),
+        ("run ID", latest.get("runId")),
+    ]:
+        require_current_text_value(failures, str(FINAL_REPORT_PATH.relative_to(ROOT)), final_report, label, expected)
+
+    bundle_readme = data.get("bundleReadme", "")
+    if "Source SHA:" in bundle_readme:
+        require_current_text_value(failures, str(BUNDLE_README_PATH.relative_to(ROOT)), bundle_readme, "source SHA", latest.get("sourceSha"))
+    if "Run ID:" in bundle_readme:
+        require_current_text_value(failures, str(BUNDLE_README_PATH.relative_to(ROOT)), bundle_readme, "run ID", latest.get("runId"))
+    if "Latest machine QA:" in bundle_readme:
+        for label, expected in [
+            ("pass count", latest.get("passCount")),
+            ("warning count", latest.get("warnCount")),
+            ("failure count", latest.get("failCount")),
+            ("gap count", latest.get("gapCount")),
+        ]:
+            require_current_text_value(failures, str(BUNDLE_README_PATH.relative_to(ROOT)), bundle_readme, label, expected)
+
+    return failures
+
+
 def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     failures: list[dict[str, str]] = []
     artifact_dir = data.get("artifactDir")
     report = data["finalReport"]
+    if data.get("requireCurrentEvidence"):
+        failures.extend(validate_current_bundle_metadata(data))
     for section in REQUIRED_FINAL_REPORT_SECTIONS:
         if section not in report:
             failures.append(finding("USF-PROOF-COCKPIT-011", f"Final report section missing: {section}", str(FINAL_REPORT_PATH.relative_to(ROOT))))
@@ -1112,6 +1299,18 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         if not actions:
             actions.append({"id": "planted", "outcome": "human-accepted", "evidenceId": "planted"})
         actions[0]["sourceSha"] = "0" * 40
+    elif kind == "external-review-bundle-current-run-metadata-drift":
+        mutated["requireCurrentEvidence"] = True
+        stale_sha = "1" * 40
+        mutated["bundleManifest"].setdefault("latestMachineRun", {})["runId"] = "qa-run-planted-stale"
+        mutated["bundleManifest"].setdefault("latestMachineRun", {})["sourceSha"] = stale_sha
+        mutated["bundleManifest"].setdefault("latestMachineRun", {})["screenshotCount"] = 1
+        mutated["bundleReadme"] = "Source SHA: 1111111111111111111111111111111111111111\nRun ID: qa-run-planted-stale\nLatest machine QA: 1 pass, 1 warnings, 1 failures, 1 unresolved gaps.\n"
+        mutated["finalReport"] = (
+            "Evidence is tied to source SHA 1111111111111111111111111111111111111111, "
+            "deployment SHA 1111111111111111111111111111111111111111, "
+            "run ID qa-run-planted-stale, and environment local-machine-qa."
+        )
     elif kind == "foundation-closure-validator-stale":
         mutated["foundationImport"]["validatorEvidence"]["allResult"] = "stale"
     elif kind == "artifact-manifest-missing":
@@ -1157,6 +1356,7 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
     elif kind == "service-evidence-missing-reenactment":
         mutated["serviceEvidenceManifest"]["services"][0]["humanReenactmentInstruction"] = ""
     elif kind == "stale-evidence-treated-current":
+        mutated["requireCurrentEvidence"] = True
         mutated["store"]["latestMachineRun"]["sourceSha"] = "0000000000000000000000000000000000000000"
     elif kind == "dirty-proof-cockpit-state":
         mutated["dirtyPaths"] = ["apps/staging-proof-cockpit/src/server.mjs"]
@@ -1244,34 +1444,42 @@ def print_result(mode: str, failures: list[dict[str, str]], selftest_results: li
     return 0 if not failures else 1
 
 
-def parse_args(argv: list[str]) -> tuple[str, bool, Path | None]:
+def parse_args(argv: list[str]) -> tuple[str, bool, Path | None, bool]:
     mode = ""
     json_output = False
     artifact_dir: Path | None = None
+    require_current_evidence = False
     index = 1
     while index < len(argv):
         arg = argv[index]
-        if arg in {"all", "selftest"}:
+        if arg in {"all", "selftest", "current"}:
             mode = arg
         elif arg == "--json":
             json_output = True
         elif arg == "--artifact-dir":
             artifact_dir = Path(argv[index + 1])
             index += 1
+        elif arg == "--require-current-evidence":
+            require_current_evidence = True
         index += 1
-    return mode, json_output, artifact_dir
+    if mode == "current":
+        require_current_evidence = True
+    return mode, json_output, artifact_dir, require_current_evidence
 
 
 def main(argv: list[str]) -> int:
-    mode, _json_output, artifact_dir = parse_args(argv)
-    if mode not in {"all", "selftest"}:
-        print("usage: validate-proof-cockpit-acceptance.py all|selftest [--json] [--artifact-dir DIR]", file=sys.stderr)
+    mode, _json_output, artifact_dir, require_current_evidence = parse_args(argv)
+    if mode not in {"all", "selftest", "current"}:
+        print(
+            "usage: validate-proof-cockpit-acceptance.py all|current|selftest [--json] [--artifact-dir DIR] [--require-current-evidence]",
+            file=sys.stderr,
+        )
         return 2
-    data = load_data(artifact_dir)
+    data = load_data(artifact_dir, require_current_evidence)
     if mode == "selftest":
         results, failures = selftest(data)
         return print_result("selftest", failures, results)
-    return print_result("all", run_all(data))
+    return print_result(mode, run_all(data))
 
 
 if __name__ == "__main__":
