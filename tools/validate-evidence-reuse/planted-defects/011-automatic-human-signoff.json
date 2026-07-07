@@ -1,0 +1,11 @@
+{
+  "id": "planted-defect.evidence-reuse.automatic-human-signoff",
+  "expectedRule": "USF-EVIDENCE-REUSE-009",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/automaticHumanSignoff",
+      "value": true
+    }
+  ]
+}

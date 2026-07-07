@@ -1,0 +1,11 @@
+{
+  "id": "planted-defect.evidence-reuse.bundle-metadata-drift",
+  "expectedRule": "USF-EVIDENCE-REUSE-008",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/bundleMetadata/artifactSetDigest",
+      "value": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ]
+}

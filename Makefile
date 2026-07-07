@@ -15,6 +15,7 @@ export USF_PROOF_PROD_FQDN
 	test-readiness-coverage test-readiness-selftest \
 	proof-cockpit-validate proof-cockpit-validate-current proof-cockpit-compare proof-cockpit-selftest \
 	evidence-invalidation-validate evidence-invalidation-selftest \
+	evidence-reuse-validate evidence-reuse-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
@@ -58,6 +59,7 @@ help:
 		'  make validate-evidence     Repository evidence validators (compatibility: corepack pnpm repo:validate)' \
 		'  make validate-bootstrap    Bootstrap governance validator (compatibility: corepack pnpm validate-bootstrap)' \
 		'  make evidence-invalidation-validate  Validate evidence invalidation map and fallback rules' \
+		'  make evidence-reuse-validate  Validate evidence reuse decision artifacts and fail-closed rules' \
 		'' \
 		'Common proof groups:' \
 		'  make runtime-proof         API and worker runtime proof' \
@@ -68,6 +70,7 @@ help:
 		'  make test-assurance        Bounded local SonarQube zero-open-issue proof' \
 		'  make test-readiness-selftest  Run planted-defect regression selftest' \
 		'  make evidence-invalidation-selftest  Run evidence invalidation planted-defect selftest' \
+		'  make evidence-reuse-selftest  Run evidence reuse planted-defect selftest' \
 		'  make public-fqdn-validate  Validate public FQDN semantic contract and non-claims' \
 		'  make public-proof-origin  Prove the gateway-neutral public proof origin locally' \
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
@@ -145,6 +148,12 @@ evidence-invalidation-validate:
 
 evidence-invalidation-selftest:
 	corepack pnpm evidence-invalidation:selftest
+
+evidence-reuse-validate:
+	corepack pnpm evidence-reuse:validate
+
+evidence-reuse-selftest:
+	corepack pnpm evidence-reuse:selftest
 
 foundation-substrate-closure-validate:
 	corepack pnpm foundation-substrate-closure:validate
