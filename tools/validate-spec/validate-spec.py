@@ -3108,6 +3108,21 @@ def validate_workflow_guardrails(F, records=None):
         _validate_proof_anchor_workflow(F, PROOF_ANCHOR_WORKFLOW, proof_anchor)
 
 
+def _is_tooling_pr_addition(path):
+    return bool(
+        re.match(r"tools/.*\.(py|mjs|js|sh)$", path)
+        or path.startswith(".github/workflows/")
+        or re.search(r"(^|/)requirements[^/]*\.txt$", path)
+    )
+
+
+def validate_pr_added_tooling(F, added_paths):
+    for path in added_paths:
+        path = _normalise_path(path)
+        if _is_tooling_pr_addition(path) and path not in AUTHORIZED_TOOLING:
+            F.add("USF-PR-TOOL", path, "tool/CI added but not in AUTHORIZED_TOOLING (explicit authorisation required)")
+
+
 def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=None, existing_paths=None):
     changed_paths = []
     changed_existing_paths = []
@@ -3141,6 +3156,7 @@ def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=N
         path = _normalise_path(path)
         if _is_implementation_path(path) and path not in disposition_targets:
             F.add("USF-PR-DISPOSITION", path, "added implementation file lacks target-file source disposition coverage")
+    validate_pr_added_tooling(F, added_paths)
 
 
 def load_changed_json_records_at_ref(ref, name_status_lines):
@@ -3185,12 +3201,6 @@ def check_pr(ctx, F, base, head):
     for line in diff.splitlines():
         parts = line.split("\t")
         status, path = parts[0], parts[-1]
-        if status.startswith("A"):
-            is_tooling = (re.match(r"tools/.*\.(py|mjs|js|sh)$", path)
-                          or path.startswith(".github/workflows/")
-                          or re.search(r"(^|/)requirements[^/]*\.txt$", path))
-            if is_tooling and path not in AUTHORIZED_TOOLING:
-                F.add("USF-PR-TOOL", path, "tool/CI added but not in AUTHORIZED_TOOLING (explicit authorisation required)")
         if status.startswith("D") and re.match(r"spec/schemas/.*\.schema\.json$", path) and path in reg_paths:
             F.add("USF-PR-DELETE", path, "deleted schema still in registry")
     for e in ctx["reg"]["schemas"]:
