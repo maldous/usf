@@ -138,6 +138,8 @@ AUTHORIZED_TOOLING = {
     "tools/validate-enterprise/validate-enterprise.py",
     "tools/validate-test-readiness/validate-test-readiness.py",
     "tools/validate-public-fqdn/validate-public-fqdn.py",
+    "tools/validate-artifact-promotion/validate-artifact-promotion.py",
+    "tools/validate-environment-ladder/validate-environment-ladder.py",
     "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py",
     "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
     "tools/validate-spec/validate-spec.py",

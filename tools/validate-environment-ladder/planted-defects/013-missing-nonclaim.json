@@ -1,0 +1,39 @@
+{
+  "case": {
+    "claimedProofLevel": "test-service-backed",
+    "claimedProviderMode": "local-composed-real-service",
+    "collectedEvidence": true,
+    "evidenceKinds": [
+      "raw-evidence",
+      "retained-proof-artifact"
+    ],
+    "evidenceReuse": {
+      "sourceEnvironment": "integration",
+      "sourceProviderMode": "local-composed-real-service",
+      "targetEnvironment": "integration",
+      "targetProviderMode": "local-composed-real-service"
+    },
+    "fallbackOnAmbiguity": "full-validation",
+    "freshnessState": "current",
+    "generatedReportAuthoritative": false,
+    "id": "positive-dev-to-test-boundary",
+    "impactClass": "validator",
+    "nonClaims": [
+      "production-readiness"
+    ],
+    "observedProofLevel": "dev-compose",
+    "productionLiveClaim": false,
+    "proofCockpit": {
+      "freshMachineQaClaim": false,
+      "projectionOnly": false
+    },
+    "providerMode": "local-composed-real-service",
+    "sourceEnvironment": "local",
+    "sourceStage": "dev",
+    "stagingReadinessClaim": true,
+    "targetEnvironment": "integration",
+    "targetStage": "test"
+  },
+  "expectedRule": "USF-ENV-LADDER-014",
+  "id": "013-missing-nonclaim"
+}

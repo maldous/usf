@@ -1,0 +1,55 @@
+{
+  "expectedRule": "USF-ARTIFACT-PROMOTION-013",
+  "id": "012-test-as-staging-proof",
+  "record": {
+    "ambiguityFallback": "fuller-applicable-validation",
+    "artifactHash": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+    "artifactRole": "staging-entry-review-artifact",
+    "claimedProofLevel": "staging-proof",
+    "evidenceKinds": [
+      "raw-evidence",
+      "retained-proof-artifact"
+    ],
+    "evidenceRefs": [
+      "evidence/test-service-proof.json"
+    ],
+    "freshnessState": "current",
+    "generatedReportNonAuthority": true,
+    "handoffId": "positive-test-to-staging",
+    "handoffType": "test-to-staging",
+    "hashAlgorithm": "sha256",
+    "hashBasis": "artifact-bytes",
+    "inputClass": "known",
+    "issueRefs": [
+      "USF-986"
+    ],
+    "nonClaims": [
+      "test-readiness",
+      "staging-readiness",
+      "staging-proof",
+      "production-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "store-readiness",
+      "compliance-readiness",
+      "human-acceptance"
+    ],
+    "observedProofLevel": "test-service-backed",
+    "providerMode": "local-composed-real-service",
+    "rerunMode": "validator-only",
+    "sameEnvironmentReuseRequired": false,
+    "sourceCommit": "fedcba9876543210fedcba9876543210fedcba98",
+    "sourceEnvironment": "test",
+    "sourceProviderMode": "local-composed-real-service",
+    "stagingEntryBoundary": true,
+    "stagingReadinessClaim": true,
+    "supersessionState": "current",
+    "targetCommit": "fedcba9876543210fedcba9876543210fedcba98",
+    "targetEnvironment": "staging",
+    "targetProviderMode": "local-composed-real-service",
+    "validationStatus": "pass",
+    "validatorRefs": [
+      "tools/validate-artifact-promotion/validate-artifact-promotion.py"
+    ]
+  }
+}
