@@ -1,0 +1,8 @@
+{
+  "id": "proof-cockpit-planted-defect-035",
+  "expectedRule": "USF-PROOF-COCKPIT-011",
+  "fixture": {
+    "kind": "external-review-bundle-current-run-metadata-drift"
+  },
+  "purpose": "Proves current external-review bundle metadata cannot drift from the staging evidence store or retained machine-run report."
+}
