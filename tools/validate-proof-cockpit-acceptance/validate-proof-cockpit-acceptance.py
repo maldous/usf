@@ -31,12 +31,16 @@ MAKEFILE_PATH = ROOT / "Makefile"
 SERVER_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "server.mjs"
 SMOKE_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "smoke.mjs"
 MACHINE_QA_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "machine-qa.mjs"
+PROJECTION_REPIN_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "projection-repin.mjs"
 VALIDATE_SPEC_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "validate-spec.yml"
 PROOF_ANCHOR_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "proof-anchor.yml"
 README_PATH = ROOT / "README.md"
 
-RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 13)]
+RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 14)]
 COMPARATOR_RULE_ID = "USF-PROOF-COCKPIT-COMPARE"
+PROJECTION_ISSUE = "USF-970"
+TERMINAL_FRESH_MACHINE_QA_ISSUE = "USF-966"
+PROJECTION_FRESHNESS_STATE = "terminal-refresh-deferred"
 
 REQUIRED_ROUTES = [
     "/proof",
@@ -204,6 +208,15 @@ REQUIRED_PLANTED_KINDS = [
     "readme-marketing-overclaim",
     "action-source-sha-unresolvable",
     "external-review-bundle-current-run-metadata-drift",
+    "projection-repin-command-wiring-missing",
+    "projection-manifest-metadata-drift",
+    "projection-readme-metadata-drift",
+    "projection-final-report-metadata-drift",
+    "projection-missing-nonclaim",
+    "projection-current-head-substituted",
+    "projection-fresh-machine-qa-overclaim",
+    "projection-stale-output-hash",
+    "projection-terminal-refresh-missing",
 ]
 
 AUTH_POSTURES = {
@@ -330,6 +343,10 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
 def resolve_artifact_path(value: str, artifact_dir: Path | None = None) -> Path | None:
@@ -1170,11 +1187,14 @@ def rule_001_model(data: dict[str, Any]) -> list[dict[str, str]]:
 
 def rule_002_wiring(data: dict[str, Any]) -> list[dict[str, str]]:
     scripts = data["package"].get("scripts", {})
+    repo_validate = scripts.get("repo:validate", "")
     failures: list[dict[str, str]] = []
     expected = {
         "proof-cockpit:validate": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json",
         "proof-cockpit:selftest": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py selftest --json",
         "proof-cockpit:compare": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py compare --json",
+        "proof-cockpit:projection-repin": "apps/staging-proof-cockpit/src/projection-repin.mjs --json",
+        "proof-cockpit:projection-repin:check": "apps/staging-proof-cockpit/src/projection-repin.mjs --check --json",
     }
     for name, required in expected.items():
         command = scripts.get(name, "")
@@ -1186,7 +1206,13 @@ def rule_002_wiring(data: dict[str, Any]) -> list[dict[str, str]]:
     for target in ["proof-cockpit-validate", "proof-cockpit-compare", "proof-cockpit-selftest"]:
         if f"{target}:" not in data["makefile"]:
             failures.append(finding("USF-PROOF-COCKPIT-002", f"Make target missing: {target}", "Makefile"))
-    repo_validate = scripts.get("repo:validate", "")
+    for target in ["proof-cockpit-projection-repin", "proof-cockpit-projection-repin-check", "proof-review-projection-repin"]:
+        if f"{target}:" not in data["makefile"]:
+            failures.append(finding("USF-PROOF-COCKPIT-002", f"Make target missing: {target}", "Makefile"))
+    if not PROJECTION_REPIN_PATH.exists():
+        failures.append(finding("USF-PROOF-COCKPIT-002", "Projection-only re-pin script is missing", str(PROJECTION_REPIN_PATH.relative_to(ROOT))))
+    if "apps/staging-proof-cockpit/src/projection-repin.mjs --check --json" not in repo_validate:
+        failures.append(finding("USF-PROOF-COCKPIT-002", "repo:validate missing projection-only re-pin drift check", "package.json"))
     for required in [
         "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json",
         "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json",
@@ -1841,6 +1867,222 @@ def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     return failures
 
 
+def compare_projection_field(
+    failures: list[dict[str, str]],
+    subject: str,
+    left_label: str,
+    left_value: Any,
+    right_label: str,
+    right_value: Any,
+) -> None:
+    if left_value in (None, ""):
+        failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection field missing: {left_label}", subject))
+        return
+    if right_value in (None, ""):
+        failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection field missing: {right_label}", subject))
+        return
+    if str(left_value) != str(right_value):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-013",
+                f"Projection metadata mismatch: {left_label}={left_value} but {right_label}={right_value}",
+                subject,
+            )
+        )
+
+
+def require_projection_text_value(
+    failures: list[dict[str, str]],
+    subject: str,
+    text: str,
+    label: str,
+    expected: Any,
+) -> None:
+    if expected in (None, ""):
+        failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection expected text value missing: {label}", subject))
+        return
+    if str(expected) not in text:
+        failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection text does not reference {label}: {expected}", subject))
+
+
+def projection_machine_counts(machine_run: dict[str, Any]) -> dict[str, Any]:
+    counts = machine_run.get("counts", {}) if isinstance(machine_run, dict) else {}
+    return {
+        "passCount": counts.get("pass"),
+        "warnCount": counts.get("warn"),
+        "failCount": counts.get("fail"),
+        "gapCount": counts.get("gap", counts.get("gaps", len(machine_run.get("gaps", [])) if isinstance(machine_run, dict) else None)),
+        "screenshotCount": counts.get("screenshots"),
+        "serviceEvidenceCount": counts.get("serviceEvidenceScreenshots", counts.get("serviceEvidence")),
+        "routeCount": counts.get("testedRoutes", counts.get("routes")),
+        "capabilityCount": counts.get("capabilities"),
+        "serviceCount": counts.get("services"),
+        "humanDecisionRequired": counts.get("humanDecisionRequired"),
+    }
+
+
+def rule_013_projection_repin_contract(data: dict[str, Any]) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    manifest = data["bundleManifest"]
+    projection_source = manifest.get("projectionSource", {})
+    manifest_latest = manifest.get("latestMachineRun", {})
+    store_latest = data["store"].get("latestMachineRun", {})
+    machine_run = data.get("machineRunReport", {})
+    machine_counts = projection_machine_counts(machine_run)
+    artifact_dir = data.get("artifactDir")
+
+    expected_manifest_values = {
+        "projectionOnly": True,
+        "projectionIssue": PROJECTION_ISSUE,
+        "terminalFreshMachineQaIssue": TERMINAL_FRESH_MACHINE_QA_ISSUE,
+        "generatedReportsAreAuthority": False,
+        "finalAcceptanceAutomatic": False,
+        "freshMachineQaGenerated": False,
+        "freshnessState": PROJECTION_FRESHNESS_STATE,
+    }
+    for field, expected in expected_manifest_values.items():
+        if manifest.get(field) != expected:
+            failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection manifest {field} must be {expected!r}", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+
+    if projection_source.get("terminalRefreshDeferredTo") != TERMINAL_FRESH_MACHINE_QA_ISSUE:
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-013",
+                "Projection source must defer terminal fresh machine evidence refresh to USF-966",
+                str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+            )
+        )
+
+    for claim in REQUIRED_NON_CLAIMS:
+        if claim not in manifest.get("nonClaims", []):
+            failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection manifest non-claim missing: {claim}", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+
+    for field in ["runId", "sourceSha", "deploymentSha", "environment", "artifactDir"]:
+        compare_projection_field(
+            failures,
+            str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+            f"projectionSource.{field}",
+            projection_source.get(field),
+            f"store.latestMachineRun.{field}",
+            store_latest.get(field),
+        )
+
+    for field in ["runId", "sourceSha", "deploymentSha", "environment", "artifactDir", "reportJson", "externalReviewBundle"]:
+        compare_projection_field(
+            failures,
+            str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+            f"bundleManifest.latestMachineRun.{field}",
+            manifest_latest.get(field),
+            f"store.latestMachineRun.{field}",
+            store_latest.get(field),
+        )
+
+    for store_field, machine_field in [
+        ("runId", "qaRun"),
+        ("sourceSha", "sourceSha"),
+        ("deploymentSha", "deploymentSha"),
+        ("environment", "environment"),
+        ("generatedAt", "completedAt"),
+    ]:
+        compare_projection_field(
+            failures,
+            str(STORE_PATH.relative_to(ROOT)),
+            f"store.latestMachineRun.{store_field}",
+            store_latest.get(store_field),
+            f"machineRunReport.{machine_field}",
+            machine_run.get(machine_field),
+        )
+
+    for field in [
+        "passCount",
+        "warnCount",
+        "failCount",
+        "gapCount",
+        "screenshotCount",
+        "serviceEvidenceCount",
+        "routeCount",
+        "capabilityCount",
+        "serviceCount",
+        "humanDecisionRequired",
+    ]:
+        compare_projection_field(
+            failures,
+            str(STORE_PATH.relative_to(ROOT)),
+            f"store.latestMachineRun.{field}",
+            store_latest.get(field),
+            f"machineRunReport.counts.{field}",
+            machine_counts.get(field),
+        )
+
+    for field in ["warnCount", "failCount", "gapCount"]:
+        if int(store_latest.get(field, 0) or 0) != 0 or int(manifest_latest.get("unresolvedGapCount" if field == "gapCount" else field, 0) or 0) != 0:
+            failures.append(
+                finding(
+                    "USF-PROOF-COCKPIT-013",
+                    "Projection-only re-pin requires zero warnings, failures, and unresolved gaps",
+                    str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+                )
+            )
+
+    source_report_hash = projection_source.get("sourceReportHash")
+    final_report_hash = projection_source.get("finalReportHash")
+    if not source_report_hash or not HEX_SHA256_RE.fullmatch(str(source_report_hash)):
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection sourceReportHash must be a SHA-256 digest", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+    if not final_report_hash or not HEX_SHA256_RE.fullmatch(str(final_report_hash)):
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection finalReportHash must be a SHA-256 digest", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+    elif final_report_hash != sha256_text(data["finalReport"]):
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection finalReportHash does not match final report bytes", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+    if source_report_hash and artifact_dir:
+        source_report_path = resolve_artifact_path("external-review-bundle/external-review-report.md", artifact_dir)
+        if source_report_path and source_report_path.exists() and source_report_hash != sha256_file(source_report_path):
+            failures.append(finding("USF-PROOF-COCKPIT-013", "Projection sourceReportHash does not match retained artifact report bytes", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+
+    for subject, text in [
+        (str(FINAL_REPORT_PATH.relative_to(ROOT)), data["finalReport"]),
+        (str(BUNDLE_README_PATH.relative_to(ROOT)), data.get("bundleReadme", "")),
+    ]:
+        for label, expected in [
+            ("projection issue", PROJECTION_ISSUE),
+            ("terminal fresh machine evidence issue", TERMINAL_FRESH_MACHINE_QA_ISSUE),
+            ("run ID", store_latest.get("runId")),
+            ("source SHA", store_latest.get("sourceSha")),
+            ("deployment SHA", store_latest.get("deploymentSha")),
+            ("environment", store_latest.get("environment")),
+        ]:
+            require_projection_text_value(failures, subject, text, label, expected)
+        for required_phrase in [
+            "Projection-only re-pin",
+            "Fresh machine QA generated",
+            "false",
+            "Generated reports are authority",
+        ]:
+            if required_phrase not in text:
+                failures.append(finding("USF-PROOF-COCKPIT-013", f"Projection text missing required phrase: {required_phrase}", subject))
+
+    if re.search(r"fresh machine qa generated[^.\n:]*:\s*true", data["finalReport"], re.I) or re.search(
+        r"fresh machine qa generated[^.\n:]*:\s*true",
+        data.get("bundleReadme", ""),
+        re.I,
+    ):
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection text must not claim fresh machine QA was generated", str(FINAL_REPORT_PATH.relative_to(ROOT))))
+
+    current = data.get("currentHead")
+    retained_source = store_latest.get("sourceSha")
+    if current and retained_source and current != retained_source:
+        if projection_source.get("sourceSha") == current or manifest_latest.get("sourceSha") == current:
+            failures.append(
+                finding(
+                    "USF-PROOF-COCKPIT-013",
+                    "Projection metadata must preserve retained proof source SHA and must not silently substitute current repository HEAD",
+                    str(BUNDLE_MANIFEST_PATH.relative_to(ROOT)),
+                )
+            )
+
+    if "apps/staging-proof-cockpit/src/projection-repin.mjs --check --json" not in data["package"].get("scripts", {}).get("repo:validate", ""):
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection check must remain wired into repo validation", "package.json"))
+    return failures
+
+
 def rule_012_planted_coverage(data: dict[str, Any]) -> list[dict[str, str]]:
     planted_rules = [fixture.get("expectedRule") for fixture in data["planted"]]
     planted_kinds = [fixture.get("fixture", {}).get("kind") for fixture in data["planted"]]
@@ -1867,6 +2109,7 @@ RULES = {
     "USF-PROOF-COCKPIT-010": rule_010_screenshots_and_redaction,
     "USF-PROOF-COCKPIT-011": rule_011_chain_and_report,
     "USF-PROOF-COCKPIT-012": rule_012_planted_coverage,
+    "USF-PROOF-COCKPIT-013": rule_013_projection_repin_contract,
 }
 
 
@@ -1884,6 +2127,12 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["model"]["schemaVersion"] = "broken"
     elif kind == "command-wiring-missing":
         mutated["package"]["scripts"].pop("proof-cockpit:validate", None)
+    elif kind == "projection-repin-command-wiring-missing":
+        mutated["package"]["scripts"].pop("proof-cockpit:projection-repin:check", None)
+        mutated["package"]["scripts"]["repo:validate"] = mutated["package"]["scripts"].get("repo:validate", "").replace(
+            " && node apps/staging-proof-cockpit/src/projection-repin.mjs --check --json",
+            "",
+        )
     elif kind == "route-surface-missing":
         mutated["nodeData"]["routes"] = [route for route in mutated["nodeData"]["routes"] if route != "/proof/import"]
     elif kind == "readiness-overclaim":
@@ -2003,6 +2252,33 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         services = mutated.get("serviceEvidenceManifest", {}).get("services", [])
         if services:
             services[0]["artifactHash"] = "0" * 64
+    elif kind == "projection-manifest-metadata-drift":
+        mutated["bundleManifest"].setdefault("projectionSource", {})["runId"] = "qa-run-planted-projection-drift"
+    elif kind == "projection-readme-metadata-drift":
+        mutated["bundleReadme"] = mutated.get("bundleReadme", "").replace(
+            str(mutated["store"].get("latestMachineRun", {}).get("sourceSha", "")),
+            "2" * 40,
+        )
+    elif kind == "projection-final-report-metadata-drift":
+        mutated["finalReport"] = mutated.get("finalReport", "").replace(
+            str(mutated["store"].get("latestMachineRun", {}).get("runId", "")),
+            "qa-run-planted-projection-drift",
+        )
+    elif kind == "projection-missing-nonclaim":
+        non_claims = mutated["bundleManifest"].get("nonClaims", [])
+        mutated["bundleManifest"]["nonClaims"] = [claim for claim in non_claims if claim != "no-staging-readiness"]
+    elif kind == "projection-current-head-substituted":
+        mutated["currentHead"] = "f" * 40
+        mutated["bundleManifest"].setdefault("projectionSource", {})["sourceSha"] = mutated.get("currentHead", "")
+    elif kind == "projection-fresh-machine-qa-overclaim":
+        mutated["bundleManifest"]["freshMachineQaGenerated"] = True
+        mutated["finalReport"] += "\nFresh machine QA generated by this projection: true\n"
+    elif kind == "projection-stale-output-hash":
+        mutated["bundleManifest"].setdefault("projectionSource", {})["finalReportHash"] = "0" * 64
+    elif kind == "projection-terminal-refresh-missing":
+        mutated["bundleManifest"]["terminalFreshMachineQaIssue"] = ""
+        mutated["bundleManifest"]["freshnessState"] = "current"
+        mutated["bundleManifest"].setdefault("projectionSource", {})["terminalRefreshDeferredTo"] = ""
     return mutated
 
 

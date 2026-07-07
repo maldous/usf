@@ -1,0 +1,8 @@
+{
+  "id": "036-projection-manifest-metadata-drift",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-manifest-metadata-drift"
+  },
+  "purpose": "Proves the projection-only manifest cannot drift from the retained latest machine-run metadata."
+}
