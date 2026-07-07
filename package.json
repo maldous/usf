@@ -95,6 +95,7 @@
     "proof-cockpit:import-check": "node apps/staging-proof-cockpit/src/machine-qa.mjs -- --full",
     "proof-cockpit:validate": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json",
     "proof-cockpit:validate-current": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py current --json",
+    "proof-cockpit:compare": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py compare --json",
     "proof-cockpit:selftest": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py selftest --json",
     "foundation-substrate-closure:validate": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json",
     "foundation-substrate-closure:selftest": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py selftest --json",
