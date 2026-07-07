@@ -490,6 +490,10 @@
         {
           "pattern": "pnpm-workspace.yaml",
           "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/regression-budget-and-performance-thresholds.md",
+          "selectorType": "path-glob"
         }
       ],
       "affectedProofFamilies": [
@@ -522,6 +526,7 @@
       "assurancePreserved": "Compatibility commands remain explicit and validator-visible.",
       "relatedIssueIds": [
         "USF-385",
+        "USF-770",
         "USF-952",
         "USF-976",
         "USF-984"

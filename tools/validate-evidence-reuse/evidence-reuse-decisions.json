@@ -125,7 +125,7 @@
       "artifactHashes": [
         {
           "path": "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
-          "sha256": "e292c319d9cd1f19d563291392aa71b3a98c5173268a37f41c3bd30445e6bdad",
+          "sha256": "bb098b03363f59284d7b586f0be8d58ae6f022eeb1347de4e4f84637ff47bc02",
           "hashBasis": "validator-owned-policy-file"
         }
       ],
