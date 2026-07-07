@@ -44,6 +44,7 @@ interface ManifestServiceRow {
   readonly ownerIssueIds: readonly string[];
   readonly obligationClassIds: readonly string[];
   readonly dependencyDisposition: string;
+  readonly boundedDisposition?: string;
   readonly requiredInTest: boolean;
   readonly generatedInTestCompose: boolean;
   readonly inMemoryServiceSubstituteAllowed: boolean | null;
@@ -67,6 +68,12 @@ interface FixtureCorpus {
     readonly inMemoryServiceSubstituteAllowed: boolean;
     readonly testReadinessClaimAllowed: boolean;
     readonly nonClaimBoundary: string;
+    readonly nonTestDisposition?: {
+      readonly reason: string;
+      readonly followUpIssue?: string;
+      readonly linkedBlockingIssue?: string;
+      readonly preventsFinalAcceptanceUntilReclassified?: boolean;
+    };
   }[];
   readonly semanticContractFixtures: readonly {
     readonly contractId: string;
@@ -153,12 +160,11 @@ describe("USF-249 auth integration evidence linkage", () => {
     }
   });
 
-  it("requires composed evidence for service-backed auth surfaces without allowing in-memory substitutes", () => {
+  it("requires composed evidence for Test auth surfaces and bounded dispositions for non-Test auth surfaces", () => {
     const fixtureByService = byService(fixtures.serviceFixtures);
     const integrationByService = byService(integration.serviceIntegrationRows);
     for (const row of manifestAuthServices) {
       expect(row.ownerIssueIds, row.serviceId).toContain("USF-249");
-      expect(row.requiredInTest, row.serviceId).toBe(true);
       expect(row.inMemoryServiceSubstituteAllowed, row.serviceId).not.toBe(true);
 
       const fixture = fixtureByService.get(row.serviceId);
@@ -166,6 +172,20 @@ describe("USF-249 auth integration evidence linkage", () => {
       expect(fixture?.fixtureSeedId, row.serviceId).toBe(row.fixtureSeedId);
       expect(fixture?.inMemoryServiceSubstituteAllowed, row.serviceId).toBe(false);
       expect(fixture?.testReadinessClaimAllowed, row.serviceId).toBe(false);
+
+      if (!row.requiredInTest) {
+        expect(row.generatedInTestCompose, row.serviceId).toBe(false);
+        expect(row.boundedDisposition ?? "", row.serviceId).toMatch(/staging|non-test/i);
+        expect(fixture?.requiredInTest, row.serviceId).toBe(false);
+        expect(fixture?.generatedInTestCompose, row.serviceId).toBe(false);
+        expect(fixture?.nonTestDisposition?.reason ?? "", row.serviceId).toMatch(
+          /outside the canonical Test Compose target|staging/i,
+        );
+        expect(fixture?.nonClaimBoundary, row.serviceId).toMatch(
+          /does not claim final Test readiness/i,
+        );
+        continue;
+      }
 
       if (row.generatedInTestCompose) {
         const integrationServiceId = row.serviceId === "caddy" ? "external-caddy" : row.serviceId;

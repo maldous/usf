@@ -8,7 +8,7 @@
     "path": "docs/architecture/semantic-service-test-obligation-manifest.json",
     "selector": "semanticContractObligations where ownerIssueIds includes USF-241",
     "expectedSemanticContractCount": 67,
-    "expectedServiceRowCount": 39,
+    "expectedServiceRowCount": 40,
     "expectedUsf241ServiceRowCount": 0
   },
   "scope": {
@@ -174,9 +174,10 @@
       "mock-oidc",
       "platform-api",
       "public-proof-origin",
-      "web-app",
       "sentry",
-      "sonar-oidc-plugin"
+      "sonar-oidc-plugin",
+      "staging-proof-cockpit",
+      "web-app"
     ]
   },
   "nonClaimsPreserved": [

@@ -354,7 +354,7 @@
   "imagePinningPosture": {
     "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
     "composeTargetPath": "compose/compose.test.generated.yaml",
-    "imageServiceCount": 35,
+    "imageServiceCount": 36,
     "composeImageLineCount": 33,
     "digestPinnedServiceIds": [
       "windmill",
@@ -378,6 +378,11 @@
         "serviceId": "public-proof-origin",
         "image": "node:24.16.0-alpine3.22",
         "blockerId": "usf266-compose-generated-target-missing-public-proof-origin"
+      },
+      {
+        "serviceId": "staging-proof-cockpit",
+        "image": "node:24.16.0-alpine3.22",
+        "blockerId": "usf255-compose-generated-target-missing-staging-proof-cockpit"
       }
     ],
     "partialTagReviewRequired": [
@@ -455,6 +460,11 @@
       "id": "usf255-source-disposition-coverage-deferred",
       "status": "blocked-by-owned-path-limits",
       "reason": "corepack pnpm verify fails USF-IMPL-002 because the new test files require target-file source disposition coverage. The disposition matrix or validator-owned coverage path is outside this issue worker's owned paths."
+    },
+    {
+      "id": "usf255-compose-generated-target-missing-staging-proof-cockpit",
+      "status": "blocked-by-current-generated-compose",
+      "reason": "The service catalogue records staging-proof-cockpit with node:24.16.0-alpine3.22, but compose/compose.test.generated.yaml does not include that staging-only operator fixture image line because the service is generated only for the staging proof-cockpit profile."
     }
   ],
   "validationCommands": [

@@ -17,7 +17,7 @@
     "semanticContracts": "spec/instances/semantic-contract/"
   },
   "expectedSemanticContractCount": 67,
-  "expectedServiceObligationCount": 39,
+  "expectedServiceObligationCount": 40,
   "expectedGeneratedServiceCount": 33,
   "expectedProfileCount": 11,
   "designContractObligationClassId": "design-contract-drift",
