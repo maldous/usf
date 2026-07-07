@@ -1,0 +1,7 @@
+{
+  "id": "014-missing-non-claims",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-010",
+  "fixture": {
+    "kind": "missing-non-claims"
+  }
+}

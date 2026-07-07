@@ -14,6 +14,7 @@ export USF_PROOF_PROD_FQDN
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
 	proof-cockpit-validate proof-cockpit-validate-current proof-cockpit-compare proof-cockpit-selftest \
+	evidence-invalidation-validate evidence-invalidation-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
@@ -56,6 +57,7 @@ help:
 		'  make validate-assurance    Enterprise assurance evidence validator (compatibility: enterprise-validate)' \
 		'  make validate-evidence     Repository evidence validators (compatibility: corepack pnpm repo:validate)' \
 		'  make validate-bootstrap    Bootstrap governance validator (compatibility: corepack pnpm validate-bootstrap)' \
+		'  make evidence-invalidation-validate  Validate evidence invalidation map and fallback rules' \
 		'' \
 		'Common proof groups:' \
 		'  make runtime-proof         API and worker runtime proof' \
@@ -65,6 +67,7 @@ help:
 		'  make test-coverage         Generate bounded LCOV and enforce 100% in-scope coverage' \
 		'  make test-assurance        Bounded local SonarQube zero-open-issue proof' \
 		'  make test-readiness-selftest  Run planted-defect regression selftest' \
+		'  make evidence-invalidation-selftest  Run evidence invalidation planted-defect selftest' \
 		'  make public-fqdn-validate  Validate public FQDN semantic contract and non-claims' \
 		'  make public-proof-origin  Prove the gateway-neutral public proof origin locally' \
 		'  make public-fqdn-proof     Strict external DNS/TLS/HTTPS public FQDN proof' \
@@ -136,6 +139,12 @@ proof-cockpit-compare:
 
 proof-cockpit-selftest:
 	corepack pnpm proof-cockpit:selftest
+
+evidence-invalidation-validate:
+	corepack pnpm evidence-invalidation:validate
+
+evidence-invalidation-selftest:
+	corepack pnpm evidence-invalidation:selftest
 
 foundation-substrate-closure-validate:
 	corepack pnpm foundation-substrate-closure:validate

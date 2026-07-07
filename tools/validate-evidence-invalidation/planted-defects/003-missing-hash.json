@@ -1,0 +1,7 @@
+{
+  "id": "003-missing-hash",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-007",
+  "fixture": {
+    "kind": "missing-hash"
+  }
+}
