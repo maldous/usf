@@ -1,0 +1,7 @@
+{
+  "id": "007-ambiguous-environment",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-008",
+  "fixture": {
+    "kind": "ambiguous-environment"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "012-pruned-payload-without-metadata",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-007",
+  "fixture": {
+    "kind": "pruned-payload-without-metadata"
+  }
+}

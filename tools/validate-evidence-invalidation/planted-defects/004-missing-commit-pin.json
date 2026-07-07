@@ -1,0 +1,7 @@
+{
+  "id": "004-missing-commit-pin",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-007",
+  "fixture": {
+    "kind": "missing-commit-pin"
+  }
+}
