@@ -1,0 +1,42 @@
+{
+  "target": "workflow-guardrails",
+  "expectedRule": "USF-CI-GUARD-002",
+  "records": {
+    ".github/workflows/validate-spec.yml": {
+      "name": "validate-spec",
+      "on": {
+        "pull_request": {}
+      },
+      "jobs": {
+        "validate": {
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@v4",
+              "with": {
+                "fetch-depth": 0,
+                "persist-credentials": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    ".github/workflows/proof-anchor.yml": {
+      "name": "proof-anchor",
+      "on": {
+        "push": {
+          "branches": [
+            "main"
+          ]
+        }
+      },
+      "permissions": {
+        "contents": "write",
+        "id-token": "write",
+        "attestations": "write"
+      },
+      "jobs": {}
+    }
+  }
+}

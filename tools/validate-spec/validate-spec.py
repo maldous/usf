@@ -14,7 +14,7 @@ implementation step forward; schema-authoring-standard section 24, standards-pro
 instance only when asked, validated against validator-report.schema.json before write.
 
 Exit codes:  0 = clean   1 = validation findings   2 = tool/internal error (incl. unreadable input).
-Dependency:  jsonschema (Draft 2020-12). Pinned for CI in tools/validate-spec/requirements.txt.
+Dependency:  jsonschema (Draft 2020-12) and PyYAML. Pinned for CI in tools/validate-spec/requirements.txt.
 
 Usage:
     python tools/validate-spec/validate-spec.py [MODE] [options]
@@ -30,6 +30,7 @@ Modes (default: all):
     evidence     committed proof/evidence records under evidence/
     real-instances  authored ADR/source/semantic/evidence/report instance corpus
     implementation  committed implementation artefact guard checks
+    workflow-guardrails  GitHub workflow permission, token, secret, cache, artifact guardrails
     selftest     plant defects from tools/validate-spec/planted-defects/ and assert the exact rule id fires
     pr           base/head diff gate (--base, --head); fails closed if git fails
     all          schemas + enums + catalogues + registry + safety + fixtures + instances + imports + evidence + real-instances + implementation + selftest
@@ -49,6 +50,21 @@ try:
 except Exception:
     print("ERROR: this tool requires the 'jsonschema' package (Draft 2020-12).", file=sys.stderr)
     sys.exit(2)
+
+try:
+    import yaml
+except Exception:
+    print("ERROR: this tool requires the 'PyYAML' package.", file=sys.stderr)
+    sys.exit(2)
+
+class GithubWorkflowLoader(yaml.SafeLoader):
+    pass
+
+GithubWorkflowLoader.yaml_implicit_resolvers = copy.deepcopy(yaml.SafeLoader.yaml_implicit_resolvers)
+for _resolver_key, _resolver_values in list(GithubWorkflowLoader.yaml_implicit_resolvers.items()):
+    GithubWorkflowLoader.yaml_implicit_resolvers[_resolver_key] = [
+        (tag, regexp) for tag, regexp in _resolver_values if tag != "tag:yaml.org,2002:bool"
+    ]
 
 def _find_root(start):
     """Ascend until a directory contains both spec/ and docs/ (the repo root)."""
@@ -97,6 +113,25 @@ AUTHORITY_INDEX_BOUNDARY_NON_CLAIMS = {
     "no-enterprise-production-readiness",
     "no-full-product-readiness",
 }
+AUTHORIZED_WORKFLOWS = {
+    ".github/workflows/validate-spec.yml",
+    ".github/workflows/proof-anchor.yml",
+}
+PROOF_ANCHOR_WORKFLOW = ".github/workflows/proof-anchor.yml"
+VALIDATE_SPEC_REQUIRED_PERMISSIONS = {"contents": "read"}
+PROOF_ANCHOR_REQUIRED_PERMISSIONS = {
+    "contents": "write",
+    "id-token": "write",
+    "attestations": "write",
+}
+SECRET_EXPRESSION_RE = re.compile(r"\bsecrets\.", re.IGNORECASE)
+GITHUB_TOKEN_RE = re.compile(r"\bgithub\.token\b", re.IGNORECASE)
+SECRET_ENV_NAME_RE = re.compile(r"(token|secret|password|credential|private[_-]?key|api[_-]?key)", re.IGNORECASE)
+SECRET_VALUE_LOG_RE = re.compile(
+    r"(echo|printf|cat|tee|printenv|env\s*\||set\s+-x).*(secrets\.|github\.token|token|password|credential|private[_-]?key)",
+    re.IGNORECASE | re.DOTALL,
+)
+ENV_DUMP_RE = re.compile(r"(^|\n)\s*(printenv|env\s*\||set\s+-x)\b", re.IGNORECASE)
 REQUIRED_FIELD_GUARDS = {
     "command": ["inputs", "outputs", "environmentScope", "sideEffects"],
     "observability-signal": ["purpose"],
@@ -372,6 +407,13 @@ RULES = {
     "USF-PR-TOOL":      ("blocking", "PR adds unauthorised tool/CI (not in AUTHORIZED_TOOLING)"),
     "USF-PR-DISPOSITION": ("blocking", "PR adds implementation file without source disposition coverage"),
     "USF-PR-FRESHNESS": ("blocking", "PR changes evidence/report JSON with non-stale freshness before post-merge publication"),
+    "USF-CI-GUARD-001": ("blocking", "CI workflow inventory or syntax is not explicitly authorised"),
+    "USF-CI-GUARD-002": ("blocking", "CI workflow permissions are missing or not explicit"),
+    "USF-CI-GUARD-003": ("blocking", "Pull-request workflow token boundary is not least privilege"),
+    "USF-CI-GUARD-004": ("blocking", "Proof-anchor workflow elevated permission boundary drifted"),
+    "USF-CI-GUARD-005": ("blocking", "Unsafe pull_request_target workflow trigger is present"),
+    "USF-CI-GUARD-006": ("blocking", "CI workflow exposes secret or token values unsafely"),
+    "USF-CI-GUARD-007": ("blocking", "CI cache or artifact configuration may include secret values"),
     "USF-ANCHOR-001":   ("blocking", "Proof freshness anchor payload is incomplete or malformed"),
     "USF-ANCHOR-002":   ("blocking", "Proof freshness anchor target/freshness commit mismatch"),
     "USF-ANCHOR-003":   ("blocking", "Proof freshness anchor payload digest mismatch"),
@@ -1999,6 +2041,7 @@ def run_all_checks(ctx, F):
     check_registry(ctx, F)
     check_catalogues(ctx, F)
     check_safety(ctx, F)
+    validate_workflow_guardrails(F)
     validate_readiness_reconciliation(F)
 
 
@@ -2019,7 +2062,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "workflow-guardrails", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -2129,6 +2172,12 @@ def check_selftest(ctx, F):
                 changed_records=patch.get("records", {}),
                 existing_paths=set() if patch.get("ignoreExistingDirective") else None,
             )
+        elif patch["target"] == "workflow-guardrails":
+            records = patch.get("records")
+            if not isinstance(records, dict):
+                F.add("USF-SELFTEST-001", df, "workflow-guardrails planted-defect needs a records object")
+                continue
+            validate_workflow_guardrails(f2, records=records)
         elif patch["target"] == "anchor-payloads":
             records = patch.get("records")
             if not isinstance(records, dict):
@@ -2596,6 +2645,295 @@ def validate_pr_freshness(F, changed_paths, changed_records=None):
             )
 
 
+def _load_workflow_records(F, records=None):
+    if records is not None:
+        return records
+    loaded = {}
+    for path in sorted(glob.glob(".github/workflows/*.yml") + glob.glob(".github/workflows/*.yaml")):
+        norm = _normalise_path(path)
+        try:
+            with open(norm, encoding="utf-8") as handle:
+                data = yaml.load(handle, Loader=GithubWorkflowLoader)
+        except yaml.YAMLError as e:
+            F.add("USF-CI-GUARD-001", norm, f"workflow YAML failed to parse: {e}")
+            continue
+        except OSError as e:
+            F.add("USF-CI-GUARD-001", norm, str(e))
+            continue
+        if not isinstance(data, dict):
+            F.add("USF-CI-GUARD-001", norm, "workflow root must be an object")
+            continue
+        loaded[norm] = data
+    return loaded
+
+
+def _workflow_events(workflow):
+    on_value = workflow.get("on")
+    if isinstance(on_value, str):
+        return {on_value}
+    if isinstance(on_value, list):
+        return {item for item in on_value if isinstance(item, str)}
+    if isinstance(on_value, dict):
+        return {str(key) for key in on_value}
+    return set()
+
+
+def _workflow_event_config(workflow, event_name):
+    on_value = workflow.get("on")
+    if isinstance(on_value, dict):
+        return on_value.get(event_name)
+    if isinstance(on_value, str) and on_value == event_name:
+        return {}
+    if isinstance(on_value, list) and event_name in on_value:
+        return {}
+    return None
+
+
+def _workflow_push_branches(workflow):
+    push_config = _workflow_event_config(workflow, "push")
+    if not isinstance(push_config, dict):
+        return set()
+    branches = push_config.get("branches")
+    if isinstance(branches, str):
+        return {branches}
+    if isinstance(branches, list):
+        return {item for item in branches if isinstance(item, str)}
+    return set()
+
+
+def _workflow_permissions(workflow):
+    permissions = workflow.get("permissions")
+    if isinstance(permissions, dict):
+        return {str(key): str(value) for key, value in permissions.items()}
+    if isinstance(permissions, str):
+        return permissions
+    if permissions is None:
+        return None
+    return "__invalid__"
+
+
+def _walk_workflow_strings(value, path="$"):
+    if isinstance(value, str):
+        return [(path, value)]
+    if isinstance(value, list):
+        out = []
+        for index, item in enumerate(value):
+            out.extend(_walk_workflow_strings(item, f"{path}/{index}"))
+        return out
+    if isinstance(value, dict):
+        out = []
+        for key, item in value.items():
+            out.extend(_walk_workflow_strings(item, f"{path}/{key}"))
+        return out
+    return []
+
+
+def _workflow_jobs(workflow):
+    jobs = workflow.get("jobs")
+    return jobs if isinstance(jobs, dict) else {}
+
+
+def _workflow_steps(workflow):
+    steps = []
+    for job_name, job in _workflow_jobs(workflow).items():
+        if not isinstance(job, dict):
+            continue
+        for index, step in enumerate(job.get("steps", []) if isinstance(job.get("steps"), list) else []):
+            if isinstance(step, dict):
+                steps.append((str(job_name), index, step))
+    return steps
+
+
+def _truthy(value):
+    return value is True or (isinstance(value, str) and value.lower() == "true")
+
+
+def _has_write_permission(permissions):
+    if permissions == "write-all":
+        return True
+    if not isinstance(permissions, dict):
+        return False
+    return any(value == "write" for value in permissions.values())
+
+
+def _has_secret_expression(workflow):
+    return any(SECRET_EXPRESSION_RE.search(text) for _, text in _walk_workflow_strings(workflow))
+
+
+def _has_github_token_expression(workflow):
+    return any(GITHUB_TOKEN_RE.search(text) for _, text in _walk_workflow_strings(workflow))
+
+
+def _dispatch_inputs(workflow):
+    dispatch = _workflow_event_config(workflow, "workflow_dispatch")
+    if not isinstance(dispatch, dict):
+        return set()
+    inputs = dispatch.get("inputs")
+    if not isinstance(inputs, dict):
+        return set()
+    return {str(key) for key in inputs}
+
+
+def _has_issue_context_input(workflow):
+    allowed = {"issue", "issueId", "linearIssue", "linear_issue", "ownerIssue", "owner_issue"}
+    return bool(_dispatch_inputs(workflow) & allowed)
+
+
+def _workflow_uses_cache_or_artifact(step):
+    uses = step.get("uses")
+    if not isinstance(uses, str):
+        return False
+    lower = uses.lower()
+    return lower.startswith("actions/cache") or lower.startswith("actions/upload-artifact")
+
+
+def _is_allowed_github_token_use(workflow_path, job_name, step):
+    if workflow_path != PROOF_ANCHOR_WORKFLOW:
+        return False
+    name = step.get("name")
+    env = step.get("env")
+    return (
+        job_name == "publish-anchor"
+        and name == "Verify the attestation"
+        and isinstance(env, dict)
+        and env.get("GH_TOKEN") == "${{ github.token }}"
+    )
+
+
+def _validate_workflow_inventory(F, records):
+    paths = set(records)
+    for path in sorted(paths - AUTHORIZED_WORKFLOWS):
+        F.add("USF-CI-GUARD-001", path, "workflow file is not in the authorised workflow inventory")
+    for path in sorted(AUTHORIZED_WORKFLOWS - paths):
+        F.add("USF-CI-GUARD-001", path, "authorised workflow file is missing")
+    for path, workflow in records.items():
+        if not _workflow_events(workflow):
+            F.add("USF-CI-GUARD-001", path, "workflow triggers are missing or could not be parsed")
+
+
+def _validate_pr_workflow(F, path, workflow):
+    events = _workflow_events(workflow)
+    if "pull_request_target" in events:
+        F.add("USF-CI-GUARD-005", f"{path}#on.pull_request_target", "pull_request_target is blocked until a separate safe-checkout policy is recorded")
+    if not ({"pull_request", "pull_request_target"} & events):
+        return
+
+    permissions = _workflow_permissions(workflow)
+    if not isinstance(permissions, dict):
+        F.add("USF-CI-GUARD-002", f"{path}#permissions", "pull-request workflow must declare explicit mapping permissions")
+    else:
+        for key, expected in VALIDATE_SPEC_REQUIRED_PERMISSIONS.items():
+            if permissions.get(key) != expected:
+                F.add("USF-CI-GUARD-003", f"{path}#permissions.{key}", f"pull-request workflow must declare {key}: {expected}")
+        for key, value in sorted(permissions.items()):
+            if value == "write":
+                F.add("USF-CI-GUARD-003", f"{path}#permissions.{key}", "pull-request workflow must not request write permissions")
+
+    for job_name, job in _workflow_jobs(workflow).items():
+        if not isinstance(job, dict):
+            continue
+        job_permissions = _workflow_permissions(job)
+        if job_permissions is None:
+            continue
+        if job_permissions == "write-all" or _has_write_permission(job_permissions):
+            F.add("USF-CI-GUARD-003", f"{path}#jobs.{job_name}.permissions", "pull-request job must not escalate token permissions")
+
+    for job_name, index, step in _workflow_steps(workflow):
+        uses = step.get("uses")
+        if isinstance(uses, str) and uses.lower().startswith("actions/checkout"):
+            with_block = step.get("with")
+            persist = with_block.get("persist-credentials") if isinstance(with_block, dict) else None
+            if not (persist is False or (isinstance(persist, str) and persist.lower() == "false")):
+                F.add("USF-CI-GUARD-003", f"{path}#jobs.{job_name}.steps.{index}", "pull-request checkout must set persist-credentials: false")
+
+    if _has_secret_expression(workflow):
+        F.add("USF-CI-GUARD-006", path, "pull-request workflow must not reference repository secrets")
+    if _has_github_token_expression(workflow):
+        F.add("USF-CI-GUARD-006", path, "pull-request workflow must not pass github.token explicitly")
+
+
+def _validate_proof_anchor_workflow(F, path, workflow):
+    events = _workflow_events(workflow)
+    if events != {"push"}:
+        F.add("USF-CI-GUARD-004", f"{path}#on", "proof-anchor must remain push-only")
+    if _workflow_push_branches(workflow) != {"main"}:
+        F.add("USF-CI-GUARD-004", f"{path}#on.push.branches", "proof-anchor must remain main-only")
+    permissions = _workflow_permissions(workflow)
+    if not isinstance(permissions, dict):
+        F.add("USF-CI-GUARD-004", f"{path}#permissions", "proof-anchor must declare explicit elevated permissions")
+        return
+    for key, expected in PROOF_ANCHOR_REQUIRED_PERMISSIONS.items():
+        if permissions.get(key) != expected:
+            F.add("USF-CI-GUARD-004", f"{path}#permissions.{key}", f"proof-anchor must keep {key}: {expected}")
+    for key, value in sorted(permissions.items()):
+        if value == "write" and key not in PROOF_ANCHOR_REQUIRED_PERMISSIONS:
+            F.add("USF-CI-GUARD-004", f"{path}#permissions.{key}", "proof-anchor has an unapproved write permission")
+    if "pull_request" in events or "pull_request_target" in events:
+        F.add("USF-CI-GUARD-004", f"{path}#on", "proof-anchor must not run in pull-request contexts")
+
+
+def _validate_secret_contexts(F, path, workflow):
+    if _has_secret_expression(workflow):
+        F.add("USF-CI-GUARD-006", path, "workflow references repository secrets without a recorded validator allowlist")
+
+    for job_name, index, step in _workflow_steps(workflow):
+        for string_path, text in _walk_workflow_strings(step, f"jobs.{job_name}.steps.{index}"):
+            if GITHUB_TOKEN_RE.search(text) and not _is_allowed_github_token_use(path, job_name, step):
+                F.add("USF-CI-GUARD-006", f"{path}#{string_path}", "github.token use is only allowed for proof-anchor attestation verification")
+            if SECRET_VALUE_LOG_RE.search(text):
+                F.add("USF-CI-GUARD-006", f"{path}#{string_path}", "workflow command may print a secret or token value")
+            if ENV_DUMP_RE.search(text) and ("token" in text.lower() or "secret" in text.lower()):
+                F.add("USF-CI-GUARD-006", f"{path}#{string_path}", "workflow command may dump a secret-bearing environment")
+
+        env = step.get("env")
+        if isinstance(env, dict):
+            for env_name, env_value in env.items():
+                if not SECRET_ENV_NAME_RE.search(str(env_name)):
+                    continue
+                if _is_allowed_github_token_use(path, job_name, step):
+                    continue
+                if isinstance(env_value, str) and env_value and "${{" not in env_value:
+                    F.add("USF-CI-GUARD-006", f"{path}#jobs.{job_name}.steps.{index}.env.{env_name}", "secret-like environment variable uses a raw literal value")
+        if _workflow_uses_cache_or_artifact(step):
+            for string_path, text in _walk_workflow_strings(step, f"jobs.{job_name}.steps.{index}"):
+                if SECRET_EXPRESSION_RE.search(text) or GITHUB_TOKEN_RE.search(text):
+                    F.add("USF-CI-GUARD-007", f"{path}#{string_path}", "cache or artifact configuration must not include secrets or github.token")
+
+
+def _validate_secret_dependent_workflow(F, path, workflow):
+    if path == PROOF_ANCHOR_WORKFLOW:
+        return
+    permissions = _workflow_permissions(workflow)
+    secret_dependent = _has_secret_expression(workflow) or _has_write_permission(permissions)
+    if not secret_dependent:
+        return
+    events = _workflow_events(workflow)
+    if "workflow_dispatch" not in events:
+        F.add("USF-CI-GUARD-006", path, "secret-dependent or elevated workflow must be manually dispatched")
+    if not _has_issue_context_input(workflow):
+        F.add("USF-CI-GUARD-006", path, "secret-dependent or elevated workflow must require an issue context input")
+    if "pull_request" in events or "pull_request_target" in events:
+        F.add("USF-CI-GUARD-006", path, "secret-dependent or elevated workflow must not run on pull-request events")
+    for job_name, job in _workflow_jobs(workflow).items():
+        if isinstance(job, dict) and _truthy(job.get("continue-on-error")):
+            F.add("USF-CI-GUARD-006", f"{path}#jobs.{job_name}.continue-on-error", "secret-dependent workflow must fail closed")
+    for job_name, index, step in _workflow_steps(workflow):
+        if _truthy(step.get("continue-on-error")):
+            F.add("USF-CI-GUARD-006", f"{path}#jobs.{job_name}.steps.{index}.continue-on-error", "secret-dependent workflow step must fail closed")
+
+
+def validate_workflow_guardrails(F, records=None):
+    records = _load_workflow_records(F, records=records)
+    _validate_workflow_inventory(F, records)
+    for path, workflow in sorted(records.items()):
+        _validate_pr_workflow(F, path, workflow)
+        _validate_secret_contexts(F, path, workflow)
+        _validate_secret_dependent_workflow(F, path, workflow)
+    proof_anchor = records.get(PROOF_ANCHOR_WORKFLOW)
+    if proof_anchor is not None:
+        _validate_proof_anchor_workflow(F, PROOF_ANCHOR_WORKFLOW, proof_anchor)
+
+
 def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=None, existing_paths=None):
     changed_paths = []
     changed_existing_paths = []
@@ -2749,7 +3087,7 @@ def emit_report(ctx, F, path):
 def main():
     ap = argparse.ArgumentParser(description="USF spec validator (fail-closed).")
     ap.add_argument("mode", nargs="?", default="all",
-                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "bootstrap", "selftest", "pr", "anchor", "all"])
+                    choices=["schemas", "enums", "catalogues", "registry", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "bootstrap", "workflow-guardrails", "selftest", "pr", "anchor", "all"])
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--base")
@@ -2772,8 +3110,9 @@ def main():
         "schemas": ["schemas"], "enums": ["enums"], "catalogues": ["catalogues"], "registry": ["registry"],
         "fixtures": ["fixtures"], "instances": ["instances"], "imports": ["imports"], "evidence": ["evidence"],
         "real-instances": ["real-instances"], "implementation": ["implementation"], "bootstrap": ["bootstrap"],
+        "workflow-guardrails": ["workflow-guardrails"],
         "selftest": ["selftest"], "pr": ["pr"], "anchor": ["anchor"],
-        "all": ["schemas", "enums", "catalogues", "registry", "safety", "readiness", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "bootstrap", "selftest"]
+        "all": ["schemas", "enums", "catalogues", "registry", "safety", "workflow-guardrails", "readiness", "fixtures", "instances", "imports", "evidence", "real-instances", "implementation", "bootstrap", "selftest"]
                + (["pr"] if pr_requested else []),
     }[a.mode]
     if "schemas" in run:
@@ -2786,6 +3125,8 @@ def main():
         check_registry(ctx, F)
     if "safety" in run:
         check_safety(ctx, F)
+    if "workflow-guardrails" in run:
+        validate_workflow_guardrails(F)
     if "readiness" in run:
         validate_readiness_reconciliation(F)
     if "fixtures" in run:
@@ -2805,6 +3146,8 @@ def main():
     if "selftest" in run:
         selftest_state = check_selftest(ctx, F)
     if "pr" in run:
+        if "workflow-guardrails" not in run:
+            validate_workflow_guardrails(F)
         check_pr(ctx, F, a.base or "main", a.head or "HEAD")
     if "anchor" in run:
         if not a.anchor_file:
