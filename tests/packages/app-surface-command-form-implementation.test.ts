@@ -6,6 +6,7 @@ import {
   getLocalCommandFormById,
   validateLocalCommandFormRegistry,
   type LocalAppSurfaceRuntimeDefinition,
+  type LocalCommandFormMapping,
   type LocalCommandFormRegistry,
   type LocalCommandFormSemanticAuthority,
 } from "@foundation/app-surface";
@@ -188,6 +189,15 @@ describe("USF-1021 command and form implementation", () => {
   it("fails closed for unknown command forms", () => {
     expect(getLocalCommandFormById("command-form-api-key-onboarding").commandRef).toBe("command.onboardApiKey");
     expect(() => getLocalCommandFormById("command-form-missing")).toThrow("command-form-unknown:command-form-missing");
+  });
+
+  it("fails closed when a semantically valid command form is not registered", () => {
+    const commandForm = clone(LOCAL_COMMAND_FORM_REGISTRY.commands[0]!) as LocalCommandFormMapping;
+    commandForm.formId = "command-form-unregistered";
+
+    expect(() => exerciseLocalCommandForm(commandForm, semanticAuthority)).toThrow(
+      "command-form-unregistered:command-form-unregistered",
+    );
   });
 
   it("satisfies USF-931-style command form validator expectations", () => {
