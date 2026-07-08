@@ -323,6 +323,18 @@
       {
         "path": "tests/apps/app-surface-web-bounded-local-scaffold.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "package.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-package-installation-proof.json",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -346,6 +358,36 @@
     "futureToCreatePaths": [
       {
         "path": "apps/mobile",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "apps/mobile/package.json",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "apps/mobile/app.json",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "apps/mobile/index.ts",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "apps/mobile/App.tsx",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "apps/mobile/src/screen-registry.ts",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
         "classification": "future-to-create",
         "owningLinearIssueId": "USF-1018"
       }
@@ -536,7 +578,8 @@
         "production-readiness",
         "live-provider-readiness",
         "human-acceptance"
-      ]
+      ],
+      "packageAuthorityArtefact": "docs/architecture/app-surface-package-installation-proof.json"
     },
     "mobile": {
       "selectedPostureArtefact": "docs/adr/0016-expo-mobile-adapter-posture.md",
@@ -546,7 +589,15 @@
         "Expo managed configuration posture only after package authority is confirmed.",
         "No EAS credentials, signing credentials, store records, store submission, or provider setup.",
         "Screens must map to USF capabilities and fail closed when unknown."
-      ]
+      ],
+      "packageAuthorityArtefact": "docs/architecture/app-surface-package-installation-proof.json",
+      "dependencyAuthorityIssueId": "USF-1019",
+      "dependencyPins": [
+        "expo@57.0.4",
+        "react-native@0.86.0"
+      ],
+      "dependencyStatus": "pinned-for-future-bounded-local-scaffold",
+      "currentStatus": "apps-mobile-not-yet-created"
     },
     "sharedClient": {
       "selectedPostureArtefact": "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
@@ -667,7 +718,23 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-package-installation",
       "mayInstallPackages": true,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "repositoryArtefact": "docs/architecture/app-surface-package-installation-proof.json",
+      "currentRepositoryStatus": "package-pins-and-rationale-recorded",
+      "packagePinsAddedByIssue": [
+        "expo@57.0.4",
+        "react-native@0.86.0"
+      ],
+      "packagePinsConfirmedByIssue": [
+        "next@16.2.10",
+        "react@19.2.7",
+        "react-dom@19.2.7",
+        "@types/react@19.2.17",
+        "@types/react-dom@19.2.3"
+      ],
+      "runtimeCodeCreatedByIssue": false,
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1020",
@@ -919,6 +986,18 @@
       "Unknown or missing semantic input must fail closed.",
       "No UI-only business rules.",
       "No credentials, external services, provider setup, deployment, staging, store setup, live identity, push provider, ads provider, or monetisation provider."
+    ],
+    "packageInstallationProofArtefact": "docs/architecture/app-surface-package-installation-proof.json",
+    "packagePinsAddedForMobileBoundedLocalScaffold": [
+      "expo@57.0.4",
+      "react-native@0.86.0"
+    ],
+    "packagePinsConfirmedForWebBoundedLocalScaffold": [
+      "next@16.2.10",
+      "react@19.2.7",
+      "react-dom@19.2.7",
+      "@types/react@19.2.17",
+      "@types/react-dom@19.2.3"
     ]
   },
   "proofLadder": {
@@ -1001,6 +1080,14 @@
       },
       {
         "command": "make app-surface-selftest"
+      },
+      {
+        "commandClass": "strict-json-parse",
+        "targetPath": "docs/architecture/app-surface-package-installation-proof.json"
+      },
+      {
+        "command": "corepack pnpm install --frozen-lockfile",
+        "guardedRuleId": "USF-1019-PACKAGE-PINS"
       }
     ],
     "commandsForLaterImplementationIssues": [
@@ -1032,15 +1119,14 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Bounded web and mobile implementation directories are not yet created.",
-    "Next web scaffold is not yet implemented.",
+    "Mobile implementation directory is not yet created.",
     "Expo mobile scaffold is not yet implemented.",
-    "Initial route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the local in-memory component-fixture runtime are not yet implemented.",
+    "Initial route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold and local in-memory component-fixture runtime are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The work-tracking tranche and repository-owned execution plan exist, but implementation, tests, proof evidence, timing evidence, staging classification, and closure report remain open child work."
+    "reason": "The implementation tranche is not ready for parent closure. Package pins and package rationale are now repository-owned for the bounded web and future bounded mobile local scaffolds, but apps/mobile, route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }

@@ -1,0 +1,287 @@
+{
+  "artifactId": "usf.app-surface-package-installation-proof",
+  "title": "App-surface package and SDK installation proof",
+  "lifecycleState": "package-pins-recorded",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1019",
+  "parentIssueId": "USF-1012",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records package-managed dependency pins and package rejection rationale for bounded local app-surface implementation. It does not define product behaviour.",
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "runtimeAuthority": "USF-1019 may install packages and record package proof. It does not create runtime code, routes, screens, provider integrations, credentials, deployment configuration, store configuration, or staging proof.",
+    "semanticAuthority": "Runtime behaviour remains governed by app-surface semantic artefacts, accepted ADRs, validator rules, and proof evidence."
+  },
+  "sourcePlan": {
+    "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+    "parentIssueId": "USF-1012",
+    "packageInstallationProofIssueId": "USF-1019",
+    "workspaceBoundaryArtefact": "docs/architecture/app-surface-workspace-package-boundaries.json",
+    "mobileImplementationIssueId": "USF-1018",
+    "webImplementationIssueId": "USF-1017"
+  },
+  "existingAuthorityPathsRequiredToExist": [
+    "AGENTS.md",
+    "CODEX.md",
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/app-surface-implementation-realisation-plan.json",
+    "docs/architecture/app-surface-workspace-package-boundaries.json",
+    "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+    "docs/architecture/mobile-adapter-semantic-surface.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/shared-client-interaction-contract-semantics.json",
+    "docs/adr/0016-expo-mobile-adapter-posture.md",
+    "docs/adr/0017-nextjs-web-adapter-posture.md",
+    "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "apps/web/package.json",
+    "packages/client/package.json",
+    "packages/ui/package.json",
+    "packages/app-surface/package.json"
+  ],
+  "futureToCreatePaths": [
+    {
+      "path": "apps/mobile",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Bounded local Expo mobile scaffold path. Package pins are recorded here, but runtime package files remain owned by USF-1018."
+    },
+    {
+      "path": "apps/mobile/package.json",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Mobile workspace package manifest to be created with the bounded local scaffold."
+    },
+    {
+      "path": "apps/mobile/app.json",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Local Expo app configuration without EAS, native signing, store, provider, staging, or deployment settings."
+    },
+    {
+      "path": "apps/mobile/index.ts",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Local Expo entry point for bounded app-surface proof."
+    },
+    {
+      "path": "apps/mobile/App.tsx",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Bounded local mobile app shell mapping screens to governed USF capability semantics."
+    },
+    {
+      "path": "apps/mobile/src/screen-registry.ts",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Mobile screen registry that must fail closed on unknown capability mappings."
+    },
+    {
+      "path": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
+      "owningLinearIssueId": "USF-1018",
+      "reason": "Local test proving mobile screen-to-capability mapping and fail-closed unknown screen behaviour."
+    }
+  ],
+  "packageManagerState": {
+    "manager": "pnpm via corepack",
+    "rootManifest": "package.json",
+    "lockfile": "pnpm-lock.yaml",
+    "workspaceFile": "pnpm-workspace.yaml",
+    "workspacePatternsAlreadyCoverAppSurfacePackages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "globalInstallsAllowed": false,
+    "lockfilePinnedVersionsRequired": true,
+    "frozenInstallRequiredBeforeClosure": true
+  },
+  "dependenciesAddedByThisIssue": [
+    {
+      "packageName": "expo",
+      "version": "57.0.4",
+      "specifier": "57.0.4",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1019",
+      "purpose": "Required by the selected Expo managed mobile posture to support the bounded local apps/mobile scaffold without EAS, native project generation, provider setup, store setup, staging, or deployment.",
+      "externalServiceIntroduced": false,
+      "credentialsRequired": false
+    },
+    {
+      "packageName": "react-native",
+      "version": "0.86.0",
+      "specifier": "0.86.0",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1019",
+      "purpose": "Required React Native runtime peer for the bounded local Expo mobile scaffold. Its React peer range is compatible with the existing react@19.2.7 pin.",
+      "externalServiceIntroduced": false,
+      "credentialsRequired": false
+    }
+  ],
+  "dependenciesConfirmedForExistingBoundedWebScaffold": [
+    {
+      "packageName": "next",
+      "version": "16.2.10",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1017",
+      "confirmedByIssueId": "USF-1019",
+      "purpose": "Bounded local Next.js web scaffold runtime only."
+    },
+    {
+      "packageName": "react",
+      "version": "19.2.7",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1017",
+      "confirmedByIssueId": "USF-1019",
+      "purpose": "Shared React runtime for bounded local web and mobile app-surface scaffolds."
+    },
+    {
+      "packageName": "react-dom",
+      "version": "19.2.7",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1017",
+      "confirmedByIssueId": "USF-1019",
+      "purpose": "React DOM runtime for bounded local Next.js web scaffold only."
+    },
+    {
+      "packageName": "@types/react",
+      "version": "19.2.17",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1017",
+      "confirmedByIssueId": "USF-1019",
+      "purpose": "TypeScript React type surface for bounded local app packages."
+    },
+    {
+      "packageName": "@types/react-dom",
+      "version": "19.2.3",
+      "manifestPath": "package.json",
+      "lockfilePath": "pnpm-lock.yaml",
+      "owningIssueId": "USF-1017",
+      "confirmedByIssueId": "USF-1019",
+      "purpose": "TypeScript React DOM type surface for bounded local Next.js web scaffold."
+    }
+  ],
+  "dependencyFreeCurrentPackages": [
+    {
+      "packagePath": "packages/client",
+      "packageName": "@foundation/client",
+      "owningIssueId": "USF-1015",
+      "dependencyStatus": "no package dependencies required for current bounded shared-client consumption path"
+    },
+    {
+      "packagePath": "packages/ui",
+      "packageName": "@foundation/ui",
+      "owningIssueId": "USF-1014",
+      "dependencyStatus": "no package dependencies required for current boundary package"
+    },
+    {
+      "packagePath": "packages/app-surface",
+      "packageName": "@foundation/app-surface",
+      "owningIssueId": "USF-1016",
+      "dependencyStatus": "no package dependencies required for current bounded local in-memory runtime"
+    },
+    {
+      "packagePath": "apps/web",
+      "packageName": "@foundation/app-web",
+      "owningIssueId": "USF-1017",
+      "dependencyStatus": "workspace package manifest has no package-local dependency section; bounded web runtime pins are held at the root package manifest and lockfile"
+    }
+  ],
+  "rejectedPackages": [
+    {
+      "packageName": "expo-router",
+      "reason": "Not required for the smallest bounded local mobile scaffold. USF-1018 can map screens through a governed local screen registry without adopting file-system routing semantics."
+    },
+    {
+      "packageName": "react-native-web",
+      "reason": "Expo marks this peer optional and the bounded mobile issue does not claim mobile-web runtime proof. Web surface is already owned by the Next scaffold."
+    },
+    {
+      "packageName": "@expo/metro-runtime",
+      "reason": "Expo marks this peer optional and no separate web or DOM runtime proof is in scope for the bounded mobile scaffold."
+    },
+    {
+      "packageName": "react-native-webview",
+      "reason": "Expo marks this peer optional and no WebView, external content, provider, store, or deployment surface is in scope."
+    },
+    {
+      "packageName": "@expo/dom-webview",
+      "reason": "Expo marks this peer optional and no DOM WebView surface is in scope."
+    },
+    {
+      "packageName": "react-native-reanimated",
+      "reason": "Not required for the minimal semantic screen registry and local scaffold proof."
+    },
+    {
+      "packageName": "react-native-gesture-handler",
+      "reason": "Not required for the minimal semantic screen registry and local scaffold proof."
+    },
+    {
+      "packageName": "react-native-screens",
+      "reason": "Not required because expo-router and native navigation are not adopted in the smallest bounded scaffold."
+    },
+    {
+      "packageName": "react-native-safe-area-context",
+      "reason": "Not required for the minimal local semantic scaffold until a concrete native layout surface is authorised."
+    },
+    {
+      "packageName": "eas-cli",
+      "reason": "EAS credentials, builds, submissions, and deployment workflows are out of scope."
+    },
+    {
+      "packageClass": "remote cache and task graph tooling",
+      "reason": "Not required for bounded local app-surface implementation and not adopted by repository authority."
+    },
+    {
+      "packageClass": "Testcontainers",
+      "reason": "Not required for local package installation proof or in-memory app-surface implementation. It remains an optimisation candidate to evaluate under USF-1035 only if a provider semantic cannot be proven in memory."
+    },
+    {
+      "packageClass": "external provider, analytics, ads, consent management, store, deployment, and live identity SDKs",
+      "reason": "Out of scope for bounded local app-surface implementation and not authorised by this package proof."
+    }
+  ],
+  "packageUseConstraints": [
+    "Expo and React Native pins only support bounded local USF-1018 mobile scaffold work.",
+    "The pins do not authorise EAS, native signing credentials, generated ios or android projects, store records, store submissions, push providers, live identity providers, ads providers, monetisation providers, staging, deployment, production, compliance, or human acceptance.",
+    "Any later package addition must add exact manifest and lockfile pins plus repository-owned rationale before use.",
+    "No package may define USF semantics; app-surface code must consume repository semantic artefacts and fail closed on missing or stale semantics."
+  ],
+  "validationPlan": {
+    "requiredBeforeIssueClosure": [
+      "strict JSON parse for docs/architecture/app-surface-package-installation-proof.json",
+      "strict JSON parse for docs/architecture/app-surface-implementation-realisation-plan.json",
+      "strict JSON parse for docs/architecture/app-surface-workspace-package-boundaries.json",
+      "corepack pnpm install --frozen-lockfile",
+      "corepack pnpm validate-spec",
+      "corepack pnpm validate-spec:selftest",
+      "make app-surface-validate",
+      "make app-surface-selftest"
+    ],
+    "composeRequired": false,
+    "stagingRequired": false,
+    "evidenceValidationRequired": false
+  },
+  "nonClaimsPreserved": [
+    "No generated SDK readiness claim.",
+    "No package publication readiness claim.",
+    "No app readiness claim.",
+    "No mobile app readiness claim.",
+    "No native project readiness claim.",
+    "No EAS readiness claim.",
+    "No App Store or Play Store readiness claim.",
+    "No provider readiness claim.",
+    "No deployment readiness claim.",
+    "No staging readiness claim.",
+    "No production readiness claim.",
+    "No compliance readiness claim.",
+    "No monetisation readiness claim.",
+    "No human acceptance claim."
+  ],
+  "readinessVerdict": {
+    "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_VALIDATION",
+    "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
+    "reason": "Minimum package pins needed before the bounded local mobile scaffold are recorded with rationale, and existing web pins are confirmed. Runtime code, mobile scaffold files, route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence, timing, staging classification, and closure proof remain owned by later child issues."
+  }
+}

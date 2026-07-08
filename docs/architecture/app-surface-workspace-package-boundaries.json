@@ -36,18 +36,22 @@
     {
       "boundaryId": "web-app-boundary",
       "path": "apps/web",
-      "classification": "future-to-create",
+      "classification": "exists-now",
       "owningLinearIssueId": "USF-1017",
       "workspaceCovered": true,
       "createdByThisIssue": false,
       "mayCreateRuntimeCode": false,
       "packageDependenciesAllowedByThisIssue": false,
       "proofLevel": "dev-local-web-boundary",
-      "purpose": "Future bounded local Next/web scaffold boundary.",
+      "purpose": "Bounded local Next/web scaffold boundary created by USF-1017 and package-confirmed by USF-1019.",
       "nonClaims": [
-        "No web runtime exists from this boundary artefact.",
-        "No deployment, CDN, staging, provider, or public route readiness is claimed."
-      ]
+        "No deployment, CDN, staging, provider, public route readiness, production readiness, live-provider readiness, or human acceptance is claimed.",
+        "The bounded local web scaffold remains governed by USF route and capability semantics and must fail closed on unknown route mappings."
+      ],
+      "packageManifest": "apps/web/package.json",
+      "mappingArtefact": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      "implementationArtefact": "apps/web/src/route-registry.ts",
+      "testArtefact": "tests/apps/app-surface-web-bounded-local-scaffold.test.ts"
     },
     {
       "boundaryId": "mobile-app-boundary",
@@ -160,7 +164,11 @@
     "deploymentSdkAllowed": false,
     "storeSdkAllowed": false,
     "adsSdkAllowed": false,
-    "consentManagementSdkAllowed": false
+    "consentManagementSdkAllowed": false,
+    "dependenciesAddedByUSF1019": [
+      "expo@57.0.4",
+      "react-native@0.86.0"
+    ]
   },
   "validationPlan": {
     "requiredCommands": [
@@ -185,7 +193,7 @@
   "readinessVerdict": {
     "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_BOUNDARY_VALIDATION",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "Package boundaries are explicit and the authorised UI, shared-client, and local in-memory app-surface runtime boundaries exist, but web, mobile, route, command, query, state/cache, auth/session, i18n, accessibility, notification, monetisation, store, deployment evidence, timing, staging classification, and closure proof remain open child work."
+    "reason": "Package boundaries are explicit and the authorised UI, shared-client, local in-memory runtime, and bounded web scaffold boundaries exist. Mobile, route, command, query, state/cache, auth/session, i18n, accessibility, notification, monetisation, store, deployment evidence, timing, staging classification, and closure proof remain open child work."
   },
   "webAppBoundedLocalScaffoldBoundary": {
     "boundaryId": "web-app-bounded-local-scaffold-boundary",
@@ -217,5 +225,21 @@
       "live-provider-readiness",
       "human-acceptance"
     ]
+  },
+  "packageInstallationProof": {
+    "path": "docs/architecture/app-surface-package-installation-proof.json",
+    "ownerIssueId": "USF-1019",
+    "packagePinsAddedForMobileBoundedLocalScaffold": [
+      "expo@57.0.4",
+      "react-native@0.86.0"
+    ],
+    "packagePinsConfirmedForWebBoundedLocalScaffold": [
+      "next@16.2.10",
+      "react@19.2.7",
+      "react-dom@19.2.7",
+      "@types/react@19.2.17",
+      "@types/react-dom@19.2.3"
+    ],
+    "runtimeCodeCreatedByPackageProof": false
   }
 }
