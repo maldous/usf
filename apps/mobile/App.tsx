@@ -1,24 +1,31 @@
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { translateLocalAppSurfaceText } from "@foundation/app-surface";
 import { MOBILE_SCREEN_REGISTRY, getMobileScreenById } from "./src/screen-registry";
 
 const homeScreen = getMobileScreenById("mobile-screen-developer-home");
+const text = {
+  kicker: translateLocalAppSurfaceText("mobile.developerHome.kicker"),
+  title: translateLocalAppSurfaceText("mobile.developerHome.title"),
+  body: translateLocalAppSurfaceText("mobile.developerHome.body"),
+  capabilityLabel: translateLocalAppSurfaceText("mobile.developerHome.capabilityLabel"),
+  permissionLabel: translateLocalAppSurfaceText("mobile.developerHome.permissionLabel"),
+  unknownScreenPolicyLabel: translateLocalAppSurfaceText("mobile.developerHome.unknownScreenPolicyLabel"),
+};
 
 export default function App() {
   return (
     <View style={styles.shell}>
       <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.kicker}>USF bounded local mobile scaffold</Text>
-        <Text style={styles.title}>{homeScreen.screenName}</Text>
-        <Text style={styles.body}>
-          This local Expo surface renders governed screen metadata only. Product behaviour remains owned by USF semantic artefacts.
-        </Text>
+        <Text style={styles.kicker}>{text.kicker.value}</Text>
+        <Text style={styles.title}>{text.title.value}</Text>
+        <Text style={styles.body}>{text.body.value}</Text>
         <View style={styles.card}>
-          <Text style={styles.label}>Capability</Text>
+          <Text style={styles.label}>{text.capabilityLabel.value}</Text>
           <Text style={styles.value}>{homeScreen.capabilityId}</Text>
-          <Text style={styles.label}>Permission</Text>
+          <Text style={styles.label}>{text.permissionLabel.value}</Text>
           <Text style={styles.value}>{homeScreen.permissionRefs.join(", ")}</Text>
-          <Text style={styles.label}>Unknown screen policy</Text>
+          <Text style={styles.label}>{text.unknownScreenPolicyLabel.value}</Text>
           <Text style={styles.value}>{MOBILE_SCREEN_REGISTRY.unknownScreenPolicy}</Text>
         </View>
       </ScrollView>
