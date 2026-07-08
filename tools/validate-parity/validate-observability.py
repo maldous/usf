@@ -82,6 +82,9 @@ SERVICE_OPERATIONS_DEPTH = "docs/architecture/observability-service-alerting-das
 OPERATIONS_EXECUTION_DEPTH = "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json"
 BROWSER_TELEMETRY_DEPTH = "docs/architecture/browser-telemetry-faro-foundation-proof.json"
 BROWSER_TELEMETRY_NOTE = "docs/architecture/browser-telemetry-faro-foundation-proof.md"
+APP_SURFACE_SOURCE_USE = "docs/architecture/app-surface-source-use-disposition-matrix.md"
+APP_SURFACE_TOPOLOGY = "docs/architecture/target-implementation-topology-plan.md"
+APP_SURFACE_UI_MANIFEST = "packages/ui/package.json"
 SENTRY_BOUNDARY = "docs/architecture/sentry-service-semantic-proof-boundary.json"
 SENTRY_ERROR_MATRIX = "docs/architecture/sentry-error-monitoring-disposition-matrix.json"
 CLOSURE_MATRIX = "docs/architecture/compose-service-disposition-closure-matrix.json"
@@ -221,6 +224,40 @@ def parse_json_text(text):
         return json.loads(text)
     except Exception:  # noqa: BLE001
         return None
+
+
+def is_authorized_app_surface_ui_metadata_boundary():
+    """Return true only for the USF-1014 dependency-free metadata boundary."""
+    if not os.path.isdir("packages/ui"):
+        return False
+
+    actual_files = set()
+    for root, dirs, files in os.walk("packages/ui"):
+        dirs[:] = [name for name in dirs if name != "node_modules"]
+        for filename in files:
+            actual_files.add(os.path.join(root, filename).replace("\\", "/"))
+    if actual_files != {APP_SURFACE_UI_MANIFEST}:
+        return False
+
+    manifest = read_json(APP_SURFACE_UI_MANIFEST)
+    if not isinstance(manifest, dict):
+        return False
+    if manifest.get("name") != "@foundation/ui" or manifest.get("private") is not True:
+        return False
+    for dependency_field in ("dependencies", "devDependencies", "peerDependencies", "optionalDependencies"):
+        if manifest.get(dependency_field):
+            return False
+    if manifest.get("scripts"):
+        return False
+
+    source_use = read_text(APP_SURFACE_SOURCE_USE).lower()
+    topology = read_text(APP_SURFACE_TOPOLOGY).lower()
+    required_markers = (
+        "usf-1014",
+        "`packages/ui/package.json`",
+        "runtime implementation",
+    )
+    return all(marker in source_use for marker in required_markers) and all(marker in topology for marker in required_markers)
 
 
 def rows_by_id(rows, key="id"):
@@ -1223,6 +1260,8 @@ def run_checks(F, state=None):
         F.add("USF-OBSERVABILITY-022", f"{BROWSER_TELEMETRY_DEPTH}.minimalHarnessScope.uiSurfaceDisposition", "minimal proof-only UI disposition is required")
     for forbidden_path in ("apps/web", "apps/ui", "apps/browser", "packages/ui", "packages/web"):
         if os.path.exists(forbidden_path):
+            if forbidden_path == "packages/ui" and is_authorized_app_surface_ui_metadata_boundary():
+                continue
             F.add("USF-OBSERVABILITY-022", forbidden_path, "USF-225 must not add product UI/browser app paths")
 
     package_json = parse_json_text(package) or {}

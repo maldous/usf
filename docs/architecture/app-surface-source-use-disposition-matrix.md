@@ -30,6 +30,7 @@ This matrix records target-file treatment for bounded app-surface workspace/pack
 | `docs/architecture/app-surface-workspace-package-boundaries.json` | evidence-only-support | USF-1014 package-boundary acceptance criteria | Machine-readable repository artefact classifying app-surface package boundaries, owner issues, package/dependency policy, external-service restrictions, proof level, and future-to-create paths. |
 | `docs/architecture/app-surface-source-use-disposition-matrix.md` | evidence-only-support | USF-1014 package-boundary acceptance criteria | Records source-use disposition coverage for app-surface package-boundary files. |
 | `docs/architecture/target-implementation-topology-plan.md` | evidence-only-support | USF implementation topology guardrail | Adds narrow app-surface boundary topology authority for `packages/ui/package.json` only; later app/runtime paths remain blocked until their owner issues update topology and source-use coverage. |
+| `tools/validate-parity/validate-observability.py` | evidence-only-support | USF-225 browser telemetry guardrail and USF-1014 app-surface package-boundary authority | Preserves the product UI/browser path prohibition while allowing only the dependency-free `packages/ui/package.json` metadata boundary authorised by USF-1014. |
 | `tools/validate-spec/validate-spec.py` | evidence-only-support | USF implementation path validator | Extends validator-enforced authorised implementation roots to include only the `packages/ui` app-surface boundary authorised by USF-1014. |
 
 ## Non-Claims Preserved
