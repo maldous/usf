@@ -270,16 +270,25 @@ def run_json_command(command: list[str], timeout_seconds: int, env_overrides: di
     if env_overrides:
         env.update(env_overrides)
     result = run_command_with_env(command, timeout_seconds, env)
+    stdout = result.get("stdout", "")
     parsed: Any = None
+    parsed_as_json = False
+    stdout_empty = not bool(stdout.strip())
     try:
-        parsed = json.loads(result.get("stdout", "") or "{}")
+        if not stdout_empty:
+            parsed = json.loads(stdout)
+            parsed_as_json = True
     except json.JSONDecodeError:
         parsed = None
     return {
         key: value
         for key, value in result.items()
         if key != "stdout"
-    } | {"parsed": parsed}
+    } | {
+        "parsed": parsed,
+        "parsedAsJson": parsed_as_json,
+        "stdoutEmpty": stdout_empty,
+    }
 
 
 def run_command_with_env(command: list[str], timeout_seconds: int, env: dict[str, str]) -> dict[str, Any]:
@@ -342,14 +351,20 @@ def validate_spec_equivalence() -> dict[str, Any]:
     enabled = run_json_command(command, 90, {"USF_VALIDATE_SPEC_JSON_CACHE": "1"})
     disabled_findings = disabled.get("parsed", {}).get("findings") if isinstance(disabled.get("parsed"), dict) else None
     enabled_findings = enabled.get("parsed", {}).get("findings") if isinstance(enabled.get("parsed"), dict) else None
+    exits_ok = disabled.get("exitCode") == 0 and enabled.get("exitCode") == 0
+    outputs_parse_as_json = bool(disabled.get("parsedAsJson")) and bool(enabled.get("parsedAsJson"))
+    findings_equivalent = exits_ok and outputs_parse_as_json and disabled_findings == enabled_findings
     return {
         "command": " ".join(command),
         "disabledExitCode": disabled.get("exitCode"),
         "enabledExitCode": enabled.get("exitCode"),
         "disabledWallMs": disabled.get("wallMs"),
         "enabledWallMs": enabled.get("wallMs"),
-        "findingsEquivalent": disabled_findings == enabled_findings,
-        "outputsParseAsJson": isinstance(disabled.get("parsed"), dict) and isinstance(enabled.get("parsed"), dict),
+        "disabledStdoutEmpty": disabled.get("stdoutEmpty"),
+        "enabledStdoutEmpty": enabled.get("stdoutEmpty"),
+        "exitsOk": exits_ok,
+        "findingsEquivalent": findings_equivalent,
+        "outputsParseAsJson": outputs_parse_as_json,
     }
 
 
@@ -392,6 +407,9 @@ def command_json_parse_reuse(_: argparse.Namespace) -> Path:
                 f"validator-equivalence-command:{equivalence['command']}",
                 f"cache-disabled-exit-code:{equivalence['disabledExitCode']}",
                 f"cache-enabled-exit-code:{equivalence['enabledExitCode']}",
+                "validator-exits-ok:true" if equivalence["exitsOk"] else "validator-exits-ok:false",
+                "validator-output-json-parse:passed" if equivalence["outputsParseAsJson"] else "validator-output-json-parse:failed",
+                "validator-json-output-nonempty:true" if not (equivalence["disabledStdoutEmpty"] or equivalence["enabledStdoutEmpty"]) else "validator-json-output-nonempty:false",
                 f"validator-cache-disabled-wall-ms:{equivalence['disabledWallMs']}",
                 f"validator-cache-enabled-wall-ms:{equivalence['enabledWallMs']}",
                 "validator-findings-equivalent:true" if equivalence["findingsEquivalent"] else "validator-findings-equivalent:false",
