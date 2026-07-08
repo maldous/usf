@@ -138,7 +138,9 @@ function computeServiceEvidenceSummary(runDir) {
 }
 
 function computeBundleLatestMachineRun(existingLatest, latest, report, serviceEvidenceSummary) {
-  const evidenceRecordCount = Array.isArray(report.evidence)
+  const evidenceRecordCount = Array.isArray(report.evidenceRecords)
+    ? report.evidenceRecords.length
+    : Array.isArray(report.evidence)
     ? report.evidence.length
     : existingLatest?.evidenceRecordCount;
 
