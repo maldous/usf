@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Document type** | Architecture / source-use disposition matrix |
-| **Status** | Draft / USF-1016 local in-memory runtime coverage |
+| **Status** | Draft / USF-1018 bounded mobile scaffold coverage |
 | **Authority level** | Reviewable source-use matrix; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the app-surface implementation realisation plan |
-| **Issue scope** | USF-1014, USF-1015, USF-1016 |
+| **Issue scope** | USF-1014, USF-1015, USF-1016, USF-1017, USF-1018 |
 | **Source row basis** | `docs/architecture/app-surface-implementation-realisation-plan.json`, `docs/architecture/app-surface-workspace-package-boundaries.json`, `docs/architecture/target-implementation-topology-plan.md` |
 
-This matrix records target-file treatment for bounded app-surface workspace/package boundary work, the USF-1015 local shared-client consumption path, and the USF-1016 local in-memory app-surface runtime. It does not authorise web/mobile scaffolds, external provider setup, deployment, staging, store setup, live-provider integration, production readiness, monetisation readiness, package publication readiness, generated SDK readiness, or direct runtime/application code import from source lineage.
+This matrix records target-file treatment for bounded app-surface workspace/package boundary work, the USF-1015 local shared-client consumption path, the USF-1016 local in-memory app-surface runtime, the USF-1017 bounded local web scaffold, and the USF-1018 bounded local mobile scaffold. It does not authorise external provider setup, deployment, staging, store setup, live-provider integration, production readiness, monetisation readiness, package publication readiness, generated SDK readiness, or direct runtime/application code import from source lineage.
 
 ## Treatment Rules
 
@@ -44,10 +44,10 @@ This matrix records target-file treatment for bounded app-surface workspace/pack
 ## Non-Claims Preserved
 
 - Only the USF-1016 dependency-free local in-memory app-surface runtime is authorised by this matrix.
-- No web app scaffold is authorised by this matrix.
-- No mobile app scaffold is authorised by this matrix.
+- Only the USF-1017 bounded local web scaffold is authorised for `apps/web`.
+- Only the USF-1018 bounded local mobile scaffold is authorised for `apps/mobile`.
 - No external provider, credential, deployment, staging, store, live push, ads, CMP, analytics, monetisation, production, compliance, or human-acceptance readiness is claimed.
-- `apps/web` and `apps/mobile` remain future-to-create paths owned by their separate Linear issues and require their own topology, source-use, and validation coverage before files are created.
+- `apps/web` and `apps/mobile` exist only as bounded local scaffolds owned by their separate Linear issues and do not authorise broader route, command, query, state, auth, i18n, accessibility, notification, monetisation, store, deployment, Compose, staging, production, provider, compliance, or human-acceptance readiness.
 - `packages/client` exists only as the USF-1015 bounded local shared-client consumption adapter and does not create generated SDK readiness, package publication readiness, product UI readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance.
 - `packages/app-surface` exists only as the USF-1016 bounded local in-memory runtime and does not create web readiness, mobile readiness, route scaffold readiness, product UI readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance.
 
@@ -66,3 +66,19 @@ This matrix records target-file treatment for bounded app-surface workspace/pack
 | `tests/apps/app-surface-web-bounded-local-scaffold.test.ts` | USF-authored | Unit tests for web posture verification, route authority mapping, unknown-route fail-closed behavior, and non-claim preservation. | Does not require external providers, credentials, Compose, staging, deployment, or human acceptance. |
 
 USF-1017 adds a bounded local Next.js scaffold only. This is the bounded local web scaffold authority marker for the parity and observability validators. It does not change the status of mobile, command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, or parent closure work.
+
+## USF-1018 mobile bounded local scaffold source-use disposition
+
+| Path | Status | Disposition | Non-claim boundary |
+| --- | --- | --- | --- |
+| `apps/mobile/package.json` | USF-authored | Bounded local Expo workspace package manifest for USF-1018. External dependencies remain pinned at the root package manifest by USF-1019. | Does not claim Expo readiness, mobile readiness, native readiness, store readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, or human acceptance. |
+| `apps/mobile/tsconfig.json` | USF-authored | Local typecheck configuration for the bounded Expo scaffold. | Does not claim full native, accessibility, internationalisation, provider, deployment, store, or production proof. |
+| `apps/mobile/app.json` | USF-authored | Provider-neutral Expo local configuration for the bounded scaffold. | Does not configure EAS, native signing, providers, credentials, store submission, deployment, staging, or production. |
+| `apps/mobile/index.ts` | USF-authored | Local Expo entry point for bounded scaffold proof. | Does not define product semantics, provider behaviour, store readiness, or deployment readiness. |
+| `apps/mobile/App.tsx` | USF-authored | Minimal local React Native component consuming the governed mobile screen registry. | Does not invent UI-only product behaviour or claim mobile readiness. |
+| `apps/mobile/src/screen-registry.ts` | USF-authored | Screen-to-capability and permission mapping plus fail-closed validator for USF-1018. | Does not claim native, store, provider, deployment, staging, production, or human-acceptance readiness. |
+| `apps/mobile/src/screen-registry-check.ts` | USF-authored | Node-only local checker that loads repository authority and validates the mobile screen registry. | Does not run in mobile production, use external services, create credentials, or claim readiness. |
+| `docs/architecture/app-surface-mobile-bounded-local-scaffold.json` | USF-authored | Repository-owned mobile scaffold authority map, package authority reference, screen mapping, validation guard, proof ladder, and non-claims. | Does not select a provider or claim readiness beyond dev-local screen proof. |
+| `tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts` | USF-authored | Unit tests for mobile posture verification, screen authority mapping, unknown-screen fail-closed behaviour, and non-claim preservation. | Does not require external providers, credentials, Compose, staging, deployment, stores, native signing, EAS, or human acceptance. |
+
+USF-1018 adds a bounded local Expo scaffold only. This is the bounded local mobile scaffold authority marker for implementation topology and source-use validators. It does not change the status of route, command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, or parent closure work.

@@ -1,0 +1,179 @@
+{
+  "artifactId": "usf.app-surface-mobile-bounded-local-scaffold",
+  "title": "App-surface mobile bounded local scaffold",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1018",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local Expo mobile scaffold implemented for USF-1018. It maps local mobile screens to governed USF capability, permission, tenant, privacy, validation, error, audit, and fixture semantics. It does not define product behaviour from Expo files, select a provider, configure EAS, create credentials, generate native projects, submit stores, deploy, run staging proof, or claim Expo, mobile, native, store, staging, production, live-provider, compliance, monetisation, or human-acceptance readiness.",
+  "postureVerification": {
+    "selectedFramework": "expo",
+    "selectedPostureArtefact": "docs/adr/0016-expo-mobile-adapter-posture.md",
+    "mobileAdapterSemanticArtefact": "docs/architecture/mobile-adapter-semantic-surface.json",
+    "mobileSemanticSurfaceDoesNotAuthoriseImplementationAlone": true,
+    "packageAuthorityArtefact": "docs/architecture/app-surface-package-installation-proof.json",
+    "boundedLocalImplementationDirective": "docs/architecture/app-surface-implementation-realisation-plan.json",
+    "verifiedBeforeScaffoldCreation": true
+  },
+  "implementationBoundary": {
+    "workspacePackage": "apps/mobile",
+    "packageName": "@foundation/app-mobile",
+    "framework": "expo",
+    "appEntryPoint": "apps/mobile/index.ts",
+    "appComponent": "apps/mobile/App.tsx",
+    "screenRegistry": "apps/mobile/src/screen-registry.ts",
+    "screenRegistryChecker": "apps/mobile/src/screen-registry-check.ts",
+    "expoConfig": "apps/mobile/app.json",
+    "runtimeCodeAllowedByIssue": true,
+    "runtimeCodeScope": "bounded local Expo mobile scaffold only",
+    "workspacePackageExternalDependencySectionsAllowed": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "easAllowed": false,
+    "nativeProjectGenerationAllowed": false,
+    "storeSetupAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "providerSetupAllowed": false
+  },
+  "dependencyInstallation": {
+    "packageManager": "pnpm@11.9.0",
+    "packageAuthorityIssueId": "USF-1019",
+    "packageAuthorityArtefact": "docs/architecture/app-surface-package-installation-proof.json",
+    "rootDependencyPins": [
+      {
+        "packageName": "expo",
+        "version": "57.0.4",
+        "reason": "Required Expo managed runtime for the bounded local mobile scaffold."
+      },
+      {
+        "packageName": "react-native",
+        "version": "0.86.0",
+        "reason": "Required React Native runtime peer for the bounded local Expo scaffold."
+      },
+      {
+        "packageName": "react",
+        "version": "19.2.7",
+        "reason": "Existing React runtime pin compatible with React Native 0.86.0 and shared by bounded local app surfaces."
+      }
+    ],
+    "workspacePackageLocalDependencies": [],
+    "rejectedPackages": [
+      "expo-router",
+      "react-native-web",
+      "@expo/metro-runtime",
+      "react-native-webview",
+      "@expo/dom-webview",
+      "react-native-reanimated",
+      "react-native-gesture-handler",
+      "react-native-screens",
+      "react-native-safe-area-context",
+      "eas-cli",
+      "deployment SDKs",
+      "store SDKs",
+      "push provider SDKs",
+      "analytics SDKs",
+      "ads SDKs",
+      "CMP or UMP SDKs",
+      "remote cache tooling",
+      "task graph tooling",
+      "Testcontainers"
+    ]
+  },
+  "screenRegistry": {
+    "artifactId": "usf.app-surface-mobile-bounded-local-screen-registry",
+    "implementationPath": "apps/mobile/src/screen-registry.ts",
+    "checkerPath": "apps/mobile/src/screen-registry-check.ts",
+    "unknownScreenPolicy": "fail-closed",
+    "screens": [
+      {
+        "screenId": "mobile-screen-developer-home",
+        "screenName": "DeveloperHomeScreen",
+        "routePath": "/",
+        "screenClass": "private",
+        "presentationBoundary": "react-native-component",
+        "capabilityId": "graphql-federation-generated-client-disposition",
+        "permissionRefs": [
+          "developer:read"
+        ],
+        "tenantBoundaryRef": "tenant.dev-local-fixture",
+        "privacyCategoryRefs": [
+          "docs/architecture/client-query-cache-privacy-semantics.json",
+          "docs/architecture/app-surface-observability-privacy-semantics.json"
+        ],
+        "validationRefs": [
+          "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+          "typed-error-problem-details-model"
+        ],
+        "errorRefs": [
+          "typed-error-problem-details-model"
+        ],
+        "auditEventRefs": [
+          "client-audit-event-emission",
+          "graphql.developerProfile"
+        ],
+        "componentFixtureRefs": [
+          "component-fixture-developer-profile-summary"
+        ],
+        "semanticSourceRefs": [
+          "docs/architecture/app-surface-local-in-memory-runtime.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json",
+          "docs/architecture/mobile-adapter-semantic-surface.json",
+          "docs/architecture/app-surface-package-installation-proof.json"
+        ],
+        "nonClaimBoundary": "local Expo React Native screen scaffold only; no Expo, mobile, native, store, staging, deployment, production, live-provider, or human-acceptance readiness claim"
+      }
+    ]
+  },
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "screenRegistryMustMatchThisArtefact": true,
+    "unknownScreensMustFailClosed": true,
+    "missingCapabilityOrPermissionAuthorityMustFailClosed": true,
+    "missingGovernedScreenReferenceAuthorityMustFailClosed": true,
+    "screenCheckMustLoadRepositoryAuthority": true,
+    "workspacePackageMustNotDeclareExternalDependencySections": true
+  },
+  "validationCommands": [
+    "strict JSON parse for this artefact and modified JSON files",
+    "corepack pnpm install --frozen-lockfile",
+    "corepack pnpm --filter @foundation/app-mobile typecheck",
+    "corepack pnpm --filter @foundation/app-mobile screens:check",
+    "corepack pnpm vitest run tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
+    "corepack pnpm typecheck",
+    "corepack pnpm validate-spec",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "proofLadderClassification": {
+    "devLocal": true,
+    "unitTests": true,
+    "contractTests": false,
+    "composeRequired": false,
+    "composeReason": "The bounded mobile scaffold uses local screen registry semantics and does not cross provider semantics.",
+    "stagingRequired": false,
+    "stagingReason": "The scaffold is local-only and does not create public, deployment-adjacent, provider-staging, or human-acceptance evidence."
+  },
+  "nonClaims": {
+    "expoReadiness": false,
+    "mobileReadiness": false,
+    "nativeReadiness": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false,
+    "providerSetup": false,
+    "credentialSetup": false,
+    "easSetup": false,
+    "nativeSigning": false,
+    "storeSubmission": false,
+    "externalServiceUse": false,
+    "accessibilityCompliance": false,
+    "internationalisationReadiness": false,
+    "monetisationReadiness": false,
+    "complianceReadiness": false
+  }
+}

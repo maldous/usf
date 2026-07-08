@@ -1,0 +1,16 @@
+{
+  "name": "@foundation/app-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Bounded local Expo mobile app-surface scaffold over governed USF screen and capability semantics; no EAS, store, provider, staging, deployment, or readiness claim is made.",
+  "main": "index.ts",
+  "exports": {
+    ".": "./src/screen-registry.ts"
+  },
+  "scripts": {
+    "start": "expo start",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "screens:check": "tsx src/screen-registry-check.ts --selftest"
+  }
+}

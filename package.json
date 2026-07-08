@@ -140,7 +140,10 @@
     "repository-optimisation:non-local": "python3 tools/repository-optimisation/realise-bounded-optimisation.py non-local-options",
     "web:dev": "pnpm --filter @foundation/app-web dev",
     "web:routes:check": "pnpm --filter @foundation/app-web routes:check",
-    "web:typecheck": "pnpm --filter @foundation/app-web typecheck"
+    "web:typecheck": "pnpm --filter @foundation/app-web typecheck",
+    "mobile:start": "pnpm --filter @foundation/app-mobile start",
+    "mobile:typecheck": "pnpm --filter @foundation/app-mobile typecheck",
+    "mobile:screens:check": "pnpm --filter @foundation/app-mobile screens:check"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1077.0",

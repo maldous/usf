@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": [
+      "ES2024"
+    ],
+    "types": [
+      "react"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "index.ts",
+    "App.tsx",
+    "src/screen-registry.ts"
+  ]
+}

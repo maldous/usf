@@ -10,6 +10,8 @@
     "apps/**/*.tsx"
   ],
   "exclude": [
-    "apps/web/next-env.d.ts"
+    "apps/web/next-env.d.ts",
+    "apps/mobile/App.tsx",
+    "apps/mobile/index.ts"
   ]
 }

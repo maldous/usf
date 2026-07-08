@@ -56,18 +56,22 @@
     {
       "boundaryId": "mobile-app-boundary",
       "path": "apps/mobile",
-      "classification": "future-to-create",
+      "classification": "exists-now",
       "owningLinearIssueId": "USF-1018",
       "workspaceCovered": true,
       "createdByThisIssue": false,
-      "mayCreateRuntimeCode": false,
+      "mayCreateRuntimeCode": true,
       "packageDependenciesAllowedByThisIssue": false,
-      "proofLevel": "dev-local-mobile-boundary",
-      "purpose": "Future bounded local Expo/mobile scaffold boundary.",
+      "proofLevel": "dev-local-mobile-screen-boundary",
+      "purpose": "Bounded local Expo/mobile scaffold boundary created by USF-1018 and package-authorised by USF-1019.",
       "nonClaims": [
-        "No mobile runtime exists from this boundary artefact.",
-        "No EAS, signing, store, provider, staging, or deployment readiness is claimed."
-      ]
+        "No EAS, signing, store, provider, staging, deployment, production, live-provider, monetisation, compliance, or human-acceptance readiness is claimed.",
+        "The bounded local mobile scaffold remains governed by USF screen and capability semantics and must fail closed on unknown screen mappings."
+      ],
+      "packageManifest": "apps/mobile/package.json",
+      "mappingArtefact": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "implementationArtefact": "apps/mobile/src/screen-registry.ts",
+      "testArtefact": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts"
     },
     {
       "boundaryId": "shared-client-boundary",
@@ -193,7 +197,7 @@
   "readinessVerdict": {
     "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_BOUNDARY_VALIDATION",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "Package boundaries are explicit and the authorised UI, shared-client, local in-memory runtime, and bounded web scaffold boundaries exist. Mobile, route, command, query, state/cache, auth/session, i18n, accessibility, notification, monetisation, store, deployment evidence, timing, staging classification, and closure proof remain open child work."
+    "reason": "Package boundaries are explicit and the authorised UI, shared-client, local in-memory runtime, bounded web scaffold, and bounded mobile scaffold boundaries exist. Route, command, query, state/cache, auth/session, i18n, accessibility, notification, monetisation, store, deployment evidence, timing, staging classification, and closure proof remain open child work."
   },
   "webAppBoundedLocalScaffoldBoundary": {
     "boundaryId": "web-app-bounded-local-scaffold-boundary",

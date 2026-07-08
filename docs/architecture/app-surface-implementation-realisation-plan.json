@@ -335,6 +335,46 @@
       {
         "path": "docs/architecture/app-surface-package-installation-proof.json",
         "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/package.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/tsconfig.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/app.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/index.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/App.tsx",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/src/screen-registry.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/mobile/src/screen-registry-check.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -355,43 +395,7 @@
         "classification": "workspace-pattern"
       }
     ],
-    "futureToCreatePaths": [
-      {
-        "path": "apps/mobile",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "apps/mobile/package.json",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "apps/mobile/app.json",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "apps/mobile/index.ts",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "apps/mobile/App.tsx",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "apps/mobile/src/screen-registry.ts",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1018"
-      }
-    ],
+    "futureToCreatePaths": [],
     "removedInvalidOrStaleReferences": [
       {
         "path": "docs/architecture/app-surface-accessibility-semantic-coverage.json",
@@ -597,7 +601,27 @@
         "react-native@0.86.0"
       ],
       "dependencyStatus": "pinned-for-future-bounded-local-scaffold",
-      "currentStatus": "apps-mobile-not-yet-created"
+      "currentStatus": "implemented-bounded-local-mobile-scaffold",
+      "implementedBoundary": "apps/mobile",
+      "packageName": "@foundation/app-mobile",
+      "implementationArtefact": "apps/mobile/src/screen-registry.ts",
+      "appEntryPoint": "apps/mobile/index.ts",
+      "appComponent": "apps/mobile/App.tsx",
+      "mappingArtefact": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "testArtefact": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
+      "proofLevel": "dev-local-typecheck-and-screen-unit-test",
+      "validationStatus": "pending-current-branch-validation",
+      "nonClaimsPreserved": [
+        "expo-readiness",
+        "mobile-readiness",
+        "native-readiness",
+        "store-readiness",
+        "deployment-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness",
+        "human-acceptance"
+      ]
     },
     "sharedClient": {
       "selectedPostureArtefact": "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
@@ -710,7 +734,24 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-mobile",
       "mayInstallPackages": "only-through-USF-1019",
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "repositoryArtefact": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "currentRepositoryStatus": "bounded-local-mobile-scaffold-implemented",
+      "implementationArtefacts": [
+        "apps/mobile/package.json",
+        "apps/mobile/tsconfig.json",
+        "apps/mobile/app.json",
+        "apps/mobile/index.ts",
+        "apps/mobile/App.tsx",
+        "apps/mobile/src/screen-registry.ts",
+        "apps/mobile/src/screen-registry-check.ts",
+        "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts"
+      ],
+      "runtimeCodeCreatedByIssue": true,
+      "packageDependenciesAddedByIssue": [],
+      "packageAuthorityIssueId": "USF-1019",
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1019",
@@ -1119,14 +1160,12 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Mobile implementation directory is not yet created.",
-    "Expo mobile scaffold is not yet implemented.",
-    "Initial route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold and local in-memory component-fixture runtime are not yet implemented.",
+    "Initial broader route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, and local in-memory component-fixture runtime are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Package pins and package rationale are now repository-owned for the bounded web and future bounded mobile local scaffolds, but apps/mobile, route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, and package proof are now repository-owned, but route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }

@@ -41,43 +41,7 @@
     "packages/ui/package.json",
     "packages/app-surface/package.json"
   ],
-  "futureToCreatePaths": [
-    {
-      "path": "apps/mobile",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Bounded local Expo mobile scaffold path. Package pins are recorded here, but runtime package files remain owned by USF-1018."
-    },
-    {
-      "path": "apps/mobile/package.json",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Mobile workspace package manifest to be created with the bounded local scaffold."
-    },
-    {
-      "path": "apps/mobile/app.json",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Local Expo app configuration without EAS, native signing, store, provider, staging, or deployment settings."
-    },
-    {
-      "path": "apps/mobile/index.ts",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Local Expo entry point for bounded app-surface proof."
-    },
-    {
-      "path": "apps/mobile/App.tsx",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Bounded local mobile app shell mapping screens to governed USF capability semantics."
-    },
-    {
-      "path": "apps/mobile/src/screen-registry.ts",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Mobile screen registry that must fail closed on unknown capability mappings."
-    },
-    {
-      "path": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
-      "owningLinearIssueId": "USF-1018",
-      "reason": "Local test proving mobile screen-to-capability mapping and fail-closed unknown screen behaviour."
-    }
-  ],
+  "futureToCreatePaths": [],
   "packageManagerState": {
     "manager": "pnpm via corepack",
     "rootManifest": "package.json",
@@ -280,8 +244,31 @@
     "No human acceptance claim."
   ],
   "readinessVerdict": {
-    "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_VALIDATION",
+    "issueState": "PACKAGE_PINS_CONSUMED_BY_BOUNDED_LOCAL_MOBILE_SCAFFOLD",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "Minimum package pins needed before the bounded local mobile scaffold are recorded with rationale, and existing web pins are confirmed. Runtime code, mobile scaffold files, route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence, timing, staging classification, and closure proof remain owned by later child issues."
+    "reason": "Minimum package pins needed by the bounded local mobile scaffold are consumed by USF-1018. Package proof still does not claim Expo, mobile, native, store, deployment, staging, provider, production, compliance, monetisation, or human-acceptance readiness."
+  },
+  "mobileScaffoldConsumption": {
+    "ownerIssueId": "USF-1018",
+    "status": "bounded-local-mobile-scaffold-created",
+    "consumedPackagePins": [
+      "expo@57.0.4",
+      "react-native@0.86.0",
+      "react@19.2.7"
+    ],
+    "createdPaths": [
+      "apps/mobile",
+      "apps/mobile/package.json",
+      "apps/mobile/tsconfig.json",
+      "apps/mobile/app.json",
+      "apps/mobile/index.ts",
+      "apps/mobile/App.tsx",
+      "apps/mobile/src/screen-registry.ts",
+      "apps/mobile/src/screen-registry-check.ts",
+      "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts"
+    ],
+    "runtimeCodeCreatedByPackageProof": false,
+    "runtimeCodeOwnerIssueId": "USF-1018"
   }
 }

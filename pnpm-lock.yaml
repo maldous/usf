@@ -176,6 +176,8 @@ importers:
 
   apps/api: {}
 
+  apps/mobile: {}
+
   apps/public-proof-origin: {}
 
   apps/staging-proof-cockpit: {}
