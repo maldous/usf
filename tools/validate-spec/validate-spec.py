@@ -2264,6 +2264,10 @@ REPOSITORY_PATH_RE = re.compile(
     r"^(?:apps|capabilities|adapters|packages|tests|docs|evidence|tools|spec|"
     r"config|infra|scripts|services|artifacts|\.github)/[^\s]+$"
 )
+REPOSITORY_PATH_TOKEN_RE = re.compile(
+    r"(?<![A-Za-z0-9._/-])((?:apps|capabilities|adapters|packages|tests|docs|evidence|tools|spec|"
+    r"config|infra|scripts|services|artifacts|\.github)/[A-Za-z0-9._@+=:,#/-]+)"
+)
 DIRECTIVE_REQUIRED_PHRASES = {
     "authorising human",
     "linear record",
@@ -2366,6 +2370,17 @@ def _normalise_repository_path_value(value):
     return None
 
 
+def _repository_path_tokens_in_text(value):
+    if not isinstance(value, str) or value.startswith(("http://", "https://", "urn:", "source:")):
+        return []
+    paths = []
+    for match in REPOSITORY_PATH_TOKEN_RE.finditer(value):
+        path = _normalise_path(match.group(1).split("#", 1)[0].rstrip(".,;:)]}"))
+        if "*" not in path:
+            paths.append(path)
+    return paths
+
+
 def _walk_repository_path_values(node, location="$"):
     if isinstance(node, dict):
         for key, value in node.items():
@@ -2377,6 +2392,9 @@ def _walk_repository_path_values(node, location="$"):
         path = _normalise_repository_path_value(node)
         if path is not None:
             yield path, location
+        else:
+            for path in _repository_path_tokens_in_text(node):
+                yield path, location
 
 
 def _path_exists_for_plan(path, existing_paths=None):
