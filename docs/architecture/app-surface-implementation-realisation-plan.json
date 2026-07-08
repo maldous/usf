@@ -1,0 +1,610 @@
+{
+  "artifactId": "usf.app-surface-implementation-realisation-plan",
+  "title": "App-surface implementation realisation plan",
+  "lifecycleState": "implementation-planning-active",
+  "createdDate": "2026-07-08",
+  "scope": {
+    "mission": "Move from validator-realisation to bounded local app-surface implementation while preserving USF authority and the environment proof ladder.",
+    "parentIssueId": "USF-1012",
+    "parentIssueUrl": "https://linear.app/maldous/issue/USF-1012/app-surface-implementation-realisation-tranche",
+    "inventoryIssueId": "USF-1013",
+    "prerequisiteIssueIds": [
+      "USF-1011",
+      "USF-329",
+      "USF-808",
+      "USF-813"
+    ],
+    "relatedNonBlockingIssueIds": [
+      "USF-1008"
+    ]
+  },
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "Repository artefacts define semantics, implementation decisions, proof rules, package boundaries, readiness classifications, and non-claims.",
+    "validatorAuthority": "Validators enforce repository-defined rules but do not create product meaning.",
+    "implementationAuthority": "Runtime code is permitted only inside child issues that explicitly allow runtime code and only after the relevant repository artefacts define the behaviour being implemented.",
+    "externalAuthority": "No external repository, provider, generated report, store, deployment target, or Linear issue is treated as USF authority."
+  },
+  "currentInventory": {
+    "appSurfaceValidator": {
+      "implementationTranche": "docs/architecture/app-surface-validator-implementation-tranche.json",
+      "tool": "tools/validate-app-surface/validate-app-surface.py",
+      "makeTargets": [
+        "make app-surface-validate",
+        "make app-surface-selftest"
+      ],
+      "packageScripts": [
+        "app-surface:validate",
+        "app-surface:selftest"
+      ],
+      "status": "validator-realised",
+      "limitations": [
+        "Synthetic validator fixtures exist.",
+        "App runtime packages and UI scaffolds are not implemented by USF-1011.",
+        "Validators passing does not prove web, mobile, SDK, route, command, query, state, auth, i18n, accessibility, notification, store, deployment, or monetisation implementation."
+      ]
+    },
+    "appSurfaceSemanticArtefacts": [
+      "docs/architecture/app-surface-accessibility-semantic-coverage.json",
+      "docs/architecture/app-surface-api-contract-realisation.json",
+      "docs/architecture/app-surface-implementation-gate.json",
+      "docs/architecture/app-surface-release-and-readiness-realisation.json",
+      "docs/architecture/app-surface-semantic-definition-backlog-closure.json",
+      "docs/architecture/app-surface-semantic-definition-candidate-backlog.json",
+      "docs/architecture/app-surface-validator-implementation-tranche.json",
+      "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json"
+    ],
+    "adapterAndClientDecisionArtefacts": [
+      "docs/adr/0016-expo-mobile-adapter-posture.md",
+      "docs/adr/0017-nextjs-web-adapter-posture.md",
+      "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
+      "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "docs/architecture/generated-client-contract-validation-semantics.json",
+      "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+    ],
+    "stateQueryAndSurfaceSemantics": [
+      "docs/architecture/client-query-cache-privacy-semantics.json",
+      "docs/architecture/client-state-storage-sync-semantics.json",
+      "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "docs/architecture/monetisation-ad-placement-telemetry-semantics.json"
+    ],
+    "workspaceState": {
+      "packageManager": "pnpm@11.9.0",
+      "workspacePatterns": [
+        "apps/*",
+        "capabilities/*",
+        "adapters/*",
+        "packages/*"
+      ],
+      "existingAppDirectories": [
+        "apps/api",
+        "apps/public-proof-origin",
+        "apps/staging-proof-cockpit",
+        "apps/work"
+      ],
+      "existingPackageDirectories": [
+        "packages/contracts",
+        "packages/core",
+        "packages/openapi",
+        "packages/ports",
+        "packages/proof",
+        "packages/source",
+        "packages/test"
+      ],
+      "absentImplementationDirectories": [
+        "apps/web",
+        "apps/mobile",
+        "packages/client",
+        "packages/ui",
+        "packages/app-surface"
+      ],
+      "currentConclusion": "The repository has validator, semantic, proof, and backend-oriented artefacts, but it does not yet contain bounded web, mobile, shared client, UI, or local app-surface runtime implementation packages."
+    },
+    "generatedClientState": {
+      "semanticAndContractArtefactsExist": true,
+      "productClientSdkPackageExists": false,
+      "graphqlGeneratedClientProofExists": true,
+      "proofArtefact": "packages/proof/src/graphql-generated-client-execution-proof.ts",
+      "currentConclusion": "Generated-client semantics and proof artefacts exist, but a product app shared client SDK consumption path is not implemented."
+    },
+    "uiRuntimeState": {
+      "tsxOrJsxAppComponentsFound": false,
+      "nextWebScaffoldFound": false,
+      "expoMobileScaffoldFound": false,
+      "localInMemoryAppSurfaceRuntimeFound": false,
+      "currentConclusion": "No app UI runtime scaffold was found for the bounded app-surface implementation tranche."
+    },
+    "openLinearIssueImpact": {
+      "USF-1008": {
+        "title": "Resolve repository-unreferenced Linear key disposition across documentation and evidence",
+        "status": "Backlog",
+        "blockingClassification": "not-blocking-current-tranche-start",
+        "reason": "USF-1008 may affect repository authority if it discovers concrete unreferenced-key drift, but no current app-surface implementation blocker is known from the issue itself."
+      }
+    }
+  },
+  "selectedPosturesForFirstImplementationSlice": {
+    "web": {
+      "selectedPostureArtefact": "docs/adr/0017-nextjs-web-adapter-posture.md",
+      "candidateBoundary": "apps/web",
+      "implementationIssueId": "USF-1017",
+      "constraints": [
+        "Local bounded scaffold only.",
+        "No deployment, CDN, hosting, staging, or public route claim.",
+        "Routes must map to USF capabilities and fail closed when unknown."
+      ]
+    },
+    "mobile": {
+      "selectedPostureArtefact": "docs/adr/0016-expo-mobile-adapter-posture.md",
+      "candidateBoundary": "apps/mobile",
+      "implementationIssueId": "USF-1018",
+      "constraints": [
+        "Expo managed configuration posture only after package authority is confirmed.",
+        "No EAS credentials, signing credentials, store records, store submission, or provider setup.",
+        "Screens must map to USF capabilities and fail closed when unknown."
+      ]
+    },
+    "sharedClient": {
+      "selectedPostureArtefact": "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
+      "candidateBoundary": "packages/client",
+      "implementationIssueId": "USF-1015",
+      "constraints": [
+        "App code must consume semantic and generated-client artefacts rather than inventing UI-only behaviour.",
+        "Stale or missing generated-client inputs must fail closed.",
+        "Package installation requires USF-1019."
+      ]
+    },
+    "uiPrimitives": {
+      "candidateBoundary": "packages/ui",
+      "implementationIssueIds": [
+        "USF-1020",
+        "USF-1021",
+        "USF-1022",
+        "USF-1025",
+        "USF-1026"
+      ],
+      "constraints": [
+        "UI primitives must map to route, command, query, i18n, accessibility, permission, validation, error, and audit semantics.",
+        "No product behaviour may be created only in presentation code."
+      ]
+    },
+    "localRuntime": {
+      "candidateBoundary": "packages/app-surface",
+      "implementationIssueIds": [
+        "USF-1016",
+        "USF-1023",
+        "USF-1024",
+        "USF-1027",
+        "USF-1028",
+        "USF-1029",
+        "USF-1030"
+      ],
+      "constraints": [
+        "Local in-memory and fixture-backed runtime only.",
+        "No external services, credentials, provider accounts, deployment, staging, stores, ads SDKs, push providers, or live identity providers."
+      ]
+    }
+  },
+  "childIssueMap": [
+    {
+      "id": "USF-1013",
+      "title": "App-surface implementation inventory and execution plan",
+      "statusAtPlanCreation": "In Progress",
+      "proofLevel": "dev-local-planning",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1014",
+      "title": "Workspace and package boundary setup",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-package-boundary",
+      "mayInstallPackages": true,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1015",
+      "title": "Shared client SDK consumption path",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-contract",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1016",
+      "title": "Local in-memory app-surface runtime",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-in-memory",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1017",
+      "title": "Web app bounded local scaffold",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-web",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1018",
+      "title": "Mobile app bounded local scaffold",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-mobile",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1019",
+      "title": "Package and SDK installation proof",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-package-installation",
+      "mayInstallPackages": true,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1020",
+      "title": "Route and capability implementation",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-route-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1021",
+      "title": "Command and form implementation",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-command-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1022",
+      "title": "Query list and detail implementation",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-query-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1023",
+      "title": "State cache and query client setup",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-state-cache-proof",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1024",
+      "title": "Auth session dev identity stub",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-auth-stub-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1025",
+      "title": "i18n baseline implementation",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-i18n-proof",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1026",
+      "title": "Accessibility baseline implementation",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-accessibility-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1027",
+      "title": "Notification consent and permission surface",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-notification-consent-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1028",
+      "title": "Ads and monetisation placeholder semantics",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-negative-placeholder-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": true
+    },
+    {
+      "id": "USF-1029",
+      "title": "Store metadata semantic surface",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-metadata-fixture-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1030",
+      "title": "Deployment evidence pinning surface",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-evidence-fixture-proof",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1031",
+      "title": "Unit test suite for app-surface implementation",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "test-unit",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": "test-code-only"
+    },
+    {
+      "id": "USF-1032",
+      "title": "Contract and integration test suite",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "test-contract-local-integration",
+      "mayInstallPackages": "only-through-USF-1019",
+      "mayCreateRuntimeCode": "test-code-only"
+    },
+    {
+      "id": "USF-1033",
+      "title": "Compose-backed app-surface proof if required",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "compose-conditional",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1034",
+      "title": "Staging proof classification",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "staging-classification-only",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1035",
+      "title": "App-surface timing and optimisation evidence",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "dev-local-timing-evidence",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    },
+    {
+      "id": "USF-1036",
+      "title": "App-surface proof report and closure gate",
+      "statusAtPlanCreation": "Todo",
+      "proofLevel": "closure-gate",
+      "mayInstallPackages": false,
+      "mayCreateRuntimeCode": false
+    }
+  ],
+  "executionOrder": [
+    {
+      "step": 1,
+      "issueId": "USF-1013",
+      "objective": "Lock repository-owned inventory and execution plan before broad implementation."
+    },
+    {
+      "step": 2,
+      "issueIds": [
+        "USF-1014",
+        "USF-1019"
+      ],
+      "objective": "Establish package boundaries and pin only required package dependencies."
+    },
+    {
+      "step": 3,
+      "issueIds": [
+        "USF-1015",
+        "USF-1016",
+        "USF-1024"
+      ],
+      "objective": "Create the local shared-client, in-memory runtime, and development identity base."
+    },
+    {
+      "step": 4,
+      "issueIds": [
+        "USF-1020",
+        "USF-1021",
+        "USF-1022",
+        "USF-1023"
+      ],
+      "objective": "Implement route, command, query, and state/cache mappings over semantic artefacts."
+    },
+    {
+      "step": 5,
+      "issueIds": [
+        "USF-1017",
+        "USF-1018"
+      ],
+      "objective": "Create bounded local web and mobile scaffolds after package authority is confirmed."
+    },
+    {
+      "step": 6,
+      "issueIds": [
+        "USF-1025",
+        "USF-1026",
+        "USF-1027",
+        "USF-1028",
+        "USF-1029",
+        "USF-1030"
+      ],
+      "objective": "Add baseline local semantics for i18n, accessibility, notification consent, negative monetisation, store metadata, and deployment evidence pinning."
+    },
+    {
+      "step": 7,
+      "issueIds": [
+        "USF-1031",
+        "USF-1032"
+      ],
+      "objective": "Prove behaviour with local unit, contract, and in-memory integration tests."
+    },
+    {
+      "step": 8,
+      "issueId": "USF-1033",
+      "objective": "Escalate to Compose only when provider semantics cannot be proven in memory."
+    },
+    {
+      "step": 9,
+      "issueIds": [
+        "USF-1034",
+        "USF-1035"
+      ],
+      "objective": "Record staging classification and timing evidence without deployment or staging action."
+    },
+    {
+      "step": 10,
+      "issueId": "USF-1036",
+      "objective": "Close the tranche only when child issue status, proof evidence, validators, timing, and non-claims are recorded."
+    }
+  ],
+  "packageAndRuntimeAuthority": {
+    "packageInstallationAllowedOnlyBy": [
+      "USF-1014",
+      "USF-1019"
+    ],
+    "packageRules": [
+      "No global installs.",
+      "All package dependencies must be package-managed and lockfile-pinned.",
+      "Minimum required dependencies only.",
+      "Dependency rationale must be recorded.",
+      "Remote cache, task graph tooling, Testcontainers, external providers, analytics, ads SDKs, consent management platform SDKs, store SDKs, and deployment SDKs are not adopted by this plan."
+    ],
+    "runtimeCodeAllowedOnlyBy": [
+      "USF-1015",
+      "USF-1016",
+      "USF-1017",
+      "USF-1018",
+      "USF-1020",
+      "USF-1021",
+      "USF-1022",
+      "USF-1023",
+      "USF-1024",
+      "USF-1025",
+      "USF-1026",
+      "USF-1027",
+      "USF-1028"
+    ],
+    "runtimeRules": [
+      "Use local in-memory or fixture-backed adapters first.",
+      "UI code must consume semantic and generated-client artefacts.",
+      "Unknown or missing semantic input must fail closed.",
+      "No UI-only business rules.",
+      "No credentials, external services, provider setup, deployment, staging, store setup, live identity, push provider, ads provider, or monetisation provider."
+    ]
+  },
+  "proofLadder": {
+    "devLocal": {
+      "requiredFirst": true,
+      "requiredProofs": [
+        "frozen package install after dependency changes",
+        "typecheck where package entry points exist",
+        "unit tests where implementation exists",
+        "app-surface validator all mode",
+        "app-surface selftest",
+        "generated-client validation where available",
+        "local in-memory runtime proof"
+      ]
+    },
+    "testContract": {
+      "requiredAfterDevLocal": true,
+      "requiredProofs": [
+        "contract tests for generated client consumption",
+        "semantic fixture mismatch tests",
+        "validator output-shape tests",
+        "route capability mapping tests",
+        "local integration tests when in-memory semantics are sufficient"
+      ]
+    },
+    "compose": {
+      "requiredByDefault": false,
+      "classificationIssueId": "USF-1033",
+      "rule": "Compose is used only if implemented provider semantics cannot be proven in memory.",
+      "nonImplication": "Compose proof does not imply staging proof."
+    },
+    "staging": {
+      "requiredByDefault": false,
+      "classificationIssueId": "USF-1034",
+      "rule": "Staging is required only when the implemented surface is public, staging-relevant, deployment-adjacent, provider-staging, or human-acceptance relevant.",
+      "preliminaryClassificationForThisInventoryStep": "not-required-for-planning-only-because-no-public-or-provider-backed-app-surface-has-been-implemented-in-this-step"
+    }
+  },
+  "optimisationHandling": {
+    "evidenceModel": [
+      "docs/architecture/repository-optimisation-local-realisation-tranche.json",
+      "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json"
+    ],
+    "timingIssueId": "USF-1035",
+    "candidateOptionsToEvaluate": [
+      "affected-run routing",
+      "Compose proof cost",
+      "Testcontainers as an option",
+      "task graph tooling",
+      "remote cache",
+      "package manager install timing",
+      "typecheck timing",
+      "unit test timing",
+      "contract test timing",
+      "validator timing"
+    ],
+    "adoptionRule": "Every timing option is considered by USF-1035, but adoption of remote cache, task graph tooling, Testcontainers, external services, or provider-backed optimisation requires separate repository authority and an implementation issue.",
+    "currentDefault": "local deterministic execution with affected-run recommendations remaining warn-only unless repository authority promotes them."
+  },
+  "validationPlan": {
+    "availableCommands": [
+      "corepack pnpm install --frozen-lockfile",
+      "corepack pnpm validate-spec",
+      "corepack pnpm validate-spec:selftest",
+      "make app-surface-validate",
+      "make app-surface-selftest",
+      "make validate-evidence"
+    ],
+    "commandsForThisPlanningIssue": [
+      "strict JSON parse for docs/architecture/app-surface-implementation-realisation-plan.json",
+      "make app-surface-validate",
+      "make app-surface-selftest"
+    ],
+    "commandsForLaterImplementationIssues": [
+      "frozen package install after dependency changes",
+      "app-surface unit tests after app packages exist",
+      "app-surface contract tests after client and mapping packages exist",
+      "generated-client validation after consumption wiring exists",
+      "local integration tests after in-memory runtime exists",
+      "Compose proof only if USF-1033 classifies it as required",
+      "evidence validation after evidence artefacts change",
+      "proof-cockpit re-pin only if stale evidence blocks validation"
+    ]
+  },
+  "nonClaimsPreserved": [
+    "No deployment readiness.",
+    "No staging readiness.",
+    "No production readiness.",
+    "No live external provider readiness.",
+    "No store readiness.",
+    "No App Store submission readiness.",
+    "No Play Store submission readiness.",
+    "No compliance readiness.",
+    "No monetisation readiness.",
+    "No human acceptance readiness.",
+    "No remote cache adoption.",
+    "No task graph tooling adoption.",
+    "No Testcontainers adoption.",
+    "No Caddy public proof routing change.",
+    "No provider credential or account setup."
+  ],
+  "initialImplementationGaps": [
+    "Workspace and package boundaries for bounded web, mobile, shared client, UI primitives, and local app-surface runtime are not yet created.",
+    "Shared client SDK consumption path is not yet implemented.",
+    "Local in-memory app-surface runtime is not yet implemented.",
+    "Next web scaffold is not yet implemented.",
+    "Expo mobile scaffold is not yet implemented.",
+    "Initial route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces are not yet implemented.",
+    "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
+  ],
+  "readinessVerdict": {
+    "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
+    "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
+    "reason": "The work-tracking tranche and repository-owned execution plan exist, but implementation, tests, proof evidence, timing evidence, staging classification, and closure report remain open child work."
+  }
+}
