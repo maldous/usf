@@ -2291,6 +2291,7 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "packages/core",
     "packages/ports",
     "packages/contracts",
+    "packages/client",
     "packages/openapi",
     "packages/test",
     "packages/proof",

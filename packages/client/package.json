@@ -1,0 +1,10 @@
+{
+  "name": "@foundation/client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Bounded local shared-client consumption adapter over governed USF semantic and generated-client artefacts.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

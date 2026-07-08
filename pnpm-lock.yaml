@@ -181,6 +181,8 @@ importers:
 
   capabilities/tenant: {}
 
+  packages/client: {}
+
   packages/contracts: {}
 
   packages/core: {}

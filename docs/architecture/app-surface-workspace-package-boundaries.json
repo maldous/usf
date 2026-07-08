@@ -68,18 +68,25 @@
     {
       "boundaryId": "shared-client-boundary",
       "path": "packages/client",
-      "classification": "future-to-create",
+      "classification": "exists-now",
       "owningLinearIssueId": "USF-1015",
       "workspaceCovered": true,
-      "createdByThisIssue": false,
-      "mayCreateRuntimeCode": false,
+      "createdByThisIssue": true,
+      "mayCreateRuntimeCode": true,
       "packageDependenciesAllowedByThisIssue": false,
-      "proofLevel": "dev-local-client-boundary",
-      "purpose": "Future shared client SDK consumption boundary over generated and semantic client artefacts.",
+      "proofLevel": "dev-local-contract",
+      "purpose": "Bounded local shared client consumption adapter over generated and semantic client artefacts.",
       "nonClaims": [
-        "No shared client SDK implementation exists from this boundary artefact.",
-        "No generated-client consumption readiness is claimed."
-      ]
+        "No generated SDK readiness, package publication readiness, product UI readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance is claimed.",
+        "No external provider, credential, deployment, store, or staging setup is introduced.",
+        "The package is dependency-free and fails closed on stale generated-client or missing semantic inputs."
+      ],
+      "packageManifest": "packages/client/package.json",
+      "sourceUseDispositionPath": "docs/architecture/app-surface-source-use-disposition-matrix.md",
+      "targetTopologyPath": "docs/architecture/target-implementation-topology-plan.md",
+      "implementationArtefact": "packages/client/src/index.ts",
+      "contractTestArtefact": "tests/packages/app-surface-shared-client-consumption.test.ts",
+      "mappingArtefact": "docs/architecture/app-surface-shared-client-consumption-path.json"
     },
     {
       "boundaryId": "ui-primitives-boundary",
@@ -160,7 +167,11 @@
     ],
     "evidenceValidationRequired": false,
     "composeRequired": false,
-    "stagingRequired": false
+    "stagingRequired": false,
+    "commands": [
+      "strict JSON parse for docs/architecture/app-surface-shared-client-consumption-path.json",
+      "corepack pnpm vitest run tests/packages/app-surface-shared-client-consumption.test.ts"
+    ]
   },
   "readinessVerdict": {
     "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_BOUNDARY_VALIDATION",
