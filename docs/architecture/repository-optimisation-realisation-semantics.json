@@ -42,7 +42,13 @@
     "USF-767",
     "USF-768",
     "USF-813",
-    "USF-982"
+    "USF-982",
+    "USF-996",
+    "USF-997",
+    "USF-998",
+    "USF-999",
+    "USF-1000",
+    "USF-1001"
   ],
   "sourceAuthorities": [
     "docs/architecture/repository-layout-and-fixture-governance.json",
@@ -196,12 +202,25 @@
       "implementationBoundary": "Continuous optimisation must not weaken validators, proof evidence, or non-claims."
     }
   ],
-  "validationEvidence": [
-    "The bounded test-readiness selftest passed.",
-    "The validate-spec selftest passed with zero findings.",
-    "Strict JSON parse passed for the foundational catalogues during this pass.",
-    "Strict JSON parse passed for this artefact."
-  ],
+  "validationEvidence": {
+    "commands": [
+      "python3 tools/repository-optimisation/realise-bounded-optimisation.py all",
+      "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py all --json",
+      "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py selftest --json",
+      "python3 tools/validate-linear-boundary/validate-linear-boundary.py all --json",
+      "python3 tools/validate-spec/validate-spec.py all --json"
+    ],
+    "generatedReports": [
+      "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json",
+      "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
+      "evidence/generated-reports/repository-optimisation-path-inventory-baseline.json",
+      "evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
+      "evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json",
+      "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json"
+    ],
+    "enforcementMode": "warn-only for affected-run and timing budget findings; blocking only for malformed repository-owned evidence",
+    "fullValidationAuthorityPreserved": true
+  },
   "globalNonClaims": [
     "No runtime product implementation is created by this artefact.",
     "No provider account setup is authorised by this artefact.",
@@ -211,5 +230,17 @@
     "No staging readiness is claimed by this artefact.",
     "No live-provider readiness is claimed by this artefact.",
     "No production readiness is claimed by this artefact."
-  ]
+  ],
+  "laterWorkIssueIds": [
+    "USF-1007"
+  ],
+  "nonLocalOptimisationOptions": {
+    "status": "considered-not-adopted-current-tranche",
+    "laterIssueId": "USF-1007",
+    "options": [
+      "Testcontainers",
+      "remote cache",
+      "task graph tooling"
+    ]
+  }
 }

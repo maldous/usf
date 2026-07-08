@@ -1550,6 +1550,14 @@
       "title": "Add credentialed full Linear export reconciliation when available",
       "url": "https://linear.app/maldous/issue/USF-1005/add-credentialed-full-linear-export-reconciliation-when-available",
       "issueId": "USF-1005"
+    },
+    {
+      "id": "USF-1006",
+      "title": "Create later-work issues for deferred blocked and unresolved Linear delivery gaps",
+      "status": "todo",
+      "parentIssueId": "USF-1004",
+      "purpose": "Track later delivery of deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only Linear work as Linear issues or explicit repository-owned dispositions.",
+      "authorityBoundary": "Linear tracks work only and does not define USF semantic authority."
     }
   ],
   "nonClaims": [
@@ -1826,11 +1834,13 @@
     "completionBoundary": "USF-1003 delivery means unresolved Linear work discovered by this audit is represented by repository-traceable follow-up issues. It does not mean those follow-up issues are complete.",
     "followUpIssueIds": [
       "USF-1004",
-      "USF-1005"
+      "USF-1005",
+      "USF-1006"
     ],
     "coveredUnresolvedWorkTypes": [
       "repository-unreferenced-issue-key-disposition",
-      "credentialed-full-description-and-comment-export-reconciliation"
+      "credentialed-full-description-and-comment-export-reconciliation",
+      "deferred-blocked-unresolved-linear-work-later-issue-delivery"
     ],
     "followUpIssueResponsibilities": [
       {
@@ -1848,5 +1858,22 @@
       "Linear descriptions or comments define USF semantic authority",
       "USF-1003 closure proves USF-1004 or USF-1005 acceptance criteria"
     ]
+  },
+  "deferredBlockedUnresolvedDelivery": {
+    "issueId": "USF-1006",
+    "deliveryMode": "later-linear-issues-or-repository-disposition",
+    "currentImplementationScopeExpanded": false,
+    "coveredStates": [
+      "unresolved",
+      "blocked",
+      "external-provider",
+      "credential-gated",
+      "duplicate",
+      "canceled",
+      "obsolete",
+      "operational-only",
+      "deferred"
+    ],
+    "authorityBoundary": "This delivery track is work tracking only. Repository artefacts, validators, and proof evidence remain authoritative."
   }
 }

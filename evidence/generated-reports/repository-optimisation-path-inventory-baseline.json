@@ -1,0 +1,52 @@
+{
+  "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated baseline for declared inventory roots that avoid repeated repository-wide scans in optimisation tooling.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/realise-bounded-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-998",
+        "scan-mode:declared-root-inventory",
+        "repository-wide-glob-avoided:true",
+        "declared-file-count:1990",
+        "inventory-root:docs/architecture:367",
+        "inventory-root:spec:199",
+        "inventory-root:tools:1349",
+        "inventory-root:evidence/generated-reports:10",
+        "inventory-root:evidence/proof-evidence:9",
+        "inventory-root:packages/proof:49",
+        "inventory-root:apps/staging-proof-cockpit:7",
+        "pruned-directory:.git",
+        "pruned-directory:.next",
+        "pruned-directory:.pnpm-store",
+        "pruned-directory:.turbo",
+        "pruned-directory:__pycache__",
+        "pruned-directory:coverage",
+        "pruned-directory:dist",
+        "pruned-directory:node_modules"
+      ],
+      "message": "Declared inventory roots produced 1990 files while pruning generated dependency/cache directories.",
+      "ruleId": "USF-OPT-PATH-001",
+      "severity": "info",
+      "subject": "declared-inventory"
+    }
+  ],
+  "id": "usf.repository-optimisation.path-inventory",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository optimisation declared path inventory baseline",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

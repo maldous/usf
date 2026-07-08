@@ -131,37 +131,34 @@
   ],
   "implementedInThisTranche": [
     {
-      "id": "local-command-timing-tool",
-      "paths": [
-        "tools/repository-optimisation/measure-command-timing.py"
-      ],
-      "capabilities": [
-        "measure local command wall-clock duration",
-        "write generated timing evidence JSON",
-        "compare baseline and current timing records",
-        "emit warn-only regression status",
-        "parse foundational JSON catalogues as a safe local measurement command"
-      ]
+      "issueId": "USF-997",
+      "status": "implemented-bounded-local",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
+      "authorityBoundary": "Generated report is lower authority than semantic definitions, validator rules, and runtime proof evidence."
     },
     {
-      "id": "package-command-surface",
-      "paths": [
-        "package.json"
-      ],
-      "capabilities": [
-        "repo:timing:validate-spec-selftest",
-        "repo:timing:repo-validate",
-        "repo:timing:compare"
-      ]
+      "issueId": "USF-998",
+      "status": "implemented-bounded-local",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-path-inventory-baseline.json",
+      "authorityBoundary": "Generated report is lower authority than semantic definitions, validator rules, and runtime proof evidence."
     },
     {
-      "id": "before-after-local-evidence",
-      "paths": [
-        "evidence/generated-reports/repository-optimisation-local-timing-before.json",
-        "evidence/generated-reports/repository-optimisation-local-timing-after.json",
-        "evidence/generated-reports/repository-optimisation-local-timing-before-after.json"
-      ],
-      "authorityBoundary": "Generated timing evidence only; not semantic authority and not readiness proof."
+      "issueId": "USF-999",
+      "status": "implemented-bounded-local",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
+      "authorityBoundary": "Generated report is lower authority than semantic definitions, validator rules, and runtime proof evidence."
+    },
+    {
+      "issueId": "USF-1000",
+      "status": "implemented-bounded-local",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json",
+      "authorityBoundary": "Generated report is lower authority than semantic definitions, validator rules, and runtime proof evidence."
+    },
+    {
+      "issueId": "USF-1001",
+      "status": "implemented-bounded-local",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json",
+      "authorityBoundary": "Generated report is lower authority than semantic definitions, validator rules, and runtime proof evidence."
     }
   ],
   "linearIssuesCreated": [
@@ -194,6 +191,14 @@
       "id": "USF-1001",
       "title": "Implement Compose startup and port timing measurement",
       "url": "https://linear.app/maldous/issue/USF-1001/implement-compose-startup-and-port-timing-measurement"
+    },
+    {
+      "id": "USF-1007",
+      "title": "Evaluate non-local optimisation options without adoption",
+      "status": "todo",
+      "parentIssueId": "USF-996",
+      "purpose": "Track later comparison of Testcontainers, remote cache, and task graph tooling without adoption in the current bounded local tranche.",
+      "authorityBoundary": "Linear tracks work only and does not define USF semantic authority."
     }
   ],
   "nonClaims": [
@@ -209,5 +214,33 @@
     "No live-provider readiness is claimed.",
     "No store, compliance, release, or human-acceptance claim is made.",
     "Generated timing reports remain lower authority than semantic definitions, ADRs, validators, and runtime proof evidence."
-  ]
+  ],
+  "boundedLocalEvidenceReports": {
+    "USF-997": "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
+    "USF-998": "evidence/generated-reports/repository-optimisation-path-inventory-baseline.json",
+    "USF-999": "evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
+    "USF-1000": "evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json",
+    "USF-1001": "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json"
+  },
+  "boundedLocalSummaryReport": "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json",
+  "fullValidationAuthorityPreserved": true,
+  "affectedRunEnforcementMode": "warn-only",
+  "nonLocalOptimisationOptionsAdopted": false,
+  "laterWorkIssueIds": [
+    "USF-1007"
+  ],
+  "nonLocalOptimisationOptionDisposition": {
+    "testcontainers": {
+      "status": "considered-not-adopted-current-tranche",
+      "laterIssueId": "USF-1007"
+    },
+    "remoteCache": {
+      "status": "considered-not-adopted-current-tranche",
+      "laterIssueId": "USF-1007"
+    },
+    "taskGraphTooling": {
+      "status": "considered-not-adopted-current-tranche",
+      "laterIssueId": "USF-1007"
+    }
+  }
 }
