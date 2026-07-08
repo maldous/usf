@@ -78,6 +78,20 @@ The source-use treatment for these files is recorded in `docs/architecture/app-s
 
 This section does not authorise `apps/web/`, `apps/mobile/`, `packages/app-surface/`, web routes, mobile screens, route scaffolds, forms, query clients, state/cache runtime, auth/session runtime, i18n runtime, accessibility runtime, notification provider setup, ads/monetisation provider setup, store setup, package publication, generated SDK readiness, external provider setup, credentials, deployment, Compose proof, staging, live-provider integration, production readiness, compliance readiness, monetisation readiness, or human-acceptance readiness. Those paths remain blocked until their owning app-surface child issue records exact target files, source-use disposition coverage, validator support, and proof expectations.
 
+## USF-1016 app-surface local in-memory runtime
+
+USF-1016 authorises a narrow dependency-free local in-memory app-surface runtime. This authorisation is limited to the following root and target files:
+
+- `packages/app-surface/`
+- `packages/app-surface/package.json`
+- `packages/app-surface/src/index.ts`
+- `docs/architecture/app-surface-local-in-memory-runtime.json`
+- `tests/packages/app-surface-local-in-memory-runtime.test.ts`
+
+The source-use treatment for these files is recorded in `docs/architecture/app-surface-source-use-disposition-matrix.md`. The package is private, dependency-free, and contains only a local in-memory component-fixture validator and runner over repository-owned capability, tenant, permission, command, query, validation, error, and audit semantics.
+
+This section does not authorise `apps/web/`, `apps/mobile/`, web routes, mobile screens, broad route scaffolds, forms, query clients, state/cache runtime, production auth/session runtime, i18n runtime, accessibility runtime, notification provider setup, ads/monetisation provider setup, store setup, package publication, generated SDK readiness, external provider setup, credentials, network calls, deployment, Compose proof, staging, live-provider integration, production readiness, compliance readiness, monetisation readiness, or human-acceptance readiness. Those paths remain blocked until their owning app-surface child issue records exact target files, source-use disposition coverage, validator support, and proof expectations.
+
 ## Decision
 
 USF-39 must not create implementation-shaped directories unless USF-61 explicitly cites this plan and the future implementation PR stays within the allowed topology below.

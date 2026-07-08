@@ -1,0 +1,202 @@
+{
+  "artifactId": "usf.app-surface-local-in-memory-runtime",
+  "title": "App-surface local in-memory runtime proof mapping",
+  "lifecycleState": "implemented-dev-local",
+  "createdDate": "2026-07-08",
+  "ownerIssueId": "USF-1016",
+  "parentIssueId": "USF-1012",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records the bounded local in-memory app-surface runtime mapping for USF-1016. It does not define product behaviour beyond repository-owned semantic inputs.",
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "runtimeAuthority": "The runtime is local, in-memory, dependency-free, and fixture-backed only.",
+    "nonAuthority": "This artefact does not claim product UI readiness, web readiness, mobile readiness, provider readiness, deployment readiness, staging readiness, production readiness, compliance readiness, monetisation readiness, or human acceptance."
+  },
+  "sourcePlan": {
+    "implementationPlan": "docs/architecture/app-surface-implementation-realisation-plan.json",
+    "workspaceBoundary": "docs/architecture/app-surface-workspace-package-boundaries.json",
+    "sourceUseDispositionMatrix": "docs/architecture/app-surface-source-use-disposition-matrix.md",
+    "targetTopologyPlan": "docs/architecture/target-implementation-topology-plan.md",
+    "sharedClientConsumptionPath": "docs/architecture/app-surface-shared-client-consumption-path.json"
+  },
+  "runtimeBoundary": {
+    "providerMode": "in-memory-only",
+    "environment": "dev-local",
+    "package": "packages/app-surface",
+    "implementation": "packages/app-surface/src/index.ts",
+    "unitTest": "tests/packages/app-surface-local-in-memory-runtime.test.ts",
+    "externalProviderAllowed": false,
+    "credentialsAllowed": false,
+    "networkAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "liveIdentityProviderAllowed": false
+  },
+  "semanticInputs": {
+    "capabilities": [
+      {
+        "id": "graphql-federation-generated-client-disposition",
+        "sourceRef": "docs/architecture/app-surface-capability-coverage-matrix.json"
+      }
+    ],
+    "permissions": [
+      {
+        "id": "developer:read",
+        "sourceRef": "docs/architecture/shared-client-interaction-contract-semantics.json#permission-context-propagation"
+      },
+      {
+        "id": "developer:key:onboard",
+        "sourceRef": "docs/architecture/shared-client-interaction-contract-semantics.json#permission-context-propagation"
+      }
+    ],
+    "commands": [
+      {
+        "id": "command.onboardApiKey",
+        "sourceRef": "docs/architecture/app-surface-shared-client-consumption-path.json#shared-client-command-onboard-api-key"
+      }
+    ],
+    "queries": [
+      {
+        "id": "query.developerProfile",
+        "sourceRef": "docs/architecture/app-surface-shared-client-consumption-path.json#shared-client-query-developer-profile"
+      }
+    ],
+    "validationRules": [
+      {
+        "id": "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "sourceRef": "docs/architecture/generated-client-contract-validation-semantics.json"
+      },
+      {
+        "id": "typed-error-problem-details-model",
+        "sourceRef": "docs/architecture/generated-client-contract-validation-semantics.json#typed-error-problem-details-model"
+      }
+    ],
+    "errorRefs": [
+      {
+        "id": "typed-error-problem-details-model",
+        "sourceRef": "docs/architecture/generated-client-contract-validation-semantics.json#typed-error-problem-details-model"
+      },
+      {
+        "id": "safe-denial:invalid-label",
+        "sourceRef": "docs/architecture/shared-client-interaction-contract-semantics.json#safe-denial"
+      }
+    ],
+    "auditEvents": [
+      {
+        "id": "client-audit-event-emission",
+        "sourceRef": "docs/architecture/shared-client-interaction-contract-semantics.json#client-audit-event-emission"
+      },
+      {
+        "id": "graphql.developerProfile",
+        "sourceRef": "docs/architecture/app-surface-shared-client-consumption-path.json#shared-client-query-developer-profile"
+      },
+      {
+        "id": "graphql.onboardApiKey",
+        "sourceRef": "docs/architecture/app-surface-shared-client-consumption-path.json#shared-client-command-onboard-api-key"
+      }
+    ],
+    "tenantContexts": [
+      {
+        "id": "tenant.dev-local-fixture",
+        "sourceRef": "docs/architecture/shared-client-interaction-contract-semantics.json#tenant-user-context-propagation",
+        "userRef": "user.dev-local-fixture"
+      }
+    ]
+  },
+  "componentFixtures": [
+    {
+      "fixtureId": "component-fixture-developer-profile-summary",
+      "componentSurfaceId": "component.developer-profile-summary",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "tenantContextId": "tenant.dev-local-fixture",
+      "requiredPermissionRefs": [
+        "developer:read"
+      ],
+      "commandRefs": [],
+      "queryRefs": [
+        "query.developerProfile"
+      ],
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.developerProfile"
+      ],
+      "expectedOutcome": "exercised-local-in-memory"
+    },
+    {
+      "fixtureId": "component-fixture-api-key-onboarding",
+      "componentSurfaceId": "component.api-key-onboarding-form",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "tenantContextId": "tenant.dev-local-fixture",
+      "requiredPermissionRefs": [
+        "developer:key:onboard"
+      ],
+      "commandRefs": [
+        "command.onboardApiKey"
+      ],
+      "queryRefs": [],
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model",
+        "safe-denial:invalid-label"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.onboardApiKey"
+      ],
+      "expectedOutcome": "exercised-local-in-memory"
+    }
+  ],
+  "failClosedRequirements": [
+    "Missing capability semantics must fail validation and prevent fixture execution.",
+    "Missing permission semantics must fail validation and prevent fixture execution.",
+    "External provider, credential, network, deployment, staging, production, or live identity provider configuration must fail validation.",
+    "Missing or overclaimed non-claims must fail validation."
+  ],
+  "validationCommands": [
+    "strict JSON parse for docs/architecture/app-surface-local-in-memory-runtime.json",
+    "corepack pnpm vitest run tests/packages/app-surface-local-in-memory-runtime.test.ts",
+    "corepack pnpm typecheck",
+    "corepack pnpm validate-spec",
+    "make app-surface-validate",
+    "make app-surface-selftest"
+  ],
+  "nonClaims": {
+    "productUiReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "complianceReadiness": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  },
+  "readinessVerdict": {
+    "status": "dev-local-in-memory-only",
+    "proofLevelReached": "dev-local-in-memory",
+    "composeRequired": false,
+    "stagingRequired": false,
+    "reason": "The implemented surface is a local dependency-free in-memory fixture runtime. It introduces no external provider, credential, public route, deployment-adjacent surface, provider-staging integration, or human-acceptance surface."
+  },
+  "providerMode": "in-memory-only",
+  "environment": "dev-local",
+  "adapterBoundary": {
+    "inMemoryAdapter": true,
+    "externalProviderAllowed": false,
+    "credentialsAllowed": false,
+    "networkAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "liveIdentityProviderAllowed": false
+  }
+}

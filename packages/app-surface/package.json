@@ -1,0 +1,10 @@
+{
+  "name": "@foundation/app-surface",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Bounded local in-memory app-surface runtime for semantic fixture proof; no provider, staging, deployment, or production readiness is claimed.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

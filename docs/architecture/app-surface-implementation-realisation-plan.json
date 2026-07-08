@@ -261,6 +261,26 @@
       {
         "path": "tests/packages/app-surface-shared-client-consumption.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/app-surface",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/app-surface/package.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/app-surface/src/index.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-local-in-memory-runtime.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -291,11 +311,6 @@
         "path": "apps/mobile",
         "classification": "future-to-create",
         "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "packages/app-surface",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1016"
       }
     ],
     "removedInvalidOrStaleReferences": [
@@ -398,6 +413,7 @@
         "apps/work"
       ],
       "existingPackageDirectories": [
+        "packages/app-surface",
         "packages/client",
         "packages/contracts",
         "packages/core",
@@ -410,10 +426,9 @@
       ],
       "absentImplementationDirectories": [
         "apps/web",
-        "apps/mobile",
-        "packages/app-surface"
+        "apps/mobile"
       ],
-      "currentConclusion": "The repository now contains bounded shared-client and UI package boundaries, including a local shared-client consumption adapter. Web, mobile, and local app-surface runtime implementation packages remain absent."
+      "currentConclusion": "The repository now contains bounded shared-client, UI, and local in-memory app-surface runtime package boundaries. Web and mobile implementation packages remain absent."
     },
     "generatedClientState": {
       "semanticAndContractArtefactsExist": true,
@@ -429,8 +444,8 @@
       "tsxOrJsxAppComponentsFound": false,
       "nextWebScaffoldFound": false,
       "expoMobileScaffoldFound": false,
-      "localInMemoryAppSurfaceRuntimeFound": false,
-      "currentConclusion": "No app UI runtime scaffold was found for the bounded app-surface implementation tranche."
+      "localInMemoryAppSurfaceRuntimeFound": true,
+      "currentConclusion": "A bounded local in-memory app-surface runtime now exists for component-fixture proof. No Next web scaffold or Expo mobile scaffold exists."
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -504,7 +519,12 @@
       "constraints": [
         "Local in-memory and fixture-backed runtime only.",
         "No external services, credentials, provider accounts, deployment, staging, stores, ads SDKs, push providers, or live identity providers."
-      ]
+      ],
+      "implementedBoundary": "packages/app-surface",
+      "implementationArtefact": "packages/app-surface/src/index.ts",
+      "runtimeMappingArtefact": "docs/architecture/app-surface-local-in-memory-runtime.json",
+      "unitTestArtefact": "tests/packages/app-surface-local-in-memory-runtime.test.ts",
+      "currentStatusInRepository": "implemented-dev-local-in-memory"
     }
   },
   "childIssueMap": [
@@ -545,7 +565,14 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-in-memory",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "implementationArtefacts": [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "packages/app-surface/package.json",
+        "packages/app-surface/src/index.ts",
+        "tests/packages/app-surface-local-in-memory-runtime.test.ts"
+      ],
+      "currentStatusInRepository": "implemented-dev-local-in-memory"
     },
     {
       "id": "USF-1017",
@@ -930,11 +957,10 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Workspace and package boundaries for bounded web, mobile, shared client, UI primitives, and local app-surface runtime are not yet created.",
-    "Local in-memory app-surface runtime is not yet implemented.",
+    "Bounded web and mobile implementation directories are not yet created.",
     "Next web scaffold is not yet implemented.",
     "Expo mobile scaffold is not yet implemented.",
-    "Initial route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces are not yet implemented.",
+    "Initial route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the local in-memory component-fixture runtime are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
