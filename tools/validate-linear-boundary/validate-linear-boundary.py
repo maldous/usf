@@ -63,6 +63,7 @@ REQUIRED_FOLLOW_UP_STATES = {
 REQUIRED_UNRESOLVED_WORK_TYPES = {
     "repository-unreferenced-issue-key-disposition",
     "credentialed-full-description-and-comment-export-reconciliation",
+    "deferred-blocked-unresolved-linear-work-later-issue-delivery",
 }
 
 
@@ -143,7 +144,7 @@ def check_audit(audit: dict[str, Any]) -> list[dict[str, str]]:
     if not isinstance(issue_range, dict) or issue_range.get("count", 0) < 1003:
         findings.append(finding("USF-LINEAR-003", "issueKeyRangeAudited", "audit must cover at least USF-1 through USF-1003"))
     child_ids = {item.get("id") for item in audit.get("newChildIssuesCreated", []) if isinstance(item, dict)}
-    for required in ("USF-1004", "USF-1005"):
+    for required in ("USF-1004", "USF-1005", "USF-1006"):
         if required not in child_ids:
             findings.append(finding("USF-LINEAR-004", "newChildIssuesCreated", f"missing child issue {required}"))
     delivery = audit.get("unresolvedLinearWorkDelivery")
@@ -161,7 +162,7 @@ def check_audit(audit: dict[str, Any]) -> list[dict[str, str]]:
             if delivery.get(key) is not True:
                 findings.append(finding("USF-LINEAR-006", f"unresolvedLinearWorkDelivery.{key}", "value must be true"))
         follow_up_ids = set(delivery.get("followUpIssueIds", []))
-        for required in ("USF-1004", "USF-1005"):
+        for required in ("USF-1004", "USF-1005", "USF-1006"):
             if required not in follow_up_ids:
                 findings.append(finding("USF-LINEAR-006", "unresolvedLinearWorkDelivery.followUpIssueIds", f"missing follow-up issue {required}"))
         work_types = set(delivery.get("coveredUnresolvedWorkTypes", []))

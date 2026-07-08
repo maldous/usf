@@ -4,7 +4,7 @@
   "blockedExternalOrCredentialItems": [
     {
       "id": "linear-full-content-local-export",
-      "reason": "LINEAR_API_KEY was absent in the shell; no secret was printed, persisted, or required for current repository validation.",
+      "reason": "A Linear API key was provided in chat but was not injected into an unlogged process environment. The agent did not place the secret in a shell command, output, file, commit, generated report, or repository artefact.",
       "status": "captured-by-USF-1005"
     }
   ],
@@ -135,6 +135,61 @@
     "obsolete-superseded-with-repository-authority",
     "linear-only-semantic-knowledge-found-repository-copy-required"
   ],
+  "deferredBlockedUnresolvedDelivery": {
+    "authorityBoundary": "This delivery track is work tracking only. Repository artefacts, validators, and proof evidence remain authoritative.",
+    "categoryDisposition": [
+      {
+        "category": "deferred",
+        "disposition": "tracked by USF-1006 or explicit repository-owned disposition"
+      },
+      {
+        "category": "blocked",
+        "disposition": "tracked by USF-1006 or explicit repository-owned disposition"
+      },
+      {
+        "category": "unresolved",
+        "disposition": "tracked by USF-1006 or explicit repository-owned disposition"
+      },
+      {
+        "category": "credential-gated",
+        "disposition": "tracked by USF-1005 and USF-1006"
+      },
+      {
+        "category": "externally gated",
+        "disposition": "tracked by USF-1006 or explicit repository-owned disposition"
+      },
+      {
+        "category": "duplicate",
+        "disposition": "explicitly classified before closure or tracked by USF-1006"
+      },
+      {
+        "category": "canceled",
+        "disposition": "explicitly classified before closure or tracked by USF-1006"
+      },
+      {
+        "category": "obsolete",
+        "disposition": "explicitly classified before closure or tracked by USF-1006"
+      },
+      {
+        "category": "operational-only",
+        "disposition": "explicitly classified before closure or tracked by USF-1006"
+      }
+    ],
+    "coveredStates": [
+      "unresolved",
+      "blocked",
+      "external-provider",
+      "credential-gated",
+      "duplicate",
+      "canceled",
+      "obsolete",
+      "operational-only",
+      "deferred"
+    ],
+    "currentImplementationScopeExpanded": false,
+    "deliveryMode": "later-linear-issues-or-repository-disposition",
+    "issueId": "USF-1006"
+  },
   "description": "Repository-owned audit artefact for Linear issue delivery coverage, repository self-sufficiency, and gap capture. It is not Linear authority and does not make Linear semantic authority.",
   "id": "usf.linear-repository-delivery-audit",
   "issueId": "USF-1003",
@@ -1541,23 +1596,23 @@
   "newChildIssuesCreated": [
     {
       "id": "USF-1004",
+      "issueId": "USF-1004",
       "title": "Reconcile repository-unreferenced Linear issue key coverage",
-      "url": "https://linear.app/maldous/issue/USF-1004/reconcile-repository-unreferenced-linear-issue-key-coverage",
-      "issueId": "USF-1004"
+      "url": "https://linear.app/maldous/issue/USF-1004/reconcile-repository-unreferenced-linear-issue-key-coverage"
     },
     {
       "id": "USF-1005",
+      "issueId": "USF-1005",
       "title": "Add credentialed full Linear export reconciliation when available",
-      "url": "https://linear.app/maldous/issue/USF-1005/add-credentialed-full-linear-export-reconciliation-when-available",
-      "issueId": "USF-1005"
+      "url": "https://linear.app/maldous/issue/USF-1005/add-credentialed-full-linear-export-reconciliation-when-available"
     },
     {
+      "authorityBoundary": "Linear tracks work only and does not define USF semantic authority.",
       "id": "USF-1006",
-      "title": "Create later-work issues for deferred blocked and unresolved Linear delivery gaps",
-      "status": "todo",
       "parentIssueId": "USF-1004",
       "purpose": "Track later delivery of deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only Linear work as Linear issues or explicit repository-owned dispositions.",
-      "authorityBoundary": "Linear tracks work only and does not define USF semantic authority."
+      "status": "todo",
+      "title": "Create later-work issues for deferred blocked and unresolved Linear delivery gaps"
     }
   ],
   "nonClaims": [
@@ -1813,6 +1868,43 @@
     "repositoryUnreferencedIssueCount": 138
   },
   "title": "Linear Repository Delivery Audit",
+  "unresolvedLinearWorkDelivery": {
+    "completionBoundary": "USF-1003 delivery means unresolved Linear work discovered by this audit is represented by repository-traceable follow-up issues. It does not mean those follow-up issues are complete.",
+    "coveredUnresolvedWorkTypes": [
+      "repository-unreferenced-issue-key-disposition",
+      "credentialed-full-description-and-comment-export-reconciliation",
+      "deferred-blocked-unresolved-linear-work-later-issue-delivery"
+    ],
+    "deliveryMode": "linear-issue-follow-up",
+    "followUpIssueIds": [
+      "USF-1004",
+      "USF-1005",
+      "USF-1006"
+    ],
+    "followUpIssueResponsibilities": [
+      {
+        "issueId": "USF-1004",
+        "responsibility": "Disposition every repository-unreferenced Linear issue key from the audit and create narrower follow-up issues only where genuine repository deliverables remain."
+      },
+      {
+        "issueId": "USF-1005",
+        "responsibility": "Add a credential-safe full-content export reconciliation path and create or update follow-up issues for additional unresolved work discovered by full descriptions or comments."
+      },
+      {
+        "issueId": "USF-1006",
+        "responsibility": "Enumerate deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only categories from repository audit evidence and ensure each has later-work Linear tracking or explicit repository disposition."
+      }
+    ],
+    "followUpIssuesDoNotCompleteThisAuditWork": true,
+    "followUpIssuesDoNotDefineSemanticAuthority": true,
+    "forbiddenClaims": [
+      "Linear follow-up issue creation completes the follow-up work",
+      "Linear status defines USF repository readiness",
+      "Linear descriptions or comments define USF semantic authority",
+      "USF-1003 closure proves USF-1004 or USF-1005 acceptance criteria"
+    ],
+    "semanticAuthorityCopiedToRepositoryBeforeIssueCompletion": true
+  },
   "validation": {
     "commands": [
       "python3 tools/validate-linear-boundary/validate-linear-boundary.py all --json",
@@ -1825,55 +1917,5 @@
     },
     "validator": "tools/validate-linear-boundary/validate-linear-boundary.py"
   },
-  "verifiedFullyRealisedIssueIds": [],
-  "unresolvedLinearWorkDelivery": {
-    "deliveryMode": "linear-issue-follow-up",
-    "semanticAuthorityCopiedToRepositoryBeforeIssueCompletion": true,
-    "followUpIssuesDoNotCompleteThisAuditWork": true,
-    "followUpIssuesDoNotDefineSemanticAuthority": true,
-    "completionBoundary": "USF-1003 delivery means unresolved Linear work discovered by this audit is represented by repository-traceable follow-up issues. It does not mean those follow-up issues are complete.",
-    "followUpIssueIds": [
-      "USF-1004",
-      "USF-1005",
-      "USF-1006"
-    ],
-    "coveredUnresolvedWorkTypes": [
-      "repository-unreferenced-issue-key-disposition",
-      "credentialed-full-description-and-comment-export-reconciliation",
-      "deferred-blocked-unresolved-linear-work-later-issue-delivery"
-    ],
-    "followUpIssueResponsibilities": [
-      {
-        "issueId": "USF-1004",
-        "responsibility": "Disposition every repository-unreferenced Linear issue key from the audit and create narrower follow-up issues only where genuine repository deliverables remain."
-      },
-      {
-        "issueId": "USF-1005",
-        "responsibility": "Add a credential-safe full-content export reconciliation path and create or update follow-up issues for additional unresolved work discovered by full descriptions or comments."
-      }
-    ],
-    "forbiddenClaims": [
-      "Linear follow-up issue creation completes the follow-up work",
-      "Linear status defines USF repository readiness",
-      "Linear descriptions or comments define USF semantic authority",
-      "USF-1003 closure proves USF-1004 or USF-1005 acceptance criteria"
-    ]
-  },
-  "deferredBlockedUnresolvedDelivery": {
-    "issueId": "USF-1006",
-    "deliveryMode": "later-linear-issues-or-repository-disposition",
-    "currentImplementationScopeExpanded": false,
-    "coveredStates": [
-      "unresolved",
-      "blocked",
-      "external-provider",
-      "credential-gated",
-      "duplicate",
-      "canceled",
-      "obsolete",
-      "operational-only",
-      "deferred"
-    ],
-    "authorityBoundary": "This delivery track is work tracking only. Repository artefacts, validators, and proof evidence remain authoritative."
-  }
+  "verifiedFullyRealisedIssueIds": []
 }
