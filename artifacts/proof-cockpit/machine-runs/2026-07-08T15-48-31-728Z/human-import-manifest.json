@@ -1,0 +1,25 @@
+{
+  "runId": "qa-run-2026-07-08T15-48-31-769Z",
+  "importRoutes": [
+    "/proof/machine-runs",
+    "/proof/machine-runs/qa-run-2026-07-08T15-48-31-769Z",
+    "/proof/import",
+    "/proof/import/qa-run-2026-07-08T15-48-31-769Z",
+    "/proof/review",
+    "/proof/review/gaps",
+    "/proof/review/nonconformities",
+    "/proof/review/corrective-actions",
+    "/proof/export"
+  ],
+  "decisionsSupported": [
+    "machine-run-viewed",
+    "machine-evidence-accepted",
+    "machine-evidence-rejected",
+    "human-note-added",
+    "retest-requested",
+    "residual-risk-accepted",
+    "corrective-action-created",
+    "report-exported"
+  ],
+  "finalAcceptanceAutomatic": false
+}
