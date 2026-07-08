@@ -15,6 +15,13 @@ const EXECUTOR = "codex-playwright-machine-qa";
 const REPO_ROOT = process.cwd();
 const COMPOSE_TARGET = "compose/compose.test.generated.yaml";
 const MACHINE_QA_ENVIRONMENT_SCOPE = "test";
+const CHROMIUM_UNSAFE_PORTS = new Set([
+  1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79, 87, 95, 101,
+  102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135, 139, 143, 161, 179, 389, 427,
+  465, 512, 513, 514, 515, 526, 530, 531, 532, 540, 548, 554, 556, 563, 587, 601, 636, 989,
+  990, 993, 995, 1719, 1720, 1723, 2049, 3659, 4045, 5060, 5061, 6000, 6566, 6665, 6666,
+  6667, 6668, 6669, 6697, 10080,
+]);
 const COMPOSE_PROFILES_FOR_SERVICE_UI = Object.freeze([
   "runtime-providers",
   "operator-tools",
@@ -1391,6 +1398,26 @@ async function gotoWithRetry(page, url, timeoutMs = 90000) {
     await new Promise((resolve) => setTimeout(resolve, 1500));
   }
   throw new Error(`service-ui-not-ready:${lastError}`);
+}
+
+async function closeServer(server) {
+  await new Promise((resolve) => server.close(resolve));
+}
+
+async function startChromiumSafeProofCockpitServer(options) {
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const server = await startProofCockpitServer(options);
+    const address = server.address();
+    if (!address || typeof address === "string") {
+      await closeServer(server);
+      throw new Error("proof-cockpit-machine-qa-address-unavailable");
+    }
+    if (!CHROMIUM_UNSAFE_PORTS.has(address.port)) {
+      return server;
+    }
+    await closeServer(server);
+  }
+  throw new Error("proof-cockpit-machine-qa-safe-port-unavailable");
 }
 
 async function fillFirstVisible(page, selectors, value) {
@@ -3411,7 +3438,7 @@ async function main() {
   }
   const server = args.baseUrl
     ? null
-    : await startProofCockpitServer({
+    : await startChromiumSafeProofCockpitServer({
         host: "127.0.0.1",
         port: 0,
         statePath,
@@ -3544,7 +3571,7 @@ async function main() {
       await browser.close();
     }
     if (server) {
-      await new Promise((resolve) => server.close(resolve));
+      await closeServer(server);
     }
   }
 }
