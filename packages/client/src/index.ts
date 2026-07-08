@@ -114,6 +114,22 @@ const FORBIDDEN_UI_ONLY_KEYS = [
   "inventedBehavior",
 ] as const;
 
+const REQUIRED_NON_CLAIMS = [
+  "generatedSdkReadiness",
+  "generatedClientReadiness",
+  "packagePublicationReadiness",
+  "productUiReadiness",
+  "webReadiness",
+  "mobileReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "productionReadiness",
+  "liveProviderReadiness",
+  "complianceReadiness",
+  "monetisationReadiness",
+  "humanAcceptance",
+] as const;
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -216,9 +232,20 @@ function validateNonClaims(nonClaims: unknown): string[] {
   if (!isRecord(nonClaims)) {
     return ["non-claims:missing"];
   }
-  return Object.entries(nonClaims)
-    .filter(([, value]) => value !== false)
-    .map(([key]) => `non-claims:${key}-overclaimed`);
+  const findings: string[] = [];
+  for (const claim of REQUIRED_NON_CLAIMS) {
+    if (!(claim in nonClaims)) {
+      findings.push(`non-claims:${claim}-missing`);
+    } else if (nonClaims[claim] !== false) {
+      findings.push(`non-claims:${claim}-overclaimed`);
+    }
+  }
+  for (const [claim, value] of Object.entries(nonClaims)) {
+    if (!REQUIRED_NON_CLAIMS.includes(claim as (typeof REQUIRED_NON_CLAIMS)[number]) && value !== false) {
+      findings.push(`non-claims:${claim}-overclaimed`);
+    }
+  }
+  return findings;
 }
 
 export function validateSharedClientConsumptionPath(

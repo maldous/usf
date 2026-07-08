@@ -79,4 +79,18 @@ describe("USF-1015 shared client SDK consumption path", () => {
       expect(value, claim).toBe(false);
     }
   });
+
+  it("fails closed when a required shared-client non-claim is omitted or overclaimed", () => {
+    const missingRequired = clone(consumptionPath);
+    delete missingRequired.nonClaims.productionReadiness;
+    const missingResult = validateSharedClientConsumptionPath(missingRequired);
+    expect(missingResult.ok).toBe(false);
+    expect(missingResult.findings).toContain("non-claims:productionReadiness-missing");
+
+    const overclaimed = clone(consumptionPath);
+    overclaimed.nonClaims.liveProviderReadiness = true;
+    const overclaimedResult = validateSharedClientConsumptionPath(overclaimed);
+    expect(overclaimedResult.ok).toBe(false);
+    expect(overclaimedResult.findings).toContain("non-claims:liveProviderReadiness-overclaimed");
+  });
 });
