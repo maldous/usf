@@ -26,6 +26,47 @@ REPORTS = {
 
 REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001"}
 REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006"}
+REQUIRED_REPORT_REFS = {
+    "USF-997": {
+        "cache-boundary:per-process",
+        "cache-key:abspath,mtime_ns,size",
+        "deepcopy-isolation:passed",
+        "stale-negative-control:passed",
+        "no-stale-parsed-data:true",
+        "validator-equivalence:passed",
+        "validator-findings-equivalent:true",
+        "timing-comparison:warn-only",
+    },
+    "USF-998": {
+        "scan-mode:declared-root-inventory",
+        "repository-wide-glob-avoided:true",
+        "previous-scan-comparison:git-tracked-and-untracked",
+        "coverage-equivalence:passed",
+        "generated-boundaries-preserved:true",
+        "missing-from-declared:0",
+        "extra-in-declared:0",
+    },
+    "USF-999": {
+        "enforcement-mode:warn-only",
+        "hard-ci-block:false",
+        "path-class-rules:explicit",
+        "unknown-path-negative-control:full-gate-fallback",
+        "affected-selftest:path-classification-pass",
+        "required-checks-weakened:false",
+        "timing-comparison:affected-vs-full-command-family",
+        "full-command-family-measured:true",
+    },
+    "USF-996": {
+        "missing-work-represented-by-child-issues:true",
+        "before-after-evidence-recorded:true",
+        "validator-equivalence-required:true",
+        "coverage-equivalence-required:true",
+        "affected-run-negative-control-required:true",
+        "full-validation-authority-preserved:true",
+        "warn-only-affected-run:true",
+        "non-local-options-adopted:false",
+    },
+}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -82,6 +123,9 @@ def check_reports(reports: dict[str, dict[str, Any]] | None = None) -> list[dict
             findings.append(finding("USF-OPT-001", rel(path), "report authorityLevel must be generated-report"))
         if "No Testcontainers" not in str(report.get("aiGuidance", "")):
             findings.append(finding("USF-OPT-001", rel(path), "report must preserve non-local optimisation non-claims"))
+        missing_refs = REQUIRED_REPORT_REFS.get(issue_id, set()) - report_refs
+        if missing_refs:
+            findings.append(finding("USF-OPT-008", rel(path), f"missing required report evidence refs: {', '.join(sorted(missing_refs))}"))
     affected = loaded.get("USF-999") if loaded and "USF-999" in loaded else load_json(REPORTS["USF-999"])
     affected_refs = refs(affected)
     if "enforcement-mode:warn-only" not in affected_refs or "hard-ci-block:false" not in affected_refs:
@@ -166,6 +210,27 @@ def selftest() -> list[dict[str, str]]:
     mutated_policy = copy.deepcopy(policy)
     mutated_policy["linearFollowUpDeliveryRules"]["deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues"] = False
     tests.append(("linear-later-issues-disabled", check_repository_artifacts(linear_policy=mutated_policy), "USF-OPT-007"))
+
+    json_reuse = load_json(REPORTS["USF-997"])
+    mutated_json_reuse = copy.deepcopy(json_reuse)
+    for item in mutated_json_reuse.get("findings", []):
+        if isinstance(item, dict):
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "validator-equivalence:passed"]
+    tests.append(("json-reuse-equivalence-missing", check_reports({"USF-997": mutated_json_reuse}), "USF-OPT-008"))
+
+    path_inventory = load_json(REPORTS["USF-998"])
+    mutated_path_inventory = copy.deepcopy(path_inventory)
+    for item in mutated_path_inventory.get("findings", []):
+        if isinstance(item, dict):
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "coverage-equivalence:passed"]
+    tests.append(("path-inventory-equivalence-missing", check_reports({"USF-998": mutated_path_inventory}), "USF-OPT-008"))
+
+    affected = load_json(REPORTS["USF-999"])
+    mutated_affected = copy.deepcopy(affected)
+    for item in mutated_affected.get("findings", []):
+        if isinstance(item, dict):
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "unknown-path-negative-control:full-gate-fallback"]
+    tests.append(("affected-negative-control-missing", check_reports({"USF-999": mutated_affected}), "USF-OPT-008"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

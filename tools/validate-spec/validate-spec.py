@@ -409,6 +409,9 @@ _JSON_CACHE = {}
 def load_json(path, F):
     abspath = os.path.abspath(path)
     try:
+        if os.environ.get("USF_VALIDATE_SPEC_JSON_CACHE") == "0":
+            with open(abspath, encoding="utf-8") as fh:
+                return json.load(fh)
         stat = os.stat(abspath)
         key = (abspath, stat.st_mtime_ns, stat.st_size)
         if key not in _JSON_CACHE:

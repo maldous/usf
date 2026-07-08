@@ -33,6 +33,39 @@
   "id": "usf.linear-reference-boundary-and-repository-self-sufficiency",
   "issueId": "USF-1002",
   "lifecycleState": "defined",
+  "linearFollowUpDeliveryRules": {
+    "completionBoundary": "Creating or linking a follow-up Linear issue records later work. It does not complete that follow-up work and does not satisfy that issue acceptance criteria.",
+    "coveredWorkStates": [
+      "unresolved",
+      "blocked",
+      "external-provider",
+      "credential-gated",
+      "duplicate",
+      "canceled",
+      "obsolete",
+      "operational-only",
+      "deferred"
+    ],
+    "credentialSafetyBoundary": "LINEAR_API_KEY must not be printed, logged, committed, echoed, or persisted. If the key is not present as an unlogged environment variable, repository work records the export as later work rather than embedding the secret in a command.",
+    "currentImplementationScopeMustNotSilentlyAbsorbUnresolvedLinearWork": true,
+    "deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues": true,
+    "followUpIssuesDoNotDefineSemanticAuthority": true,
+    "followUpIssuesDoNotSatisfyAcceptanceUntilValidated": true,
+    "laterWorkTrackingBoundary": "Deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only Linear work is delivered as later-work Linear issues or explicit repository-owned dispositions. These issues do not define USF semantic authority and do not make current implementation complete.",
+    "laterWorkTrackingIssueIds": [
+      "USF-1004",
+      "USF-1005",
+      "USF-1006"
+    ],
+    "remainingWorkIsTrackedByLinearFollowUpIssues": true,
+    "rule": "Linear items discovered during repository delivery audit must be dispositioned in repository-owned artefacts. If future work remains, that work is delivered for tracking purposes by creating or linking a Linear follow-up issue, not by treating Linear text, status, comments, labels, or project fields as USF semantic authority.",
+    "trackedLaterWorkCategories": [
+      "repository-unreferenced issue key disposition",
+      "credentialed full Linear description and comment export reconciliation",
+      "deferred blocked unresolved credential-gated externally gated duplicate canceled obsolete and operational-only work delivery"
+    ],
+    "unresolvedWorkRequiresRepositoryDisposition": true
+  },
   "nonClaims": [
     "No UI implementation is claimed.",
     "No app-surface implementation is claimed.",
@@ -59,32 +92,5 @@
       "python3 tools/validate-linear-boundary/validate-linear-boundary.py selftest --json"
     ],
     "validator": "tools/validate-linear-boundary/validate-linear-boundary.py"
-  },
-  "linearFollowUpDeliveryRules": {
-    "unresolvedWorkRequiresRepositoryDisposition": true,
-    "remainingWorkIsTrackedByLinearFollowUpIssues": true,
-    "followUpIssuesDoNotDefineSemanticAuthority": true,
-    "followUpIssuesDoNotSatisfyAcceptanceUntilValidated": true,
-    "coveredWorkStates": [
-      "unresolved",
-      "blocked",
-      "external-provider",
-      "credential-gated",
-      "duplicate",
-      "canceled",
-      "obsolete",
-      "operational-only",
-      "deferred"
-    ],
-    "rule": "Linear items discovered during repository delivery audit must be dispositioned in repository-owned artefacts. If future work remains, that work is delivered for tracking purposes by creating or linking a Linear follow-up issue, not by treating Linear text, status, comments, labels, or project fields as USF semantic authority.",
-    "completionBoundary": "Creating or linking a follow-up Linear issue records later work. It does not complete that follow-up work and does not satisfy that issue acceptance criteria.",
-    "deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues": true,
-    "currentImplementationScopeMustNotSilentlyAbsorbUnresolvedLinearWork": true,
-    "laterWorkTrackingIssueIds": [
-      "USF-1004",
-      "USF-1005",
-      "USF-1006"
-    ],
-    "laterWorkTrackingBoundary": "Deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only Linear work is delivered as later-work Linear issues or explicit repository-owned dispositions. These issues do not define USF semantic authority and do not make current implementation complete."
   }
 }

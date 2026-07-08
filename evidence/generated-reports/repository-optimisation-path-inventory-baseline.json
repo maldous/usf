@@ -11,6 +11,12 @@
         "issue:USF-998",
         "scan-mode:declared-root-inventory",
         "repository-wide-glob-avoided:true",
+        "previous-scan-comparison:git-tracked-and-untracked",
+        "coverage-equivalence:passed",
+        "generated-boundaries-preserved:true",
+        "previous-scan-file-count:1990",
+        "missing-from-declared:0",
+        "extra-in-declared:0",
         "declared-file-count:1990",
         "inventory-root:docs/architecture:367",
         "inventory-root:spec:199",
@@ -28,7 +34,7 @@
         "pruned-directory:dist",
         "pruned-directory:node_modules"
       ],
-      "message": "Declared inventory roots produced 1990 files while pruning generated dependency/cache directories.",
+      "message": "Declared inventory roots produced 1990 files while pruning generated dependency/cache directories; coverage equivalence passed=True.",
       "ruleId": "USF-OPT-PATH-001",
       "severity": "info",
       "subject": "declared-inventory"
