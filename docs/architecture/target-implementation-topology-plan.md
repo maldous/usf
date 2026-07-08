@@ -233,3 +233,15 @@ The scaffold is an Expo managed adapter over governed USF screen, capability, pe
 USF-1018 does not authorise EAS credentials, native signing credentials, native project generation, App Store setup, Play Store setup, store submission, live push provider setup, provider setup, credentials, deployment, staging proof, production proof, Expo readiness, mobile readiness, native readiness, store readiness, live-provider readiness, compliance readiness, monetisation readiness, accessibility compliance, internationalisation readiness, or human acceptance.
 
 USF-1018 adds a bounded local Expo scaffold only. This is the bounded local mobile scaffold authority marker for implementation topology and source-use validators. It does not change the status of route, command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, or parent closure work.
+
+## USF-1020 app-surface route and capability implementation
+
+USF-1020 authorises the following bounded local route-capability implementation paths only:
+
+- `docs/architecture/app-surface-route-capability-implementation.json`
+- `tests/apps/app-surface-route-capability-implementation.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+The route-capability implementation consolidates the existing bounded local web route registry and mobile screen registry from USF-1017 and USF-1018. It proves that the implemented targets map to governed capability ownership, permission references, tenant boundaries, proof references, and fail-closed unknown-target behaviour.
+
+USF-1020 does not add package dependencies, create new external provider integrations, introduce credentials, configure deployment, run staging proof, expose public routes, or claim product UI readiness, web readiness, mobile readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, store readiness, compliance readiness, monetisation readiness, or human acceptance.

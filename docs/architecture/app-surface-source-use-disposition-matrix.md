@@ -82,3 +82,13 @@ USF-1017 adds a bounded local Next.js scaffold only. This is the bounded local w
 | `tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts` | USF-authored | Unit tests for mobile posture verification, screen authority mapping, unknown-screen fail-closed behaviour, and non-claim preservation. | Does not require external providers, credentials, Compose, staging, deployment, stores, native signing, EAS, or human acceptance. |
 
 USF-1018 adds a bounded local Expo scaffold only. This is the bounded local mobile scaffold authority marker for implementation topology and source-use validators. It does not change the status of route, command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, or parent closure work.
+
+## USF-1020 route and capability implementation source-use disposition
+
+| Path | Status | Disposition | Non-claim boundary |
+| --- | --- | --- | --- |
+| `docs/architecture/app-surface-route-capability-implementation.json` | USF-authored | Repository-owned route and screen capability implementation map for the bounded local web and mobile targets. | Does not claim product UI, web, mobile, deployment, staging, production, live-provider, store, compliance, monetisation, or human-acceptance readiness. |
+| `tests/apps/app-surface-route-capability-implementation.test.ts` | USF-authored | Cross-surface test proving implemented route and screen mappings carry capability, permission, tenant, proof, unknown-target fail-closed, USF-930-style, and non-claim guards. | Does not require external providers, credentials, Compose, staging, deployment, stores, native signing, EAS, or human acceptance. |
+| `tools/validate-app-surface/validate-app-surface.py` | USF-authored | Adds a real implementation guard for the USF-1020 route-capability artefact while preserving the existing synthetic fixture suite. | Does not infer product behaviour from framework files or upgrade validator success into readiness. |
+
+USF-1020 consolidates the currently implemented bounded local web route and mobile screen mappings. It does not implement command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, deployment, provider setup, or parent closure work.
