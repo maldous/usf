@@ -439,6 +439,22 @@
       {
         "path": "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-store-metadata-semantic-surface.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-deployment-evidence-pinning-surface.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-local-negative-surfaces.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -591,13 +607,19 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, and notification consent/permission runtime mappings now exist; negative monetisation, store metadata, deployment evidence pinning, and later app surfaces remain issue-scoped work",
+      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, and deployment evidence pinning fixture surfaces now exist; later test consolidation, conditional Compose, staging classification, timing, and closure surfaces remain issue-scoped work",
       "queryListDetailRegistryFound": true,
       "stateCacheQueryClientBoundary": "implemented-by-USF-1023",
       "authSessionDevIdentityImplementation": "implemented-by-USF-1024",
       "i18nBaselineImplementation": "implemented-by-USF-1025",
       "notificationConsentPermissionSurfaceFound": true,
-      "notificationConsentPermissionSurface": "implemented-by-USF-1027"
+      "notificationConsentPermissionSurface": "implemented-by-USF-1027",
+      "adsMonetisationPlaceholderSurfaceFound": true,
+      "adsMonetisationPlaceholderSurface": "implemented-by-USF-1028",
+      "storeMetadataSemanticSurfaceFound": true,
+      "storeMetadataSemanticSurface": "implemented-by-USF-1029",
+      "deploymentEvidencePinningSurfaceFound": true,
+      "deploymentEvidencePinningSurface": "implemented-by-USF-1030"
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -1023,7 +1045,10 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-negative-placeholder-proof",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "implementationStatus": "implemented-by-USF-1028",
+      "runtimeCodeCreated": false,
+      "implementationArtefact": "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json"
     },
     {
       "id": "USF-1029",
@@ -1031,7 +1056,10 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-metadata-fixture-proof",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "implementationStatus": "implemented-by-USF-1029",
+      "runtimeCodeCreated": false,
+      "implementationArtefact": "docs/architecture/app-surface-store-metadata-semantic-surface.json"
     },
     {
       "id": "USF-1030",
@@ -1039,7 +1067,10 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-evidence-fixture-proof",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "implementationStatus": "implemented-by-USF-1030",
+      "runtimeCodeCreated": false,
+      "implementationArtefact": "docs/architecture/app-surface-deployment-evidence-pinning-surface.json"
     },
     {
       "id": "USF-1031",
@@ -1336,12 +1367,11 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Initial broader negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, local in-memory component-fixture runtime, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, and notification consent/permission mappings are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, and notification consent/permission surface are now repository-owned, but negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, and deployment evidence pinning surface are now repository-owned, but unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }

@@ -1,0 +1,127 @@
+{
+  "artifactId": "usf.app-surface-ads-monetisation-placeholder-surface",
+  "title": "App-surface ads and monetisation placeholder surface",
+  "ownerIssueId": "USF-1028",
+  "lifecycleState": "dev-local-negative-placeholder-implemented",
+  "authorityNotice": "This artefact records the bounded local negative ads and monetisation placeholder surface for USF-1028. It proves consent, privacy, age/region policy, store disclosure, and no-live-provider boundaries for ad placement placeholders. It does not integrate AdMob, AdSense, ad SDKs, CMP, UMP, ATT provider flow, subscriptions, in-app purchases, live ad serving, external providers, deployment, staging, production, monetisation readiness, advertising compliance, store readiness, or human acceptance.",
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+      "authorityType": "semantic-definition",
+      "description": "Monetisation, ad placement, telemetry, consent, privacy, and no-live-provider semantics."
+    },
+    {
+      "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "authorityType": "semantic-definition",
+      "description": "Consent and data-inventory semantics consumed by the placeholder mapping."
+    },
+    {
+      "path": "tools/validate-app-surface/fixtures/conforming/006-ad-placement-with-consent-privacy.json",
+      "authorityType": "validator-fixture",
+      "description": "USF-934-style conforming ad placement fixture."
+    },
+    {
+      "path": "tools/validate-app-surface/planted-defects/006-ad-placement-without-consent-privacy.json",
+      "authorityType": "validator-planted-defect",
+      "description": "USF-934-style planted defect proving ad placement without privacy mapping fails closed."
+    }
+  ],
+  "placeholderMappings": [
+    {
+      "surfaceId": "ads-placeholder-no-live-placement",
+      "surfaceKind": "negative-local-placeholder",
+      "implementationPath": "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json",
+      "consentRef": "regional-ads-consent-required",
+      "privacyClassificationRef": "privacy-data-category-advertising",
+      "ageRegionPolicyRef": "age-region-policy-required",
+      "thirdPartySdkRefs": [
+        "no-ad-sdk-adopted-currently"
+      ],
+      "storeDisclosureRef": "store-disclosure-required-before-adoption",
+      "evidenceRefs": [
+        "validator-selftest-with-planted-defect-fixtures",
+        "tools/validate-app-surface/fixtures/conforming/006-ad-placement-with-consent-privacy.json",
+        "tools/validate-app-surface/planted-defects/006-ad-placement-without-consent-privacy.json"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+        "docs/architecture/notification-consent-data-inventory-semantics.json"
+      ],
+      "localOnly": true,
+      "liveAdServingAllowed": false,
+      "adSdkAllowed": false,
+      "consentManagementPlatformAllowed": false,
+      "umpProviderFlowAllowed": false,
+      "attProviderFlowAllowed": false,
+      "subscriptionOrPurchaseAllowed": false,
+      "monetisationProviderAllowed": false,
+      "externalProviderAllowed": false,
+      "nonClaimBoundary": "negative local ad placement placeholder only; no ad SDK, CMP, UMP, ATT provider flow, subscription, in-app purchase, live ad serving, monetisation readiness, advertising compliance, store readiness, deployment, staging, production, provider, or human-acceptance claim"
+    }
+  ],
+  "outOfScopeIntegrations": [
+    {
+      "integrationId": "admob",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "adsense",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "ad-sdk",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "cmp",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "ump",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "att-provider-flow",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "subscriptions",
+      "status": "not-authorised"
+    },
+    {
+      "integrationId": "in-app-purchases",
+      "status": "not-authorised"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "noLiveAdOrMonetisationSdkMayBeIntegrated": true,
+    "adPlacementWithoutConsentAndPrivacyMappingMustFailClosed": true,
+    "noLivePlaceholderBoundaryMustBeExplicit": true,
+    "usf934StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "noExternalServiceCredentialDeploymentOrProviderSetup": true
+  },
+  "proofLadder": {
+    "devLocalFixtureProof": true,
+    "strictJsonParseRequired": true,
+    "appSurfaceValidatorAllRequired": true,
+    "appSurfaceSelftestRequired": true,
+    "repositoryEvidenceValidationRequired": true,
+    "composeRequired": false,
+    "stagingRequired": false
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

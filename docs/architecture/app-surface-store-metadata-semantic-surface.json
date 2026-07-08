@@ -1,0 +1,116 @@
+{
+  "artifactId": "usf.app-surface-store-metadata-semantic-surface",
+  "title": "App-surface store metadata semantic surface",
+  "ownerIssueId": "USF-1029",
+  "lifecycleState": "dev-local-metadata-fixture-implemented",
+  "authorityNotice": "This artefact records the bounded local store metadata semantic surface for USF-1029. It proves local metadata, version authority, release evidence, store asset, privacy input, and mismatch-detection semantics. It does not create App Store setup, Play Store setup, store records, store accounts, app review, store submission, deployment, staging, production, store readiness, or human acceptance.",
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-store-provisioning-semantics.json",
+      "authorityType": "semantic-definition",
+      "description": "Store provisioning and metadata semantics."
+    },
+    {
+      "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "authorityType": "semantic-definition",
+      "description": "Release version and evidence authority consumed by store metadata fixtures."
+    },
+    {
+      "path": "tools/validate-app-surface/fixtures/conforming/007-store-metadata-matches-semantics.json",
+      "authorityType": "validator-fixture",
+      "description": "USF-935-style conforming metadata fixture."
+    },
+    {
+      "path": "tools/validate-app-surface/planted-defects/007-store-metadata-mismatch.json",
+      "authorityType": "validator-planted-defect",
+      "description": "USF-935-style planted defect proving metadata mismatch fails closed."
+    }
+  ],
+  "metadataSurface": {
+    "surfaceId": "store-metadata-local-semantic-fixture",
+    "surfaceKind": "local-metadata-fixture",
+    "implementationPath": "docs/architecture/app-surface-store-metadata-semantic-surface.json",
+    "semanticAuthorityRef": "app-surface-store-provisioning-semantics",
+    "versionAuthorityRef": "release-version-authority-governed",
+    "releaseEvidenceRef": "release-evidence-required-before-submission",
+    "storeAssetRefs": [
+      "store-assets-semantic-placeholder-only"
+    ],
+    "privacyInputRefs": [
+      "privacy-disclosure-required-before-submission"
+    ],
+    "evidenceRefs": [
+      "tools/validate-app-surface/fixtures/conforming/007-store-metadata-matches-semantics.json",
+      "tools/validate-app-surface/planted-defects/007-store-metadata-mismatch.json"
+    ],
+    "semanticSourceRefs": [
+      "docs/architecture/app-surface-store-provisioning-semantics.json",
+      "docs/architecture/app-surface-release-provisioning-semantics.json"
+    ],
+    "matchesCurrentSemantics": true,
+    "localOnly": true,
+    "appStoreRecordCreated": false,
+    "playStoreRecordCreated": false,
+    "storeAccountConfigured": false,
+    "storeSubmissionCreated": false,
+    "appReviewSubmitted": false,
+    "nonClaimBoundary": "local store metadata semantic fixture only; no App Store setup, Play Store setup, store record, store account, app review, store submission, deployment, staging, production, store readiness, or human-acceptance claim"
+  },
+  "outOfScopeStoreActions": [
+    {
+      "actionId": "app-store-record",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "play-store-record",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "store-account-setup",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "store-submission",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "app-review",
+      "status": "not-authorised"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "storeMetadataFixturesMustRemainLocalOnly": true,
+    "metadataMismatchMustFailClosed": true,
+    "noStoreRecordSubmissionOrAccountMayBeCreated": true,
+    "usf935StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "appStoreAndPlayStoreReadinessNonClaimsMustBePreserved": true
+  },
+  "proofLadder": {
+    "devLocalFixtureProof": true,
+    "strictJsonParseRequired": true,
+    "appSurfaceValidatorAllRequired": true,
+    "appSurfaceSelftestRequired": true,
+    "repositoryEvidenceValidationRequired": true,
+    "composeRequired": false,
+    "stagingRequired": false
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false,
+    "appStoreReadiness": false,
+    "playStoreReadiness": false,
+    "storeSubmissionReadiness": false,
+    "appReviewReadiness": false
+  }
+}

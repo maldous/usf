@@ -293,3 +293,51 @@ The bounded local auth/session/dev identity implementation is authorised only fo
 - `tools/validate-app-surface/validate-app-surface.py`
 
 The implementation may create local in-memory dev identity, tenant, role, permission, and session-context registry code and tests over existing semantic app-surface mappings. It must not install packages, configure production identity providers, create live OAuth or OIDC credentials, configure Keycloak, create secure-storage claims, add external auth services, configure deployment, run staging, or claim auth/provider/credential/staging/production/live-provider/compliance/human-acceptance readiness.
+
+## USF-1025 app-surface i18n baseline implementation
+
+USF-1025 authorises the following bounded local i18n baseline implementation paths only:
+
+- `packages/app-surface/src/index.ts`
+- `apps/web/app/page.tsx`
+- `apps/mobile/App.tsx`
+- `docs/architecture/app-surface-i18n-baseline-implementation.json`
+- `tests/packages/app-surface-i18n-baseline-implementation.test.ts`
+
+The implementation may create local translation catalogue and missing-translation fail-closed mappings over existing route, screen, command, query, and USF-937 fixture semantics. It must not install packages, create localisation provider setup, configure deployment, run staging, or claim localisation, internationalisation, store, production, provider, compliance, or human-acceptance readiness.
+
+## USF-1026 app-surface accessibility baseline implementation
+
+USF-1026 authorises the following bounded local accessibility baseline implementation paths only:
+
+- `packages/app-surface/src/index.ts`
+- `apps/web/app/page.tsx`
+- `apps/mobile/App.tsx`
+- `docs/architecture/app-surface-accessibility-baseline-implementation.json`
+- `tests/packages/app-surface-accessibility-baseline-implementation.test.ts`
+
+The implementation may create local accessibility metadata and fail-closed lookup mappings over existing route, screen, command, query, i18n, and USF-938 fixture semantics. It must not install packages, create external audit tooling, run device-lab proof, configure deployment, run staging, or claim accessibility compliance, certification, production, provider, or human-acceptance readiness.
+
+## USF-1027 app-surface notification consent and permission surface
+
+USF-1027 authorises the following bounded local notification consent and permission paths only:
+
+- `packages/app-surface/src/index.ts`
+- `docs/architecture/app-surface-notification-consent-permission-surface.json`
+- `tests/packages/app-surface-notification-consent-permission-surface.test.ts`
+
+The implementation may create local in-app notification consent and permission mappings over existing notification, consent, privacy, i18n, accessibility, and USF-933 fixture semantics. It must not install packages, create push provider setup, create mobile push credentials, create service-worker push setup, configure deployment, run staging, or claim notification, push, privacy-compliance, production, provider, store, or human-acceptance readiness.
+
+## USF-1028 through USF-1030 local negative and fixture-only surfaces
+
+USF-1028 through USF-1030 authorise the following bounded local negative/fixture-only paths only:
+
+- `docs/architecture/app-surface-ads-monetisation-placeholder-surface.json`
+- `docs/architecture/app-surface-store-metadata-semantic-surface.json`
+- `docs/architecture/app-surface-deployment-evidence-pinning-surface.json`
+- `tests/packages/app-surface-local-negative-surfaces.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+USF-1028 records a no-live ads and monetisation placeholder boundary over existing USF-934 fixture semantics. USF-1029 records local store metadata mismatch detection over existing USF-935 fixture semantics. USF-1030 records local deployment evidence pinning over existing USF-940 fixture semantics.
+
+This batch must not install packages, create runtime provider code, create credentials, integrate ad SDKs, configure CMP or UMP, configure App Store or Play Store records, submit store metadata, deploy anything, create staging proof, configure CDN or provider setup, create production evidence, or claim ads, monetisation, store, deployment, staging, production, provider, compliance, or human-acceptance readiness.
