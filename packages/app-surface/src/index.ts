@@ -386,3 +386,327 @@ export function assertLocalInMemoryAppSurfaceRuntime(definition: LocalAppSurface
     throw new Error(`local-in-memory-app-surface-runtime-invalid:${validation.findings.join(",")}`);
   }
 }
+
+export type LocalCommandFormMapping = {
+  formId: string;
+  componentFixtureRef: string;
+  commandRef: string;
+  capabilityId: string;
+  permissionRefs: string[];
+  tenantBoundaryRef: string;
+  validationRefs: string[];
+  errorRefs: string[];
+  auditEventRefs: string[];
+  idempotencyBoundaryRef: string;
+  semanticSourceRefs: string[];
+  proofRefs: string[];
+  uiOnlyBusinessRulesAllowed: false;
+  rejectedUiOnlyBusinessRuleInputs: string[];
+  nonClaimBoundary: string;
+};
+
+export type LocalCommandFormRegistry = {
+  artifactId: string;
+  ownerIssueId: string;
+  providerMode: LocalAppSurfaceProviderMode;
+  environment: LocalAppSurfaceEnvironment;
+  commands: LocalCommandFormMapping[];
+  unknownCommandFormPolicy: "fail-closed";
+  externalSubmissionAllowed: false;
+  serverMutationProviderAllowed: false;
+  nonClaims: Record<string, boolean>;
+};
+
+export type LocalCommandFormSemanticAuthority = {
+  commandRefs: ReadonlySet<string>;
+  capabilityIds: ReadonlySet<string>;
+  permissionIds: ReadonlySet<string>;
+  tenantBoundaryIds: ReadonlySet<string>;
+  validationIds: ReadonlySet<string>;
+  errorIds: ReadonlySet<string>;
+  auditEventIds: ReadonlySet<string>;
+  componentFixtureIds: ReadonlySet<string>;
+  idempotencyBoundaryRefs: ReadonlySet<string>;
+  semanticSourceRefs: ReadonlySet<string>;
+  proofRefs: ReadonlySet<string>;
+};
+
+export type LocalCommandFormValidationResult = {
+  ok: boolean;
+  findings: string[];
+};
+
+export type LocalCommandFormExerciseOutcome = {
+  formId: string;
+  commandRef: string;
+  capabilityId: string;
+  tenantBoundaryRef: string;
+  permissionRefsChecked: string[];
+  validationRefsChecked: string[];
+  errorRefsAvailable: string[];
+  auditEventRefsEmitted: string[];
+  idempotencyBoundaryRef: string;
+  providerMode: LocalAppSurfaceProviderMode;
+  externalSubmissionUsed: false;
+  serverMutationProviderUsed: false;
+  uiOnlyBusinessRulesUsed: false;
+  stagingUsed: false;
+  deploymentUsed: false;
+};
+
+const REQUIRED_COMMAND_FORM_STRING_FIELDS = [
+  "formId",
+  "componentFixtureRef",
+  "commandRef",
+  "capabilityId",
+  "tenantBoundaryRef",
+  "idempotencyBoundaryRef",
+  "nonClaimBoundary",
+] as const;
+
+const REQUIRED_COMMAND_FORM_ARRAY_FIELDS = [
+  "permissionRefs",
+  "validationRefs",
+  "errorRefs",
+  "auditEventRefs",
+  "semanticSourceRefs",
+  "proofRefs",
+  "rejectedUiOnlyBusinessRuleInputs",
+] as const;
+
+const REQUIRED_COMMAND_FORM_NON_CLAIMS = [
+  "commandExecutionReadiness",
+  "productionCommandReadiness",
+  "providerReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "productionReadiness",
+  "liveProviderReadiness",
+  "complianceReadiness",
+  "humanAcceptance",
+] as const;
+
+export const LOCAL_COMMAND_FORM_REGISTRY = {
+  artifactId: "usf.app-surface-command-form-registry",
+  ownerIssueId: "USF-1021",
+  providerMode: "in-memory-only",
+  environment: "dev-local",
+  unknownCommandFormPolicy: "fail-closed",
+  externalSubmissionAllowed: false,
+  serverMutationProviderAllowed: false,
+  commands: [
+    {
+      formId: "command-form-api-key-onboarding",
+      componentFixtureRef: "component-fixture-api-key-onboarding",
+      commandRef: "command.onboardApiKey",
+      capabilityId: "graphql-federation-generated-client-disposition",
+      permissionRefs: ["developer:key:onboard"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      validationRefs: [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model",
+      ],
+      errorRefs: ["typed-error-problem-details-model", "safe-denial:invalid-label"],
+      auditEventRefs: ["client-audit-event-emission", "graphql.onboardApiKey"],
+      idempotencyBoundaryRef: "idempotency-boundary-required-for-command",
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "docs/architecture/shared-client-interaction-contract-semantics.json",
+        "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json",
+      ],
+      proofRefs: [
+        "tests/packages/app-surface-command-form-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      uiOnlyBusinessRulesAllowed: false,
+      rejectedUiOnlyBusinessRuleInputs: [
+        "ui-only-required-field",
+        "presentation-only-permission-check",
+        "client-only-business-state-transition",
+      ],
+      nonClaimBoundary: "local command form mapping only; no server mutation provider, external form submission, production command execution, deployment, staging, live-provider, compliance, or human-acceptance readiness claim",
+    },
+  ],
+  nonClaims: {
+    commandExecutionReadiness: false,
+    productionCommandReadiness: false,
+    providerReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    productionReadiness: false,
+    liveProviderReadiness: false,
+    complianceReadiness: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalCommandFormRegistry;
+
+function validateCommandFormNonClaims(nonClaims: unknown): string[] {
+  if (!isRecord(nonClaims)) {
+    return ["command-form-registry:missing-non-claims"];
+  }
+  const findings: string[] = [];
+  for (const claim of REQUIRED_COMMAND_FORM_NON_CLAIMS) {
+    if (!(claim in nonClaims)) {
+      findings.push(`command-form-registry:missing-non-claim:${claim}`);
+    } else if (nonClaims[claim] !== false) {
+      findings.push(`command-form-registry:overclaimed:${claim}`);
+    }
+  }
+  for (const [claim, value] of Object.entries(nonClaims)) {
+    if (value !== false) {
+      findings.push(`command-form-registry:overclaimed:${claim}`);
+    }
+  }
+  return findings;
+}
+
+function validateCommandFormArrayAuthority(
+  findings: string[],
+  formId: string,
+  refs: unknown,
+  authorityIds: ReadonlySet<string>,
+  findingPrefix: string,
+): void {
+  const values = hasNonEmptyStringArray(refs) ? refs : [];
+  for (const ref of values) {
+    if (!authorityIds.has(ref)) {
+      findings.push(`${formId}:${findingPrefix}:${ref}`);
+    }
+  }
+}
+
+function validateCommandFormStringAuthority(
+  findings: string[],
+  formId: string,
+  ref: unknown,
+  authorityIds: ReadonlySet<string>,
+  findingPrefix: string,
+): void {
+  if (!isNonEmptyString(ref) || !authorityIds.has(ref)) {
+    findings.push(`${formId}:${findingPrefix}:${isNonEmptyString(ref) ? ref : "missing"}`);
+  }
+}
+
+function validateCommandForm(
+  commandForm: LocalCommandFormMapping | unknown,
+  index: number,
+  semanticAuthority?: LocalCommandFormSemanticAuthority,
+): string[] {
+  if (!isRecord(commandForm)) {
+    return [`command-form-${index}:missing`];
+  }
+  const formId = isNonEmptyString(commandForm.formId) ? commandForm.formId : `command-form-${index}`;
+  const findings: string[] = [];
+  for (const field of REQUIRED_COMMAND_FORM_STRING_FIELDS) {
+    if (!isNonEmptyString(commandForm[field])) {
+      findings.push(`${formId}:missing-${field}`);
+    }
+  }
+  for (const field of REQUIRED_COMMAND_FORM_ARRAY_FIELDS) {
+    if (!hasNonEmptyStringArray(commandForm[field])) {
+      findings.push(`${formId}:missing-${field}`);
+    }
+  }
+  if (commandForm.uiOnlyBusinessRulesAllowed !== false) {
+    findings.push(`${formId}:ui-only-business-rules-not-authorised`);
+  }
+  for (const key of FORBIDDEN_EXTERNAL_KEYS) {
+    if (key in commandForm) {
+      findings.push(`${formId}:${key}-not-authorised`);
+    }
+  }
+  if (semanticAuthority) {
+    validateCommandFormStringAuthority(findings, formId, commandForm.commandRef, semanticAuthority.commandRefs, "command-authority-missing");
+    validateCommandFormStringAuthority(findings, formId, commandForm.capabilityId, semanticAuthority.capabilityIds, "capability-authority-missing");
+    validateCommandFormStringAuthority(findings, formId, commandForm.tenantBoundaryRef, semanticAuthority.tenantBoundaryIds, "tenant-authority-missing");
+    validateCommandFormStringAuthority(findings, formId, commandForm.componentFixtureRef, semanticAuthority.componentFixtureIds, "component-fixture-authority-missing");
+    validateCommandFormStringAuthority(findings, formId, commandForm.idempotencyBoundaryRef, semanticAuthority.idempotencyBoundaryRefs, "idempotency-authority-missing");
+    validateCommandFormArrayAuthority(findings, formId, commandForm.permissionRefs, semanticAuthority.permissionIds, "permission-authority-missing");
+    validateCommandFormArrayAuthority(findings, formId, commandForm.validationRefs, semanticAuthority.validationIds, "validation-authority-missing");
+    validateCommandFormArrayAuthority(findings, formId, commandForm.errorRefs, semanticAuthority.errorIds, "error-authority-missing");
+    validateCommandFormArrayAuthority(findings, formId, commandForm.auditEventRefs, semanticAuthority.auditEventIds, "audit-authority-missing");
+    validateCommandFormArrayAuthority(findings, formId, commandForm.semanticSourceRefs, semanticAuthority.semanticSourceRefs, "semantic-source-authority-missing");
+    validateCommandFormArrayAuthority(findings, formId, commandForm.proofRefs, semanticAuthority.proofRefs, "proof-authority-missing");
+  }
+  return findings;
+}
+
+export function validateLocalCommandFormRegistry(
+  registry: LocalCommandFormRegistry | unknown,
+  semanticAuthority?: LocalCommandFormSemanticAuthority,
+): LocalCommandFormValidationResult {
+  if (!isRecord(registry)) {
+    return { ok: false, findings: ["command-form-registry:missing"] };
+  }
+  const findings: string[] = [];
+  if (registry.ownerIssueId !== "USF-1021") {
+    findings.push("command-form-registry:unexpected-owner-issue");
+  }
+  if (registry.providerMode !== "in-memory-only") {
+    findings.push("command-form-registry:provider-mode-must-be-in-memory-only");
+  }
+  if (registry.environment !== "dev-local") {
+    findings.push("command-form-registry:environment-must-be-dev-local");
+  }
+  if (registry.unknownCommandFormPolicy !== "fail-closed") {
+    findings.push("command-form-registry:unknown-command-form-policy-must-fail-closed");
+  }
+  if (registry.externalSubmissionAllowed !== false) {
+    findings.push("command-form-registry:external-submission-not-authorised");
+  }
+  if (registry.serverMutationProviderAllowed !== false) {
+    findings.push("command-form-registry:server-mutation-provider-not-authorised");
+  }
+  if (!Array.isArray(registry.commands) || registry.commands.length === 0) {
+    findings.push("command-form-registry:missing-commands");
+  } else {
+    const seenFormIds = new Set<string>();
+    registry.commands.forEach((commandForm, index) => {
+      findings.push(...validateCommandForm(commandForm, index, semanticAuthority));
+      if (isRecord(commandForm) && isNonEmptyString(commandForm.formId)) {
+        if (seenFormIds.has(commandForm.formId)) {
+          findings.push(`${commandForm.formId}:duplicate-form-id`);
+        }
+        seenFormIds.add(commandForm.formId);
+      }
+    });
+  }
+  findings.push(...validateCommandFormNonClaims(registry.nonClaims));
+  return { ok: findings.length === 0, findings };
+}
+
+export function getLocalCommandFormById(formId: string): LocalCommandFormMapping {
+  const commandForm = LOCAL_COMMAND_FORM_REGISTRY.commands.find((candidate) => candidate.formId === formId);
+  if (!commandForm) {
+    throw new Error(`command-form-unknown:${formId}`);
+  }
+  return commandForm;
+}
+
+export function exerciseLocalCommandForm(
+  commandForm: LocalCommandFormMapping,
+  semanticAuthority?: LocalCommandFormSemanticAuthority,
+): LocalCommandFormExerciseOutcome {
+  const validation = validateCommandForm(commandForm, 0, semanticAuthority);
+  if (validation.length > 0) {
+    throw new Error(`command-form-invalid:${validation.join(",")}`);
+  }
+  return {
+    formId: commandForm.formId,
+    commandRef: commandForm.commandRef,
+    capabilityId: commandForm.capabilityId,
+    tenantBoundaryRef: commandForm.tenantBoundaryRef,
+    permissionRefsChecked: [...commandForm.permissionRefs],
+    validationRefsChecked: [...commandForm.validationRefs],
+    errorRefsAvailable: [...commandForm.errorRefs],
+    auditEventRefsEmitted: [...commandForm.auditEventRefs],
+    idempotencyBoundaryRef: commandForm.idempotencyBoundaryRef,
+    providerMode: "in-memory-only",
+    externalSubmissionUsed: false,
+    serverMutationProviderUsed: false,
+    uiOnlyBusinessRulesUsed: false,
+    stagingUsed: false,
+    deploymentUsed: false,
+  };
+}

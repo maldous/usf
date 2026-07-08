@@ -245,3 +245,16 @@ USF-1020 authorises the following bounded local route-capability implementation 
 The route-capability implementation consolidates the existing bounded local web route registry and mobile screen registry from USF-1017 and USF-1018. It proves that the implemented targets map to governed capability ownership, permission references, tenant boundaries, proof references, and fail-closed unknown-target behaviour.
 
 USF-1020 does not add package dependencies, create new external provider integrations, introduce credentials, configure deployment, run staging proof, expose public routes, or claim product UI readiness, web readiness, mobile readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, store readiness, compliance readiness, monetisation readiness, or human acceptance.
+
+## USF-1021 app-surface command and form implementation
+
+USF-1021 authorises the following bounded local command/form implementation paths only:
+
+- `packages/app-surface/src/index.ts`
+- `docs/architecture/app-surface-command-form-implementation.json`
+- `tests/packages/app-surface-command-form-implementation.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+The command/form implementation maps the local API-key onboarding command form to governed command, validation, permission, error, audit, idempotency, tenant, component-fixture, semantic-source, and proof references. Unknown command forms must fail closed, UI-only business rules are not authorised, and the validator must guard the real repository artefact.
+
+USF-1021 does not add package dependencies, create server mutation providers, submit forms to external services, introduce credentials, configure deployment, run staging proof, execute production commands, or claim product UI readiness, command execution readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, store readiness, compliance readiness, monetisation readiness, or human acceptance.

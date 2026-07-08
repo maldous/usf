@@ -383,6 +383,14 @@
       {
         "path": "tests/apps/app-surface-route-capability-implementation.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-command-form-implementation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-command-form-implementation.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -516,10 +524,8 @@
         "packages/test",
         "packages/ui"
       ],
-      "absentImplementationDirectories": [
-        "apps/mobile"
-      ],
-      "currentConclusion": "The repository now contains bounded shared-client, UI, local in-memory runtime, and local Next.js web scaffold package boundaries. Mobile implementation remains absent."
+      "absentImplementationDirectories": [],
+      "currentConclusion": "The repository now contains bounded shared-client, UI, local in-memory runtime, local Next.js web scaffold, and local Expo mobile scaffold package boundaries."
     },
     "generatedClientState": {
       "semanticAndContractArtefactsExist": true,
@@ -534,9 +540,10 @@
     "uiRuntimeState": {
       "tsxOrJsxAppComponentsFound": true,
       "nextWebScaffoldFound": true,
-      "expoMobileScaffoldFound": false,
+      "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
-      "currentConclusion": "A bounded local Next.js web scaffold and local in-memory app-surface runtime now exist for route and component-fixture proof. No Expo mobile scaffold exists."
+      "commandFormRegistryFound": true,
+      "currentConclusion": "Bounded local Next.js web and Expo mobile scaffolds, local in-memory app-surface runtime, route capability mapping, and command form registry now exist for dev-local proof."
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -814,7 +821,18 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-command-proof",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "repositoryArtefact": "docs/architecture/app-surface-command-form-implementation.json",
+      "currentRepositoryStatus": "bounded-local-command-form-mapping-implemented",
+      "implementedCommands": [
+        "command-form-api-key-onboarding"
+      ],
+      "runtimeCodeCreatedByIssue": true,
+      "runtimePackage": "packages/app-surface/src/index.ts",
+      "validatorGuardAdded": "tools/validate-app-surface/validate-app-surface.py",
+      "unitTestArtefact": "tests/packages/app-surface-command-form-implementation.test.ts",
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1022",
@@ -1183,12 +1201,12 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Initial broader route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, and local in-memory component-fixture runtime are not yet implemented.",
+    "Initial broader query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, local in-memory component-fixture runtime, route capability mapping, and command form mapping are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, and package proof are now repository-owned, but route, command, query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, and command form mapping are now repository-owned, but query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }

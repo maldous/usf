@@ -26,6 +26,11 @@ MAKEFILE = ROOT / "Makefile"
 ROUTE_CAPABILITY_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-route-capability-implementation.json"
 WEB_SCAFFOLD = ROOT / "docs/architecture/app-surface-web-bounded-local-scaffold.json"
 MOBILE_SCAFFOLD = ROOT / "docs/architecture/app-surface-mobile-bounded-local-scaffold.json"
+LOCAL_IN_MEMORY_RUNTIME = ROOT / "docs/architecture/app-surface-local-in-memory-runtime.json"
+SHARED_CLIENT_CONSUMPTION_PATH = ROOT / "docs/architecture/app-surface-shared-client-consumption-path.json"
+COMMAND_FORM_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-command-form-implementation.json"
+USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
+USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF930_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/002-route-with-capability-mapping.json"
 USF930_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/002-route-without-capability-mapping.json"
 
@@ -627,6 +632,222 @@ def validate_route_capability_implementation() -> list[dict[str, str]]:
     return failures
 
 
+def ids_from_semantic_inputs(runtime: dict[str, Any], collection: str) -> set[str]:
+    semantic_inputs = runtime.get("semanticInputs", {})
+    values = semantic_inputs.get(collection, []) if isinstance(semantic_inputs, dict) else []
+    return {
+        str(item.get("id"))
+        for item in values
+        if isinstance(item, dict) and isinstance(item.get("id"), str) and item["id"].strip()
+    }
+
+
+def extend_authority_from_mapping(authority: dict[str, set[str]], mapping: dict[str, Any]) -> None:
+    if isinstance(mapping.get("commandOrQueryOrWorkflowOrEventId"), str):
+        authority["commandRefs"].add(mapping["commandOrQueryOrWorkflowOrEventId"])
+    if isinstance(mapping.get("capabilityId"), str):
+        authority["capabilityIds"].add(mapping["capabilityId"])
+    for source_field, authority_key in [
+        ("permissionRefs", "permissionRefs"),
+        ("validationRefs", "validationRefs"),
+        ("errorRefs", "errorRefs"),
+        ("auditEventRefs", "auditEventRefs"),
+    ]:
+        values = mapping.get(source_field, [])
+        if isinstance(values, list):
+            authority[authority_key].update(item for item in values if isinstance(item, str) and item.strip())
+
+
+def path_ref_exists(path_ref: Any) -> bool:
+    if not isinstance(path_ref, str) or not path_ref.strip():
+        return False
+    path = path_ref.split("#", 1)[0]
+    if path.startswith(("docs/", "spec/", "tools/", "tests/", "apps/", "packages/", "evidence/")):
+        return path_exists(path)
+    return True
+
+
+def validate_command_form_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-002"
+    issue_id = "USF-1021"
+    subject = rel(COMMAND_FORM_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not COMMAND_FORM_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "command form implementation artefact is missing", issue_id)]
+    data = load_json(COMMAND_FORM_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "command form implementation artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, subject, "artefact ownerIssueId must be USF-1021", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, subject, "artefact lifecycleState must be bounded-local-implemented", issue_id))
+    for path in data.get("authorityInputs", []):
+        if not isinstance(path, str) or not path_exists(path):
+            failures.append(finding(rule_id, subject, f"authority input does not exist: {path}", issue_id))
+    guard = data.get("validationGuard", {})
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "commandsMustMapToSemanticCommandAuthority",
+        "validationPermissionErrorAuditMappingsMustExist",
+        "idempotencyBoundaryMustExist",
+        "tenantBoundaryMustExist",
+        "uiOnlyBusinessRulesMustBeRejected",
+        "unknownCommandFormsMustFailClosed",
+        "usf931StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "externalSubmissionMustRemainForbidden",
+        "serverMutationProviderMustRemainForbidden",
+    ]
+    if not isinstance(guard, dict):
+        failures.append(finding(rule_id, subject, "validationGuard must be an object", issue_id))
+    else:
+        for flag in required_guard_flags:
+            if guard.get(flag) is not True:
+                failures.append(finding(rule_id, f"{subject}.validationGuard.{flag}", "validation guard flag must be true", issue_id))
+
+    runtime = load_json(LOCAL_IN_MEMORY_RUNTIME) if LOCAL_IN_MEMORY_RUNTIME.exists() else {}
+    shared_client = load_json(SHARED_CLIENT_CONSUMPTION_PATH) if SHARED_CLIENT_CONSUMPTION_PATH.exists() else {}
+    if not isinstance(runtime, dict):
+        runtime = {}
+    if not isinstance(shared_client, dict):
+        shared_client = {}
+    authority: dict[str, set[str]] = {
+        "commandRefs": ids_from_semantic_inputs(runtime, "commands"),
+        "capabilityIds": ids_from_semantic_inputs(runtime, "capabilities"),
+        "permissionRefs": ids_from_semantic_inputs(runtime, "permissions"),
+        "tenantBoundaryRefs": ids_from_semantic_inputs(runtime, "tenantContexts"),
+        "validationRefs": ids_from_semantic_inputs(runtime, "validationRules"),
+        "errorRefs": ids_from_semantic_inputs(runtime, "errorRefs"),
+        "auditEventRefs": ids_from_semantic_inputs(runtime, "auditEvents"),
+    }
+    shared_mappings = [
+        item
+        for item in shared_client.get("mappings", [])
+        if isinstance(item, dict) and item.get("behaviourClass") == "commands"
+    ]
+    for mapping in shared_mappings:
+        extend_authority_from_mapping(authority, mapping)
+    shared_by_command = {
+        mapping.get("commandOrQueryOrWorkflowOrEventId"): mapping
+        for mapping in shared_mappings
+        if isinstance(mapping.get("commandOrQueryOrWorkflowOrEventId"), str)
+    }
+    component_fixtures = runtime.get("componentFixtures", []) if isinstance(runtime.get("componentFixtures", []), list) else []
+    fixtures_by_id = {
+        fixture.get("fixtureId"): fixture
+        for fixture in component_fixtures
+        if isinstance(fixture, dict) and isinstance(fixture.get("fixtureId"), str)
+    }
+    conforming = load_json(USF931_CONFORMING) if USF931_CONFORMING.exists() else {}
+    planted = load_json(USF931_PLANTED) if USF931_PLANTED.exists() else {}
+    conforming_command = conforming.get("command", {}) if isinstance(conforming, dict) else {}
+    idempotency_refs = (
+        {conforming_command.get("idempotencyBoundaryRef")}
+        if isinstance(conforming_command, dict) and isinstance(conforming_command.get("idempotencyBoundaryRef"), str)
+        else set()
+    )
+    required_string_fields = [
+        "formId",
+        "componentFixtureRef",
+        "commandRef",
+        "capabilityId",
+        "tenantBoundaryRef",
+        "idempotencyBoundaryRef",
+        "nonClaimBoundary",
+    ]
+    required_array_fields = [
+        "permissionRefs",
+        "validationRefs",
+        "errorRefs",
+        "auditEventRefs",
+        "semanticSourceRefs",
+        "proofRefs",
+        "rejectedUiOnlyBusinessRuleInputs",
+    ]
+    commands = data.get("implementedCommands", [])
+    if not isinstance(commands, list) or not commands:
+        failures.append(finding(rule_id, subject, "implementedCommands must be a non-empty array", issue_id))
+        commands = []
+    for index, command in enumerate(commands):
+        if not isinstance(command, dict):
+            failures.append(finding(rule_id, f"{subject}.implementedCommands.{index}", "implemented command must be an object", issue_id))
+            continue
+        form_id = command.get("formId") if isinstance(command.get("formId"), str) and command["formId"].strip() else f"implementedCommands.{index}"
+        command_subject = f"{subject}.implementedCommands.{form_id}"
+        for field in required_string_fields:
+            if not isinstance(command.get(field), str) or not command[field].strip():
+                failures.append(finding(rule_id, command_subject, f"missing {field}", issue_id))
+        for field in required_array_fields:
+            if not has_nonempty_string_array(command.get(field)):
+                failures.append(finding(rule_id, command_subject, f"missing {field}", issue_id))
+        for field in ["semanticSourceRefs", "proofRefs"]:
+            values = command.get(field, [])
+            if isinstance(values, list):
+                for path_ref in values:
+                    if not path_ref_exists(path_ref):
+                        failures.append(finding(rule_id, command_subject, f"{field} path does not exist: {path_ref}", issue_id))
+        if command.get("uiOnlyBusinessRulesAllowed") is not False:
+            failures.append(finding(rule_id, command_subject, "uiOnlyBusinessRulesAllowed must be false", issue_id))
+        for field, authority_key in [
+            ("commandRef", "commandRefs"),
+            ("capabilityId", "capabilityIds"),
+            ("tenantBoundaryRef", "tenantBoundaryRefs"),
+        ]:
+            value = command.get(field)
+            if not isinstance(value, str) or value not in authority[authority_key]:
+                failures.append(finding(rule_id, command_subject, f"{field} lacks repository authority", issue_id))
+        for field, authority_key in [
+            ("permissionRefs", "permissionRefs"),
+            ("validationRefs", "validationRefs"),
+            ("errorRefs", "errorRefs"),
+            ("auditEventRefs", "auditEventRefs"),
+        ]:
+            values = command.get(field, [])
+            if isinstance(values, list):
+                for value in values:
+                    if not isinstance(value, str) or value not in authority[authority_key]:
+                        failures.append(finding(rule_id, command_subject, f"{field} lacks repository authority: {value}", issue_id))
+        if command.get("idempotencyBoundaryRef") not in idempotency_refs:
+            failures.append(finding(rule_id, command_subject, "idempotencyBoundaryRef must map to USF-931-style fixture authority", issue_id))
+        fixture = fixtures_by_id.get(command.get("componentFixtureRef"))
+        if not isinstance(fixture, dict):
+            failures.append(finding(rule_id, command_subject, "componentFixtureRef must map to local runtime fixture authority", issue_id))
+        else:
+            fixture_commands = fixture.get("commandRefs", [])
+            if command.get("commandRef") not in fixture_commands:
+                failures.append(finding(rule_id, command_subject, "component fixture must reference the commandRef", issue_id))
+        shared_mapping = shared_by_command.get(command.get("commandRef"))
+        if not isinstance(shared_mapping, dict):
+            failures.append(finding(rule_id, command_subject, "commandRef must map to shared-client command authority", issue_id))
+        else:
+            for field in ["capabilityId", "permissionRefs", "validationRefs", "errorRefs", "auditEventRefs"]:
+                if command.get(field) != shared_mapping.get(field):
+                    failures.append(finding(rule_id, command_subject, f"{field} must match shared-client command authority", issue_id))
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    observed_out_of_scope = {
+        item.get("surface"): item
+        for item in out_of_scope
+        if isinstance(item, dict)
+    } if isinstance(out_of_scope, list) else {}
+    required_out_of_scope = {
+        "server-mutation-provider": {"status": "not-authorised"},
+        "external-form-submission": {"status": "not-authorised"},
+        "production-command-execution": {"status": "not-authorised"},
+        "query-list-detail": {"ownerIssueId": "USF-1022", "status": "owned-by-later-issue"},
+        "state-cache-query-client": {"ownerIssueId": "USF-1023", "status": "owned-by-later-issue"},
+    }
+    for surface, expected in required_out_of_scope.items():
+        item = observed_out_of_scope.get(surface)
+        if not isinstance(item, dict) or any(item.get(key) != value for key, value in expected.items()):
+            failures.append(finding(rule_id, subject, f"{surface} out-of-scope boundary is missing or incorrect", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-003":
+        failures.append(finding(rule_id, rel(USF931_CONFORMING), "USF-931 conforming fixture must remain wired", issue_id))
+    if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-003":
+        failures.append(finding(rule_id, rel(USF931_PLANTED), "USF-931 planted fixture must remain wired", issue_id))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -644,6 +865,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_package_scripts())
     failures.extend(validate_makefile_wiring())
     failures.extend(validate_route_capability_implementation())
+    failures.extend(validate_command_form_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -682,6 +904,10 @@ def validate_selftest() -> list[dict[str, str]]:
 
 
 def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
+    real_implementation_paths = [
+        ROUTE_CAPABILITY_IMPLEMENTATION,
+        COMMAND_FORM_IMPLEMENTATION,
+    ]
     return {
         "mode": mode,
         "status": "fail" if findings else "pass",
@@ -689,7 +915,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
             "ruleCount": len(TARGETS),
             "conformingFixtureCount": len(list(CONFORMING.glob("*.json"))),
             "plantedDefectFixtureCount": len(list(PLANTED.glob("*.json"))),
-            "realImplementationArtifactCount": 1 if ROUTE_CAPABILITY_IMPLEMENTATION.exists() else 0,
+            "realImplementationArtifactCount": sum(1 for path in real_implementation_paths if path.exists()),
             "findingCount": len(findings),
         },
         "findings": findings,
