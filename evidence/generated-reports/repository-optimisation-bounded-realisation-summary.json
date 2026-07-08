@@ -1,7 +1,7 @@
 {
   "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
   "authorityLevel": "generated-report",
-  "description": "Generated summary connecting USF-996 to bounded local evidence for USF-997 through USF-1001 and later-work issue USF-1007.",
+  "description": "Generated summary connecting USF-996 to bounded local evidence for USF-997 through USF-1001 and bounded non-local option evaluation for USF-1007.",
   "evidenceRefs": [
     "tools/repository-optimisation/realise-bounded-optimisation.py"
   ],
@@ -14,7 +14,7 @@
         "implemented-issue:USF-999",
         "implemented-issue:USF-1000",
         "implemented-issue:USF-1001",
-        "later-issue:USF-1007",
+        "implemented-issue:USF-1007",
         "missing-work-represented-by-child-issues:true",
         "before-after-evidence-recorded:true",
         "validator-equivalence-required:true",
@@ -27,9 +27,10 @@
         "generated-report:path-inventory:evidence/generated-reports/repository-optimisation-path-inventory-baseline.json",
         "generated-report:affected-run:evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
         "generated-report:screenshot-retention:evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json",
-        "generated-report:compose-timing:evidence/generated-reports/repository-optimisation-compose-timing-baseline.json"
+        "generated-report:compose-timing:evidence/generated-reports/repository-optimisation-compose-timing-baseline.json",
+        "generated-report:non-local-options:evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json"
       ],
-      "message": "Bounded local optimisation evidence is generated for USF-997 through USF-1001; USF-1007 tracks later non-local option evaluation.",
+      "message": "Bounded local optimisation evidence is generated for USF-997 through USF-1001; USF-1007 evaluates non-local optimisation options without adoption.",
       "ruleId": "USF-OPT-SUMMARY-001",
       "severity": "info",
       "subject": "bounded-local-realisation"

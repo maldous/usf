@@ -11,6 +11,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 TRANCHE = ROOT / "docs/architecture/repository-optimisation-local-realisation-tranche.json"
+NON_LOCAL_EVALUATION = ROOT / "docs/architecture/repository-non-local-optimisation-option-evaluation.json"
 SEMANTICS = ROOT / "docs/architecture/repository-optimisation-realisation-semantics.json"
 LINEAR_POLICY = ROOT / "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json"
 LINEAR_AUDIT = ROOT / "docs/architecture/linear-repository-delivery-audit.json"
@@ -22,10 +23,11 @@ REPORTS = {
     "USF-999": ROOT / "evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
     "USF-1000": ROOT / "evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json",
     "USF-1001": ROOT / "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json",
+    "USF-1007": ROOT / "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
     "USF-996": ROOT / "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json",
 }
 
-REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001"}
+REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001", "USF-1007"}
 REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006", "USF-1008"}
 REQUIRED_REPORT_REFS = {
     "USF-997": {
@@ -71,10 +73,30 @@ REQUIRED_REPORT_REFS = {
         "compose-config-exit-code:0",
         "compose-startup-wait-exit-code:0",
         "compose-teardown-exit-code:0",
-        "testcontainers:considered-not-adopted-current-tranche",
-        "remote-cache:considered-not-adopted-current-tranche",
-        "task-graph-tooling:considered-not-adopted-current-tranche",
-        "non-local-options-later-issue:USF-1007",
+        "testcontainers:evaluated-not-adopted",
+        "remote-cache:evaluated-not-adopted",
+        "task-graph-tooling:evaluated-not-adopted",
+        "non-local-options-evaluation-issue:USF-1007",
+    },
+    "USF-1007": {
+        "issue:USF-1007",
+        "option-count:3",
+        "missing-option-count:0",
+        "non-local-options-adopted:false",
+        "provider-environment-proof-nonclaims-preserved:true",
+        "future-adoption-issue-required:true",
+        "testcontainers-comparison-criteria:defined",
+        "remote-cache-comparison-criteria:defined",
+        "task-graph-tooling-comparison-criteria:defined",
+        "testcontainers-evidence-requirements:defined",
+        "remote-cache-evidence-requirements:defined",
+        "task-graph-tooling-evidence-requirements:defined",
+        "adoption-state:testcontainers=evaluated-not-adopted",
+        "adoption-state:remote-cache=evaluated-not-adopted",
+        "adoption-state:task-graph-tooling=evaluated-not-adopted",
+        "no-external-provider-setup:true",
+        "no-credential-persistence:true",
+        "no-readiness-claim:true",
     },
     "USF-996": {
         "missing-work-represented-by-child-issues:true",
@@ -128,6 +150,7 @@ def refs(report: dict[str, Any]) -> set[str]:
 
 
 def check_reports(reports: dict[str, dict[str, Any]] | None = None) -> list[dict[str, str]]:
+
     findings: list[dict[str, str]] = []
     loaded: dict[str, dict[str, Any]] = reports or {}
     for issue_id, path in REPORTS.items():
@@ -154,10 +177,10 @@ def check_reports(reports: dict[str, dict[str, Any]] | None = None) -> list[dict
     compose_refs = refs(compose)
     required_compose_refs = {
         "compose-phase-split:config,port,startup-wait,teardown",
-        "testcontainers:considered-not-adopted-current-tranche",
-        "remote-cache:considered-not-adopted-current-tranche",
-        "task-graph-tooling:considered-not-adopted-current-tranche",
-        "non-local-options-later-issue:USF-1007",
+        "testcontainers:evaluated-not-adopted",
+        "remote-cache:evaluated-not-adopted",
+        "task-graph-tooling:evaluated-not-adopted",
+        "non-local-options-evaluation-issue:USF-1007",
     }
     missing_compose_refs = required_compose_refs - compose_refs
     if missing_compose_refs:
@@ -171,6 +194,7 @@ def check_repository_artifacts(
     linear_policy: dict[str, Any] | None = None,
     linear_audit: dict[str, Any] | None = None,
     package: dict[str, Any] | None = None,
+    non_local_evaluation: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     tranche_data = tranche or load_json(TRANCHE)
@@ -178,6 +202,7 @@ def check_repository_artifacts(
     policy_data = linear_policy or load_json(LINEAR_POLICY)
     audit_data = linear_audit or load_json(LINEAR_AUDIT)
     package_data = package or load_json(PACKAGE)
+    nonlocal_data = non_local_evaluation or load_json(NON_LOCAL_EVALUATION)
 
     implemented = issue_ids(tranche_data.get("implementedInThisTranche", []))
     missing = REQUIRED_IMPLEMENTED - implemented
@@ -187,8 +212,10 @@ def check_repository_artifacts(
     missing_reports = REQUIRED_IMPLEMENTED - reports
     if missing_reports:
         findings.append(finding("USF-OPT-004", rel(TRANCHE), f"missing bounded evidence report mappings: {', '.join(sorted(missing_reports))}"))
-    if "USF-1007" not in issue_ids(tranche_data.get("linearIssuesCreated", [])) and "USF-1007" not in set(tranche_data.get("laterWorkIssueIds", [])):
-        findings.append(finding("USF-OPT-005", rel(TRANCHE), "USF-1007 must track non-local optimisation options for later"))
+    if "USF-1007" not in implemented:
+        findings.append(finding("USF-OPT-005", rel(TRANCHE), "USF-1007 must be implemented as bounded non-local option evaluation"))
+    if "USF-1007" in set(tranche_data.get("laterWorkIssueIds", [])):
+        findings.append(finding("USF-OPT-005", rel(TRANCHE), "USF-1007 must not remain unrealised later work"))
     validation = semantics_data.get("validationEvidence", {})
     commands = validation.get("commands", []) if isinstance(validation, dict) else []
     if not any("validate-repository-optimisation.py all" in str(command) for command in commands):
@@ -201,10 +228,39 @@ def check_repository_artifacts(
             "repository-optimisation:realise": "realise-bounded-optimisation.py all --include-startup --measure-full-family",
             "repo:affected": "realise-bounded-optimisation.py affected-run --measure-full-family",
             "compose:timing": "realise-bounded-optimisation.py compose-timing --include-startup",
+            "repository-optimisation:non-local": "realise-bounded-optimisation.py non-local-options",
         }
         for script_name, expected_fragment in expected_scripts.items():
             if expected_fragment not in str(scripts.get(script_name, "")):
                 findings.append(finding("USF-OPT-009", rel(PACKAGE), f"missing or weakened optimisation command script: {script_name}"))
+
+
+    nonlocal_data = non_local_evaluation or load_json(NON_LOCAL_EVALUATION)
+    scope = nonlocal_data.get("evaluationScope", {})
+    options = {option.get("id"): option for option in nonlocal_data.get("options", [])}
+    required_options = {"testcontainers", "remote-cache", "task-graph-tooling"}
+    missing_options = required_options - set(options)
+    if missing_options:
+        findings.append(finding("USF-OPT-008", rel(NON_LOCAL_EVALUATION), f"missing non-local optimisation options: {', '.join(sorted(missing_options))}"))
+    if scope.get("adoptionBoundary") is not False:
+        findings.append(finding("USF-OPT-010", rel(NON_LOCAL_EVALUATION), "non-local optimisation adoption boundary must remain false"))
+    for field in ["externalProviderSetup", "credentialPersistence", "stagingOrDeploymentChange", "productionReadinessClaim"]:
+        if scope.get(field) is not False:
+            findings.append(finding("USF-OPT-010", rel(NON_LOCAL_EVALUATION), f"non-local optimisation field must remain false: {field}"))
+    if scope.get("providerEnvironmentProofNonclaimsPreserved") is not True:
+        findings.append(finding("USF-OPT-010", rel(NON_LOCAL_EVALUATION), "provider/environment proof nonclaims must be preserved"))
+    if scope.get("futureAdoptionIssueRequired") is not True:
+        findings.append(finding("USF-OPT-010", rel(NON_LOCAL_EVALUATION), "future option adoption must require a separate issue"))
+    for option_id in sorted(required_options):
+        option = options.get(option_id, {})
+        if option.get("adoptionState") != "evaluated-not-adopted":
+            findings.append(finding("USF-OPT-010", rel(NON_LOCAL_EVALUATION), f"option must be evaluated-not-adopted: {option_id}"))
+        if not option.get("comparisonCriteria"):
+            findings.append(finding("USF-OPT-008", rel(NON_LOCAL_EVALUATION), f"option missing comparison criteria: {option_id}"))
+        if not option.get("evidenceRequirements"):
+            findings.append(finding("USF-OPT-008", rel(NON_LOCAL_EVALUATION), f"option missing evidence requirements: {option_id}"))
+        if option.get("futureIssueRequiredForAdoption") is not True:
+            findings.append(finding("USF-OPT-010", rel(NON_LOCAL_EVALUATION), f"option must require future issue for adoption: {option_id}"))
 
     follow_rules = policy_data.get("linearFollowUpDeliveryRules", {})
     if follow_rules.get("deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues") is not True:
@@ -237,13 +293,13 @@ def selftest() -> list[dict[str, str]]:
     mutated_compose = copy.deepcopy(compose)
     for item in mutated_compose.get("findings", []):
         if isinstance(item, dict):
-            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "testcontainers:considered-not-adopted-current-tranche"]
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "testcontainers:evaluated-not-adopted"]
     tests.append(("testcontainers-adopted", check_reports({"USF-1001": mutated_compose}), "USF-OPT-003"))
 
     policy = load_json(LINEAR_POLICY)
     mutated_policy = copy.deepcopy(policy)
     mutated_policy["linearFollowUpDeliveryRules"]["deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues"] = False
-    tests.append(("linear-later-issues-disabled", check_repository_artifacts(linear_policy=mutated_policy), "USF-OPT-007"))
+    tests.append(("linear-follow-up-issues-disabled", check_repository_artifacts(linear_policy=mutated_policy), "USF-OPT-007"))
 
     package = load_json(PACKAGE)
     mutated_package = copy.deepcopy(package)
@@ -284,6 +340,19 @@ def selftest() -> list[dict[str, str]]:
         if isinstance(item, dict):
             item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "startup-measurement-requested:true"]
     tests.append(("compose-startup-measurement-missing", check_reports({"USF-1001": mutated_compose}), "USF-OPT-008"))
+
+
+    nonlocal_data = load_json(NON_LOCAL_EVALUATION)
+    mutated_nonlocal = copy.deepcopy(nonlocal_data)
+    mutated_nonlocal["evaluationScope"]["adoptionBoundary"] = True
+    tests.append(("non-local-adoption-boundary-mutated", check_repository_artifacts(non_local_evaluation=mutated_nonlocal), "USF-OPT-010"))
+
+    nonlocal_report = load_json(REPORTS["USF-1007"])
+    mutated_nonlocal_report = copy.deepcopy(nonlocal_report)
+    for item in mutated_nonlocal_report.get("findings", []):
+        if isinstance(item, dict):
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "testcontainers-comparison-criteria:defined"]
+    tests.append(("non-local-report-comparison-missing", check_reports({"USF-1007": mutated_nonlocal_report}), "USF-OPT-008"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

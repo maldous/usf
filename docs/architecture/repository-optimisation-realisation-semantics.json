@@ -34,10 +34,10 @@
       "compose-config-exit-code:0",
       "compose-startup-wait-exit-code:0",
       "compose-teardown-exit-code:0",
-      "testcontainers:considered-not-adopted-current-tranche",
-      "remote-cache:considered-not-adopted-current-tranche",
-      "task-graph-tooling:considered-not-adopted-current-tranche",
-      "non-local-options-later-issue:USF-1007"
+      "testcontainers:evaluated-not-adopted",
+      "remote-cache:evaluated-not-adopted",
+      "task-graph-tooling:evaluated-not-adopted",
+      "non-local-options-evaluation-issue:USF-1007"
     ]
   },
   "coveredIssueIds": [
@@ -99,18 +99,19 @@
     "No production readiness is claimed by this artefact."
   ],
   "id": "usf.repository-optimisation-realisation-semantics",
-  "laterWorkIssueIds": [
-    "USF-1007"
-  ],
+  "laterWorkIssueIds": [],
   "lifecycleState": "defined",
   "nonLocalOptimisationOptions": {
-    "laterIssueId": "USF-1007",
-    "options": [
-      "Testcontainers",
-      "remote cache",
-      "task graph tooling"
+    "status": "evaluated-not-adopted",
+    "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+    "generatedReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+    "adoptedOptions": [],
+    "evaluatedOptions": [
+      "testcontainers",
+      "remote-cache",
+      "task-graph-tooling"
     ],
-    "status": "considered-not-adopted-current-tranche"
+    "futureAdoptionIssueRequired": true
   },
   "realisedDecisions": [
     {
@@ -284,7 +285,41 @@
       "evidence/generated-reports/repository-optimisation-path-inventory-baseline.json",
       "evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
       "evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json",
-      "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json"
+      "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json",
+      "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json"
+    ],
+    "nonLocalOptionsValidatorCoverage": "tools/validate-repository-optimisation/validate-repository-optimisation.py"
+  },
+  "nonLocalOptimisationOptionEvaluation": {
+    "linearIssueId": "USF-1007",
+    "status": "evaluated-not-adopted",
+    "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+    "generatedReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+    "implementedInThisTranche": true,
+    "adoptionBoundary": false,
+    "futureAdoptionIssueRequired": true,
+    "options": [
+      "testcontainers",
+      "remote-cache",
+      "task-graph-tooling"
     ]
+  },
+  "commands": {
+    "repository-optimisation:non-local": "python3 tools/repository-optimisation/realise-bounded-optimisation.py non-local-options"
+  },
+  "issueRequirements": {
+    "USF-1007": {
+      "title": "Evaluate non-local timing optimisation options without adoption",
+      "status": "implemented-bounded-local",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "generatedReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+      "acceptance": [
+        "testcontainers evaluated without adoption",
+        "remote-cache evaluated without adoption",
+        "task-graph-tooling evaluated without adoption",
+        "future adoption evidence requirements defined",
+        "validator enforces non-adoption posture"
+      ]
+    }
   }
 }
