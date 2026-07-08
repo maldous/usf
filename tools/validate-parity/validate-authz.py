@@ -82,7 +82,7 @@ USF141_PROHIBITED_CLAIMS = {
     "usf-133-closure",
 }
 PROVEN_STATUSES = {"proven-local", "bounded-local-proof", "implemented"}
-DEFERRED_STATUSES = {"deferred-with-owner", "transferred", "out-of-scope-with-rationale"}
+DEFERRED_STATUSES = {"deferred-with-owner", "evaluated-with-owner", "transferred", "out-of-scope-with-rationale"}
 
 
 class Findings:
