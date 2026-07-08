@@ -233,6 +233,34 @@
       {
         "path": "tools/validate-app-surface/validate-app-surface.py",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/client",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/client/package.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/client/src/index.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/ui",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/ui/package.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-shared-client-consumption.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -263,16 +291,6 @@
         "path": "apps/mobile",
         "classification": "future-to-create",
         "owningLinearIssueId": "USF-1018"
-      },
-      {
-        "path": "packages/client",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1015"
-      },
-      {
-        "path": "packages/ui",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1014"
       },
       {
         "path": "packages/app-surface",
@@ -380,29 +398,32 @@
         "apps/work"
       ],
       "existingPackageDirectories": [
+        "packages/client",
         "packages/contracts",
         "packages/core",
         "packages/openapi",
         "packages/ports",
         "packages/proof",
         "packages/source",
-        "packages/test"
+        "packages/test",
+        "packages/ui"
       ],
       "absentImplementationDirectories": [
         "apps/web",
         "apps/mobile",
-        "packages/client",
-        "packages/ui",
         "packages/app-surface"
       ],
-      "currentConclusion": "The repository has validator, semantic, proof, and backend-oriented artefacts, but it does not yet contain bounded web, mobile, shared client, UI, or local app-surface runtime implementation packages."
+      "currentConclusion": "The repository now contains bounded shared-client and UI package boundaries, including a local shared-client consumption adapter. Web, mobile, and local app-surface runtime implementation packages remain absent."
     },
     "generatedClientState": {
       "semanticAndContractArtefactsExist": true,
       "productClientSdkPackageExists": false,
       "graphqlGeneratedClientProofExists": true,
       "proofArtefact": "packages/proof/src/graphql-generated-client-execution-proof.ts",
-      "currentConclusion": "Generated-client semantics and proof artefacts exist, but a product app shared client SDK consumption path is not implemented."
+      "currentConclusion": "Generated-client semantics and proof artefacts exist, and USF-1015 adds a bounded local shared-client consumption path that fails closed on stale generated-client or missing semantic inputs without claiming generated SDK readiness or package publication readiness.",
+      "boundedLocalSharedClientConsumptionPathExists": true,
+      "sharedClientConsumptionArtefact": "docs/architecture/app-surface-shared-client-consumption-path.json",
+      "sharedClientPackage": "packages/client"
     },
     "uiRuntimeState": {
       "tsxOrJsxAppComponentsFound": false,
@@ -448,8 +469,12 @@
       "constraints": [
         "App code must consume semantic and generated-client artefacts rather than inventing UI-only behaviour.",
         "Stale or missing generated-client inputs must fail closed.",
-        "Package installation requires USF-1019."
-      ]
+        "No package dependencies are introduced by USF-1015; any future dependency still requires USF-1019."
+      ],
+      "implementedBoundary": "packages/client",
+      "implementationArtefact": "packages/client/src/index.ts",
+      "mappingArtefact": "docs/architecture/app-surface-shared-client-consumption-path.json",
+      "contractTestArtefact": "tests/packages/app-surface-shared-client-consumption.test.ts"
     },
     "uiPrimitives": {
       "candidateBoundary": "packages/ui",
@@ -505,7 +530,14 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-contract",
       "mayInstallPackages": "only-through-USF-1019",
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "implementationArtefacts": [
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "packages/client/package.json",
+        "packages/client/src/index.ts",
+        "tests/packages/app-surface-shared-client-consumption.test.ts"
+      ],
+      "currentStatusInRepository": "implemented-dev-local-contract"
     },
     {
       "id": "USF-1016",
@@ -899,7 +931,6 @@
   ],
   "initialImplementationGaps": [
     "Workspace and package boundaries for bounded web, mobile, shared client, UI primitives, and local app-surface runtime are not yet created.",
-    "Shared client SDK consumption path is not yet implemented.",
     "Local in-memory app-surface runtime is not yet implemented.",
     "Next web scaffold is not yet implemented.",
     "Expo mobile scaffold is not yet implemented.",

@@ -1,0 +1,170 @@
+{
+  "artifactId": "usf.app-surface-shared-client-consumption-path",
+  "title": "App-surface shared client consumption path",
+  "lifecycleState": "dev-local-contract-implemented",
+  "createdDate": "2026-07-08",
+  "ownerIssueId": "USF-1015",
+  "parentIssueId": "USF-1012",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records the bounded local shared-client consumption path over governed USF semantic and generated-client artefacts.",
+    "linearAuthority": "Linear tracks this work only and does not define semantic authority.",
+    "implementationBoundary": "packages/client contains a dependency-free local adapter that validates semantic mapping inputs and fails closed on stale generated-client or missing semantic inputs.",
+    "nonAuthority": "This artefact does not define product behaviour, permission semantics, API provider semantics, generated SDK readiness, package publication readiness, product UI readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance."
+  },
+  "authorityRefs": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/shared-client-interaction-contract-semantics.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/app-surface-workspace-package-boundaries.json"
+  ],
+  "implementationRefs": [
+    "packages/client/package.json",
+    "packages/client/src/index.ts",
+    "tests/packages/app-surface-shared-client-consumption.test.ts"
+  ],
+  "generatedClient": {
+    "semanticInputHashRef": "semantic-input-hash-current",
+    "provenanceRef": "generation-provenance-current",
+    "freshnessRef": "generated-client-freshness-current",
+    "validatorEvidenceRef": "validator-selftest-with-planted-defect-fixtures",
+    "currentWithSemanticInputs": true,
+    "currentnessFixtureRef": "tools/validate-app-surface/fixtures/conforming/011-generated-client-current.json",
+    "staleFixtureRef": "tools/validate-app-surface/planted-defects/011-stale-generated-client.json",
+    "proofRef": "packages/proof/src/graphql-generated-client-execution-proof.ts"
+  },
+  "mappings": [
+    {
+      "mappingId": "shared-client-query-developer-profile",
+      "semanticContractId": "spec/instances/semantic-contract/api-docs-developer-portal-sdks-rate-limits.json",
+      "interfaceContractId": "docs/architecture/generated-client-contract-validation-semantics.json#apiClientContractGeneration.query-to-client-operation",
+      "behaviourClass": "queries",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "commandOrQueryOrWorkflowOrEventId": "query.developerProfile",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.developerProfile"
+      ],
+      "privacyCategoryRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "telemetryRefs": [
+        "tenant-user-context-propagation",
+        "docs/architecture/generated-client-contract-validation-semantics.json#capabilityToScreenViewModelMapping"
+      ],
+      "offlineRetryCachePosture": {
+        "offlineAllowed": false,
+        "retryAllowed": false,
+        "cacheSemanticsRef": "docs/architecture/client-query-cache-privacy-semantics.json",
+        "tenantIsolationRequired": true
+      },
+      "proofRefs": [
+        "packages/proof/src/graphql-generated-client-execution-proof.ts",
+        "tools/validate-app-surface/fixtures/conforming/011-generated-client-current.json"
+      ],
+      "nonClaimBoundary": "This query mapping proves only local semantic consumption and fail-closed validation. It does not claim generated SDK readiness, public API readiness, product UI readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, or human acceptance."
+    },
+    {
+      "mappingId": "shared-client-command-onboard-api-key",
+      "semanticContractId": "spec/instances/semantic-contract/api-docs-developer-portal-sdks-rate-limits.json",
+      "interfaceContractId": "docs/architecture/generated-client-contract-validation-semantics.json#apiClientContractGeneration.command-to-client-operation",
+      "behaviourClass": "commands",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "commandOrQueryOrWorkflowOrEventId": "command.onboardApiKey",
+      "permissionRefs": [
+        "developer:key:onboard"
+      ],
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model",
+        "safe-denial:invalid-label"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.onboardApiKey"
+      ],
+      "privacyCategoryRefs": [
+        "docs/architecture/shared-client-interaction-contract-semantics.json#client-audit-event-emission",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "telemetryRefs": [
+        "tenant-user-context-propagation",
+        "docs/architecture/generated-client-contract-validation-semantics.json#apiClientContractGeneration"
+      ],
+      "offlineRetryCachePosture": {
+        "offlineAllowed": false,
+        "retryAllowed": false,
+        "cacheSemanticsRef": "docs/architecture/client-query-cache-privacy-semantics.json",
+        "tenantIsolationRequired": true
+      },
+      "proofRefs": [
+        "packages/proof/src/graphql-generated-client-execution-proof.ts",
+        "tools/validate-app-surface/fixtures/conforming/011-generated-client-current.json"
+      ],
+      "nonClaimBoundary": "This command mapping proves only local semantic consumption and fail-closed validation. It does not claim generated SDK readiness, public API readiness, credential issuance readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, or human acceptance."
+    }
+  ],
+  "failClosedRequirements": {
+    "staleGeneratedClientFinding": "generated-client:stale-or-not-current-with-semantic-inputs",
+    "missingSemanticInputFindingPattern": "missing-semanticContractId",
+    "uiOnlyBehaviourFinding": "ui-only-behaviour-not-authorised",
+    "missingPermissionFindingPattern": "missing-permissionRefs",
+    "missingAuditFindingPattern": "missing-auditEventRefs"
+  },
+  "uiOnlyBehaviourPolicy": {
+    "uiOnlyBehaviourAllowed": false,
+    "rejectedInputs": [
+      "uiOnlyBehaviour",
+      "presentationOnlyBehaviour",
+      "inventedBehaviour"
+    ]
+  },
+  "validationCommands": [
+    "strict JSON parse for docs/architecture/app-surface-shared-client-consumption-path.json",
+    "corepack pnpm vitest run tests/packages/app-surface-shared-client-consumption.test.ts",
+    "corepack pnpm validate-spec",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "nonClaims": {
+    "generatedSdkReadiness": false,
+    "generatedClientReadiness": false,
+    "packagePublicationReadiness": false,
+    "productUiReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "complianceReadiness": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  },
+  "readinessVerdict": {
+    "status": "dev-local-contract-only",
+    "proofLevelReached": "dev-local-contract",
+    "composeRequired": false,
+    "stagingRequired": false,
+    "reason": "The implemented surface is a local dependency-free semantic adapter and contract test. It introduces no external provider, public route, deployment-adjacent surface, provider-staging integration, or human-acceptance surface."
+  }
+}

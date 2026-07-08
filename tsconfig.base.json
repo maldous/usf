@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2024",
-    "lib": ["ES2024"],
+    "lib": [
+      "ES2024"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
@@ -17,40 +19,111 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@foundation/app-api": ["apps/api/src/server.ts"],
-      "@foundation/app-api/runtime": ["apps/api/src/runtime.ts"],
-      "@foundation/app-work": ["apps/work/src/worker.ts"],
-      "@foundation/capability-audit": ["capabilities/audit/src/index.ts"],
-      "@foundation/capability-auth": ["capabilities/auth/src/index.ts"],
-      "@foundation/capability-bulk": ["capabilities/bulk/src/index.ts"],
-      "@foundation/capability-config": ["capabilities/config/src/index.ts"],
-      "@foundation/capability-files": ["capabilities/files/src/index.ts"],
-      "@foundation/capability-jobs": ["capabilities/jobs/src/index.ts"],
-      "@foundation/capability-notify": ["capabilities/notify/src/index.ts"],
-      "@foundation/capability-resources": ["capabilities/resources/src/index.ts"],
-      "@foundation/capability-search": ["capabilities/search/src/index.ts"],
-      "@foundation/capability-tenant": ["capabilities/tenant/src/index.ts"],
-      "@foundation/adapter-bus": ["adapters/bus/src/index.ts"],
-      "@foundation/adapter-bulk": ["adapters/bulk/src/index.ts"],
-      "@foundation/adapter-db": ["adapters/db/src/index.ts"],
-      "@foundation/adapter-assurance": ["adapters/assurance/src/index.ts"],
-      "@foundation/adapter-guardrails": ["adapters/guardrails/src/index.ts"],
-      "@foundation/adapter-idp": ["adapters/idp/src/index.ts"],
-      "@foundation/adapter-mail": ["adapters/mail/src/index.ts"],
-      "@foundation/adapter-obs": ["adapters/obs/src/index.ts"],
-      "@foundation/adapter-resources": ["adapters/resources/src/index.ts"],
-      "@foundation/adapter-search": ["adapters/search/src/index.ts"],
-      "@foundation/adapter-secrets": ["adapters/secrets/src/index.ts"],
-      "@foundation/adapter-store": ["adapters/store/src/index.ts"],
-      "@foundation/adapter-wf": ["adapters/wf/src/index.ts"],
-      "@foundation/contracts": ["packages/contracts/src/index.ts"],
-      "@foundation/core": ["packages/core/src/index.ts"],
-      "@foundation/openapi": ["packages/openapi/src/index.ts"],
-      "@foundation/openapi/check": ["packages/openapi/src/check.ts"],
-      "@foundation/ports": ["packages/ports/src/index.ts"],
-      "@foundation/proof": ["packages/proof/src/index.ts"],
-      "@foundation/source": ["packages/source/src/index.ts"],
-      "@foundation/test": ["packages/test/src/index.ts"]
+      "@foundation/adapter-assurance": [
+        "adapters/assurance/src/index.ts"
+      ],
+      "@foundation/adapter-bulk": [
+        "adapters/bulk/src/index.ts"
+      ],
+      "@foundation/adapter-bus": [
+        "adapters/bus/src/index.ts"
+      ],
+      "@foundation/adapter-db": [
+        "adapters/db/src/index.ts"
+      ],
+      "@foundation/adapter-guardrails": [
+        "adapters/guardrails/src/index.ts"
+      ],
+      "@foundation/adapter-idp": [
+        "adapters/idp/src/index.ts"
+      ],
+      "@foundation/adapter-mail": [
+        "adapters/mail/src/index.ts"
+      ],
+      "@foundation/adapter-obs": [
+        "adapters/obs/src/index.ts"
+      ],
+      "@foundation/adapter-resources": [
+        "adapters/resources/src/index.ts"
+      ],
+      "@foundation/adapter-search": [
+        "adapters/search/src/index.ts"
+      ],
+      "@foundation/adapter-secrets": [
+        "adapters/secrets/src/index.ts"
+      ],
+      "@foundation/adapter-store": [
+        "adapters/store/src/index.ts"
+      ],
+      "@foundation/adapter-wf": [
+        "adapters/wf/src/index.ts"
+      ],
+      "@foundation/app-api": [
+        "apps/api/src/server.ts"
+      ],
+      "@foundation/app-api/runtime": [
+        "apps/api/src/runtime.ts"
+      ],
+      "@foundation/app-work": [
+        "apps/work/src/worker.ts"
+      ],
+      "@foundation/capability-audit": [
+        "capabilities/audit/src/index.ts"
+      ],
+      "@foundation/capability-auth": [
+        "capabilities/auth/src/index.ts"
+      ],
+      "@foundation/capability-bulk": [
+        "capabilities/bulk/src/index.ts"
+      ],
+      "@foundation/capability-config": [
+        "capabilities/config/src/index.ts"
+      ],
+      "@foundation/capability-files": [
+        "capabilities/files/src/index.ts"
+      ],
+      "@foundation/capability-jobs": [
+        "capabilities/jobs/src/index.ts"
+      ],
+      "@foundation/capability-notify": [
+        "capabilities/notify/src/index.ts"
+      ],
+      "@foundation/capability-resources": [
+        "capabilities/resources/src/index.ts"
+      ],
+      "@foundation/capability-search": [
+        "capabilities/search/src/index.ts"
+      ],
+      "@foundation/capability-tenant": [
+        "capabilities/tenant/src/index.ts"
+      ],
+      "@foundation/client": [
+        "packages/client/src/index.ts"
+      ],
+      "@foundation/contracts": [
+        "packages/contracts/src/index.ts"
+      ],
+      "@foundation/core": [
+        "packages/core/src/index.ts"
+      ],
+      "@foundation/openapi": [
+        "packages/openapi/src/index.ts"
+      ],
+      "@foundation/openapi/check": [
+        "packages/openapi/src/check.ts"
+      ],
+      "@foundation/ports": [
+        "packages/ports/src/index.ts"
+      ],
+      "@foundation/proof": [
+        "packages/proof/src/index.ts"
+      ],
+      "@foundation/source": [
+        "packages/source/src/index.ts"
+      ],
+      "@foundation/test": [
+        "packages/test/src/index.ts"
+      ]
     }
   }
 }
