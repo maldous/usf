@@ -10,10 +10,10 @@
     "../warning-inventory.md",
     "README.md",
     "manifest.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/external-review-bundle/external-review-report.md",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/proof-cockpit-machine-qa-run.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/service-evidence-manifest.json",
-    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/proof-cockpit-screenshot-manifest.json"
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/external-review-bundle/external-review-report.md",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/proof-cockpit-machine-qa-run.json",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/service-evidence-manifest.json",
+    "../../../../artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/proof-cockpit-screenshot-manifest.json"
   ],
   "generatedReportsAreAuthority": false,
   "finalAcceptanceAutomatic": false,
@@ -31,10 +31,10 @@
     "no-usf-290-completion"
   ],
   "latestMachineRun": {
-    "runId": "qa-run-2026-07-08T22-19-24-577Z",
-    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z",
-    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/proof-cockpit-machine-qa-run.json",
-    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/external-review-bundle",
+    "runId": "qa-run-2026-07-08T22-58-34-008Z",
+    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z",
+    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/proof-cockpit-machine-qa-run.json",
+    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/external-review-bundle",
     "passCount": 1282,
     "warnCount": 0,
     "failCount": 0,
@@ -42,8 +42,8 @@
     "screenshotCount": 94,
     "serviceEvidenceCount": 40,
     "evidenceRecordCount": 1190,
-    "sourceSha": "d806805391fb29d69b382ed375ea2788155f0a6a",
-    "deploymentSha": "d806805391fb29d69b382ed375ea2788155f0a6a",
+    "sourceSha": "01a2e90da3791649d6f450d0330d5991356b04f1",
+    "deploymentSha": "01a2e90da3791649d6f450d0330d5991356b04f1",
     "authenticatedServiceUiCaptureCount": 6,
     "authPostureMismatchCount": 7,
     "serviceTargetObservationCount": 40
@@ -65,6 +65,6 @@
     "authenticatedServiceUiCaptureCount": 6,
     "resolutionMethod": "Regenerated current-main machine QA after audit-gap hardening; service evidence now includes run context, source SHA, capturedAt, screenshot linkage, auth posture comparison, target-system observation, leaf JSON parity, and validator planted-defect coverage.",
     "validationCommand": "corepack pnpm proof-cockpit:machine-qa -- --output-dir artifacts/proof-cockpit/machine-runs",
-    "finalMachineRunPath": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-19-24-534Z/proof-cockpit-machine-qa-run.json"
+    "finalMachineRunPath": "artifacts/proof-cockpit/machine-runs/2026-07-08T22-58-33-965Z/proof-cockpit-machine-qa-run.json"
   }
 }
