@@ -29,8 +29,8 @@ export default function App() {
         <Text style={styles.body}>{text.body.value}</Text>
         <View
           accessible
-          accessibilityLabel={`${text.capabilityLabel.value}: ${homeScreen.capabilityId}. ${text.permissionLabel.value}: ${homeScreen.permissionRefs.join(", ")}.`}
-          accessibilityHint={accessibility.errorAnnouncementRef}
+          accessibilityLabel={`${text.capabilityLabel.value}: ${homeScreen.capabilityId}. ${text.permissionLabel.value}: ${homeScreen.permissionRefs.join(", ")}. ${text.unknownScreenPolicyLabel.value}: ${MOBILE_SCREEN_REGISTRY.unknownScreenPolicy}.`}
+          accessibilityHint={text.body.value}
           style={styles.card}
         >
           <Text style={styles.label}>{text.capabilityLabel.value}</Text>

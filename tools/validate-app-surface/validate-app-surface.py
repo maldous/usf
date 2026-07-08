@@ -2058,6 +2058,11 @@ def validate_accessibility_baseline_implementation() -> list[dict[str, str]]:
                 for proof_index, proof_ref in enumerate(proof_refs):
                     if not path_ref_exists(proof_ref):
                         failures.append(finding(rule_id, f"{entry_subject}.proofRefs[{proof_index}]", "accessibility proof reference path must exist", issue_id))
+            semantic_source_refs = entry.get("semanticSourceRefs", [])
+            if isinstance(semantic_source_refs, list):
+                for semantic_index, semantic_ref in enumerate(semantic_source_refs):
+                    if not path_ref_exists(semantic_ref):
+                        failures.append(finding(rule_id, f"{entry_subject}.semanticSourceRefs[{semantic_index}]", "accessibility semantic source reference path must exist", issue_id))
 
     missing_surfaces = set(required_surfaces) - observed_surfaces
     for surface_id in sorted(missing_surfaces):
