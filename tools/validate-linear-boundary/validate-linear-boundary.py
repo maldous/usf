@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -72,6 +73,18 @@ REQUIRED_UNRESOLVED_WORK_TYPES = {
 }
 
 REQUIRED_FOLLOW_UP_ISSUES = ("USF-1004", "USF-1005", "USF-1006", "USF-1008")
+ISSUE_KEY_RE = re.compile(r"\bUSF-\d+\b")
+REFERENCE_SCAN_BINARY_SUFFIXES = {
+    ".gif",
+    ".gz",
+    ".ico",
+    ".jpeg",
+    ".jpg",
+    ".pdf",
+    ".png",
+    ".webp",
+    ".zip",
+}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -200,6 +213,11 @@ def check_disposition(disposition: dict[str, Any]) -> list[dict[str, str]]:
     if not isinstance(per_key, list):
         findings.append(finding("USF-LINEAR-007", "perKeyDispositions", "list is required"))
         return findings
+    issue_ids = [item.get("issueId") for item in per_key if isinstance(item, dict)]
+    if not all(isinstance(issue_id, str) for issue_id in issue_ids):
+        findings.append(finding("USF-LINEAR-007", "perKeyDispositions.issueId", "each per-key disposition must have an issue ID"))
+        return findings
+    reference_index = build_repository_issue_reference_index(set(issue_ids))
     if scan.get("auditSetIssueCount") != len(per_key):
         findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.auditSetIssueCount", "must match per-key disposition count"))
     if scan.get("auditSetIssueCount") != 138:
@@ -216,8 +234,51 @@ def check_disposition(disposition: dict[str, Any]) -> list[dict[str, str]]:
         findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.requiresSafeFullContentDispositionCount", "must match per-key unresolved disposition count"))
     if scan.get("repositoryReferencePresentCount") != len(referenced):
         findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.repositoryReferencePresentCount", "must match per-key referenced disposition count"))
+    actual_referenced = [
+        item for item in per_key
+        if isinstance(item, dict) and reference_index.get(item.get("issueId", ""))
+    ]
+    actual_required_full = [
+        item for item in per_key
+        if isinstance(item, dict) and not reference_index.get(item.get("issueId", ""))
+    ]
+    if scan.get("repositoryReferencePresentCount") != len(actual_referenced):
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.repositoryReferencePresentCount", "must match current repository reference scan"))
+    if scan.get("requiresSafeFullContentDispositionCount") != len(actual_required_full):
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.requiresSafeFullContentDispositionCount", "must match current repository reference scan"))
     if scan.get("requiresSafeFullContentDispositionFollowUpIssueId") != "USF-1008":
         findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.requiresSafeFullContentDispositionFollowUpIssueId", "must be USF-1008"))
+    for item in per_key:
+        if not isinstance(item, dict):
+            continue
+        issue_id = item.get("issueId")
+        if not isinstance(issue_id, str):
+            continue
+        disposition_value = item.get("disposition")
+        actual_paths = reference_index.get(issue_id, [])
+        evidence_sample = item.get("repositoryReferenceEvidencePathSample")
+        if not isinstance(evidence_sample, list) or not all(isinstance(path, str) for path in evidence_sample):
+            findings.append(finding("USF-LINEAR-007", issue_id, "repository reference evidence sample must be a list of paths"))
+            continue
+        if item.get("repositoryReferenceEvidencePathSampleCount") != len(evidence_sample):
+            findings.append(finding("USF-LINEAR-007", issue_id, "repository reference evidence sample count must match sample paths"))
+        if item.get("repositoryReferenceEvidenceTotalPathCount") != len(actual_paths):
+            findings.append(finding("USF-LINEAR-007", issue_id, "repository reference evidence total must match current repository scan"))
+        stale_sample_paths = sorted(set(evidence_sample) - set(actual_paths))
+        if stale_sample_paths:
+            findings.append(finding("USF-LINEAR-007", issue_id, f"repository reference evidence paths do not contain current issue key: {', '.join(stale_sample_paths[:5])}"))
+        if disposition_value == "repository-reference-present-current":
+            if not actual_paths:
+                findings.append(finding("USF-LINEAR-007", issue_id, "claimed repository reference is absent from current repository scan"))
+            if item.get("followUpIssueId") is not None or item.get("completionClaim") != "reference-presence-only":
+                findings.append(finding("USF-LINEAR-007", issue_id, "referenced dispositions must remain reference-presence-only without follow-up completion"))
+        elif disposition_value == "requires-safe-full-content-disposition":
+            if actual_paths:
+                findings.append(finding("USF-LINEAR-007", issue_id, "current repository reference exists, so unresolved disposition is stale"))
+            if evidence_sample:
+                findings.append(finding("USF-LINEAR-007", issue_id, "unresolved dispositions must not carry repository reference evidence samples"))
+        else:
+            findings.append(finding("USF-LINEAR-007", issue_id, "unknown repository-unreferenced disposition value"))
     for item in required_full:
         if item.get("followUpIssueId") != "USF-1008" or item.get("completionClaim") != "not-complete":
             findings.append(finding("USF-LINEAR-007", item.get("issueId", "perKeyDispositions"), "unresolved dispositions must be carried by USF-1008 and marked not complete"))
@@ -240,6 +301,41 @@ def check_disposition(disposition: dict[str, Any]) -> list[dict[str, str]]:
             if boundary.get(key) is not True:
                 findings.append(finding("USF-LINEAR-007", f"completionBoundary.{key}", "value must be true"))
     return findings
+
+
+def iter_repository_reference_scan_files() -> list[Path]:
+    excluded_files = {AUDIT.resolve(), DISPOSITION.resolve()}
+    files: list[Path] = []
+    for path in ROOT.rglob("*"):
+        if ".git" in path.parts:
+            continue
+        if not path.is_file():
+            continue
+        if path.resolve() in excluded_files:
+            continue
+        if path.suffix.lower() in REFERENCE_SCAN_BINARY_SUFFIXES:
+            continue
+        files.append(path)
+    return files
+
+
+def build_repository_issue_reference_index(issue_ids: set[str]) -> dict[str, list[str]]:
+    reference_index: dict[str, set[str]] = {issue_id: set() for issue_id in issue_ids}
+    for path in iter_repository_reference_scan_files():
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        referenced_ids = set(ISSUE_KEY_RE.findall(text)) & issue_ids
+        if not referenced_ids:
+            continue
+        relative_path = path.relative_to(ROOT).as_posix()
+        for issue_id in referenced_ids:
+            reference_index[issue_id].add(relative_path)
+    return {
+        issue_id: sorted(paths)
+        for issue_id, paths in reference_index.items()
+    }
 
 
 def check_export_availability(availability: dict[str, Any]) -> list[dict[str, str]]:
@@ -371,6 +467,21 @@ def selftest() -> list[dict[str, str]]:
     mutated_disposition = copy.deepcopy(disposition)
     mutated_disposition["repositoryReferenceScan"]["requiresSafeFullContentDispositionFollowUpIssueId"] = "USF-1004"
     tests.append(("disposition-missing-follow-up", validate(policy, audit, mutated_disposition, availability, include_runtime_scan=False), "USF-LINEAR-007"))
+
+    mutated_disposition = copy.deepcopy(disposition)
+    stale_item = next(
+        item for item in mutated_disposition["perKeyDispositions"]
+        if item.get("disposition") == "requires-safe-full-content-disposition"
+    )
+    stale_item["disposition"] = "repository-reference-present-current"
+    stale_item["repositoryReferenceEvidencePathSample"] = ["package.json"]
+    stale_item["repositoryReferenceEvidencePathSampleCount"] = 1
+    stale_item["repositoryReferenceEvidenceTotalPathCount"] = 1
+    stale_item["followUpIssueId"] = None
+    stale_item["completionClaim"] = "reference-presence-only"
+    mutated_disposition["repositoryReferenceScan"]["repositoryReferencePresentCount"] += 1
+    mutated_disposition["repositoryReferenceScan"]["requiresSafeFullContentDispositionCount"] -= 1
+    tests.append(("disposition-fake-repository-reference", validate(policy, audit, mutated_disposition, availability, include_runtime_scan=False), "USF-LINEAR-007"))
 
     mutated_availability = copy.deepcopy(availability)
     mutated_availability["credentialSafetyBoundary"]["credentialPrinted"] = True
