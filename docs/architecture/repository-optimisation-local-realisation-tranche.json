@@ -90,6 +90,26 @@
         "Timing evidence compares a recommended narrow command family with the full validate-spec command family."
       ],
       "report": "evidence/generated-reports/repository-optimisation-affected-run-baseline.json"
+    },
+    "USF-1000": {
+      "acceptanceCriteriaEvidence": [
+        "Screenshot-equivalent proof-cockpit image artefacts are counted and byte-profiled in repository-optimisation-screenshot-retention-baseline.json.",
+        "Retention enforcement is non-destructive and records delete-artifacts:false.",
+        "Allowed-root violations must remain zero for the bounded retention report to validate.",
+        "Artifact deletion or pruning remains later-policy-required and cannot be inferred from this timing report.",
+        "Generated screenshot profiling evidence remains lower authority than proof evidence and semantic definitions."
+      ],
+      "report": "evidence/generated-reports/repository-optimisation-screenshot-retention-baseline.json"
+    },
+    "USF-1001": {
+      "acceptanceCriteriaEvidence": [
+        "Compose config, port, startup-wait, and teardown phases are split in repository-optimisation-compose-timing-baseline.json.",
+        "Startup measurement is explicitly requested for completion evidence.",
+        "Measured command evidence includes passing generated Compose checks, port checks, Docker Compose config, startup wait, and teardown phases.",
+        "Testcontainers, remote cache, and task graph tooling are considered optimisation candidates but are not adopted by the bounded local tranche.",
+        "Compose remains the canonical service-backed proof path until side-by-side equivalence and improvement evidence supports any later substitution."
+      ],
+      "report": "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json"
     }
   },
   "issueId": "USF-996",

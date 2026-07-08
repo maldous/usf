@@ -22,7 +22,7 @@
         "validator-exits-ok:true",
         "validator-output-json-parse:passed",
         "validator-json-output-nonempty:true",
-        "validator-cache-disabled-wall-ms:179",
+        "validator-cache-disabled-wall-ms:182",
         "validator-cache-enabled-wall-ms:190",
         "validator-findings-equivalent:true",
         "timing-comparison:warn-only",

@@ -19,6 +19,25 @@
       "unknown-path-negative-control:full-gate-fallback",
       "required-checks-weakened:false",
       "timing-comparison:affected-vs-full-command-family"
+    ],
+    "USF-1000": [
+      "retention-mode:non-destructive-report-enforced",
+      "delete-artifacts:false",
+      "allowed-root-violations:0",
+      "later-policy-required-for-deletion:true"
+    ],
+    "USF-1001": [
+      "startup-measurement-requested:true",
+      "compose-phase-split:config,port,startup-wait,teardown",
+      "generated-compose-check-exit-code:0",
+      "compose-port-check-exit-code:0",
+      "compose-config-exit-code:0",
+      "compose-startup-wait-exit-code:0",
+      "compose-teardown-exit-code:0",
+      "testcontainers:considered-not-adopted-current-tranche",
+      "remote-cache:considered-not-adopted-current-tranche",
+      "task-graph-tooling:considered-not-adopted-current-tranche",
+      "non-local-options-later-issue:USF-1007"
     ]
   },
   "coveredIssueIds": [
@@ -253,7 +272,9 @@
       "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py selftest --json",
       "python3 tools/validate-linear-boundary/validate-linear-boundary.py all --json",
       "python3 tools/validate-spec/validate-spec.py all --json",
-      "python3 tools/repository-optimisation/realise-bounded-optimisation.py all --measure-full-family"
+      "python3 tools/repository-optimisation/realise-bounded-optimisation.py all --include-startup --measure-full-family",
+      "corepack pnpm repo:affected",
+      "corepack pnpm compose:timing"
     ],
     "enforcementMode": "warn-only for affected-run and timing budget findings; blocking only for malformed repository-owned evidence",
     "fullValidationAuthorityPreserved": true,
