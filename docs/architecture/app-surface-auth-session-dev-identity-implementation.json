@@ -259,5 +259,12 @@
     "oidc-flow-readiness",
     "secure-storage-readiness",
     "security-compliance-readiness"
-  ]
+  ],
+  "permissionTargetBindingPolicy": {
+    "status": "fail-closed",
+    "source": "permissionCheckCases",
+    "requirement": "A local auth/session request may allow only when identity, tenant, permission, request context kind, and target match an explicit mapped allow case.",
+    "deniedReasonCode": "permission-target-mapping-missing-fail-closed",
+    "nonClaimBoundary": "This is a bounded local app-surface mapping rule and does not claim production PDP, identity-provider, live OAuth/OIDC, deployment, staging, or human-acceptance readiness."
+  }
 }
