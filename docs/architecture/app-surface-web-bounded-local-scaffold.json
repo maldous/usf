@@ -93,18 +93,21 @@
         "permissionRefs": [
           "developer:read"
         ],
-        "tenantBoundaryRef": "tenant-context.developer-local",
+        "tenantBoundaryRef": "tenant.dev-local-fixture",
         "privacyCategoryRefs": [
-          "privacy.developer-profile-local"
+          "docs/architecture/client-query-cache-privacy-semantics.json",
+          "docs/architecture/app-surface-observability-privacy-semantics.json"
         ],
         "validationRefs": [
-          "validation.generated-client-current"
+          "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+          "typed-error-problem-details-model"
         ],
         "errorRefs": [
-          "error.missing-generated-client-input"
+          "typed-error-problem-details-model"
         ],
         "auditEventRefs": [
-          "audit.generated-client-consumption"
+          "client-audit-event-emission",
+          "graphql.developerProfile"
         ],
         "componentFixtureRefs": [
           "component-fixture-developer-profile-summary"
@@ -123,6 +126,8 @@
     "routeRegistryMustMatchThisArtefact": true,
     "unknownRoutesMustFailClosed": true,
     "missingCapabilityOrPermissionAuthorityMustFailClosed": true,
+    "missingGovernedRouteReferenceAuthorityMustFailClosed": true,
+    "routesCheckMustLoadRepositoryAuthority": true,
     "workspacePackageMustNotDeclareExternalDependencySections": true
   },
   "validationCommands": [

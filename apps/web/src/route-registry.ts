@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+
 export type WebRouteClass = "private" | "public" | "operator" | "admin";
 export type WebRenderingBoundary = "server-component" | "client-component" | "route-handler";
 
@@ -34,6 +36,13 @@ export type WebRouteRegistry = {
 export type WebRouteSemanticAuthority = {
   readonly capabilityIds: ReadonlySet<string>;
   readonly permissionIds: ReadonlySet<string>;
+  readonly tenantBoundaryIds: ReadonlySet<string>;
+  readonly privacyCategoryIds: ReadonlySet<string>;
+  readonly validationIds: ReadonlySet<string>;
+  readonly errorIds: ReadonlySet<string>;
+  readonly auditEventIds: ReadonlySet<string>;
+  readonly componentFixtureIds: ReadonlySet<string>;
+  readonly semanticSourceRefs: ReadonlySet<string>;
 };
 
 export type WebRouteValidationResult = {
@@ -75,6 +84,14 @@ const REQUIRED_ROUTE_STRING_FIELDS = [
   "nonClaimBoundary",
 ] as const;
 
+const REPOSITORY_ROOT_URL = new URL("../../../", import.meta.url);
+
+const ROUTE_SEMANTIC_SOURCE_PATHS = [
+  "docs/architecture/app-surface-local-in-memory-runtime.json",
+  "docs/architecture/app-surface-shared-client-consumption-path.json",
+  "docs/architecture/app-surface-web-adapter-semantics.json",
+] as const;
+
 export const WEB_ROUTE_REGISTRY = {
   artifactId: "usf.app-surface-web-bounded-local-route-registry",
   ownerIssueId: "USF-1017",
@@ -92,11 +109,17 @@ export const WEB_ROUTE_REGISTRY = {
       renderingBoundary: "server-component",
       capabilityId: "graphql-federation-generated-client-disposition",
       permissionRefs: ["developer:read"],
-      tenantBoundaryRef: "tenant-context.developer-local",
-      privacyCategoryRefs: ["privacy.developer-profile-local"],
-      validationRefs: ["validation.generated-client-current"],
-      errorRefs: ["error.missing-generated-client-input"],
-      auditEventRefs: ["audit.generated-client-consumption"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      privacyCategoryRefs: [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+      ],
+      validationRefs: [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model",
+      ],
+      errorRefs: ["typed-error-problem-details-model"],
+      auditEventRefs: ["client-audit-event-emission", "graphql.developerProfile"],
       componentFixtureRefs: ["component-fixture-developer-profile-summary"],
       semanticSourceRefs: [
         "docs/architecture/app-surface-local-in-memory-runtime.json",
@@ -132,6 +155,112 @@ function hasNonEmptyStringArray(value: unknown): value is readonly string[] {
   return Array.isArray(value) && value.length > 0 && value.every(isNonEmptyString);
 }
 
+function readRepositoryJson(relativePath: string): unknown {
+  return JSON.parse(readFileSync(new URL(relativePath, REPOSITORY_ROOT_URL), "utf8"));
+}
+
+function addIdsFromRefs(target: Set<string>, refs: unknown): void {
+  if (!Array.isArray(refs)) {
+    return;
+  }
+  for (const ref of refs) {
+    if (isRecord(ref) && isNonEmptyString(ref.id)) {
+      target.add(ref.id);
+    }
+  }
+}
+
+function addStringRefs(target: Set<string>, refs: unknown): void {
+  if (!Array.isArray(refs)) {
+    return;
+  }
+  for (const ref of refs) {
+    if (isNonEmptyString(ref)) {
+      target.add(ref);
+    }
+  }
+}
+
+function addStringRef(target: Set<string>, ref: unknown): void {
+  if (isNonEmptyString(ref)) {
+    target.add(ref);
+  }
+}
+
+export function buildWebRouteSemanticAuthorityFromRepository(): WebRouteSemanticAuthority {
+  const localRuntime = readRepositoryJson(
+    "docs/architecture/app-surface-local-in-memory-runtime.json",
+  );
+  const sharedClient = readRepositoryJson(
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+  );
+  const capabilityIds = new Set<string>();
+  const permissionIds = new Set<string>();
+  const tenantBoundaryIds = new Set<string>();
+  const privacyCategoryIds = new Set<string>();
+  const validationIds = new Set<string>();
+  const errorIds = new Set<string>();
+  const auditEventIds = new Set<string>();
+  const componentFixtureIds = new Set<string>();
+  const semanticSourceRefs = new Set<string>();
+
+  if (isRecord(localRuntime) && isRecord(localRuntime.semanticInputs)) {
+    addIdsFromRefs(capabilityIds, localRuntime.semanticInputs.capabilities);
+    addIdsFromRefs(permissionIds, localRuntime.semanticInputs.permissions);
+    addIdsFromRefs(tenantBoundaryIds, localRuntime.semanticInputs.tenantContexts);
+    addIdsFromRefs(validationIds, localRuntime.semanticInputs.validationRules);
+    addIdsFromRefs(errorIds, localRuntime.semanticInputs.errorRefs);
+    addIdsFromRefs(auditEventIds, localRuntime.semanticInputs.auditEvents);
+  }
+
+  if (isRecord(localRuntime) && Array.isArray(localRuntime.componentFixtures)) {
+    for (const fixture of localRuntime.componentFixtures) {
+      if (!isRecord(fixture)) {
+        continue;
+      }
+      addStringRef(componentFixtureIds, fixture.fixtureId);
+      addStringRef(capabilityIds, fixture.capabilityId);
+      addStringRef(tenantBoundaryIds, fixture.tenantContextId);
+      addStringRefs(permissionIds, fixture.requiredPermissionRefs);
+      addStringRefs(validationIds, fixture.validationRefs);
+      addStringRefs(errorIds, fixture.errorRefs);
+      addStringRefs(auditEventIds, fixture.auditEventRefs);
+    }
+  }
+
+  if (isRecord(sharedClient) && Array.isArray(sharedClient.mappings)) {
+    for (const mapping of sharedClient.mappings) {
+      if (!isRecord(mapping)) {
+        continue;
+      }
+      addStringRef(capabilityIds, mapping.capabilityId);
+      addStringRefs(permissionIds, mapping.permissionRefs);
+      addStringRefs(privacyCategoryIds, mapping.privacyCategoryRefs);
+      addStringRefs(validationIds, mapping.validationRefs);
+      addStringRefs(errorIds, mapping.errorRefs);
+      addStringRefs(auditEventIds, mapping.auditEventRefs);
+    }
+  }
+
+  for (const sourcePath of ROUTE_SEMANTIC_SOURCE_PATHS) {
+    if (existsSync(new URL(sourcePath, REPOSITORY_ROOT_URL))) {
+      semanticSourceRefs.add(sourcePath);
+    }
+  }
+
+  return {
+    capabilityIds,
+    permissionIds,
+    tenantBoundaryIds,
+    privacyCategoryIds,
+    validationIds,
+    errorIds,
+    auditEventIds,
+    componentFixtureIds,
+    semanticSourceRefs,
+  };
+}
+
 function validateNonClaims(nonClaims: unknown): string[] {
   if (!isRecord(nonClaims)) {
     return ["web-route-registry:missing-non-claims"];
@@ -150,6 +279,33 @@ function validateNonClaims(nonClaims: unknown): string[] {
     }
   }
   return findings;
+}
+
+function validateAuthorityStringRef(
+  findings: string[],
+  routeId: string,
+  ref: unknown,
+  authorityIds: ReadonlySet<string>,
+  findingPrefix: string,
+): void {
+  if (!isNonEmptyString(ref) || !authorityIds.has(ref)) {
+    findings.push(`${routeId}:${findingPrefix}:${isNonEmptyString(ref) ? ref : "missing"}`);
+  }
+}
+
+function validateAuthorityArrayRefs(
+  findings: string[],
+  routeId: string,
+  refs: unknown,
+  authorityIds: ReadonlySet<string>,
+  findingPrefix: string,
+): void {
+  const values = hasNonEmptyStringArray(refs) ? refs : [];
+  for (const ref of values) {
+    if (!authorityIds.has(ref)) {
+      findings.push(`${routeId}:${findingPrefix}:${ref}`);
+    }
+  }
 }
 
 function validateRoute(
@@ -195,6 +351,55 @@ function validateRoute(
         findings.push(`${routeId}:permission-authority-missing:${permissionRef}`);
       }
     }
+    validateAuthorityStringRef(
+      findings,
+      routeId,
+      route.tenantBoundaryRef,
+      semanticAuthority.tenantBoundaryIds,
+      "tenant-authority-missing",
+    );
+    validateAuthorityArrayRefs(
+      findings,
+      routeId,
+      route.privacyCategoryRefs,
+      semanticAuthority.privacyCategoryIds,
+      "privacy-authority-missing",
+    );
+    validateAuthorityArrayRefs(
+      findings,
+      routeId,
+      route.validationRefs,
+      semanticAuthority.validationIds,
+      "validation-authority-missing",
+    );
+    validateAuthorityArrayRefs(
+      findings,
+      routeId,
+      route.errorRefs,
+      semanticAuthority.errorIds,
+      "error-authority-missing",
+    );
+    validateAuthorityArrayRefs(
+      findings,
+      routeId,
+      route.auditEventRefs,
+      semanticAuthority.auditEventIds,
+      "audit-authority-missing",
+    );
+    validateAuthorityArrayRefs(
+      findings,
+      routeId,
+      route.componentFixtureRefs,
+      semanticAuthority.componentFixtureIds,
+      "component-fixture-authority-missing",
+    );
+    validateAuthorityArrayRefs(
+      findings,
+      routeId,
+      route.semanticSourceRefs,
+      semanticAuthority.semanticSourceRefs,
+      "semantic-source-authority-missing",
+    );
   }
   return findings;
 }
@@ -207,6 +412,18 @@ export function validateWebRouteRegistry(
     return { ok: false, findings: ["web-route-registry:missing"] };
   }
   const findings: string[] = [];
+  let resolvedSemanticAuthority = semanticAuthority;
+  if (!resolvedSemanticAuthority) {
+    try {
+      resolvedSemanticAuthority = buildWebRouteSemanticAuthorityFromRepository();
+    } catch (error) {
+      findings.push(
+        `web-route-registry:semantic-authority-unavailable:${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
   if (registry.ownerIssueId !== "USF-1017") {
     findings.push("web-route-registry:unexpected-owner-issue");
   }
@@ -227,7 +444,7 @@ export function validateWebRouteRegistry(
   } else {
     const seenPaths = new Set<string>();
     registry.routes.forEach((route, index) => {
-      findings.push(...validateRoute(route, index, semanticAuthority));
+      findings.push(...validateRoute(route, index, resolvedSemanticAuthority));
       if (isRecord(route) && isNonEmptyString(route.path)) {
         if (seenPaths.has(route.path)) {
           findings.push(`${route.routeId ?? `web-route-${index}`}:duplicate-path`);
@@ -259,5 +476,5 @@ export function assertWebRouteRegistry(
 }
 
 if (process.argv.includes("--selftest")) {
-  assertWebRouteRegistry();
+  assertWebRouteRegistry(WEB_ROUTE_REGISTRY, buildWebRouteSemanticAuthorityFromRepository());
 }
