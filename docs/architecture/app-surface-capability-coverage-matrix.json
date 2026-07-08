@@ -1,0 +1,601 @@
+{
+  "id": "app-surface-capability-coverage-matrix",
+  "title": "App Surface Capability Coverage Matrix",
+  "issueId": "USF-327",
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This matrix records the parent app-surface coverage inventory for current USF semantic-contract instances. It does not create UI, mobile, web, generated client, validator, store, deployment, compliance, production, live-provider, or readiness implementation. Detailed per-capability app-surface mappings remain owned by the child coverage issues listed here.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/capability-source-coverage-matrix.md"
+  ],
+  "inventoryBasis": {
+    "semanticContractInstanceDirectory": "spec/instances/semantic-contract/",
+    "semanticContractInstancePattern": "*.json",
+    "semanticContractCount": 67,
+    "childCoverageIssueParent": "USF-327",
+    "childCoverageIssueRange": {
+      "first": "USF-862",
+      "last": "USF-928",
+      "count": 67
+    },
+    "mappingRule": "Each current semantic-contract instance is mapped to one USF-native child coverage issue under USF-327. The child issue owns detailed app-surface semantics for that capability family."
+  },
+  "requiredCoverageDimensions": [
+    "mobile-view-model-needs",
+    "web-view-model-needs",
+    "routes",
+    "navigation",
+    "commands",
+    "queries",
+    "workflows",
+    "permissions",
+    "validation",
+    "errors",
+    "audit-events",
+    "offline-and-cache-posture",
+    "notifications",
+    "privacy-data-categories",
+    "i18n-keys",
+    "accessibility-requirements",
+    "telemetry",
+    "proof-requirements",
+    "store-disclosure-impact",
+    "ads-or-monetisation-impact"
+  ],
+  "coverageEntries": [
+    {
+      "semanticContractId": "semantic-contract.abac-policy-decision-point",
+      "semanticContractPath": "spec/instances/semantic-contract/abac-policy-decision-point.json",
+      "coverageIssueId": "USF-862",
+      "coverageIssueTitle": "Capability app-surface coverage: ABAC Policy Decision Point",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.accessibility-a11y-gate",
+      "semanticContractPath": "spec/instances/semantic-contract/accessibility-a11y-gate.json",
+      "coverageIssueId": "USF-863",
+      "coverageIssueTitle": "Capability app-surface coverage: Accessibility A11Y Gate",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "semanticContractPath": "spec/instances/semantic-contract/alerting-incident-management-on-call-status-page.json",
+      "coverageIssueId": "USF-864",
+      "coverageIssueTitle": "Capability app-surface coverage: Alerting Incident Management On Call Status Page",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semanticContractPath": "spec/instances/semantic-contract/api-docs-developer-portal-sdks-rate-limits.json",
+      "coverageIssueId": "USF-865",
+      "coverageIssueTitle": "Capability app-surface coverage: API Docs Developer Portal SDKs Rate Limits",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.api-keys-personal-access-tokens",
+      "semanticContractPath": "spec/instances/semantic-contract/api-keys-personal-access-tokens.json",
+      "coverageIssueId": "USF-866",
+      "coverageIssueTitle": "Capability app-surface coverage: API Keys And Personal Access Tokens",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.audit-of-privileged-access",
+      "semanticContractPath": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "coverageIssueId": "USF-867",
+      "coverageIssueTitle": "Capability app-surface coverage: Audit Of Privileged Access",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.authentication-platform",
+      "semanticContractPath": "spec/instances/semantic-contract/authentication-platform.json",
+      "coverageIssueId": "USF-868",
+      "coverageIssueTitle": "Capability app-surface coverage: Authentication Platform",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.background-workers-job-runner",
+      "semanticContractPath": "spec/instances/semantic-contract/background-workers-job-runner.json",
+      "coverageIssueId": "USF-869",
+      "coverageIssueTitle": "Capability app-surface coverage: Background Workers Job Runner",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.backup-and-restore",
+      "semanticContractPath": "spec/instances/semantic-contract/backup-and-restore.json",
+      "coverageIssueId": "USF-870",
+      "coverageIssueTitle": "Capability app-surface coverage: Backup And Restore",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.branding-and-theming",
+      "semanticContractPath": "spec/instances/semantic-contract/branding-and-theming.json",
+      "coverageIssueId": "USF-871",
+      "coverageIssueTitle": "Capability app-surface coverage: Branding And Theming",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semanticContractPath": "spec/instances/semantic-contract/browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing.json",
+      "coverageIssueId": "USF-872",
+      "coverageIssueTitle": "Capability app-surface coverage: Browser Telemetry Grafana Faro RUM And Browser To BFF Tracing",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.build-versus-compose-decision-framework",
+      "semanticContractPath": "spec/instances/semantic-contract/build-versus-compose-decision-framework.json",
+      "coverageIssueId": "USF-873",
+      "coverageIssueTitle": "Capability app-surface coverage: Build Versus Compose Decision Framework",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semanticContractPath": "spec/instances/semantic-contract/code-quality-and-secret-and-dependency-scanning.json",
+      "coverageIssueId": "USF-874",
+      "coverageIssueTitle": "Capability app-surface coverage: Code Quality And Secret And Dependency Scanning",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semanticContractPath": "spec/instances/semantic-contract/compliance-reports-access-reviews-evidence-packs.json",
+      "coverageIssueId": "USF-875",
+      "coverageIssueTitle": "Capability app-surface coverage: Compliance Reports Access Reviews Evidence Packs",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.composed-provider-readiness-spine",
+      "semanticContractPath": "spec/instances/semantic-contract/composed-provider-readiness-spine.json",
+      "coverageIssueId": "USF-876",
+      "coverageIssueTitle": "Capability app-surface coverage: Composed Provider Readiness Spine",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.configuration-registry-and-history",
+      "semanticContractPath": "spec/instances/semantic-contract/configuration-registry-and-history.json",
+      "coverageIssueId": "USF-877",
+      "coverageIssueTitle": "Capability app-surface coverage: Configuration Registry And History",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semanticContractPath": "spec/instances/semantic-contract/custom-domains-dns-ownership-tls-canonical.json",
+      "coverageIssueId": "USF-878",
+      "coverageIssueTitle": "Capability app-surface coverage: Custom Domains DNS Ownership TLS Canonical",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semanticContractPath": "spec/instances/semantic-contract/data-governance-catalog-lineage-classification-pii-dsr-gdpr.json",
+      "coverageIssueId": "USF-879",
+      "coverageIssueTitle": "Capability app-surface coverage: Data Governance Catalog Lineage Classification PII DSR GDPR",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.delegated-administration-roles",
+      "semanticContractPath": "spec/instances/semantic-contract/delegated-administration-roles.json",
+      "coverageIssueId": "USF-880",
+      "coverageIssueTitle": "Capability app-surface coverage: Delegated Administration Roles",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semanticContractPath": "spec/instances/semantic-contract/e2e-confidence-ladder-stage-aware.json",
+      "coverageIssueId": "USF-881",
+      "coverageIssueTitle": "Capability app-surface coverage: E2E Confidence Ladder Stage Aware",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "semanticContractPath": "spec/instances/semantic-contract/end-user-profile-and-preferences-self-service.json",
+      "coverageIssueId": "USF-882",
+      "coverageIssueTitle": "Capability app-surface coverage: End User Profile And Preferences Self Service",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.entitlement-engine",
+      "semanticContractPath": "spec/instances/semantic-contract/entitlement-engine.json",
+      "coverageIssueId": "USF-883",
+      "coverageIssueTitle": "Capability app-surface coverage: Entitlement Engine",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.environment-registry-and-bootstrap",
+      "semanticContractPath": "spec/instances/semantic-contract/environment-registry-and-bootstrap.json",
+      "coverageIssueId": "USF-884",
+      "coverageIssueTitle": "Capability app-surface coverage: Environment Registry And Bootstrap",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.environment-specific-vs-shared-service-model",
+      "semanticContractPath": "spec/instances/semantic-contract/environment-specific-vs-shared-service-model.json",
+      "coverageIssueId": "USF-885",
+      "coverageIssueTitle": "Capability app-surface coverage: Environment Specific Vs Shared Service Model",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semanticContractPath": "spec/instances/semantic-contract/event-bus-durable-queues-dlq-redrive.json",
+      "coverageIssueId": "USF-886",
+      "coverageIssueTitle": "Capability app-surface coverage: Event Bus Durable Queues DLQ Redrive",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.history-read-model-read-only-projection",
+      "semanticContractPath": "spec/instances/semantic-contract/history-read-model-read-only-projection.json",
+      "coverageIssueId": "USF-887",
+      "coverageIssueTitle": "Capability app-surface coverage: History Read Model Read Only Projection",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.i18n-runtime-and-validation",
+      "semanticContractPath": "spec/instances/semantic-contract/i18n-runtime-and-validation.json",
+      "coverageIssueId": "USF-888",
+      "coverageIssueTitle": "Capability app-surface coverage: I18N Runtime And Validation",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.internal-service-catalog-and-readiness",
+      "semanticContractPath": "spec/instances/semantic-contract/internal-service-catalog-and-readiness.json",
+      "coverageIssueId": "USF-889",
+      "coverageIssueTitle": "Capability app-surface coverage: Internal Service Catalog And Readiness",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semanticContractPath": "spec/instances/semantic-contract/logs-aggregation-and-tenant-scoped-search.json",
+      "coverageIssueId": "USF-890",
+      "coverageIssueTitle": "Capability app-surface coverage: Logs Aggregation And Tenant Scoped Search",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.metrics-and-traces",
+      "semanticContractPath": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "coverageIssueId": "USF-891",
+      "coverageIssueTitle": "Capability app-surface coverage: Metrics And Traces",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.mock-providers-dev-test",
+      "semanticContractPath": "spec/instances/semantic-contract/mock-providers-dev-test.json",
+      "coverageIssueId": "USF-892",
+      "coverageIssueTitle": "Capability app-surface coverage: Mock Providers Dev Test",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticContractPath": "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+      "coverageIssueId": "USF-893",
+      "coverageIssueTitle": "Capability app-surface coverage: Notification Delivery And Preferences And Channels",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semanticContractPath": "spec/instances/semantic-contract/object-storage-and-tenant-prefixes-and-signed-urls.json",
+      "coverageIssueId": "USF-894",
+      "coverageIssueTitle": "Capability app-surface coverage: Object Storage And Tenant Prefixes And Signed URLs",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "semanticContractPath": "spec/instances/semantic-contract/observability-built-in-alerting-and-incidents.json",
+      "coverageIssueId": "USF-895",
+      "coverageIssueTitle": "Capability app-surface coverage: Observability Built In Alerting And Incidents",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.openapi-drift-hard-gate",
+      "semanticContractPath": "spec/instances/semantic-contract/openapi-drift-hard-gate.json",
+      "coverageIssueId": "USF-896",
+      "coverageIssueTitle": "Capability app-surface coverage: OpenAPI Drift Hard Gate",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semanticContractPath": "spec/instances/semantic-contract/pitr-retention-legal-hold-data-residency.json",
+      "coverageIssueId": "USF-897",
+      "coverageIssueTitle": "Capability app-surface coverage: PITR Retention Legal Hold Data Residency",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.product-catalog-plans-prices",
+      "semanticContractPath": "spec/instances/semantic-contract/product-catalog-plans-prices.json",
+      "coverageIssueId": "USF-898",
+      "coverageIssueTitle": "Capability app-surface coverage: Product Catalog Plans Prices",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.provider-configuration-plane",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-configuration-plane.json",
+      "coverageIssueId": "USF-899",
+      "coverageIssueTitle": "Capability app-surface coverage: Provider Configuration Plane",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.provider-environment-classification",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-environment-classification.json",
+      "coverageIssueId": "USF-900",
+      "coverageIssueTitle": "Capability app-surface coverage: Provider Environment Classification",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.quota-enforcement",
+      "semanticContractPath": "spec/instances/semantic-contract/quota-enforcement.json",
+      "coverageIssueId": "USF-901",
+      "coverageIssueTitle": "Capability app-surface coverage: Quota Enforcement",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.rate-limiting-api",
+      "semanticContractPath": "spec/instances/semantic-contract/rate-limiting-api.json",
+      "coverageIssueId": "USF-902",
+      "coverageIssueTitle": "Capability app-surface coverage: Rate Limiting API",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.rbac-roles-and-permissions",
+      "semanticContractPath": "spec/instances/semantic-contract/rbac-roles-and-permissions.json",
+      "coverageIssueId": "USF-903",
+      "coverageIssueTitle": "Capability app-surface coverage: RBAC Roles and Permissions",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "semanticContractPath": "spec/instances/semantic-contract/relational-storage-and-migrations-and-rls.json",
+      "coverageIssueId": "USF-904",
+      "coverageIssueTitle": "Capability app-surface coverage: Relational Storage And Migrations And RLS",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.runtime-secrets-management",
+      "semanticContractPath": "spec/instances/semantic-contract/runtime-secrets-management.json",
+      "coverageIssueId": "USF-905",
+      "coverageIssueTitle": "Capability app-surface coverage: Runtime Secrets Management",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semanticContractPath": "spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json",
+      "coverageIssueId": "USF-906",
+      "coverageIssueTitle": "Capability app-surface coverage: Scheduled Jobs Built In On The Event Substrate",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.search-and-indexing-product-search",
+      "semanticContractPath": "spec/instances/semantic-contract/search-and-indexing-product-search.json",
+      "coverageIssueId": "USF-907",
+      "coverageIssueTitle": "Capability app-surface coverage: Search And Indexing Product Search",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.serverless-function-runtime",
+      "semanticContractPath": "spec/instances/semantic-contract/serverless-function-runtime.json",
+      "coverageIssueId": "USF-908",
+      "coverageIssueTitle": "Capability app-surface coverage: Serverless Function Runtime",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.service-catalog-and-provider-integration-model",
+      "semanticContractPath": "spec/instances/semantic-contract/service-catalog-and-provider-integration-model.json",
+      "coverageIssueId": "USF-909",
+      "coverageIssueTitle": "Capability app-surface coverage: Service Catalog And Provider Integration Model",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.sub-organisations",
+      "semanticContractPath": "spec/instances/semantic-contract/sub-organisations.json",
+      "coverageIssueId": "USF-910",
+      "coverageIssueTitle": "Capability app-surface coverage: Sub Organisations",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semanticContractPath": "spec/instances/semantic-contract/subscriptions-invoices-payment-methods-dunning.json",
+      "coverageIssueId": "USF-911",
+      "coverageIssueTitle": "Capability app-surface coverage: Subscriptions Invoices Payment Methods Dunning",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.support-mode-break-glass-access",
+      "semanticContractPath": "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+      "coverageIssueId": "USF-912",
+      "coverageIssueTitle": "Capability app-surface coverage: Support Mode And Break Glass Access",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.support-tickets-customer-health-announcements",
+      "semanticContractPath": "spec/instances/semantic-contract/support-tickets-customer-health-announcements.json",
+      "coverageIssueId": "USF-913",
+      "coverageIssueTitle": "Capability app-surface coverage: Support Tickets Customer Health Announcements",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-canonical-domain-set-unset",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-canonical-domain-set-unset.json",
+      "coverageIssueId": "USF-914",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Canonical Domain Set Unset",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-data-import-export",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-data-import-export.json",
+      "coverageIssueId": "USF-915",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Data Import Export",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-domain-activation-auth-client",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-domain-activation-auth-client.json",
+      "coverageIssueId": "USF-916",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Domain Activation Auth Client",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-groups",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-groups.json",
+      "coverageIssueId": "USF-917",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Groups",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-host-identity-resolution",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-host-identity-resolution.json",
+      "coverageIssueId": "USF-918",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Host Identity Resolution",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-identity-record-and-fqdn",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json",
+      "coverageIssueId": "USF-919",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Identity Record and FQDN",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-isolation-proof",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-isolation-proof.json",
+      "coverageIssueId": "USF-920",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Isolation Proof",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-lifecycle-provision-suspend-delete-export.json",
+      "coverageIssueId": "USF-921",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Lifecycle Provision Suspend Delete Export",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.tenant-service-clickthrough-policy",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-service-clickthrough-policy.json",
+      "coverageIssueId": "USF-922",
+      "coverageIssueTitle": "Capability app-surface coverage: Tenant Service Clickthrough Policy",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "semanticContractPath": "spec/instances/semantic-contract/universal-service-foundation-scope-and-principles.json",
+      "coverageIssueId": "USF-923",
+      "coverageIssueTitle": "Capability app-surface coverage: Universal Service Foundation Scope And Principles",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semanticContractPath": "spec/instances/semantic-contract/usage-metering-and-meter-event-ingestion.json",
+      "coverageIssueId": "USF-924",
+      "coverageIssueTitle": "Capability app-surface coverage: Usage Metering And Meter Event Ingestion",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.user-identity-and-tenant-membership",
+      "semanticContractPath": "spec/instances/semantic-contract/user-identity-and-tenant-membership.json",
+      "coverageIssueId": "USF-925",
+      "coverageIssueTitle": "Capability app-surface coverage: User Identity And Tenant Membership",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.webhooks-developer-facing",
+      "semanticContractPath": "spec/instances/semantic-contract/webhooks-developer-facing.json",
+      "coverageIssueId": "USF-926",
+      "coverageIssueTitle": "Capability app-surface coverage: Webhooks Developer Facing",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semanticContractPath": "spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json",
+      "coverageIssueId": "USF-927",
+      "coverageIssueTitle": "Capability app-surface coverage: Workflow Engine Scheduled Jobs Approvals",
+      "mappingStatus": "child-coverage-issue-created"
+    },
+    {
+      "semanticContractId": "semantic-contract.write-only-secret-settings",
+      "semanticContractPath": "spec/instances/semantic-contract/write-only-secret-settings.json",
+      "coverageIssueId": "USF-928",
+      "coverageIssueTitle": "Capability app-surface coverage: Write Only Secret Settings",
+      "mappingStatus": "child-coverage-issue-created"
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-APP-SURFACE-COVERAGE-001",
+      "description": "Future app-surface coverage validation must fail closed when a current semantic-contract instance has no app-surface child coverage issue mapping.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-327"
+    },
+    {
+      "ruleId": "USF-APP-SURFACE-COVERAGE-002",
+      "description": "Future app-surface coverage validation must fail closed when a child coverage issue mapping references a missing semantic-contract instance path or a non-USF-native issue identifier.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-327"
+    },
+    {
+      "ruleId": "USF-APP-SURFACE-COVERAGE-003",
+      "description": "Future app-surface coverage validation must fail closed when a child app-surface mapping omits one of the required parent coverage dimensions without an explicit not-applicable rationale.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-327"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "app-surface-capability-coverage-inventory-proof",
+      "description": "Future proof must show that the semantic-contract inventory and child coverage issue inventory remain aligned before any app-surface implementation, generated client, validator, store, deployment, compliance, or readiness claim is accepted.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "child app-surface mappings are completed where in scope",
+      "validator requirements are implemented and selftested",
+      "planted-defect fixtures exist for missing coverage and unresolved mapping failures",
+      "proof evidence exists and is tied to the governed semantic-contract inventory",
+      "owner acceptance is recorded for any readiness or implementation promotion"
+    ]
+  },
+  "nonClaims": {
+    "implementationReady": false,
+    "productUiReady": false,
+    "mobileReady": false,
+    "webReady": false,
+    "storeReady": false,
+    "cdnReady": false,
+    "deploymentReady": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "complianceReady": false,
+    "monetisationReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "criterion": "Every current semantic contract family has a child coverage issue.",
+      "status": "satisfied",
+      "evidence": "coverageEntries contains 67 entries, matching inventoryBasis.semanticContractCount and the current semantic-contract instance count."
+    },
+    {
+      "criterion": "No capability family is invented.",
+      "status": "satisfied",
+      "evidence": "Each coverage entry references an existing semantic-contract instance path under spec/instances/semantic-contract/."
+    },
+    {
+      "criterion": "Every mapping is USF-native and resolvable.",
+      "status": "satisfied",
+      "evidence": "Each mapping uses a USF issue identifier and a repository semantic-contract instance path."
+    },
+    {
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "validatorRequirements and proofRequirements define blocking future coverage validation and inventory proof expectations."
+    },
+    {
+      "criterion": "Non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "authorityBoundary, implementationGate, and nonClaims preserve the no-implementation and no-readiness boundary."
+    }
+  ]
+}

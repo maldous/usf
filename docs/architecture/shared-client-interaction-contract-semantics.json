@@ -1,0 +1,541 @@
+{
+  "id": "usf.shared-client-interaction-contract-semantics",
+  "title": "Shared client interaction contract semantics",
+  "status": "semantic-definition",
+  "purpose": "Define shared mobile and web client interaction contracts for authentication, context propagation, permissions, user messages, retries, offline envelopes, optimistic updates, realtime subscriptions, file transfer, capability detection, rate-limit handling, and client audit events without creating implementation behaviour.",
+  "coveredIssueIds": [
+    "USF-335",
+    "USF-336",
+    "USF-337",
+    "USF-338",
+    "USF-340",
+    "USF-341",
+    "USF-342",
+    "USF-343",
+    "USF-345",
+    "USF-346",
+    "USF-347",
+    "USF-348"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "role": "constitutional-authority"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "role": "authority-order"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "role": "app-surface-authority-boundary"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "role": "shared-client-sdk-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+      "role": "capability-coverage-foundation"
+    },
+    {
+      "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+      "role": "generated-client-contract-foundation"
+    },
+    {
+      "path": "docs/architecture/client-query-cache-privacy-semantics.json",
+      "role": "client-state-and-privacy-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "role": "validator-requirement-foundation"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "role": "taxonomy-catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "role": "vocabulary-catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "role": "schema-registry"
+    }
+  ],
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-330",
+      "USF-331",
+      "USF-312"
+    ],
+    "notSatisfiedByThisArtefact": [
+      "USF-328",
+      "USF-821",
+      "USF-822",
+      "USF-939"
+    ]
+  },
+  "crossCuttingRules": [
+    {
+      "id": "client-contracts-project-authority",
+      "requirement": "Client contracts project USF semantic authority and MUST NOT create product behaviour, permission rules, provider semantics, or readiness claims by themselves."
+    },
+    {
+      "id": "messages-do-not-change-behaviour",
+      "requirement": "User-facing messages explain governed state and MUST NOT expand, weaken, or redefine allowed behaviour."
+    },
+    {
+      "id": "platform-differences-do-not-redefine-authorization",
+      "requirement": "Mobile and web platform differences may affect presentation and availability but MUST NOT redefine authentication, authorization, tenant isolation, or capability authority."
+    },
+    {
+      "id": "provider-mode-and-environment-remain-separate",
+      "requirement": "Provider mode and environment remain separate dimensions in client context and MUST NOT upgrade one another by implication."
+    },
+    {
+      "id": "resilience-behaviour-is-capability-defined",
+      "requirement": "Retry, backoff, offline queueing, optimistic updates, realtime reconnection, and file-transfer retry behaviour require capability authority and fail closed when unmapped."
+    },
+    {
+      "id": "client-events-remain-evidence-inputs",
+      "requirement": "Client audit, telemetry, diagnostic, and progress events are evidence inputs and MUST NOT define product semantics by themselves."
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-335",
+      "id": "typed-error-problem-details-model",
+      "purpose": "Map validation, authorization, rate-limit, conflict, retry, offline, provider, and unknown-error states to USF-defined error semantics and user messages.",
+      "requiredMappings": [
+        "errorClass",
+        "authorityReference",
+        "problemDetailsReference",
+        "userMessageReference",
+        "retryPolicyReference",
+        "auditReference",
+        "privacyReference"
+      ],
+      "failClosedWhenMissing": [
+        "errorClass",
+        "authorityReference",
+        "userMessageReference"
+      ],
+      "validatorRequirementId": "typed-error-problem-details-validator",
+      "proofRequirementId": "typed-error-problem-details-proof"
+    },
+    {
+      "issueId": "USF-336",
+      "id": "auth-session-client-contract",
+      "purpose": "Map login, identity context, tenant context, session lifecycle, refresh, revocation, logout, storage boundaries, and audit events to USF authentication semantics.",
+      "requiredMappings": [
+        "authenticationAuthorityReference",
+        "identityContextReference",
+        "tenantContextReference",
+        "sessionLifecycleReference",
+        "storageBoundaryReference",
+        "permissionReference",
+        "auditReference",
+        "privacyReference"
+      ],
+      "failClosedWhenMissing": [
+        "authenticationAuthorityReference",
+        "permissionReference",
+        "auditReference"
+      ],
+      "validatorRequirementId": "auth-session-client-contract-validator",
+      "proofRequirementId": "auth-session-client-contract-proof"
+    },
+    {
+      "issueId": "USF-337",
+      "id": "tenant-user-context-propagation",
+      "purpose": "Map tenant identity, user identity, capability context, environment, provider mode, audit context, and correlation context through mobile and web clients.",
+      "requiredMappings": [
+        "tenantIdentityReference",
+        "userIdentityReference",
+        "capabilityContextReference",
+        "environmentReference",
+        "providerModeReference",
+        "auditContextReference",
+        "correlationContextReference"
+      ],
+      "failClosedWhenMissing": [
+        "tenantIdentityReference",
+        "userIdentityReference",
+        "environmentReference",
+        "providerModeReference"
+      ],
+      "validatorRequirementId": "tenant-user-context-propagation-validator",
+      "proofRequirementId": "tenant-user-context-propagation-proof"
+    },
+    {
+      "issueId": "USF-338",
+      "id": "permission-feature-flag-affordance-contract",
+      "purpose": "Map roles, permissions, entitlements, feature flags, disabled states, hidden states, audit events, and denial messaging to USF authority.",
+      "requiredMappings": [
+        "capabilityReference",
+        "roleReference",
+        "permissionReference",
+        "entitlementReference",
+        "featureFlagReference",
+        "affordanceStateReference",
+        "denialMessageReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "capabilityReference",
+        "permissionReference",
+        "affordanceStateReference"
+      ],
+      "validatorRequirementId": "permission-feature-flag-affordance-validator",
+      "proofRequirementId": "permission-feature-flag-affordance-proof"
+    },
+    {
+      "issueId": "USF-340",
+      "id": "client-audit-event-emission",
+      "purpose": "Map user interactions, commands, permission denials, security-relevant events, consent events, and diagnostic context to USF audit semantics.",
+      "requiredMappings": [
+        "eventAuthorityReference",
+        "interactionReference",
+        "commandReference",
+        "permissionReference",
+        "securityEventReference",
+        "consentReference",
+        "diagnosticContextReference",
+        "privacyReference"
+      ],
+      "failClosedWhenMissing": [
+        "eventAuthorityReference",
+        "privacyReference"
+      ],
+      "validatorRequirementId": "client-audit-event-emission-validator",
+      "proofRequirementId": "client-audit-event-emission-proof"
+    },
+    {
+      "issueId": "USF-341",
+      "id": "offline-safe-command-envelope",
+      "purpose": "Map offline eligibility, queued command data, identity context, idempotency, expiration, conflict policy, retry policy, audit events, and privacy retention to USF semantics.",
+      "requiredMappings": [
+        "offlineEligibilityReference",
+        "commandReference",
+        "identityContextReference",
+        "idempotencyReference",
+        "expirationReference",
+        "conflictPolicyReference",
+        "retryPolicyReference",
+        "auditReference",
+        "privacyRetentionReference"
+      ],
+      "failClosedWhenMissing": [
+        "offlineEligibilityReference",
+        "identityContextReference",
+        "privacyRetentionReference"
+      ],
+      "validatorRequirementId": "offline-safe-command-envelope-validator",
+      "proofRequirementId": "offline-safe-command-envelope-proof"
+    },
+    {
+      "issueId": "USF-342",
+      "id": "idempotency-retry-semantics",
+      "purpose": "Map retryable operations, non-retryable operations, idempotency keys, backoff, duplicate handling, conflict states, user messages, and audit events to USF semantics.",
+      "requiredMappings": [
+        "operationReference",
+        "retryEligibilityReference",
+        "idempotencyReference",
+        "backoffReference",
+        "duplicateHandlingReference",
+        "conflictStateReference",
+        "userMessageReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "operationReference",
+        "retryEligibilityReference",
+        "idempotencyReference"
+      ],
+      "validatorRequirementId": "idempotency-retry-semantics-validator",
+      "proofRequirementId": "idempotency-retry-semantics-proof"
+    },
+    {
+      "issueId": "USF-343",
+      "id": "optimistic-update-semantics",
+      "purpose": "Map eligible capabilities, pending state, rollback, conflict state, retry state, user messaging, audit events, and cache invalidation to USF authority.",
+      "requiredMappings": [
+        "capabilityReference",
+        "optimisticEligibilityReference",
+        "pendingStateReference",
+        "rollbackReference",
+        "conflictStateReference",
+        "retryStateReference",
+        "userMessageReference",
+        "auditReference",
+        "cacheInvalidationReference"
+      ],
+      "failClosedWhenMissing": [
+        "capabilityReference",
+        "optimisticEligibilityReference",
+        "rollbackReference",
+        "conflictStateReference"
+      ],
+      "validatorRequirementId": "optimistic-update-semantics-validator",
+      "proofRequirementId": "optimistic-update-semantics-proof"
+    },
+    {
+      "issueId": "USF-345",
+      "id": "realtime-subscription-event-stream-semantics",
+      "purpose": "Map event eligibility, subscription scope, tenant isolation, ordering expectations, reconnect behaviour, missed events, user messages, and audit events to USF semantics.",
+      "requiredMappings": [
+        "eventAuthorityReference",
+        "subscriptionScopeReference",
+        "tenantIsolationReference",
+        "permissionReference",
+        "orderingExpectationReference",
+        "reconnectReference",
+        "missedEventReference",
+        "userMessageReference",
+        "auditReference",
+        "privacyReference"
+      ],
+      "failClosedWhenMissing": [
+        "eventAuthorityReference",
+        "subscriptionScopeReference",
+        "tenantIsolationReference",
+        "permissionReference",
+        "privacyReference"
+      ],
+      "validatorRequirementId": "realtime-subscription-event-stream-validator",
+      "proofRequirementId": "realtime-subscription-event-stream-proof"
+    },
+    {
+      "issueId": "USF-346",
+      "id": "file-transfer-contract-semantics",
+      "purpose": "Map file types, size limits, signed URL usage, tenant prefixes, content checks, progress states, retries, retention, privacy categories, and audit events to USF semantics.",
+      "requiredMappings": [
+        "capabilityReference",
+        "fileTypeReference",
+        "sizeLimitReference",
+        "signedUrlReference",
+        "tenantPrefixReference",
+        "contentCheckReference",
+        "progressStateReference",
+        "retryPolicyReference",
+        "retentionReference",
+        "privacyCategoryReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "capabilityReference",
+        "retentionReference",
+        "privacyCategoryReference",
+        "auditReference"
+      ],
+      "validatorRequirementId": "file-transfer-contract-validator",
+      "proofRequirementId": "file-transfer-contract-proof"
+    },
+    {
+      "issueId": "USF-347",
+      "id": "device-browser-capability-detection",
+      "purpose": "Map platform capabilities, unavailable states, permission prerequisites, progressive enhancement, fallback rules, analytics limits, and privacy implications to USF semantics.",
+      "requiredMappings": [
+        "platformCapabilityReference",
+        "unavailableStateReference",
+        "permissionPrerequisiteReference",
+        "progressiveEnhancementReference",
+        "fallbackReference",
+        "analyticsLimitReference",
+        "privacyReference"
+      ],
+      "failClosedWhenMissing": [
+        "platformCapabilityReference",
+        "fallbackReference",
+        "privacyReference"
+      ],
+      "validatorRequirementId": "device-browser-capability-detection-validator",
+      "proofRequirementId": "device-browser-capability-detection-proof"
+    },
+    {
+      "issueId": "USF-348",
+      "id": "rate-limit-backoff-user-message-semantics",
+      "purpose": "Map quota events, retry-after signals, backoff rules, disabled actions, user messaging, telemetry, and audit context to USF rate-limit and quota semantics.",
+      "requiredMappings": [
+        "quotaEventReference",
+        "retryAfterReference",
+        "backoffReference",
+        "disabledActionReference",
+        "userMessageReference",
+        "telemetryReference",
+        "auditContextReference"
+      ],
+      "failClosedWhenMissing": [
+        "quotaEventReference",
+        "retryAfterReference",
+        "userMessageReference"
+      ],
+      "validatorRequirementId": "rate-limit-backoff-user-message-validator",
+      "proofRequirementId": "rate-limit-backoff-user-message-proof"
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "typed-error-problem-details-validator",
+      "issueId": "USF-335",
+      "requirement": "Future validators reject unmapped error states and user-facing messages that change allowed behaviour.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "auth-session-client-contract-validator",
+      "issueId": "USF-336",
+      "requirement": "Future validators reject auth flows without authentication, permission, privacy, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "tenant-user-context-propagation-validator",
+      "issueId": "USF-337",
+      "requirement": "Future validators reject clients that omit or conflate tenant, user, provider mode, environment, audit, or correlation context.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "permission-feature-flag-affordance-validator",
+      "issueId": "USF-338",
+      "requirement": "Future validators reject affordances without capability, permission, entitlement, feature-flag, denial-message, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "client-audit-event-emission-validator",
+      "issueId": "USF-340",
+      "requirement": "Future validators reject client audit events without semantic event authority and privacy mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "offline-safe-command-envelope-validator",
+      "issueId": "USF-341",
+      "requirement": "Future validators reject offline commands without capability, identity, idempotency, expiration, conflict, retry, audit, and privacy retention mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "idempotency-retry-semantics-validator",
+      "issueId": "USF-342",
+      "requirement": "Future validators reject unsafe retry or idempotency behaviour without semantic backing.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "optimistic-update-semantics-validator",
+      "issueId": "USF-343",
+      "requirement": "Future validators reject optimistic updates without capability, rollback, conflict, retry, cache, user-message, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "realtime-subscription-event-stream-validator",
+      "issueId": "USF-345",
+      "requirement": "Future validators reject subscriptions without event, permission, tenant isolation, privacy, reconnect, missed-event, user-message, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "file-transfer-contract-validator",
+      "issueId": "USF-346",
+      "requirement": "Future validators reject file operations without capability, storage, privacy, retention, progress, retry, content-check, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "device-browser-capability-detection-validator",
+      "issueId": "USF-347",
+      "requirement": "Future validators reject feature branches without semantic platform capability, fallback, permission prerequisite, analytics limit, and privacy mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "rate-limit-backoff-user-message-validator",
+      "issueId": "USF-348",
+      "requirement": "Future validators reject rate-limit handling without quota, retry-after, backoff, disabled-action, user-message, telemetry, and audit mappings.",
+      "failureMode": "fail-closed"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "typed-error-problem-details-proof",
+      "issueId": "USF-335",
+      "requirement": "Future proof records trace each client error state to its USF error class, problem-details mapping, user message, and audit reference."
+    },
+    {
+      "id": "auth-session-client-contract-proof",
+      "issueId": "USF-336",
+      "requirement": "Future proof records trace auth and session flows to authentication, permission, privacy, storage-boundary, and audit authority."
+    },
+    {
+      "id": "tenant-user-context-propagation-proof",
+      "issueId": "USF-337",
+      "requirement": "Future proof records show tenant, user, provider mode, environment, audit, and correlation context are preserved without conflation."
+    },
+    {
+      "id": "permission-feature-flag-affordance-proof",
+      "issueId": "USF-338",
+      "requirement": "Future proof records show each affordance maps to capability, permission, entitlement, feature-flag, denial-message, and audit authority."
+    },
+    {
+      "id": "client-audit-event-emission-proof",
+      "issueId": "USF-340",
+      "requirement": "Future proof records show each client audit event maps to event authority, diagnostic context, consent where applicable, and privacy classification."
+    },
+    {
+      "id": "offline-safe-command-envelope-proof",
+      "issueId": "USF-341",
+      "requirement": "Future proof records show queued commands preserve identity, idempotency, expiration, conflict, retry, audit, and privacy retention mappings."
+    },
+    {
+      "id": "idempotency-retry-semantics-proof",
+      "issueId": "USF-342",
+      "requirement": "Future proof records show retry and idempotency behaviour does not alter business semantics."
+    },
+    {
+      "id": "optimistic-update-semantics-proof",
+      "issueId": "USF-343",
+      "requirement": "Future proof records show optimistic update, rollback, conflict, retry, user-message, audit, and cache invalidation mappings are capability-approved."
+    },
+    {
+      "id": "realtime-subscription-event-stream-proof",
+      "issueId": "USF-345",
+      "requirement": "Future proof records show subscriptions preserve event authority, tenant isolation, permission, privacy, reconnect, missed-event, and audit semantics."
+    },
+    {
+      "id": "file-transfer-contract-proof",
+      "issueId": "USF-346",
+      "requirement": "Future proof records show file operations map to capability, storage, privacy, retention, content checks, progress, retry, and audit semantics."
+    },
+    {
+      "id": "device-browser-capability-detection-proof",
+      "issueId": "USF-347",
+      "requirement": "Future proof records show capability detection and fallback paths do not create business behaviour absent from USF authority."
+    },
+    {
+      "id": "rate-limit-backoff-user-message-proof",
+      "issueId": "USF-348",
+      "requirement": "Future proof records show rate-limit backoff and user messages derive from quota authority and do not change allowed behaviour."
+    }
+  ],
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines semantic requirements only. Identity-provider integration, token storage, runtime context providers, feature flag providers, UI components, telemetry providers, offline queues, sync engines, event transports, storage providers, uploaders, detection libraries, native bridges, rate limiters, validators, package publishing, and readiness claims remain blocked until later authorised gates exist."
+  },
+  "nonClaims": {
+    "apiReadiness": false,
+    "uiReadiness": false,
+    "supportReadiness": false,
+    "authorizationReadiness": false,
+    "productUiReadiness": false,
+    "productionReadiness": false,
+    "auditReadiness": false,
+    "observabilityReadiness": false,
+    "complianceReadiness": false,
+    "offlineFirstReadiness": false,
+    "syncReadiness": false,
+    "reliabilityReadiness": false,
+    "uxReadiness": false,
+    "realtimeReadiness": false,
+    "liveProviderReadiness": false,
+    "fileTransferReadiness": false,
+    "storageReadiness": false,
+    "platformReadiness": false,
+    "identityProviderReadiness": false,
+    "implementationReadiness": false,
+    "humanAcceptance": false
+  }
+}

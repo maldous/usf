@@ -1,0 +1,628 @@
+{
+  "id": "privacy-compliance-consent-proof-semantics",
+  "title": "Privacy compliance consent and proof semantics",
+  "lifecycleState": "semantic-definition",
+  "authorityLayer": "semantic-definition",
+  "trackedWorkOnly": true,
+  "semanticAuthorityNotice": "This artefact defines USF semantic inputs and gates only. Linear tracks the work and does not define USF semantic authority.",
+  "coveredIssueIds": [
+    "USF-624",
+    "USF-628",
+    "USF-631",
+    "USF-635",
+    "USF-641",
+    "USF-644",
+    "USF-646",
+    "USF-648",
+    "USF-650",
+    "USF-652"
+  ],
+  "evaluatedIssueIds": [
+    "USF-634",
+    "USF-638"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/directory-and-file-naming-standard.md",
+      "authorityRole": "naming-standard"
+    },
+    {
+      "path": "docs/architecture/schema-authoring-standard.md",
+      "authorityRole": "schema-standard"
+    },
+    {
+      "path": "docs/architecture/git-practices-standard.md",
+      "authorityRole": "git-standard"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy-catalog"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary-catalog"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema-registry"
+    },
+    {
+      "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-observability-privacy-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    }
+  ],
+  "implementationGate": {
+    "runtimeImplementationAllowed": false,
+    "sdkConfigurationAllowed": false,
+    "storeSubmissionAllowed": false,
+    "legalApprovalClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "reason": "This artefact defines semantic mappings, validator requirements, proof requirements, dependency mappings, and non-claims. It does not authorise runtime, legal, provider, or store work."
+  },
+  "semanticModels": [
+    {
+      "id": "att-tracking-decision-model",
+      "issueId": "USF-624",
+      "purpose": "Define App Tracking Transparency tracking decision semantics for tracking, consent, ads, analytics, SDKs, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "tracking-purpose-to-consent-purpose",
+        "tracking-signal-to-privacy-category",
+        "ads-dependency-to-tracking-posture",
+        "analytics-dependency-to-tracking-posture",
+        "sdk-to-tracking-disclosure",
+        "app-store-tracking-claim-to-proof-evidence",
+        "att-prompt-or-tracking-claim-without-authority-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "cmp-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "privacy-disclosure-sdk-vendor-semantics",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "monetisation-ad-placement-telemetry-semantics",
+          "semanticContractPath": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "attPromptImplementation": false,
+        "adsImplementation": false,
+        "appStoreSubmission": false,
+        "legalConclusion": false,
+        "readinessClaim": false
+      }
+    },
+    {
+      "id": "gdpr-lawful-basis-consent-dsr-model",
+      "issueId": "USF-628",
+      "purpose": "Define GDPR lawful-basis, consent, withdrawal, export, deletion, and DSR mappings as USF semantic inputs.",
+      "requiredMappings": [
+        "governed-purpose-to-lawful-basis-candidate",
+        "consent-record-to-purpose-and-version",
+        "withdrawal-to-purpose-suppression",
+        "export-request-to-governed-data-inventory",
+        "deletion-request-to-retention-and-purge-rule",
+        "audit-event-to-request-lifecycle"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "account-deletion-export-self-service-semantics",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "gdprCompliance": false,
+        "legalConclusion": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "international-privacy-jurisdiction-model",
+      "issueId": "USF-631",
+      "purpose": "Define jurisdiction discovery and impact mapping for UK GDPR, ePrivacy, CCPA, CPRA, LGPD, PIPEDA, and Australian Privacy Principles without claiming compliance.",
+      "requiredMappings": [
+        "launch-jurisdiction-to-supported-status",
+        "jurisdiction-to-consent-impact",
+        "jurisdiction-to-disclosure-impact",
+        "jurisdiction-to-policy-input-variant",
+        "unsupported-jurisdiction-to-fail-closed-proof-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "supported-countries-and-languages-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "consent-model",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "internationalCompliance": false,
+        "launchReadiness": false,
+        "storeReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "retention-deletion-export-model",
+      "issueId": "USF-635",
+      "purpose": "Define retention, deletion, export, purge, and audit semantics for client, browser, server, telemetry, and account data.",
+      "requiredMappings": [
+        "data-category-to-retention-rule",
+        "storage-location-to-purge-rule",
+        "exportable-field-to-data-inventory-entry",
+        "deletion-scope-to-system-boundary",
+        "logout-event-to-local-data-purge",
+        "audit-event-to-retention-action"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "account-deletion-export-self-service-semantics",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "logout-data-purge-policy",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "cmp-ump-integration-model",
+      "issueId": "USF-641",
+      "purpose": "Define CMP and Google UMP integration semantics for consent update timing, regional applicability, ads and analytics dependencies, audit events, validators, proof expectations, and non-claims.",
+      "requiredMappings": [
+        "consent-update-to-timing-rule",
+        "region-to-consent-surface-applicability",
+        "ads-dependency-to-consent-requirement",
+        "analytics-dependency-to-consent-requirement",
+        "ump-posture-to-provider-decision",
+        "consent-update-to-audit-event",
+        "cmp-provider-claim-without-owner-decision-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "cmp-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "analytics-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "monetisation-ad-placement-telemetry-semantics",
+          "semanticContractPath": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "sdkImplementation": false,
+        "providerCredentialSetup": false,
+        "legalConclusion": false,
+        "complianceReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "analytics-consent-model",
+      "issueId": "USF-644",
+      "purpose": "Define analytics purpose, event-category, consent-state, suppression, and audit semantics for mobile and web app surfaces.",
+      "requiredMappings": [
+        "analytics-purpose-to-privacy-category",
+        "analytics-event-category-to-consent-purpose",
+        "consent-state-to-emission-permission",
+        "withdrawal-to-analytics-suppression",
+        "audit-event-to-consent-state-transition",
+        "provider-decision-to-implementation-block"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "consent-receipt-model",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "analytics-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "analyticsReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "diagnostics-consent-model",
+      "issueId": "USF-646",
+      "purpose": "Define crash-report and performance-diagnostic consent, personal-data mapping, suppression, audit, validator, and proof semantics.",
+      "requiredMappings": [
+        "diagnostic-signal-to-privacy-category",
+        "diagnostic-signal-to-consent-purpose",
+        "consent-state-to-diagnostics-emission-permission",
+        "withdrawal-to-diagnostics-suppression",
+        "crash-report-to-personal-data-classification",
+        "provider-decision-to-implementation-block"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "consent-receipt-model",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "analytics-crash-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "diagnosticsReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "privacy-policy-generation-input-model",
+      "issueId": "USF-648",
+      "purpose": "Define governed inputs required before privacy policy text may be generated from USF semantics.",
+      "requiredMappings": [
+        "data-inventory-to-policy-input",
+        "purpose-to-policy-purpose-text-input",
+        "retention-rule-to-policy-retention-input",
+        "vendor-to-policy-subprocessor-input",
+        "rights-channel-to-policy-contact-input",
+        "jurisdiction-to-policy-variant-input"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "jurisdiction-mapping",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "vendor-registry",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "privacy-disclosures",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "legalApproval": false,
+        "privacyCompliance": false,
+        "storeReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "terms-eula-store-policy-link-model",
+      "issueId": "USF-650",
+      "purpose": "Define policy link, terms link, EULA link, locale variant, store metadata, and consent-surface link mappings.",
+      "requiredMappings": [
+        "policy-link-to-locale-variant",
+        "terms-link-to-surface-placement",
+        "eula-link-to-store-metadata-input",
+        "policy-link-to-consent-surface",
+        "link-version-to-proof-evidence",
+        "missing-required-link-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "privacy-policy-generation-inputs",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "localised-privacy-text",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "store-metadata-generation",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "legalApproval": false,
+        "privacyCompliance": false,
+        "storeReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "privacy-compliance-proof-gate-model",
+      "issueId": "USF-652",
+      "purpose": "Define proof-gate semantics for privacy and compliance evidence without claiming legal certification, store readiness, or production readiness.",
+      "requiredMappings": [
+        "data-inventory-to-proof-input",
+        "disclosure-mapping-to-proof-input",
+        "consent-model-to-proof-input",
+        "vendor-registry-to-proof-input",
+        "store-metadata-to-proof-input",
+        "evidence-freshness-to-proof-state",
+        "planted-defect-to-validator-expectation",
+        "missing-or-stale-evidence-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "data-inventory",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "disclosure-mappings",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "consent-model",
+          "semanticContractPath": "docs/architecture/notification-consent-data-inventory-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "vendor-registry",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "policy-inputs",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "internationalCompliance": false,
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "validate-att-tracking-decision-model",
+      "issueId": "USF-624",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject ATT tracking semantics that lack tracking purpose mapping, privacy category mapping, ads or analytics dependency mapping, SDK disclosure mapping, proof evidence, or implementation blocking."
+    },
+    {
+      "id": "validate-gdpr-lawful-basis-consent-dsr-model",
+      "issueId": "USF-628",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject privacy purposes, consent, withdrawal, export, deletion, or DSR mappings that are absent, ambiguous, detached from governed data inventory, or presented as legal conclusions."
+    },
+    {
+      "id": "validate-international-privacy-jurisdiction-model",
+      "issueId": "USF-631",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject launch or policy proof claims for jurisdictions that are unsupported, unmapped, stale, or missing consent and disclosure impact mapping."
+    },
+    {
+      "id": "validate-retention-deletion-export-model",
+      "issueId": "USF-635",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject client storage, browser storage, telemetry, or account-flow mappings without retention, export, deletion, purge, and audit semantics."
+    },
+    {
+      "id": "validate-cmp-ump-integration-model",
+      "issueId": "USF-641",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject CMP or UMP integration semantics that lack consent update timing, regional applicability, ads and analytics dependency mapping, audit mapping, owner decision dependency, or implementation blocking."
+    },
+    {
+      "id": "validate-analytics-consent-model",
+      "issueId": "USF-644",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject analytics event emission semantics that lack purpose mapping, privacy-category mapping, consent-state mapping, suppression semantics, or provider-decision gates."
+    },
+    {
+      "id": "validate-diagnostics-consent-model",
+      "issueId": "USF-646",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject crash or performance diagnostic emission semantics that lack consent mapping, privacy mapping, personal-data classification, suppression semantics, or provider-decision gates."
+    },
+    {
+      "id": "validate-privacy-policy-generation-input-model",
+      "issueId": "USF-648",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject privacy policy generation inputs that are missing, stale, not tied to governed capabilities, detached from vendor mappings, or presented as legal approval."
+    },
+    {
+      "id": "validate-terms-eula-store-policy-link-model",
+      "issueId": "USF-650",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject store metadata or consent surfaces when required policy, terms, EULA, locale, version, or proof-link mappings are absent."
+    },
+    {
+      "id": "validate-privacy-compliance-proof-gate-model",
+      "issueId": "USF-652",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject compliance proof claims when evidence is missing, stale, incomplete, detached from USF semantics, or upgraded from a generated report without underlying evidence."
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "prove-att-tracking-decision-model",
+      "issueId": "USF-624",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show ATT tracking purpose mapping, privacy category mapping, ads and analytics dependency mapping, SDK disclosure mapping, App Store claim boundary, and implementation blocking."
+    },
+    {
+      "id": "prove-gdpr-lawful-basis-consent-dsr-model",
+      "issueId": "USF-628",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show governed data inventory linkage, purpose linkage, consent or withdrawal handling, export and deletion mapping, and audit event mapping. It must not claim GDPR compliance or legal sufficiency."
+    },
+    {
+      "id": "prove-international-privacy-jurisdiction-model",
+      "issueId": "USF-631",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show jurisdiction discovery, supported-status mapping, consent impact, disclosure impact, policy variant inputs, and fail-closed handling for unsupported or unmapped jurisdictions."
+    },
+    {
+      "id": "prove-retention-deletion-export-model",
+      "issueId": "USF-635",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show retention, deletion, export, purge, and audit mapping for each governed storage or telemetry surface before implementation may proceed."
+    },
+    {
+      "id": "prove-cmp-ump-integration-model",
+      "issueId": "USF-641",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show consent update timing, regional applicability, ads and analytics dependency mapping, provider decision dependency, audit mapping, and implementation blocking."
+    },
+    {
+      "id": "prove-analytics-consent-model",
+      "issueId": "USF-644",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show analytics purpose mapping, event-category mapping, consent-state mapping, suppression mapping, audit mapping, and implementation blocking until provider decision gates are satisfied."
+    },
+    {
+      "id": "prove-diagnostics-consent-model",
+      "issueId": "USF-646",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show diagnostics signal classification, personal-data mapping, consent-state mapping, suppression mapping, audit mapping, and implementation blocking until provider decision gates are satisfied."
+    },
+    {
+      "id": "prove-privacy-policy-generation-input-model",
+      "issueId": "USF-648",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show that policy inputs derive from governed data inventory, purposes, retention, vendors, subprocessors, rights channels, and jurisdiction variants without claiming legal approval."
+    },
+    {
+      "id": "prove-terms-eula-store-policy-link-model",
+      "issueId": "USF-650",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show required policy, terms, and EULA links are mapped to locale variants, store metadata, consent surfaces, and version evidence without claiming publication or store readiness."
+    },
+    {
+      "id": "prove-privacy-compliance-proof-gate-model",
+      "issueId": "USF-652",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof gates must fail closed for missing, stale, incomplete, or detached evidence and must preserve the distinction between raw evidence, semantic evidence, generated reports, and compliance claims."
+    }
+  ],
+  "evidenceFreshnessSemantics": {
+    "freshnessRequired": true,
+    "missingEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "dependencyPolicy": {
+    "semanticDependencyLinksRequired": true,
+    "nullSemanticContractPathMeansDependencyIsKnownButNotYetSatisfiedForImplementation": true,
+    "implementationMayProceedWithNullSemanticContractPath": false,
+    "ownerDecisionIssuesRemainOpen": [
+      "USF-634",
+      "USF-638"
+    ],
+    "providerIntegrationIssuesRemainDeferred": [
+      "USF-638"
+    ]
+  },
+  "nonClaims": {
+    "privacyCompliance": false,
+    "gdprCompliance": false,
+    "internationalCompliance": false,
+    "legalConclusion": false,
+    "legalApproval": false,
+    "policyPublication": false,
+    "storeSubmission": false,
+    "storeReadiness": false,
+    "analyticsReadiness": false,
+    "diagnosticsReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "sdkImplementation": false,
+    "runtimeImplementation": false
+  }
+}

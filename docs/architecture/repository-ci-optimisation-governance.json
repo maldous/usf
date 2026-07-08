@@ -1,0 +1,135 @@
+{
+  "id": "usf.repository-ci-optimisation-governance",
+  "title": "Repository CI optimisation governance",
+  "purpose": "Record design-only governance for CI timing visibility and parent CI optimisation closure without workflow changes, dashboard implementation, timing reports, proof execution, or readiness claims.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "implementationCreated": false,
+    "nonClaims": [
+      "No CI workflow change is authorised by this artifact.",
+      "No CI timing dashboard is implemented by this artifact.",
+      "No timing report or measured performance claim is made by this artifact.",
+      "No proof, readiness, staging, production, deployment, compliance, store, release, live-provider, or human-acceptance claim is made."
+    ]
+  },
+  "sourceReferences": [
+    ".github/workflows/proof-anchor.yml",
+    ".github/workflows/validate-spec.yml",
+    "package.json",
+    "Makefile",
+    "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+    "docs/architecture/repository-build-package-and-contract-test-governance.json"
+  ],
+  "observedCiState": {
+    "workflowCountObserved": 2,
+    "workflowFilesObserved": [
+      ".github/workflows/proof-anchor.yml",
+      ".github/workflows/validate-spec.yml"
+    ],
+    "workflowWithPackageCacheObserved": [
+      ".github/workflows/validate-spec.yml"
+    ],
+    "packageManagerObserved": "pnpm@11.9.0",
+    "aggregateCommandManifestObserved": true,
+    "interpretation": "The current CI optimisation surface can be governed through explicit workflow, command, cache, timing, and report boundaries. Timing visibility is a future reporting concern and does not by itself alter required checks or proof expectations."
+  },
+  "ciTimingDashboardPolicy": {
+    "stateInspected": true,
+    "dashboardImplemented": false,
+    "timingRunPerformed": false,
+    "policyRules": [
+      "A future CI timing dashboard or report must identify workflow, job, command, cache state, dependency state, environment, provider mode where relevant, and raw evidence source.",
+      "Timing reports are generated reports and must not be treated as semantic authority or proof readiness by themselves.",
+      "A timing dashboard may support regression triage, but it must not replace required validators, proof commands, evidence collection, or owner decisions.",
+      "Unknown timing provenance, missing raw evidence, stale report state, or environment mismatch must fail closed for performance claims."
+    ],
+    "assuranceImpact": {
+      "preserved": [
+        "CI timing visibility remains diagnostic rather than authoritative.",
+        "Required checks and proof gates remain separate from performance reporting.",
+        "Generated timing reports remain lower authority than raw execution evidence."
+      ],
+      "risk": [
+        "Timing dashboards can create false confidence if cache state and raw evidence are missing.",
+        "Dashboard-only regressions can be overinterpreted as proof failures or readiness evidence requirements without explicit thresholds.",
+        "Mandatory timing collection can add CI cost if not scoped deliberately."
+      ]
+    },
+    "validationProofExpectation": [
+      "Future implementation must preserve raw timing evidence before producing generated dashboard summaries.",
+      "Future CI budget enforcement requires a separate owner decision and explicit threshold policy.",
+      "Future dashboard publication must preserve the generated-report boundary and fail closed on stale or unknown timing status."
+    ],
+    "dependenciesRecorded": [
+      "USF-384 baseline timing and cost measurement",
+      "USF-860 owner decision: enforce performance budgets in CI",
+      "USF-861 owner decision: require command timing reports on every PR"
+    ],
+    "ownerDecisionStatus": "Current repository optimisation realisation approves evaluation of CI timing dashboards, performance budgets, and per-PR timing reports as timing options. Enforcement is not imposed until thresholds, raw timing evidence, provenance, and no-regression behaviour are defined."
+  },
+  "parentCiOptimisationClosurePolicy": {
+    "stateInspected": true,
+    "closureBasis": "The remaining open child under USF-359 was the CI timing dashboard design issue. Parent closure is valid only as governance closure and does not implement or require a dashboard, CI budget, workflow mutation, or timing report.",
+    "nonClosureBoundaries": [
+      "CI workflow optimisation is in evaluation scope and requires implementation evidence before any workflow-change claim.",
+      "Timing dashboard implementation is in evaluation scope and requires raw timing evidence, provenance, and generated-report boundaries before any dashboard claim.",
+      "Actual performance budget enforcement is in scope for evaluation but is not enforced until thresholds and raw timing evidence are defined.",
+      "Actual per-PR timing report requirement is in scope for evaluation but is not mandatory until overhead, provenance, and no-regression behaviour are defined."
+    ]
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-667",
+      "title": "CI timing dashboard",
+      "completionBasis": "ciTimingDashboardPolicy records inspected CI timing-dashboard state, assurance impact, validation and proof expectations, and dependencies without implementation or timing claims."
+    },
+    {
+      "issueId": "USF-359",
+      "title": "Parent: CI optimisation and assurance",
+      "completionBasis": "parentCiOptimisationClosurePolicy records parent closure basis after the remaining child issue is resolved and no open child issues remain."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-667",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedCiState",
+        "ciTimingDashboardPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-359",
+      "criteria": [
+        "Child state inspected.",
+        "No open child issues remain before parent closure.",
+        "Parent non-claims recorded.",
+        "Validation/proof expectation boundaries preserved."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedCiState",
+        "parentCiOptimisationClosurePolicy"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "workflowChanged": false,
+    "dashboardImplemented": false,
+    "timingRunPerformed": false,
+    "timingReportCreated": false,
+    "packageScriptChanged": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

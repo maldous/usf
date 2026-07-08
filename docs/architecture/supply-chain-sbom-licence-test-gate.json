@@ -2,11 +2,11 @@
   "id": "supply-chain-sbom-licence-test-gate",
   "issueId": "USF-255",
   "parentIssueId": "USF-234",
-  "status": "issue-scoped-blocked-not-final",
+  "status": "issue-scoped-evidence-required-not-final",
   "authorityLevel": "runtime-proof-evidence",
   "artefactKind": "evidence",
   "lifecycle": "draft",
-  "summary": "Issue-scoped supply-chain dependency, package-manager/toolchain, lockfile, SBOM, licence, advisory, provenance, signing, and Compose-image regression gate. This evidence records current repository support and bounded blockers without claiming final test readiness or final USF-234 acceptance.",
+  "summary": "Issue-scoped supply-chain dependency, package-manager/toolchain, lockfile, SBOM, licence, advisory, provenance, signing, and Compose-image regression gate. This evidence records current repository support and bounded evidence requirements without claiming final test readiness or final USF-234 acceptance.",
   "sourceAuthorities": {
     "linearIssue": "USF-255",
     "packageManifest": "package.json",
@@ -22,7 +22,7 @@
   "acceptanceCriteriaReadFromLinear": [
     "Supply-chain obligation matrix added and linked to dependencies, Compose images, SDK governance, and enterprise evidence rows.",
     "Tests validate lockfile integrity, exact version posture, licence posture, advisory fixtures, and dependency ownership.",
-    "SBOM generation or bounded deferred SBOM evidence is recorded and validator-backed.",
+    "SBOM generation or bounded evaluated SBOM evidence requirement is recorded and validator-backed.",
     "Docker/Compose image pinning and provenance posture are tested where applicable.",
     "Validator fails on floating versions/images, missing advisory posture, missing licence posture, missing owner, stale SBOM evidence, or unsupported overclaim.",
     "Non-claims preserved: no SOC, ISO, production supply-chain maturity, live-provider, enterprise production, or final USF-234 acceptance."
@@ -128,17 +128,17 @@
         "docs/architecture/dev-readiness-validation-and-handover.json",
         "docs/architecture/test-readiness-command-surface-and-ci-gate.json"
       ],
-      "testAssertion": "The issue-local Vitest suite fails on missing licence posture, missing advisory posture, missing SBOM generated-or-deferred evidence, missing provenance or signing boundary, or unsupported readiness overclaim."
+      "testAssertion": "The issue-local Vitest suite fails on missing licence posture, missing advisory posture, missing SBOM generated evidence or evaluated evidence requirement, missing provenance or signing boundary, or unsupported readiness overclaim."
     },
     {
       "id": "compose-image-pinning-and-provenance",
       "categoryId": "supply-chain-sbom-licence",
-      "scope": "Compose image inventory, digest-pinned subset, moving tag blockers, missing generated Compose image blockers, and deferred non-digest provenance",
+      "scope": "Compose image inventory, digest-pinned subset, moving tag evidence requirements, missing generated Compose image evidence requirements, and evaluated non-digest provenance requirement",
       "evidenceRefs": [
         "spec/instances/compose-service/service-catalogue.json",
         "compose/compose.test.generated.yaml"
       ],
-      "testAssertion": "The issue-local Vitest suite fails when image-bearing service rows lack owners, generated Compose image coverage differs from the documented blocker list, moving tags are not recorded as blockers, or non-digest provenance is overclaimed."
+      "testAssertion": "The issue-local Vitest suite fails when image-bearing service rows lack owners, generated Compose image coverage differs from the documented evidence requirement list, moving tags are not recorded as evidence requirements, or non-digest provenance is overclaimed."
     }
   ],
   "packageManagerPosture": {
@@ -303,7 +303,7 @@
     "issueLocalTestBacked": true,
     "sharedReadinessValidatorCategoryBacked": true,
     "freshSbomValidatorBacked": false,
-    "blockerId": "usf255-sbom-generation-not-wired",
+    "evidenceRequirementId": "usf255-sbom-generation-not-wired",
     "sbomReadinessClaimAllowed": false
   },
   "provenancePosture": {
@@ -312,7 +312,7 @@
     "packageSigningClaimAllowed": false,
     "containerSigningClaimAllowed": false,
     "boundedDeferred": true,
-    "blockerId": "usf255-release-and-container-provenance-deferred"
+    "evidenceRequirementId": "usf255-release-and-container-provenance-evaluated"
   },
   "sdkGovernanceLinkage": {
     "enterpriseModelPath": "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
@@ -365,24 +365,24 @@
       {
         "serviceId": "clamav",
         "image": "clamav/clamav:stable",
-        "blockerId": "usf255-compose-image-moving-tag-clamav"
+        "evidenceRequirementId": "usf255-compose-image-moving-tag-clamav"
       }
     ],
     "composeTargetMissingImageBlockers": [
       {
         "serviceId": "sonar-oidc-plugin",
         "image": "curlimages/curl:8.11.1",
-        "blockerId": "usf255-compose-generated-target-missing-sonar-oidc-plugin"
+        "evidenceRequirementId": "usf255-compose-generated-target-missing-sonar-oidc-plugin"
       },
       {
         "serviceId": "public-proof-origin",
         "image": "node:24.16.0-alpine3.22",
-        "blockerId": "usf266-compose-generated-target-missing-public-proof-origin"
+        "evidenceRequirementId": "usf266-compose-generated-target-missing-public-proof-origin"
       },
       {
         "serviceId": "staging-proof-cockpit",
         "image": "node:24.16.0-alpine3.22",
-        "blockerId": "usf255-compose-generated-target-missing-staging-proof-cockpit"
+        "evidenceRequirementId": "usf255-compose-generated-target-missing-staging-proof-cockpit"
       }
     ],
     "partialTagReviewRequired": [
@@ -423,47 +423,47 @@
       "missing-lockfile-evidence",
       "missing-licence-posture",
       "missing-advisory-posture",
-      "missing-sbom-or-deferred-evidence",
+      "missing-sbom-or-evaluated-evidence-requirement",
       "unsupported-supply-chain-readiness-overclaim",
-      "floating-compose-image-without-blocker",
+      "floating-compose-image-without-evidence-requirement",
       "missing-owner",
       "missing-package-manager-toolchain-posture"
     ]
   },
-  "blockers": [
+  "evidenceRequirements": [
     {
       "id": "usf255-sbom-generation-not-wired",
-      "status": "blocked-by-missing-command-surface",
-      "reason": "No current package script or test-readiness command generates and validates a fresh SBOM artefact. The issue records bounded deferred SBOM evidence instead of fabricating SBOM output."
+      "status": "evidence-required-by-missing-command-surface",
+      "reason": "No current package script or test-readiness command generates and validates a fresh SBOM artefact. The issue records bounded evaluated SBOM evidence requirement instead of fabricating SBOM output."
     },
     {
-      "id": "usf255-licence-advisory-fresh-inventory-deferred",
-      "status": "bounded-deferred",
+      "id": "usf255-licence-advisory-fresh-inventory-evaluated",
+      "status": "bounded-evidence-requirement",
       "reason": "The current repository records licence and audit posture in dev-readiness handover evidence, but this issue does not add fresh committed licence or advisory inventory artefacts."
     },
     {
       "id": "usf255-compose-image-moving-tag-clamav",
-      "status": "blocked-by-current-compose-image",
-      "reason": "The compose service catalogue currently records clamav/clamav:stable. This is treated as a moving-tag blocker, not as a pinned-image pass."
+      "status": "evidence-required-by-current-compose-image",
+      "reason": "The compose service catalogue currently records clamav/clamav:stable. This is treated as a moving-tag evidence requirement, not as a pinned-image pass."
     },
     {
       "id": "usf255-compose-generated-target-missing-sonar-oidc-plugin",
-      "status": "blocked-by-current-generated-compose",
+      "status": "evidence-required-by-current-generated-compose",
       "reason": "The service catalogue records sonar-oidc-plugin with curlimages/curl:8.11.1, but compose/compose.test.generated.yaml does not currently include that image line."
     },
     {
-      "id": "usf255-release-and-container-provenance-deferred",
-      "status": "bounded-deferred",
+      "id": "usf255-release-and-container-provenance-evaluated",
+      "status": "bounded-evidence-requirement",
       "reason": "The repository has proof-anchor workflow evidence but this issue does not claim package signing, release artifact provenance, or container signing."
     },
     {
-      "id": "usf255-source-disposition-coverage-deferred",
-      "status": "blocked-by-owned-path-limits",
+      "id": "usf255-source-disposition-coverage-evaluated",
+      "status": "evidence-required-by-owned-path-limits",
       "reason": "corepack pnpm verify fails USF-IMPL-002 because the new test files require target-file source disposition coverage. The disposition matrix or validator-owned coverage path is outside this issue worker's owned paths."
     },
     {
       "id": "usf255-compose-generated-target-missing-staging-proof-cockpit",
-      "status": "blocked-by-current-generated-compose",
+      "status": "evidence-required-by-current-generated-compose",
       "reason": "The service catalogue records staging-proof-cockpit with node:24.16.0-alpine3.22, but compose/compose.test.generated.yaml does not include that staging-only operator fixture image line because the service is generated only for the staging proof-cockpit profile."
     }
   ],

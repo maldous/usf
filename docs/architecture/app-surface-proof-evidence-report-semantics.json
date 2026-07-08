@@ -1,0 +1,299 @@
+{
+  "id": "usf.app-surface-proof-evidence-report-semantics",
+  "title": "App-surface proof evidence and report semantics",
+  "status": "semantic-definition",
+  "purpose": "Define app-surface store and CDN evidence, app review evidence, human acceptance cockpit extension, generated evidence freshness, staleness propagation, and validator report semantics without executing deployments, collecting evidence, publishing reports, or approving readiness.",
+  "coveredIssueIds": [
+    "USF-818",
+    "USF-819",
+    "USF-820",
+    "USF-821",
+    "USF-822"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "role": "constitutional-authority"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "role": "authority-order"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "role": "app-surface-authority-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "role": "validator-requirement-foundation"
+    },
+    {
+      "path": "docs/architecture/generated-ui-renderer-composition-semantics.json",
+      "role": "generated-ui-review-boundary"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "role": "store-privacy-disclosure-foundation"
+    },
+    {
+      "path": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+      "role": "telemetry-event-foundation"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "role": "taxonomy-catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "role": "vocabulary-catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "role": "schema-registry"
+    }
+  ],
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-331",
+      "USF-327",
+      "USF-849",
+      "USF-936",
+      "USF-503",
+      "USF-504"
+    ],
+    "notSatisfiedByThisArtefact": [
+      "USF-807",
+      "USF-940"
+    ]
+  },
+  "authorityRules": [
+    {
+      "id": "generated-reports-lowest-authority",
+      "requirement": "Generated reports remain lower authority than USF semantic definitions, ADRs, validator rules, runtime proof evidence, and source implementation."
+    },
+    {
+      "id": "freshness-must-fail-closed",
+      "requirement": "Stale, unknown, missing, or generated-only evidence MUST NOT satisfy pass, readiness, deployment, store, compliance, or live-provider claims."
+    },
+    {
+      "id": "commit-pin-required",
+      "requirement": "Evidence and report records that support app-surface claims require governed commit pins and must fail closed when pinned to the wrong commit."
+    },
+    {
+      "id": "human-acceptance-cannot-upgrade-evidence",
+      "requirement": "Human acceptance cockpit summaries and owner approvals cannot upgrade missing, stale, unknown, generated-only, or wrong-commit evidence."
+    },
+    {
+      "id": "store-and-review-evidence-is-not-readiness",
+      "requirement": "Store uploads, app review records, app review answers, CDN deployment evidence, and review summaries do not by themselves claim store readiness, deployment readiness, production readiness, or compliance readiness."
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-818",
+      "id": "store-cdn-deployment-evidence",
+      "purpose": "Map store uploads, CDN deployments, commits, build IDs, provider IDs, approvals, evidence freshness, validators, proof, dependency, and non-claims.",
+      "requiredMappings": [
+        "targetCommitReference",
+        "buildIdReference",
+        "providerIdReference",
+        "storeUploadReference",
+        "cdnDeploymentReference",
+        "approvalReference",
+        "freshnessReference",
+        "validatorReference",
+        "nonClaimReference"
+      ],
+      "failClosedWhenMissing": [
+        "targetCommitReference",
+        "buildIdReference",
+        "freshnessReference",
+        "validatorReference"
+      ],
+      "validatorRequirementId": "store-cdn-deployment-evidence-validator",
+      "proofRequirementId": "store-cdn-deployment-evidence-proof"
+    },
+    {
+      "issueId": "USF-819",
+      "id": "app-review-evidence",
+      "purpose": "Map review status, submissions, rejections, compliance answers, reviewer notes, store metadata, validators, proof, dependency, and non-claims.",
+      "requiredMappings": [
+        "reviewStatusReference",
+        "submissionReference",
+        "rejectionReference",
+        "complianceAnswerReference",
+        "reviewerNoteReference",
+        "storeMetadataReference",
+        "privacyDisclosureReference",
+        "validatorReference",
+        "nonClaimReference"
+      ],
+      "failClosedWhenMissing": [
+        "reviewStatusReference",
+        "storeMetadataReference",
+        "privacyDisclosureReference",
+        "validatorReference"
+      ],
+      "validatorRequirementId": "app-review-evidence-validator",
+      "proofRequirementId": "app-review-evidence-proof"
+    },
+    {
+      "issueId": "USF-820",
+      "id": "human-acceptance-cockpit-extension",
+      "purpose": "Map owner approvals, evidence summaries, non-claims, evidence requirements, readiness gates, validators, proof, dependency, and non-claims.",
+      "requiredMappings": [
+        "ownerApprovalReference",
+        "evidenceSummaryReference",
+        "evidence requirementReference",
+        "readinessGateReference",
+        "validatorResultReference",
+        "proofEvidenceReference",
+        "nonClaimReference"
+      ],
+      "failClosedWhenMissing": [
+        "evidenceSummaryReference",
+        "evidence requirementReference",
+        "validatorResultReference",
+        "proofEvidenceReference",
+        "nonClaimReference"
+      ],
+      "validatorRequirementId": "human-acceptance-cockpit-extension-validator",
+      "proofRequirementId": "human-acceptance-cockpit-extension-proof"
+    },
+    {
+      "issueId": "USF-821",
+      "id": "generated-evidence-freshness-staleness-propagation",
+      "purpose": "Map generated reports, raw evidence, commit pins, stale status, unknown status, validators, proof, dependency, and non-claims.",
+      "requiredMappings": [
+        "generatedReportReference",
+        "rawEvidenceReference",
+        "commitPinReference",
+        "freshnessStatusReference",
+        "stalenessPropagationReference",
+        "unknownStatusReference",
+        "validatorReference",
+        "nonClaimReference"
+      ],
+      "failClosedWhenMissing": [
+        "rawEvidenceReference",
+        "commitPinReference",
+        "freshnessStatusReference",
+        "validatorReference"
+      ],
+      "validatorRequirementId": "generated-evidence-freshness-validator",
+      "proofRequirementId": "generated-evidence-freshness-proof"
+    },
+    {
+      "issueId": "USF-822",
+      "id": "validator-report-app-surface-readiness",
+      "purpose": "Map validator outputs, readiness gates, non-claims, stale evidence, generated reports, planted defects, proof, dependency, and evidence requirements.",
+      "requiredMappings": [
+        "validatorOutputReference",
+        "readinessGateReference",
+        "nonClaimReference",
+        "staleEvidenceReference",
+        "generatedReportReference",
+        "plantedDefectReference",
+        "proofReference",
+        "evidence requirementReference"
+      ],
+      "failClosedWhenMissing": [
+        "validatorOutputReference",
+        "nonClaimReference",
+        "staleEvidenceReference",
+        "plantedDefectReference",
+        "proofReference"
+      ],
+      "validatorRequirementId": "validator-report-app-surface-readiness-validator",
+      "proofRequirementId": "validator-report-app-surface-readiness-proof"
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "store-cdn-deployment-evidence-validator",
+      "issueId": "USF-818",
+      "requirement": "Future validators reject store or CDN evidence without commit, build, provider, freshness, approval, and non-claim mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "app-review-evidence-validator",
+      "issueId": "USF-819",
+      "requirement": "Future validators reject app review evidence without review status, store metadata, privacy disclosure, reviewer note, validation, and non-claim mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "human-acceptance-cockpit-extension-validator",
+      "issueId": "USF-820",
+      "requirement": "Future validators reject acceptance cockpit summaries that omit evidence requirements, stale evidence, validator results, proof evidence, or non-claims.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "generated-evidence-freshness-validator",
+      "issueId": "USF-821",
+      "requirement": "Future validators fail closed on stale, unknown, missing, wrong-commit, or generated-only app-surface evidence.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "validator-report-app-surface-readiness-validator",
+      "issueId": "USF-822",
+      "requirement": "Future validators reject app-surface readiness reports that treat generated reports as authority, omit planted-defect coverage, omit proof evidence, or exceed observed evidence.",
+      "failureMode": "fail-closed"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "store-cdn-deployment-evidence-proof",
+      "issueId": "USF-818",
+      "requirement": "Future proof records trace each store or CDN evidence item to commit, build, provider, approval, freshness, and non-claim mappings."
+    },
+    {
+      "id": "app-review-evidence-proof",
+      "issueId": "USF-819",
+      "requirement": "Future proof records trace app review status, submissions, rejections, compliance answers, reviewer notes, store metadata, and privacy disclosures."
+    },
+    {
+      "id": "human-acceptance-cockpit-extension-proof",
+      "issueId": "USF-820",
+      "requirement": "Future proof records show cockpit summaries preserve evidence requirements, evidence status, validator results, proof evidence, and non-claims."
+    },
+    {
+      "id": "generated-evidence-freshness-proof",
+      "issueId": "USF-821",
+      "requirement": "Future proof records show generated reports link to raw evidence, governed commits, freshness status, and staleness propagation."
+    },
+    {
+      "id": "validator-report-app-surface-readiness-proof",
+      "issueId": "USF-822",
+      "requirement": "Future proof records show validator reports remain lower authority than raw proof evidence and cannot upgrade readiness claims."
+    }
+  ],
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines semantic requirements only. Store submission, CDN deployment, app review response, generated report publication, cockpit implementation, UI implementation, evidence collection execution, release approval, validator implementation, provider setup, credential setup, and readiness approval remain requires the applicable authorised gates before readiness claims."
+  },
+  "freshnessAndReportRules": {
+    "staleSatisfiesPass": false,
+    "unknownSatisfiesPass": false,
+    "generatedReportCanUpgradeReadiness": false,
+    "wrongCommitEvidenceCanPass": false,
+    "humanApprovalCanOverrideMissingEvidence": false,
+    "providerModeCanUpgradeEnvironment": false,
+    "environmentCanUpgradeProviderMode": false
+  },
+  "nonClaims": {
+    "storeReadiness": false,
+    "appReviewReadiness": false,
+    "cdnReadiness": false,
+    "deploymentReadiness": false,
+    "generatedReportReadiness": false,
+    "humanAcceptance": false,
+    "readinessApproval": false,
+    "validatorImplementationReadiness": false,
+    "implementationReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false
+  }
+}

@@ -1,0 +1,503 @@
+{
+  "id": "usf.repository-app-surface-proof-integration-readiness-governance",
+  "title": "Repository app-surface proof integration readiness governance",
+  "purpose": "Define how future app-surface change classes map to Dev, Test, Compose, Staging, acceptance proof, and retained artifacts before UI implementation begins, without implementing an app surface or claiming readiness.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "appSurfaceImplemented": false,
+    "stagingReadinessClaimed": false,
+    "productUiReadinessClaimed": false,
+    "nonClaims": [
+      "No app-surface implementation is created.",
+      "No route, screen, UI adapter, Expo app, Next app, generated client, or browser E2E implementation is created.",
+      "No staging readiness, product UI readiness, production readiness, deployment readiness, store readiness, release readiness, live-provider readiness, or human-acceptance completion claim is made.",
+      "Staging is not the default proof path for app-surface work."
+    ]
+  },
+  "sourceReferences": [
+    "docs/architecture/repository-traceability-determinism-security-governance.json",
+    "docs/architecture/repository-compose-optimisation-governance.json",
+    "docs/architecture/repository-supply-chain-and-contract-conformance-governance.json",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+    "docs/architecture/repository-developer-experience-guidance-governance.json",
+    "docs/architecture/repository-command-surface-target-governance.json",
+    "docs/architecture/repository-build-package-and-contract-test-governance.json",
+    "spec/registries/schema-registry.json",
+    "package.json",
+    "pnpm-workspace.yaml",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+    "docs/architecture/repository-layout-and-fixture-governance.json",
+    "docs/architecture/repository-ci-optimisation-governance.json",
+    "docs/architecture/staging-rehearsal-evidence-pack-definition.json",
+    "docs/architecture/repository-developer-experience-proof-ladder-guide-governance.json"
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-427",
+      "title": "Define exact Dev to Test to Staging ladder semantics",
+      "status": "Done",
+      "usedFor": [
+        "Dev, Test, Staging proof separation",
+        "staging non-default rule"
+      ]
+    },
+    {
+      "issueId": "USF-775",
+      "title": "Proof ladder audit tests",
+      "status": "Done",
+      "usedFor": [
+        "proof-ladder audit scenarios",
+        "fail-closed proof routing expectations"
+      ]
+    },
+    {
+      "issueId": "USF-538",
+      "title": "pnpm workspace review",
+      "status": "Done",
+      "usedFor": [
+        "workspace package-impact forecast",
+        "cache-key and install-impact expectations before app-surface work"
+      ]
+    },
+    {
+      "issueId": "USF-553",
+      "title": "Generated-client and build artifact policy",
+      "status": "Done",
+      "usedFor": [
+        "generated-client readiness gate",
+        "build artifact cache and source-traceability policy"
+      ]
+    },
+    {
+      "issueId": "USF-773",
+      "title": "Contract drift and API client conformance design",
+      "status": "Done",
+      "usedFor": [
+        "generated client contract conformance expectation",
+        "fail-closed stale contract and generated output handling"
+      ]
+    }
+  ],
+  "appSurfaceChangeClassProofMap": [
+    {
+      "changeClass": "semantic-only app-surface planning",
+      "examples": [
+        "screen semantics",
+        "navigation semantics",
+        "accessibility requirements",
+        "privacy disclosure requirements"
+      ],
+      "minimumProof": "semantic and governance validation",
+      "artifactsRequired": [
+        "semantic authority references",
+        "non-claim statement",
+        "traceability note"
+      ],
+      "stagingTrigger": false
+    },
+    {
+      "changeClass": "generated-client consumption planning",
+      "examples": [
+        "UI adapter expects generated API client",
+        "typed contract handoff for app code"
+      ],
+      "minimumProof": "contract conformance and generated-client source traceability before implementation use",
+      "artifactsRequired": [
+        "source contract reference",
+        "schema registry lifecycle state",
+        "generated-client trace record",
+        "contract conformance result when implemented"
+      ],
+      "stagingTrigger": false
+    },
+    {
+      "changeClass": "route or screen implementation",
+      "examples": [
+        "new page route",
+        "screen interaction",
+        "form flow",
+        "navigation state"
+      ],
+      "minimumProof": "Dev-level UI proof plus Test-level contract or integration proof when behaviour crosses a contract boundary",
+      "artifactsRequired": [
+        "route proof map",
+        "test traceability record",
+        "screenshot or machine QA artifact only when UI review depends on visual evidence",
+        "non-claim statement"
+      ],
+      "stagingTrigger": false
+    },
+    {
+      "changeClass": "provider-backed app behaviour",
+      "examples": [
+        "auth flow",
+        "database-backed interaction",
+        "object storage interaction",
+        "queue or workflow interaction"
+      ],
+      "minimumProof": "Compose-required Test proof for provider semantics after Dev proof where applicable",
+      "artifactsRequired": [
+        "provider-mode label",
+        "environment label",
+        "Compose service evidence where provider semantics matter",
+        "evidence freshness result",
+        "artifact custody or manifest reference"
+      ],
+      "stagingTrigger": false
+    },
+    {
+      "changeClass": "public route or staging-relevant acceptance surface",
+      "examples": [
+        "public proof route",
+        "public FQDN proof surface",
+        "human acceptance surface",
+        "deployment-adjacent route exposure"
+      ],
+      "minimumProof": "Dev and Test prerequisites first, then staging-relevant proof only when the change affects staging-relevant runtime, deployment, public proof, provider integration, production-shaped rehearsal, proof-cockpit acceptance, or human acceptance surfaces",
+      "artifactsRequired": [
+        "public route proof evidence when relevant",
+        "proof-cockpit or acceptance evidence when relevant",
+        "environment and provider labels",
+        "non-claim preservation",
+        "terminal proof boundary reference when fresh machine QA is outside the scoped claim"
+      ],
+      "stagingTrigger": true
+    },
+    {
+      "changeClass": "visual review or screenshot-bearing change",
+      "examples": [
+        "visual regression review",
+        "accessibility visual evidence",
+        "machine QA screenshot expansion"
+      ],
+      "minimumProof": "Dev or Test visual evidence according to changed behaviour; staging only when the visual surface is staging-relevant",
+      "artifactsRequired": [
+        "screenshot artifact path",
+        "retention class",
+        "source route or screen reference",
+        "machine QA run reference when applicable",
+        "generated-report non-authority marker"
+      ],
+      "stagingTrigger": false
+    }
+  ],
+  "proofRoutingRules": [
+    "Every app-surface change starts with the lowest sufficient proof level and escalates only when the changed behaviour crosses a contract, provider, public route, staging, or human-acceptance boundary.",
+    "In-memory or Dev proof cannot satisfy provider-backed Compose proof when provider semantics matter.",
+    "Test proof remains Test proof and does not imply staging readiness.",
+    "Generated reports, screenshots, and external-review bundles are supporting artifacts and cannot upgrade raw evidence, proof level, environment, or provider mode.",
+    "Ambiguous app-surface impact falls back to fuller affected-family validation rather than defaulting to staging or passing silently.",
+    "Fresh proof-cockpit machine QA remains a terminal orchestration concern unless a later material issue explicitly requires earlier collection."
+  ],
+  "artifactExpectations": [
+    "route proof map for implemented routes or screens",
+    "test-to-requirement traceability for behavioural assertions",
+    "contract conformance output when contracts or generated clients are consumed",
+    "provider-mode and environment labels for provider-backed flows",
+    "screenshot retention class and source reference for visual artifacts",
+    "evidence freshness and custody references for proof-supporting artifacts",
+    "non-claim statement for every generated report or projection"
+  ],
+  "realisedPreUiGateCoverage": [
+    {
+      "issueId": "USF-802",
+      "realisation": "The tests-required-before-UI and test-suite parent planning gates are realised for bounded local app-surface implementation by repository-test-suite-governance.json and repository-optimisation-realisation-semantics.json. Actual implementation still runs the applicable test and validator gates for the changed files."
+    },
+    {
+      "issueId": "USF-813",
+      "realisation": "The final owner decision gate is realised by docs/architecture/pre-ui-repository-readiness-realisation.json for bounded local app-surface implementation only. It does not claim store, CDN, privacy, external review, staging, live-provider, or production readiness."
+    }
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-808",
+      "title": "App-surface proof integration readiness",
+      "completionBasis": "appSurfaceChangeClassProofMap maps app-surface change classes to required proof and artifacts."
+    },
+    {
+      "issueId": "USF-799",
+      "title": "Expo and Next workload impact forecast",
+      "completionBasis": "appSurfaceWorkloadForecast lists expected package classes, command impact, artifact impact, CI cost impact, and proof-ladder impact."
+    },
+    {
+      "issueId": "USF-805",
+      "title": "Generated client pipeline readiness",
+      "completionBasis": "generatedClientPipelineReadinessGate states required contracts, generation rules, validation rules, and owner decisions."
+    },
+    {
+      "issueId": "USF-801",
+      "title": "Required validator changes before UI work",
+      "completionBasis": "requiredValidatorChangesBeforeUiGate names required validators, optional validators, evidence requirements, and validation expectations."
+    },
+    {
+      "issueId": "USF-800",
+      "title": "Required repo and tooling changes before UI work",
+      "completionBasis": "requiredRepoAndToolingChangesBeforeUiGate identifies command, structure, package, generated-client, and owner-decision prerequisites while preserving open implementation evidence requirements."
+    },
+    {
+      "issueId": "USF-803",
+      "title": "Required artifact and cache changes before UI work",
+      "completionBasis": "requiredArtifactAndCacheChangesBeforeUiGate identifies generated-client, artifact, cache, evidence-reuse, and staging evidence-pack prerequisites while preserving open implementation evidence requirements."
+    },
+    {
+      "issueId": "USF-804",
+      "title": "Required environment ladder changes before UI work",
+      "completionBasis": "requiredEnvironmentLadderChangesBeforeUiGate identifies proof-ladder, handoff, validator, operator-sequence, and owner-decision prerequisites while preserving open implementation evidence requirements."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-808",
+      "criterion": "Readiness plan maps app-surface change classes to required proof and artifacts.",
+      "satisfied": true,
+      "evidence": [
+        "appSurfaceChangeClassProofMap",
+        "proofRoutingRules",
+        "artifactExpectations"
+      ]
+    },
+    {
+      "issueId": "USF-799",
+      "criterion": "Forecast lists expected package classes, commands, artifacts, CI cost, and proof-ladder impact.",
+      "satisfied": true,
+      "evidence": [
+        "appSurfaceWorkloadForecast.packageClasses",
+        "appSurfaceWorkloadForecast.commandImpact",
+        "appSurfaceWorkloadForecast.artifactImpact",
+        "appSurfaceWorkloadForecast.ciCostImpact",
+        "appSurfaceWorkloadForecast.proofLadderImpact"
+      ]
+    },
+    {
+      "issueId": "USF-805",
+      "criterion": "Readiness checklist states required contracts, generation rules, validation, and owner decisions.",
+      "satisfied": true,
+      "evidence": [
+        "generatedClientPipelineReadinessGate.requiredContracts",
+        "generatedClientPipelineReadinessGate.generationRules",
+        "generatedClientPipelineReadinessGate.validationRules",
+        "generatedClientPipelineReadinessGate.ownerDecisionChecklist"
+      ]
+    },
+    {
+      "issueId": "USF-801",
+      "criterion": "Checklist names required validators, optional validators, evidence requirements, and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "requiredValidatorChangesBeforeUiGate.requiredValidators",
+        "requiredValidatorChangesBeforeUiGate.optionalValidators",
+        "requiredValidatorChangesBeforeUiGate.evidence requirements",
+        "requiredValidatorChangesBeforeUiGate.validationExpectations"
+      ]
+    },
+    {
+      "issueId": "USF-800",
+      "criterion": "Required repository and tooling changes before UI work are identified with open implementation evidence requirements and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "requiredRepoAndToolingChangesBeforeUiGate"
+      ]
+    },
+    {
+      "issueId": "USF-803",
+      "criterion": "Required artifact and cache changes before UI work are identified with open implementation evidence requirements and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "requiredArtifactAndCacheChangesBeforeUiGate"
+      ]
+    },
+    {
+      "issueId": "USF-804",
+      "criterion": "Required environment ladder changes before UI work are identified with open implementation evidence requirements and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "requiredEnvironmentLadderChangesBeforeUiGate"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "appSurfaceImplemented": false,
+    "routeCreated": false,
+    "screenCreated": false,
+    "generatedClientChanged": false,
+    "proofRunClaimed": false,
+    "stagingReadinessClaimed": false,
+    "productUiReadinessClaimed": false,
+    "newDirectoryCreated": false
+  },
+  "appSurfaceWorkloadForecast": {
+    "stateInspected": true,
+    "scope": "Forecast only for future Expo and Next app-surface work. This does not authorise UI implementation, package creation, route creation, app creation, or readiness claims.",
+    "packageClasses": [
+      "Expo application workspace package and mobile runtime dependencies if approved later.",
+      "Next application workspace package and web runtime dependencies if approved later.",
+      "Shared UI, generated API client, and app-surface test helper packages only if separately authorised.",
+      "Build, transpilation, bundling, and native-tooling dependencies introduced by app-surface work.",
+      "Contract, type generation, browser, and mobile test dependencies needed to prove app-surface behaviour."
+    ],
+    "commandImpact": [
+      "Frozen install and lockfile validation become more sensitive to workspace breadth and generator inputs.",
+      "Typecheck, lint, unit, contract, generated-client conformance, and app build commands may need separate cache keys and failure surfaces.",
+      "Future Expo and Next commands must route through the current command-surface target governance before becoming preferred entry points.",
+      "Proof commands must continue to distinguish hermetic mock, live external provider, production shaped, and production live dimensions."
+    ],
+    "artifactImpact": [
+      "Package-manager store and build caches need keys covering package manifests, pnpm-lock.yaml, pnpm-workspace.yaml, package-manager version, overrides, and allow-build settings.",
+      "Generated clients, build outputs, screenshots, logs, coverage, and validation evidence need retention, naming, size-control, and source-traceability rules.",
+      "Generated reports remain lower authority than raw evidence and semantic definitions.",
+      "Large app-surface artifacts should use manifest-first scanning and avoid unconditional deep artifact walks."
+    ],
+    "ciCostImpact": [
+      "Cold install cost can increase with additional workspace packages, native toolchains, generator dependencies, and browser/mobile test dependencies.",
+      "Warm cache cost depends on stable cache keys that include workspace, lockfile, package manager, generator, contract, and build configuration inputs.",
+      "App build and browser/mobile test stages should remain bounded and separate from foundation validation until promoted by an approved directive.",
+      "Unknown or unmeasured CI impact must not be hidden by narrowed validation; it falls back to the full relevant gate."
+    ],
+    "proofLadderImpact": [
+      "Future UI proof must compare observed workload against this forecast and update gates before claiming readiness.",
+      "Dev, Test, and Staging evidence remain separate proof environments and cannot be upgraded by generated reports.",
+      "Hermetic mock proof does not satisfy live external provider proof, and production shaped does not satisfy production live.",
+      "Missing app-surface evidence, stale generated output, unknown provider mode, or environment mismatch must fail closed."
+    ]
+  },
+  "generatedClientPipelineReadinessGate": {
+    "stateInspected": true,
+    "scope": "Readiness checklist only. This does not create a generated client, generated artifact, schema, package, route, or UI consumer.",
+    "requiredContracts": [
+      "Source contracts used for generation must be active or otherwise explicitly authorised by USF semantic authority.",
+      "Planned schemas alone must not be used as generated-client authority.",
+      "Contract source hashes, lifecycle state, generator inputs, and output manifest references must be retained with validation evidence.",
+      "Generated-client consumers must trace to the exact source contract and generated output they consume."
+    ],
+    "generationRules": [
+      "Generator version, package-manager version, lockfile state, workspace state, source contract hash, build configuration, and environment dimensions are required cache-key inputs.",
+      "Generation must be reproducible or must record an explicit bounded non-determinism comparison rule before use.",
+      "Generated outputs are projections, not semantic authority, and cannot upgrade readiness claims.",
+      "Unknown generator input, missing source hash, stale output, schema lifecycle mismatch, or missing retention evidence fails closed."
+    ],
+    "validationRules": [
+      "Contract-conformance validation must compare generated clients against the governed source contract used to generate them.",
+      "Validation must fail stale generated output, missing generator metadata, lifecycle mismatch, unknown source contract, or missing raw evidence.",
+      "Generated-client validation evidence must remain distinct from generated reports and source implementation.",
+      "UI consumption requires source-to-output traceability, conformance evidence, artifact retention, and owner approval where required."
+    ],
+    "ownerDecisionChecklist": [
+      "Decide the allowed generator and generated-output retention model before implementation.",
+      "Decide whether generated outputs are committed, retained as artifacts, or rebuilt from retained source inputs.",
+      "Decide cache invalidation ownership for source contract, schema lifecycle, generator, package manager, lockfile, workspace, and build configuration changes.",
+      "Decide the owner approval path for UI consumption of generated clients.",
+      "Decide how generated-client failures block app-surface readiness without treating generated output as authority."
+    ]
+  },
+  "requiredValidatorChangesBeforeUiGate": {
+    "stateInspected": true,
+    "requiredValidators": [
+      "Validator regression-proofing gate for stale input, missing input, invalid JSON, unknown controlled values, generated-report non-authority, and omitted path classes.",
+      "Validator rule-to-authority traceability gate so UI-facing semantics trace to USF semantic definitions, ADRs, validator rules, and proof expectations rather than implementation resemblance.",
+      "Generated-client contract conformance and lifecycle gate before UI consumes generated clients.",
+      "App-surface proof routing gate for provider mode, environment, proof level, and retained artifact expectations.",
+      "Stale evidence and generated-report non-authority detection gate for UI proof artifacts.",
+      "Aggregate validator command manifest and before-after validator equivalence gate for any command routing, caching, partial-run, or optimisation change before UI work."
+    ],
+    "optionalValidators": [
+      "Property-based validator test pilots for controlled vocabularies, taxonomy uniqueness, schema lifecycle, evidence status, and provider/environment separation.",
+      "Secret and environment leakage scans for UI proof artifacts after scope, owner, false-positive handling, and rollback are defined.",
+      "Duplicate-content and stale-guidance checks as repository-hygiene support, not UI semantic authority."
+    ],
+    "evidenceRequirements": [
+      {
+        "issueId": "USF-526",
+        "status": "Done",
+        "role": "validator regression-proofing before UI work"
+      },
+      {
+        "issueId": "USF-355",
+        "status": "Done",
+        "role": "validator suite parent planning closure"
+      },
+      {
+        "issueId": "USF-995",
+        "status": "Done",
+        "role": "aggregate validator command manifest design"
+      }
+    ],
+    "validationExpectations": [
+      "Future UI implementation gate must run validator selftests and planted-defect suites for any validator family affected by UI semantics, generated clients, evidence artifacts, or command routing.",
+      "Future UI gate must fail closed on unknown validator ownership, stale generated output, missing raw evidence, missing source contract hash, schema lifecycle mismatch, provider-mode mismatch, environment mismatch, or generated-report-only proof.",
+      "Any validator optimisation or affected-only run before UI work must compare against full validation or documented before-after validator equivalence evidence.",
+      "No validator gap may be treated as UI-ready solely because a discovery artifact exists; implementation gates require actual validation evidence when implementation begins."
+    ]
+  },
+  "requiredRepoAndToolingChangesBeforeUiGate": {
+    "stateInspected": true,
+    "implementationComplete": false,
+    "requiredChangesIdentified": [
+      "Preserve current preferred command entry points and compatibility aliases before adding app-surface commands.",
+      "Keep aggregate validator command manifest and command-surface target governance as the routing source for future UI-related commands.",
+      "Resolve repository structure and large-file audit evidence requirements before treating the repository as UI-implementation ready.",
+      "Keep package graph, workspace, generated-client, and build-artifact policies in force before adding Expo, Next, browser, mobile, or generated-client packages.",
+      "Preserve developer and AI-agent proof-ladder guidance so UI work does not default to staging proof or readiness claims."
+    ],
+    "realisedPrerequisiteCoverage": [
+      "USF-360 is covered by repository-optimisation-realisation-semantics.json through the current-structure policy.",
+      "USF-695 evidence is captured by repository-artifact-storage-and-naming-governance.json and remains an evidence boundary for storage migration claims.",
+      "USF-813 is covered by pre-ui-repository-readiness-realisation.json for bounded local implementation.",
+      "USF-952, if still present as programme orchestration, does not block bounded local implementation when the scoped gate artefacts are present and non-claims are preserved."
+    ],
+    "validationProofExpectation": [
+      "Future UI implementation must not begin from workspace globs, package names, or command aliases alone.",
+      "Future UI command additions must include command manifest and validator routing review.",
+      "Unknown repository/tooling impact must fail closed to full relevant gates and owner decision."
+    ]
+  },
+  "requiredArtifactAndCacheChangesBeforeUiGate": {
+    "stateInspected": true,
+    "implementationComplete": false,
+    "requiredChangesIdentified": [
+      "Generated clients and build artifacts must preserve source contract hashes, generator metadata, lifecycle state, and cache-key inputs.",
+      "Large app-surface artifacts need manifest-first scanning, retention class, freshness state, and generated-report non-authority markers.",
+      "Package, build, TypeScript, generated-client, screenshot, log, and proof evidence caches need explicit invalidation inputs before readiness claims.",
+      "Compose proof evidence reuse requires validator-checkable handoff records before later Test or Staging steps can rely on it.",
+      "Staging rehearsal evidence packs must distinguish raw evidence, retained proof artifacts, generated reports, custody, environment, provider mode, and proof level."
+    ],
+    "evidenceBoundaries": [
+      "USF-695 is covered as current evidence in repository-artifact-storage-and-naming-governance.json; storage migration still requires reference-resolution proof.",
+      "USF-853 evaluation is approved for all storage options; selected migration still requires custody, access, rollback, and evidence-preservation proof.",
+      "USF-985 and USF-986 are handoff schema and validator implementation boundaries for promotion claims, not evidence requirements to bounded local app-surface implementation.",
+      "USF-982 is covered by repository-optimisation-realisation-semantics.json for bounded local implementation; promotion workflow readiness remains a separate evidence claim."
+    ],
+    "validationProofExpectation": [
+      "Future UI artifact and cache changes must fail closed on stale output, missing source hash, unknown generator input, missing custody, environment mismatch, provider-mode mismatch, or generated-report-only proof.",
+      "Future artifact pruning or migration requires retention, owner approval where needed, and reference-resolution validation.",
+      "Future UI screenshots and generated reports cannot upgrade readiness without underlying raw evidence or retained proof artifacts."
+    ]
+  },
+  "requiredEnvironmentLadderChangesBeforeUiGate": {
+    "stateInspected": true,
+    "implementationComplete": false,
+    "requiredChangesIdentified": [
+      "Dev, Test, Compose-backed proof, Staging rehearsal, production-shaped proof, production-live proof, and human acceptance must remain separate proof states.",
+      "Provider mode and environment must remain separate dimensions and cannot upgrade each other by implication.",
+      "The staging rehearsal evidence pack must be available before Test evidence supports staging-entry review beyond planning.",
+      "Environment ladder validator implementation is required before automated enforcement can be claimed.",
+      "Operator sequence and handoff records are required before promotion workflow readiness can be claimed."
+    ],
+    "evidenceBoundaries": [
+      "USF-985 is a Dev-to-Test handoff implementation boundary for promotion claims, not an evidence requirement to bounded local app-surface implementation.",
+      "USF-986 is a Test-to-Staging handoff implementation boundary for staging-entry claims, not an evidence requirement to bounded local app-surface implementation.",
+      "USF-989 and USF-993 are validator implementation and aggregate wiring boundaries for automated environment-ladder enforcement claims.",
+      "USF-982 is covered for bounded local implementation by repository-optimisation-realisation-semantics.json; operator-sequence readiness remains a separate evidence claim.",
+      "USF-813 is realised by pre-ui-repository-readiness-realisation.json for bounded local implementation."
+    ],
+    "validationProofExpectation": [
+      "Future UI gate must fail closed on unknown environment, unknown provider mode, stale evidence, missing handoff record, generated-report-only proof, or readiness overclaim.",
+      "Future staging-entry review cannot be treated as staging readiness or deployment readiness.",
+      "Future owner acceptance must be explicit and cannot be inferred from discovery artifacts."
+    ]
+  }
+}

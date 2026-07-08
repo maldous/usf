@@ -1,0 +1,509 @@
+{
+  "id": "client-state-storage-sync-semantics",
+  "title": "Client state storage and synchronisation semantics",
+  "lifecycleState": "semantic-definition",
+  "authorityLayer": "semantic-definition",
+  "trackedWorkOnly": true,
+  "semanticAuthorityNotice": "This artefact defines USF semantic inputs and gates only. Linear tracks the work and does not define USF semantic authority.",
+  "coveredIssueIds": [
+    "USF-527",
+    "USF-529",
+    "USF-531",
+    "USF-532",
+    "USF-533",
+    "USF-534",
+    "USF-535",
+    "USF-536",
+    "USF-537"
+  ],
+  "evaluatedIssueIds": [
+    "USF-528"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/directory-and-file-naming-standard.md",
+      "authorityRole": "naming-standard"
+    },
+    {
+      "path": "docs/architecture/schema-authoring-standard.md",
+      "authorityRole": "schema-standard"
+    },
+    {
+      "path": "docs/architecture/git-practices-standard.md",
+      "authorityRole": "git-standard"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy-catalog"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary-catalog"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema-registry"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/client-query-cache-privacy-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    }
+  ],
+  "implementationGate": {
+    "runtimeImplementationAllowed": false,
+    "storageImplementationAllowed": false,
+    "syncEngineImplementationAllowed": false,
+    "queryLibrarySetupAllowed": false,
+    "identityProviderIntegrationAllowed": false,
+    "realtimeProviderSetupAllowed": false,
+    "backgroundTaskImplementationAllowed": false,
+    "privacyComplianceClaimAllowed": false,
+    "offlineReadinessClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "reason": "This artefact defines semantic mappings, validator requirements, proof requirements, dependency mappings, and non-claims. It does not authorise runtime, storage, sync, provider, or privacy compliance work."
+  },
+  "semanticModels": [
+    {
+      "id": "persistent-local-state-policy",
+      "issueId": "USF-527",
+      "purpose": "Define persistence, retention, purge, privacy, validator, and proof mappings for device and browser storage.",
+      "requiredMappings": [
+        "capability-to-persistence-eligibility",
+        "state-entry-to-storage-location",
+        "storage-location-to-retention-rule",
+        "state-entry-to-privacy-category",
+        "state-entry-to-purge-trigger",
+        "persistence-policy-to-proof-requirement"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "app-surface-authority-model-extension",
+          "semanticContractPath": "docs/architecture/app-surface-authority-model-extension.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "shared-client-sdk-semantic-surface",
+          "semanticContractPath": "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "privacy-compliance-semantics",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "offlineReadiness": false
+      }
+    },
+    {
+      "id": "sync-queue-conflict-resolution",
+      "issueId": "USF-529",
+      "purpose": "Define sync queue, conflict, retry, audit, privacy, validator, and proof mappings for mobile and web clients.",
+      "requiredMappings": [
+        "capability-to-sync-eligibility",
+        "mutation-to-queue-entry",
+        "queue-entry-to-retry-policy",
+        "conflict-to-resolution-policy",
+        "sync-action-to-audit-event",
+        "sync-payload-to-privacy-category"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "app-surface-authority-model-extension",
+          "semanticContractPath": "docs/architecture/app-surface-authority-model-extension.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "shared-client-sdk-semantic-surface",
+          "semanticContractPath": "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "offline-first-owner-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "syncReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "revalidation-trigger-mapping",
+      "issueId": "USF-531",
+      "purpose": "Define revalidation trigger, event, cache, privacy, validator, and proof mappings.",
+      "requiredMappings": [
+        "capability-to-revalidation-eligibility",
+        "event-to-revalidation-trigger",
+        "cache-entry-to-revalidation-policy",
+        "revalidation-trigger-to-privacy-category",
+        "trigger-source-to-audit-event",
+        "stale-data-state-to-fail-closed-behaviour"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "client-query-cache-privacy-semantics",
+          "semanticContractPath": "docs/architecture/client-query-cache-privacy-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "shared-client-interaction-contract",
+          "semanticContractPath": "docs/architecture/shared-client-interaction-contract-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "cacheReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "multi-device-session-consistency",
+      "issueId": "USF-532",
+      "purpose": "Define session, identity, revocation, sync, audit, privacy, validator, and proof mappings for multi-device behaviour.",
+      "requiredMappings": [
+        "session-state-to-device-context",
+        "identity-context-to-session-scope",
+        "revocation-event-to-session-invalidation",
+        "multi-device-change-to-sync-event",
+        "session-event-to-audit-record",
+        "session-data-to-privacy-category"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "shared-client-sdk-semantic-surface",
+          "semanticContractPath": "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "identity-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "authReadiness": false,
+        "syncReadiness": false
+      }
+    },
+    {
+      "id": "realtime-event-subscription-semantics",
+      "issueId": "USF-533",
+      "purpose": "Define event, subscription, permission, tenant isolation, privacy, validator, and proof mappings for realtime subscriptions.",
+      "requiredMappings": [
+        "event-type-to-subscription-eligibility",
+        "subscription-to-permission-scope",
+        "subscription-to-tenant-boundary",
+        "event-payload-to-privacy-category",
+        "subscription-state-to-audit-event",
+        "realtime-provider-decision-to-implementation-block"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "app-surface-authority-model-extension",
+          "semanticContractPath": "docs/architecture/app-surface-authority-model-extension.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "realtime-provider-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "realtimeReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "background-refresh-constraint-semantics",
+      "issueId": "USF-534",
+      "purpose": "Define platform constraints, refresh eligibility, privacy, battery, validator, and proof mappings for background refresh.",
+      "requiredMappings": [
+        "capability-to-background-refresh-eligibility",
+        "platform-to-background-constraint",
+        "refresh-action-to-privacy-category",
+        "refresh-action-to-battery-impact-class",
+        "refresh-trigger-to-audit-event",
+        "unsupported-platform-state-to-fail-closed-behaviour"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "shared-client-sdk-semantic-surface",
+          "semanticContractPath": "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "offline-first-owner-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "backgroundReadiness": false,
+        "platformReadiness": false
+      }
+    },
+    {
+      "id": "client-device-browser-retention",
+      "issueId": "USF-535",
+      "purpose": "Define retention, purge, privacy, local storage, cache, validator, and proof mappings for client-held data.",
+      "requiredMappings": [
+        "client-data-category-to-retention-rule",
+        "device-storage-to-purge-trigger",
+        "browser-storage-to-purge-trigger",
+        "cache-entry-to-retention-rule",
+        "retained-data-to-privacy-category",
+        "retention-policy-to-proof-requirement"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "persistent-local-state-policy",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "privacy-compliance-semantics",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "dataRetentionCompliance": false
+      }
+    },
+    {
+      "id": "logout-session-expiry-purge",
+      "issueId": "USF-536",
+      "purpose": "Define purge, session expiry, token removal, cache clearing, audit, privacy, validator, and proof mappings.",
+      "requiredMappings": [
+        "logout-event-to-local-purge-trigger",
+        "session-expiry-to-token-removal",
+        "session-expiry-to-cache-clearing",
+        "purge-action-to-audit-event",
+        "purged-data-to-privacy-category",
+        "partial-purge-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "persistent-local-state-policy",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "multi-device-session-consistency",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "authReadiness": false,
+        "privacyCompliance": false
+      }
+    },
+    {
+      "id": "privacy-mode-shared-device-posture",
+      "issueId": "USF-537",
+      "purpose": "Define browser and device posture semantics, storage limits, session handling, privacy, validator, and proof mappings for privacy mode, incognito use, and shared devices.",
+      "requiredMappings": [
+        "browser-posture-to-storage-limit",
+        "device-posture-to-session-handling",
+        "shared-device-state-to-purge-policy",
+        "privacy-mode-state-to-persistence-limit",
+        "posture-detection-to-proof-input",
+        "unsupported-posture-to-fail-closed-behaviour"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "persistent-local-state-policy",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "logout-session-expiry-purge",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "privacyCompliance": false,
+        "productReadiness": false
+      }
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "validate-persistent-local-state-policy",
+      "issueId": "USF-527",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject persistence semantics that lack capability, privacy, retention, purge, storage-location, or proof mapping."
+    },
+    {
+      "id": "validate-sync-queue-conflict-resolution",
+      "issueId": "USF-529",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject sync behaviour semantics that lack capability eligibility, queue entry mapping, retry policy, conflict policy, audit mapping, or privacy mapping."
+    },
+    {
+      "id": "validate-revalidation-trigger-mapping",
+      "issueId": "USF-531",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject revalidation trigger semantics that lack capability, event, cache, stale-state, audit, or privacy mapping."
+    },
+    {
+      "id": "validate-multi-device-session-consistency",
+      "issueId": "USF-532",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject multi-device session semantics that lack session, identity, revocation, sync, audit, or privacy mapping."
+    },
+    {
+      "id": "validate-realtime-event-subscription-semantics",
+      "issueId": "USF-533",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject realtime subscription semantics that lack event, permission, tenant, privacy, provider-decision, or proof mapping."
+    },
+    {
+      "id": "validate-background-refresh-constraint-semantics",
+      "issueId": "USF-534",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject background refresh semantics that lack capability, platform, privacy, battery, audit, or unsupported-platform fail-closed mapping."
+    },
+    {
+      "id": "validate-client-device-browser-retention",
+      "issueId": "USF-535",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject retained client data semantics without privacy category, retention rule, purge trigger, cache mapping, and proof mapping."
+    },
+    {
+      "id": "validate-logout-session-expiry-purge",
+      "issueId": "USF-536",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject logout or session-expiry semantics without purge, token removal, cache clearing, audit, privacy, and fail-closed mapping."
+    },
+    {
+      "id": "validate-privacy-mode-shared-device-posture",
+      "issueId": "USF-537",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject privacy-mode or shared-device semantics without posture, storage-limit, session-handling, purge, privacy, and proof mapping."
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "prove-persistent-local-state-policy",
+      "issueId": "USF-527",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show persistence eligibility, storage location, retention rule, purge trigger, privacy category, and implementation blocking before storage work proceeds."
+    },
+    {
+      "id": "prove-sync-queue-conflict-resolution",
+      "issueId": "USF-529",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show sync eligibility, queue entry, retry, conflict resolution, audit, and privacy mappings before sync implementation proceeds."
+    },
+    {
+      "id": "prove-revalidation-trigger-mapping",
+      "issueId": "USF-531",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show trigger source, event mapping, cache entry mapping, stale-state handling, audit event, and privacy category."
+    },
+    {
+      "id": "prove-multi-device-session-consistency",
+      "issueId": "USF-532",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show device context, identity scope, revocation handling, sync event mapping, audit mapping, and privacy category."
+    },
+    {
+      "id": "prove-realtime-event-subscription-semantics",
+      "issueId": "USF-533",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show event eligibility, permission scope, tenant boundary, event payload privacy category, audit mapping, and implementation blocking until provider decisions exist."
+    },
+    {
+      "id": "prove-background-refresh-constraint-semantics",
+      "issueId": "USF-534",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show capability eligibility, platform constraints, privacy category, battery impact class, audit event, and unsupported-platform fail-closed behaviour."
+    },
+    {
+      "id": "prove-client-device-browser-retention",
+      "issueId": "USF-535",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show retention rule, purge trigger, privacy category, cache mapping, and implementation blocking before retained client data is introduced."
+    },
+    {
+      "id": "prove-logout-session-expiry-purge",
+      "issueId": "USF-536",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show logout purge, session expiry, token removal, cache clearing, audit, privacy category, and fail-closed state for partial purge."
+    },
+    {
+      "id": "prove-privacy-mode-shared-device-posture",
+      "issueId": "USF-537",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show browser posture, device posture, storage limits, session handling, purge policy, privacy-mode persistence limits, and unsupported-posture handling."
+    }
+  ],
+  "dependencyPolicy": {
+    "semanticDependencyLinksRequired": true,
+    "nullSemanticContractPathMeansDependencyIsKnownButNotYetSatisfiedForImplementation": true,
+    "implementationMayProceedWithNullSemanticContractPath": false,
+    "ownerDecisionIssuesRemainOpen": [
+      "USF-528"
+    ]
+  },
+  "nonClaims": {
+    "privacyCompliance": false,
+    "dataRetentionCompliance": false,
+    "offlineReadiness": false,
+    "cacheReadiness": false,
+    "syncReadiness": false,
+    "authReadiness": false,
+    "realtimeReadiness": false,
+    "backgroundReadiness": false,
+    "platformReadiness": false,
+    "productReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "runtimeImplementation": false,
+    "storageImplementation": false,
+    "syncEngineImplementation": false,
+    "providerSetup": false
+  }
+}

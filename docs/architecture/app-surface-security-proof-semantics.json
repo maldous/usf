@@ -1,0 +1,700 @@
+{
+  "id": "app-surface-security-proof-semantics",
+  "title": "App surface security proof semantics",
+  "lifecycleState": "semantic-definition",
+  "authorityLayer": "semantic-definition",
+  "trackedWorkOnly": true,
+  "semanticAuthorityNotice": "This artefact defines USF semantic inputs and gates only. Linear tracks the work and does not define USF semantic authority.",
+  "coveredIssueIds": [
+    "USF-779",
+    "USF-780",
+    "USF-781",
+    "USF-782",
+    "USF-783",
+    "USF-784",
+    "USF-786",
+    "USF-787",
+    "USF-790",
+    "USF-792",
+    "USF-795",
+    "USF-796"
+  ],
+  "evaluatedIssueIds": [
+    "USF-785"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/directory-and-file-naming-standard.md",
+      "authorityRole": "naming-standard"
+    },
+    {
+      "path": "docs/architecture/schema-authoring-standard.md",
+      "authorityRole": "schema-standard"
+    },
+    {
+      "path": "docs/architecture/git-practices-standard.md",
+      "authorityRole": "git-standard"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy-catalog"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary-catalog"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema-registry"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-auth-session-security-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/client-state-storage-sync-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "authorityRole": "related-validator-expectation"
+    }
+  ],
+  "implementationGate": {
+    "runtimeImplementationAllowed": false,
+    "apiGatewayImplementationAllowed": false,
+    "clientImplementationAllowed": false,
+    "platformIntegrationAllowed": false,
+    "keySetupAllowed": false,
+    "scannerSetupAllowed": false,
+    "dependencyInstallationAllowed": false,
+    "sdkInstallationAllowed": false,
+    "sdkApprovalExecutionAllowed": false,
+    "penetrationTestExecutionAllowed": false,
+    "securityCertificationClaimAllowed": false,
+    "securityApprovalClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "storeReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "reason": "This artefact defines semantic mappings, validator requirements, proof requirements, dependency mappings, and non-claims. It does not authorise runtime, provider, key, scanner, SDK, certification, or release work."
+  },
+  "semanticModels": [
+    {
+      "id": "mobile-secure-storage-semantics",
+      "issueId": "USF-779",
+      "purpose": "Define mobile secure storage semantics for token storage, device unlock, keychain or keystore use, logout purge, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "mobile-token-storage-to-authority",
+        "keychain-keystore-boundary",
+        "device-unlock-to-local-session-context",
+        "logout-purge-to-proof-input",
+        "privacy-impact-to-data-classification",
+        "missing-secure-storage-policy-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "auth-token-and-session-semantics",
+          "semanticContractPath": "docs/architecture/app-surface-auth-session-security-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "client-state-storage-and-purge-semantics",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "secureStorageImplementation": false,
+        "credentialSetup": false,
+        "securityApproval": false,
+        "mobileReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "web-secure-cookie-semantics",
+      "issueId": "USF-780",
+      "purpose": "Define web secure cookie semantics for session cookies, CSRF, same-site policy, tenant domains, logout purge, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "session-cookie-to-session-authority",
+        "same-site-policy-to-csrf-boundary",
+        "tenant-domain-to-cookie-scope",
+        "logout-purge-to-proof-input",
+        "cookie-attribute-to-privacy-impact",
+        "missing-cookie-policy-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "web-cookie-session-csrf-semantics",
+          "semanticContractPath": "docs/architecture/app-surface-auth-session-security-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "client-state-storage-and-purge-semantics",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "webCookieImplementation": false,
+        "providerSetup": false,
+        "securityApproval": false,
+        "webProductionReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "csrf-cors-csp-semantics",
+      "issueId": "USF-781",
+      "purpose": "Define CSRF, CORS, and CSP semantics for app surfaces, including origins, sessions, route classes, headers, scripts, providers, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "route-class-to-csrf-policy",
+        "origin-to-cors-policy",
+        "content-security-policy-to-script-provider",
+        "session-context-to-header-requirement",
+        "third-party-provider-to-csp-boundary",
+        "missing-origin-or-csp-policy-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "web-cookie-session-csrf-semantics",
+          "semanticContractPath": "docs/architecture/app-surface-auth-session-security-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "third-party-sdk-and-provider-registry",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "user-message-and-error-boundary-semantics",
+          "semanticContractPath": "docs/architecture/shared-client-interaction-contract-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityHeaderImplementation": false,
+        "providerSetup": false,
+        "securityCertification": false,
+        "securityApproval": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "api-abuse-rate-limit-client-handling",
+      "issueId": "USF-782",
+      "purpose": "Define throttling, retry, backoff, user messaging, telemetry, audit, validator, and proof mappings for API abuse and rate-limit handling.",
+      "requiredMappings": [
+        "rate-limit-signal-to-client-state",
+        "abuse-response-to-user-message",
+        "retry-policy-to-backoff-rule",
+        "throttle-event-to-telemetry-category",
+        "abuse-event-to-audit-record",
+        "missing-rate-limit-policy-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "rate-limit-backoff-semantics",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "user-messaging-semantics",
+          "semanticContractPath": "docs/architecture/shared-client-interaction-contract-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "device-app-integrity-posture",
+      "issueId": "USF-783",
+      "purpose": "Define Play Integrity, App Attest, and DeviceCheck posture mappings without performing platform integration.",
+      "requiredMappings": [
+        "platform-integrity-signal-to-trust-state",
+        "unsupported-integrity-mode-to-fail-closed-state",
+        "integrity-signal-to-privacy-impact",
+        "integrity-failure-to-abuse-handling",
+        "integrity-dependent-capability-to-proof-requirement",
+        "platform-provider-decision-to-implementation-block"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "play-integrity-app-attest-devicecheck-posture",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "app-surface-authority-model-extension",
+          "semanticContractPath": "docs/architecture/app-surface-authority-model-extension.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "jailbreak-root-posture",
+      "issueId": "USF-784",
+      "purpose": "Define detection posture, user messaging, feature restriction, privacy, audit, validator, and proof mappings for root-sensitive mobile behaviour.",
+      "requiredMappings": [
+        "root-signal-to-device-posture",
+        "device-posture-to-user-message",
+        "device-posture-to-feature-restriction",
+        "root-signal-to-privacy-impact",
+        "posture-event-to-audit-record",
+        "owner-approved-posture-to-implementation-block"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "app-surface-authority-model-extension",
+          "semanticContractPath": "docs/architecture/app-surface-authority-model-extension.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "device-app-integrity-posture",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "mobileReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "dependency-sbom-sca-policy",
+      "issueId": "USF-786",
+      "purpose": "Define dependency inventory, vulnerability policy, SBOM, evidence freshness, validator, proof, dependency, and non-claim mappings.",
+      "requiredMappings": [
+        "dependency-to-authority-record",
+        "dependency-to-sbom-entry",
+        "dependency-to-vulnerability-policy",
+        "sca-result-to-evidence-freshness",
+        "stale-vulnerability-evidence-to-fail-closed-state",
+        "release-evidence-to-dependency-proof-input"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "build-provenance",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "supply-chain-policy",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "supplyChainApproval": false,
+        "securityApproval": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "secrets-config-exposure-scan",
+      "issueId": "USF-787",
+      "purpose": "Define public config, private secret, build output, store metadata, log, validator, proof, dependency, and non-claim mappings.",
+      "requiredMappings": [
+        "config-field-to-public-or-private-classification",
+        "secret-field-to-prohibited-exposure-surface",
+        "build-output-to-secret-exposure-check",
+        "store-metadata-to-secret-exposure-check",
+        "log-field-to-secret-exposure-check",
+        "exposed-governed-secret-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "secret-handling-policy",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "app-surface-validator-suite",
+          "semanticContractPath": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "provisioningReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "app-surface-supply-chain-policy",
+      "issueId": "USF-790",
+      "purpose": "Define dependency authority, SDK approval, native code generation, privacy, validator, proof, dependency, and non-claim mappings for Expo, Next.js, React Native, native modules, and SDKs.",
+      "requiredMappings": [
+        "dependency-to-authority-source",
+        "sdk-to-approval-gate",
+        "native-code-generation-to-review-requirement",
+        "dependency-to-privacy-registry-entry",
+        "sdk-use-to-proof-requirement",
+        "unapproved-dependency-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "third-party-sdk-data-practice-registry",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "version-discovery",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "supplyChainApproval": false,
+        "sdkApproval": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "third-party-sdk-approval-gate",
+      "issueId": "USF-792",
+      "purpose": "Define SDK purpose, data practice, permission, native module, vendor registry, validator, proof, dependency, and non-claim mappings for third-party SDK approval gates.",
+      "requiredMappings": [
+        "sdk-to-purpose",
+        "sdk-to-data-practice",
+        "sdk-to-permission-use",
+        "sdk-to-native-module-scope",
+        "sdk-to-vendor-registry-entry",
+        "unapproved-sdk-use-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "sdk-data-practice-registry",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "vendor-subprocessor-registry",
+          "semanticContractPath": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "sdkApproval": false,
+        "privacyCompliance": false,
+        "securityApproval": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "app-surface-threat-model",
+      "issueId": "USF-795",
+      "purpose": "Define threat, mitigation, trust-boundary, privacy, abuse-case, validator, proof, dependency, and non-claim mappings for mobile, web, and ad SDK surfaces.",
+      "requiredMappings": [
+        "capability-to-threat",
+        "threat-to-mitigation",
+        "capability-to-trust-boundary",
+        "threat-to-privacy-impact",
+        "abuse-case-to-client-handling",
+        "missing-threat-coverage-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "app-surface-authority-model-extension",
+          "semanticContractPath": "docs/architecture/app-surface-authority-model-extension.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "ads-foundation",
+          "semanticContractPath": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "sdk-approval-gate",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "adsCompliance": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "app-surface-security-proof-gate",
+      "issueId": "USF-796",
+      "purpose": "Define security proof gate requirements for storage, cookies, headers, integrity, dependencies, SDKs, secrets, threat model, evidence freshness, validators, and non-claims.",
+      "requiredMappings": [
+        "storage-semantics-to-proof-input",
+        "cookie-and-header-semantics-to-proof-input",
+        "integrity-posture-to-proof-input",
+        "dependency-and-sbom-policy-to-proof-input",
+        "sdk-approval-gate-to-proof-input",
+        "secret-exposure-scan-to-proof-input",
+        "threat-model-to-proof-input",
+        "planted-defect-to-validator-expectation",
+        "missing-or-stale-security-evidence-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "client-state-storage-semantics",
+          "semanticContractPath": "docs/architecture/client-state-storage-sync-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "all-app-surface-security-semantic-issues",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "app-surface-validator-suite",
+          "semanticContractPath": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "productionReadiness": false,
+        "storeReadiness": false,
+        "liveProviderReadiness": false
+      }
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "validate-mobile-secure-storage-semantics",
+      "issueId": "USF-779",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject mobile storage semantics that lack token storage authority, keychain or keystore boundary, local unlock boundary, logout purge, privacy impact, and fail-closed handling."
+    },
+    {
+      "id": "validate-web-secure-cookie-semantics",
+      "issueId": "USF-780",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject web session semantics that lack cookie authority, same-site and CSRF boundary, tenant domain scope, logout purge, privacy impact, and fail-closed handling."
+    },
+    {
+      "id": "validate-csrf-cors-csp-semantics",
+      "issueId": "USF-781",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject app-surface web security semantics that lack CSRF, CORS, CSP, route, origin, session, provider, dependency, and proof mapping."
+    },
+    {
+      "id": "validate-api-abuse-rate-limit-client-handling",
+      "issueId": "USF-782",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject client API handling semantics that lack rate-limit signal mapping, abuse response, retry policy, backoff, user messaging, telemetry, or audit mapping."
+    },
+    {
+      "id": "validate-device-app-integrity-posture",
+      "issueId": "USF-783",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject integrity-dependent capability semantics that lack platform posture, unsupported-mode handling, privacy impact, abuse handling, and implementation blocking."
+    },
+    {
+      "id": "validate-jailbreak-root-posture",
+      "issueId": "USF-784",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject root-sensitive behaviour semantics that lack posture mapping, user messaging, feature restriction, privacy impact, audit mapping, and owner-approved posture gate."
+    },
+    {
+      "id": "validate-dependency-sbom-sca-policy",
+      "issueId": "USF-786",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject release evidence semantics without dependency inventory, SBOM mapping, vulnerability policy, SCA evidence freshness, and stale-evidence fail-closed handling."
+    },
+    {
+      "id": "validate-secrets-config-exposure-scan",
+      "issueId": "USF-787",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject app-surface config, release, store metadata, or log semantics that expose governed secrets or lack public/private classification."
+    },
+    {
+      "id": "validate-app-surface-supply-chain-policy",
+      "issueId": "USF-790",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject SDK or dependency use semantics without dependency authority, SDK approval gate, native generation review mapping, privacy registry linkage, and proof mapping."
+    },
+    {
+      "id": "validate-third-party-sdk-approval-gate",
+      "issueId": "USF-792",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject app-surface SDK use semantics without SDK purpose, data practice, permission, native module, vendor registry, approval, and proof mappings."
+    },
+    {
+      "id": "validate-app-surface-threat-model",
+      "issueId": "USF-795",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject app-surface capabilities or SDK semantics that lack threat coverage, mitigation mapping, trust-boundary mapping, privacy impact, and abuse-case handling."
+    },
+    {
+      "id": "validate-app-surface-security-proof-gate",
+      "issueId": "USF-796",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject security proof claims when evidence is missing, stale, incomplete, detached from USF semantics, or upgraded from generated reports without underlying evidence."
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "prove-mobile-secure-storage-semantics",
+      "issueId": "USF-779",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show token storage authority, secure-storage boundary, local unlock boundary, logout purge, privacy mapping, and implementation blocking."
+    },
+    {
+      "id": "prove-web-secure-cookie-semantics",
+      "issueId": "USF-780",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show session cookie policy, same-site posture, CSRF boundary, tenant domain scope, logout purge, privacy mapping, and implementation blocking."
+    },
+    {
+      "id": "prove-csrf-cors-csp-semantics",
+      "issueId": "USF-781",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show route-to-CSRF policy, origin-to-CORS policy, CSP provider boundaries, session header requirements, fail-closed handling, and implementation blocking."
+    },
+    {
+      "id": "prove-api-abuse-rate-limit-client-handling",
+      "issueId": "USF-782",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show rate-limit signals, abuse responses, retry and backoff rules, user messaging, telemetry, audit mapping, and implementation blocking."
+    },
+    {
+      "id": "prove-device-app-integrity-posture",
+      "issueId": "USF-783",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show platform integrity signal mapping, unsupported mode handling, privacy impact, abuse handling, and provider/key/setup blocking."
+    },
+    {
+      "id": "prove-jailbreak-root-posture",
+      "issueId": "USF-784",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show root posture, user messaging, feature restrictions, privacy impact, audit mapping, and implementation blocking until owner-approved posture exists."
+    },
+    {
+      "id": "prove-dependency-sbom-sca-policy",
+      "issueId": "USF-786",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show dependency inventory, SBOM entries, vulnerability policy, SCA evidence freshness, stale-evidence failure, and dependency proof linkage."
+    },
+    {
+      "id": "prove-secrets-config-exposure-scan",
+      "issueId": "USF-787",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show public and private config classification, prohibited secret exposure surfaces, build output checks, store metadata checks, log checks, and fail-closed handling."
+    },
+    {
+      "id": "prove-app-surface-supply-chain-policy",
+      "issueId": "USF-790",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show dependency authority, SDK approval gate, native code generation review, privacy registry linkage, proof mapping, and fail-closed handling for unapproved dependencies."
+    },
+    {
+      "id": "prove-third-party-sdk-approval-gate",
+      "issueId": "USF-792",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show SDK purpose, data practice, permission use, native module scope, vendor registry linkage, and fail-closed handling for unapproved SDK use."
+    },
+    {
+      "id": "prove-app-surface-threat-model",
+      "issueId": "USF-795",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show threats, mitigations, trust boundaries, privacy impacts, abuse cases, SDK coverage, and fail-closed handling for missing threat coverage."
+    },
+    {
+      "id": "prove-app-surface-security-proof-gate",
+      "issueId": "USF-796",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof gates must fail closed for missing, stale, incomplete, or detached security evidence and must preserve the distinction between semantic evidence, runtime proof evidence, generated reports, and approval claims."
+    }
+  ],
+  "evidenceFreshnessSemantics": {
+    "freshnessRequired": true,
+    "missingEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "dependencyPolicy": {
+    "semanticDependencyLinksRequired": true,
+    "nullSemanticContractPathMeansDependencyIsKnownButNotYetSatisfiedForImplementation": true,
+    "implementationMayProceedWithNullSemanticContractPath": false,
+    "ownerDecisionIssuesRemainOpen": [
+      "USF-785"
+    ],
+    "providerKeyAndScannerSetupRequiresEvidence": true
+  },
+  "nonClaims": {
+    "securityApproval": false,
+    "securityCertification": false,
+    "supplyChainApproval": false,
+    "sdkApproval": false,
+    "privacyCompliance": false,
+    "adsCompliance": false,
+    "mobileReadiness": false,
+    "storeReadiness": false,
+    "provisioningReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "runtimeImplementation": false,
+    "apiGatewayImplementation": false,
+    "clientImplementation": false,
+    "platformIntegration": false,
+    "keySetup": false,
+    "scannerSetup": false,
+    "dependencyInstallation": false,
+    "sdkInstallation": false,
+    "penetrationTestExecution": false
+  }
+}

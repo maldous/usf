@@ -1,0 +1,946 @@
+{
+  "id": "usf.app-surface-web-adapter-semantics",
+  "title": "App Surface Web Adapter Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines provider-independent Next.js web-adapter semantics for routes, rendering boundaries, server actions, route handlers, middleware, metadata, caching, streaming states, auth, browser storage, PWA posture, web push, file transfer, accessibility, internationalisation, SEO, route classification, web telemetry, security headers, optimisation, tenant domains, proof gates, and release evidence. It does not create Next.js implementation, route files, middleware, service workers, deployment configuration, provider accounts, credentials, DNS records, runtime telemetry, or readiness claims.",
+  "parentIssueId": "USF-314",
+  "coveredIssueIds": [
+    "USF-423",
+    "USF-424",
+    "USF-425",
+    "USF-426",
+    "USF-428",
+    "USF-430",
+    "USF-431",
+    "USF-432",
+    "USF-433",
+    "USF-434",
+    "USF-435",
+    "USF-436",
+    "USF-442",
+    "USF-445",
+    "USF-447",
+    "USF-449",
+    "USF-451",
+    "USF-454",
+    "USF-457",
+    "USF-458",
+    "USF-459",
+    "USF-461",
+    "USF-462"
+  ],
+  "evaluatedOwnerDecisionIssueIds": [
+    "USF-460"
+  ],
+  "relatedOpenDecisionIssueIds": [
+    "USF-634",
+    "USF-638",
+    "USF-736",
+    "USF-807"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/app-surface-web-cdn-release-semantics.json",
+      "authorityRole": "web CDN and release semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-observability-privacy-semantics.json",
+      "authorityRole": "observability and privacy semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "authorityRole": "future validator planted-defect requirements"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-423",
+      "modelId": "nextjs-app-router-semantic-mapping",
+      "purpose": "Define Next.js App Router semantic mapping for route segments, layouts, route groups, capability mapping, permission mapping, tenant boundary, privacy category, audit events, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "route-segment",
+        "layout-boundary",
+        "route-group",
+        "capability",
+        "permission",
+        "tenant-boundary",
+        "privacy-category",
+        "audit-event",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-424",
+      "modelId": "server-components-client-components-boundary",
+      "purpose": "Define the Server Components and Client Components boundary for data access, interactivity, serialization, privacy, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "server-component",
+        "client-component",
+        "data-access-boundary",
+        "interactivity-boundary",
+        "serialization-boundary",
+        "privacy-boundary",
+        "audit-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-425",
+      "modelId": "server-actions-mutation-authority",
+      "purpose": "Define Server Actions and mutation authority for commands, authorization, validation, CSRF posture, audit events, idempotency or retry boundaries, privacy categories, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "mutation",
+        "command-authority",
+        "authorization",
+        "input-validation",
+        "csrf-posture",
+        "audit-event",
+        "idempotency-or-retry-boundary",
+        "privacy-category",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-426",
+      "modelId": "route-handlers-bff-boundary",
+      "purpose": "Define route handlers and BFF boundary semantics for request context, authorization, validation, audit, privacy, errors, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "route-handler",
+        "bff-boundary",
+        "request-context",
+        "authorization",
+        "validation",
+        "audit-event",
+        "privacy-category",
+        "error-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-428",
+      "modelId": "middleware-proxy-edge-boundary",
+      "purpose": "Define middleware, proxy, and edge boundary semantics for request routing, redirects, rewrites, auth hints, privacy boundaries, runtime constraints, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "middleware",
+        "proxy-boundary",
+        "edge-boundary",
+        "redirect",
+        "rewrite",
+        "auth-hint",
+        "privacy-boundary",
+        "runtime-constraint",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-430",
+      "modelId": "metadata-sitemap-robots-og-image-semantics",
+      "purpose": "Define metadata, sitemap, robots, and Open Graph image semantics for public metadata, indexing, canonical URLs, tenant domains, generated images, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "metadata",
+        "sitemap",
+        "robots-policy",
+        "open-graph-image",
+        "canonical-url",
+        "tenant-domain",
+        "privacy-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-431",
+      "modelId": "nextjs-caching-revalidation-tag-invalidation",
+      "purpose": "Define Next.js caching, revalidation, and tag invalidation semantics for cache keys, tags, revalidation triggers, stale states, privacy purge, tenant isolation, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "cache-key",
+        "cache-tag",
+        "revalidation-trigger",
+        "stale-state",
+        "privacy-purge",
+        "tenant-isolation",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-432",
+      "modelId": "ppr-streaming-loading-error-not-found",
+      "purpose": "Define PPR, streaming, loading, error, and not-found semantics for progressive rendering, fallback states, error states, unavailable resources, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "partial-prerendering",
+        "streaming",
+        "loading-state",
+        "error-state",
+        "not-found-state",
+        "unavailable-resource",
+        "privacy-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-433",
+      "modelId": "web-auth-session-cookie-csrf",
+      "purpose": "Define web authentication, session, cookie, and CSRF semantics for session lifecycle, cookie policy, CSRF protections, auth context, tenant context, audit, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "auth-context",
+        "session-lifecycle",
+        "cookie-policy",
+        "csrf-protection",
+        "tenant-context",
+        "audit-event",
+        "privacy-category",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-434",
+      "modelId": "browser-storage-policy",
+      "purpose": "Define browser storage policy semantics for storage types, session data, cache data, privacy retention, purge, shared-device posture, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "local-storage",
+        "session-storage",
+        "indexeddb",
+        "cache-storage",
+        "retention-policy",
+        "purge-policy",
+        "shared-device-posture",
+        "privacy-category",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-435",
+      "modelId": "web-offline-pwa-posture",
+      "purpose": "Define web offline and PWA posture semantics for offline eligibility, service worker boundaries, cache limits, installability, notification linkage, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "offline-eligibility",
+        "service-worker-boundary",
+        "cache-limit",
+        "installability",
+        "notification-linkage",
+        "privacy-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-436",
+      "modelId": "web-push-notification-posture",
+      "purpose": "Define web push notification posture semantics for push eligibility, browser permissions, consent, preferences, service worker boundary, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "push-eligibility",
+        "browser-permission",
+        "consent-state",
+        "notification-preference",
+        "service-worker-boundary",
+        "privacy-category",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-442",
+      "modelId": "web-file-upload-download",
+      "purpose": "Define web file upload and download semantics for route boundaries, permissions, privacy categories, content validation, audit events, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "upload-boundary",
+        "download-boundary",
+        "route",
+        "permission",
+        "privacy-category",
+        "content-validation",
+        "audit-event",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-445",
+      "modelId": "web-accessibility-baseline",
+      "purpose": "Define web accessibility baseline semantics for keyboard access, screen reader mapping, focus order, error announcements, alternative text, reduced motion, contrast, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "keyboard-access",
+        "screen-reader-semantics",
+        "focus-order",
+        "error-announcement",
+        "alternative-text",
+        "reduced-motion",
+        "contrast-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-447",
+      "modelId": "web-i18n-locale-routing-rtl",
+      "purpose": "Define web internationalisation, locale routing, and RTL semantics for locale routing, translation catalogues, bidirectional layout, fallback rules, localised validation or consent text, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "locale-routing",
+        "translation-catalogue",
+        "bidirectional-layout",
+        "fallback-rule",
+        "localised-validation",
+        "localised-consent",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-449",
+      "modelId": "seo-public-page-boundary",
+      "purpose": "Define SEO and public page boundary semantics for public routes, crawlable content, metadata, tenant domains, privacy boundaries, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "public-route",
+        "crawlable-content",
+        "metadata",
+        "canonical-url",
+        "tenant-domain",
+        "privacy-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-451",
+      "modelId": "public-private-admin-operator-route-classification",
+      "purpose": "Define public, private, admin, and operator route classification semantics for route classes, permissions, tenant context, audit events, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "route-class",
+        "permission",
+        "tenant-context",
+        "audit-event",
+        "privacy-category",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-454",
+      "modelId": "web-telemetry-web-vitals",
+      "purpose": "Define web telemetry and web vitals semantics for diagnostics, performance metrics, interaction events, consent state, privacy categories, sampling, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "web-vital-metric",
+        "diagnostic-event",
+        "performance-metric",
+        "interaction-event",
+        "consent-state",
+        "privacy-category",
+        "sampling-policy",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-457",
+      "modelId": "web-security-headers-csp",
+      "purpose": "Define web security headers and CSP semantics for CSP, cookies, CORS, redirects, headers, script boundaries, third-party SDKs, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "content-security-policy",
+        "cookie-policy",
+        "cors-policy",
+        "redirect-policy",
+        "security-header",
+        "script-boundary",
+        "third-party-sdk",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-458",
+      "modelId": "image-font-script-optimisation-policy",
+      "purpose": "Define image, font, and script optimisation policy semantics for optimisation behaviour, third-party resources, privacy and consent implications, CDN constraints, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "image-asset",
+        "font-asset",
+        "script-asset",
+        "optimisation-policy",
+        "third-party-resource",
+        "privacy-boundary",
+        "consent-state",
+        "cdn-constraint",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-459",
+      "modelId": "multi-tenant-domain-route-strategy",
+      "purpose": "Define multi-tenant domain and route strategy semantics for tenant host resolution, canonical domains, route classification, TLS and DNS evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "tenant-host-resolution",
+        "canonical-domain",
+        "route-classification",
+        "tls-evidence",
+        "dns-evidence",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-461",
+      "modelId": "nextjs-proof-gates-ssr-isr-static-edge",
+      "purpose": "Define Next.js proof gates for SSR, ISR, static, and edge support with rendering modes, provider constraints, cache behaviour, deployment evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "ssr-mode",
+        "isr-mode",
+        "static-mode",
+        "edge-mode",
+        "provider-constraint-placeholder",
+        "cache-behaviour",
+        "deployment-evidence",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-462",
+      "modelId": "web-release-runbook-evidence",
+      "purpose": "Define web release runbook and evidence semantics for release steps, approvals, deployment provenance, domains, cache purge, rollback, health monitoring, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "release-step",
+        "approval-gate",
+        "deployment-provenance",
+        "domain-policy",
+        "cache-purge",
+        "rollback-plan",
+        "health-monitoring",
+        "validator",
+        "proof"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "issueId": "USF-423",
+      "requirementId": "validator.app-surface.web-adapter.nextjs-app-router",
+      "failClosedOn": [
+        "route without capability mapping",
+        "route group without permission mapping",
+        "route without tenant or privacy boundary"
+      ]
+    },
+    {
+      "issueId": "USF-424",
+      "requirementId": "validator.app-surface.web-adapter.server-client-boundary",
+      "failClosedOn": [
+        "client component reads server-only data",
+        "server component assumes client interactivity",
+        "serialization boundary missing"
+      ]
+    },
+    {
+      "issueId": "USF-425",
+      "requirementId": "validator.app-surface.web-adapter.server-actions",
+      "failClosedOn": [
+        "mutation without command authority",
+        "mutation without validation or audit mapping",
+        "CSRF posture missing"
+      ]
+    },
+    {
+      "issueId": "USF-426",
+      "requirementId": "validator.app-surface.web-adapter.route-handlers",
+      "failClosedOn": [
+        "route handler without request context mapping",
+        "BFF boundary invents API semantics",
+        "handler missing privacy or audit mapping"
+      ]
+    },
+    {
+      "issueId": "USF-428",
+      "requirementId": "validator.app-surface.web-adapter.middleware-edge",
+      "failClosedOn": [
+        "middleware changes route authority",
+        "rewrite bypasses permission boundary",
+        "edge runtime claim without constraint mapping"
+      ]
+    },
+    {
+      "issueId": "USF-430",
+      "requirementId": "validator.app-surface.web-adapter.metadata-indexing",
+      "failClosedOn": [
+        "metadata exposes non-public data",
+        "canonical URL lacks tenant domain mapping",
+        "generated image lacks privacy boundary"
+      ]
+    },
+    {
+      "issueId": "USF-431",
+      "requirementId": "validator.app-surface.web-adapter.cache-revalidation",
+      "failClosedOn": [
+        "cache key lacks tenant isolation",
+        "revalidation trigger lacks semantic authority",
+        "stale state satisfies pass"
+      ]
+    },
+    {
+      "issueId": "USF-432",
+      "requirementId": "validator.app-surface.web-adapter.streaming-states",
+      "failClosedOn": [
+        "loading state omits privacy boundary",
+        "error state exposes unsupported detail",
+        "not-found state conflicts with route authority"
+      ]
+    },
+    {
+      "issueId": "USF-433",
+      "requirementId": "validator.app-surface.web-adapter.auth-session-cookie-csrf",
+      "failClosedOn": [
+        "session without lifecycle mapping",
+        "cookie policy missing",
+        "CSRF protection omitted for mutation authority"
+      ]
+    },
+    {
+      "issueId": "USF-434",
+      "requirementId": "validator.app-surface.web-adapter.browser-storage",
+      "failClosedOn": [
+        "browser storage lacks privacy classification",
+        "retention or purge rule missing",
+        "shared-device posture missing"
+      ]
+    },
+    {
+      "issueId": "USF-435",
+      "requirementId": "validator.app-surface.web-adapter.offline-pwa",
+      "failClosedOn": [
+        "offline cache lacks privacy boundary",
+        "service worker boundary missing",
+        "installability claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-436",
+      "requirementId": "validator.app-surface.web-adapter.web-push",
+      "failClosedOn": [
+        "push without browser permission mapping",
+        "notification without consent mapping",
+        "service worker push boundary missing"
+      ]
+    },
+    {
+      "issueId": "USF-442",
+      "requirementId": "validator.app-surface.web-adapter.file-transfer",
+      "failClosedOn": [
+        "upload without permission mapping",
+        "download without privacy category",
+        "file transfer lacks audit mapping"
+      ]
+    },
+    {
+      "issueId": "USF-445",
+      "requirementId": "validator.app-surface.web-adapter.accessibility",
+      "failClosedOn": [
+        "interactive surface lacks keyboard mapping",
+        "screen reader semantics missing",
+        "accessibility compliance claimed without proof"
+      ]
+    },
+    {
+      "issueId": "USF-447",
+      "requirementId": "validator.app-surface.web-adapter.i18n",
+      "failClosedOn": [
+        "route lacks locale fallback",
+        "user-facing text lacks translation catalogue mapping",
+        "RTL boundary missing where required"
+      ]
+    },
+    {
+      "issueId": "USF-449",
+      "requirementId": "validator.app-surface.web-adapter.seo-public-boundary",
+      "failClosedOn": [
+        "crawlable route is not public",
+        "SEO metadata exposes private data",
+        "canonical URL lacks tenant domain mapping"
+      ]
+    },
+    {
+      "issueId": "USF-451",
+      "requirementId": "validator.app-surface.web-adapter.route-classification",
+      "failClosedOn": [
+        "route class missing",
+        "admin or operator route lacks permission mapping",
+        "private route lacks tenant context"
+      ]
+    },
+    {
+      "issueId": "USF-454",
+      "requirementId": "validator.app-surface.web-adapter.web-telemetry",
+      "failClosedOn": [
+        "web vital lacks route classification",
+        "telemetry lacks privacy or consent mapping",
+        "provider readiness claimed without owner decision"
+      ]
+    },
+    {
+      "issueId": "USF-457",
+      "requirementId": "validator.app-surface.web-adapter.security-headers",
+      "failClosedOn": [
+        "CSP missing for third-party script boundary",
+        "cookie header conflicts with session semantics",
+        "security readiness claimed without proof"
+      ]
+    },
+    {
+      "issueId": "USF-458",
+      "requirementId": "validator.app-surface.web-adapter.resource-optimisation",
+      "failClosedOn": [
+        "third-party resource lacks privacy mapping",
+        "optimisation policy assumes provider capability",
+        "script optimisation bypasses consent boundary"
+      ]
+    },
+    {
+      "issueId": "USF-459",
+      "requirementId": "validator.app-surface.web-adapter.multi-tenant-domain-route",
+      "failClosedOn": [
+        "tenant host lacks canonical domain mapping",
+        "route strategy lacks tenant isolation",
+        "TLS or DNS readiness claimed without evidence"
+      ]
+    },
+    {
+      "issueId": "USF-461",
+      "requirementId": "validator.app-surface.web-adapter.nextjs-proof-gates",
+      "failClosedOn": [
+        "rendering mode lacks provider constraint mapping",
+        "edge support claimed without proof",
+        "deployment readiness claimed without evidence"
+      ]
+    },
+    {
+      "issueId": "USF-462",
+      "requirementId": "validator.app-surface.web-adapter.release-runbook",
+      "failClosedOn": [
+        "release step lacks approval mapping",
+        "rollback plan lacks evidence expectation",
+        "release readiness claimed without proof"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "issueId": "USF-423",
+      "requirementId": "proof.app-surface.web-adapter.nextjs-app-router",
+      "expectedEvidence": [
+        "route-to-capability mapping",
+        "permission and tenant-boundary mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-424",
+      "requirementId": "proof.app-surface.web-adapter.server-client-boundary",
+      "expectedEvidence": [
+        "server-client boundary mapping",
+        "data access and interactivity classification",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-425",
+      "requirementId": "proof.app-surface.web-adapter.server-actions",
+      "expectedEvidence": [
+        "mutation-to-command mapping",
+        "validation and audit mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-426",
+      "requirementId": "proof.app-surface.web-adapter.route-handlers",
+      "expectedEvidence": [
+        "route-handler boundary mapping",
+        "request context and privacy mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-428",
+      "requirementId": "proof.app-surface.web-adapter.middleware-edge",
+      "expectedEvidence": [
+        "middleware and edge boundary mapping",
+        "redirect and rewrite mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-430",
+      "requirementId": "proof.app-surface.web-adapter.metadata-indexing",
+      "expectedEvidence": [
+        "metadata and indexing mapping",
+        "tenant canonical URL mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-431",
+      "requirementId": "proof.app-surface.web-adapter.cache-revalidation",
+      "expectedEvidence": [
+        "cache key and tag mapping",
+        "revalidation and stale-state mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-432",
+      "requirementId": "proof.app-surface.web-adapter.streaming-states",
+      "expectedEvidence": [
+        "streaming and fallback-state mapping",
+        "error and not-found state mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-433",
+      "requirementId": "proof.app-surface.web-adapter.auth-session-cookie-csrf",
+      "expectedEvidence": [
+        "session and cookie policy mapping",
+        "CSRF and audit mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-434",
+      "requirementId": "proof.app-surface.web-adapter.browser-storage",
+      "expectedEvidence": [
+        "browser storage classification",
+        "retention purge and shared-device mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-435",
+      "requirementId": "proof.app-surface.web-adapter.offline-pwa",
+      "expectedEvidence": [
+        "offline and service-worker boundary mapping",
+        "cache and installability mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-436",
+      "requirementId": "proof.app-surface.web-adapter.web-push",
+      "expectedEvidence": [
+        "push permission and consent mapping",
+        "service-worker and privacy mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-442",
+      "requirementId": "proof.app-surface.web-adapter.file-transfer",
+      "expectedEvidence": [
+        "upload and download boundary mapping",
+        "permission privacy and audit mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-445",
+      "requirementId": "proof.app-surface.web-adapter.accessibility",
+      "expectedEvidence": [
+        "accessibility semantic mapping",
+        "future accessibility proof expectation",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-447",
+      "requirementId": "proof.app-surface.web-adapter.i18n",
+      "expectedEvidence": [
+        "locale and translation mapping",
+        "RTL and fallback mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-449",
+      "requirementId": "proof.app-surface.web-adapter.seo-public-boundary",
+      "expectedEvidence": [
+        "public route and crawlability mapping",
+        "metadata privacy boundary mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-451",
+      "requirementId": "proof.app-surface.web-adapter.route-classification",
+      "expectedEvidence": [
+        "route class mapping",
+        "permission tenant and audit mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-454",
+      "requirementId": "proof.app-surface.web-adapter.web-telemetry",
+      "expectedEvidence": [
+        "web vitals and telemetry mapping",
+        "privacy consent and sampling mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-457",
+      "requirementId": "proof.app-surface.web-adapter.security-headers",
+      "expectedEvidence": [
+        "security header and CSP mapping",
+        "third-party script boundary mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-458",
+      "requirementId": "proof.app-surface.web-adapter.resource-optimisation",
+      "expectedEvidence": [
+        "asset optimisation mapping",
+        "third-party resource privacy mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-459",
+      "requirementId": "proof.app-surface.web-adapter.multi-tenant-domain-route",
+      "expectedEvidence": [
+        "tenant domain and route mapping",
+        "TLS and DNS evidence expectation",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-461",
+      "requirementId": "proof.app-surface.web-adapter.nextjs-proof-gates",
+      "expectedEvidence": [
+        "rendering mode support mapping",
+        "provider constraint and cache mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-462",
+      "requirementId": "proof.app-surface.web-adapter.release-runbook",
+      "expectedEvidence": [
+        "release runbook mapping",
+        "deployment provenance rollback and health mapping",
+        "non-claim preservation evidence"
+      ]
+    }
+  ],
+  "crossReferencePolicy": {
+    "supportsValidatorIssueIds": [
+      "USF-929",
+      "USF-930",
+      "USF-931",
+      "USF-932",
+      "USF-933",
+      "USF-937",
+      "USF-938",
+      "USF-940"
+    ],
+    "usesCdnReleaseSemanticsForDeploymentEvidence": true,
+    "usesObservabilityPrivacySemanticsForWebTelemetry": true,
+    "semanticClosureDoesNotCloseReferencedValidatorIssues": true
+  },
+  "dependencyPolicy": {
+    "providerDecisionRequiredForImplementation": true,
+    "providerDecisionIssueId": "USF-460",
+    "cdnProviderDecisionIssueId": "USF-736",
+    "analyticsProviderDecisionIssueId": "USF-807",
+    "privacyAndConsentDecisionIssueIds": [
+      "USF-634",
+      "USF-638"
+    ],
+    "semanticClosureDoesNotSelectProvider": true,
+    "implementationMayProceedWhileProviderDecisionOpen": false,
+    "readinessClaimsAllowedWhileProviderDecisionOpen": false
+  },
+  "evidenceFreshnessSemantics": {
+    "missingEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "implementationGate": {
+    "implementationAllowed": false,
+    "routeCreationAllowed": false,
+    "middlewareCreationAllowed": false,
+    "serverActionCreationAllowed": false,
+    "routeHandlerCreationAllowed": false,
+    "serviceWorkerCreationAllowed": false,
+    "pushProviderSetupAllowed": false,
+    "telemetryProviderSetupAllowed": false,
+    "securityHeaderConfigurationAllowed": false,
+    "browserStorageImplementationAllowed": false,
+    "deploymentAllowed": false,
+    "dnsChangeAllowed": false,
+    "secretCreationAllowed": false,
+    "readinessClaimAllowed": false,
+    "reason": "USF-314 child issues are semantic-definition work only. USF-460 remains the open owner decision for Next.js deployment provider posture, and related provider, consent, analytics, deployment, and proof gates remain separate."
+  },
+  "nonClaims": {
+    "nextjsImplementation": false,
+    "routeImplementation": false,
+    "middlewareImplementation": false,
+    "serverActionImplementation": false,
+    "routeHandlerImplementation": false,
+    "serviceWorkerImplementation": false,
+    "pwaReadiness": false,
+    "webPushReadiness": false,
+    "telemetryReadiness": false,
+    "securityReadiness": false,
+    "accessibilityCompliance": false,
+    "internationalisationReadiness": false,
+    "seoReadiness": false,
+    "providerSelection": false,
+    "providerSetup": false,
+    "deploymentReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}

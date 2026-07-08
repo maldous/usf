@@ -142,6 +142,8 @@ AUTHORIZED_TOOLING = {
     "tools/validate-environment-ladder/validate-environment-ladder.py",
     "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py",
     "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
+    "tools/repository-optimisation/measure-command-timing.py",
+    "tools/validate-linear-boundary/validate-linear-boundary.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
     "tools/validate-parity/validate-parity.py",

@@ -1,0 +1,146 @@
+{
+  "id": "usf.staging-rehearsal-evidence-pack-definition",
+  "title": "Staging rehearsal evidence pack definition",
+  "purpose": "Define the evidence pack required before Test evidence can support staging-entry review beyond planning, without implementing schemas, validators, operator runbooks, staging infrastructure, or readiness claims.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "generatedReportIsAuthority": false,
+    "implementationCreated": false,
+    "nonClaims": [
+      "This definition does not authorise staging execution.",
+      "This definition does not implement a handoff schema or validator.",
+      "This definition does not create a promotion runbook.",
+      "This definition does not claim staging readiness.",
+      "This definition does not claim production readiness.",
+      "This definition does not claim production-live proof.",
+      "This definition does not claim deployment readiness."
+    ]
+  },
+  "sourceReferences": [
+    "docs/architecture/repository-environment-ladder-governance.json",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+    "docs/architecture/repository-compose-optimisation-governance.json",
+    "docs/architecture/repository-ci-optimisation-governance.json",
+    "docs/architecture/authority-model.md",
+    "AGENTS.md"
+  ],
+  "evidencePackScope": {
+    "stateInspected": true,
+    "packPurpose": "Support staging-entry review by making non-destructive production-shaped rehearsal evidence explicit, bounded, and lower-authority than semantic definitions and raw evidence.",
+    "requiredDimensions": [
+      "environment",
+      "provider mode",
+      "proof level",
+      "rehearsal scope",
+      "service set",
+      "source contract basis",
+      "generated artifact basis",
+      "freshness state",
+      "custody reference",
+      "owner decision references where required"
+    ]
+  },
+  "requiredEvidenceClasses": [
+    {
+      "class": "migration rehearsal evidence",
+      "purpose": "Show that schema or data migration rehearsal expectations are recorded for staging-entry review without claiming production-live execution."
+    },
+    {
+      "class": "release and rollback rehearsal evidence",
+      "purpose": "Show that release, rollback, and recovery paths are described with rollback boundaries and retained proof references."
+    },
+    {
+      "class": "observability and alerting evidence",
+      "purpose": "Show that telemetry, alerting, and operator visibility expectations are captured for the rehearsal scope."
+    },
+    {
+      "class": "incident and support readiness evidence",
+      "purpose": "Show that incident triage, escalation, and failure-mode documentation are available for review."
+    },
+    {
+      "class": "privacy and security evidence",
+      "purpose": "Show that privacy, secret handling, access control, and security posture are represented for staging-entry review."
+    },
+    {
+      "class": "backup and restore rehearsal evidence",
+      "purpose": "Show that backup, restore, and custody expectations are captured where proof claims depend on them."
+    },
+    {
+      "class": "provider and environment boundary evidence",
+      "purpose": "Show that provider mode and environment are labelled separately and cannot upgrade each other by implication."
+    },
+    {
+      "class": "artifact custody and freshness evidence",
+      "purpose": "Show that raw evidence, generated reports, retained proof artifacts, and freshness states are distinguished."
+    }
+  ],
+  "forbiddenInterpretations": [
+    "hermetic-mock evidence satisfying live-external-provider proof",
+    "local-composed proof satisfying production-live proof",
+    "production-shaped rehearsal satisfying production-live proof",
+    "generated reports satisfying proof without raw evidence or retained proof artifacts",
+    "unknown, stale, missing, or mismatched evidence satisfying pass",
+    "staging-entry review being treated as staging readiness or deployment readiness"
+  ],
+  "validationProofExpectation": [
+    "Future schema or validator implementation must fail closed on missing required dimensions, unknown provider mode, unknown environment, stale evidence, missing custody, generated-report-only proof, or readiness overclaim.",
+    "Future Dev-to-Test and Test-to-Staging handoff records must remain separate implementation work and must reference this evidence-pack definition where applicable.",
+    "Future operator runbook work must sequence evidence collection without upgrading proof levels by implication."
+  ],
+  "openDependencies": [
+    {
+      "issueId": "USF-985",
+      "reason": "Dev-to-Test artifact handoff manifest schema and validator implementation remains open."
+    },
+    {
+      "issueId": "USF-986",
+      "reason": "Test-to-Staging artifact handoff record schema and validator implementation remains open."
+    },
+    {
+      "issueId": "USF-989",
+      "reason": "Environment ladder validator implementation remains open."
+    },
+    {
+      "issueId": "USF-982",
+      "reason": "Promotion runbook and operator sequence remains open until handoff records, validator gates, and related proof evidence are available."
+    }
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-981",
+      "title": "Staging rehearsal evidence pack definition",
+      "completionBasis": "This artifact defines the staging rehearsal evidence pack classes, required dimensions, forbidden interpretations, validation expectations, and open implementation dependencies."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-981",
+      "criteria": [
+        "Evidence pack scope is defined.",
+        "Required evidence classes are enumerated.",
+        "Provider mode and environment boundaries are preserved.",
+        "Generated-report and readiness non-claims are explicit.",
+        "Open schema, validator, and runbook dependencies are recorded.",
+        "Strict JSON parse passed for the definition and the three catalogue JSON files."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "evidencePackScope",
+        "requiredEvidenceClasses",
+        "forbiddenInterpretations",
+        "openDependencies"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "schemaCreated": false,
+    "testCodeCreated": false,
+    "operatorRunbookCreated": false,
+    "proofRunPerformed": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

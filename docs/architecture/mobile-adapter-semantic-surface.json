@@ -1,0 +1,480 @@
+{
+  "id": "usf.mobile-adapter-semantic-surface",
+  "title": "Mobile Adapter Semantic Surface",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines USF-native mobile adapter semantics for Expo and React Native posture, navigation, links, lifecycle, notifications, storage, permissions, native capability boundaries, browser boundaries, validators, proof expectations, dependencies, and non-claims. It does not implement mobile adapters, generate native projects, install dependencies, configure providers, create credentials, submit stores, or claim readiness.",
+  "coveredIssueIds": [
+    "USF-366",
+    "USF-368",
+    "USF-369",
+    "USF-370",
+    "USF-371",
+    "USF-372",
+    "USF-373",
+    "USF-374",
+    "USF-376",
+    "USF-377",
+    "USF-378",
+    "USF-379",
+    "USF-380",
+    "USF-381",
+    "USF-382",
+    "USF-383"
+  ],
+  "deferredOwnerDecisionIssueIds": [
+    "USF-375",
+    "USF-388"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "authorityRole": "shared client SDK semantic surface"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "authorityRole": "shared client interaction semantics"
+    },
+    {
+      "path": "docs/architecture/client-state-storage-sync-semantics.json",
+      "authorityRole": "client state storage and sync semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-auth-session-security-semantics.json",
+      "authorityRole": "auth session security semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-security-proof-semantics.json",
+      "authorityRole": "security proof semantics"
+    },
+    {
+      "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "authorityRole": "notification consent and data inventory semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "privacy compliance and consent proof semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "authorityRole": "privacy disclosure and SDK vendor semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-i18n-localisation-semantics.json",
+      "authorityRole": "i18n and localisation semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-semantics.json",
+      "authorityRole": "accessibility semantics"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-366",
+      "modelId": "mobile-expo-react-native-architecture-posture",
+      "purpose": "Define Expo SDK and React Native architecture posture for USF mobile adapters without selecting or implementing a native project policy.",
+      "requiredMappings": [
+        "mobile-adapter-to-app-surface-authority",
+        "framework-posture-to-permission-boundary",
+        "native-capability-to-approval-gate",
+        "release-posture-to-proof-requirement",
+        "privacy-impact-to-data-classification"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312",
+        "USF-388"
+      ]
+    },
+    {
+      "issueId": "USF-368",
+      "modelId": "expo-router-navigation-semantics",
+      "purpose": "Define Expo Router navigation semantics for routes, navigation transitions, permissions, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "route-to-capability",
+        "navigation-transition-to-state-boundary",
+        "route-to-permission-requirement",
+        "navigation-event-to-audit-record",
+        "missing-route-authority-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312"
+      ]
+    },
+    {
+      "issueId": "USF-369",
+      "modelId": "deep-link-universal-app-link-semantics",
+      "purpose": "Define deep link and universal app link semantics for routes, identity, permissions, verification, fallback, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "deep-link-to-route-authority",
+        "universal-link-to-domain-verification",
+        "link-entry-to-identity-context",
+        "link-entry-to-permission-check",
+        "fallback-to-user-message"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312"
+      ]
+    },
+    {
+      "issueId": "USF-370",
+      "modelId": "mobile-app-lifecycle-background-state-semantics",
+      "purpose": "Define app lifecycle and background state semantics for foreground, background, resume, suspend, refresh, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "lifecycle-state-to-client-state",
+        "background-transition-to-privacy-boundary",
+        "resume-event-to-refresh-policy",
+        "suspend-event-to-persistence-policy",
+        "missing-lifecycle-authority-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312"
+      ]
+    },
+    {
+      "issueId": "USF-371",
+      "modelId": "mobile-push-notification-semantics",
+      "purpose": "Define push notification semantics for notification purpose, consent, permission, preference, delivery, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "push-purpose-to-capability",
+        "push-delivery-to-consent-state",
+        "push-permission-to-platform-disclosure",
+        "notification-preference-to-user-control",
+        "push-event-to-audit-record"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312",
+        "USF-320"
+      ]
+    },
+    {
+      "issueId": "USF-372",
+      "modelId": "mobile-local-notification-semantics",
+      "purpose": "Define local notification semantics for scheduling, preferences, permission, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "local-notification-purpose-to-capability",
+        "schedule-rule-to-user-preference",
+        "local-notification-permission-to-disclosure",
+        "notification-action-to-audit-record",
+        "missing-preference-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312",
+        "USF-320"
+      ]
+    },
+    {
+      "issueId": "USF-373",
+      "modelId": "mobile-secure-storage-token-storage-policy",
+      "purpose": "Define secure storage and token storage policy for mobile credentials, tokens, sessions, privacy, retention, purge, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "credential-to-secure-storage-boundary",
+        "token-to-session-authority",
+        "retention-rule-to-purge-requirement",
+        "storage-field-to-privacy-classification",
+        "missing-storage-policy-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-317",
+        "USF-324",
+        "USF-375"
+      ]
+    },
+    {
+      "issueId": "USF-374",
+      "modelId": "mobile-local-cache-offline-queue-policy",
+      "purpose": "Define local cache and offline queue policy for cache eligibility, offline queues, retention, conflicts, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "cache-entry-to-capability-authority",
+        "offline-eligibility-to-privacy-boundary",
+        "queue-item-to-retention-rule",
+        "conflict-rule-to-resolution-policy",
+        "missing-offline-policy-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-312",
+        "USF-375"
+      ]
+    },
+    {
+      "issueId": "USF-376",
+      "modelId": "mobile-permissions-model",
+      "purpose": "Define the mobile permissions model for permission purpose, platform disclosure, denial, fallback, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "permission-to-capability-purpose",
+        "permission-to-platform-disclosure",
+        "denial-state-to-fallback-behaviour",
+        "permission-change-to-audit-record",
+        "missing-permission-purpose-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-320"
+      ]
+    },
+    {
+      "issueId": "USF-377",
+      "modelId": "mobile-camera-photo-media-picker-semantics",
+      "purpose": "Define camera, photo, and media picker semantics for media access, permission, privacy, transfer, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "media-access-to-permission-purpose",
+        "media-file-to-privacy-classification",
+        "media-transfer-to-retention-rule",
+        "media-action-to-audit-record",
+        "missing-media-consent-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-376"
+      ]
+    },
+    {
+      "issueId": "USF-378",
+      "modelId": "mobile-file-document-picker-semantics",
+      "purpose": "Define file and document picker semantics for file access, permission, transfer, retention, privacy, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "file-access-to-permission-purpose",
+        "document-type-to-privacy-classification",
+        "file-transfer-to-retention-rule",
+        "document-action-to-audit-record",
+        "missing-file-purpose-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-376"
+      ]
+    },
+    {
+      "issueId": "USF-379",
+      "modelId": "mobile-location-geofencing-semantics",
+      "purpose": "Define location permission and geofencing semantics for location purpose, precision, background use, retention, privacy, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "location-purpose-to-capability",
+        "precision-level-to-privacy-impact",
+        "background-location-to-permission-gate",
+        "geofence-event-to-retention-rule",
+        "missing-location-purpose-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-376"
+      ]
+    },
+    {
+      "issueId": "USF-380",
+      "modelId": "mobile-contacts-calendar-integration-policy",
+      "purpose": "Define contacts and calendar integration policy for allow or deny posture, permission, privacy, purpose, retention, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "integration-to-allow-deny-posture",
+        "contact-calendar-purpose-to-permission",
+        "imported-data-to-retention-rule",
+        "integration-event-to-audit-record",
+        "missing-purpose-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-376"
+      ]
+    },
+    {
+      "issueId": "USF-381",
+      "modelId": "mobile-biometric-passkey-device-unlock-semantics",
+      "purpose": "Define biometric, passkey, and device unlock semantics for unlock, reauthentication, consent, fallback, audit, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "biometric-unlock-to-local-session-boundary",
+        "passkey-use-to-auth-authority",
+        "device-unlock-to-reauthentication-rule",
+        "fallback-to-user-control",
+        "unlock-event-to-audit-record"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-317",
+        "USF-320",
+        "USF-324"
+      ]
+    },
+    {
+      "issueId": "USF-382",
+      "modelId": "mobile-share-sheet-cross-app-handoff-semantics",
+      "purpose": "Define share sheet and cross-app handoff semantics for share targets, payloads, privacy, permission, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "share-target-to-permission-boundary",
+        "payload-to-privacy-classification",
+        "handoff-to-user-confirmation",
+        "share-event-to-audit-record",
+        "missing-share-purpose-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-376"
+      ]
+    },
+    {
+      "issueId": "USF-383",
+      "modelId": "mobile-in-app-browser-webview-boundary",
+      "purpose": "Define in-app browser and webview boundary semantics for navigation, auth, tracking, storage, privacy, consent, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "webview-navigation-to-route-authority",
+        "browser-session-to-auth-boundary",
+        "webview-storage-to-privacy-boundary",
+        "tracking-context-to-consent-state",
+        "external-navigation-to-user-confirmation"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-317",
+        "USF-320",
+        "USF-324"
+      ]
+    }
+  ],
+  "validatorRequirementGroup": {
+    "id": "validator.mobile-adapter.semantic-surface",
+    "coveredIssueIds": [
+      "USF-366",
+      "USF-368",
+      "USF-369",
+      "USF-370",
+      "USF-371",
+      "USF-372",
+      "USF-373",
+      "USF-374",
+      "USF-376",
+      "USF-377",
+      "USF-378",
+      "USF-379",
+      "USF-380",
+      "USF-381",
+      "USF-382",
+      "USF-383"
+    ],
+    "failClosedOn": [
+      "missing mobile semantic mapping",
+      "missing permission or privacy mapping",
+      "missing dependency mapping",
+      "missing proof requirement",
+      "owner decision treated as resolved",
+      "implementation or readiness overclaim"
+    ]
+  },
+  "proofRequirementGroup": {
+    "id": "proof.mobile-adapter.semantic-surface",
+    "coveredIssueIds": [
+      "USF-366",
+      "USF-368",
+      "USF-369",
+      "USF-370",
+      "USF-371",
+      "USF-372",
+      "USF-373",
+      "USF-374",
+      "USF-376",
+      "USF-377",
+      "USF-378",
+      "USF-379",
+      "USF-380",
+      "USF-381",
+      "USF-382",
+      "USF-383"
+    ],
+    "requiredEvidence": [
+      "semantic source reference",
+      "capability or permission mapping",
+      "privacy classification mapping",
+      "dependency mapping",
+      "evidence freshness record",
+      "non-claim boundary record"
+    ]
+  },
+  "dependencyPolicy": {
+    "ownerDecisionIssuesRemainOpen": [
+      "USF-375",
+      "USF-388"
+    ],
+    "implementationMayProceedWithOpenOwnerDecision": false,
+    "dependencyMappingRequiredBeforeImplementation": true,
+    "providerCredentialStoreAndNativeSetupRemainBlocked": true
+  },
+  "implementationAuthorization": {
+    "mobileImplementationCodeAuthorized": false,
+    "nativeProjectGenerationAuthorized": false,
+    "dependencyInstallationAuthorized": false,
+    "providerSetupAuthorized": false,
+    "credentialSetupAuthorized": false,
+    "storeSubmissionAuthorized": false,
+    "testExecutionAuthorized": false,
+    "legalConclusionAuthorized": false,
+    "readinessClaimAuthorized": false
+  },
+  "evidenceFreshnessSemantics": {
+    "missingEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "nonClaims": {
+    "mobileReadiness": false,
+    "nativeReadiness": false,
+    "expoReadiness": false,
+    "storeReadiness": false,
+    "privacyCompliance": false,
+    "securityApproval": false,
+    "accessibilityCompliance": false,
+    "localisationReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false
+  }
+}

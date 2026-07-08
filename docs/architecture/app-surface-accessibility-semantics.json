@@ -1,0 +1,476 @@
+{
+  "id": "usf.app-surface-accessibility-semantics",
+  "title": "App-surface accessibility semantics",
+  "status": "semantic-definition",
+  "purpose": "Define cross-platform accessibility semantics and proof expectations for mobile and web app surfaces without implementing UI components, executing audits, submitting apps, or claiming accessibility compliance.",
+  "coveredIssueIds": [
+    "USF-600",
+    "USF-602",
+    "USF-604",
+    "USF-606",
+    "USF-607",
+    "USF-608",
+    "USF-609",
+    "USF-610",
+    "USF-611",
+    "USF-612",
+    "USF-613"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "role": "constitutional-authority"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "role": "authority-order"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "role": "app-surface-authority-boundary"
+    },
+    {
+      "path": "docs/architecture/generated-ui-view-model-semantics.json",
+      "role": "generated-ui-view-model-foundation"
+    },
+    {
+      "path": "docs/architecture/generated-ui-renderer-composition-semantics.json",
+      "role": "renderer-composition-foundation"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "role": "client-interaction-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "role": "proof-evidence-report-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "role": "validator-requirement-foundation"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "role": "taxonomy-catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "role": "vocabulary-catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "role": "schema-registry"
+    }
+  ],
+  "externalStandardsPosture": {
+    "wcag": "inspiration-and-baseline-reference",
+    "mobileAccessibilityGuidance": "adapted-practice-reference",
+    "complianceClaimed": false,
+    "certificationClaimed": false
+  },
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-331",
+      "USF-315",
+      "USF-481",
+      "USF-490",
+      "USF-491",
+      "USF-492",
+      "USF-494",
+      "USF-495",
+      "USF-496",
+      "USF-497",
+      "USF-498",
+      "USF-499",
+      "USF-500",
+      "USF-501",
+      "USF-502",
+      "USF-503",
+      "USF-504",
+      "USF-818",
+      "USF-821",
+      "USF-822"
+    ],
+    "notSatisfiedByThisArtefact": [
+      "USF-837",
+      "USF-938"
+    ]
+  },
+  "semanticModels": [
+    {
+      "issueId": "USF-600",
+      "id": "cross-platform-accessibility-baseline",
+      "purpose": "Define cross-platform accessibility baseline semantics, capability mapping, validator requirements, proof expectations, dependency mapping, and non-claims.",
+      "requiredMappings": [
+        "capabilityReference",
+        "platformReference",
+        "screenReaderReference",
+        "focusReference",
+        "targetSizeReference",
+        "contrastReference",
+        "motionReference",
+        "keyboardReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "capabilityReference",
+        "platformReference",
+        "proofReference"
+      ],
+      "validatorRequirementId": "cross-platform-accessibility-baseline-validator",
+      "proofRequirementId": "cross-platform-accessibility-baseline-proof"
+    },
+    {
+      "issueId": "USF-602",
+      "id": "screen-reader-semantics",
+      "purpose": "Map labels, hints, roles, states, validation errors, navigation, and proof expectations for generated and hand-authored app surfaces.",
+      "requiredMappings": [
+        "labelReference",
+        "hintReference",
+        "roleReference",
+        "stateReference",
+        "validationErrorReference",
+        "navigationReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "labelReference",
+        "roleReference",
+        "stateReference"
+      ],
+      "validatorRequirementId": "screen-reader-semantics-validator",
+      "proofRequirementId": "screen-reader-semantics-proof"
+    },
+    {
+      "issueId": "USF-604",
+      "id": "focus-order-navigation-semantics",
+      "purpose": "Map focus, tab order, modal, stack, route, and workflow navigation semantics with validator and proof expectations.",
+      "requiredMappings": [
+        "focusOrderReference",
+        "tabOrderReference",
+        "modalReference",
+        "routeReference",
+        "workflowReference",
+        "backStackReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "focusOrderReference",
+        "routeReference",
+        "proofReference"
+      ],
+      "validatorRequirementId": "focus-order-navigation-validator",
+      "proofRequirementId": "focus-order-navigation-proof"
+    },
+    {
+      "issueId": "USF-606",
+      "id": "touch-target-gesture-alternatives",
+      "purpose": "Map minimum interactive targets, gesture alternatives, keyboard equivalents, error states, validator requirements, and proof expectations.",
+      "requiredMappings": [
+        "interactiveTargetReference",
+        "gestureReference",
+        "gestureAlternativeReference",
+        "keyboardEquivalentReference",
+        "errorStateReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "interactiveTargetReference",
+        "gestureAlternativeReference",
+        "keyboardEquivalentReference"
+      ],
+      "validatorRequirementId": "touch-target-gesture-alternatives-validator",
+      "proofRequirementId": "touch-target-gesture-alternatives-proof"
+    },
+    {
+      "issueId": "USF-607",
+      "id": "dynamic-type-font-scaling",
+      "purpose": "Map mobile font scaling, web text zoom, layout resilience, validator requirements, proof expectations, and non-claims.",
+      "requiredMappings": [
+        "fontScaleReference",
+        "textZoomReference",
+        "layoutResilienceReference",
+        "truncationPolicyReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "fontScaleReference",
+        "layoutResilienceReference"
+      ],
+      "validatorRequirementId": "dynamic-type-font-scaling-validator",
+      "proofRequirementId": "dynamic-type-font-scaling-proof"
+    },
+    {
+      "issueId": "USF-608",
+      "id": "colour-contrast-theme-requirements",
+      "purpose": "Map contrast, state indication, theme variants, high contrast, validation rules, proof expectations, and non-claims.",
+      "requiredMappings": [
+        "contrastReference",
+        "stateIndicationReference",
+        "themeVariantReference",
+        "highContrastReference",
+        "validationRuleReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "contrastReference",
+        "stateIndicationReference",
+        "validationRuleReference"
+      ],
+      "validatorRequirementId": "colour-contrast-theme-validator",
+      "proofRequirementId": "colour-contrast-theme-proof"
+    },
+    {
+      "issueId": "USF-609",
+      "id": "reduced-motion-semantics",
+      "purpose": "Map motion preference semantics, animation alternatives, loading and transition behavior, validator requirements, proof expectations, and non-claims.",
+      "requiredMappings": [
+        "motionPreferenceReference",
+        "animationAlternativeReference",
+        "loadingStateReference",
+        "transitionReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "motionPreferenceReference",
+        "animationAlternativeReference"
+      ],
+      "validatorRequirementId": "reduced-motion-validator",
+      "proofRequirementId": "reduced-motion-proof"
+    },
+    {
+      "issueId": "USF-610",
+      "id": "keyboard-navigation-web",
+      "purpose": "Map keyboard interaction, shortcut, focus trap, modal, route, validator requirements, and proof expectations for web surfaces.",
+      "requiredMappings": [
+        "keyboardInteractionReference",
+        "shortcutReference",
+        "focusTrapReference",
+        "modalReference",
+        "routeReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "keyboardInteractionReference",
+        "focusTrapReference",
+        "routeReference"
+      ],
+      "validatorRequirementId": "keyboard-navigation-web-validator",
+      "proofRequirementId": "keyboard-navigation-web-proof"
+    },
+    {
+      "issueId": "USF-611",
+      "id": "error-announcement-semantics",
+      "purpose": "Map validation, command errors, problem details, banners, form fields, and notifications to accessible announcements.",
+      "requiredMappings": [
+        "validationReference",
+        "commandErrorReference",
+        "problemDetailsReference",
+        "bannerReference",
+        "formFieldReference",
+        "notificationReference",
+        "announcementReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "validationReference",
+        "problemDetailsReference",
+        "announcementReference"
+      ],
+      "validatorRequirementId": "error-announcement-semantics-validator",
+      "proofRequirementId": "error-announcement-semantics-proof"
+    },
+    {
+      "issueId": "USF-612",
+      "id": "media-captions-alt-text",
+      "purpose": "Map images, documents, video, generated assets, store assets, uploads, validator requirements, proof expectations, and non-claims.",
+      "requiredMappings": [
+        "imageReference",
+        "documentReference",
+        "videoReference",
+        "generatedAssetReference",
+        "storeAssetReference",
+        "uploadReference",
+        "captionReference",
+        "altTextReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "captionReference",
+        "altTextReference",
+        "proofReference"
+      ],
+      "validatorRequirementId": "media-captions-alt-text-validator",
+      "proofRequirementId": "media-captions-alt-text-proof"
+    },
+    {
+      "issueId": "USF-613",
+      "id": "accessibility-proof-audit-evidence",
+      "purpose": "Define accessibility proof and audit evidence requirements, evidence envelope requirements, validator requirements, planted defects, freshness rules, dependency mapping, and non-claims.",
+      "requiredMappings": [
+        "evidenceEnvelopeReference",
+        "auditEvidenceReference",
+        "validatorRequirementReference",
+        "plantedDefectReference",
+        "freshnessReference",
+        "nonClaimReference"
+      ],
+      "failClosedWhenMissing": [
+        "evidenceEnvelopeReference",
+        "validatorRequirementReference",
+        "freshnessReference",
+        "nonClaimReference"
+      ],
+      "validatorRequirementId": "accessibility-proof-audit-evidence-validator",
+      "proofRequirementId": "accessibility-proof-audit-evidence-proof"
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "cross-platform-accessibility-baseline-validator",
+      "issueId": "USF-600",
+      "requirement": "Future validators reject app-surface mappings without cross-platform accessibility baseline references and non-claims.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "screen-reader-semantics-validator",
+      "issueId": "USF-602",
+      "requirement": "Future validators reject surfaces without screen reader labels, roles, states, validation-error, navigation, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "focus-order-navigation-validator",
+      "issueId": "USF-604",
+      "requirement": "Future validators reject surfaces without focus order, route, modal, workflow, back-stack, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "touch-target-gesture-alternatives-validator",
+      "issueId": "USF-606",
+      "requirement": "Future validators reject interactive surfaces without target, gesture alternative, keyboard equivalent, error-state, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "dynamic-type-font-scaling-validator",
+      "issueId": "USF-607",
+      "requirement": "Future validators reject surfaces without font scaling, text zoom, layout resilience, truncation policy, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "colour-contrast-theme-validator",
+      "issueId": "USF-608",
+      "requirement": "Future validators reject surfaces without contrast, state indication, theme variant, high contrast, validation rule, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "reduced-motion-validator",
+      "issueId": "USF-609",
+      "requirement": "Future validators reject surfaces without motion preference, animation alternative, loading, transition, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "keyboard-navigation-web-validator",
+      "issueId": "USF-610",
+      "requirement": "Future validators reject web surfaces without keyboard interaction, shortcut, focus trap, modal, route, and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "error-announcement-semantics-validator",
+      "issueId": "USF-611",
+      "requirement": "Future validators reject validation, command error, problem details, banner, field, or notification mappings without accessible announcement semantics.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "media-captions-alt-text-validator",
+      "issueId": "USF-612",
+      "requirement": "Future validators reject media, generated asset, store asset, or upload mappings without caption, alt text, and proof references where required.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "accessibility-proof-audit-evidence-validator",
+      "issueId": "USF-613",
+      "requirement": "Future validators reject accessibility evidence without evidence envelope, audit evidence, planted defect, freshness, and non-claim mappings.",
+      "failureMode": "fail-closed"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "cross-platform-accessibility-baseline-proof",
+      "issueId": "USF-600",
+      "requirement": "Future proof records trace app surfaces to baseline accessibility mappings without claiming compliance."
+    },
+    {
+      "id": "screen-reader-semantics-proof",
+      "issueId": "USF-602",
+      "requirement": "Future proof records trace screen reader labels, hints, roles, states, validation errors, and navigation semantics."
+    },
+    {
+      "id": "focus-order-navigation-proof",
+      "issueId": "USF-604",
+      "requirement": "Future proof records trace focus, tab order, modal, route, workflow, and back-stack semantics."
+    },
+    {
+      "id": "touch-target-gesture-alternatives-proof",
+      "issueId": "USF-606",
+      "requirement": "Future proof records trace touch targets, gesture alternatives, keyboard equivalents, and error states."
+    },
+    {
+      "id": "dynamic-type-font-scaling-proof",
+      "issueId": "USF-607",
+      "requirement": "Future proof records trace font scaling, text zoom, layout resilience, and truncation policy semantics."
+    },
+    {
+      "id": "colour-contrast-theme-proof",
+      "issueId": "USF-608",
+      "requirement": "Future proof records trace contrast, state indication, theme variants, high contrast, and validation rule semantics."
+    },
+    {
+      "id": "reduced-motion-proof",
+      "issueId": "USF-609",
+      "requirement": "Future proof records trace motion preference, animation alternative, loading, and transition semantics."
+    },
+    {
+      "id": "keyboard-navigation-web-proof",
+      "issueId": "USF-610",
+      "requirement": "Future proof records trace keyboard interaction, shortcuts, focus traps, modals, and route semantics."
+    },
+    {
+      "id": "error-announcement-semantics-proof",
+      "issueId": "USF-611",
+      "requirement": "Future proof records trace accessible announcements for validation, command errors, problem details, banners, fields, and notifications."
+    },
+    {
+      "id": "media-captions-alt-text-proof",
+      "issueId": "USF-612",
+      "requirement": "Future proof records trace caption and alt-text semantics for media, generated assets, store assets, and uploads."
+    },
+    {
+      "id": "accessibility-proof-audit-evidence-proof",
+      "issueId": "USF-613",
+      "requirement": "Future proof records trace accessibility evidence envelopes, audit evidence, planted defects, freshness, and non-claims."
+    }
+  ],
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines semantic requirements only. UI implementation, component implementation, route implementation, web implementation, shortcut registry implementation, animation implementation, visual design implementation, typography implementation, media generation, content production, device testing, audit execution, certification, app submission, validator implementation, and readiness claims remain requires the applicable authorised gates before readiness claims."
+  },
+  "nonClaims": {
+    "accessibilityCompliance": false,
+    "accessibilityCertification": false,
+    "uiReadiness": false,
+    "componentReadiness": false,
+    "routeReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "visualDesignReadiness": false,
+    "typographyReadiness": false,
+    "mediaProductionReadiness": false,
+    "auditExecutionReadiness": false,
+    "appSubmissionReadiness": false,
+    "validatorImplementationReadiness": false,
+    "implementationReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}

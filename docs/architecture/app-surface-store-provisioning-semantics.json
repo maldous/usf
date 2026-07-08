@@ -1,0 +1,351 @@
+{
+  "id": "usf.app-surface-store-provisioning-semantics",
+  "title": "App Surface Store Provisioning Semantics",
+  "status": "semantic-definition",
+  "authority_scope": "Defines store-facing app identity, version authority, metadata, preview media, and store compliance checklist semantics for app-surface release work.",
+  "parent_issue": "USF-322",
+  "covered_issues": [
+    "USF-702",
+    "USF-703",
+    "USF-705",
+    "USF-713",
+    "USF-722",
+    "USF-723"
+  ],
+  "authority_references": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/directory-and-file-naming-standard.md",
+    "docs/architecture/schema-authoring-standard.md",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/app-surface-accessibility-semantics.json",
+    "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+    "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+    "docs/architecture/app-surface-release-provisioning-semantics.json",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json"
+  ],
+  "semantic_models": [
+    {
+      "issue": "USF-702",
+      "model_id": "usf.app-surface-store-provisioning.apple-account-prerequisites",
+      "title": "Apple Developer and App Store Connect account prerequisites",
+      "purpose": "Define prerequisite semantics for Apple Developer and App Store Connect account standing, ownership, release authority, privacy, entitlement, proof, validator, dependency, and non-claim mappings.",
+      "required_mappings": [
+        "Apple account prerequisites must identify account standing, team ownership, role boundaries, release authority, privacy obligations, entitlement prerequisites, and evidence expectations.",
+        "Apple account prerequisite semantics must not create an account, assign roles, handle credentials, submit an app, or assert legal approval.",
+        "Release authority must remain separate from build execution and store submission execution.",
+        "Missing, unknown, or stale account evidence must fail closed for any App Store readiness claim."
+      ],
+      "validator_requirement": "Future validators must reject Apple account prerequisite claims that lack account standing, ownership, role, release authority, privacy, entitlement, evidence, or non-claim mappings.",
+      "proof_requirement": "Future proof must preserve Apple account standing, role boundary, release authority, privacy and entitlement prerequisite evidence, and readiness non-claims before any store-facing claim is made.",
+      "dependencies": [
+        "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+        "docs/architecture/app-surface-security-proof-semantics.json",
+        "USF-704"
+      ],
+      "implementation_gate": "No Apple account creation, role assignment, credential handling, app submission, legal conclusion, or readiness claim is authorized by this model.",
+      "non_claims": [
+        "app-store-readiness",
+        "legal-approval",
+        "credential-readiness",
+        "production-readiness"
+      ]
+    },
+    {
+      "issue": "USF-703",
+      "model_id": "usf.app-surface-store-provisioning.google-play-account-prerequisites",
+      "title": "Google Play Console account prerequisites",
+      "purpose": "Define prerequisite semantics for Google Play Console account standing, ownership, release authority, Data Safety, signing, track, proof, validator, dependency, and non-claim mappings.",
+      "required_mappings": [
+        "Google Play account prerequisites must identify account standing, ownership, release authority, Data Safety obligations, app signing posture, track prerequisites, and evidence expectations.",
+        "Google Play prerequisite semantics must not create an account, handle credentials, upload a build, submit a release, or assert legal approval.",
+        "Data Safety and app signing prerequisites must remain traceable to governed privacy and release semantics.",
+        "Missing, unknown, or stale account evidence must fail closed for any Google Play readiness claim."
+      ],
+      "validator_requirement": "Future validators must reject Google Play account prerequisite claims that lack account standing, ownership, release authority, Data Safety, signing, track, evidence, or non-claim mappings.",
+      "proof_requirement": "Future proof must preserve Google Play account standing, release authority, Data Safety, signing, track prerequisite evidence, and readiness non-claims before any store-facing claim is made.",
+      "dependencies": [
+        "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+        "docs/architecture/app-surface-release-provisioning-semantics.json",
+        "USF-704"
+      ],
+      "implementation_gate": "No Google Play account creation, credential handling, build upload, release submission, legal conclusion, or readiness claim is authorized by this model.",
+      "non_claims": [
+        "google-play-readiness",
+        "legal-approval",
+        "credential-readiness",
+        "production-readiness"
+      ]
+    },
+    {
+      "issue": "USF-705",
+      "model_id": "usf.app-surface-store-provisioning.app-identity-version-authority",
+      "title": "Bundle ID package name and version authority",
+      "purpose": "Define the authority boundary for bundle identifiers, package names, display identity, version names, build numbers, and release identity.",
+      "required_mappings": [
+        "Each app identity value must have one governed semantic source and must not be inferred from implementation structure.",
+        "Bundle ID, package name, version name, and build number must be represented as separate release identity dimensions.",
+        "Version and build-number authority must be traceable to a release gate and must not imply store readiness.",
+        "Naming values must comply with the directory and file naming standard where repository artefacts are involved."
+      ],
+      "validator_requirement": "Future release validators must fail closed when app identity, version name, build number, or release identity is missing, duplicated, implementation-derived, or inconsistent with governed metadata.",
+      "proof_requirement": "Future proof must preserve the governed app identity and version mapping used for a release candidate before any store-facing claim is made.",
+      "dependencies": [
+        "docs/architecture/directory-and-file-naming-standard.md",
+        "docs/architecture/app-surface-release-provisioning-semantics.json"
+      ],
+      "implementation_gate": "No app creation, bundle registration, package publishing, build execution, or store submission is authorized by this model.",
+      "non_claims": [
+        "store-readiness",
+        "provisioning-readiness",
+        "production-readiness",
+        "live-provider-readiness"
+      ]
+    },
+    {
+      "issue": "USF-713",
+      "model_id": "usf.app-surface-store-provisioning.store-metadata-generation",
+      "title": "Store metadata generation",
+      "purpose": "Define the semantic contract for app names, descriptions, categories, privacy labels, Data Safety mappings, policy links, localization, and screenshot references.",
+      "required_mappings": [
+        "Store metadata must be derived from governed capability, privacy, accessibility, and locale semantics rather than marketing inference.",
+        "Privacy labels and Data Safety fields must reference the privacy disclosure and compliance proof semantics.",
+        "Policy links, support links, and marketing descriptions must be classified as store metadata claims and must not exceed validated USF semantics.",
+        "Localized metadata must identify the locale and source semantic claim for each localized field."
+      ],
+      "validator_requirement": "Future validators must reject store metadata that lacks a governed source, conflicts with privacy disclosures, omits required locale mapping, or claims readiness beyond available evidence.",
+      "proof_requirement": "Future proof must preserve generated metadata inputs, source semantic references, locale mappings, and reviewer-facing claim boundaries.",
+      "dependencies": [
+        "docs/architecture/app-surface-capability-coverage-matrix.json",
+        "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+        "docs/architecture/privacy-compliance-consent-proof-semantics.json"
+      ],
+      "implementation_gate": "No metadata upload, asset generation, store submission, legal approval, or privacy compliance conclusion is authorized by this model.",
+      "non_claims": [
+        "app-store-readiness",
+        "google-play-readiness",
+        "privacy-compliance",
+        "production-readiness"
+      ]
+    },
+    {
+      "issue": "USF-722",
+      "model_id": "usf.app-surface-store-provisioning.store-preview-media",
+      "title": "Store screenshots and preview media",
+      "purpose": "Define preview media semantics for screenshots, videos, localization, fixture privacy, accessibility, platform requirements, and metadata linkage.",
+      "required_mappings": [
+        "Each preview asset must map to a governed UI capability, locale, platform, and privacy-safe fixture source.",
+        "Preview media must not expose personal data, credentials, provider secrets, or unapproved production data.",
+        "Preview media must reference accessibility semantics when it visually represents text, contrast, controls, or user flows.",
+        "Preview media requirements must remain separate from actual asset generation and store upload execution."
+      ],
+      "validator_requirement": "Future validators must reject preview media evidence that lacks governed capability mapping, locale mapping, privacy-safe fixture provenance, platform classification, or metadata linkage.",
+      "proof_requirement": "Future proof must preserve asset source inputs, fixture privacy classification, locale, platform, and linked metadata claim for each store-facing preview item.",
+      "dependencies": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-capability-coverage-matrix.json",
+        "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+        "USF-713"
+      ],
+      "implementation_gate": "No screenshot generation, preview media generation, asset upload, store submission, product UI readiness, or production readiness is authorized by this model.",
+      "non_claims": [
+        "app-store-readiness",
+        "google-play-readiness",
+        "product-ui-readiness",
+        "production-readiness"
+      ]
+    },
+    {
+      "issue": "USF-723",
+      "model_id": "usf.app-surface-store-provisioning.store-privacy-compliance-checklist",
+      "title": "Store privacy compliance submission checklist",
+      "purpose": "Define checklist semantics for privacy labels, Data Safety, tracking prompts, policy links, consent, SDK registry linkage, validation, and proof.",
+      "required_mappings": [
+        "Checklist items must reference governed privacy disclosure, SDK vendor, consent, data inventory, and compliance proof semantics.",
+        "A checklist item may indicate required evidence, missing evidence, or owner review requiring evidence, but must not assert legal approval without explicit authority.",
+        "Store privacy fields must be traceable to the same semantic source used by metadata generation.",
+        "Unknown, stale, or missing evidence must fail closed for any store compliance claim."
+      ],
+      "validator_requirement": "Future validators must reject checklist evidence that is missing, stale, inconsistent with privacy disclosure semantics, inconsistent with SDK registry semantics, or used as a legal compliance conclusion.",
+      "proof_requirement": "Future proof must preserve checklist source inputs, privacy mapping references, evidence freshness, owner-review status, and non-claim boundaries.",
+      "dependencies": [
+        "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+        "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+        "USF-713"
+      ],
+      "implementation_gate": "No legal conclusion, compliance approval, checklist execution, store submission, or production readiness is authorized by this model.",
+      "non_claims": [
+        "privacy-compliance",
+        "app-store-readiness",
+        "google-play-readiness",
+        "production-readiness"
+      ]
+    }
+  ],
+  "dependency_policy": {
+    "semantic_closure_meaning": "A covered issue may be closed only as a semantic-definition work item when its model, validator requirement, proof requirement, dependency mapping, implementation gate, and non-claims are recorded.",
+    "execution_claim_boundary": "Dependency mapping in this artefact does not satisfy execution, release, provider, store, compliance, approval, or production prerequisites.",
+    "execution_evidence_requirements": [
+      "USF-704 owner decision for store account ownership and release authority",
+      "store account ownership decisions",
+      "release approval gates",
+      "store submission execution",
+      "asset generation",
+      "legal review",
+      "live provider evidence"
+    ]
+  },
+  "validator_requirements": [
+    {
+      "id": "usf.validator.apple-account-prerequisites",
+      "covered_issue": "USF-702",
+      "fail_closed_conditions": [
+        "missing-apple-account-standing",
+        "missing-apple-release-authority",
+        "missing-apple-role-boundary",
+        "missing-apple-privacy-or-entitlement-evidence",
+        "app-store-readiness-overclaim"
+      ]
+    },
+    {
+      "id": "usf.validator.google-play-account-prerequisites",
+      "covered_issue": "USF-703",
+      "fail_closed_conditions": [
+        "missing-google-play-account-standing",
+        "missing-google-play-release-authority",
+        "missing-data-safety-prerequisite",
+        "missing-app-signing-prerequisite",
+        "google-play-readiness-overclaim"
+      ]
+    },
+    {
+      "id": "usf.validator.app-identity-version-authority",
+      "covered_issue": "USF-705",
+      "fail_closed_conditions": [
+        "missing-app-identity",
+        "missing-version-authority",
+        "duplicate-release-identity",
+        "implementation-derived-identity",
+        "readiness-claim-without-proof"
+      ]
+    },
+    {
+      "id": "usf.validator.store-metadata-generation",
+      "covered_issue": "USF-713",
+      "fail_closed_conditions": [
+        "metadata-without-semantic-source",
+        "metadata-privacy-conflict",
+        "missing-locale-mapping",
+        "metadata-readiness-overclaim"
+      ]
+    },
+    {
+      "id": "usf.validator.store-preview-media",
+      "covered_issue": "USF-722",
+      "fail_closed_conditions": [
+        "asset-without-capability-mapping",
+        "asset-without-locale-mapping",
+        "unsafe-fixture-source",
+        "asset-readiness-overclaim"
+      ]
+    },
+    {
+      "id": "usf.validator.store-privacy-compliance-checklist",
+      "covered_issue": "USF-723",
+      "fail_closed_conditions": [
+        "missing-checklist-evidence",
+        "stale-checklist-evidence",
+        "privacy-disclosure-conflict",
+        "legal-compliance-overclaim"
+      ]
+    }
+  ],
+  "proof_requirements": [
+    {
+      "id": "usf.proof.apple-account-prerequisites",
+      "covered_issue": "USF-702",
+      "required_evidence": [
+        "apple-account-standing",
+        "apple-role-boundary",
+        "apple-release-authority",
+        "apple-privacy-and-entitlement-prerequisites"
+      ]
+    },
+    {
+      "id": "usf.proof.google-play-account-prerequisites",
+      "covered_issue": "USF-703",
+      "required_evidence": [
+        "google-play-account-standing",
+        "google-play-release-authority",
+        "data-safety-prerequisites",
+        "app-signing-and-track-prerequisites"
+      ]
+    },
+    {
+      "id": "usf.proof.app-identity-version-authority",
+      "covered_issue": "USF-705",
+      "required_evidence": [
+        "governed-app-identity",
+        "governed-version-name",
+        "governed-build-number",
+        "release-identity-source"
+      ]
+    },
+    {
+      "id": "usf.proof.store-metadata-generation",
+      "covered_issue": "USF-713",
+      "required_evidence": [
+        "metadata-source-inputs",
+        "privacy-disclosure-references",
+        "locale-mappings",
+        "claim-boundary-record"
+      ]
+    },
+    {
+      "id": "usf.proof.store-preview-media",
+      "covered_issue": "USF-722",
+      "required_evidence": [
+        "asset-source-inputs",
+        "privacy-safe-fixture-classification",
+        "platform-and-locale-mapping",
+        "metadata-linkage"
+      ]
+    },
+    {
+      "id": "usf.proof.store-privacy-compliance-checklist",
+      "covered_issue": "USF-723",
+      "required_evidence": [
+        "checklist-source-inputs",
+        "privacy-mapping-references",
+        "evidence-freshness-record",
+        "owner-review-status"
+      ]
+    }
+  ],
+  "evidence_freshness_semantics": {
+    "missing": "Missing evidence must not satisfy any checklist, metadata, preview media, identity, release, compliance, or readiness claim.",
+    "unknown": "Unknown evidence status must not satisfy pass.",
+    "stale": "Stale evidence status must not satisfy pass.",
+    "generated_reports": "Generated store reports are lower authority than raw evidence and semantic definitions."
+  },
+  "implementation_authorization": {
+    "implementation_code_authorized": false,
+    "runtime_code_authorized": false,
+    "credential_change_authorized": false,
+    "store_submission_authorized": false,
+    "asset_generation_authorized": false,
+    "legal_conclusion_authorized": false
+  },
+  "non_claims": [
+    "This artefact does not claim App Store readiness.",
+    "This artefact does not claim Google Play readiness.",
+    "This artefact does not claim privacy compliance.",
+    "This artefact does not claim legal approval.",
+    "This artefact does not claim production readiness.",
+    "This artefact does not claim live-provider readiness."
+  ]
+}

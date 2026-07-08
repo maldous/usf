@@ -1,0 +1,277 @@
+{
+  "id": "usf.generated-client-contract-validation-semantics",
+  "title": "Generated client contract and validation semantics",
+  "status": "semantic-definition",
+  "purpose": "Define how generated client contracts, validation schemas, and capability-to-screen view-model mappings derive from USF semantic authority without creating runtime behaviour.",
+  "coveredIssueIds": [
+    "USF-333",
+    "USF-339",
+    "USF-481"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "role": "constitutional-authority"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "role": "authority-order"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "role": "app-surface-authority-boundary"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "role": "shared-client-sdk-foundation"
+    },
+    {
+      "path": "docs/architecture/generated-ui-view-model-semantics.json",
+      "role": "generated-ui-view-model-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+      "role": "capability-coverage-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "role": "validator-requirement-foundation"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "role": "taxonomy-catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "role": "vocabulary-catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "role": "schema-registry"
+    }
+  ],
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-330",
+      "USF-331",
+      "USF-312",
+      "USF-315"
+    ],
+    "notRequiredForThisDefinition": [
+      "USF-821",
+      "USF-822",
+      "USF-939"
+    ]
+  },
+  "authorityPrinciples": [
+    {
+      "id": "generated-client-must-project-semantics",
+      "requirement": "Generated clients project USF commands, queries, workflows, events, validation, permissions, errors, and audit semantics from governed USF artefacts."
+    },
+    {
+      "id": "generated-client-must-not-invent-behaviour",
+      "requirement": "Generated clients MUST NOT introduce behaviour, permission rules, validation rules, errors, event semantics, provider semantics, or readiness claims that are not present in USF authority."
+    },
+    {
+      "id": "client-hints-cannot-weaken-server-validation",
+      "requirement": "Client validation hints can improve interaction quality but MUST NOT weaken server-side validation or USF semantic validation authority."
+    },
+    {
+      "id": "view-models-remain-projections",
+      "requirement": "Generated view-models are projections of semantic contracts and MUST NOT define product meaning by themselves."
+    }
+  ],
+  "apiClientContractGeneration": {
+    "issueId": "USF-333",
+    "generationInputs": [
+      "command-semantics",
+      "query-semantics",
+      "workflow-semantics",
+      "event-semantics",
+      "validation-semantics",
+      "permission-semantics",
+      "error-semantics",
+      "audit-semantics"
+    ],
+    "requiredMappings": [
+      {
+        "mapping": "command-to-client-operation",
+        "requiredProperties": [
+          "commandId",
+          "authorityReference",
+          "requestShapeReference",
+          "responseShapeReference",
+          "permissionReference",
+          "validationReference",
+          "auditReference",
+          "errorReference"
+        ]
+      },
+      {
+        "mapping": "query-to-client-operation",
+        "requiredProperties": [
+          "queryId",
+          "authorityReference",
+          "cachePrivacyReference",
+          "permissionReference",
+          "resultShapeReference",
+          "stalenessReference",
+          "errorReference"
+        ]
+      },
+      {
+        "mapping": "workflow-to-client-facade",
+        "requiredProperties": [
+          "workflowId",
+          "stepAuthorityReferences",
+          "stateTransitionReferences",
+          "auditReferences",
+          "errorReferences"
+        ]
+      }
+    ],
+    "forbiddenGeneration": [
+      "runtime-provider-selection",
+      "unmapped-permission-defaults",
+      "unmapped-error-codes",
+      "unmapped-event-names",
+      "readiness-claims",
+      "package-publishing-claims"
+    ]
+  },
+  "validationSchemaGeneration": {
+    "issueId": "USF-339",
+    "derivationRules": [
+      {
+        "id": "validation-derived-from-usf-authority",
+        "requirement": "Generated validation schemas derive from USF semantic authority and carry references to the source semantic definition."
+      },
+      {
+        "id": "client-validation-is-a-hint",
+        "requirement": "Client-side validation is an interaction hint and MUST NOT satisfy or replace server-side validation authority."
+      },
+      {
+        "id": "localized-validation-requires-separate-i18n-authority",
+        "requirement": "Localized validation messages require i18n authority and MUST NOT be claimed complete by this artefact."
+      },
+      {
+        "id": "audit-and-error-display-are-mapped",
+        "requirement": "Generated validation schemas identify error-display and audit-event mappings where the source semantic definition requires them."
+      }
+    ],
+    "requiredProperties": [
+      "fieldAuthorityReference",
+      "constraintAuthorityReference",
+      "serverValidationReference",
+      "clientHintReference",
+      "errorDisplayReference",
+      "auditReference",
+      "freshnessReference"
+    ],
+    "failClosedConditions": [
+      "missing-authority-reference",
+      "client-hint-weaker-than-server-rule",
+      "stale-generated-schema",
+      "unmapped-error-display",
+      "unmapped-audit-requirement"
+    ]
+  },
+  "capabilityToScreenViewModelMapping": {
+    "issueId": "USF-481",
+    "mappingInputs": [
+      "capability-coverage-entry",
+      "permission-semantics",
+      "command-semantics",
+      "query-semantics",
+      "validation-semantics",
+      "audit-semantics",
+      "privacy-semantics",
+      "i18n-semantics",
+      "accessibility-semantics"
+    ],
+    "requiredProperties": [
+      "capabilityId",
+      "screenProjectionId",
+      "commandReferences",
+      "queryReferences",
+      "permissionReferences",
+      "validationReferences",
+      "auditReferences",
+      "privacyReferences",
+      "i18nCoverageReference",
+      "accessibilityReference",
+      "sourceAuthorityReferences"
+    ],
+    "projectionRules": [
+      {
+        "id": "screen-projection-requires-capability",
+        "requirement": "A generated screen or view-model projection requires a capability coverage entry."
+      },
+      {
+        "id": "view-model-error-state-is-derived",
+        "requirement": "View-model error states derive from USF error and validation semantics."
+      },
+      {
+        "id": "view-model-empty-state-is-non-authoritative",
+        "requirement": "Empty states are interaction projections and MUST NOT change semantic state or authority."
+      },
+      {
+        "id": "view-model-cannot-claim-ui-readiness",
+        "requirement": "Capability-to-screen mapping does not claim generated UI readiness, product UI readiness, or implementation readiness."
+      }
+    ]
+  },
+  "validatorRequirements": [
+    {
+      "id": "generated-client-contract-mapping-validator",
+      "issueId": "USF-333",
+      "requirement": "Future validators reject generated client contracts that omit required command, query, workflow, event, validation, permission, error, or audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "generated-validation-schema-derivation-validator",
+      "issueId": "USF-339",
+      "requirement": "Future validators reject generated validation schemas that are stale, weaker than server validation, missing authority references, or unmapped to error display and audit semantics.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "capability-screen-view-model-mapping-validator",
+      "issueId": "USF-481",
+      "requirement": "Future validators reject UI/view-model mappings without capability, permission, validation, audit, privacy, i18n, and accessibility references.",
+      "failureMode": "fail-closed"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "generated-client-currentness-proof",
+      "issueIds": [
+        "USF-333",
+        "USF-339"
+      ],
+      "requirement": "Future proof records identify the semantic input set and commit used to generate each client contract and validation schema."
+    },
+    {
+      "id": "view-model-projection-proof",
+      "issueIds": [
+        "USF-481"
+      ],
+      "requirement": "Future proof records show that each generated view-model projection maps back to capability coverage, validation, audit, privacy, i18n, and accessibility references."
+    }
+  ],
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines semantic requirements only. Client generation implementation, package publishing, runtime integration, form rendering, screens, components, design-system work, generated UI implementation, validator implementation, and readiness claims remain blocked until later authorised gates exist."
+  },
+  "nonClaims": {
+    "sdkReadiness": false,
+    "generatedClientReadiness": false,
+    "generatedUiReadiness": false,
+    "productUiReadiness": false,
+    "validationImplementationReadiness": false,
+    "implementationReadiness": false,
+    "packagePublishingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "aiGuidance": "Lowest-authority generated timing report for bounded local optimisation review only. Generated timing output is not USF semantic authority. Generated timing output is not a readiness claim. Generated timing output is not a staging, production, deployment, live-provider, store, release, compliance, or human-acceptance claim. Timing comparison is warn-only and does not hard-block CI. No external provider, remote cache, task graph, or Testcontainers migration is introduced by this tool.",
+  "authorityLevel": "generated-report",
+  "description": "Generated local command timing report. It supports bounded optimisation review and does not define USF semantics.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/measure-command-timing.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "timing-wall-ms:37",
+        "exit-code:0",
+        "started-at:2026-07-08T00:58:31.990744Z",
+        "ended-at:2026-07-08T00:58:32.027445Z"
+      ],
+      "message": "Local command timing measured wallMs=37; exitCode=0; startedAt=2026-07-08T00:58:31.990744Z; endedAt=2026-07-08T00:58:32.027445Z; command=python3 tools/repository-optimisation/measure-command-timing.py parse-catalogues. This is generated timing evidence only and carries no readiness claim.",
+      "ruleId": "USF-TIMING-MEASURE",
+      "severity": "info",
+      "subject": "catalogue-parse-instrumented"
+    }
+  ],
+  "id": "usf.repository-optimisation.timing.catalogue-parse-instrumented",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Local timing report for catalogue-parse-instrumented",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

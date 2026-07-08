@@ -70,7 +70,7 @@
       "routes": [],
       "cachePolicy": {
         "cacheable": "not-assessed",
-        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "cacheControl": "requires-staging-specific-route-contract",
         "stagingReadinessClaim": false
       }
     },
@@ -79,7 +79,7 @@
       "routes": [],
       "cachePolicy": {
         "cacheable": "not-assessed",
-        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "cacheControl": "requires-staging-specific-route-contract",
         "stagingReadinessClaim": false
       }
     },
@@ -88,7 +88,7 @@
       "routes": [],
       "cachePolicy": {
         "cacheable": "not-assessed",
-        "cacheControl": "deferred-to-staging-specific-route-contract",
+        "cacheControl": "requires-staging-specific-route-contract",
         "stagingReadinessClaim": false
       }
     }
@@ -112,7 +112,7 @@
     "ageAcceptedWhen": "no-store-plus-no-hit-no-stale-plus-explicit-miss-bypass-or-dynamic"
   },
   "providerConfigurationEvidencePack": "docs/architecture/external-http-provider-configuration-evidence-pack.json",
-  "blockers": [],
+  "evidenceRequirements": [],
   "freshnessAndInvalidationBoundary": {
     "ttlExpectation": "proof-control-routes-no-store",
     "cacheKeyBoundary": "host-scheme-path-query-method-and-vary-header-where-present",

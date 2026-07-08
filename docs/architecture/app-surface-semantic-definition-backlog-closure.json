@@ -56,7 +56,7 @@
     "repoEnvironmentOptimisationOpen": true,
     "proofRefreshOpen": true,
     "baselineBlockersOpen": true,
-    "summary": "The app-surface semantic-definition backlog can be reported as closed for planning purposes, but repository and environment optimisation, proof refresh, baseline blocker resolution, and final owner acceptance remain open. This report must not be used as implementation permission."
+    "summary": "The app-surface semantic-definition backlog can be reported as closed for planning purposes, but repository and environment optimisation, proof refresh, baseline evidence requirement resolution, and final owner acceptance remain open. This report must not be used as implementation permission."
   },
   "appSurfaceNonReadinessBoundaries": [
     "Semantic-definition closure is not UI implementation readiness.",
@@ -68,7 +68,7 @@
   ],
   "validationProofExpectation": [
     "Before any UI implementation claim, the final pre-UI owner decision gate must be resolved.",
-    "Before any readiness claim, open baseline blockers, proof refresh work, and required validators must be resolved and evidenced.",
+    "Before any readiness claim, open baseline evidence requirements, proof refresh work, and required validators must be resolved and evidenced.",
     "Any future closure report update must distinguish semantic closure, validator implementation, proof evidence, repository readiness, and owner acceptance."
   ],
   "coveredIssues": [

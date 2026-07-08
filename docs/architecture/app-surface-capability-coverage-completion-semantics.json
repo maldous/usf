@@ -1,0 +1,3512 @@
+{
+  "id": "usf.app-surface-capability-coverage-completion-semantics",
+  "title": "App Surface Capability Coverage Completion Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact completes semantic coverage bookkeeping for app-surface capability coverage issues only. It does not create implementation, tests, validators, generated reports, readiness claims, or external compliance claims.",
+  "matrixAuthority": {
+    "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "role": "source coverage matrix"
+  },
+  "capabilityCount": 67,
+  "coveredIssueIds": [
+    "USF-862",
+    "USF-863",
+    "USF-864",
+    "USF-865",
+    "USF-866",
+    "USF-867",
+    "USF-868",
+    "USF-869",
+    "USF-870",
+    "USF-871",
+    "USF-872",
+    "USF-873",
+    "USF-874",
+    "USF-875",
+    "USF-876",
+    "USF-877",
+    "USF-878",
+    "USF-879",
+    "USF-880",
+    "USF-881",
+    "USF-882",
+    "USF-883",
+    "USF-884",
+    "USF-885",
+    "USF-886",
+    "USF-887",
+    "USF-888",
+    "USF-889",
+    "USF-890",
+    "USF-891",
+    "USF-892",
+    "USF-893",
+    "USF-894",
+    "USF-895",
+    "USF-896",
+    "USF-897",
+    "USF-898",
+    "USF-899",
+    "USF-900",
+    "USF-901",
+    "USF-902",
+    "USF-903",
+    "USF-904",
+    "USF-905",
+    "USF-906",
+    "USF-907",
+    "USF-908",
+    "USF-909",
+    "USF-910",
+    "USF-911",
+    "USF-912",
+    "USF-913",
+    "USF-914",
+    "USF-915",
+    "USF-916",
+    "USF-917",
+    "USF-918",
+    "USF-919",
+    "USF-920",
+    "USF-921",
+    "USF-922",
+    "USF-923",
+    "USF-924",
+    "USF-925",
+    "USF-926",
+    "USF-927",
+    "USF-928"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+      "authorityRole": "capability coverage matrix"
+    },
+    {
+      "path": "docs/architecture/generated-ui-view-model-semantics.json",
+      "authorityRole": "generated view-model semantics"
+    },
+    {
+      "path": "docs/architecture/generated-ui-renderer-composition-semantics.json",
+      "authorityRole": "renderer composition semantics"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "authorityRole": "shared client interaction semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-semantics.json",
+      "authorityRole": "accessibility semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityRole": "proof evidence and report semantics"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-862",
+      "issueTitle": "Capability app-surface coverage: ABAC Policy Decision Point",
+      "modelId": "app-surface-capability-coverage.semantic-contract.abac-policy-decision-point",
+      "semanticContractId": "semantic-contract.abac-policy-decision-point",
+      "semanticContractPath": "spec/instances/semantic-contract/abac-policy-decision-point.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-863",
+      "issueTitle": "Capability app-surface coverage: Accessibility A11Y Gate",
+      "modelId": "app-surface-capability-coverage.semantic-contract.accessibility-a11y-gate",
+      "semanticContractId": "semantic-contract.accessibility-a11y-gate",
+      "semanticContractPath": "spec/instances/semantic-contract/accessibility-a11y-gate.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-864",
+      "issueTitle": "Capability app-surface coverage: Alerting Incident Management On Call Status Page",
+      "modelId": "app-surface-capability-coverage.semantic-contract.alerting-incident-management-on-call-status-page",
+      "semanticContractId": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "semanticContractPath": "spec/instances/semantic-contract/alerting-incident-management-on-call-status-page.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-865",
+      "issueTitle": "Capability app-surface coverage: API Docs Developer Portal SDKs Rate Limits",
+      "modelId": "app-surface-capability-coverage.semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semanticContractId": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semanticContractPath": "spec/instances/semantic-contract/api-docs-developer-portal-sdks-rate-limits.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-866",
+      "issueTitle": "Capability app-surface coverage: API Keys And Personal Access Tokens",
+      "modelId": "app-surface-capability-coverage.semantic-contract.api-keys-personal-access-tokens",
+      "semanticContractId": "semantic-contract.api-keys-personal-access-tokens",
+      "semanticContractPath": "spec/instances/semantic-contract/api-keys-personal-access-tokens.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-867",
+      "issueTitle": "Capability app-surface coverage: Audit Of Privileged Access",
+      "modelId": "app-surface-capability-coverage.semantic-contract.audit-of-privileged-access",
+      "semanticContractId": "semantic-contract.audit-of-privileged-access",
+      "semanticContractPath": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-868",
+      "issueTitle": "Capability app-surface coverage: Authentication Platform",
+      "modelId": "app-surface-capability-coverage.semantic-contract.authentication-platform",
+      "semanticContractId": "semantic-contract.authentication-platform",
+      "semanticContractPath": "spec/instances/semantic-contract/authentication-platform.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-869",
+      "issueTitle": "Capability app-surface coverage: Background Workers Job Runner",
+      "modelId": "app-surface-capability-coverage.semantic-contract.background-workers-job-runner",
+      "semanticContractId": "semantic-contract.background-workers-job-runner",
+      "semanticContractPath": "spec/instances/semantic-contract/background-workers-job-runner.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-870",
+      "issueTitle": "Capability app-surface coverage: Backup And Restore",
+      "modelId": "app-surface-capability-coverage.semantic-contract.backup-and-restore",
+      "semanticContractId": "semantic-contract.backup-and-restore",
+      "semanticContractPath": "spec/instances/semantic-contract/backup-and-restore.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-871",
+      "issueTitle": "Capability app-surface coverage: Branding And Theming",
+      "modelId": "app-surface-capability-coverage.semantic-contract.branding-and-theming",
+      "semanticContractId": "semantic-contract.branding-and-theming",
+      "semanticContractPath": "spec/instances/semantic-contract/branding-and-theming.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-872",
+      "issueTitle": "Capability app-surface coverage: Browser Telemetry Grafana Faro RUM And Browser To BFF Tracing",
+      "modelId": "app-surface-capability-coverage.semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semanticContractId": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semanticContractPath": "spec/instances/semantic-contract/browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-873",
+      "issueTitle": "Capability app-surface coverage: Build Versus Compose Decision Framework",
+      "modelId": "app-surface-capability-coverage.semantic-contract.build-versus-compose-decision-framework",
+      "semanticContractId": "semantic-contract.build-versus-compose-decision-framework",
+      "semanticContractPath": "spec/instances/semantic-contract/build-versus-compose-decision-framework.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-874",
+      "issueTitle": "Capability app-surface coverage: Code Quality And Secret And Dependency Scanning",
+      "modelId": "app-surface-capability-coverage.semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semanticContractId": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semanticContractPath": "spec/instances/semantic-contract/code-quality-and-secret-and-dependency-scanning.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-875",
+      "issueTitle": "Capability app-surface coverage: Compliance Reports Access Reviews Evidence Packs",
+      "modelId": "app-surface-capability-coverage.semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semanticContractId": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semanticContractPath": "spec/instances/semantic-contract/compliance-reports-access-reviews-evidence-packs.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-876",
+      "issueTitle": "Capability app-surface coverage: Composed Provider Readiness Spine",
+      "modelId": "app-surface-capability-coverage.semantic-contract.composed-provider-readiness-spine",
+      "semanticContractId": "semantic-contract.composed-provider-readiness-spine",
+      "semanticContractPath": "spec/instances/semantic-contract/composed-provider-readiness-spine.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-877",
+      "issueTitle": "Capability app-surface coverage: Configuration Registry And History",
+      "modelId": "app-surface-capability-coverage.semantic-contract.configuration-registry-and-history",
+      "semanticContractId": "semantic-contract.configuration-registry-and-history",
+      "semanticContractPath": "spec/instances/semantic-contract/configuration-registry-and-history.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-878",
+      "issueTitle": "Capability app-surface coverage: Custom Domains DNS Ownership TLS Canonical",
+      "modelId": "app-surface-capability-coverage.semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semanticContractId": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semanticContractPath": "spec/instances/semantic-contract/custom-domains-dns-ownership-tls-canonical.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-879",
+      "issueTitle": "Capability app-surface coverage: Data Governance Catalog Lineage Classification PII DSR GDPR",
+      "modelId": "app-surface-capability-coverage.semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semanticContractId": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semanticContractPath": "spec/instances/semantic-contract/data-governance-catalog-lineage-classification-pii-dsr-gdpr.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-880",
+      "issueTitle": "Capability app-surface coverage: Delegated Administration Roles",
+      "modelId": "app-surface-capability-coverage.semantic-contract.delegated-administration-roles",
+      "semanticContractId": "semantic-contract.delegated-administration-roles",
+      "semanticContractPath": "spec/instances/semantic-contract/delegated-administration-roles.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-881",
+      "issueTitle": "Capability app-surface coverage: E2E Confidence Ladder Stage Aware",
+      "modelId": "app-surface-capability-coverage.semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semanticContractId": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semanticContractPath": "spec/instances/semantic-contract/e2e-confidence-ladder-stage-aware.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-882",
+      "issueTitle": "Capability app-surface coverage: End User Profile And Preferences Self Service",
+      "modelId": "app-surface-capability-coverage.semantic-contract.end-user-profile-and-preferences-self-service",
+      "semanticContractId": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "semanticContractPath": "spec/instances/semantic-contract/end-user-profile-and-preferences-self-service.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-883",
+      "issueTitle": "Capability app-surface coverage: Entitlement Engine",
+      "modelId": "app-surface-capability-coverage.semantic-contract.entitlement-engine",
+      "semanticContractId": "semantic-contract.entitlement-engine",
+      "semanticContractPath": "spec/instances/semantic-contract/entitlement-engine.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-884",
+      "issueTitle": "Capability app-surface coverage: Environment Registry And Bootstrap",
+      "modelId": "app-surface-capability-coverage.semantic-contract.environment-registry-and-bootstrap",
+      "semanticContractId": "semantic-contract.environment-registry-and-bootstrap",
+      "semanticContractPath": "spec/instances/semantic-contract/environment-registry-and-bootstrap.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-885",
+      "issueTitle": "Capability app-surface coverage: Environment Specific Vs Shared Service Model",
+      "modelId": "app-surface-capability-coverage.semantic-contract.environment-specific-vs-shared-service-model",
+      "semanticContractId": "semantic-contract.environment-specific-vs-shared-service-model",
+      "semanticContractPath": "spec/instances/semantic-contract/environment-specific-vs-shared-service-model.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-886",
+      "issueTitle": "Capability app-surface coverage: Event Bus Durable Queues DLQ Redrive",
+      "modelId": "app-surface-capability-coverage.semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semanticContractId": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semanticContractPath": "spec/instances/semantic-contract/event-bus-durable-queues-dlq-redrive.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-887",
+      "issueTitle": "Capability app-surface coverage: History Read Model Read Only Projection",
+      "modelId": "app-surface-capability-coverage.semantic-contract.history-read-model-read-only-projection",
+      "semanticContractId": "semantic-contract.history-read-model-read-only-projection",
+      "semanticContractPath": "spec/instances/semantic-contract/history-read-model-read-only-projection.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-888",
+      "issueTitle": "Capability app-surface coverage: I18N Runtime And Validation",
+      "modelId": "app-surface-capability-coverage.semantic-contract.i18n-runtime-and-validation",
+      "semanticContractId": "semantic-contract.i18n-runtime-and-validation",
+      "semanticContractPath": "spec/instances/semantic-contract/i18n-runtime-and-validation.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-889",
+      "issueTitle": "Capability app-surface coverage: Internal Service Catalog And Readiness",
+      "modelId": "app-surface-capability-coverage.semantic-contract.internal-service-catalog-and-readiness",
+      "semanticContractId": "semantic-contract.internal-service-catalog-and-readiness",
+      "semanticContractPath": "spec/instances/semantic-contract/internal-service-catalog-and-readiness.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-890",
+      "issueTitle": "Capability app-surface coverage: Logs Aggregation And Tenant Scoped Search",
+      "modelId": "app-surface-capability-coverage.semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semanticContractId": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semanticContractPath": "spec/instances/semantic-contract/logs-aggregation-and-tenant-scoped-search.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-891",
+      "issueTitle": "Capability app-surface coverage: Metrics And Traces",
+      "modelId": "app-surface-capability-coverage.semantic-contract.metrics-and-traces",
+      "semanticContractId": "semantic-contract.metrics-and-traces",
+      "semanticContractPath": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-892",
+      "issueTitle": "Capability app-surface coverage: Mock Providers Dev Test",
+      "modelId": "app-surface-capability-coverage.semantic-contract.mock-providers-dev-test",
+      "semanticContractId": "semantic-contract.mock-providers-dev-test",
+      "semanticContractPath": "spec/instances/semantic-contract/mock-providers-dev-test.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-893",
+      "issueTitle": "Capability app-surface coverage: Notification Delivery And Preferences And Channels",
+      "modelId": "app-surface-capability-coverage.semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticContractId": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticContractPath": "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-894",
+      "issueTitle": "Capability app-surface coverage: Object Storage And Tenant Prefixes And Signed URLs",
+      "modelId": "app-surface-capability-coverage.semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semanticContractId": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semanticContractPath": "spec/instances/semantic-contract/object-storage-and-tenant-prefixes-and-signed-urls.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-895",
+      "issueTitle": "Capability app-surface coverage: Observability Built In Alerting And Incidents",
+      "modelId": "app-surface-capability-coverage.semantic-contract.observability-built-in-alerting-and-incidents",
+      "semanticContractId": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "semanticContractPath": "spec/instances/semantic-contract/observability-built-in-alerting-and-incidents.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-896",
+      "issueTitle": "Capability app-surface coverage: OpenAPI Drift Hard Gate",
+      "modelId": "app-surface-capability-coverage.semantic-contract.openapi-drift-hard-gate",
+      "semanticContractId": "semantic-contract.openapi-drift-hard-gate",
+      "semanticContractPath": "spec/instances/semantic-contract/openapi-drift-hard-gate.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-897",
+      "issueTitle": "Capability app-surface coverage: PITR Retention Legal Hold Data Residency",
+      "modelId": "app-surface-capability-coverage.semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semanticContractId": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semanticContractPath": "spec/instances/semantic-contract/pitr-retention-legal-hold-data-residency.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-898",
+      "issueTitle": "Capability app-surface coverage: Product Catalog Plans Prices",
+      "modelId": "app-surface-capability-coverage.semantic-contract.product-catalog-plans-prices",
+      "semanticContractId": "semantic-contract.product-catalog-plans-prices",
+      "semanticContractPath": "spec/instances/semantic-contract/product-catalog-plans-prices.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-899",
+      "issueTitle": "Capability app-surface coverage: Provider Configuration Plane",
+      "modelId": "app-surface-capability-coverage.semantic-contract.provider-configuration-plane",
+      "semanticContractId": "semantic-contract.provider-configuration-plane",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-configuration-plane.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-900",
+      "issueTitle": "Capability app-surface coverage: Provider Environment Classification",
+      "modelId": "app-surface-capability-coverage.semantic-contract.provider-environment-classification",
+      "semanticContractId": "semantic-contract.provider-environment-classification",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-environment-classification.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-901",
+      "issueTitle": "Capability app-surface coverage: Quota Enforcement",
+      "modelId": "app-surface-capability-coverage.semantic-contract.quota-enforcement",
+      "semanticContractId": "semantic-contract.quota-enforcement",
+      "semanticContractPath": "spec/instances/semantic-contract/quota-enforcement.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-902",
+      "issueTitle": "Capability app-surface coverage: Rate Limiting API",
+      "modelId": "app-surface-capability-coverage.semantic-contract.rate-limiting-api",
+      "semanticContractId": "semantic-contract.rate-limiting-api",
+      "semanticContractPath": "spec/instances/semantic-contract/rate-limiting-api.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-903",
+      "issueTitle": "Capability app-surface coverage: RBAC Roles and Permissions",
+      "modelId": "app-surface-capability-coverage.semantic-contract.rbac-roles-and-permissions",
+      "semanticContractId": "semantic-contract.rbac-roles-and-permissions",
+      "semanticContractPath": "spec/instances/semantic-contract/rbac-roles-and-permissions.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-904",
+      "issueTitle": "Capability app-surface coverage: Relational Storage And Migrations And RLS",
+      "modelId": "app-surface-capability-coverage.semantic-contract.relational-storage-and-migrations-and-rls",
+      "semanticContractId": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "semanticContractPath": "spec/instances/semantic-contract/relational-storage-and-migrations-and-rls.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-905",
+      "issueTitle": "Capability app-surface coverage: Runtime Secrets Management",
+      "modelId": "app-surface-capability-coverage.semantic-contract.runtime-secrets-management",
+      "semanticContractId": "semantic-contract.runtime-secrets-management",
+      "semanticContractPath": "spec/instances/semantic-contract/runtime-secrets-management.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-906",
+      "issueTitle": "Capability app-surface coverage: Scheduled Jobs Built In On The Event Substrate",
+      "modelId": "app-surface-capability-coverage.semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semanticContractId": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semanticContractPath": "spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-907",
+      "issueTitle": "Capability app-surface coverage: Search And Indexing Product Search",
+      "modelId": "app-surface-capability-coverage.semantic-contract.search-and-indexing-product-search",
+      "semanticContractId": "semantic-contract.search-and-indexing-product-search",
+      "semanticContractPath": "spec/instances/semantic-contract/search-and-indexing-product-search.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-908",
+      "issueTitle": "Capability app-surface coverage: Serverless Function Runtime",
+      "modelId": "app-surface-capability-coverage.semantic-contract.serverless-function-runtime",
+      "semanticContractId": "semantic-contract.serverless-function-runtime",
+      "semanticContractPath": "spec/instances/semantic-contract/serverless-function-runtime.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-909",
+      "issueTitle": "Capability app-surface coverage: Service Catalog And Provider Integration Model",
+      "modelId": "app-surface-capability-coverage.semantic-contract.service-catalog-and-provider-integration-model",
+      "semanticContractId": "semantic-contract.service-catalog-and-provider-integration-model",
+      "semanticContractPath": "spec/instances/semantic-contract/service-catalog-and-provider-integration-model.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-910",
+      "issueTitle": "Capability app-surface coverage: Sub Organisations",
+      "modelId": "app-surface-capability-coverage.semantic-contract.sub-organisations",
+      "semanticContractId": "semantic-contract.sub-organisations",
+      "semanticContractPath": "spec/instances/semantic-contract/sub-organisations.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-911",
+      "issueTitle": "Capability app-surface coverage: Subscriptions Invoices Payment Methods Dunning",
+      "modelId": "app-surface-capability-coverage.semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semanticContractId": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semanticContractPath": "spec/instances/semantic-contract/subscriptions-invoices-payment-methods-dunning.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-912",
+      "issueTitle": "Capability app-surface coverage: Support Mode And Break Glass Access",
+      "modelId": "app-surface-capability-coverage.semantic-contract.support-mode-break-glass-access",
+      "semanticContractId": "semantic-contract.support-mode-break-glass-access",
+      "semanticContractPath": "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-913",
+      "issueTitle": "Capability app-surface coverage: Support Tickets Customer Health Announcements",
+      "modelId": "app-surface-capability-coverage.semantic-contract.support-tickets-customer-health-announcements",
+      "semanticContractId": "semantic-contract.support-tickets-customer-health-announcements",
+      "semanticContractPath": "spec/instances/semantic-contract/support-tickets-customer-health-announcements.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-914",
+      "issueTitle": "Capability app-surface coverage: Tenant Canonical Domain Set Unset",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-canonical-domain-set-unset",
+      "semanticContractId": "semantic-contract.tenant-canonical-domain-set-unset",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-canonical-domain-set-unset.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-915",
+      "issueTitle": "Capability app-surface coverage: Tenant Data Import Export",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-data-import-export",
+      "semanticContractId": "semantic-contract.tenant-data-import-export",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-data-import-export.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-916",
+      "issueTitle": "Capability app-surface coverage: Tenant Domain Activation Auth Client",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-domain-activation-auth-client",
+      "semanticContractId": "semantic-contract.tenant-domain-activation-auth-client",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-domain-activation-auth-client.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-917",
+      "issueTitle": "Capability app-surface coverage: Tenant Groups",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-groups",
+      "semanticContractId": "semantic-contract.tenant-groups",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-groups.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-918",
+      "issueTitle": "Capability app-surface coverage: Tenant Host Identity Resolution",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-host-identity-resolution",
+      "semanticContractId": "semantic-contract.tenant-host-identity-resolution",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-host-identity-resolution.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-919",
+      "issueTitle": "Capability app-surface coverage: Tenant Identity Record and FQDN",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-identity-record-and-fqdn",
+      "semanticContractId": "semantic-contract.tenant-identity-record-and-fqdn",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-920",
+      "issueTitle": "Capability app-surface coverage: Tenant Isolation Proof",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-isolation-proof",
+      "semanticContractId": "semantic-contract.tenant-isolation-proof",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-isolation-proof.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-921",
+      "issueTitle": "Capability app-surface coverage: Tenant Lifecycle Provision Suspend Delete Export",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semanticContractId": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-lifecycle-provision-suspend-delete-export.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-922",
+      "issueTitle": "Capability app-surface coverage: Tenant Service Clickthrough Policy",
+      "modelId": "app-surface-capability-coverage.semantic-contract.tenant-service-clickthrough-policy",
+      "semanticContractId": "semantic-contract.tenant-service-clickthrough-policy",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-service-clickthrough-policy.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-923",
+      "issueTitle": "Capability app-surface coverage: Universal Service Foundation Scope And Principles",
+      "modelId": "app-surface-capability-coverage.semantic-contract.universal-service-foundation-scope-and-principles",
+      "semanticContractId": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "semanticContractPath": "spec/instances/semantic-contract/universal-service-foundation-scope-and-principles.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-924",
+      "issueTitle": "Capability app-surface coverage: Usage Metering And Meter Event Ingestion",
+      "modelId": "app-surface-capability-coverage.semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semanticContractId": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semanticContractPath": "spec/instances/semantic-contract/usage-metering-and-meter-event-ingestion.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-925",
+      "issueTitle": "Capability app-surface coverage: User Identity And Tenant Membership",
+      "modelId": "app-surface-capability-coverage.semantic-contract.user-identity-and-tenant-membership",
+      "semanticContractId": "semantic-contract.user-identity-and-tenant-membership",
+      "semanticContractPath": "spec/instances/semantic-contract/user-identity-and-tenant-membership.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-926",
+      "issueTitle": "Capability app-surface coverage: Webhooks Developer Facing",
+      "modelId": "app-surface-capability-coverage.semantic-contract.webhooks-developer-facing",
+      "semanticContractId": "semantic-contract.webhooks-developer-facing",
+      "semanticContractPath": "spec/instances/semantic-contract/webhooks-developer-facing.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-927",
+      "issueTitle": "Capability app-surface coverage: Workflow Engine Scheduled Jobs Approvals",
+      "modelId": "app-surface-capability-coverage.semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semanticContractId": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semanticContractPath": "spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    },
+    {
+      "issueId": "USF-928",
+      "issueTitle": "Capability app-surface coverage: Write Only Secret Settings",
+      "modelId": "app-surface-capability-coverage.semantic-contract.write-only-secret-settings",
+      "semanticContractId": "semantic-contract.write-only-secret-settings",
+      "semanticContractPath": "spec/instances/semantic-contract/write-only-secret-settings.json",
+      "mappingStatus": "semantic-coverage-defined",
+      "requiredCoverageDimensions": [
+        "mobile-view-model-posture",
+        "web-view-model-posture",
+        "routes-and-navigation",
+        "commands-queries-and-workflows",
+        "permissions-validation-errors-and-audit-events",
+        "offline-cache-and-notification-posture",
+        "privacy-accessibility-telemetry-and-proof-posture",
+        "store-disclosure-and-ads-or-monetisation-posture",
+        "implementation-gate-and-non-claim-posture"
+      ],
+      "forbiddenInterpretations": [
+        "coverage mapping creates implementation",
+        "coverage mapping claims product UI readiness",
+        "coverage mapping claims production readiness",
+        "coverage mapping claims live-provider readiness"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "issueId": "USF-862",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.abac-policy-decision-point",
+      "semanticContractId": "semantic-contract.abac-policy-decision-point",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-863",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.accessibility-a11y-gate",
+      "semanticContractId": "semantic-contract.accessibility-a11y-gate",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-864",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.alerting-incident-management-on-call-status-page",
+      "semanticContractId": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-865",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semanticContractId": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-866",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.api-keys-personal-access-tokens",
+      "semanticContractId": "semantic-contract.api-keys-personal-access-tokens",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-867",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.audit-of-privileged-access",
+      "semanticContractId": "semantic-contract.audit-of-privileged-access",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-868",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.authentication-platform",
+      "semanticContractId": "semantic-contract.authentication-platform",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-869",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.background-workers-job-runner",
+      "semanticContractId": "semantic-contract.background-workers-job-runner",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-870",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.backup-and-restore",
+      "semanticContractId": "semantic-contract.backup-and-restore",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-871",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.branding-and-theming",
+      "semanticContractId": "semantic-contract.branding-and-theming",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-872",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semanticContractId": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-873",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.build-versus-compose-decision-framework",
+      "semanticContractId": "semantic-contract.build-versus-compose-decision-framework",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-874",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semanticContractId": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-875",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semanticContractId": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-876",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.composed-provider-readiness-spine",
+      "semanticContractId": "semantic-contract.composed-provider-readiness-spine",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-877",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.configuration-registry-and-history",
+      "semanticContractId": "semantic-contract.configuration-registry-and-history",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-878",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semanticContractId": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-879",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semanticContractId": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-880",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.delegated-administration-roles",
+      "semanticContractId": "semantic-contract.delegated-administration-roles",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-881",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semanticContractId": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-882",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.end-user-profile-and-preferences-self-service",
+      "semanticContractId": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-883",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.entitlement-engine",
+      "semanticContractId": "semantic-contract.entitlement-engine",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-884",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.environment-registry-and-bootstrap",
+      "semanticContractId": "semantic-contract.environment-registry-and-bootstrap",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-885",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.environment-specific-vs-shared-service-model",
+      "semanticContractId": "semantic-contract.environment-specific-vs-shared-service-model",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-886",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semanticContractId": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-887",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.history-read-model-read-only-projection",
+      "semanticContractId": "semantic-contract.history-read-model-read-only-projection",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-888",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.i18n-runtime-and-validation",
+      "semanticContractId": "semantic-contract.i18n-runtime-and-validation",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-889",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.internal-service-catalog-and-readiness",
+      "semanticContractId": "semantic-contract.internal-service-catalog-and-readiness",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-890",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semanticContractId": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-891",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.metrics-and-traces",
+      "semanticContractId": "semantic-contract.metrics-and-traces",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-892",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.mock-providers-dev-test",
+      "semanticContractId": "semantic-contract.mock-providers-dev-test",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-893",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticContractId": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-894",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semanticContractId": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-895",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.observability-built-in-alerting-and-incidents",
+      "semanticContractId": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-896",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.openapi-drift-hard-gate",
+      "semanticContractId": "semantic-contract.openapi-drift-hard-gate",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-897",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semanticContractId": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-898",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.product-catalog-plans-prices",
+      "semanticContractId": "semantic-contract.product-catalog-plans-prices",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-899",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.provider-configuration-plane",
+      "semanticContractId": "semantic-contract.provider-configuration-plane",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-900",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.provider-environment-classification",
+      "semanticContractId": "semantic-contract.provider-environment-classification",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-901",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.quota-enforcement",
+      "semanticContractId": "semantic-contract.quota-enforcement",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-902",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.rate-limiting-api",
+      "semanticContractId": "semantic-contract.rate-limiting-api",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-903",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.rbac-roles-and-permissions",
+      "semanticContractId": "semantic-contract.rbac-roles-and-permissions",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-904",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.relational-storage-and-migrations-and-rls",
+      "semanticContractId": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-905",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.runtime-secrets-management",
+      "semanticContractId": "semantic-contract.runtime-secrets-management",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-906",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semanticContractId": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-907",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.search-and-indexing-product-search",
+      "semanticContractId": "semantic-contract.search-and-indexing-product-search",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-908",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.serverless-function-runtime",
+      "semanticContractId": "semantic-contract.serverless-function-runtime",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-909",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.service-catalog-and-provider-integration-model",
+      "semanticContractId": "semantic-contract.service-catalog-and-provider-integration-model",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-910",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.sub-organisations",
+      "semanticContractId": "semantic-contract.sub-organisations",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-911",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semanticContractId": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-912",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.support-mode-break-glass-access",
+      "semanticContractId": "semantic-contract.support-mode-break-glass-access",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-913",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.support-tickets-customer-health-announcements",
+      "semanticContractId": "semantic-contract.support-tickets-customer-health-announcements",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-914",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-canonical-domain-set-unset",
+      "semanticContractId": "semantic-contract.tenant-canonical-domain-set-unset",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-915",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-data-import-export",
+      "semanticContractId": "semantic-contract.tenant-data-import-export",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-916",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-domain-activation-auth-client",
+      "semanticContractId": "semantic-contract.tenant-domain-activation-auth-client",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-917",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-groups",
+      "semanticContractId": "semantic-contract.tenant-groups",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-918",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-host-identity-resolution",
+      "semanticContractId": "semantic-contract.tenant-host-identity-resolution",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-919",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-identity-record-and-fqdn",
+      "semanticContractId": "semantic-contract.tenant-identity-record-and-fqdn",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-920",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-isolation-proof",
+      "semanticContractId": "semantic-contract.tenant-isolation-proof",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-921",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semanticContractId": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-922",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.tenant-service-clickthrough-policy",
+      "semanticContractId": "semantic-contract.tenant-service-clickthrough-policy",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-923",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.universal-service-foundation-scope-and-principles",
+      "semanticContractId": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-924",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semanticContractId": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-925",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.user-identity-and-tenant-membership",
+      "semanticContractId": "semantic-contract.user-identity-and-tenant-membership",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-926",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.webhooks-developer-facing",
+      "semanticContractId": "semantic-contract.webhooks-developer-facing",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-927",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semanticContractId": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    },
+    {
+      "issueId": "USF-928",
+      "requirementId": "validator.app-surface.capability-coverage.semantic-contract.write-only-secret-settings",
+      "semanticContractId": "semantic-contract.write-only-secret-settings",
+      "failClosedOn": [
+        "missing capability coverage entry",
+        "missing semantic contract path",
+        "missing mobile or web view-model posture",
+        "missing command query workflow or permission posture where applicable",
+        "missing privacy accessibility telemetry or proof posture",
+        "readiness claim exceeding observed evidence"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "issueId": "USF-862",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.abac-policy-decision-point",
+      "semanticContractId": "semantic-contract.abac-policy-decision-point",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-863",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.accessibility-a11y-gate",
+      "semanticContractId": "semantic-contract.accessibility-a11y-gate",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-864",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.alerting-incident-management-on-call-status-page",
+      "semanticContractId": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-865",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semanticContractId": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-866",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.api-keys-personal-access-tokens",
+      "semanticContractId": "semantic-contract.api-keys-personal-access-tokens",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-867",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.audit-of-privileged-access",
+      "semanticContractId": "semantic-contract.audit-of-privileged-access",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-868",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.authentication-platform",
+      "semanticContractId": "semantic-contract.authentication-platform",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-869",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.background-workers-job-runner",
+      "semanticContractId": "semantic-contract.background-workers-job-runner",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-870",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.backup-and-restore",
+      "semanticContractId": "semantic-contract.backup-and-restore",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-871",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.branding-and-theming",
+      "semanticContractId": "semantic-contract.branding-and-theming",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-872",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semanticContractId": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-873",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.build-versus-compose-decision-framework",
+      "semanticContractId": "semantic-contract.build-versus-compose-decision-framework",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-874",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semanticContractId": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-875",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semanticContractId": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-876",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.composed-provider-readiness-spine",
+      "semanticContractId": "semantic-contract.composed-provider-readiness-spine",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-877",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.configuration-registry-and-history",
+      "semanticContractId": "semantic-contract.configuration-registry-and-history",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-878",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semanticContractId": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-879",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semanticContractId": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-880",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.delegated-administration-roles",
+      "semanticContractId": "semantic-contract.delegated-administration-roles",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-881",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semanticContractId": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-882",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.end-user-profile-and-preferences-self-service",
+      "semanticContractId": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-883",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.entitlement-engine",
+      "semanticContractId": "semantic-contract.entitlement-engine",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-884",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.environment-registry-and-bootstrap",
+      "semanticContractId": "semantic-contract.environment-registry-and-bootstrap",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-885",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.environment-specific-vs-shared-service-model",
+      "semanticContractId": "semantic-contract.environment-specific-vs-shared-service-model",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-886",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semanticContractId": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-887",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.history-read-model-read-only-projection",
+      "semanticContractId": "semantic-contract.history-read-model-read-only-projection",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-888",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.i18n-runtime-and-validation",
+      "semanticContractId": "semantic-contract.i18n-runtime-and-validation",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-889",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.internal-service-catalog-and-readiness",
+      "semanticContractId": "semantic-contract.internal-service-catalog-and-readiness",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-890",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semanticContractId": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-891",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.metrics-and-traces",
+      "semanticContractId": "semantic-contract.metrics-and-traces",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-892",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.mock-providers-dev-test",
+      "semanticContractId": "semantic-contract.mock-providers-dev-test",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-893",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticContractId": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-894",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semanticContractId": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-895",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.observability-built-in-alerting-and-incidents",
+      "semanticContractId": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-896",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.openapi-drift-hard-gate",
+      "semanticContractId": "semantic-contract.openapi-drift-hard-gate",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-897",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semanticContractId": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-898",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.product-catalog-plans-prices",
+      "semanticContractId": "semantic-contract.product-catalog-plans-prices",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-899",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.provider-configuration-plane",
+      "semanticContractId": "semantic-contract.provider-configuration-plane",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-900",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.provider-environment-classification",
+      "semanticContractId": "semantic-contract.provider-environment-classification",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-901",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.quota-enforcement",
+      "semanticContractId": "semantic-contract.quota-enforcement",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-902",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.rate-limiting-api",
+      "semanticContractId": "semantic-contract.rate-limiting-api",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-903",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.rbac-roles-and-permissions",
+      "semanticContractId": "semantic-contract.rbac-roles-and-permissions",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-904",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.relational-storage-and-migrations-and-rls",
+      "semanticContractId": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-905",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.runtime-secrets-management",
+      "semanticContractId": "semantic-contract.runtime-secrets-management",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-906",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semanticContractId": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-907",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.search-and-indexing-product-search",
+      "semanticContractId": "semantic-contract.search-and-indexing-product-search",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-908",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.serverless-function-runtime",
+      "semanticContractId": "semantic-contract.serverless-function-runtime",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-909",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.service-catalog-and-provider-integration-model",
+      "semanticContractId": "semantic-contract.service-catalog-and-provider-integration-model",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-910",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.sub-organisations",
+      "semanticContractId": "semantic-contract.sub-organisations",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-911",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semanticContractId": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-912",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.support-mode-break-glass-access",
+      "semanticContractId": "semantic-contract.support-mode-break-glass-access",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-913",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.support-tickets-customer-health-announcements",
+      "semanticContractId": "semantic-contract.support-tickets-customer-health-announcements",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-914",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-canonical-domain-set-unset",
+      "semanticContractId": "semantic-contract.tenant-canonical-domain-set-unset",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-915",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-data-import-export",
+      "semanticContractId": "semantic-contract.tenant-data-import-export",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-916",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-domain-activation-auth-client",
+      "semanticContractId": "semantic-contract.tenant-domain-activation-auth-client",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-917",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-groups",
+      "semanticContractId": "semantic-contract.tenant-groups",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-918",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-host-identity-resolution",
+      "semanticContractId": "semantic-contract.tenant-host-identity-resolution",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-919",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-identity-record-and-fqdn",
+      "semanticContractId": "semantic-contract.tenant-identity-record-and-fqdn",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-920",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-isolation-proof",
+      "semanticContractId": "semantic-contract.tenant-isolation-proof",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-921",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semanticContractId": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-922",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.tenant-service-clickthrough-policy",
+      "semanticContractId": "semantic-contract.tenant-service-clickthrough-policy",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-923",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.universal-service-foundation-scope-and-principles",
+      "semanticContractId": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-924",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semanticContractId": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-925",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.user-identity-and-tenant-membership",
+      "semanticContractId": "semantic-contract.user-identity-and-tenant-membership",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-926",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.webhooks-developer-facing",
+      "semanticContractId": "semantic-contract.webhooks-developer-facing",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-927",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semanticContractId": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-928",
+      "requirementId": "proof.app-surface.capability-coverage.semantic-contract.write-only-secret-settings",
+      "semanticContractId": "semantic-contract.write-only-secret-settings",
+      "expectedEvidence": [
+        "semantic contract path resolution",
+        "coverage entry presence",
+        "validator-result evidence when validator exists",
+        "proof evidence when runtime proof exists",
+        "non-claim preservation evidence"
+      ]
+    }
+  ],
+  "coverageBoundary": {
+    "semanticCoverageDefined": true,
+    "implementationCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorImplementationCreated": false,
+    "proofExecutionPerformed": false,
+    "generatedReportCreated": false,
+    "readinessClaimCreated": false
+  },
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "Capability coverage semantics define required mappings only. Runtime implementation requires separately authorized semantic, validator, proof, and implementation gates exist."
+  },
+  "nonClaims": {
+    "productUiReadiness": false,
+    "implementationReadiness": false,
+    "validatorCompletion": false,
+    "proofCompletion": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "storeReadiness": false,
+    "privacyCompliance": false,
+    "accessibilityCertification": false,
+    "monetisationReadiness": false
+  }
+}

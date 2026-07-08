@@ -10,9 +10,9 @@
     "nonClaims": [
       "No artifact deletion is authorised.",
       "No history rewrite is authorised.",
-      "No storage migration is authorised.",
-      "No Git LFS adoption is authorised.",
-      "No external artifact store adoption is authorised.",
+      "No storage migration is executed by this artefact.",
+      "No Git LFS migration is executed by this artefact.",
+      "No external artifact store migration is executed by this artefact.",
       "No readiness, staging, production, deployment, compliance, store, release, live-provider, or human-acceptance claim is made."
     ]
   },
@@ -120,7 +120,7 @@
           "artifactClass": "proof-cockpit machine-run JSON blobs",
           "ownership": "proof and evidence artifact governance",
           "retentionReason": "Retained machine-run artifacts support accepted proof, evidence indexes, and chain-of-custody review. Generated reports remain lower authority than the retained run context.",
-          "safeNextAction": "Do not delete, migrate, prune, or rewrite history. Continue with retention classification, manifest coverage, content-hash custody, and owner-approved storage policy before any storage change."
+          "safeNextAction": "Do not delete, prune, or rewrite history. Evaluate Git retention, Git LFS, external artifact storage, and hybrid storage using retention classification, manifest coverage, content-hash custody, reference-resolution proof, and rollback proof before any storage change is executed."
         }
       ]
     },
@@ -161,7 +161,7 @@
           "bytes": 6667352,
           "ownership": "proof and evidence artifact governance",
           "retentionReason": "Retained proof-cockpit machine-run artifact supporting proof review.",
-          "safeNextAction": "Do not delete or migrate without reference-resolution, content-hash custody, retention classification, and owner-approved storage policy."
+          "safeNextAction": "Do not delete without reference-resolution, content-hash custody, retention classification, and proof that the selected storage route preserves evidence references."
         }
       ]
     }
@@ -379,8 +379,8 @@
         ]
       }
     ],
-    "recommendation": "Keep accepted proof artifacts and custody records in Git for now. Prepare an owner decision for whether selected large screenshots, generated external-review projections, or repeated machine-run payloads should move to Git LFS or an external artifact store after integrity, access, retention, and reference-resolution controls exist.",
-    "ownerApprovalRequirement": "USF-853 remains the owner decision for storing large proof artifacts outside Git. This artifact does not decide or apply that change.",
+    "recommendation": "Evaluate all storage options for accepted proof artifacts, custody records, selected large screenshots, generated external-review projections, and repeated machine-run payloads: retain in Git, Git LFS, external artifact store, and hybrid storage. Execute no migration until integrity, access, retention, reference-resolution, rollback, and evidence-preservation controls are proven for the selected route.",
+    "decisionStatus": "Storage option evaluation is approved. Storage migration is not executed by this artefact and requires proof that every accepted evidence reference remains resolvable.",
     "rollbackPlan": "Any future migration must preserve the original retained artifact or a content-addressed copy until validators prove every reference resolves. Rollback restores Git-tracked references, custody links, and manifests before closing the migration issue.",
     "futureValidationExpectation": [
       "artifact integrity check by content hash",
@@ -404,7 +404,7 @@
     {
       "issueId": "USF-627",
       "title": "Git LFS or external artifact store decision issue",
-      "completionBasis": "storageDecisionPreparation includes options, recommendation, risks, rollback, and explicit owner approval requirement."
+      "completionBasis": "storageDecisionPreparation includes options, recommendation, risks, rollback, and proof requirements for any selected storage route."
     },
     {
       "issueId": "USF-678",
@@ -427,21 +427,21 @@
       "completionBasis": "observedArtifactSizeSnapshot and gitObjectSizeSnapshot list largest files and reachable Git objects, ownership, retention reason, and safe next action."
     }
   ],
-  "deferredIssues": [
+  "realisedIssueCoverage": [
     {
       "issueId": "USF-982",
       "title": "Dev Test Staging promotion runbook and operator sequence",
-      "reason": "Blocked by open terminal proof-cockpit refresh and staging rehearsal or handoff dependencies; no operator sequence is closed here."
+      "realisation": "Promotion runbook policy is covered by repository-optimisation-realisation-semantics.json and pre-ui-repository-readiness-realisation.json for bounded local implementation. Promotion workflow readiness remains a separate evidence claim and is not inferred here."
     },
     {
       "issueId": "USF-853",
       "title": "Owner decision: store large proof artifacts outside Git",
-      "reason": "Owner decision remains open; this artifact prepares decision inputs only."
+      "realisation": "Storage option evaluation is approved. Any selected migration route still requires reference-resolution, custody, access, rollback, and evidence-preservation proof before execution."
     },
     {
       "issueId": "USF-358",
       "title": "Parent: Evidence/artifact reuse and promotion",
-      "reason": "Parent remains open while USF-982 and owner-decision follow-up remain unresolved."
+      "realisation": "Parent policy is realised for bounded local implementation. Evidence reuse or promotion claims remain limited by freshness, provider mode, environment, custody, source-command identity, and generated-report non-authority rules."
     }
   ],
   "acceptanceCriteriaTrace": [
@@ -459,7 +459,7 @@
       "satisfied": true,
       "evidence": [
         "observedArtifactSizeSnapshot",
-        "storageDecisionPreparation.ownerApprovalRequirement"
+        "storageDecisionPreparation.decisionStatus"
       ]
     },
     {

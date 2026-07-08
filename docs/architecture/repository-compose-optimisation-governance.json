@@ -1,0 +1,746 @@
+{
+  "id": "usf.repository-compose-optimisation-governance",
+  "title": "Repository Compose optimisation governance",
+  "purpose": "Define design-only governance for local Compose profile scope, provider proof mapping, reset and reuse safety, port conflict handling, and parallel developer environment safety without changing generated Compose, runtime code, validators, Make targets, package scripts, or proof tooling.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "generatedComposeIsAuthority": false,
+    "serviceCatalogueAuthority": "spec/instances/compose-service/service-catalogue.json remains the controlling service and port policy input for generated Compose.",
+    "semanticAuthorityPreserved": true,
+    "nonClaims": [
+      "No staging readiness claim is made.",
+      "No production readiness claim is made.",
+      "No live-provider readiness claim is made.",
+      "No product UI readiness claim is made.",
+      "No deployment readiness claim is made.",
+      "No SOC or ISO certification claim is made.",
+      "No generated report is treated as canonical."
+    ]
+  },
+  "sourceReferences": [
+    "docs/architecture/compose-profile-orchestration.md",
+    "docs/architecture/compose-port-exposure-and-hardening-standard.md",
+    "spec/instances/compose-service/service-catalogue.json",
+    "docs/architecture/repository-compose-teardown-safety-governance.json",
+    "docs/architecture/repository-developer-experience-guidance-governance.json",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "compose/compose.yaml",
+    "compose/compose.dev.generated.yaml",
+    "compose/compose.test.generated.yaml",
+    "compose/compose.staging.generated.yaml",
+    "compose/compose.production.generated.yaml",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+    "docs/architecture/proof-artifact-retention-policy.md"
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-384",
+      "title": "Baseline timing and cost measurement",
+      "status": "Done",
+      "usedFor": [
+        "baseline timing dependency",
+        "local Compose smoke port-conflict observation"
+      ]
+    },
+    {
+      "issueId": "USF-386",
+      "title": "Assurance classification matrix",
+      "status": "Done",
+      "usedFor": [
+        "assurance boundary",
+        "volume and reset proof classification",
+        "Testcontainers decision preparation"
+      ]
+    },
+    {
+      "issueId": "USF-427",
+      "title": "Define exact Dev to Test to Staging ladder semantics",
+      "status": "Done",
+      "usedFor": [
+        "Dev, Test, and Staging separation",
+        "profile escalation policy"
+      ]
+    },
+    {
+      "issueId": "USF-429",
+      "title": "Change impact classifier for docs schema code config proof UI deployment",
+      "status": "Done",
+      "usedFor": [
+        "profile trigger classification",
+        "full proof fallback on ambiguity"
+      ]
+    },
+    {
+      "issueId": "USF-437",
+      "title": "In-memory-first proof policy",
+      "status": "Done",
+      "usedFor": [
+        "in-memory-safe behaviour mapping"
+      ]
+    },
+    {
+      "issueId": "USF-438",
+      "title": "Compose-required proof policy",
+      "status": "Done",
+      "usedFor": [
+        "Compose-required behaviour mapping",
+        "service-backed proof escalation"
+      ]
+    },
+    {
+      "issueId": "USF-422",
+      "title": "Human-safe destructive target policy",
+      "status": "Done",
+      "usedFor": [
+        "destructive cleanup confirmation boundary"
+      ]
+    },
+    {
+      "issueId": "USF-596",
+      "title": "Compose teardown safety",
+      "status": "Done",
+      "usedFor": [
+        "safe, reset, and destructive teardown classes"
+      ]
+    }
+  ],
+  "localComposeModel": {
+    "serviceCatalogue": {
+      "path": "spec/instances/compose-service/service-catalogue.json",
+      "observedServiceCount": 40,
+      "governanceRule": "Compose service inclusion, host publication, provider exposure, and generated target policy must derive from the catalogue rather than from image defaults or hand-authored generated YAML."
+    },
+    "orchestrationPhases": [
+      "config",
+      "port-policy",
+      "start",
+      "readiness",
+      "seed",
+      "exercise",
+      "observe",
+      "reset",
+      "cleanup",
+      "teardown",
+      "residue-check"
+    ],
+    "portExposureBaseline": {
+      "defaultHostBind": "127.0.0.1",
+      "defaultConcurrency": "single-environment-only for fixed local loopback ports unless a later policy authorises isolated allocation",
+      "conflictPolicy": "Local runtime port conflicts fail closed with diagnostics; they do not silently skip Compose proof or promote to in-memory proof.",
+      "artifactRequirement": "When a Compose run allocates or verifies ports, the observed binding and conflict result must be recorded in proof or diagnostic artifacts for the affected command."
+    }
+  },
+  "profilePolicy": {
+    "minimalDev": {
+      "serviceSetDefinition": "The minimal Dev profile is the lowest local Compose surface needed for the changed behaviour. Pure documentation, schema parsing, static validation, and in-memory semantic behaviour use no service-backed Compose profile. Provider-backed Dev work starts only the catalogue-governed services needed for the changed provider surface.",
+      "evaluatedServiceOmissions": "Services not required by the changed Dev behaviour are explicit omissions and must be listed by the executable classifier or command output when omitted.",
+      "escalation": "Escalate to Test or Compose-required proof when the change touches provider adapters, persistence, identity, object storage, queues, workflow, secrets, observability, generated Compose, service health, ports, or integration semantics. Ambiguity widens to the full affected proof family."
+    },
+    "fullTest": {
+      "serviceSetDefinition": "The full Test Compose profile is the catalogue-governed service-backed profile for integration behaviours assigned to Test by the change classifier.",
+      "rationaleRequirement": "Each included service must have a behaviour, provider, integration, evidence, or command-surface rationale. Omitted services require an explicit non-impact reason.",
+      "validationExpectation": "Future implementation must prove the Test profile covers integration behaviours assigned to Test and must preserve generated Compose validation."
+    },
+    "stagingProof": {
+      "trigger": "Staging proof is required only for staging-relevant runtime, deployment, public proof, provider integration, production-shaped rehearsal, proof-cockpit acceptance, or human acceptance surfaces.",
+      "serviceInventoryRule": "The staging proof profile must list the service catalogue entries required by the staging-relevant trigger and must fall back to full proof on ambiguity.",
+      "nonClaim": "A staging proof profile does not by itself claim staging readiness, production readiness, deployment readiness, or live-provider readiness."
+    }
+  },
+  "providerProofMapping": {
+    "inMemorySafeBehaviours": [
+      "pure semantic behaviour",
+      "deterministic domain logic",
+      "static validation and schema parsing",
+      "authorization decisions that do not depend on a real provider",
+      "UI and app-surface semantic checks without provider behaviour"
+    ],
+    "composeRequiredBehaviours": [
+      "provider adapters",
+      "persistence and migrations",
+      "row-level security",
+      "identity provider integration",
+      "object storage",
+      "queues and workflow runtime",
+      "secrets service integration",
+      "search or observability provider behaviour",
+      "network route and port behaviour",
+      "generated Compose targets",
+      "service health and startup ordering"
+    ],
+    "unclearCases": "Any unclear case requires full affected-family proof and must not be satisfied by in-memory, generated-report-only, stale, unknown, or mismatched evidence.",
+    "providerSubstitutionPolicy": {
+      "permitted": [
+        "In-memory proof for behaviours classified as in-memory safe.",
+        "Hermetic mock proof for internal platform proof where no live-provider claim is made.",
+        "Catalogue-governed local Compose providers for service-backed Test proof."
+      ],
+      "forbidden": [
+        "Hermetic mock evidence satisfying live-external-provider proof.",
+        "Production-shaped proof satisfying production-live proof.",
+        "Environment upgrading provider mode by implication.",
+        "Provider mode upgrading environment by implication.",
+        "Generated reports satisfying proof without underlying evidence."
+      ],
+      "requiredLabels": [
+        "environment",
+        "providerMode",
+        "proofLevel",
+        "substitutionType",
+        "serviceCatalogueReference",
+        "inputHashOrFreshnessBasis"
+      ],
+      "validatorExpectation": "Future validators must fail closed on unknown provider mode, mismatched provider mode, unknown environment, stale evidence, unknown evidence status, and generated-report-only proof."
+    }
+  },
+  "testcontainersDecisionPreparation": {
+    "recommendation": "Include Testcontainers in the exhaustive timing-optimisation evaluation lane for selected provider and service-specific checks. Keep Compose as the current canonical service-backed proof mechanism until side-by-side evidence proves that a Testcontainers path has same-or-stronger provider-mode, environment, evidence-preservation, reset, cleanup, and validator coverage with better timing or reliability.",
+    "candidateScopes": [
+      "comparative startup and teardown timing for provider-backed checks currently routed through Compose",
+      "isolated service-backed tests where fixed Compose ports or shared state are the dominant timing or flake cost",
+      "selected provider tests where isolation materially improves reliability",
+      "service-specific checks where CI parity and cache policy are proven equivalent",
+      "no canonical substitution where Compose already provides sufficient catalogue-driven proof and Testcontainers does not produce measured improvement"
+    ],
+    "promotionCriteria": [
+      "same service topology or an explicitly narrower service-backed obligation",
+      "same provider mode and environment labels",
+      "same or stronger raw evidence preservation",
+      "same or stronger validator and proof coverage",
+      "deterministic reset and cleanup with no evidence loss",
+      "measured startup, teardown, and flake improvement against the current Compose path",
+      "serial-versus-substituted output equivalence before any default route changes"
+    ],
+    "risks": [
+      "tooling fragmentation",
+      "local and CI behaviour divergence",
+      "dependency and cache cost growth",
+      "provider-mode evidence mismatch"
+    ],
+    "fallback": "If Testcontainers equivalence cannot be proven, keep Compose as the service-backed proof path.",
+    "ownerApprovalStatus": "The current repository optimisation realisation approves comparative timing evaluation for Testcontainers. Canonical adoption still requires measured equivalence and improvement evidence.",
+    "noRegressionProofPath": "Any future adoption must run equivalent provider checks before and after substitution and preserve provider-mode and environment labels."
+  },
+  "stateReuseAndLifecyclePolicy": {
+    "warmServiceReuse": {
+      "safeScenarios": [
+        "developer convenience checks whose proof claim does not depend on pristine provider state",
+        "repeat local runs after reset checks prove state equivalence",
+        "service reuse where inputs, environment, provider mode, and freshness labels match the prior run"
+      ],
+      "unsafeScenarios": [
+        "Test or proof claims requiring known fresh state without reset evidence",
+        "provider-mode or environment mismatch",
+        "stale seed data or unknown migration state",
+        "shared services used by parallel agents without isolation",
+        "accepted evidence or raw proof artifacts that would be overwritten or hidden"
+      ],
+      "requiredResetChecks": [
+        "seed manifest or fixture baseline check",
+        "volume lifecycle state check",
+        "provider readiness check",
+        "residue check after cleanup",
+        "evidence freshness check"
+      ]
+    },
+    "seedAndReset": {
+      "seedInputs": [
+        "fixture corpus",
+        "service-specific seed manifests",
+        "migration state",
+        "provider bootstrap configuration"
+      ],
+      "resetExpectations": [
+        "Dev reset may preserve convenience caches only when no proof claim depends on fresh provider state.",
+        "Test reset must prove known state or fail closed before service-backed proof.",
+        "Proof reset must preserve accepted evidence and raw proof artifacts unless explicit destructive confirmation is provided."
+      ],
+      "reuseEligibility": "State reuse is eligible only when input hashes, provider mode, environment, proof level, seed baseline, and reset evidence match the current claim.",
+      "evidenceRequirements": [
+        "reset mode",
+        "seed input basis",
+        "volume action",
+        "freshness result",
+        "residue result"
+      ]
+    },
+    "volumeLifecycle": {
+      "devConvenience": "Dev workflows may reuse named volumes for speed only when the command output states that no Test, staging, live-provider, production, or readiness claim is being made.",
+      "testRequirement": "Test workflows must start from known state or record reset evidence proving state equivalence.",
+      "proofRequirement": "Proof workflows must preserve accepted evidence and fail closed if volume reuse could hide stale provider state.",
+      "destructiveDeletion": "Volume deletion is destructive and requires explicit confirmation, affected scope output, and no silent removal of raw evidence or accepted proof artifacts."
+    }
+  },
+  "portAndParallelSafetyPolicy": {
+    "portDefaults": "Local generated Compose ports bind to loopback and use fixed ports unless a later accepted policy authorises an isolated allocation mode.",
+    "conflictBehaviour": "Conflicts fail with actionable diagnostics. A conflict must not auto-kill user services, bypass Compose proof, or silently select an unrecorded alternate port.",
+    "artifactRecording": "Proof or diagnostic artifacts must record checked ports, assigned ports when dynamic allocation is later authorised, conflict results, and remediation guidance.",
+    "parallelEnvironmentSafety": {
+      "currentDefault": "Parallel local generated Compose environments are unsupported by default because fixed loopback ports and named state can collide.",
+      "safeOperatingPatterns": [
+        "one active generated Compose environment per checkout unless isolated naming and ports are explicit",
+        "separate artifact output roots per agent or run",
+        "no shared proof evidence directory writes across concurrent runs",
+        "fail closed when isolation cannot be proven"
+      ],
+      "unsupportedPatterns": [
+        "multiple agents sharing the same fixed host ports",
+        "shared named volumes for proof-bearing Test or staging-like runs",
+        "automatic destructive cleanup of another developer or agent environment"
+      ]
+    }
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-581",
+      "title": "Minimal dev compose profile",
+      "completionBasis": "minimalDev defines the lowest Dev Compose service set, documents evaluated services, and makes escalation to Test or Compose proof explicit."
+    },
+    {
+      "issueId": "USF-582",
+      "title": "Full test compose profile",
+      "completionBasis": "fullTest defines Test Compose profile requirements, service rationale requirements, and validation expectations."
+    },
+    {
+      "issueId": "USF-583",
+      "title": "Staging proof compose profile",
+      "completionBasis": "stagingProof defines staging profile triggers, inventory rules, ambiguity fallback, and non-claims."
+    },
+    {
+      "issueId": "USF-586",
+      "title": "Reuse of warm services",
+      "completionBasis": "warmServiceReuse documents safe and unsafe reuse scenarios and required reset checks."
+    },
+    {
+      "issueId": "USF-587",
+      "title": "Testcontainers vs Compose decision issue",
+      "completionBasis": "testcontainersDecisionPreparation states recommendation, risks, fallback, owner approval need, and no-regression proof path."
+    },
+    {
+      "issueId": "USF-588",
+      "title": "In-memory adapter vs Compose provider mapping",
+      "completionBasis": "providerProofMapping identifies in-memory-safe behaviours, Compose-required behaviours, and unclear cases requiring full proof."
+    },
+    {
+      "issueId": "USF-589",
+      "title": "Provider substitution policy",
+      "completionBasis": "providerSubstitutionPolicy states permitted substitutions, required labels, non-claims, and validator checks."
+    },
+    {
+      "issueId": "USF-591",
+      "title": "Seed data and reset policy",
+      "completionBasis": "seedAndReset defines seed inputs, reset expectations, reuse eligibility, and evidence requirements."
+    },
+    {
+      "issueId": "USF-592",
+      "title": "Volume lifecycle policy",
+      "completionBasis": "volumeLifecycle distinguishes Dev convenience from Test and proof requirements."
+    },
+    {
+      "issueId": "USF-593",
+      "title": "Port allocation and conflict handling",
+      "completionBasis": "portAndParallelSafetyPolicy states defaults, conflict behaviour, and artifact recording expectations."
+    },
+    {
+      "issueId": "USF-594",
+      "title": "Parallel developer environment safety",
+      "completionBasis": "parallelEnvironmentSafety documents risks, safe operating patterns, and unsupported patterns for parallel environments."
+    },
+    {
+      "issueId": "USF-584",
+      "title": "Service healthcheck correctness",
+      "completionBasis": "healthcheckAndStartupDependencyInventory records current generated-Compose healthcheck coverage, services without healthchecks, assurance impact, and proof expectations without changing healthchecks."
+    },
+    {
+      "issueId": "USF-585",
+      "title": "Startup dependency graph",
+      "completionBasis": "healthcheckAndStartupDependencyInventory records static depends_on edges and service graph summary without mutating Compose or claiming runtime critical-path timing."
+    },
+    {
+      "issueId": "USF-595",
+      "title": "Compose logs and artifacts capture",
+      "completionBasis": "composeLogsAndArtifactsCapturePolicy records required, optional, and prunable capture classes with assurance, validation, and dependency boundaries without changing capture implementation."
+    },
+    {
+      "issueId": "USF-597",
+      "title": "Compose proof evidence reuse",
+      "completionBasis": "composeProofEvidenceReusePolicy records reuse eligibility, forbidden reuse cases, assurance impact, validation expectations, and open handoff dependencies without implementing evidence promotion."
+    }
+  ],
+  "realisedTimingIssues": [
+    {
+      "issueId": "USF-590",
+      "title": "LocalStack minio keycloak and postgres startup optimisation",
+      "realisation": "Covered by the profile-gated startup policy and the exhaustive timing-option evaluation lane. The timing lane includes Compose profile minimisation, Testcontainers comparison, service-level startup and teardown measurement, warm reuse where safe, reset-cost measurement, and network/cache isolation. Actual speedup claims still require measured evidence."
+    },
+    {
+      "issueId": "USF-962",
+      "title": "Baseline evidence requirement: local Compose smoke port conflicts",
+      "realisation": "Recorded as a fail-closed local proof evidence requirement, not a planning scope decision. It does not block bounded local implementation unless a specific proof claim depends on the local Compose smoke path. Timing work must consider port isolation, dynamic allocation, Testcontainers isolation, and actionable diagnostics as candidate remedies."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-581",
+      "criterion": "Minimal Dev service set is defined. Evaluated services are documented. Escalation to Test or Compose proof is explicit.",
+      "satisfied": true,
+      "evidence": [
+        "profilePolicy.minimalDev"
+      ]
+    },
+    {
+      "issueId": "USF-582",
+      "criterion": "Test Compose profile requirements are documented with service rationale and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "profilePolicy.fullTest"
+      ]
+    },
+    {
+      "issueId": "USF-583",
+      "criterion": "Staging profile trigger and service inventory are documented, including fallback to full proof on ambiguity.",
+      "satisfied": true,
+      "evidence": [
+        "profilePolicy.stagingProof"
+      ]
+    },
+    {
+      "issueId": "USF-586",
+      "criterion": "Safe and unsafe reuse scenarios are documented with required reset checks.",
+      "satisfied": true,
+      "evidence": [
+        "stateReuseAndLifecyclePolicy.warmServiceReuse"
+      ]
+    },
+    {
+      "issueId": "USF-587",
+      "criterion": "Decision proposal states recommendation, risks, fallback, owner approval needed, and no-regression proof path.",
+      "satisfied": true,
+      "evidence": [
+        "testcontainersDecisionPreparation"
+      ]
+    },
+    {
+      "issueId": "USF-588",
+      "criterion": "Mapping identifies in-memory-safe behaviours, Compose-required behaviours, and unclear cases requiring full proof.",
+      "satisfied": true,
+      "evidence": [
+        "providerProofMapping"
+      ]
+    },
+    {
+      "issueId": "USF-589",
+      "criterion": "Policy states permitted substitutions, required labels, non-claims, and validator checks.",
+      "satisfied": true,
+      "evidence": [
+        "providerProofMapping.providerSubstitutionPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-591",
+      "criterion": "Policy defines seed inputs, reset expectations, reuse eligibility, and evidence requirements.",
+      "satisfied": true,
+      "evidence": [
+        "stateReuseAndLifecyclePolicy.seedAndReset"
+      ]
+    },
+    {
+      "issueId": "USF-592",
+      "criterion": "Volume policy distinguishes Dev convenience from Test and proof requirements.",
+      "satisfied": true,
+      "evidence": [
+        "stateReuseAndLifecyclePolicy.volumeLifecycle"
+      ]
+    },
+    {
+      "issueId": "USF-593",
+      "criterion": "Port policy states defaults, conflict behaviour, and artifact recording expectations.",
+      "satisfied": true,
+      "evidence": [
+        "portAndParallelSafetyPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-594",
+      "criterion": "Risks and safe operating patterns for parallel environments are documented.",
+      "satisfied": true,
+      "evidence": [
+        "portAndParallelSafetyPolicy.parallelEnvironmentSafety"
+      ]
+    },
+    {
+      "issueId": "USF-584",
+      "criterion": "Current generated-Compose healthcheck coverage and services without healthchecks are inventoried with proof expectations and non-claims.",
+      "satisfied": true,
+      "evidence": [
+        "healthcheckAndStartupDependencyInventory"
+      ]
+    },
+    {
+      "issueId": "USF-585",
+      "criterion": "Current static startup dependency edges and service graph summary are inventoried without Compose mutation or runtime timing claims.",
+      "satisfied": true,
+      "evidence": [
+        "healthcheckAndStartupDependencyInventory.staticDependencyEdgesObserved"
+      ]
+    },
+    {
+      "issueId": "USF-595",
+      "criterion": "Required, optional, and prunable Compose log and artifact capture classes are documented with proof and non-authority boundaries.",
+      "satisfied": true,
+      "evidence": [
+        "composeLogsAndArtifactsCapturePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-597",
+      "criterion": "Compose proof evidence reuse eligibility and invalidation rules are documented with forbidden reuse cases and open handoff dependencies.",
+      "satisfied": true,
+      "evidence": [
+        "composeProofEvidenceReusePolicy"
+      ]
+    }
+  ],
+  "parentIssueStatus": {
+    "issueId": "USF-357",
+    "readyToClose": true,
+    "reason": "Compose optimisation is realised as explicit policy: all timing options may be evaluated, Compose remains canonical until evidence supports substitution, and unresolved local proof evidence requirements remain fail-closed evidence boundaries rather than planning scope decisions."
+  },
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "composeFileChanged": false,
+    "generatedComposeChanged": false,
+    "makeTargetChanged": false,
+    "packageScriptChanged": false,
+    "testcontainersAdopted": false,
+    "evidenceArtifactCreated": false,
+    "proofRunClaimed": false
+  },
+  "healthcheckAndStartupDependencyInventory": {
+    "stateInspected": true,
+    "filesInspected": [
+      "compose/compose.yaml",
+      "compose/compose.dev.generated.yaml",
+      "compose/compose.test.generated.yaml",
+      "compose/compose.staging.generated.yaml",
+      "compose/compose.production.generated.yaml"
+    ],
+    "inventorySummary": [
+      {
+        "path": "compose/compose.yaml",
+        "serviceCount": 31,
+        "healthcheckCount": 10,
+        "servicesWithoutHealthcheckCount": 21,
+        "dependencyEdgeCount": 10
+      },
+      {
+        "path": "compose/compose.dev.generated.yaml",
+        "serviceCount": 31,
+        "healthcheckCount": 10,
+        "servicesWithoutHealthcheckCount": 21,
+        "dependencyEdgeCount": 10
+      },
+      {
+        "path": "compose/compose.test.generated.yaml",
+        "serviceCount": 33,
+        "healthcheckCount": 10,
+        "servicesWithoutHealthcheckCount": 23,
+        "dependencyEdgeCount": 10
+      },
+      {
+        "path": "compose/compose.staging.generated.yaml",
+        "serviceCount": 33,
+        "healthcheckCount": 12,
+        "servicesWithoutHealthcheckCount": 21,
+        "dependencyEdgeCount": 10
+      },
+      {
+        "path": "compose/compose.production.generated.yaml",
+        "serviceCount": 1,
+        "healthcheckCount": 1,
+        "servicesWithoutHealthcheckCount": 0,
+        "dependencyEdgeCount": 0
+      }
+    ],
+    "uniqueServicesObserved": [
+      "alertmanager",
+      "alloy",
+      "clamav",
+      "clickhouse",
+      "external-caddy",
+      "grafana",
+      "keycloak",
+      "keycloak-db",
+      "localstack",
+      "loki",
+      "mailpit",
+      "meilisearch",
+      "minio",
+      "nats",
+      "openbao",
+      "otel-collector",
+      "pgadmin",
+      "pgbackrest",
+      "postgres",
+      "prometheus",
+      "public-proof-origin",
+      "redis",
+      "sonar-oidc-plugin",
+      "sonar-postgres",
+      "sonarqube",
+      "staging-proof-cockpit",
+      "tempo",
+      "temporal",
+      "temporal-postgres",
+      "temporal-ui",
+      "webhook-sink",
+      "windmill",
+      "windmill-postgres",
+      "windmill-redis",
+      "windmill-worker",
+      "wiremock"
+    ],
+    "servicesWithHealthcheckObservedAcrossAnyInspectedCompose": [
+      "keycloak-db",
+      "minio",
+      "pgbackrest",
+      "postgres",
+      "public-proof-origin",
+      "sonar-postgres",
+      "staging-proof-cockpit",
+      "temporal-postgres",
+      "windmill",
+      "windmill-postgres",
+      "windmill-redis",
+      "windmill-worker"
+    ],
+    "staticDependencyEdgesObserved": [
+      {
+        "service": "keycloak",
+        "dependsOn": [
+          "keycloak-db"
+        ]
+      },
+      {
+        "service": "pgbackrest",
+        "dependsOn": [
+          "postgres"
+        ]
+      },
+      {
+        "service": "sonarqube",
+        "dependsOn": [
+          "sonar-postgres"
+        ]
+      },
+      {
+        "service": "temporal",
+        "dependsOn": [
+          "postgres"
+        ]
+      },
+      {
+        "service": "temporal-ui",
+        "dependsOn": [
+          "temporal"
+        ]
+      },
+      {
+        "service": "windmill",
+        "dependsOn": [
+          "windmill-postgres",
+          "windmill-redis"
+        ]
+      },
+      {
+        "service": "windmill-worker",
+        "dependsOn": [
+          "windmill",
+          "windmill-postgres",
+          "windmill-redis"
+        ]
+      }
+    ],
+    "assuranceImpact": "The inspected Compose files have explicit healthchecks for a subset of stateful or proof-facing services and static depends_on edges for selected providers. Services without healthchecks may still be intentionally command- or protocol-checked elsewhere, but generated Compose alone cannot prove readiness for them.",
+    "validationProofExpectation": [
+      "Future healthcheck changes must classify service readiness by provider behaviour rather than process startup alone.",
+      "Future startup graph changes must preserve generated-Compose validation and service-catalogue authority.",
+      "Unknown service readiness, missing healthcheck rationale, or unvalidated startup ordering must fail closed for proof claims that depend on those services.",
+      "This inventory does not replace a runtime Compose smoke pass or service-level timing measurement."
+    ],
+    "dependenciesRecorded": [
+      "USF-384 baseline timing and cost measurement",
+      "USF-438 Compose-required proof policy",
+      "USF-962 local Compose smoke port-conflict evidence requirement"
+    ]
+  },
+  "composeLogsAndArtifactsCapturePolicy": {
+    "stateInspected": true,
+    "capturePolicyImplemented": false,
+    "artifactPipelineChanged": false,
+    "requiredCaptureClasses": [
+      "Compose command invocation context",
+      "service startup and readiness diagnostics",
+      "port binding and conflict diagnostics",
+      "service healthcheck results where present",
+      "proof command stdout and stderr where proof claims depend on it",
+      "generated Compose source reference and content hash",
+      "environment and provider-mode labels",
+      "failure remediation summary for local developer and CI use"
+    ],
+    "optionalCaptureClasses": [
+      "full service logs for services not involved in the failing proof path",
+      "debug-level provider logs for passing runs",
+      "large screenshots or review projections when raw proof evidence does not depend on them"
+    ],
+    "prunableOnlyWithPolicy": [
+      "generated review projections",
+      "duplicated evidence-index projections",
+      "large screenshots that are not the raw proof evidence for an accepted claim"
+    ],
+    "assuranceImpact": "Compose logs and artifacts support diagnosis and proof review, but generated projections and logs are not semantic authority. Capture policy must preserve raw evidence, custody, environment, provider mode, and freshness distinctions.",
+    "validationProofExpectation": [
+      "Future capture implementation must preserve raw evidence and retained proof artifacts where a proof claim depends on them.",
+      "Generated logs or reports must reference the run, environment, provider mode, source Compose file, and raw evidence basis.",
+      "Unknown capture completeness, missing custody, stale artifacts, or provider-mode mismatch must fail closed for proof reuse claims.",
+      "Large artifact pruning requires retention class, owner approval where needed, and reference-resolution validation."
+    ],
+    "dependenciesRecorded": [
+      "USF-358 evidence and artifact reuse parent remains open",
+      "USF-853 owner decision remains open for storage outside Git",
+      "USF-962 local Compose smoke port-conflict evidence requirement remains open"
+    ]
+  },
+  "composeProofEvidenceReusePolicy": {
+    "stateInspected": true,
+    "evidencePromotionImplemented": false,
+    "reuseEligibilityRules": [
+      "The reused evidence must identify the exact command, source Compose file, generated Compose hash, environment, provider mode, proof level, service set, dependency state, and run timestamp.",
+      "The reuse consumer must require the same or narrower service-backed behaviour and the same provider-mode and environment dimensions.",
+      "The evidence must be fresh under the applicable freshness rule and must not be generated-report-only.",
+      "The evidence must include raw proof evidence or retained proof artifacts with custody references where the proof claim depends on them.",
+      "Any source, generated Compose, service catalogue, package, validator, proof script, environment, provider-mode, or evidence-policy change invalidates reuse unless a future validator proves non-impact."
+    ],
+    "forbiddenReuseCases": [
+      "local composed proof satisfying live-external-provider proof",
+      "hermetic mock proof satisfying live-external-provider proof",
+      "production-shaped rehearsal satisfying production-live proof",
+      "generated report satisfying proof without raw evidence or retained proof artifacts",
+      "stale, unknown, missing, or mismatched evidence satisfying pass"
+    ],
+    "assuranceImpact": "Evidence reuse can reduce repeated work, but only if it preserves proof honesty. Reuse must not promote Dev evidence to Test or Staging by implication and must not hide stale generated Compose, provider-mode mismatch, or missing raw evidence.",
+    "validationProofExpectation": [
+      "Future reuse implementation requires a validator-checkable manifest or handoff record before proof evidence can support later stages.",
+      "Future Dev-to-Test and Test-to-Staging handoff schemas remain separate implementation work.",
+      "Future operator runbooks remain separate from this design policy and must not be inferred from closure of this issue."
+    ],
+    "dependenciesRecorded": [
+      "USF-985 Dev-to-Test artifact handoff manifest schema and validator implementation remains open",
+      "USF-986 Test-to-Staging artifact handoff record schema and validator implementation remains open",
+      "USF-982 Dev Test Staging promotion runbook and operator sequence remains open",
+      "USF-853 owner decision remains open for storage outside Git"
+    ]
+  }
+}

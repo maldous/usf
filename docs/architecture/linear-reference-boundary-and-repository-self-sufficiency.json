@@ -1,0 +1,81 @@
+{
+  "allowedLinearReferenceUses": [
+    "work tracking issue identifier",
+    "operational action history reference",
+    "closure traceability reference",
+    "parent child tracking relationship reference",
+    "external tracker URL for human navigation"
+  ],
+  "artifactType": "semantic-definition",
+  "authorityNotice": "This artefact defines the repository-owned boundary for Linear references. It does not make Linear semantic authority; it prevents Linear from becoming semantic authority.",
+  "boundary": {
+    "distributedCopiesRemainSemanticallyCompleteWithoutLinear": true,
+    "linearCommentsDefineSemantics": false,
+    "linearDefinesSemanticAuthority": false,
+    "linearIssueDescriptionsDefineSemantics": false,
+    "linearLabelsDefineSemantics": false,
+    "linearReferencesAreTraceabilityOnly": true,
+    "linearStatusDefinesReadiness": false,
+    "proofGatesRequireLinearAccess": false,
+    "repositoryArtifactsDefineSemantics": true,
+    "validatorsRequireLinearAccess": false
+  },
+  "forbiddenLinearReferenceUses": [
+    "semantic source of truth",
+    "owner decision that exists only in Linear",
+    "gate definition that exists only in Linear",
+    "readiness meaning that exists only in Linear",
+    "validator rule that requires Linear access",
+    "proof requirement that requires Linear access",
+    "implementation expectation that exists only in Linear",
+    "non-claim boundary that exists only in Linear"
+  ],
+  "id": "usf.linear-reference-boundary-and-repository-self-sufficiency",
+  "issueId": "USF-1002",
+  "lifecycleState": "defined",
+  "nonClaims": [
+    "No UI implementation is claimed.",
+    "No app-surface implementation is claimed.",
+    "No provider setup is claimed.",
+    "No credential setup is claimed.",
+    "No deployment is claimed.",
+    "No store submission is claimed.",
+    "No legal or compliance readiness is claimed.",
+    "No staging, production, live-provider, product, release, or human-acceptance readiness is claimed."
+  ],
+  "purpose": "Ensure USF semantic authority remains self-contained in repository-controlled artefacts, validators, and proof evidence even when Linear tracks work and operational history.",
+  "repositorySelfSufficiencyRules": [
+    "USF semantic definitions must live in repository-controlled artefacts.",
+    "Linear issue descriptions, comments, labels, names, states, and closure events are operational tracker data only.",
+    "A repository artefact may cite a Linear issue only as traceability or action history.",
+    "Repository validators, gates, and proof logic must not call Linear to determine semantic meaning.",
+    "A distributed copy of the repository must remain semantically complete without Linear access.",
+    "If semantic knowledge is found only in Linear, it must be copied into a repository artefact or tracked as repository-authority-copy work."
+  ],
+  "title": "Linear Reference Boundary and Repository Self-Sufficiency",
+  "validation": {
+    "commands": [
+      "python3 tools/validate-linear-boundary/validate-linear-boundary.py all --json",
+      "python3 tools/validate-linear-boundary/validate-linear-boundary.py selftest --json"
+    ],
+    "validator": "tools/validate-linear-boundary/validate-linear-boundary.py"
+  },
+  "linearFollowUpDeliveryRules": {
+    "unresolvedWorkRequiresRepositoryDisposition": true,
+    "remainingWorkIsTrackedByLinearFollowUpIssues": true,
+    "followUpIssuesDoNotDefineSemanticAuthority": true,
+    "followUpIssuesDoNotSatisfyAcceptanceUntilValidated": true,
+    "coveredWorkStates": [
+      "unresolved",
+      "blocked",
+      "external-provider",
+      "credential-gated",
+      "duplicate",
+      "canceled",
+      "obsolete",
+      "operational-only"
+    ],
+    "rule": "Linear items discovered during repository delivery audit must be dispositioned in repository-owned artefacts. If future work remains, that work is delivered for tracking purposes by creating or linking a Linear follow-up issue, not by treating Linear text, status, comments, labels, or project fields as USF semantic authority.",
+    "completionBoundary": "Creating or linking a follow-up Linear issue records later work. It does not complete that follow-up work and does not satisfy that issue acceptance criteria."
+  }
+}

@@ -1,0 +1,1107 @@
+{
+  "id": "usf.repository-developer-experience-guidance-governance",
+  "title": "Repository developer experience guidance governance",
+  "status": "tracking-report",
+  "purpose": "Define non-implementation guidance contracts for selected developer-experience repository optimisation items while preserving USF authority, proof, evidence, and validation boundaries.",
+  "authorityPosture": {
+    "isSemanticAuthority": false,
+    "tracksWorkOnly": true,
+    "doesNotOverride": [
+      "docs/architecture/charter.md",
+      "docs/architecture/authority-model.md",
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "AGENTS.md",
+      "CODEX.md",
+      "CLAUDE.md",
+      "validator results",
+      "runtime proof evidence"
+    ],
+    "generatedReportsAreNotCanonical": true
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-718",
+      "title": "Local timing dashboard",
+      "completionBasis": "The local timing dashboard design identifies metrics, artifact format, display mode, and no-claim wording. Dependencies USF-384 and USF-415 are Done."
+    },
+    {
+      "issueId": "USF-733",
+      "title": "Cache clean command",
+      "completionBasis": "The cache clean command contract identifies cache classes, ownership, safety class, and validation after cleanup. Dependency USF-616 is Done."
+    },
+    {
+      "issueId": "USF-734",
+      "title": "Proof artifact viewer",
+      "completionBasis": "The proof artifact viewer design states viewed artifact classes, source links, non-claims, and freshness display. Dependencies USF-598 and USF-633 are Done."
+    },
+    {
+      "issueId": "USF-738",
+      "title": "IDE and editor recommended settings",
+      "completionBasis": "The editor recommendation identifies safe settings, risks, and files to avoid editing automatically. The issue has no dependencies."
+    },
+    {
+      "issueId": "USF-739",
+      "title": "Pre-commit and pre-push policy decision",
+      "completionBasis": "The decision-preparation packet presents options, recommendation, owner approval need, and no-regression path. Dependency USF-639 is Done."
+    },
+    {
+      "issueId": "USF-714",
+      "title": "One-command setup",
+      "completionBasis": "The setup command contract states prerequisites, command contract, outputs, cache behaviour, and failure modes. Dependency USF-398 is Done."
+    },
+    {
+      "issueId": "USF-715",
+      "title": "Doctor and preflight command",
+      "completionBasis": "The doctor and preflight contract defines checks, outputs, exit codes, and non-claims. Dependencies USF-418 and USF-419 are Done."
+    },
+    {
+      "issueId": "USF-716",
+      "title": "Fast validate command",
+      "completionBasis": "The fast validate contract states included checks, excluded checks, escalation triggers, and outputs. Dependencies USF-386 and USF-398 are Done."
+    },
+    {
+      "issueId": "USF-717",
+      "title": "Explain-failure output",
+      "completionBasis": "The failure output standard defines failure sections, required evidence links, and exit-code semantics. Dependency USF-414 is Done."
+    },
+    {
+      "issueId": "USF-735",
+      "title": "Make target help",
+      "completionBasis": "The Make target help design lists required metadata fields and generation approach. Dependency USF-411 is Done."
+    },
+    {
+      "issueId": "USF-699",
+      "title": "Repository onboarding guide",
+      "completionBasis": "The onboarding guide outline identifies audience, required commands, authority references, and validation expectations. Dependency USF-675 is Done."
+    },
+    {
+      "issueId": "USF-700",
+      "title": "Contributor command guide",
+      "completionBasis": "The contributor command guide outline maps change types to commands and identifies missing commands to create in separate issues. Dependencies USF-398 and USF-675 are Done."
+    },
+    {
+      "issueId": "USF-701",
+      "title": "AI-agent operating guide improvement",
+      "completionBasis": "The AI-agent guide proposal identifies guide changes and confirms no conflict with agent directive files. Dependency USF-675 is Done."
+    },
+    {
+      "issueId": "USF-719",
+      "title": "Common failure remediation guide",
+      "completionBasis": "The failure remediation guide outline maps failures to safe commands, evidence preservation notes, and owner decisions. Dependency USF-699 is covered by this artefact."
+    },
+    {
+      "issueId": "USF-741",
+      "title": "AI-agent task checklist",
+      "completionBasis": "The AI-agent task checklist proposal references required authority files and validation expectations. Dependency USF-701 is covered by this artefact."
+    },
+    {
+      "issueId": "USF-744",
+      "title": "New developer onboarding test",
+      "completionBasis": "The onboarding test design states scenario, commands, expected outputs, timing capture, and non-claims. Dependencies USF-699, USF-714, and USF-715 are covered or Done."
+    },
+    {
+      "issueId": "USF-720",
+      "title": "Environment reset command",
+      "completionBasis": "The environment reset command contract distinguishes safe reset, test reset, and destructive cleanup. Dependency USF-596 is Done."
+    },
+    {
+      "issueId": "USF-721",
+      "title": "Safe clean command",
+      "completionBasis": "The safe clean command contract lists what is removed, preserved, warned, and blocked by default. Dependencies USF-422 and USF-596 are Done."
+    }
+  ],
+  "resolvedDeferredIssues": [
+    {
+      "issueId": "USF-742",
+      "title": "Human-readable proof ladder guide",
+      "resolution": "Superseded by docs/architecture/repository-developer-experience-proof-ladder-guide-governance.json, which records design closure for the human-readable proof ladder guide without implementation, proof-policy mutation, or readiness claim."
+    }
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-384",
+      "title": "Baseline timing and cost measurement",
+      "status": "Done",
+      "supports": [
+        "USF-718"
+      ]
+    },
+    {
+      "issueId": "USF-415",
+      "title": "Target timing instrumentation",
+      "status": "Done",
+      "supports": [
+        "USF-718"
+      ]
+    },
+    {
+      "issueId": "USF-616",
+      "title": "Evidence invalidation rules",
+      "status": "Done",
+      "supports": [
+        "USF-733"
+      ]
+    },
+    {
+      "issueId": "USF-598",
+      "title": "Artifact inventory and retention policy",
+      "status": "Done",
+      "supports": [
+        "USF-734"
+      ]
+    },
+    {
+      "issueId": "USF-633",
+      "title": "Artifact diffability and review ergonomics",
+      "status": "Done",
+      "supports": [
+        "USF-734"
+      ]
+    },
+    {
+      "issueId": "USF-639",
+      "title": "Required checks matrix",
+      "status": "Done",
+      "supports": [
+        "USF-739"
+      ]
+    },
+    {
+      "issueId": "USF-398",
+      "title": "Makefile target taxonomy and naming standard",
+      "status": "Done",
+      "supports": [
+        "USF-714",
+        "USF-716"
+      ]
+    },
+    {
+      "issueId": "USF-418",
+      "title": "Target environment-variable validation",
+      "status": "Done",
+      "supports": [
+        "USF-715"
+      ]
+    },
+    {
+      "issueId": "USF-419",
+      "title": "Target secret and credential fail-closed checks",
+      "status": "Done",
+      "supports": [
+        "USF-715"
+      ]
+    },
+    {
+      "issueId": "USF-386",
+      "title": "Assurance classification matrix",
+      "status": "Done",
+      "supports": [
+        "USF-716"
+      ]
+    },
+    {
+      "issueId": "USF-414",
+      "title": "Target exit-code standard",
+      "status": "Done",
+      "supports": [
+        "USF-717"
+      ]
+    },
+    {
+      "issueId": "USF-411",
+      "title": "Target help and documentation generation",
+      "status": "Done",
+      "supports": [
+        "USF-735"
+      ]
+    },
+    {
+      "issueId": "USF-675",
+      "title": "Directory responsibility map",
+      "status": "Done",
+      "supports": [
+        "USF-699",
+        "USF-700",
+        "USF-701"
+      ]
+    },
+    {
+      "issueId": "USF-699",
+      "title": "Repository onboarding guide",
+      "status": "Covered by this artefact",
+      "supports": [
+        "USF-719",
+        "USF-744"
+      ]
+    },
+    {
+      "issueId": "USF-701",
+      "title": "AI-agent operating guide improvement",
+      "status": "Covered by this artefact",
+      "supports": [
+        "USF-741"
+      ]
+    },
+    {
+      "issueId": "USF-714",
+      "title": "One-command setup",
+      "status": "Done",
+      "supports": [
+        "USF-744"
+      ]
+    },
+    {
+      "issueId": "USF-715",
+      "title": "Doctor and preflight command",
+      "status": "Done",
+      "supports": [
+        "USF-744"
+      ]
+    },
+    {
+      "issueId": "USF-596",
+      "title": "Compose teardown safety",
+      "status": "Done",
+      "supports": [
+        "USF-720",
+        "USF-721"
+      ]
+    },
+    {
+      "issueId": "USF-422",
+      "title": "Human-safe destructive target policy",
+      "status": "Done",
+      "supports": [
+        "USF-721"
+      ]
+    }
+  ],
+  "localTimingDashboardDesign": {
+    "issueId": "USF-718",
+    "metrics": [
+      "command identifier",
+      "command group",
+      "assurance classification",
+      "provider mode where relevant",
+      "environment classification where relevant",
+      "duration seconds",
+      "exit status",
+      "peak memory when available",
+      "cache state when available",
+      "artifact bytes when available",
+      "known blocker issue references"
+    ],
+    "artifactFormat": {
+      "primary": "strict JSON timing summary",
+      "secondary": "human-readable table derived from the same timing summary",
+      "freshnessFields": [
+        "measuredAt",
+        "inputHashSet",
+        "commandSurfaceVersion",
+        "toolchainVersion"
+      ]
+    },
+    "displayMode": [
+      "slowest-command ranking",
+      "changed-since-baseline summary",
+      "failed-or-timed-out command section",
+      "non-claim banner"
+    ],
+    "noClaimWording": "Timing output is operational evidence for optimisation review only. It does not prove readiness, staging suitability, production suitability, or semantic correctness by itself."
+  },
+  "cacheCleanCommandContract": {
+    "issueId": "USF-733",
+    "cacheClasses": [
+      {
+        "name": "package manager cache",
+        "owner": "dependency tooling",
+        "safetyClass": "rebuildable but provenance-sensitive",
+        "defaultAction": "preserve unless explicit cache cleanup is requested",
+        "validationAfterCleanup": "frozen dependency install must pass before cache-clean success is claimed"
+      },
+      {
+        "name": "validator cache",
+        "owner": "validator tooling",
+        "safetyClass": "rebuildable from semantic inputs",
+        "defaultAction": "safe to remove only when all semantic input hashes can be recomputed",
+        "validationAfterCleanup": "strict JSON parse and relevant validator selftests must be rerunnable"
+      },
+      {
+        "name": "artifact cache",
+        "owner": "proof and report tooling",
+        "safetyClass": "mixed evidence-adjacent state",
+        "defaultAction": "preserve unless the artifact is explicitly classified as rebuildable generated output",
+        "validationAfterCleanup": "source evidence references must remain resolvable"
+      },
+      {
+        "name": "build output cache",
+        "owner": "build tooling",
+        "safetyClass": "rebuildable generated output",
+        "defaultAction": "eligible for dry-run listing before removal",
+        "validationAfterCleanup": "build or equivalent generation path must be rerunnable before claiming success"
+      }
+    ],
+    "blockedByDefault": [
+      "raw evidence deletion",
+      "accepted proof evidence deletion",
+      "foundational governance artefact deletion",
+      "catalogue, registry, or schema deletion",
+      "lockfile mutation",
+      "credential or secret printing"
+    ],
+    "requiredOutput": [
+      "dry-run list",
+      "owner and safety class for each target",
+      "preserved evidence notice",
+      "post-clean validation recommendation"
+    ]
+  },
+  "proofArtifactViewerDesign": {
+    "issueId": "USF-734",
+    "viewedArtifactClasses": [
+      "proof cockpit reports",
+      "runtime proof evidence summaries",
+      "screenshots",
+      "logs",
+      "manifests",
+      "generated reports",
+      "external review bundles"
+    ],
+    "sourceLinks": [
+      "raw evidence path when present",
+      "semantic authority reference when present",
+      "generated report path when present",
+      "artifact manifest entry when present"
+    ],
+    "freshnessDisplay": [
+      "fresh",
+      "stale",
+      "unknown",
+      "missing source evidence"
+    ],
+    "nonClaims": [
+      "Viewer output is convenience output and not canonical proof.",
+      "Generated report freshness cannot upgrade missing raw evidence.",
+      "A viewer pass does not imply validation pass, proof pass, staging readiness, or production readiness."
+    ]
+  },
+  "editorRecommendation": {
+    "issueId": "USF-738",
+    "safeSettings": [
+      "format on save only for file types with repository-approved formatting behaviour",
+      "disable automatic dependency install actions",
+      "disable automatic generated-file rewrites",
+      "show JSON validation errors without rewriting catalogues",
+      "prefer read-only inspection for evidence and generated reports",
+      "surface current preferred command aliases in task panels"
+    ],
+    "risks": [
+      "editor hooks can rewrite generated reports and obscure source evidence",
+      "automatic import cleanup can change implementation or validator behaviour",
+      "formatters can alter normative text unexpectedly",
+      "extension-managed dependency installation can bypass frozen install expectations"
+    ],
+    "avoidAutomaticEditing": [
+      "evidence files",
+      "generated reports",
+      "proof artifacts",
+      "catalogues",
+      "schema registry",
+      "future schema files unless schema work is explicitly in scope",
+      "lockfiles",
+      "agent directive files"
+    ],
+    "validationReminder": "Editor recommendations are advisory and do not replace repository validation, proof expectations, or agent bootstrap requirements."
+  },
+  "preCommitPrePushDecisionPacket": {
+    "issueId": "USF-739",
+    "options": [
+      {
+        "name": "no local hooks",
+        "tradeoff": "Lowest local friction, but delayed feedback until manual validation or CI."
+      },
+      {
+        "name": "optional recommended hooks",
+        "tradeoff": "Improves feedback while preserving contributor control. Requires clear non-claim wording."
+      },
+      {
+        "name": "required local hooks",
+        "tradeoff": "Strongest local guardrail, but highest risk of inconsistent local failures and unsafe bypass behaviour."
+      }
+    ],
+    "recommendation": "Prefer optional recommended hooks until command taxonomy, destructive-target safety, environment and secret checks, and proof-ladder routing are fully settled.",
+    "ownerApprovalNeed": "Owner must decide whether hooks are advisory, recommended, or required before any hook implementation or repository policy change.",
+    "noRegressionPath": [
+      "document hook command contracts before implementation",
+      "prove hook checks match required-check matrix categories",
+      "keep CI as the authoritative automated gate",
+      "preserve explicit bypass recording if bypass is ever allowed",
+      "avoid hooks that mutate evidence, generated reports, lockfiles, or authority files automatically"
+    ]
+  },
+  "setupCommandContract": {
+    "issueId": "USF-714",
+    "prerequisites": [
+      "repository checkout is present",
+      "package manager tooling is available",
+      "lockfile is present and treated as frozen",
+      "required foundational artefacts are present",
+      "environment classification is known before proof or provider-adjacent commands run"
+    ],
+    "commandContract": [
+      "perform frozen dependency setup",
+      "avoid mutating lockfiles by default",
+      "report missing tools and prerequisites as blockers",
+      "preserve evidence and generated report boundaries",
+      "route users to validation commands without claiming validation has passed"
+    ],
+    "outputs": [
+      "setup status",
+      "tool availability summary",
+      "lockfile and dependency install status",
+      "cache state note",
+      "next-command guidance",
+      "non-claim wording"
+    ],
+    "cacheBehaviour": [
+      "package manager cache may be reused when lockfile integrity is preserved",
+      "cache misses must be reported without weakening frozen install expectations",
+      "cache cleanup remains separate from setup",
+      "evidence and proof artifacts are not setup cache"
+    ],
+    "failureModes": [
+      "missing tool",
+      "lockfile mismatch",
+      "dependency install failure",
+      "unknown environment classification",
+      "unsafe credential exposure",
+      "network or cache failure"
+    ],
+    "nonClaims": [
+      "setup success does not prove semantic validity",
+      "setup success does not prove Test readiness",
+      "setup success does not prove Staging readiness",
+      "setup success does not satisfy proof evidence"
+    ]
+  },
+  "doctorPreflightCommandContract": {
+    "issueId": "USF-715",
+    "checks": [
+      "required tool availability",
+      "package manager and lockfile presence",
+      "known environment classification",
+      "known provider mode classification when relevant",
+      "required environment-variable presence without printing secret values",
+      "secret and credential safety boundaries",
+      "reserved port availability where service commands are in scope",
+      "evidence and artifact path writability where relevant"
+    ],
+    "outputs": [
+      "pass, fail, blocked, unsupported, and unknown status",
+      "safe remediation hint",
+      "evidence-preservation note",
+      "secret redaction notice",
+      "next recommended command"
+    ],
+    "exitCodes": {
+      "pass": 0,
+      "fail": 1,
+      "blocked": 2,
+      "unsupported": 3,
+      "unknown": 4
+    },
+    "nonClaims": [
+      "doctor pass does not replace validation",
+      "doctor pass does not replace proof",
+      "doctor pass does not imply provider proof",
+      "doctor pass does not imply environment promotion"
+    ],
+    "securityRules": [
+      "never print secret values",
+      "never require live credentials for hermetic-only checks",
+      "fail closed when a credential is required but absent",
+      "distinguish missing credential from intentionally out-of-scope provider proof"
+    ]
+  },
+  "fastValidateCommandContract": {
+    "issueId": "USF-716",
+    "includedChecks": [
+      "strict JSON parse for directly affected JSON artefacts",
+      "foundational catalogue parse when relevant",
+      "lightweight command-surface consistency checks when relevant",
+      "non-mutating local syntax and shape checks where configured"
+    ],
+    "excludedChecks": [
+      "full foundation gate",
+      "full Test proof",
+      "Staging proof",
+      "live external provider proof",
+      "machine QA proof",
+      "owner acceptance"
+    ],
+    "escalationTriggers": [
+      "unknown changed file class",
+      "foundational artefact change",
+      "schema, taxonomy, vocabulary, or registry change",
+      "validator change",
+      "proof evidence change",
+      "provider mode or environment claim",
+      "generated report without source evidence",
+      "lockfile change",
+      "command graph change"
+    ],
+    "outputs": [
+      "included check list",
+      "excluded check list",
+      "escalation trigger list",
+      "pass, fail, blocked, unsupported, or unknown status",
+      "next full gate recommendation",
+      "non-claim wording"
+    ],
+    "nonClaimWording": "Fast validation is local feedback only. It does not replace make foundation, Test proof, Staging proof, live-provider proof, or human acceptance."
+  },
+  "failureOutputStandard": {
+    "issueId": "USF-717",
+    "requiredSections": [
+      "summary",
+      "failed command or check",
+      "status classification",
+      "authority or evidence reference when relevant",
+      "safe remediation",
+      "unsafe actions to avoid",
+      "next validation step",
+      "non-claim reminder"
+    ],
+    "requiredEvidenceLinks": [
+      "raw evidence path when a proof claim is involved",
+      "generated report path only with source evidence reference",
+      "validator or command output location",
+      "issue or blocker reference when known"
+    ],
+    "exitCodeSemantics": [
+      "0 means pass only for the scoped command",
+      "1 means failure",
+      "2 means blocked",
+      "3 means unsupported",
+      "4 means unknown",
+      "timeout remains non-pass",
+      "stale remains non-pass"
+    ],
+    "assuranceRules": [
+      "failure output must not downgrade failures to warnings",
+      "remediation must not recommend bypassing required proof",
+      "unknown or stale status must not satisfy pass",
+      "provider and environment mismatches must be explicit"
+    ]
+  },
+  "makeTargetHelpDesign": {
+    "issueId": "USF-735",
+    "requiredMetadataFields": [
+      "target name",
+      "preferred or compatibility status",
+      "target family",
+      "assurance class",
+      "provider mode relevance",
+      "environment relevance",
+      "cost label",
+      "side effects",
+      "artifacts produced",
+      "evidence consumed",
+      "safe follow-up command",
+      "non-claim wording"
+    ],
+    "generationApproach": [
+      "derive help from a structured target inventory",
+      "mark generated help as convenience output rather than semantic authority",
+      "compare generated help against actual target inventory before release",
+      "keep current preferred aliases visible",
+      "retain compatibility alias notes until separately dispositioned"
+    ],
+    "validationExpectation": [
+      "future implementation must verify documented targets match actual targets",
+      "future implementation must fail closed on undocumented preferred targets",
+      "future implementation must flag compatibility aliases without removing them"
+    ]
+  },
+  "repositoryOnboardingGuideOutline": {
+    "issueId": "USF-699",
+    "audience": [
+      "first-time contributor",
+      "returning contributor",
+      "AI coding agent",
+      "reviewer checking proof or evidence",
+      "owner reviewing implementation readiness"
+    ],
+    "requiredCommands": [
+      "make setup",
+      "make dev-ready",
+      "make foundation",
+      "make test-ready when test-readiness track is in scope",
+      "make validate-evidence when evidence changes",
+      "make validate-assurance when assurance artefacts change"
+    ],
+    "authorityReferences": [
+      "AGENTS.md",
+      "CODEX.md",
+      "CLAUDE.md",
+      "docs/architecture/charter.md",
+      "docs/architecture/authority-model.md",
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "docs/architecture/current-state-foundation-authority-index.json",
+      "docs/architecture/current-state-command-surface.json",
+      "docs/architecture/directory-and-file-naming-standard.md",
+      "docs/architecture/schema-authoring-standard.md",
+      "docs/architecture/git-practices-standard.md"
+    ],
+    "validationExpectations": [
+      "setup does not replace validation",
+      "dev-ready does not replace Test or Staging proof",
+      "foundation gate is the full local foundation gate",
+      "evidence changes require evidence validation",
+      "schema work requires schema-authoring rules and registry consistency",
+      "implementation remains blocked unless separately authorised"
+    ],
+    "guideSections": [
+      "repository authority and non-claims",
+      "first setup path",
+      "current command map",
+      "proof ladder overview",
+      "evidence and generated report distinction",
+      "common failure routing",
+      "when to ask owner decision"
+    ]
+  },
+  "contributorCommandGuideOutline": {
+    "issueId": "USF-700",
+    "changeTypeCommandMap": [
+      {
+        "changeType": "documentation or governance text",
+        "recommendedCommands": [
+          "make dev-ready",
+          "make foundation when foundational or authority text changes"
+        ],
+        "notes": "Do not treat generated reports as semantic authority."
+      },
+      {
+        "changeType": "taxonomy, vocabulary, registry, or JSON catalogue",
+        "recommendedCommands": [
+          "strict JSON parse",
+          "make foundation",
+          "make validate-coverage when coverage artefacts are affected"
+        ],
+        "notes": "Unknown controlled values and invalid JSON must fail closed."
+      },
+      {
+        "changeType": "evidence or artifact policy",
+        "recommendedCommands": [
+          "make validate-evidence",
+          "make foundation"
+        ],
+        "notes": "Generated reports require source evidence references."
+      },
+      {
+        "changeType": "validator or command-surface design",
+        "recommendedCommands": [
+          "make dev-ready",
+          "make foundation"
+        ],
+        "notes": "Future implementation must add regression or equivalence tests."
+      },
+      {
+        "changeType": "runtime implementation",
+        "recommendedCommands": [
+          "blocked until explicitly authorised",
+          "test-ready path once in scope"
+        ],
+        "notes": "No implementation starts from this guide."
+      }
+    ],
+    "missingCommandsToCreateSeparately": [
+      "actual setup command implementation if not already present",
+      "actual doctor or preflight implementation",
+      "actual fast validate implementation",
+      "actual generated Make target help",
+      "actual safe clean and reset commands after Compose teardown safety is complete"
+    ],
+    "compatibilityGuidance": [
+      "use preferred current-state aliases in human-facing instructions",
+      "retain historical compatibility aliases until separately dispositioned",
+      "do not use compatibility aliases to upgrade readiness claims"
+    ]
+  },
+  "aiAgentOperatingGuideProposal": {
+    "issueId": "USF-701",
+    "proposedGuideChanges": [
+      "short bootstrap reminder tied to AGENTS, CODEX, CLAUDE, and foundational artefacts",
+      "task routing table for JSON, schema, evidence, validator, command, Linear, and implementation work",
+      "no-implementation guardrail before UI, runtime, staging, provider, or deployment work",
+      "proof-ladder discipline and provider/environment separation reminder",
+      "Linear hygiene summary with inspect, draft, and apply modes",
+      "final reporting checklist aligned with AGENTS output requirements"
+    ],
+    "noConflictWithDirectiveFiles": true,
+    "conflictAvoidance": [
+      "guide remains advisory and does not redefine AGENTS, CODEX, CLAUDE, Charter, or Authority Model",
+      "guide points back to canonical directives rather than replacing them",
+      "guide preserves bootstrap, validation, and implementation guardrails",
+      "guide does not permit generated reports to override authority"
+    ],
+    "futureReviewExpectation": "Future documentation implementation must be reviewed against AGENTS, CODEX, CLAUDE, and foundational artefacts before publication."
+  },
+  "failureRemediationGuideOutline": {
+    "issueId": "USF-719",
+    "failureMappings": [
+      {
+        "failureClass": "setup failure",
+        "safeCommands": [
+          "make setup",
+          "future doctor command"
+        ],
+        "evidencePreservation": "No evidence cleanup is implied by setup retry.",
+        "ownerDecision": "Owner decision is needed only if setup requires policy change or dependency policy change."
+      },
+      {
+        "failureClass": "JSON parse or catalogue failure",
+        "safeCommands": [
+          "strict JSON parse",
+          "make foundation"
+        ],
+        "evidencePreservation": "Do not edit generated reports to hide source JSON failure.",
+        "ownerDecision": "Owner decision is needed for semantic value changes, not for fixing invalid JSON syntax."
+      },
+      {
+        "failureClass": "proof or evidence failure",
+        "safeCommands": [
+          "make validate-evidence",
+          "make foundation"
+        ],
+        "evidencePreservation": "Preserve raw evidence and record stale or missing evidence honestly.",
+        "ownerDecision": "Owner decision is needed when proof claims exceed available evidence."
+      },
+      {
+        "failureClass": "Compose, port, or service failure",
+        "safeCommands": [
+          "future doctor command",
+          "future environment reset command after safety policy is complete"
+        ],
+        "evidencePreservation": "Do not remove volumes, artifacts, or evidence without safe cleanup policy.",
+        "ownerDecision": "Owner decision is needed for destructive cleanup policy."
+      },
+      {
+        "failureClass": "Linear or external service write failure",
+        "safeCommands": [
+          "read before retry if connection outcome is ambiguous"
+        ],
+        "evidencePreservation": "Record pending external update rather than duplicating writes.",
+        "ownerDecision": "Owner decision is needed for semantic conflicts, not transient write formatting."
+      }
+    ],
+    "unsafeRemediation": [
+      "bypassing required validators",
+      "deleting evidence to force pass",
+      "editing generated reports instead of source evidence",
+      "using live credentials for hermetic-only proof",
+      "treating doctor or setup pass as proof pass"
+    ]
+  },
+  "aiAgentTaskChecklistProposal": {
+    "issueId": "USF-741",
+    "requiredAuthorityFiles": [
+      "AGENTS.md",
+      "CODEX.md for Codex",
+      "CLAUDE.md for Claude",
+      "docs/architecture/charter.md",
+      "docs/architecture/authority-model.md",
+      "docs/architecture/standards-profile.md",
+      "docs/architecture/ontology.md",
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "spec/taxonomies/taxonomy-catalog.json",
+      "spec/vocabularies/vocabulary-catalog.json",
+      "spec/registries/schema-registry.json"
+    ],
+    "modifyingTaskChecklist": [
+      "perform required bootstrap and relevant artefact reads",
+      "run required preflight where applicable",
+      "parse JSON before and after JSON modifications",
+      "avoid implementation or runtime code unless explicitly authorised",
+      "preserve provider mode and environment distinctions",
+      "record Linear mutations only when authorised",
+      "tick Linear acceptance criteria only after checks are actually satisfied",
+      "report files read, files modified, validation, assumptions, and readiness verdict"
+    ],
+    "validationExpectations": [
+      "strict JSON parse for modified JSON",
+      "targeted artefact coverage checks for tracking reports",
+      "git status review when repository files are modified",
+      "no unclaimed validation"
+    ]
+  },
+  "onboardingTestDesign": {
+    "issueId": "USF-744",
+    "scenario": "A first-time contributor or AI agent starts from a clean checkout, identifies authority files, runs setup, runs a local readiness command, and receives clear failure output without any readiness overclaim.",
+    "commands": [
+      "make setup",
+      "future doctor command",
+      "make dev-ready",
+      "make foundation when the task requires the full local foundation gate"
+    ],
+    "expectedOutputs": [
+      "setup status",
+      "tool and dependency readiness summary",
+      "authority and non-claim reminder",
+      "validation status",
+      "failure remediation pointer when a command fails",
+      "no product, staging, production, deployment, or live-provider claim"
+    ],
+    "timingCapture": [
+      "capture wall-clock duration for setup",
+      "capture wall-clock duration for dev-ready",
+      "record timeout separately from fail and pass",
+      "record cache state where available"
+    ],
+    "nonClaims": [
+      "onboarding rehearsal does not replace full validation",
+      "onboarding rehearsal does not prove Test readiness",
+      "onboarding rehearsal does not prove Staging readiness",
+      "onboarding rehearsal does not authorise implementation"
+    ]
+  },
+  "environmentResetCommandContract": {
+    "issueId": "USF-720",
+    "safeReset": [
+      "stop local services without deleting volumes",
+      "preserve raw evidence",
+      "preserve accepted proof evidence",
+      "preserve foundational artefacts and lockfiles",
+      "print affected service and port summary"
+    ],
+    "testReset": [
+      "reset only test-scoped service state",
+      "require dry-run summary before mutation",
+      "require evidence collection or explicit out-of-scope note before reset",
+      "fail closed on unknown resource ownership"
+    ],
+    "destructiveCleanup": [
+      "not default",
+      "requires owner-approved policy for high-risk cleanup",
+      "requires explicit confirmation",
+      "blocked when evidence dependency is unresolved",
+      "blocked for authority files, lockfiles, credentials, and accepted proof evidence"
+    ],
+    "expectedOutput": [
+      "reset mode",
+      "resources affected",
+      "resources preserved",
+      "evidence preservation status",
+      "follow-up validation recommendation",
+      "non-claim wording"
+    ],
+    "nonClaims": [
+      "reset success does not prove validation pass",
+      "reset success does not prove proof pass",
+      "reset success does not imply Test or Staging readiness"
+    ]
+  },
+  "safeCleanCommandContract": {
+    "issueId": "USF-721",
+    "removedByDefault": [
+      "rebuildable generated outputs only when classified as safe",
+      "tool caches only when ownership and rebuild path are known",
+      "test-scoped temporary state only after dry-run summary"
+    ],
+    "preservedByDefault": [
+      "raw evidence",
+      "accepted proof evidence",
+      "generated reports whose source evidence is still needed",
+      "foundational governance artefacts",
+      "taxonomy catalogue",
+      "vocabulary catalogue",
+      "schema registry",
+      "lockfiles",
+      "credentials and secret material"
+    ],
+    "warned": [
+      "cache cleanup can increase setup time",
+      "generated output cleanup may require regeneration before validation",
+      "Compose state cleanup may affect local service availability",
+      "unknown ownership blocks cleanup"
+    ],
+    "blockedByDefault": [
+      "evidence deletion",
+      "accepted proof deletion",
+      "authority file deletion",
+      "lockfile mutation",
+      "credential exposure",
+      "unclassified artifact cleanup",
+      "destructive volume removal without owner-approved policy"
+    ],
+    "futureValidation": [
+      "dry-run output matches actual cleanup plan",
+      "protected resources remain present",
+      "rebuildable outputs can be regenerated",
+      "stale or missing evidence remains non-pass"
+    ]
+  },
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "commandSurfaceChanged": false,
+    "documentationImplementationCreated": false,
+    "hookImplementationCreated": false,
+    "cacheCleanupImplemented": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-718",
+      "criterion": "Design identifies metrics, artifact format, display mode, and no-claim wording.",
+      "satisfied": true,
+      "evidence": [
+        "localTimingDashboardDesign"
+      ]
+    },
+    {
+      "issueId": "USF-733",
+      "criterion": "Command contract identifies each cache, owner, safety class, and validation after cleanup.",
+      "satisfied": true,
+      "evidence": [
+        "cacheCleanCommandContract"
+      ]
+    },
+    {
+      "issueId": "USF-734",
+      "criterion": "Design states viewed artifact classes, source links, non-claims, and freshness display.",
+      "satisfied": true,
+      "evidence": [
+        "proofArtifactViewerDesign"
+      ]
+    },
+    {
+      "issueId": "USF-738",
+      "criterion": "Recommendation identifies safe settings, risks, and files to avoid editing automatically.",
+      "satisfied": true,
+      "evidence": [
+        "editorRecommendation"
+      ]
+    },
+    {
+      "issueId": "USF-739",
+      "criterion": "Decision issue presents options, recommendation, owner approval need, and no-regression path.",
+      "satisfied": true,
+      "evidence": [
+        "preCommitPrePushDecisionPacket"
+      ]
+    },
+    {
+      "issueId": "USF-714",
+      "criterion": "Design states prerequisites, command contract, outputs, cache behaviour, and failure modes.",
+      "satisfied": true,
+      "evidence": [
+        "setupCommandContract"
+      ]
+    },
+    {
+      "issueId": "USF-715",
+      "criterion": "Command contract defines checks, outputs, exit codes, and non-claims.",
+      "satisfied": true,
+      "evidence": [
+        "doctorPreflightCommandContract"
+      ]
+    },
+    {
+      "issueId": "USF-716",
+      "criterion": "Command contract states included checks, excluded checks, escalation triggers, and outputs.",
+      "satisfied": true,
+      "evidence": [
+        "fastValidateCommandContract"
+      ]
+    },
+    {
+      "issueId": "USF-717",
+      "criterion": "Standard defines failure sections, required evidence links, and exit-code semantics.",
+      "satisfied": true,
+      "evidence": [
+        "failureOutputStandard"
+      ]
+    },
+    {
+      "issueId": "USF-735",
+      "criterion": "Help design lists required metadata fields and generation approach.",
+      "satisfied": true,
+      "evidence": [
+        "makeTargetHelpDesign"
+      ]
+    },
+    {
+      "issueId": "USF-699",
+      "criterion": "Outline identifies audience, required commands, authority references, and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "repositoryOnboardingGuideOutline"
+      ]
+    },
+    {
+      "issueId": "USF-700",
+      "criterion": "Outline maps change types to commands and identifies missing commands to create in separate issues.",
+      "satisfied": true,
+      "evidence": [
+        "contributorCommandGuideOutline"
+      ]
+    },
+    {
+      "issueId": "USF-701",
+      "criterion": "Proposal identifies guide changes and confirms no conflict with agent directive files.",
+      "satisfied": true,
+      "evidence": [
+        "aiAgentOperatingGuideProposal"
+      ]
+    },
+    {
+      "issueId": "USF-719",
+      "criterion": "Guide outline maps failures to safe commands, evidence preservation notes, and owner decisions.",
+      "satisfied": true,
+      "evidence": [
+        "failureRemediationGuideOutline"
+      ]
+    },
+    {
+      "issueId": "USF-741",
+      "criterion": "Checklist proposal references required authority files and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "aiAgentTaskChecklistProposal"
+      ]
+    },
+    {
+      "issueId": "USF-744",
+      "criterion": "Design states scenario, commands, expected outputs, timing capture, and non-claims.",
+      "satisfied": true,
+      "evidence": [
+        "onboardingTestDesign"
+      ]
+    },
+    {
+      "issueId": "USF-720",
+      "criterion": "Command contract distinguishes safe reset, test reset, and destructive cleanup.",
+      "satisfied": true,
+      "evidence": [
+        "environmentResetCommandContract"
+      ]
+    },
+    {
+      "issueId": "USF-721",
+      "criterion": "Command contract lists what is removed, preserved, warned, and blocked by default.",
+      "satisfied": true,
+      "evidence": [
+        "safeCleanCommandContract"
+      ]
+    }
+  ],
+  "nonClaims": [
+    "This artefact does not implement commands, hooks, dashboards, viewers, editor configuration, documentation, validators, or runtime code.",
+    "This artefact does not modify Makefile targets, package scripts, CI workflows, proof scripts, cache behaviour, or evidence retention.",
+    "This artefact does not approve pre-commit or pre-push hook enforcement.",
+    "This artefact does not make a readiness, staging, production, compliance, store, deployment, or release claim.",
+    "This artefact does not close issues that require implementation, validator proof, runtime evidence, or readiness evidence beyond the design contracts recorded here."
+  ]
+}

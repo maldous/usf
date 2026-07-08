@@ -1,0 +1,366 @@
+{
+  "id": "app-surface-authority-model-extension",
+  "title": "App Surface Authority Model Extension",
+  "issueId": "USF-331",
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityBoundary": "This artefact defines app-surface authority classes for planning and validation. It does not amend the Charter or Authority Model, does not create implementation code, does not activate schemas, does not implement validators, and does not make product UI, store, CDN, deployment, staging, production, compliance, or live-provider readiness claims.",
+  "sourceAuthorities": {
+    "charter": "docs/architecture/charter.md",
+    "authorityModel": "docs/architecture/authority-model.md",
+    "currentStateFoundationAuthorityIndex": "docs/architecture/current-state-foundation-authority-index.md",
+    "currentStateFoundationAuthorityIndexJson": "docs/architecture/current-state-foundation-authority-index.json",
+    "aiUiCompositionBoundary": "docs/architecture/ai-ui-composition-boundary.md",
+    "uiSemanticModelSchema": "spec/schemas/ui-semantic-model.schema.json",
+    "interfaceContractSchema": "spec/schemas/interface-contract.schema.json",
+    "validatorReportSchema": "spec/schemas/validator-report.schema.json",
+    "versionDiscoveryDependency": "USF-330"
+  },
+  "trackingBoundary": {
+    "linearTracksWorkOnly": true,
+    "linearDefinesSemanticAuthority": false,
+    "repositoryArtefactsDefineTruth": true,
+    "validatorsEnforceConsistency": true
+  },
+  "authorityOrderPreserved": [
+    "USF semantic definitions",
+    "USF ADRs",
+    "USF validator rules",
+    "Runtime proof evidence",
+    "USF source implementation",
+    "Generated reports"
+  ],
+  "appSurfaceAuthorityClasses": [
+    {
+      "id": "mobile-adapter",
+      "description": "Expo or native mobile app-surface adapter material that renders or invokes governed USF semantics on mobile platforms.",
+      "authorityPosition": "source-implementation-or-generated-projection-only",
+      "mayConsume": [
+        "spec/instances/ui-semantic-model/",
+        "spec/instances/interface-contract/",
+        "spec/instances/semantic-contract/",
+        "accepted ADRs"
+      ],
+      "mustNotDefine": [
+        "capability behaviour",
+        "permission semantics",
+        "validation semantics",
+        "event semantics",
+        "provider mode",
+        "readiness claims"
+      ],
+      "requiredBacking": [
+        "ui semantic model",
+        "interface or semantic contract",
+        "permission mapping",
+        "proof expectation",
+        "non-claim boundary"
+      ]
+    },
+    {
+      "id": "web-adapter",
+      "description": "Next.js web app-surface adapter material that renders or invokes governed USF semantics on web surfaces.",
+      "authorityPosition": "source-implementation-or-generated-projection-only",
+      "mayConsume": [
+        "spec/instances/ui-semantic-model/",
+        "spec/instances/interface-contract/",
+        "spec/instances/semantic-contract/",
+        "accepted ADRs"
+      ],
+      "mustNotDefine": [
+        "route authority",
+        "capability behaviour",
+        "mutation authority",
+        "cache semantics",
+        "privacy semantics",
+        "readiness claims"
+      ],
+      "requiredBacking": [
+        "route-to-capability mapping",
+        "command or query mapping",
+        "privacy and tenant boundary mapping",
+        "proof expectation",
+        "non-claim boundary"
+      ]
+    },
+    {
+      "id": "shared-client-sdk",
+      "description": "Generated or hand-authored client SDK used by mobile and web adapters to bind to governed USF contracts.",
+      "authorityPosition": "derived-contract-binding-only",
+      "mayConsume": [
+        "interface contracts",
+        "semantic contracts",
+        "command and query models",
+        "typed error models"
+      ],
+      "mustNotDefine": [
+        "API contract meaning",
+        "permission semantics",
+        "error semantics",
+        "staleness acceptance",
+        "readiness claims"
+      ],
+      "requiredBacking": [
+        "current semantic input provenance",
+        "generation or authoring provenance",
+        "freshness rule",
+        "validator expectation",
+        "proof expectation"
+      ]
+    },
+    {
+      "id": "generated-view-model",
+      "description": "Generated UI-facing view model, route model, command model, query model, validation shape, or projection material.",
+      "authorityPosition": "generated-report-or-derived-projection-below-semantics",
+      "mayConsume": [
+        "ui semantic models",
+        "interface contracts",
+        "semantic contracts",
+        "validator output"
+      ],
+      "mustNotDefine": [
+        "new UI behaviour",
+        "state transition semantics",
+        "validation rules",
+        "accessibility obligations",
+        "i18n obligations",
+        "readiness claims"
+      ],
+      "requiredBacking": [
+        "semantic input hash or equivalent provenance",
+        "source semantic references",
+        "generation freshness evidence",
+        "staleness rejection rule"
+      ]
+    },
+    {
+      "id": "native-capability-bridge",
+      "description": "Mobile native bridge or platform API surface used by the app adapter.",
+      "authorityPosition": "implementation-adapter-only",
+      "mayConsume": [
+        "provider mode semantics",
+        "environment semantics",
+        "permission semantics",
+        "platform policy mappings"
+      ],
+      "mustNotDefine": [
+        "permission authority",
+        "privacy data classification",
+        "provider readiness",
+        "live-provider evidence",
+        "store compliance"
+      ],
+      "requiredBacking": [
+        "permission mapping",
+        "privacy classification",
+        "platform policy mapping",
+        "provider-mode boundary",
+        "proof expectation"
+      ]
+    },
+    {
+      "id": "store-release-metadata",
+      "description": "App Store, TestFlight, Google Play, store listing, screenshot, privacy, version, release-note, or release-approval metadata.",
+      "authorityPosition": "release-evidence-or-generated-metadata-below-semantics",
+      "mayConsume": [
+        "release metadata semantics",
+        "privacy disclosure mappings",
+        "version authority",
+        "evidence and provenance records"
+      ],
+      "mustNotDefine": [
+        "store readiness",
+        "privacy compliance",
+        "advertising compliance",
+        "release readiness",
+        "human acceptance"
+      ],
+      "requiredBacking": [
+        "semantic authority reference",
+        "privacy and data-safety mapping",
+        "version or build authority",
+        "commit or artifact provenance",
+        "non-claim boundary"
+      ]
+    },
+    {
+      "id": "cdn-deployment-metadata",
+      "description": "Web hosting, CDN, deployment, edge, cache, domain, route, or release-health metadata for app surfaces.",
+      "authorityPosition": "deployment-evidence-or-generated-metadata-below-semantics",
+      "mayConsume": [
+        "environment semantics",
+        "route semantics",
+        "deployment evidence",
+        "provenance records"
+      ],
+      "mustNotDefine": [
+        "production readiness",
+        "deployment readiness",
+        "live-provider readiness",
+        "route behaviour",
+        "security posture"
+      ],
+      "requiredBacking": [
+        "current commit pin",
+        "artifact hash or provenance",
+        "route authority",
+        "environment boundary",
+        "non-claim boundary"
+      ]
+    },
+    {
+      "id": "app-surface-proof",
+      "description": "Future proof or evidence record for app-surface validator, UI semantic, store, CDN, release, or deployment claims.",
+      "authorityPosition": "runtime-proof-evidence-only",
+      "mayConsume": [
+        "semantic definitions",
+        "validator rules",
+        "proof commands",
+        "evidence records"
+      ],
+      "mustNotDefine": [
+        "intended behaviour",
+        "proof level beyond observed evidence",
+        "provider mode beyond observed substrate",
+        "environment beyond observed context",
+        "readiness claims without owner acceptance"
+      ],
+      "requiredBacking": [
+        "executed proof command",
+        "observed proof level",
+        "provider mode",
+        "environment",
+        "freshness and non-claim boundary"
+      ]
+    }
+  ],
+  "rejectableBehaviourPolicy": {
+    "rule": "Any UI, route, client SDK, generated view model, native capability bridge, store metadata, CDN metadata, release metadata, deployment metadata, or app-surface proof artifact that attempts to define product behaviour without USF semantic backing must be rejected.",
+    "semanticBackingRequired": [
+      "ui semantic model",
+      "interface contract or semantic contract",
+      "accepted ADR where a decision is required",
+      "permission, validation, audit, privacy, i18n, accessibility, telemetry, and proof mappings where applicable"
+    ],
+    "generatedReportsAreAuthority": false,
+    "sourceImplementationDefinesBehaviour": false,
+    "screenshotsDefineBehaviour": false
+  },
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-APP-SURFACE-AUTHORITY-001",
+      "description": "Reject app-surface artifacts that use adapter, SDK, generated view-model, store, CDN, release, deployment, or proof metadata as semantic authority.",
+      "expectedSeverity": "blocking",
+      "ownerIssueIds": [
+        "USF-331",
+        "USF-929",
+        "USF-939",
+        "USF-940"
+      ]
+    },
+    {
+      "ruleId": "USF-APP-SURFACE-AUTHORITY-002",
+      "description": "Reject UI-authored behaviour that lacks a UI semantic model, interface contract, semantic contract, or accepted ADR reference.",
+      "expectedSeverity": "blocking",
+      "ownerIssueIds": [
+        "USF-331",
+        "USF-929"
+      ]
+    },
+    {
+      "ruleId": "USF-APP-SURFACE-AUTHORITY-003",
+      "description": "Reject app-surface metadata that makes store, CDN, deployment, production, compliance, live-provider, product UI, or human-acceptance claims without explicit proof and owner acceptance.",
+      "expectedSeverity": "blocking",
+      "ownerIssueIds": [
+        "USF-331",
+        "USF-935",
+        "USF-936",
+        "USF-940"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "future-validator-selftest-proof",
+      "description": "Future proof must include validator selftest evidence showing authority inversion and unbacked UI behaviour planted defects fail closed and conforming fixtures pass.",
+      "minimumFutureEvidence": [
+        "planted-defect fixture",
+        "conforming fixture",
+        "validator report",
+        "freshness or source input reference",
+        "non-claim boundary"
+      ],
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "app-surface semantic authority references exist",
+      "validator rules exist",
+      "planted-defect fixtures exist",
+      "selftest evidence exists",
+      "proof or evidence mapping exists",
+      "non-claim preservation review exists"
+    ]
+  },
+  "currentStateRoutingGuidance": {
+    "useCurrentStateIndex": "docs/architecture/current-state-foundation-authority-index.md",
+    "useAiUiCompositionBoundary": "docs/architecture/ai-ui-composition-boundary.md",
+    "permittedInputs": [
+      "spec/instances/ui-semantic-model/",
+      "spec/instances/interface-contract/",
+      "spec/instances/semantic-contract/",
+      "accepted ADRs"
+    ],
+    "prohibitedInputs": [
+      "visual design alone",
+      "JSX layout alone",
+      "component names alone",
+      "screenshots alone",
+      "generated reports alone",
+      "source-lineage structure alone"
+    ]
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "criterion": "App-surface classes are defined below USF semantics and ADRs.",
+      "evidence": "appSurfaceAuthorityClasses defines mobile adapter, web adapter, shared client SDK, generated view model, native capability bridge, store release metadata, CDN deployment metadata, and app-surface proof below semantic and ADR authority.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "UI-authored behaviour without semantic backing is rejectable.",
+      "evidence": "rejectableBehaviourPolicy and validator requirement USF-APP-SURFACE-AUTHORITY-002 require fail-closed rejection.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "USF-native references resolve.",
+      "evidence": "sourceAuthorities names repository-local authority files and the completed USF-330 dependency.",
+      "status": "requires-validation"
+    },
+    {
+      "criterion": "Validator and proof requirements are identified.",
+      "evidence": "validatorRequirements and proofRequirements identify future rule and selftest proof expectations.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Implementation requires gates exist.",
+      "evidence": "implementationGate keeps app-surface implementation requires evidence until semantic, validator, planted-defect, selftest, proof, and non-claim gates exist.",
+      "status": "satisfied"
+    }
+  ],
+  "claims": {
+    "implementationCreated": false,
+    "validatorImplemented": false,
+    "schemaActivated": false,
+    "productUiReadiness": false,
+    "storeReadiness": false,
+    "cdnReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "complianceReadiness": false,
+    "humanAcceptance": false
+  }
+}

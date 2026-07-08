@@ -1,0 +1,163 @@
+{
+  "id": "repository-assurance-improvement-opportunities-governance",
+  "title": "Repository assurance improvement opportunities governance",
+  "purpose": "Summarise discovery-only assurance improvement opportunities before future UI and staging work expands USF app-surface risk.",
+  "authorityBoundary": {
+    "semanticAuthorityCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "scanImplemented": false,
+    "dependencyChanged": false,
+    "readinessClaimMade": false,
+    "notes": "This artifact closes planning criteria only. It does not create validators, tests, scans, dependencies, or proof claims."
+  },
+  "sourceReferences": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/schema-authoring-standard.md",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/repository-supply-chain-and-contract-conformance-governance.json",
+    "docs/architecture/repository-traceability-determinism-security-governance.json",
+    "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+    "docs/architecture/repository-build-package-and-contract-test-governance.json",
+    "docs/architecture/repository-layout-and-fixture-governance.json",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json"
+  ],
+  "assuranceGapCategories": [
+    {
+      "category": "High risk UI-blocking assurance",
+      "opportunities": [
+        {
+          "name": "Validator regression-proofing before UI work",
+          "authorityOrProofNeed": "Validator rules must continue to fail closed when app-surface work adds schemas, generated clients, environment proof, or evidence classes.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Over-broad affected-validation or stale parse caches can produce false passes."
+        },
+        {
+          "name": "Generated client pipeline readiness",
+          "authorityOrProofNeed": "Generated clients must trace to active or explicitly authorised contracts with reproducible outputs and conformance evidence.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Generated output can look current while source contracts, lifecycle state, or generator inputs have drifted."
+        },
+        {
+          "name": "App-surface proof integration readiness",
+          "authorityOrProofNeed": "UI changes must map to provider mode, environment, proof level, and retained artifact expectations.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Hermetic mock or production-shaped proof can be mistaken for live external provider or production-live proof."
+        }
+      ]
+    },
+    {
+      "category": "Medium risk conformance and drift assurance",
+      "opportunities": [
+        {
+          "name": "Contract conformance and API client drift checks",
+          "authorityOrProofNeed": "Contract tests and generated-client checks must compare outputs against governed source contracts.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Stale generated clients or planned-only schemas can satisfy local tests without satisfying governed semantics."
+        },
+        {
+          "name": "Deterministic generated outputs and reproducible build policy",
+          "authorityOrProofNeed": "Generated projections and build artifacts require source hashes, generator metadata, cache keys, and deterministic comparison rules.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Cache hits can hide changed generator inputs or source contract drift."
+        },
+        {
+          "name": "Semantic-to-implementation and test-to-requirement traceability",
+          "authorityOrProofNeed": "Implementation and tests must trace to semantic definitions, ADRs, validators, and proof evidence rather than source resemblance.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Trace links can become decorative unless validators fail missing or unknown trace classes closed."
+        }
+      ]
+    },
+    {
+      "category": "Medium risk supply-chain and security assurance",
+      "opportunities": [
+        {
+          "name": "SBOM, licence policy, vulnerability scan, and provenance gates",
+          "authorityOrProofNeed": "Dependency and generated-client consumption must preserve supply-chain evidence and frozen install integrity.",
+          "uiBlocking": false,
+          "falsePositiveRisk": "Scanner noise or unsupported severity thresholds can create false blockers without authority linkage."
+        },
+        {
+          "name": "Secret scan and environment simulation checks",
+          "authorityOrProofNeed": "Environment proof must preserve provider/environment separation and prevent secret leakage in artifacts or generated reports.",
+          "uiBlocking": true,
+          "falsePositiveRisk": "Pattern-based secret scans can flag examples or miss generated artifacts if scope is unclear."
+        }
+      ]
+    },
+    {
+      "category": "Lower risk exploratory assurance",
+      "opportunities": [
+        {
+          "name": "Validator property-based test pilots",
+          "authorityOrProofNeed": "Property tests can broaden invariant coverage for vocabularies, taxonomies, schema lifecycle, evidence status, and provider/environment separation.",
+          "uiBlocking": false,
+          "falsePositiveRisk": "Unbounded generators, nondeterministic seeds, or expensive shrinking can create flaky gates."
+        },
+        {
+          "name": "Dead-tool, stale-guidance, and duplicate-content audits",
+          "authorityOrProofNeed": "Repository hygiene improves agent safety but must not remove authority, proof, validator, or lineage evidence without separate validation.",
+          "uiBlocking": false,
+          "falsePositiveRisk": "Similarity or stale-candidate labels can be wrong if authority role and references are not checked."
+        }
+      ]
+    }
+  ],
+  "uiBlockingAssuranceItems": [
+    "Validator regression-proofing before UI work.",
+    "Generated-client pipeline readiness.",
+    "App-surface proof integration readiness.",
+    "Contract conformance and generated API client drift checks.",
+    "Deterministic generated output and cache-key policy for UI-consumed artifacts.",
+    "Environment and provider-mode proof separation for app-surface flows.",
+    "Secret and environment leakage checks for UI proof artifacts."
+  ],
+  "falsePositiveRiskControls": [
+    "Every future assurance gate should state the authority or proof need it protects before enforcement.",
+    "Negative controls, planted defects, or equivalent failure fixtures should be included where applicable.",
+    "Generated reports must remain lower authority and cannot satisfy raw evidence or semantic authority requirements alone.",
+    "No scanner, validator, or proof command should be considered UI-blocking until scope, false-positive handling, owner, and rollback are defined.",
+    "Flaky, nondeterministic, stale-cache, or unknown-input conditions fail closed to the broader validation gate rather than producing pass evidence."
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-363",
+      "title": "Parent: Assurance improvement opportunities",
+      "completionBasis": "assuranceGapCategories, uiBlockingAssuranceItems, and falsePositiveRiskControls satisfy the parent planning criteria."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-363",
+      "criteria": [
+        "Assurance gaps are categorized by risk.",
+        "Each opportunity links to authority or proof need.",
+        "UI-blocking assurance items are identified.",
+        "False-positive risk is documented."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "assuranceGapCategories",
+        "assuranceGapCategories.opportunities.authorityOrProofNeed",
+        "uiBlockingAssuranceItems",
+        "falsePositiveRiskControls"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "scanImplemented": false,
+    "dependencyChanged": false,
+    "schemaActivated": false,
+    "proofRunClaimed": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

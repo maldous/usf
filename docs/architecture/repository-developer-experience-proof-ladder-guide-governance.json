@@ -1,0 +1,150 @@
+{
+  "id": "usf.repository-developer-experience-proof-ladder-guide-governance",
+  "title": "Repository developer experience proof ladder guide governance",
+  "purpose": "Record design-only governance for a human-readable proof ladder guide and developer-experience parent closure without changing proof policy, command routing, validators, evidence rules, or readiness claims.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "implementationCreated": false,
+    "nonClaims": [
+      "No proof policy is changed by this artifact.",
+      "No command alias, Make target, package script, validator, or workflow is changed by this artifact.",
+      "No Dev, Test, Staging, production, deployment, compliance, store, release, live-provider, or human-acceptance readiness claim is made."
+    ]
+  },
+  "sourceReferences": [
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/repository-environment-ladder-governance.json",
+    "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+    "docs/architecture/repository-test-suite-governance.json",
+    "docs/architecture/repository-ci-optimisation-governance.json",
+    "docs/architecture/authority-model.md",
+    "AGENTS.md"
+  ],
+  "observedGuideNeed": {
+    "stateInspected": true,
+    "guideAudience": [
+      "human contributors",
+      "AI agents",
+      "reviewers",
+      "owners making promotion or proof decisions"
+    ],
+    "guidePurpose": "Give human-readable routing guidance for Dev, Test, Compose-backed proof, Staging proof, generated reports, raw evidence, and human acceptance without upgrading any proof level by implication.",
+    "currentPreferredCommandEntryPoints": [
+      "make foundation",
+      "make setup",
+      "make dev-ready",
+      "make test-ready",
+      "make validate-coverage",
+      "make validate-assurance",
+      "make validate-evidence",
+      "make test-composed",
+      "make test-readiness-integration",
+      "make test-assurance"
+    ]
+  },
+  "humanReadableProofLadderGuideDesign": {
+    "stateInspected": true,
+    "guideImplemented": false,
+    "sectionsToInclude": [
+      "Purpose and non-authority boundary",
+      "Authority order and generated-report boundary",
+      "Provider mode versus environment distinction",
+      "Dev proof routing",
+      "Test proof routing",
+      "Compose-backed proof routing",
+      "Staging proof routing",
+      "Human acceptance and owner decision boundary",
+      "Command entry-point map",
+      "Common false-upgrade examples",
+      "When to stop and ask for owner decision"
+    ],
+    "assuranceImpact": {
+      "preserved": [
+        "The guide explains existing authority and proof routing rather than changing it.",
+        "Provider mode and environment remain separate dimensions.",
+        "Generated reports remain lower authority than raw evidence and semantic definitions.",
+        "Unknown, stale, or missing proof evidence remains fail-closed."
+      ],
+      "risk": [
+        "A guide can accidentally sound like policy if it does not cite governing artifacts.",
+        "A guide can overclaim readiness if command names are presented without proof-level boundaries.",
+        "A guide can confuse production-shaped proof with production-live proof if environment and provider mode are not separated."
+      ]
+    },
+    "validationProofExpectation": [
+      "Future guide text must cite governing artifacts and must not override the Charter, Authority Model, accepted ADRs, validators, runtime proof evidence, or semantic instances.",
+      "Future guide text must preserve the difference between hermetic mock, local composed, live external provider, production-shaped, and production-live claims.",
+      "Future guide text must mark generated reports as lowest authority and must not treat a passing report as defining intended behaviour."
+    ],
+    "dependenciesRecorded": [
+      "environment ladder governance",
+      "aggregate validator command manifest governance",
+      "test-suite governance",
+      "CI optimisation governance"
+    ]
+  },
+  "parentDeveloperExperienceClosurePolicy": {
+    "stateInspected": true,
+    "closureBasis": "The remaining open child under USF-361 was the human-readable proof ladder guide design issue. Parent closure is valid only as design and governance closure and does not implement guide publication, command changes, validators, setup changes, or proof policy mutation.",
+    "nonClosureBoundaries": [
+      "Actual guide publication remains future documentation work unless separately instructed.",
+      "Actual command or workflow changes remain future implementation work.",
+      "Actual proof policy changes require the proper authority path and are not made here."
+    ]
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-742",
+      "title": "Human-readable proof ladder guide",
+      "completionBasis": "humanReadableProofLadderGuideDesign records guide purpose, target sections, assurance impact, validation and proof expectations, dependencies, and non-claims."
+    },
+    {
+      "issueId": "USF-361",
+      "title": "Parent: Developer experience and fast feedback",
+      "completionBasis": "parentDeveloperExperienceClosurePolicy records parent closure basis after the remaining child issue is resolved and no open child issues remain."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-742",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedGuideNeed",
+        "humanReadableProofLadderGuideDesign"
+      ]
+    },
+    {
+      "issueId": "USF-361",
+      "criteria": [
+        "Child state inspected.",
+        "No open child issues remain before parent closure.",
+        "Parent non-claims recorded.",
+        "Validation/proof expectation boundaries preserved."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedGuideNeed",
+        "parentDeveloperExperienceClosurePolicy"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "guideImplemented": false,
+    "proofPolicyChanged": false,
+    "commandChanged": false,
+    "workflowChanged": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

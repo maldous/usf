@@ -1,0 +1,648 @@
+{
+  "id": "usf.app-surface-web-cdn-release-semantics",
+  "title": "App Surface Web CDN Release Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines provider-independent web CDN, hosting, deployment, runtime, cache, header, domain, observability, compliance, rollback, and production release gate semantics. It does not select a CDN provider, configure provider accounts, change DNS, deploy code, create secrets, publish assets, execute rollbacks, claim legal approval, or claim web, production, or live-provider readiness.",
+  "parentIssueId": "USF-323",
+  "coveredIssueIds": [
+    "USF-737",
+    "USF-740",
+    "USF-743",
+    "USF-745",
+    "USF-746",
+    "USF-747",
+    "USF-748",
+    "USF-756",
+    "USF-757",
+    "USF-758",
+    "USF-759",
+    "USF-760",
+    "USF-761",
+    "USF-762",
+    "USF-764"
+  ],
+  "evaluatedOwnerDecisionIssueIds": [
+    "USF-736"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/app-surface-security-proof-semantics.json",
+      "authorityRole": "security proof semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-observability-privacy-semantics.json",
+      "authorityRole": "observability and privacy semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "authorityRole": "release provisioning semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "privacy compliance proof semantics"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-737",
+      "modelId": "cloudflare-pages-static-nextjs-posture",
+      "purpose": "Define Cloudflare Pages static Next.js posture semantics for static export constraints, redirects, headers, assets, previews, environment variables, validators, proof, dependencies, and non-claims without selecting Cloudflare as provider.",
+      "requiredMappings": [
+        "static-export-constraint",
+        "redirect-rule",
+        "security-header",
+        "asset-boundary",
+        "preview-deployment",
+        "environment-variable",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-740",
+      "modelId": "cloudflare-workers-full-stack-nextjs-posture",
+      "purpose": "Define Cloudflare Workers full-stack Next.js posture semantics for adapter support, server rendering, edge constraints, secrets, caching, logs, validators, proof, dependencies, and non-claims without selecting Cloudflare as provider.",
+      "requiredMappings": [
+        "opennext-adapter-support",
+        "server-rendering-mode",
+        "edge-constraint",
+        "secret-boundary",
+        "cache-behaviour",
+        "provider-log",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-743",
+      "modelId": "netlify-nextjs-adapter-posture",
+      "purpose": "Define Netlify Next.js adapter posture semantics for adapter support, SSR, ISR, edge and serverless limits, previews, secrets, logs, validators, proof, dependencies, and non-claims without selecting Netlify as provider.",
+      "requiredMappings": [
+        "opennext-adapter-support",
+        "ssr-mode",
+        "isr-mode",
+        "edge-limit",
+        "serverless-limit",
+        "preview-deployment",
+        "secret-boundary",
+        "provider-log",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-745",
+      "modelId": "custom-domains-dns-tls",
+      "purpose": "Define custom domain, DNS, and TLS semantics for tenant domains, canonical domains, DNS ownership, certificates, renewal, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "tenant-domain",
+        "canonical-domain",
+        "dns-ownership",
+        "certificate",
+        "certificate-renewal",
+        "tls-evidence",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-746",
+      "modelId": "preview-deployments",
+      "purpose": "Define preview deployment semantics for branch previews, access controls, secrets, provider logs, evidence, data exposure, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "branch-preview",
+        "preview-access-control",
+        "preview-secret-boundary",
+        "provider-log",
+        "preview-evidence",
+        "data-exposure-boundary",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-747",
+      "modelId": "branch-deployment-controls",
+      "purpose": "Define branch deployment control semantics for allowed branches, preview access, production release restrictions, approvals, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "allowed-branch",
+        "preview-access-control",
+        "production-release-restriction",
+        "approval-gate",
+        "deployment-evidence",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-748",
+      "modelId": "web-environment-variables-and-secrets",
+      "purpose": "Define web environment variable and secret semantics for public versus private variables, provider secrets, runtime exposure, rotation, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "public-variable",
+        "private-secret",
+        "provider-secret-boundary",
+        "runtime-exposure",
+        "rotation-policy",
+        "secret-evidence",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-756",
+      "modelId": "redirects-headers-security-headers",
+      "purpose": "Define redirects, headers, and security header semantics for redirects, canonical URLs, CSP, HSTS, cache headers, provider support, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "redirect-rule",
+        "canonical-url",
+        "content-security-policy",
+        "hsts-policy",
+        "cache-header",
+        "provider-support-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-757",
+      "modelId": "edge-serverless-runtime-limits",
+      "purpose": "Define edge, serverless, and runtime limit semantics for provider runtimes, unsupported APIs, execution limits, caching effects, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "provider-runtime",
+        "unsupported-api",
+        "execution-limit",
+        "caching-effect",
+        "runtime-compatibility",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-758",
+      "modelId": "cache-keys-purge-revalidation",
+      "purpose": "Define cache key, purge, and revalidation semantics for cache keys, tags, capability events, privacy boundaries, provider purge APIs, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "cache-key",
+        "cache-tag",
+        "capability-event",
+        "privacy-boundary",
+        "provider-purge-api-placeholder",
+        "revalidation-policy",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-759",
+      "modelId": "asset-and-image-cdn-strategy",
+      "purpose": "Define asset and image CDN strategy semantics for images, fonts, scripts, optimisation, privacy, cache headers, provider support, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "image-asset",
+        "font-asset",
+        "script-asset",
+        "optimisation-policy",
+        "privacy-boundary",
+        "cache-header",
+        "provider-support-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-760",
+      "modelId": "cdn-logs-analytics-observability",
+      "purpose": "Define CDN logs, analytics, and observability semantics for provider logs, analytics, privacy categories, retention, consent, telemetry, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "provider-log",
+        "analytics-event",
+        "privacy-category",
+        "retention-policy",
+        "consent-state",
+        "telemetry-event",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-761",
+      "modelId": "web-rollback-deployment-provenance",
+      "purpose": "Define web rollback and deployment provenance semantics for commits, build outputs, provider deployment IDs, rollback targets, approvals, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "commit-binding",
+        "build-output",
+        "provider-deployment-id-placeholder",
+        "rollback-target",
+        "approval-gate",
+        "deployment-evidence",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-762",
+      "modelId": "cdn-provider-compliance-data-residency",
+      "purpose": "Define CDN provider compliance and data residency semantics for provider regions, subprocessors, log data, cache data, retention, privacy disclosures, validators, proof, dependencies, and non-claims without making legal conclusions.",
+      "requiredMappings": [
+        "provider-region-placeholder",
+        "subprocessor-placeholder",
+        "log-data-category",
+        "cache-data-category",
+        "retention-policy",
+        "privacy-disclosure",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-764",
+      "modelId": "web-production-release-gate",
+      "purpose": "Define the web production release gate for provider decision, deployment evidence, headers, domains, privacy, observability, rollback, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "provider-decision",
+        "deployment-evidence",
+        "header-policy",
+        "domain-policy",
+        "privacy-gate",
+        "observability-gate",
+        "rollback-gate",
+        "validator",
+        "proof"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "issueId": "USF-737",
+      "requirementId": "validator.app-surface.web-cdn.cloudflare-pages-static-nextjs-posture",
+      "failClosedOn": [
+        "static posture without export constraint mapping",
+        "provider readiness claim without provider decision",
+        "deployment readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-740",
+      "requirementId": "validator.app-surface.web-cdn.cloudflare-workers-full-stack-nextjs-posture",
+      "failClosedOn": [
+        "full-stack posture without runtime constraint mapping",
+        "secret handling without boundary",
+        "provider readiness claim without provider decision"
+      ]
+    },
+    {
+      "issueId": "USF-743",
+      "requirementId": "validator.app-surface.web-cdn.netlify-nextjs-adapter-posture",
+      "failClosedOn": [
+        "adapter posture without SSR or ISR mapping",
+        "serverless limit missing",
+        "provider readiness claim without provider decision"
+      ]
+    },
+    {
+      "issueId": "USF-745",
+      "requirementId": "validator.app-surface.web-cdn.custom-domains-dns-tls",
+      "failClosedOn": [
+        "domain without ownership evidence",
+        "TLS claim without certificate and renewal mapping",
+        "DNS readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-746",
+      "requirementId": "validator.app-surface.web-cdn.preview-deployments",
+      "failClosedOn": [
+        "preview without access control",
+        "preview secret exposure",
+        "preview readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-747",
+      "requirementId": "validator.app-surface.web-cdn.branch-deployment-controls",
+      "failClosedOn": [
+        "deployment branch without allowlist mapping",
+        "production release bypasses approval",
+        "deployment readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-748",
+      "requirementId": "validator.app-surface.web-cdn.environment-variables-secrets",
+      "failClosedOn": [
+        "secret exposed as public variable",
+        "runtime exposure without classification",
+        "secret readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-756",
+      "requirementId": "validator.app-surface.web-cdn.redirects-headers-security-headers",
+      "failClosedOn": [
+        "redirect without canonical URL mapping",
+        "security header missing required semantic source",
+        "header readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-757",
+      "requirementId": "validator.app-surface.web-cdn.edge-serverless-runtime-limits",
+      "failClosedOn": [
+        "runtime without limit mapping",
+        "unsupported API not classified",
+        "runtime readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-758",
+      "requirementId": "validator.app-surface.web-cdn.cache-purge-revalidation",
+      "failClosedOn": [
+        "cache key without privacy boundary",
+        "purge API assumed before provider decision",
+        "cache readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-759",
+      "requirementId": "validator.app-surface.web-cdn.asset-image-strategy",
+      "failClosedOn": [
+        "asset optimisation without privacy mapping",
+        "cache header missing",
+        "image CDN readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-760",
+      "requirementId": "validator.app-surface.web-cdn.logs-analytics-observability",
+      "failClosedOn": [
+        "provider log without privacy category",
+        "analytics without consent mapping",
+        "observability readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-761",
+      "requirementId": "validator.app-surface.web-cdn.rollback-deployment-provenance",
+      "failClosedOn": [
+        "deployment without commit binding",
+        "rollback target without evidence",
+        "rollback readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-762",
+      "requirementId": "validator.app-surface.web-cdn.provider-compliance-data-residency",
+      "failClosedOn": [
+        "data residency claim without provider decision",
+        "subprocessor mapping missing",
+        "legal compliance claim without authority"
+      ]
+    },
+    {
+      "issueId": "USF-764",
+      "requirementId": "validator.app-surface.web-cdn.production-release-gate",
+      "failClosedOn": [
+        "production gate without provider decision",
+        "production gate without deployment evidence mapping",
+        "production readiness claim without proof"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "issueId": "USF-737",
+      "requirementId": "proof.app-surface.web-cdn.cloudflare-pages-static-nextjs-posture",
+      "expectedEvidence": [
+        "static export constraint mapping",
+        "redirect and header mapping",
+        "asset and preview mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-740",
+      "requirementId": "proof.app-surface.web-cdn.cloudflare-workers-full-stack-nextjs-posture",
+      "expectedEvidence": [
+        "adapter support mapping",
+        "runtime constraint mapping",
+        "secret and log boundary mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-743",
+      "requirementId": "proof.app-surface.web-cdn.netlify-nextjs-adapter-posture",
+      "expectedEvidence": [
+        "adapter support mapping",
+        "SSR and ISR mapping",
+        "edge and serverless limit mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-745",
+      "requirementId": "proof.app-surface.web-cdn.custom-domains-dns-tls",
+      "expectedEvidence": [
+        "domain ownership mapping",
+        "canonical domain mapping",
+        "TLS certificate and renewal mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-746",
+      "requirementId": "proof.app-surface.web-cdn.preview-deployments",
+      "expectedEvidence": [
+        "branch preview mapping",
+        "access control mapping",
+        "secret and data exposure mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-747",
+      "requirementId": "proof.app-surface.web-cdn.branch-deployment-controls",
+      "expectedEvidence": [
+        "allowed branch mapping",
+        "production restriction mapping",
+        "approval and evidence mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-748",
+      "requirementId": "proof.app-surface.web-cdn.environment-variables-secrets",
+      "expectedEvidence": [
+        "public-private variable classification",
+        "provider secret boundary mapping",
+        "runtime exposure mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-756",
+      "requirementId": "proof.app-surface.web-cdn.redirects-headers-security-headers",
+      "expectedEvidence": [
+        "redirect mapping",
+        "canonical URL mapping",
+        "security and cache header mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-757",
+      "requirementId": "proof.app-surface.web-cdn.edge-serverless-runtime-limits",
+      "expectedEvidence": [
+        "runtime mapping",
+        "unsupported API mapping",
+        "execution limit mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-758",
+      "requirementId": "proof.app-surface.web-cdn.cache-purge-revalidation",
+      "expectedEvidence": [
+        "cache key and tag mapping",
+        "privacy boundary mapping",
+        "purge and revalidation mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-759",
+      "requirementId": "proof.app-surface.web-cdn.asset-image-strategy",
+      "expectedEvidence": [
+        "asset classification mapping",
+        "optimisation policy mapping",
+        "privacy and cache header mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-760",
+      "requirementId": "proof.app-surface.web-cdn.logs-analytics-observability",
+      "expectedEvidence": [
+        "provider log mapping",
+        "privacy and retention mapping",
+        "consent and telemetry mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-761",
+      "requirementId": "proof.app-surface.web-cdn.rollback-deployment-provenance",
+      "expectedEvidence": [
+        "commit binding mapping",
+        "deployment ID mapping placeholder",
+        "rollback target and approval mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-762",
+      "requirementId": "proof.app-surface.web-cdn.provider-compliance-data-residency",
+      "expectedEvidence": [
+        "provider region mapping placeholder",
+        "subprocessor mapping placeholder",
+        "log and cache data category mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-764",
+      "requirementId": "proof.app-surface.web-cdn.production-release-gate",
+      "expectedEvidence": [
+        "provider decision dependency mapping",
+        "deployment evidence mapping",
+        "privacy observability and rollback gate mapping",
+        "non-claim preservation evidence"
+      ]
+    }
+  ],
+  "dependencyPolicy": {
+    "providerDecisionRequiredForImplementation": true,
+    "providerDecisionIssueId": "USF-736",
+    "semanticClosureDoesNotSelectProvider": true,
+    "providerSpecificPostureModelsAreComparativeInputsOnly": true,
+    "implementationMayProceedWhileProviderDecisionOpen": false,
+    "readinessClaimsAllowedWhileProviderDecisionOpen": false
+  },
+  "evidenceFreshnessSemantics": {
+    "missingEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "implementationGate": {
+    "implementationAllowed": false,
+    "providerSetupAllowed": false,
+    "dnsChangeAllowed": false,
+    "secretCreationAllowed": false,
+    "deploymentAllowed": false,
+    "rollbackExecutionAllowed": false,
+    "assetPublicationAllowed": false,
+    "monitorSetupAllowed": false,
+    "productionReleaseAllowed": false,
+    "readinessClaimAllowed": false,
+    "reason": "USF-736 remains the open owner decision for CDN and hosting provider posture. This artefact defines semantic mappings only."
+  },
+  "nonClaims": {
+    "providerSelection": false,
+    "providerSetup": false,
+    "accountSetup": false,
+    "dnsReadiness": false,
+    "tlsReadiness": false,
+    "secretReadiness": false,
+    "deploymentReadiness": false,
+    "previewReadiness": false,
+    "cacheReadiness": false,
+    "observabilityReadiness": false,
+    "dataResidencyCompliance": false,
+    "legalApproval": false,
+    "webReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false
+  }
+}

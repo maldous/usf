@@ -1,0 +1,342 @@
+{
+  "id": "privacy-disclosure-sdk-vendor-semantics",
+  "title": "Privacy Disclosure, SDK, and Vendor Semantics",
+  "issueId": "USF-622",
+  "coveredIssueIds": [
+    "USF-623",
+    "USF-625",
+    "USF-626",
+    "USF-654",
+    "USF-655"
+  ],
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact defines semantic requirements for Apple privacy nutrition labels, Apple privacy manifests and required reason APIs, Google Play Data Safety, Android permission disclosure, third-party SDK data practices, and vendor or subprocessor registries. It does not create App Store submission, Play Console submission, privacy policy publication, legal conclusions, SDK installation, provider credential setup, vendor onboarding, procurement approval, privacy compliance, store readiness, production readiness, live-provider readiness, or human acceptance.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "docs/architecture/notification-consent-data-inventory-semantics.json",
+    "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "spec/schemas/interface-contract.schema.json"
+  ],
+  "applePrivacyNutritionLabelMapping": {
+    "issueId": "USF-622",
+    "rule": "Apple privacy nutrition label inputs must be derived from USF data inventory, tracking posture, linked-data posture, purposes, SDK data practices, validators, proof, and non-claims.",
+    "requiredMappings": [
+      "capability",
+      "data-inventory-entry",
+      "data-category",
+      "collection-purpose",
+      "tracking-posture",
+      "linked-data-posture",
+      "sdk-data-practice-entry",
+      "store-disclosure-impact",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "privacy label value without data inventory mapping",
+      "tracking value without consent and tracking posture mapping",
+      "linked-data value without semantic backing",
+      "SDK-derived label without SDK data practice mapping"
+    ]
+  },
+  "applePrivacyManifestAndRequiredReasonMapping": {
+    "issueId": "USF-623",
+    "rule": "Apple privacy manifest and required reason API metadata must map app and third-party SDK usage to USF semantics before any store or compliance claim.",
+    "requiredMappings": [
+      "capability",
+      "privacy-manifest-entry",
+      "required-reason-api",
+      "declared-reason",
+      "sdk-data-practice-entry",
+      "data-inventory-entry",
+      "privacy-category",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "required reason API without declared semantic reason",
+      "privacy manifest entry without data inventory mapping",
+      "third-party SDK manifest without SDK data practice mapping",
+      "manifest readiness claim without proof and owner acceptance"
+    ]
+  },
+  "googlePlayDataSafetyMapping": {
+    "issueId": "USF-625",
+    "rule": "Google Play Data Safety answers must be derived from USF data inventory, collection, sharing, security practice, deletion, purpose, SDK data practice, validator, proof, and non-claim mappings.",
+    "requiredMappings": [
+      "capability",
+      "data-inventory-entry",
+      "data-collected",
+      "data-shared",
+      "security-practice",
+      "deletion-support",
+      "purpose",
+      "sdk-data-practice-entry",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "Data Safety answer without data inventory mapping",
+      "sharing answer without vendor or SDK mapping",
+      "deletion answer without deletion semantics",
+      "security practice answer without semantic backing"
+    ]
+  },
+  "androidPermissionDisclosureMapping": {
+    "issueId": "USF-626",
+    "rule": "Android permissions and Play policy disclosures must map to USF capability authority, runtime disclosure, privacy data categories, validators, proof, and non-claims.",
+    "requiredMappings": [
+      "capability",
+      "android-permission",
+      "runtime-disclosure",
+      "play-policy-disclosure",
+      "privacy-data-category",
+      "permission-purpose",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "Android permission without capability mapping",
+      "runtime disclosure without privacy data category mapping",
+      "Play policy disclosure without semantic backing",
+      "permission readiness claim without proof"
+    ]
+  },
+  "thirdPartySdkDataPracticeRegistry": {
+    "issueId": "USF-654",
+    "rule": "Third-party SDK usage must have a data practice registry entry before app-surface use, disclosure, approval, or readiness claims.",
+    "requiredMappings": [
+      "sdk-identifier",
+      "sdk-purpose",
+      "data-collected",
+      "data-shared",
+      "privacy-manifest-impact",
+      "Data-Safety-impact",
+      "consent-requirement",
+      "approval-gate",
+      "vendor-registry-entry",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "SDK use without registry entry",
+      "SDK data collection without privacy category mapping",
+      "SDK sharing without vendor mapping",
+      "SDK approval claim without approval gate and proof"
+    ]
+  },
+  "vendorAndSubprocessorRegistry": {
+    "issueId": "USF-655",
+    "rule": "Vendor, subprocessor, ads, analytics, hosting, SDK, or provider use must have registry mappings for region, data category, purpose, contract posture, privacy links, validators, proof, and non-claims.",
+    "requiredMappings": [
+      "vendor-identifier",
+      "subprocessor-identifier-where-applicable",
+      "region",
+      "data-category",
+      "purpose",
+      "contract-posture",
+      "privacy-link",
+      "sdk-or-provider-linkage",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "provider use without vendor mapping",
+      "SDK use without vendor or subprocessor mapping",
+      "ads or analytics use without vendor mapping",
+      "vendor approval claim without proof and owner acceptance"
+    ]
+  },
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-APPLE-PRIVACY-LABEL-001",
+      "description": "Reject Apple privacy nutrition label values that diverge from USF data inventory, tracking, linked data, purpose, SDK data practice, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-622"
+    },
+    {
+      "ruleId": "USF-APPLE-PRIVACY-MANIFEST-001",
+      "description": "Reject privacy manifest or required reason API metadata that does not map to USF capability, data inventory, SDK data practice, privacy category, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-623"
+    },
+    {
+      "ruleId": "USF-PLAY-DATA-SAFETY-001",
+      "description": "Reject Google Play Data Safety answers that diverge from USF data inventory, collection, sharing, security practice, deletion, purpose, SDK data practice, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-625"
+    },
+    {
+      "ruleId": "USF-ANDROID-PERMISSION-001",
+      "description": "Reject Android permissions, runtime disclosures, or Play policy disclosures without USF capability, privacy data category, purpose, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-626"
+    },
+    {
+      "ruleId": "USF-SDK-DATA-PRACTICE-001",
+      "description": "Reject app-surface SDK use without SDK data practice registry, privacy, consent, vendor, approval gate, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-654"
+    },
+    {
+      "ruleId": "USF-VENDOR-SUBPROCESSOR-001",
+      "description": "Reject provider, SDK, ads, analytics, hosting, or vendor use without vendor or subprocessor registry mapping and proof.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-655"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "privacy-disclosure-sdk-vendor-semantic-proof",
+      "description": "Future proof must demonstrate that store privacy disclosures, privacy manifests, Data Safety answers, Android permission disclosures, SDK registry entries, and vendor registry entries are semantically mapped and fail closed when mismatched.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "data inventory mappings exist for relevant app surfaces",
+      "SDK and vendor registry mappings exist where applicable",
+      "store privacy disclosure mappings exist for Apple and Google surfaces",
+      "validator requirements are implemented and selftested",
+      "planted-defect fixtures exist for mismatched privacy labels, manifests, Data Safety, permissions, SDKs, and vendors",
+      "proof evidence exists for mapped and rejected cases",
+      "owner acceptance is recorded before any privacy compliance, store readiness, vendor approval, SDK approval, or submission claim"
+    ]
+  },
+  "nonClaims": {
+    "appStoreReady": false,
+    "googlePlayReady": false,
+    "privacyComplianceReady": false,
+    "storeReady": false,
+    "storeSubmissionReady": false,
+    "privacyPolicyPublicationReady": false,
+    "legalConclusion": false,
+    "sdkApprovalReady": false,
+    "vendorApprovalReady": false,
+    "providerCredentialReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "implementationReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-622",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "applePrivacyNutritionLabelMapping defines Apple privacy label mapping requirements."
+    },
+    {
+      "issueId": "USF-623",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "applePrivacyManifestAndRequiredReasonMapping defines privacy manifest and required reason API mapping requirements."
+    },
+    {
+      "issueId": "USF-625",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "googlePlayDataSafetyMapping defines Data Safety mapping requirements."
+    },
+    {
+      "issueId": "USF-626",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "androidPermissionDisclosureMapping defines Android permission disclosure mapping requirements."
+    },
+    {
+      "issueId": "USF-654",
+      "criterion": "Registry artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "thirdPartySdkDataPracticeRegistry defines SDK registry requirements."
+    },
+    {
+      "issueId": "USF-655",
+      "criterion": "Registry artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "vendorAndSubprocessorRegistry defines vendor and subprocessor registry requirements."
+    },
+    {
+      "issueId": "USF-622",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-APPLE-PRIVACY-LABEL-001 and privacy-disclosure-sdk-vendor-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-623",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-APPLE-PRIVACY-MANIFEST-001 and privacy-disclosure-sdk-vendor-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-625",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-PLAY-DATA-SAFETY-001 and privacy-disclosure-sdk-vendor-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-626",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-ANDROID-PERMISSION-001 and privacy-disclosure-sdk-vendor-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-654",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-SDK-DATA-PRACTICE-001 and privacy-disclosure-sdk-vendor-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-655",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-VENDOR-SUBPROCESSOR-001 and privacy-disclosure-sdk-vendor-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-622",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-623",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-625",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-626",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-654",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-655",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    }
+  ]
+}

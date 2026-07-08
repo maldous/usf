@@ -88,7 +88,7 @@
     "validationStatuses": [
       "pass",
       "fail",
-      "blocked",
+      "evidence-required",
       "owner-review-required"
     ],
     "freshnessStates": [
@@ -138,16 +138,25 @@
       "artifactRole": "semantic-behaviour-artifact",
       "sourceCommit": "0123456789abcdef0123456789abcdef01234567",
       "targetCommit": "0123456789abcdef0123456789abcdef01234567",
-      "issueRefs": ["USF-985"],
+      "issueRefs": [
+        "USF-985"
+      ],
       "sourceEnvironment": "dev",
       "targetEnvironment": "test",
       "providerMode": "local-composed-real-service",
       "observedProofLevel": "dev-compose",
       "claimedProofLevel": "test-consideration",
       "validationStatus": "pass",
-      "validatorRefs": ["tools/validate-artifact-promotion/validate-artifact-promotion.py"],
-      "evidenceRefs": ["evidence/dev-compose-proof.json"],
-      "evidenceKinds": ["raw-evidence", "retained-proof-artifact"],
+      "validatorRefs": [
+        "tools/validate-artifact-promotion/validate-artifact-promotion.py"
+      ],
+      "evidenceRefs": [
+        "evidence/dev-compose-proof.json"
+      ],
+      "evidenceKinds": [
+        "raw-evidence",
+        "retained-proof-artifact"
+      ],
       "artifactHash": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "hashAlgorithm": "sha256",
       "hashBasis": "artifact-bytes",
@@ -180,16 +189,25 @@
       "artifactRole": "staging-entry-review-artifact",
       "sourceCommit": "fedcba9876543210fedcba9876543210fedcba98",
       "targetCommit": "fedcba9876543210fedcba9876543210fedcba98",
-      "issueRefs": ["USF-986"],
+      "issueRefs": [
+        "USF-986"
+      ],
       "sourceEnvironment": "test",
       "targetEnvironment": "staging",
       "providerMode": "local-composed-real-service",
       "observedProofLevel": "test-service-backed",
       "claimedProofLevel": "staging-entry-consideration",
       "validationStatus": "pass",
-      "validatorRefs": ["tools/validate-artifact-promotion/validate-artifact-promotion.py"],
-      "evidenceRefs": ["evidence/test-service-proof.json"],
-      "evidenceKinds": ["raw-evidence", "retained-proof-artifact"],
+      "validatorRefs": [
+        "tools/validate-artifact-promotion/validate-artifact-promotion.py"
+      ],
+      "evidenceRefs": [
+        "evidence/test-service-proof.json"
+      ],
+      "evidenceKinds": [
+        "raw-evidence",
+        "retained-proof-artifact"
+      ],
       "artifactHash": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
       "hashAlgorithm": "sha256",
       "hashBasis": "artifact-bytes",

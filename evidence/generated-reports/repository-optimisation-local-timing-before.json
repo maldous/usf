@@ -1,0 +1,37 @@
+{
+  "aiGuidance": "Lowest-authority generated timing report for bounded local optimisation review only. Generated timing output is not USF semantic authority. Generated timing output is not a readiness claim. Generated timing output is not a staging, production, deployment, live-provider, store, release, compliance, or human-acceptance claim. Timing comparison is warn-only and does not hard-block CI. No external provider, remote cache, task graph, or Testcontainers migration is introduced by this tool.",
+  "authorityLevel": "generated-report",
+  "description": "Generated local command timing report. It supports bounded optimisation review and does not define USF semantics.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/measure-command-timing.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "timing-wall-ms:22",
+        "exit-code:0",
+        "started-at:2026-07-08T00:58:23.594951Z",
+        "ended-at:2026-07-08T00:58:23.616865Z"
+      ],
+      "message": "Local command timing measured wallMs=22; exitCode=0; startedAt=2026-07-08T00:58:23.594951Z; endedAt=2026-07-08T00:58:23.616865Z; command=python3 -c import json; paths=['spec/taxonomies/taxonomy-catalog.json','spec/vocabularies/vocabulary-catalog.json','spec/registries/schema-registry.json']; [json.load(open(path, encoding='utf-8')) for path in paths]; print({'parsed': paths}). This is generated timing evidence only and carries no readiness claim.",
+      "ruleId": "USF-TIMING-MEASURE",
+      "severity": "info",
+      "subject": "catalogue-parse-direct"
+    }
+  ],
+  "id": "usf.repository-optimisation.timing.catalogue-parse-direct",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Local timing report for catalogue-parse-direct",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

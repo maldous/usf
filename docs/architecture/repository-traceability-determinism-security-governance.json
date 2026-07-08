@@ -1,0 +1,718 @@
+{
+  "id": "repository-traceability-determinism-security-governance",
+  "title": "Repository Traceability, Determinism, and Security Governance",
+  "issueId": "USF-363",
+  "coveredIssueIds": [
+    "USF-776",
+    "USF-777",
+    "USF-778",
+    "USF-788",
+    "USF-794",
+    "USF-797",
+    "USF-798",
+    "USF-771",
+    "USF-774",
+    "USF-775"
+  ],
+  "deferredIssueIds": [
+    "USF-772",
+    "USF-773",
+    "USF-789",
+    "USF-791",
+    "USF-793"
+  ],
+  "dependencyIssueIds": [
+    "USF-427",
+    "USF-386",
+    "USF-603",
+    "USF-632",
+    "USF-661",
+    "USF-456"
+  ],
+  "authorityBoundary": "This artefact defines repository governance and future validation expectations for traceability, deterministic outputs, security scanning, vulnerability scanning, reproducible builds, and drift detection. It does not implement scanners, tests, validators, generators, runtime code, generated clients, CI workflows, or readiness claims.",
+  "inputArtefacts": [
+    {
+      "path": "docs/architecture/current-state-foundation-authority-index.json",
+      "role": "current authority routing and staleness propagation boundary"
+    },
+    {
+      "path": "docs/architecture/design-contract-compose-drift-test-suite.json",
+      "role": "existing drift-test evidence and generated-output authority boundary"
+    },
+    {
+      "path": "docs/architecture/supply-chain-sbom-licence-test-gate.json",
+      "role": "existing supply-chain, lockfile, license, advisory, SBOM, and provenance posture"
+    },
+    {
+      "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+      "role": "generated-client authority and contract derivation boundary"
+    },
+    {
+      "path": "docs/architecture/config-and-secrets-standard.md",
+      "role": "secret handling, redaction, and fail-closed secret-value boundary"
+    },
+    {
+      "path": "docs/architecture/environment-tooling-governance-test-gate.json",
+      "role": "existing secret-like leakage, generated-artifact drift, and environment tooling gate evidence"
+    },
+    {
+      "path": "docs/architecture/repository-optimisation-risk-management-governance.json",
+      "role": "current optimisation risk scoring and owner-approval policy"
+    }
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-386",
+      "title": "Assurance classification matrix",
+      "status": "done",
+      "requiredBy": [
+        "USF-771",
+        "USF-776",
+        "USF-777",
+        "USF-798"
+      ]
+    },
+    {
+      "issueId": "USF-427",
+      "title": "Define exact Dev to Test to Staging ladder semantics",
+      "status": "done",
+      "requiredBy": [
+        "USF-774"
+      ]
+    },
+    {
+      "issueId": "USF-603",
+      "title": "Artifact hash and content-addressing",
+      "status": "done",
+      "requiredBy": [
+        "USF-794"
+      ]
+    },
+    {
+      "issueId": "USF-632",
+      "title": "Reproducible evidence bundle generation",
+      "status": "done",
+      "requiredBy": [
+        "USF-794",
+        "USF-797"
+      ]
+    },
+    {
+      "issueId": "USF-661",
+      "title": "CI secret safety",
+      "status": "done",
+      "requiredBy": [
+        "USF-778"
+      ]
+    },
+    {
+      "issueId": "USF-456",
+      "title": "Validator enforcing environment ladder discipline",
+      "status": "done",
+      "requiredBy": [
+        "USF-775"
+      ]
+    }
+  ],
+  "deferredDependencyStatus": [
+    {
+      "issueId": "USF-526",
+      "title": "Validator regression-proofing before UI work",
+      "status": "todo",
+      "blocks": [
+        "USF-772"
+      ],
+      "reason": "Validator property-based test planning remains open because the validator regression-proofing prerequisite is still Todo."
+    },
+    {
+      "issueId": "USF-466",
+      "title": "Contract test standard",
+      "status": "todo",
+      "blocks": [
+        "USF-773"
+      ],
+      "reason": "Contract conformance test planning remains open because the contract test standard prerequisite is still Todo."
+    },
+    {
+      "issueId": "USF-543",
+      "title": "Lockfile hygiene",
+      "status": "todo",
+      "blocks": [
+        "USF-789",
+        "USF-791",
+        "USF-793"
+      ],
+      "reason": "SBOM generation, license policy, and broad supply-chain provenance remain open because their issue text depends on lockfile hygiene."
+    }
+  ],
+  "semanticImplementationTraceability": {
+    "issueId": "USF-776",
+    "checkableNow": [
+      {
+        "class": "semantic-authority-reference",
+        "description": "Future implementation surfaces can be required to reference a semantic definition, accepted ADR, validator requirement, proof requirement, or explicit owner-approved blocker."
+      },
+      {
+        "class": "schema-registry-reference",
+        "description": "Generated clients or schema-derived surfaces can be checked for references to active, draft, or planned schema lifecycle state without promoting planned schemas to active."
+      },
+      {
+        "class": "app-surface-semantics-reference",
+        "description": "App-surface components, generated clients, view models, and route plans can be required to reference app-surface semantic artefacts before implementation is accepted."
+      }
+    ],
+    "waitsForApprovedImplementation": [
+      "runtime routes",
+      "UI components",
+      "generated clients",
+      "provider integrations",
+      "deployment workflows",
+      "package publication"
+    ],
+    "futureFailureMode": "Future implementation validation must fail closed when an implementation surface lacks semantic authority, invents missing semantics, or maps to a planned schema as though it were active.",
+    "readinessBoundary": "Traceability planning does not authorise implementation and does not claim generated-client, product UI, staging, production, or live-provider readiness."
+  },
+  "testRequirementTraceability": {
+    "issueId": "USF-777",
+    "requiredReferences": [
+      "semantic definition path or identifier",
+      "validator rule or planted-defect identifier where applicable",
+      "proof requirement or evidence class where applicable",
+      "Linear issue identifier for work tracking only",
+      "non-claim boundary when the test is readiness-adjacent"
+    ],
+    "optionalReferences": [
+      "accepted ADR identifier",
+      "risk score",
+      "owner decision identifier",
+      "artifact or generated-report source path",
+      "runtime proof command identifier"
+    ],
+    "reportingFormat": {
+      "minimumFields": [
+        "testId",
+        "assuranceClass",
+        "requirementReferences",
+        "authorityReferences",
+        "proofOrEvidenceReferences",
+        "nonClaims"
+      ],
+      "antiTheatreRule": "A test must not be counted as requirement coverage unless the referenced requirement is actually exercised or intentionally checked as a negative control."
+    },
+    "futureValidationExpectation": "Future implementation must demonstrate traceability for representative tests before using traceability reports as acceptance evidence."
+  },
+  "securityAndSecretScanningProposal": {
+    "issueId": "USF-778",
+    "scannerScopes": [
+      {
+        "id": "secret-pattern-scan",
+        "purpose": "Detect committed secret-shaped values, private keys, credentialed URLs, API tokens, and unsafe endpoint tokens in repository text, workflow files, generated reports, and evidence artifacts.",
+        "candidateScanner": "secret-pattern scanner compatible with the existing environment-tooling secret-like leakage model",
+        "failureMode": "fail-closed for likely real secrets; require owner review for allowlist entries and known synthetic fixtures"
+      },
+      {
+        "id": "configuration-secret-boundary-scan",
+        "purpose": "Check that configuration and evidence output use secret references, redacted values, and value-free audit metadata.",
+        "candidateScanner": "config-and-secrets standard validation surface",
+        "failureMode": "fail-closed when secret values are exposed or secret references are replaced by raw credentials"
+      },
+      {
+        "id": "dependency-advisory-scan",
+        "purpose": "Check package dependencies for advisory posture without claiming vulnerability clearance.",
+        "candidateScanner": "pnpm advisory audit posture recorded by the supply-chain test gate",
+        "failureMode": "record findings and owner decisions; do not expose secrets in logs"
+      },
+      {
+        "id": "container-image-advisory-scan",
+        "purpose": "Check Compose image dependencies where image inventory exists.",
+        "candidateScanner": "owner-selected container image scanner after image pinning and provenance posture are settled",
+        "failureMode": "defer unsupported scans rather than fabricating pass evidence"
+      }
+    ],
+    "allowlistProcess": [
+      "Allowlist entries require path, finding class, reason, owner, expiry or review date, and evidence that the value is synthetic or intentionally public.",
+      "Allowlist entries must not include raw secret values.",
+      "Expired, unknown, or ownerless allowlist entries fail closed."
+    ],
+    "ownerDecisionPoints": [
+      "selecting the concrete secret scanner",
+      "selecting a container image scanner",
+      "deciding severity thresholds that block CI",
+      "approving persistent allowlist entries",
+      "promoting scan results into acceptance evidence"
+    ],
+    "futureProofExpectation": "Future implementation must prove synthetic secret fixtures are detected and real secret values are not printed, committed, or persisted."
+  },
+  "dependencyVulnerabilityScanProposal": {
+    "issueId": "USF-788",
+    "dependencyOnSecurityScanProposal": "Satisfied by securityAndSecretScanningProposal in this artefact.",
+    "scannerScope": [
+      {
+        "class": "package-dependencies",
+        "scanner": "pnpm advisory audit posture",
+        "inputs": [
+          "package manifest",
+          "workspace manifest",
+          "lockfile"
+        ],
+        "outputBoundary": "advisory report or deferred evidence without secret exposure"
+      },
+      {
+        "class": "container-images",
+        "scanner": "owner-selected image vulnerability scanner",
+        "inputs": [
+          "compose service catalogue",
+          "generated Compose outputs",
+          "image pinning posture"
+        ],
+        "outputBoundary": "scan result, deferred unsupported scope, or owner blocker"
+      }
+    ],
+    "severityThresholds": [
+      {
+        "level": "critical",
+        "defaultAction": "block future acceptance until remediated, deferred with owner decision, or proven not applicable"
+      },
+      {
+        "level": "high",
+        "defaultAction": "require owner review, remediation plan, or bounded exception before acceptance"
+      },
+      {
+        "level": "medium",
+        "defaultAction": "record remediation flow and review cadence"
+      },
+      {
+        "level": "low",
+        "defaultAction": "record posture without upgrading readiness claims"
+      },
+      {
+        "level": "unknown",
+        "defaultAction": "fail closed for pass claims and require owner review"
+      }
+    ],
+    "remediationFlow": [
+      "identify affected dependency, image, or transitive component",
+      "record source input and scan evidence",
+      "decide update, pin, exception, deferral, or removal",
+      "rerun relevant validation after future implementation changes",
+      "preserve non-claims until evidence supports stronger posture"
+    ],
+    "futureValidationExpectation": "Future implementation must report scan results without exposing secrets and must not treat advisory absence as functional correctness."
+  },
+  "reproducibleBuildExpectations": {
+    "issueId": "USF-794",
+    "currentBlockers": [
+      {
+        "id": "timestamp-and-run-id-variance",
+        "description": "Generated reports, bundles, proof cockpit artifacts, and future build outputs may contain timestamps, run identifiers, or source paths that need explicit normalization policy."
+      },
+      {
+        "id": "environment-and-cache-variance",
+        "description": "Outputs may vary by Node or package-manager version, OS path behaviour, locale, timezone, cache state, or hidden local state."
+      },
+      {
+        "id": "unsettled-generated-client-surface",
+        "description": "Generated clients are semantic definitions and future outputs only; no generated-client implementation exists in this planning scope."
+      }
+    ],
+    "proofNeededBeforeCachingBuildOutputs": [
+      "declared input manifest",
+      "toolchain and environment capture",
+      "content hash for inputs and outputs",
+      "independent rebuild comparison",
+      "documented intentional variance",
+      "fallback to full rebuild on missing or unknown provenance"
+    ],
+    "futureValidationExpectation": "Future implementation must compare independent builds and explain all differences before build outputs can be cached as proof-supporting artifacts."
+  },
+  "deterministicGeneratedOutputRequirements": {
+    "issueId": "USF-797",
+    "generatedOutputClasses": [
+      {
+        "class": "generated-reports",
+        "requirements": [
+          "stable ordering",
+          "declared input references",
+          "source evidence references",
+          "explicit generated-report non-authority boundary",
+          "timestamp fields isolated from semantic comparison"
+        ]
+      },
+      {
+        "class": "artifact-manifests",
+        "requirements": [
+          "content hashes where available",
+          "producer and command identity",
+          "environment and provider-mode labels",
+          "source commit or input-set reference",
+          "staleness and pruning status"
+        ]
+      },
+      {
+        "class": "generated-clients",
+        "requirements": [
+          "semantic input set reference",
+          "schema lifecycle reference",
+          "deterministic ordering of operations and fields",
+          "no behaviour not found in USF authority",
+          "no package publishing or implementation readiness claim"
+        ]
+      },
+      {
+        "class": "evidence-bundles",
+        "requirements": [
+          "declared inputs",
+          "stable ordering",
+          "content-addressed or hashed outputs where available",
+          "redacted sensitive values",
+          "explicit freshness state"
+        ]
+      }
+    ],
+    "intentionalVariancePolicy": "Future generators must identify any expected variance field and exclude it only from equivalence comparison, not from evidence custody.",
+    "futureValidationExpectation": "Future implementation must prove regenerated outputs are stable or explain intentional variance without hiding meaningful behaviour or proof differences."
+  },
+  "driftDetectionDesign": {
+    "issueId": "USF-798",
+    "driftClasses": [
+      {
+        "id": "authority-reference-drift",
+        "description": "A doc, generated report, test, validator, or tool references an obsolete, missing, lower-authority, or inactive authority source.",
+        "severity": "high"
+      },
+      {
+        "id": "semantic-implementation-drift",
+        "description": "A future implementation or generated client lacks semantic authority or changes behaviour not backed by semantic definitions.",
+        "severity": "high"
+      },
+      {
+        "id": "command-reference-drift",
+        "description": "Docs, agent directives, CI, package scripts, Make targets, or proof instructions disagree about a command, alias, or compatibility target.",
+        "severity": "moderate"
+      },
+      {
+        "id": "generated-output-drift",
+        "description": "A generated output no longer matches source authority, declared inputs, generator expectations, or staleness state.",
+        "severity": "high"
+      },
+      {
+        "id": "evidence-freshness-drift",
+        "description": "Evidence, generated reports, or human decisions remain treated as current after semantic definitions, source SHA, input hashes, provider mode, or environment changed.",
+        "severity": "high"
+      },
+      {
+        "id": "security-posture-drift",
+        "description": "Security scan posture, secret boundary, vulnerability posture, allowlist ownership, or advisory evidence falls behind current dependencies or workflows.",
+        "severity": "moderate"
+      }
+    ],
+    "severityLevels": [
+      {
+        "level": "high",
+        "ownerAction": "block pass or completion claims until authority, evidence, or validator posture is corrected or owner-approved as deferred"
+      },
+      {
+        "level": "moderate",
+        "ownerAction": "require issue-level review, remediation plan, or documented deferral before depending on the affected surface"
+      },
+      {
+        "level": "low",
+        "ownerAction": "record and schedule cleanup without upgrading readiness claims"
+      },
+      {
+        "level": "unknown",
+        "ownerAction": "fail closed for pass claims"
+      }
+    ],
+    "validatorCandidates": [
+      "authority reference resolver",
+      "command reference checker",
+      "generated output currentness checker",
+      "evidence freshness and source SHA checker",
+      "semantic-to-implementation traceability checker",
+      "scan posture and allowlist ownership checker"
+    ],
+    "futureValidationExpectation": "Future implementation must include planted drift fixtures and fail-closed behaviour before drift detection can be treated as enforced."
+  },
+  "negativeControlDesign": {
+    "issueId": "USF-771",
+    "currentNegativeControls": [
+      {
+        "class": "validator-selftests-and-planted-defects",
+        "authorityReference": "USF-386",
+        "currentRole": "Existing validators and planted defects prove known forbidden states fail closed."
+      },
+      {
+        "class": "generated-output-drift-cases",
+        "authorityReference": "docs/architecture/design-contract-compose-drift-test-suite.json",
+        "currentRole": "Existing drift cases cover missing command, stale generated output, missing contract mapping, and readiness overclaim."
+      },
+      {
+        "class": "environment-tooling-negative-cases",
+        "authorityReference": "docs/architecture/environment-tooling-governance-test-gate.json",
+        "currentRole": "Existing planted cases cover tool-version drift, command mismatch, generated-artifact drift, private-state leakage, secret-like leakage, missing environment boundary, and unsupported overclaim."
+      }
+    ],
+    "gaps": [
+      {
+        "id": "cross-layer-authority-inversion",
+        "description": "A generated report, implementation surface, or Linear issue implies authority over semantic definitions.",
+        "priority": "high"
+      },
+      {
+        "id": "provider-mode-environment-upgrade",
+        "description": "A hermetic or test proof is treated as live-external-provider, staging, production-shaped, or production-live proof.",
+        "priority": "high"
+      },
+      {
+        "id": "stale-evidence-pass",
+        "description": "A stale, unknown, missing, or generated-only evidence record is accepted as pass.",
+        "priority": "high"
+      },
+      {
+        "id": "planned-schema-active-use",
+        "description": "A planned schema or contract is consumed as active without lifecycle promotion and validator coverage.",
+        "priority": "moderate"
+      }
+    ],
+    "prioritizedAdditions": [
+      "cross-layer authority inversion planted defects",
+      "provider-mode and environment upgrade planted defects",
+      "stale evidence pass planted defects",
+      "planned schema active-use planted defects",
+      "missing traceability planted defects for future implementation surfaces"
+    ],
+    "futureValidationExpectation": "Future implementation must prove each negative control fails for the intended reason and must not count a negative case as covered unless its authority reference is explicit."
+  },
+  "environmentSimulationTestDesign": {
+    "issueId": "USF-774",
+    "scenarios": [
+      {
+        "id": "dev-hermetic-does-not-satisfy-test-compose",
+        "providerMode": "hermetic-mock",
+        "environment": "dev",
+        "expectedResult": "pass only for dev-level proof; fail for composed service or staging claims",
+        "requiredEvidenceLabels": [
+          "provider-mode",
+          "environment",
+          "proof-level",
+          "non-claim"
+        ]
+      },
+      {
+        "id": "test-compose-does-not-satisfy-staging",
+        "providerMode": "local-composed-test",
+        "environment": "test",
+        "expectedResult": "pass only for Test or Compose proof; fail for staging, production-shaped, production-live, or live-external-provider claims",
+        "requiredEvidenceLabels": [
+          "provider-mode",
+          "environment",
+          "proof-level",
+          "non-claim"
+        ]
+      },
+      {
+        "id": "stale-evidence-cannot-satisfy-pass",
+        "providerMode": "any",
+        "environment": "any",
+        "expectedResult": "fail when evidence freshness is stale, unknown, or mismatched to the source input set",
+        "requiredEvidenceLabels": [
+          "freshness",
+          "source-input-set",
+          "source-sha",
+          "proof-level"
+        ]
+      },
+      {
+        "id": "provider-substitution-cannot-upgrade-proof",
+        "providerMode": "mock-or-substitute",
+        "environment": "dev-or-test",
+        "expectedResult": "fail for live-provider or staging claims unless separately authorised and evidenced",
+        "requiredEvidenceLabels": [
+          "provider-mode",
+          "substitution-policy",
+          "environment",
+          "non-claim"
+        ]
+      }
+    ],
+    "futureValidationExpectation": "Future implementation must prove simulated evidence cannot satisfy higher proof levels and must keep simulation labels distinct from live-provider, staging, production-shaped, and production-live evidence."
+  },
+  "proofLadderAuditTestDesign": {
+    "issueId": "USF-775",
+    "auditScenarios": [
+      {
+        "id": "forbidden-staging-promotion-without-dev-test",
+        "expectedFailClosedBehaviour": "A staging-style proof claim fails when Dev and Test prerequisites are missing or stale."
+      },
+      {
+        "id": "forbidden-live-provider-substitution",
+        "expectedFailClosedBehaviour": "A mock, hermetic, or local-composed provider proof fails when used as live-external-provider proof."
+      },
+      {
+        "id": "missing-provider-mode-label",
+        "expectedFailClosedBehaviour": "Evidence without provider-mode labels fails instead of defaulting to pass."
+      },
+      {
+        "id": "missing-environment-label",
+        "expectedFailClosedBehaviour": "Evidence without environment labels fails instead of inheriting environment from command or path."
+      },
+      {
+        "id": "generated-report-without-raw-evidence",
+        "expectedFailClosedBehaviour": "A generated report cannot satisfy proof without underlying raw evidence and source input references."
+      },
+      {
+        "id": "overbroad-staging-trigger",
+        "expectedFailClosedBehaviour": "A low-risk documentation or routing change must not be forced into staging proof unless its risk classification requires it."
+      }
+    ],
+    "futureValidationExpectation": "Future implementation must include failing fixtures for incorrect proof promotion and must preserve current proof gates rather than relaxing them."
+  },
+  "blockedItemsNotClosed": [
+    {
+      "issueId": "USF-772",
+      "reason": "Validator property-based tests remain blocked by validator regression-proofing before UI work."
+    },
+    {
+      "issueId": "USF-773",
+      "reason": "Contract conformance tests remain blocked by the contract test standard."
+    },
+    {
+      "issueId": "USF-789",
+      "reason": "SBOM generation remains blocked by lockfile hygiene."
+    },
+    {
+      "issueId": "USF-791",
+      "reason": "License policy remains blocked by lockfile hygiene."
+    },
+    {
+      "issueId": "USF-793",
+      "reason": "Supply-chain provenance remains blocked by lockfile hygiene and cannot be closed from this artefact."
+    }
+  ],
+  "implementationBoundary": {
+    "runtimeCodeCreated": false,
+    "runtimeCodeImported": false,
+    "testsCreated": false,
+    "validatorsCreated": false,
+    "scannerImplemented": false,
+    "ciWorkflowChanged": false,
+    "packageManifestChanged": false,
+    "lockfileChanged": false,
+    "generatedOutputsChanged": false,
+    "schemasCreated": false,
+    "directoriesCreated": false
+  },
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-product-readiness",
+    "no-generated-client-readiness",
+    "no-scanner-implementation",
+    "no-vulnerability-clearance",
+    "no-license-clearance",
+    "no-sbom-generation"
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-776",
+      "criterion": "Design states what traceability can be checked now and what waits for approved implementation.",
+      "evidence": [
+        "semanticImplementationTraceability.checkableNow",
+        "semanticImplementationTraceability.waitsForApprovedImplementation"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-777",
+      "criterion": "Design states required references, optional references, and reporting format.",
+      "evidence": [
+        "testRequirementTraceability.requiredReferences",
+        "testRequirementTraceability.optionalReferences",
+        "testRequirementTraceability.reportingFormat"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-778",
+      "criterion": "Proposal identifies scanners, scope, failure mode, allowlist process, and owner decisions.",
+      "evidence": [
+        "securityAndSecretScanningProposal.scannerScopes",
+        "securityAndSecretScanningProposal.allowlistProcess",
+        "securityAndSecretScanningProposal.ownerDecisionPoints"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-788",
+      "criterion": "Proposal defines scanner, scope, severity thresholds, owner decisions, and remediation flow.",
+      "evidence": [
+        "dependencyVulnerabilityScanProposal.scannerScope",
+        "dependencyVulnerabilityScanProposal.severityThresholds",
+        "dependencyVulnerabilityScanProposal.remediationFlow"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-794",
+      "criterion": "Design identifies current reproducibility blockers and proof needed before caching build outputs.",
+      "evidence": [
+        "reproducibleBuildExpectations.currentBlockers",
+        "reproducibleBuildExpectations.proofNeededBeforeCachingBuildOutputs"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-797",
+      "criterion": "Policy lists generated output classes and determinism requirements for each.",
+      "evidence": [
+        "deterministicGeneratedOutputRequirements.generatedOutputClasses"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-798",
+      "criterion": "Design identifies drift classes, severity levels, owner actions, and validator candidates.",
+      "evidence": [
+        "driftDetectionDesign.driftClasses",
+        "driftDetectionDesign.severityLevels",
+        "driftDetectionDesign.validatorCandidates"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-771",
+      "criterion": "Report lists current negative controls, gaps, and prioritized additions with authority references.",
+      "evidence": [
+        "negativeControlDesign.currentNegativeControls",
+        "negativeControlDesign.gaps",
+        "negativeControlDesign.prioritizedAdditions"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-774",
+      "criterion": "Design lists scenarios, expected pass/fail results, and required evidence labels.",
+      "evidence": [
+        "environmentSimulationTestDesign.scenarios"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-775",
+      "criterion": "Design lists audit scenarios and expected fail-closed behaviour.",
+      "evidence": [
+        "proofLadderAuditTestDesign.auditScenarios"
+      ],
+      "status": "satisfied"
+    }
+  ]
+}
