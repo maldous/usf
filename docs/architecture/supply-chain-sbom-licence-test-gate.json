@@ -141,8 +141,8 @@
   },
   "workspaceBoundary": {
     "workspaceGlobs": ["apps/*", "capabilities/*", "adapters/*", "packages/*"],
-    "expectedPackageJsonCountIncludingRoot": 35,
-    "expectedWorkspacePackageCount": 34,
+    "expectedPackageJsonCountIncludingRoot": 36,
+    "expectedWorkspacePackageCount": 35,
     "workspacePackageNamePrefix": "@foundation/",
     "workspaceExternalDependencySectionsAllowed": false
   },
