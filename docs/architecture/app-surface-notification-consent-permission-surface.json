@@ -1,0 +1,310 @@
+{
+  "artifactId": "usf.app-surface-notification-consent-permission-surface",
+  "title": "App-surface notification consent and permission surface",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1027",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local notification consent and permission implementation for USF-1027. It maps local in-app inbox, toast, and banner notification surfaces to explicit consent, permission, preference, privacy, audit, i18n, accessibility, data inventory, provider-mode, and proof references. It does not create a push provider, mobile push credentials, service worker push setup, live delivery, provider configuration, deployment, staging proof, production readiness, privacy compliance, notification readiness, or human acceptance.",
+  "implementationScope": {
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY",
+    "runtimeLookupExport": "getLocalNotificationSurfaceById",
+    "runtimeExerciseExport": "exerciseLocalNotificationSurface",
+    "unitTestArtefact": "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "providerMode": "local-non-live-only",
+    "environment": "dev-local",
+    "packageInstallationAllowed": false,
+    "dependencyInstallRequired": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "providerSetupAllowed": false,
+    "pushProviderAllowed": false,
+    "mobilePushCredentialsAllowed": false,
+    "serviceWorkerPushAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "runtimeCodeCreatedByIssue": true
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "role": "authority-input",
+      "description": "Notification inbox, toast, banner, consent receipt, audit event, data inventory, privacy, proof, and non-claim semantic authority."
+    },
+    {
+      "path": "docs/architecture/notifications-and-messaging-standard.md",
+      "role": "authority-input",
+      "description": "Controlled notification and messaging standard for local-only provider posture, consent, preferences, suppression, audit, and provider non-claims."
+    },
+    {
+      "path": "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+      "role": "authority-input",
+      "description": "Semantic contract containing notification delivery, preferences, channel, permission, validation, error, audit, and readiness facets."
+    },
+    {
+      "path": "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+      "role": "validator-fixture",
+      "description": "USF-933-style conforming fixture for notification consent and permission mapping."
+    },
+    {
+      "path": "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json",
+      "role": "validator-fixture",
+      "description": "USF-933-style planted defect proving missing notification consent fails closed."
+    },
+    {
+      "path": "docs/architecture/app-surface-i18n-baseline-implementation.json",
+      "role": "implementation-input",
+      "description": "Local i18n baseline authority consumed for notification string mapping posture."
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+      "role": "implementation-input",
+      "description": "Local accessibility baseline authority consumed for notification announcement and semantic posture."
+    }
+  ],
+  "notificationConsentPermissionMappings": [
+    {
+      "surfaceId": "notification-surface-developer-inbox",
+      "surfaceKind": "in-app-inbox",
+      "channel": "in-app",
+      "classification": "transactional",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "capabilityRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticEventRef": "notification.created",
+      "consentRef": "notification-consent-required",
+      "permissionRef": "platform.notifications.write",
+      "preferenceRef": "notification-preference-required",
+      "privacyCategoryRef": "notification-privacy-category-required",
+      "dataInventoryRef": "notification-data-inventory-required",
+      "channelLifecycleRef": "notification-channel-lifecycle-governed",
+      "optOutBoundaryRef": "notification-opt-out-required",
+      "auditRef": "notification-consent-audit-event",
+      "telemetryRef": "notification-telemetry-proof-required",
+      "i18nRef": "notification-i18n-key-required",
+      "accessibilityRef": "notification-accessibility-semantics-required",
+      "retentionRef": "notification-retention-required",
+      "providerModeRef": "provider-mode-not-live-external-provider",
+      "localOnly": true,
+      "consentRequired": true,
+      "permissionRequired": true,
+      "preferenceRequired": true,
+      "auditRequired": true,
+      "liveDeliveryAllowed": false,
+      "pushProviderAllowed": false,
+      "mobilePushCredentialsAllowed": false,
+      "serviceWorkerPushAllowed": false,
+      "externalProviderAllowed": false,
+      "semanticSourceRefs": [
+        "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+        "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-notification-consent-permission-surface.json",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+        "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json"
+      ],
+      "nonClaimBoundary": "local in-app inbox notification mapping only; no push provider, provider credential, service worker, deployment, staging, production, privacy compliance, notification readiness, or human-acceptance claim"
+    },
+    {
+      "surfaceId": "notification-surface-developer-toast",
+      "surfaceKind": "toast",
+      "channel": "in-app",
+      "classification": "workflow",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "capabilityRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticEventRef": "notification.queued",
+      "consentRef": "notification-consent-required",
+      "permissionRef": "platform.notifications.write",
+      "preferenceRef": "notification-preference-required",
+      "privacyCategoryRef": "notification-privacy-category-required",
+      "dataInventoryRef": "notification-data-inventory-required",
+      "channelLifecycleRef": "notification-channel-lifecycle-governed",
+      "optOutBoundaryRef": "notification-opt-out-required",
+      "auditRef": "notification-consent-audit-event",
+      "telemetryRef": "notification-telemetry-proof-required",
+      "i18nRef": "notification-i18n-key-required",
+      "accessibilityRef": "notification-accessibility-semantics-required",
+      "retentionRef": "notification-retention-required",
+      "providerModeRef": "provider-mode-not-live-external-provider",
+      "localOnly": true,
+      "consentRequired": true,
+      "permissionRequired": true,
+      "preferenceRequired": true,
+      "auditRequired": true,
+      "liveDeliveryAllowed": false,
+      "pushProviderAllowed": false,
+      "mobilePushCredentialsAllowed": false,
+      "serviceWorkerPushAllowed": false,
+      "externalProviderAllowed": false,
+      "semanticSourceRefs": [
+        "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+        "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-notification-consent-permission-surface.json",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+        "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json"
+      ],
+      "nonClaimBoundary": "local in-app toast notification mapping only; no push provider, provider credential, service worker, deployment, staging, production, privacy compliance, notification readiness, or human-acceptance claim"
+    },
+    {
+      "surfaceId": "notification-surface-developer-banner",
+      "surfaceKind": "banner",
+      "channel": "in-app",
+      "classification": "operational",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "capabilityRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticEventRef": "notification.read",
+      "consentRef": "notification-consent-required",
+      "permissionRef": "platform.notifications.write",
+      "preferenceRef": "notification-preference-required",
+      "privacyCategoryRef": "notification-privacy-category-required",
+      "dataInventoryRef": "notification-data-inventory-required",
+      "channelLifecycleRef": "notification-channel-lifecycle-governed",
+      "optOutBoundaryRef": "notification-opt-out-required",
+      "auditRef": "notification-consent-audit-event",
+      "telemetryRef": "notification-telemetry-proof-required",
+      "i18nRef": "notification-i18n-key-required",
+      "accessibilityRef": "notification-accessibility-semantics-required",
+      "retentionRef": "notification-retention-required",
+      "providerModeRef": "provider-mode-not-live-external-provider",
+      "localOnly": true,
+      "consentRequired": true,
+      "permissionRequired": true,
+      "preferenceRequired": true,
+      "auditRequired": true,
+      "liveDeliveryAllowed": false,
+      "pushProviderAllowed": false,
+      "mobilePushCredentialsAllowed": false,
+      "serviceWorkerPushAllowed": false,
+      "externalProviderAllowed": false,
+      "semanticSourceRefs": [
+        "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+        "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-notification-consent-permission-surface.json",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+        "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json"
+      ],
+      "nonClaimBoundary": "local in-app banner notification mapping only; no push provider, provider credential, service worker, deployment, staging, production, privacy compliance, notification readiness, or human-acceptance claim"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "consentAndPermissionMappingsMustBeExplicit": true,
+    "preferencePrivacyAuditI18nAccessibilityAndProofMappingsMustBeExplicit": true,
+    "missingConsentOrPermissionMustFailClosed": true,
+    "missingPreferenceMustFailClosed": true,
+    "noRealProviderOrCredentialMayBeIntroduced": true,
+    "noPushProviderMobilePushCredentialOrServiceWorkerPushMayBeIntroduced": true,
+    "onlyInAppNotificationChannelMayBeMapped": true,
+    "localOnlyProviderBoundaryMustBePreserved": true,
+    "usf933StyleFixtureMustRemainPresent": true,
+    "surfaceCoverageMustMapToImplementationPaths": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "proofLadder": {
+    "devLocalRequired": true,
+    "unitTestsRequired": true,
+    "contractTestsRequired": true,
+    "composeRequired": false,
+    "stagingRequired": false,
+    "composeRationale": "The implemented surface is local in-app notification semantics only and does not cross a provider boundary that requires Compose proof.",
+    "stagingRationale": "No public, deployment-adjacent, provider-staging, or human-acceptance notification surface is implemented by USF-1027."
+  },
+  "outOfScopeSurfaces": [
+    {
+      "surfaceId": "push-provider",
+      "status": "not-authorised",
+      "reason": "USF-1027 implements only local non-live notification semantics."
+    },
+    {
+      "surfaceId": "mobile-push-credentials",
+      "status": "not-authorised",
+      "reason": "No APNs, FCM, native signing, or mobile push credential setup is authorised."
+    },
+    {
+      "surfaceId": "service-worker-push",
+      "status": "not-authorised",
+      "reason": "No web service worker push setup or VAPID configuration is authorised."
+    },
+    {
+      "surfaceId": "live-delivery-provider",
+      "status": "not-authorised",
+      "reason": "No live external provider, endpoint, provider credential, or delivery readiness claim is authorised."
+    },
+    {
+      "surfaceId": "notification-readiness",
+      "status": "not-authorised",
+      "reason": "The local mapping proof is not notification readiness, provider readiness, deployment readiness, or production readiness."
+    },
+    {
+      "surfaceId": "human-acceptance",
+      "status": "not-authorised",
+      "reason": "No human acceptance or product UI readiness is claimed."
+    }
+  ],
+  "validationCommands": [
+    {
+      "command": "strict JSON parse for this artefact and plan JSON",
+      "requiredBeforeIssueClosure": true
+    },
+    {
+      "command": "app-surface notification consent and permission unit test",
+      "requiredBeforeIssueClosure": true
+    },
+    {
+      "command": "typecheck",
+      "requiredBeforeIssueClosure": true
+    },
+    {
+      "command": "app-surface validate",
+      "requiredBeforeIssueClosure": true
+    },
+    {
+      "command": "app-surface selftest",
+      "requiredBeforeIssueClosure": true
+    },
+    {
+      "command": "validate-spec",
+      "requiredBeforeIssueClosure": true
+    },
+    {
+      "command": "validate-evidence",
+      "requiredBeforeIssueClosure": true
+    }
+  ],
+  "nonClaims": {
+    "notificationReady": false,
+    "pushReady": false,
+    "providerConfigurationReady": false,
+    "providerReadiness": false,
+    "mobilePushReadiness": false,
+    "serviceWorkerPushReadiness": false,
+    "privacyCompliance": false,
+    "productUiReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}
