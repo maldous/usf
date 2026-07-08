@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-08T23-35-08-581Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "73926a0cdde99448a108219d7546b07a2951ab17",
+  "deploymentSha": "73926a0cdde99448a108219d7546b07a2951ab17",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:1047",
+  "startedAt": "2026-07-08T23:35:08.581Z",
+  "completedAt": "2026-07-08T23:37:50.814Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "?? docs/architecture/app-surface-ads-monetisation-placeholder-surface.json\n?? docs/architecture/app-surface-deployment-evidence-pinning-surface.json\n?? docs/architecture/app-surface-store-metadata-semantic-surface.json\n?? tests/packages/app-surface-local-negative-surfaces.test.ts",
+  "branch": "ci/deduplicate-validate-spec-runs",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}
