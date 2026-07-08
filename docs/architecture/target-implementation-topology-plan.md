@@ -53,6 +53,17 @@ The exact target files and their source-use treatments are named in `docs/archit
 
 This section does not authorise staging, production, live-external-provider, deployment, or production-live readiness. It does not authorise direct source-lineage runtime/application copy, source-lineage path mirroring, generated-report authority, or schema activation.
 
+## USF-1014 App-Surface Package-Boundary Topology
+
+USF-1014 authorises a narrow app-surface workspace/package boundary for UI primitives metadata only. This authorisation is limited to the following root and target file:
+
+- `packages/ui/`
+- `packages/ui/package.json`
+
+The source-use treatment for this file is recorded in `docs/architecture/app-surface-source-use-disposition-matrix.md`. The package is private, dependency-free, and contains no runtime implementation.
+
+This section does not authorise `apps/web/`, `apps/mobile/`, `packages/client/`, `packages/app-surface/`, route scaffolds, screen scaffolds, forms, queries, state/cache runtime, auth/session runtime, i18n runtime, accessibility runtime, notification provider setup, ads/monetisation provider setup, store setup, deployment, staging, live-provider integration, production readiness, compliance readiness, or human-acceptance readiness. Those paths remain blocked until their owning app-surface child issue records exact target files, source-use disposition coverage, validator support, and proof expectations.
+
 ## Decision
 
 USF-39 must not create implementation-shaped directories unless USF-61 explicitly cites this plan and the future implementation PR stays within the allowed topology below.

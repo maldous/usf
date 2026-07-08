@@ -1,0 +1,7 @@
+{
+  "name": "@foundation/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Boundary package for future app-surface UI primitives; no runtime implementation is present in USF-1014."
+}

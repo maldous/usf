@@ -2295,6 +2295,7 @@ AUTHORIZED_IMPLEMENTATION_ROOTS = {
     "packages/test",
     "packages/proof",
     "packages/source",
+    "packages/ui",
     "tests/apps",
     "tests/capabilities",
     "tests/adapters",

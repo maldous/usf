@@ -1,0 +1,169 @@
+{
+  "artifactId": "usf.app-surface-workspace-package-boundaries",
+  "title": "App-surface workspace and package boundaries",
+  "lifecycleState": "boundary-defined",
+  "createdDate": "2026-07-08",
+  "ownerIssueId": "USF-1014",
+  "parentIssueId": "USF-1012",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records package and workspace boundaries for app-surface implementation. It does not define product behaviour.",
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "runtimeAuthority": "This issue may create package manifests and placeholder metadata only. Runtime code remains owned by later implementation issues.",
+    "packageAuthority": "No package dependency is added by this artefact. Future dependency additions require package-managed exact versions, lockfile updates, and repository-owned rationale."
+  },
+  "sourcePlan": {
+    "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+    "parentIssueId": "USF-1012",
+    "inventoryIssueId": "USF-1013",
+    "workspaceBoundaryIssueId": "USF-1014",
+    "packageInstallationProofIssueId": "USF-1019",
+    "sourceUseDispositionMatrix": "docs/architecture/app-surface-source-use-disposition-matrix.md",
+    "targetImplementationTopologyPlan": "docs/architecture/target-implementation-topology-plan.md"
+  },
+  "workspaceConfiguration": {
+    "workspaceFile": "pnpm-workspace.yaml",
+    "existingWorkspacePatterns": [
+      "apps/*",
+      "capabilities/*",
+      "adapters/*",
+      "packages/*"
+    ],
+    "workspaceChangeRequired": false,
+    "reason": "The existing workspace patterns already include every current and planned app-surface package boundary.",
+    "deterministicInstallRule": "Any package manifest introduced by this tranche must be represented in package-managed state and must pass frozen install validation before the owning issue is closed."
+  },
+  "boundaries": [
+    {
+      "boundaryId": "web-app-boundary",
+      "path": "apps/web",
+      "classification": "future-to-create",
+      "owningLinearIssueId": "USF-1017",
+      "workspaceCovered": true,
+      "createdByThisIssue": false,
+      "mayCreateRuntimeCode": false,
+      "packageDependenciesAllowedByThisIssue": false,
+      "proofLevel": "dev-local-web-boundary",
+      "purpose": "Future bounded local Next/web scaffold boundary.",
+      "nonClaims": [
+        "No web runtime exists from this boundary artefact.",
+        "No deployment, CDN, staging, provider, or public route readiness is claimed."
+      ]
+    },
+    {
+      "boundaryId": "mobile-app-boundary",
+      "path": "apps/mobile",
+      "classification": "future-to-create",
+      "owningLinearIssueId": "USF-1018",
+      "workspaceCovered": true,
+      "createdByThisIssue": false,
+      "mayCreateRuntimeCode": false,
+      "packageDependenciesAllowedByThisIssue": false,
+      "proofLevel": "dev-local-mobile-boundary",
+      "purpose": "Future bounded local Expo/mobile scaffold boundary.",
+      "nonClaims": [
+        "No mobile runtime exists from this boundary artefact.",
+        "No EAS, signing, store, provider, staging, or deployment readiness is claimed."
+      ]
+    },
+    {
+      "boundaryId": "shared-client-boundary",
+      "path": "packages/client",
+      "classification": "future-to-create",
+      "owningLinearIssueId": "USF-1015",
+      "workspaceCovered": true,
+      "createdByThisIssue": false,
+      "mayCreateRuntimeCode": false,
+      "packageDependenciesAllowedByThisIssue": false,
+      "proofLevel": "dev-local-client-boundary",
+      "purpose": "Future shared client SDK consumption boundary over generated and semantic client artefacts.",
+      "nonClaims": [
+        "No shared client SDK implementation exists from this boundary artefact.",
+        "No generated-client consumption readiness is claimed."
+      ]
+    },
+    {
+      "boundaryId": "ui-primitives-boundary",
+      "path": "packages/ui",
+      "classification": "exists-now",
+      "owningLinearIssueId": "USF-1014",
+      "workspaceCovered": true,
+      "createdByThisIssue": true,
+      "packageManifest": "packages/ui/package.json",
+      "sourceUseDispositionPath": "docs/architecture/app-surface-source-use-disposition-matrix.md",
+      "targetTopologyPath": "docs/architecture/target-implementation-topology-plan.md",
+      "mayCreateRuntimeCode": false,
+      "packageDependenciesAllowedByThisIssue": false,
+      "proofLevel": "dev-local-ui-boundary",
+      "purpose": "Boundary package for future UI primitives that map app-surface routes, commands, queries, accessibility, and i18n semantics.",
+      "nonClaims": [
+        "No UI primitive runtime implementation exists from this boundary artefact.",
+        "No route, command, query, accessibility, i18n, web, mobile, staging, deployment, or readiness claim is created."
+      ]
+    },
+    {
+      "boundaryId": "local-app-surface-runtime-boundary",
+      "path": "packages/app-surface",
+      "classification": "future-to-create",
+      "owningLinearIssueId": "USF-1016",
+      "workspaceCovered": true,
+      "createdByThisIssue": false,
+      "mayCreateRuntimeCode": false,
+      "packageDependenciesAllowedByThisIssue": false,
+      "proofLevel": "dev-local-in-memory-runtime-boundary",
+      "purpose": "Future local in-memory app-surface runtime boundary.",
+      "nonClaims": [
+        "No local app-surface runtime exists from this boundary artefact.",
+        "No external provider, credential, staging, deployment, or production readiness is claimed."
+      ]
+    },
+    {
+      "boundaryId": "generated-artifact-boundary",
+      "path": "packages/contracts",
+      "classification": "exists-now",
+      "owningLinearIssueId": "USF-1014",
+      "workspaceCovered": true,
+      "createdByThisIssue": false,
+      "packageManifest": "packages/contracts/package.json",
+      "mayCreateRuntimeCode": false,
+      "packageDependenciesAllowedByThisIssue": false,
+      "proofLevel": "dev-local-generated-artifact-boundary",
+      "purpose": "Existing generated and semantic contract package boundary consumed by later shared client and app-surface work.",
+      "nonClaims": [
+        "No new generated artefact implementation is created by this issue.",
+        "No generated-client app consumption readiness is claimed."
+      ]
+    }
+  ],
+  "dependencyPolicy": {
+    "dependenciesAddedByThisIssue": [],
+    "lockfileUpdateAllowed": true,
+    "lockfileUpdateScope": "Workspace importer metadata only if required by pnpm for the new packages/ui manifest.",
+    "globalInstallsAllowed": false,
+    "remoteCacheAllowed": false,
+    "taskGraphToolingAllowed": false,
+    "testcontainersAllowed": false,
+    "externalProviderSdkAllowed": false,
+    "deploymentSdkAllowed": false,
+    "storeSdkAllowed": false,
+    "adsSdkAllowed": false,
+    "consentManagementSdkAllowed": false
+  },
+  "validationPlan": {
+    "requiredCommands": [
+      "strict JSON parse for docs/architecture/app-surface-workspace-package-boundaries.json",
+      "corepack pnpm install --frozen-lockfile",
+      "corepack pnpm typecheck",
+      "corepack pnpm validate-spec",
+      "make app-surface-validate",
+      "make app-surface-selftest"
+    ],
+    "evidenceValidationRequired": false,
+    "composeRequired": false,
+    "stagingRequired": false
+  },
+  "readinessVerdict": {
+    "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_BOUNDARY_VALIDATION",
+    "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
+    "reason": "Package boundaries are explicit and the authorised UI placeholder manifest exists, but app, client, runtime, tests, timing, staging classification, and closure proof remain open child work."
+  }
+}
