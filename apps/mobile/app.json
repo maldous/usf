@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "USF Local App Surface",
+    "slug": "app-surface-mobile-local",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "foundation-local",
+    "assetBundlePatterns": [],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {},
+    "plugins": [],
+    "extra": {
+      "authorityBoundary": "bounded local app-surface proof only",
+      "ownerIssueId": "USF-1018",
+      "stagingRequired": false,
+      "deploymentAllowed": false,
+      "storeSubmissionAllowed": false,
+      "easCredentialsAllowed": false
+    }
+  }
+}

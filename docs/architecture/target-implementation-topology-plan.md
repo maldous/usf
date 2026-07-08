@@ -144,7 +144,6 @@ Any implementation-shaped directory not listed in the allowed topology remains b
 Still blocked examples include:
 
 - `apps/platform-api/`
-- `apps/web/`
 - `packages/adapters-keycloak/`
 - `packages/adapters-postgres/`
 - `packages/authorisation-runtime/`
@@ -213,3 +212,24 @@ USF-1017 authorises the following bounded local web scaffold paths only:
 The scaffold is a Next.js adapter over governed USF route, capability, permission, tenant, privacy, validation, error, audit, and component-fixture semantics. It does not create provider setup, credentials, CDN configuration, DNS changes, public route proof, deployment, staging proof, production proof, web readiness, live-provider readiness, compliance readiness, monetisation readiness, store readiness, accessibility compliance, internationalisation readiness, SEO readiness, or human acceptance.
 
 USF-1017 authorises exact root package pins for Next.js and React only where required by the bounded local web scaffold. It does not authorise analytics SDKs, ads SDKs, CMP or UMP SDKs, deployment SDKs, provider SDKs, remote cache tooling, task graph tooling, or Testcontainers.
+
+## USF-1018 app-surface mobile bounded local scaffold
+
+USF-1018 authorises the following bounded local mobile scaffold paths only:
+
+- `apps/mobile/`
+- `apps/mobile/package.json`
+- `apps/mobile/tsconfig.json`
+- `apps/mobile/app.json`
+- `apps/mobile/index.ts`
+- `apps/mobile/App.tsx`
+- `apps/mobile/src/screen-registry.ts`
+- `apps/mobile/src/screen-registry-check.ts`
+- `docs/architecture/app-surface-mobile-bounded-local-scaffold.json`
+- `tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts`
+
+The scaffold is an Expo managed adapter over governed USF screen, capability, permission, tenant, privacy, validation, error, audit, and component-fixture semantics. It consumes the package pins recorded by USF-1019 and does not add package dependencies itself.
+
+USF-1018 does not authorise EAS credentials, native signing credentials, native project generation, App Store setup, Play Store setup, store submission, live push provider setup, provider setup, credentials, deployment, staging proof, production proof, Expo readiness, mobile readiness, native readiness, store readiness, live-provider readiness, compliance readiness, monetisation readiness, accessibility compliance, internationalisation readiness, or human acceptance.
+
+USF-1018 adds a bounded local Expo scaffold only. This is the bounded local mobile scaffold authority marker for implementation topology and source-use validators. It does not change the status of route, command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, or parent closure work.
