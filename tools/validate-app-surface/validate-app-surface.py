@@ -2212,6 +2212,7 @@ def validate_notification_consent_permission_implementation() -> list[dict[str, 
         "missingPreferenceMustFailClosed",
         "noRealProviderOrCredentialMayBeIntroduced",
         "noPushProviderMobilePushCredentialOrServiceWorkerPushMayBeIntroduced",
+        "onlyInAppNotificationChannelMayBeMapped",
         "localOnlyProviderBoundaryMustBePreserved",
         "usf933StyleFixtureMustRemainPresent",
         "surfaceCoverageMustMapToImplementationPaths",
@@ -2277,6 +2278,8 @@ def validate_notification_consent_permission_implementation() -> list[dict[str, 
             for field in required_string_fields:
                 if not isinstance(entry.get(field), str) or not entry.get(field, "").strip():
                     failures.append(finding(rule_id, f"{entry_subject}.{field}", "notification mapping field must be a non-empty string", issue_id))
+            if entry.get("channel") != "in-app":
+                failures.append(finding(rule_id, f"{entry_subject}.channel", "notification channel must remain in-app", issue_id))
             for field in required_array_fields:
                 if not has_nonempty_string_array(entry.get(field)):
                     failures.append(finding(rule_id, f"{entry_subject}.{field}", "notification mapping field must be a non-empty string array", issue_id))

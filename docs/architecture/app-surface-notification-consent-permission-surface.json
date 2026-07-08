@@ -215,6 +215,7 @@
     "missingPreferenceMustFailClosed": true,
     "noRealProviderOrCredentialMayBeIntroduced": true,
     "noPushProviderMobilePushCredentialOrServiceWorkerPushMayBeIntroduced": true,
+    "onlyInAppNotificationChannelMayBeMapped": true,
     "localOnlyProviderBoundaryMustBePreserved": true,
     "usf933StyleFixtureMustRemainPresent": true,
     "surfaceCoverageMustMapToImplementationPaths": true,

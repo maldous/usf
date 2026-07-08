@@ -20,6 +20,7 @@ interface NotificationConsentPermissionImplementation {
   authorityInputs: Array<{ path: string }>;
   notificationConsentPermissionMappings: Array<{
     surfaceId: string;
+    channel: string;
     implementationPath: string;
     capabilityRef: string;
     consentRef: string;
@@ -77,6 +78,8 @@ describe("app-surface notification consent and permission surface", () => {
     );
     for (const surface of implementation.notificationConsentPermissionMappings) {
       const registered = getLocalNotificationSurfaceById(surface.surfaceId);
+      expect(surface.channel).toBe("in-app");
+      expect(registered.channel).toBe("in-app");
       expect(registered.implementationPath).toBe(surface.implementationPath);
       expect(registered.capabilityRef).toBe(surface.capabilityRef);
       expect(registered.consentRef).toBe("notification-consent-required");
