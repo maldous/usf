@@ -2,9 +2,9 @@
 """Validate bounded app-surface validator tranche fixtures.
 
 This validator implements the app-surface validator family requested for
-USF-930, USF-933, USF-934, USF-935, USF-937, USF-940, and the USF-941
-planted-defect suite boundary. It validates synthetic repository-owned
-fixtures only; it does not create or inspect product UI/runtime code.
+USF-929 through USF-941 and the USF-1011 realisation boundary. It validates
+synthetic repository-owned fixtures only; it does not create or inspect product
+UI/runtime code.
 """
 
 from __future__ import annotations
@@ -21,6 +21,7 @@ TRANCHE = ROOT / "docs/architecture/app-surface-validator-implementation-tranche
 CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming"
 PLANTED = ROOT / "tools/validate-app-surface/planted-defects"
 PACKAGE = ROOT / "package.json"
+MAKEFILE = ROOT / "Makefile"
 
 TARGETS: dict[str, dict[str, Any]] = {
     "USF-APP-SURFACE-VALIDATOR-001": {
@@ -196,6 +197,21 @@ COMMON_NONCLAIMS = {
     "humanAcceptance": False,
 }
 
+REQUIRED_REALISATION_CRITERIA = {
+    "semantic-artifacts-are-authority-not-linear-done-issues",
+    "validator-logic-covers-required-suite",
+    "selftests-exercise-success-and-failure",
+    "planted-defect-fixtures-fail-closed",
+    "conforming-fixtures-pass",
+    "output-shape-covers-pass-fail-and-planted-defect",
+    "package-scripts-direct-execution",
+    "make-or-repo-validation-wiring",
+    "repo-validation-before-app-surface-implementation-work",
+    "environment-ladder-preserved",
+    "non-claims-preserved",
+    "validation-evidence-recorded-before-done",
+}
+
 
 def load_json(path: Path) -> Any:
     with path.open(encoding="utf-8") as handle:
@@ -321,6 +337,50 @@ def validate_tranche() -> list[dict[str, str]]:
     }
     if not required_commands.issubset(commands):
         failures.append(finding("USF-APP-SURFACE-SUITE-002", rel(TRANCHE), "tranche missing app-surface validation commands", "USF-941"))
+    if data.get("realisationIssueId") != "USF-1011":
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "tranche missing USF-1011 realisation issue trace", "USF-1011"))
+    tracking = data.get("trackingBoundary", {})
+    if tracking.get("linearDefinesSemanticAuthority") is not False:
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "Linear must not define semantic authority", "USF-1011"))
+    if tracking.get("oldDoneIssuesUsedAsImplementationEvidence") is not False:
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "old Done Linear issues must not be implementation evidence", "USF-1011"))
+    criteria = {
+        str(item.get("id")): item
+        for item in data.get("acceptanceCriteriaTrace", [])
+        if isinstance(item, dict)
+    }
+    missing_criteria = sorted(REQUIRED_REALISATION_CRITERIA - set(criteria))
+    if missing_criteria:
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), f"tranche missing USF-1011 criteria trace: {', '.join(missing_criteria)}", "USF-1011"))
+    for criterion_id in REQUIRED_REALISATION_CRITERIA & set(criteria):
+        if criteria[criterion_id].get("status") != "satisfied":
+            failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), f"{criterion_id} must be satisfied", "USF-1011"))
+    output_shape = data.get("validatorOutputShape", {})
+    for key in ["mode", "status", "summary", "findings"]:
+        if key not in output_shape.get("requiredTopLevelKeys", []):
+            failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), f"validator output shape missing {key}", "USF-1011"))
+    statuses = set(output_shape.get("statusValues", []))
+    if not {"pass", "fail"}.issubset(statuses):
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "validator output shape must define pass and fail statuses", "USF-1011"))
+    if output_shape.get("plantedDefectSummaryKey") != "plantedDefectFixtureCount":
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "validator output shape must expose planted-defect summary", "USF-1011"))
+    ladder = data.get("environmentLadderPreservation", {})
+    expected_ladder = {
+        "devLocalFirst": True,
+        "testContractBoundaryOnly": True,
+        "composeOnlyProviderSemantics": True,
+        "stagingOnlyPublicAcceptance": True,
+        "environmentDoesNotUpgradeProviderMode": True,
+        "providerModeDoesNotUpgradeEnvironment": True,
+    }
+    for key, expected in expected_ladder.items():
+        if ladder.get(key) is not expected:
+            failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), f"environment ladder field {key} must be {expected}", "USF-1011"))
+    repo_wiring = data.get("repoValidationIntegration", {})
+    if repo_wiring.get("repoValidateIncludesAppSurfaceSuite") is not True:
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "repo validation integration must include app-surface suite", "USF-1011"))
+    if repo_wiring.get("beforeUiExpoNextStagingDeploymentStoreProviderProductionWork") is not True:
+        failures.append(finding("USF-APP-SURFACE-SUITE-006", rel(TRANCHE), "repo validation integration must gate later app-surface work", "USF-1011"))
     return failures
 
 
@@ -343,6 +403,25 @@ def validate_package_scripts() -> list[dict[str, str]]:
     return failures
 
 
+def validate_makefile_wiring() -> list[dict[str, str]]:
+    text = MAKEFILE.read_text(encoding="utf-8")
+    failures: list[dict[str, str]] = []
+    expected = {
+        "app-surface-validate:": "corepack pnpm app-surface:validate",
+        "app-surface-selftest:": "corepack pnpm app-surface:selftest",
+        "validate-evidence:": "corepack pnpm repo:validate",
+    }
+    for target, command in expected.items():
+        if target not in text or command not in text:
+            failures.append(finding("USF-APP-SURFACE-SUITE-007", rel(MAKEFILE), f"missing Makefile wiring for {target.rstrip(':')}", "USF-1011"))
+    phony_line = next((line for line in text.splitlines() if line.startswith(".PHONY:")), "")
+    phony_block = text[text.find(".PHONY:"):text.find("help:")] if ".PHONY:" in text and "help:" in text else phony_line
+    for target in ["app-surface-validate", "app-surface-selftest"]:
+        if target not in phony_block:
+            failures.append(finding("USF-APP-SURFACE-SUITE-007", rel(MAKEFILE), f"{target} must be phony", "USF-1011"))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -358,6 +437,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_matrix())
     failures.extend(validate_tranche())
     failures.extend(validate_package_scripts())
+    failures.extend(validate_makefile_wiring())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -395,13 +475,27 @@ def validate_selftest() -> list[dict[str, str]]:
     return failures
 
 
+def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
+    return {
+        "mode": mode,
+        "status": "fail" if findings else "pass",
+        "summary": {
+            "ruleCount": len(TARGETS),
+            "conformingFixtureCount": len(list(CONFORMING.glob("*.json"))),
+            "plantedDefectFixtureCount": len(list(PLANTED.glob("*.json"))),
+            "findingCount": len(findings),
+        },
+        "findings": findings,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("mode", choices=["all", "selftest"])
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     findings = validate_selftest() if args.mode == "selftest" else validate_all()
-    payload = {"mode": args.mode, "findings": findings}
+    payload = build_payload(args.mode, findings)
     if args.json:
         print(json.dumps(payload, indent=2, sort_keys=True))
     else:

@@ -17,6 +17,7 @@ export USF_PROOF_PROD_FQDN
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	artifact-promotion-validate artifact-promotion-selftest environment-ladder-validate environment-ladder-selftest \
+	app-surface-validate app-surface-selftest \
 	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
@@ -57,9 +58,11 @@ help:
 		'  make validate-assurance    Enterprise assurance evidence validator (compatibility: enterprise-validate)' \
 		'  make validate-evidence     Repository evidence validators (compatibility: corepack pnpm repo:validate)' \
 		'  make validate-bootstrap    Bootstrap governance validator (compatibility: corepack pnpm validate-bootstrap)' \
-		'  make artifact-promotion-validate  Validate Dev/Test/Staging artifact handoff contract' \
-		'  make environment-ladder-validate  Validate environment ladder discipline' \
-		'' \
+			'  make artifact-promotion-validate  Validate Dev/Test/Staging artifact handoff contract' \
+			'  make environment-ladder-validate  Validate environment ladder discipline' \
+			'  make app-surface-validate  Validate app-surface semantic validator tranche' \
+			'  make app-surface-selftest  Run app-surface planted-defect selftest' \
+			'' \
 		'Common proof groups:' \
 		'  make runtime-proof         API and worker runtime proof' \
 		'  make providers-proof       Provider adapter proof' \
@@ -156,6 +159,12 @@ environment-ladder-validate:
 
 environment-ladder-selftest:
 	corepack pnpm environment-ladder:selftest
+
+app-surface-validate:
+	corepack pnpm app-surface:validate
+
+app-surface-selftest:
+	corepack pnpm app-surface:selftest
 
 public-proof-origin:
 	corepack pnpm proof:public-origin
