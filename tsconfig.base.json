@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2024",
     "lib": [
-      "ES2024"
+      "ES2024",
+      "DOM",
+      "DOM.Iterable"
     ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -126,7 +128,11 @@
       ],
       "@foundation/test": [
         "packages/test/src/index.ts"
+      ],
+      "@foundation/app-web": [
+        "apps/web/src/route-registry.ts"
       ]
-    }
+    },
+    "jsx": "react-jsx"
   }
 }

@@ -165,14 +165,14 @@
       "adapters/*",
       "packages/*"
     ],
-    "expectedPackageJsonCountIncludingRoot": 38,
-    "expectedWorkspacePackageCount": 37,
+    "expectedPackageJsonCountIncludingRoot": 39,
+    "expectedWorkspacePackageCount": 38,
     "workspacePackageNamePrefix": "@foundation/",
     "workspaceExternalDependencySectionsAllowed": false
   },
   "dependencyVersionPosture": {
-    "expectedDependencyCount": 26,
-    "expectedDevDependencyCount": 12,
+    "expectedDependencyCount": 29,
+    "expectedDevDependencyCount": 14,
     "exactSpecifierRequired": true,
     "forbiddenSpecifierForms": [
       "latest",
@@ -263,6 +263,23 @@
           "vitest"
         ],
         "owner": "platform-tooling-foundation"
+      },
+      {
+        "id": "web-framework-runtime",
+        "packageNames": [
+          "next",
+          "react",
+          "react-dom"
+        ],
+        "owner": "app-surface-web-foundation"
+      },
+      {
+        "id": "web-framework-types",
+        "packageNames": [
+          "@types/react",
+          "@types/react-dom"
+        ],
+        "owner": "app-surface-web-foundation"
       }
     ]
   },

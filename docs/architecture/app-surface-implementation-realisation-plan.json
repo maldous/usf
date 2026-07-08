@@ -281,6 +281,46 @@
       {
         "path": "tests/packages/app-surface-local-in-memory-runtime.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "apps/web",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/package.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/tsconfig.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/next-env.d.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/next.config.mjs",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/app/layout.tsx",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/app/page.tsx",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/web/src/route-registry.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/apps/app-surface-web-bounded-local-scaffold.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -302,11 +342,6 @@
       }
     ],
     "futureToCreatePaths": [
-      {
-        "path": "apps/web",
-        "classification": "future-to-create",
-        "owningLinearIssueId": "USF-1017"
-      },
       {
         "path": "apps/mobile",
         "classification": "future-to-create",
@@ -410,6 +445,7 @@
         "apps/api",
         "apps/public-proof-origin",
         "apps/staging-proof-cockpit",
+        "apps/web",
         "apps/work"
       ],
       "existingPackageDirectories": [
@@ -425,10 +461,9 @@
         "packages/ui"
       ],
       "absentImplementationDirectories": [
-        "apps/web",
         "apps/mobile"
       ],
-      "currentConclusion": "The repository now contains bounded shared-client, UI, and local in-memory app-surface runtime package boundaries. Web and mobile implementation packages remain absent."
+      "currentConclusion": "The repository now contains bounded shared-client, UI, local in-memory runtime, and local Next.js web scaffold package boundaries. Mobile implementation remains absent."
     },
     "generatedClientState": {
       "semanticAndContractArtefactsExist": true,
@@ -441,11 +476,11 @@
       "sharedClientPackage": "packages/client"
     },
     "uiRuntimeState": {
-      "tsxOrJsxAppComponentsFound": false,
-      "nextWebScaffoldFound": false,
+      "tsxOrJsxAppComponentsFound": true,
+      "nextWebScaffoldFound": true,
       "expoMobileScaffoldFound": false,
       "localInMemoryAppSurfaceRuntimeFound": true,
-      "currentConclusion": "A bounded local in-memory app-surface runtime now exists for component-fixture proof. No Next web scaffold or Expo mobile scaffold exists."
+      "currentConclusion": "A bounded local Next.js web scaffold and local in-memory app-surface runtime now exist for route and component-fixture proof. No Expo mobile scaffold exists."
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -465,6 +500,40 @@
         "Local bounded scaffold only.",
         "No deployment, CDN, hosting, staging, or public route claim.",
         "Routes must map to USF capabilities and fail closed when unknown."
+      ],
+      "implementedBoundary": "apps/web",
+      "implementationArtefact": "apps/web/src/route-registry.ts",
+      "mappingArtefact": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      "testArtefact": "tests/apps/app-surface-web-bounded-local-scaffold.test.ts",
+      "packageName": "@foundation/app-web",
+      "dependencyPins": [
+        "next@16.2.10",
+        "react@19.2.7",
+        "react-dom@19.2.7",
+        "@types/react@19.2.17",
+        "@types/react-dom@19.2.3"
+      ],
+      "proofLevel": "dev-local-typecheck-and-route-unit-test",
+      "currentStatus": "implemented-in-current-branch",
+      "implementationArtefacts": [
+        "apps/web/package.json",
+        "apps/web/tsconfig.json",
+        "apps/web/next.config.mjs",
+        "apps/web/app/layout.tsx",
+        "apps/web/app/page.tsx",
+        "apps/web/src/route-registry.ts",
+        "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+        "tests/apps/app-surface-web-bounded-local-scaffold.test.ts"
+      ],
+      "validationStatus": "pending-current-branch-validation",
+      "nonClaimsPreserved": [
+        "web-readiness",
+        "deployment-readiness",
+        "cdn-readiness",
+        "staging-readiness",
+        "production-readiness",
+        "live-provider-readiness",
+        "human-acceptance"
       ]
     },
     "mobile": {

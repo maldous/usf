@@ -1,0 +1,15 @@
+{
+  "name": "@foundation/app-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Bounded local Next.js app-surface scaffold over governed USF route and capability semantics; no deployment or readiness claim is made.",
+  "exports": {
+    ".": "./src/route-registry.ts"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "routes:check": "tsx src/route-registry.ts --selftest"
+  }
+}

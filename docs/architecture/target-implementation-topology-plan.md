@@ -194,3 +194,22 @@ The PR validator must fail closed when:
 ## Readiness
 
 This plan closes the USF-63 topology-planning boundary only. It does not start USF-39 and does not authorise implementation by itself. USF-39 remains gated by USF-61, current proof/readiness blockers, validator guards, source-use reconciliation, and a separate explicit implementation directive.
+
+## USF-1017 app-surface web bounded local scaffold
+
+USF-1017 authorises the following bounded local web scaffold paths only:
+
+- `apps/web/`
+- `apps/web/package.json`
+- `apps/web/tsconfig.json`
+- `apps/web/next-env.d.ts`
+- `apps/web/next.config.mjs`
+- `apps/web/app/layout.tsx`
+- `apps/web/app/page.tsx`
+- `apps/web/src/route-registry.ts`
+- `docs/architecture/app-surface-web-bounded-local-scaffold.json`
+- `tests/apps/app-surface-web-bounded-local-scaffold.test.ts`
+
+The scaffold is a Next.js adapter over governed USF route, capability, permission, tenant, privacy, validation, error, audit, and component-fixture semantics. It does not create provider setup, credentials, CDN configuration, DNS changes, public route proof, deployment, staging proof, production proof, web readiness, live-provider readiness, compliance readiness, monetisation readiness, store readiness, accessibility compliance, internationalisation readiness, SEO readiness, or human acceptance.
+
+USF-1017 authorises exact root package pins for Next.js and React only where required by the bounded local web scaffold. It does not authorise analytics SDKs, ads SDKs, CMP or UMP SDKs, deployment SDKs, provider SDKs, remote cache tooling, task graph tooling, or Testcontainers.

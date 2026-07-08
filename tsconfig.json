@@ -6,6 +6,10 @@
     "adapters/**/*.ts",
     "packages/**/*.ts",
     "tests/**/*.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "apps/**/*.tsx"
+  ],
+  "exclude": [
+    "apps/web/next-env.d.ts"
   ]
 }
