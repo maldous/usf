@@ -357,7 +357,45 @@ USF133_REQUIRED_GATE_INPUTS = {
 # UI/browser artefact markers that the UI-agnostic foundation must not contain
 # without separate authority. Scanned over tracked first-party files only.
 AUTHORISED_UI_ARTEFACT_ROOTS = {
-    "apps/web": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+    "apps/web": {
+        "authorityPath": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+        "ownerIssueId": "USF-1017",
+        "boundaryFalseFields": (),
+        "nonClaimFalseFields": (
+            "webReadiness",
+            "deploymentReadiness",
+            "stagingReadiness",
+            "productionReadiness",
+            "liveProviderReadiness",
+            "humanAcceptance",
+        ),
+    },
+    "apps/mobile": {
+        "authorityPath": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+        "ownerIssueId": "USF-1018",
+        "boundaryFalseFields": (
+            "easAllowed",
+            "nativeProjectGenerationAllowed",
+            "storeSetupAllowed",
+        ),
+        "nonClaimFalseFields": (
+            "expoReadiness",
+            "mobileReadiness",
+            "nativeReadiness",
+            "storeReadiness",
+            "deploymentReadiness",
+            "stagingReadiness",
+            "productionReadiness",
+            "liveProviderReadiness",
+            "humanAcceptance",
+            "providerSetup",
+            "credentialSetup",
+            "easSetup",
+            "nativeSigning",
+            "storeSubmission",
+            "externalServiceUse",
+        ),
+    },
 }
 
 
@@ -372,28 +410,25 @@ def is_ui_artefact_path(path):
 
 
 def is_authorised_ui_artefact_path(path):
-    for root, authority_path in AUTHORISED_UI_ARTEFACT_ROOTS.items():
+    for root, expectations in AUTHORISED_UI_ARTEFACT_ROOTS.items():
         if path != root and not path.startswith(f"{root}/"):
             continue
+        authority_path = expectations["authorityPath"]
         authority, error = read_json_or_error(authority_path)
         if error is not None or not isinstance(authority, dict):
             return False
         boundary = authority.get("implementationBoundary", {})
         non_claims = authority.get("nonClaims", {})
         return (
-            authority.get("ownerIssueId") == "USF-1017"
+            authority.get("ownerIssueId") == expectations["ownerIssueId"]
             and boundary.get("workspacePackage") == root
             and boundary.get("externalServicesAllowed") is False
             and boundary.get("credentialsAllowed") is False
             and boundary.get("deploymentAllowed") is False
             and boundary.get("stagingAllowed") is False
             and boundary.get("providerSetupAllowed") is False
-            and non_claims.get("webReadiness") is False
-            and non_claims.get("deploymentReadiness") is False
-            and non_claims.get("stagingReadiness") is False
-            and non_claims.get("productionReadiness") is False
-            and non_claims.get("liveProviderReadiness") is False
-            and non_claims.get("humanAcceptance") is False
+            and all(boundary.get(field) is False for field in expectations["boundaryFalseFields"])
+            and all(non_claims.get(field) is False for field in expectations["nonClaimFalseFields"])
         )
     return False
 
