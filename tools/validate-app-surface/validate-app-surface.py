@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Validate bounded app-surface validator tranche fixtures.
+"""Validate bounded app-surface validator tranche fixtures and guards.
 
 This validator implements the app-surface validator family requested for
-USF-929 through USF-941 and the USF-1011 realisation boundary. It validates
-synthetic repository-owned fixtures only; it does not create or inspect product
-UI/runtime code.
+USF-929 through USF-941, the USF-1011 realisation boundary, and bounded
+implementation guards added by later app-surface issues. It validates
+repository-owned fixtures and machine-readable implementation artefacts; it
+does not infer product behaviour from framework files.
 """
 
 from __future__ import annotations
@@ -22,6 +23,11 @@ CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming"
 PLANTED = ROOT / "tools/validate-app-surface/planted-defects"
 PACKAGE = ROOT / "package.json"
 MAKEFILE = ROOT / "Makefile"
+ROUTE_CAPABILITY_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-route-capability-implementation.json"
+WEB_SCAFFOLD = ROOT / "docs/architecture/app-surface-web-bounded-local-scaffold.json"
+MOBILE_SCAFFOLD = ROOT / "docs/architecture/app-surface-mobile-bounded-local-scaffold.json"
+USF930_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/002-route-with-capability-mapping.json"
+USF930_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/002-route-without-capability-mapping.json"
 
 TARGETS: dict[str, dict[str, Any]] = {
     "USF-APP-SURFACE-VALIDATOR-001": {
@@ -422,6 +428,205 @@ def validate_makefile_wiring() -> list[dict[str, str]]:
     return failures
 
 
+def path_exists(path: str) -> bool:
+    return (ROOT / path).exists()
+
+
+def has_nonempty_string_array(value: Any) -> bool:
+    return isinstance(value, list) and bool(value) and all(isinstance(item, str) and item.strip() for item in value)
+
+
+def validate_false_nonclaims(record: dict[str, Any], subject: str, rule_id: str, issue_id: str) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    nonclaims = record.get("nonClaims", {})
+    if not isinstance(nonclaims, dict) or not nonclaims:
+        return [finding(rule_id, subject, "nonClaims must be a non-empty object", issue_id)]
+    for key, value in nonclaims.items():
+        if value is not False:
+            failures.append(finding(rule_id, f"{subject}.nonClaims.{key}", "non-claim must be false", issue_id))
+    return failures
+
+
+def expected_route_capability_targets() -> dict[str, dict[str, Any]]:
+    expected: dict[str, dict[str, Any]] = {}
+    if WEB_SCAFFOLD.exists():
+        web = load_json(WEB_SCAFFOLD)
+        registry = web.get("routeRegistry", {}) if isinstance(web, dict) else {}
+        routes = registry.get("routes", []) if isinstance(registry, dict) else []
+        for route in routes:
+            if not isinstance(route, dict) or not isinstance(route.get("routeId"), str):
+                continue
+            expected[route["routeId"]] = {
+                "surface": "web-route",
+                "framework": "nextjs",
+                "registryArtifactId": registry.get("artifactId"),
+                "implementationPath": registry.get("implementationPath"),
+                "authorityArtifactPath": rel(WEB_SCAFFOLD),
+                "path": route.get("path"),
+                "frameworkSegment": route.get("nextRouteSegment"),
+                "capabilityId": route.get("capabilityId"),
+                "permissionRefs": route.get("permissionRefs"),
+                "tenantBoundaryRef": route.get("tenantBoundaryRef"),
+                "privacyCategoryRefs": route.get("privacyCategoryRefs"),
+                "validationRefs": route.get("validationRefs"),
+                "errorRefs": route.get("errorRefs"),
+                "auditEventRefs": route.get("auditEventRefs"),
+                "componentFixtureRefs": route.get("componentFixtureRefs"),
+                "semanticSourceRefs": route.get("semanticSourceRefs"),
+                "unknownTargetPolicy": registry.get("unknownRoutePolicy"),
+                "nonClaimBoundary": route.get("nonClaimBoundary"),
+            }
+    if MOBILE_SCAFFOLD.exists():
+        mobile = load_json(MOBILE_SCAFFOLD)
+        registry = mobile.get("screenRegistry", {}) if isinstance(mobile, dict) else {}
+        screens = registry.get("screens", []) if isinstance(registry, dict) else []
+        for screen in screens:
+            if not isinstance(screen, dict) or not isinstance(screen.get("screenId"), str):
+                continue
+            expected[screen["screenId"]] = {
+                "surface": "mobile-screen",
+                "framework": "expo",
+                "registryArtifactId": registry.get("artifactId"),
+                "implementationPath": registry.get("implementationPath"),
+                "authorityArtifactPath": rel(MOBILE_SCAFFOLD),
+                "routePath": screen.get("routePath"),
+                "frameworkSegment": screen.get("screenName"),
+                "capabilityId": screen.get("capabilityId"),
+                "permissionRefs": screen.get("permissionRefs"),
+                "tenantBoundaryRef": screen.get("tenantBoundaryRef"),
+                "privacyCategoryRefs": screen.get("privacyCategoryRefs"),
+                "validationRefs": screen.get("validationRefs"),
+                "errorRefs": screen.get("errorRefs"),
+                "auditEventRefs": screen.get("auditEventRefs"),
+                "componentFixtureRefs": screen.get("componentFixtureRefs"),
+                "semanticSourceRefs": screen.get("semanticSourceRefs"),
+                "unknownTargetPolicy": registry.get("unknownScreenPolicy"),
+                "nonClaimBoundary": screen.get("nonClaimBoundary"),
+            }
+    return expected
+
+
+def validate_route_capability_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-001"
+    issue_id = "USF-1020"
+    subject = rel(ROUTE_CAPABILITY_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not ROUTE_CAPABILITY_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "route capability implementation artefact is missing", issue_id)]
+    data = load_json(ROUTE_CAPABILITY_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "route capability implementation artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, subject, "artefact ownerIssueId must be USF-1020", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, subject, "artefact lifecycleState must be bounded-local-implemented", issue_id))
+    for path in data.get("authorityInputs", []):
+        if not isinstance(path, str) or not path_exists(path):
+            failures.append(finding(rule_id, subject, f"authority input does not exist: {path}", issue_id))
+    guard = data.get("validationGuard", {})
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "implementedTargetsMustMatchScaffoldArtefacts",
+        "everyTargetMustHaveCapabilityOwnership",
+        "everyTargetMustHavePermissionRefs",
+        "everyTargetMustHaveTenantBoundaryRef",
+        "everyTargetMustHaveProofRefs",
+        "unknownTargetsMustFailClosed",
+        "usf930StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "outOfScopeSurfacesRemainOwnedByLaterIssues",
+    ]
+    if not isinstance(guard, dict):
+        failures.append(finding(rule_id, subject, "validationGuard must be an object", issue_id))
+    else:
+        for flag in required_guard_flags:
+            if guard.get(flag) is not True:
+                failures.append(finding(rule_id, f"{subject}.validationGuard.{flag}", "validation guard flag must be true", issue_id))
+    expected = expected_route_capability_targets()
+    targets = data.get("implementedTargets", [])
+    if not isinstance(targets, list) or not targets:
+        failures.append(finding(rule_id, subject, "implementedTargets must be a non-empty array", issue_id))
+        targets = []
+    actual_by_id = {
+        target.get("targetId"): target
+        for target in targets
+        if isinstance(target, dict) and isinstance(target.get("targetId"), str)
+    }
+    if set(actual_by_id) != set(expected):
+        failures.append(finding(rule_id, subject, "implemented target ids must match web and mobile scaffold registries", issue_id))
+    comparable_fields = [
+        "surface",
+        "framework",
+        "registryArtifactId",
+        "implementationPath",
+        "authorityArtifactPath",
+        "path",
+        "routePath",
+        "frameworkSegment",
+        "capabilityId",
+        "permissionRefs",
+        "tenantBoundaryRef",
+        "privacyCategoryRefs",
+        "validationRefs",
+        "errorRefs",
+        "auditEventRefs",
+        "componentFixtureRefs",
+        "semanticSourceRefs",
+        "unknownTargetPolicy",
+        "nonClaimBoundary",
+    ]
+    for target_id, target in actual_by_id.items():
+        target_subject = f"{subject}.implementedTargets.{target_id}"
+        expected_target = expected.get(target_id, {})
+        for path_field in ["implementationPath", "authorityArtifactPath"]:
+            path_value = target.get(path_field)
+            if not isinstance(path_value, str) or not path_exists(path_value):
+                failures.append(finding(rule_id, target_subject, f"{path_field} does not exist", issue_id))
+        if not isinstance(target.get("capabilityId"), str) or not target["capabilityId"].strip():
+            failures.append(finding(rule_id, target_subject, "target must have capability ownership", issue_id))
+        if not has_nonempty_string_array(target.get("permissionRefs")):
+            failures.append(finding(rule_id, target_subject, "target must have permissionRefs", issue_id))
+        if not isinstance(target.get("tenantBoundaryRef"), str) or not target["tenantBoundaryRef"].strip():
+            failures.append(finding(rule_id, target_subject, "target must have tenantBoundaryRef", issue_id))
+        if not has_nonempty_string_array(target.get("proofRefs")):
+            failures.append(finding(rule_id, target_subject, "target must have proofRefs", issue_id))
+        for proof_ref in target.get("proofRefs", []) if isinstance(target.get("proofRefs"), list) else []:
+            if not isinstance(proof_ref, str) or not path_exists(proof_ref):
+                failures.append(finding(rule_id, target_subject, f"proofRef does not exist: {proof_ref}", issue_id))
+        if target.get("unknownTargetPolicy") != "fail-closed":
+            failures.append(finding(rule_id, target_subject, "unknownTargetPolicy must be fail-closed", issue_id))
+        for field in comparable_fields:
+            if field in expected_target and target.get(field) != expected_target[field]:
+                failures.append(finding(rule_id, target_subject, f"{field} must match scaffold registry authority", issue_id))
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    required_out_of_scope = {
+        "command-form": "USF-1021",
+        "query-list-detail": "USF-1022",
+        "state-cache-query-client": "USF-1023",
+        "auth-session-dev-identity": "USF-1024",
+    }
+    observed_out_of_scope = {
+        item.get("surface"): item
+        for item in out_of_scope
+        if isinstance(item, dict)
+    } if isinstance(out_of_scope, list) else {}
+    for surface, owner in required_out_of_scope.items():
+        item = observed_out_of_scope.get(surface)
+        if not item or item.get("ownerIssueId") != owner or item.get("status") != "owned-by-later-issue":
+            failures.append(finding(rule_id, subject, f"{surface} must remain owned by {owner}", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    if USF930_CONFORMING.exists() and USF930_PLANTED.exists():
+        conforming = load_json(USF930_CONFORMING)
+        planted = load_json(USF930_PLANTED)
+        if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-002":
+            failures.append(finding(rule_id, rel(USF930_CONFORMING), "USF-930 conforming fixture must remain wired", issue_id))
+        if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-002":
+            failures.append(finding(rule_id, rel(USF930_PLANTED), "USF-930 planted fixture must remain wired", issue_id))
+    else:
+        failures.append(finding(rule_id, subject, "USF-930 route capability fixtures must exist", issue_id))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -438,6 +643,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_tranche())
     failures.extend(validate_package_scripts())
     failures.extend(validate_makefile_wiring())
+    failures.extend(validate_route_capability_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -483,6 +689,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
             "ruleCount": len(TARGETS),
             "conformingFixtureCount": len(list(CONFORMING.glob("*.json"))),
             "plantedDefectFixtureCount": len(list(PLANTED.glob("*.json"))),
+            "realImplementationArtifactCount": 1 if ROUTE_CAPABILITY_IMPLEMENTATION.exists() else 0,
             "findingCount": len(findings),
         },
         "findings": findings,

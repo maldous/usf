@@ -375,6 +375,14 @@
       {
         "path": "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-route-capability-implementation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/apps/app-surface-route-capability-implementation.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -783,7 +791,22 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-route-proof",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "repositoryArtefact": "docs/architecture/app-surface-route-capability-implementation.json",
+      "currentRepositoryStatus": "bounded-local-web-route-and-mobile-screen-capability-mappings-consolidated",
+      "implementedTargets": [
+        "web-route-developer-home",
+        "mobile-screen-developer-home"
+      ],
+      "runtimeCodeCreatedByIssue": false,
+      "runtimeCodeConsumedFromIssueIds": [
+        "USF-1017",
+        "USF-1018"
+      ],
+      "validatorGuardAdded": "tools/validate-app-surface/validate-app-surface.py",
+      "unitTestArtefact": "tests/apps/app-surface-route-capability-implementation.test.ts",
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1021",

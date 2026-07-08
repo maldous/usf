@@ -1,0 +1,194 @@
+{
+  "artifactId": "usf.app-surface-route-capability-implementation",
+  "title": "App-surface route and capability implementation",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1020",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local route and screen capability implementation for USF-1020. It consolidates the currently implemented web route and mobile screen registries over governed USF capability, permission, tenant, privacy, validation, error, audit, fixture, and proof references. It does not define product behaviour from app framework files, expose public routes, create provider setup, configure deployment, run staging proof, or claim product UI, web, mobile, staging, deployment, production, live-provider, store, compliance, monetisation, or human-acceptance readiness.",
+  "scope": {
+    "implementedSurface": "bounded-local-route-and-screen-capability-mapping",
+    "webRouteRegistry": "apps/web/src/route-registry.ts",
+    "mobileScreenRegistry": "apps/mobile/src/screen-registry.ts",
+    "webAuthorityArtefact": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+    "mobileAuthorityArtefact": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "testArtefact": "tests/apps/app-surface-route-capability-implementation.test.ts"
+  },
+  "authorityInputs": [
+    "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+    "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+    "docs/architecture/app-surface-local-in-memory-runtime.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+    "docs/architecture/app-surface-web-adapter-semantics.json",
+    "docs/architecture/mobile-adapter-semantic-surface.json",
+    "tools/validate-app-surface/fixtures/conforming/002-route-with-capability-mapping.json",
+    "tools/validate-app-surface/planted-defects/002-route-without-capability-mapping.json"
+  ],
+  "implementedTargets": [
+    {
+      "targetId": "web-route-developer-home",
+      "surface": "web-route",
+      "framework": "nextjs",
+      "registryArtifactId": "usf.app-surface-web-bounded-local-route-registry",
+      "implementationPath": "apps/web/src/route-registry.ts",
+      "authorityArtifactPath": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      "path": "/",
+      "frameworkSegment": "app/page.tsx",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "privacyCategoryRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.developerProfile"
+      ],
+      "componentFixtureRefs": [
+        "component-fixture-developer-profile-summary"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "docs/architecture/app-surface-web-adapter-semantics.json"
+      ],
+      "proofRefs": [
+        "tests/apps/app-surface-web-bounded-local-scaffold.test.ts",
+        "tests/apps/app-surface-route-capability-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "unknownTargetPolicy": "fail-closed",
+      "nonClaimBoundary": "local Next.js route scaffold only; no web, deployment, CDN, staging, production, live-provider, or human-acceptance readiness claim"
+    },
+    {
+      "targetId": "mobile-screen-developer-home",
+      "surface": "mobile-screen",
+      "framework": "expo",
+      "registryArtifactId": "usf.app-surface-mobile-bounded-local-screen-registry",
+      "implementationPath": "apps/mobile/src/screen-registry.ts",
+      "authorityArtifactPath": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "routePath": "/",
+      "frameworkSegment": "DeveloperHomeScreen",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "privacyCategoryRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.developerProfile"
+      ],
+      "componentFixtureRefs": [
+        "component-fixture-developer-profile-summary"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "docs/architecture/mobile-adapter-semantic-surface.json",
+        "docs/architecture/app-surface-package-installation-proof.json"
+      ],
+      "proofRefs": [
+        "tests/apps/app-surface-mobile-bounded-local-scaffold.test.ts",
+        "tests/apps/app-surface-route-capability-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "unknownTargetPolicy": "fail-closed",
+      "nonClaimBoundary": "local Expo React Native screen scaffold only; no Expo, mobile, native, store, staging, deployment, production, live-provider, or human-acceptance readiness claim"
+    }
+  ],
+  "outOfScopeSurfaces": [
+    {
+      "surface": "command-form",
+      "ownerIssueId": "USF-1021",
+      "status": "owned-by-later-issue"
+    },
+    {
+      "surface": "query-list-detail",
+      "ownerIssueId": "USF-1022",
+      "status": "owned-by-later-issue"
+    },
+    {
+      "surface": "state-cache-query-client",
+      "ownerIssueId": "USF-1023",
+      "status": "owned-by-later-issue"
+    },
+    {
+      "surface": "auth-session-dev-identity",
+      "ownerIssueId": "USF-1024",
+      "status": "owned-by-later-issue"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "implementedTargetsMustMatchScaffoldArtefacts": true,
+    "everyTargetMustHaveCapabilityOwnership": true,
+    "everyTargetMustHavePermissionRefs": true,
+    "everyTargetMustHaveTenantBoundaryRef": true,
+    "everyTargetMustHaveProofRefs": true,
+    "unknownTargetsMustFailClosed": true,
+    "usf930StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "outOfScopeSurfacesRemainOwnedByLaterIssues": true
+  },
+  "validationCommands": [
+    "strict JSON parse for this artefact and modified JSON files",
+    "corepack pnpm vitest run tests/apps/app-surface-route-capability-implementation.test.ts",
+    "corepack pnpm typecheck",
+    "corepack pnpm validate-spec",
+    "corepack pnpm validate-spec:selftest",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "proofLadderClassification": {
+    "devLocal": true,
+    "unitTests": true,
+    "contractTests": true,
+    "contractTestReason": "The cross-surface test proves route and screen registries match repository authority artefacts and USF-930-style route-capability guardrails.",
+    "composeRequired": false,
+    "composeReason": "The implemented route and screen mappings are local registry semantics and do not cross provider semantics.",
+    "stagingRequired": false,
+    "stagingReason": "The implementation is local-only and does not create public, deployment-adjacent, provider-staging, or human-acceptance evidence."
+  },
+  "nonClaims": {
+    "productUiReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "cdnReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "providerSetup": false,
+    "credentialSetup": false,
+    "externalServiceUse": false,
+    "humanAcceptance": false,
+    "accessibilityCompliance": false,
+    "internationalisationReadiness": false,
+    "monetisationReadiness": false,
+    "complianceReadiness": false
+  }
+}
