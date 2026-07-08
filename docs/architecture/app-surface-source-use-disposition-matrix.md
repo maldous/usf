@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Document type** | Architecture / source-use disposition matrix |
-| **Status** | Draft / USF-1018 bounded mobile scaffold coverage |
+| **Status** | Draft / USF-1021 bounded command/form coverage |
 | **Authority level** | Reviewable source-use matrix; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the app-surface implementation realisation plan |
-| **Issue scope** | USF-1014, USF-1015, USF-1016, USF-1017, USF-1018 |
+| **Issue scope** | USF-1014, USF-1015, USF-1016, USF-1017, USF-1018, USF-1020, USF-1021 |
 | **Source row basis** | `docs/architecture/app-surface-implementation-realisation-plan.json`, `docs/architecture/app-surface-workspace-package-boundaries.json`, `docs/architecture/target-implementation-topology-plan.md` |
 
-This matrix records target-file treatment for bounded app-surface workspace/package boundary work, the USF-1015 local shared-client consumption path, the USF-1016 local in-memory app-surface runtime, the USF-1017 bounded local web scaffold, and the USF-1018 bounded local mobile scaffold. It does not authorise external provider setup, deployment, staging, store setup, live-provider integration, production readiness, monetisation readiness, package publication readiness, generated SDK readiness, or direct runtime/application code import from source lineage.
+This matrix records target-file treatment for bounded app-surface workspace/package boundary work, the USF-1015 local shared-client consumption path, the USF-1016 local in-memory app-surface runtime, the USF-1017 bounded local web scaffold, the USF-1018 bounded local mobile scaffold, the USF-1020 route-capability implementation, and the USF-1021 bounded local command/form implementation. It does not authorise external provider setup, deployment, staging, store setup, live-provider integration, production readiness, monetisation readiness, package publication readiness, generated SDK readiness, or direct runtime/application code import from source lineage.
 
 ## Treatment Rules
 
@@ -92,3 +92,14 @@ USF-1018 adds a bounded local Expo scaffold only. This is the bounded local mobi
 | `tools/validate-app-surface/validate-app-surface.py` | USF-authored | Adds a real implementation guard for the USF-1020 route-capability artefact while preserving the existing synthetic fixture suite. | Does not infer product behaviour from framework files or upgrade validator success into readiness. |
 
 USF-1020 consolidates the currently implemented bounded local web route and mobile screen mappings. It does not implement command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, deployment, provider setup, or parent closure work.
+
+## USF-1021 command and form implementation source-use disposition
+
+| Path | Status | Disposition | Non-claim boundary |
+| --- | --- | --- | --- |
+| `packages/app-surface/src/index.ts` | USF-authored | Extends the existing dependency-free local app-surface package with a command/form registry validator and local exercise helper over governed command, validation, permission, error, audit, idempotency, tenant, component-fixture, and proof references. | Does not create a server mutation provider, external form submission, network call, credential use, production command execution, deployment, staging, live-provider readiness, compliance readiness, or human acceptance. |
+| `docs/architecture/app-surface-command-form-implementation.json` | USF-authored | Repository-owned command/form implementation map for the bounded local API-key onboarding command form. | Does not claim command execution readiness beyond local mapping proof and does not authorise query/list/detail, state/cache, provider setup, deployment, staging, production, compliance, or human acceptance. |
+| `tests/packages/app-surface-command-form-implementation.test.ts` | USF-authored | Unit and contract-style tests proving command/form mappings pass when governed and fail closed for missing command authority, missing validation/audit mappings, UI-only business rules, unknown forms, missing proof refs, and non-claim drift. | Does not require external providers, credentials, Compose, staging, deployment, stores, native signing, EAS, or human acceptance. |
+| `tools/validate-app-surface/validate-app-surface.py` | USF-authored | Adds a real implementation guard for the USF-1021 command/form artefact while preserving the existing synthetic fixture suite and USF-1020 route-capability guard. | Does not infer product behaviour from package files or upgrade validator success into provider, deployment, staging, production, compliance, monetisation, or human-acceptance readiness. |
+
+USF-1021 implements a bounded local command/form mapping only. It does not implement query/list/detail, state/cache/query client, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, deployment, provider setup, or parent closure work.

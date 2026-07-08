@@ -1,0 +1,134 @@
+{
+  "artifactId": "usf.app-surface-command-form-implementation",
+  "title": "App-surface command and form implementation",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1021",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local command and form implementation for USF-1021. It maps the first local command form to governed USF command, validation, permission, error, idempotency, audit, tenant, component fixture, semantic source, and proof references. It does not create a server mutation provider, submit to external services, mint credentials, invent UI-only business rules, execute production commands, deploy, run staging proof, or claim provider, deployment, compliance, production, live-provider, or human-acceptance readiness.",
+  "scope": {
+    "implementedSurface": "bounded-local-command-form-mapping",
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_COMMAND_FORM_REGISTRY",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "testArtefact": "tests/packages/app-surface-command-form-implementation.test.ts"
+  },
+  "authorityInputs": [
+    "docs/architecture/app-surface-local-in-memory-runtime.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+    "docs/architecture/shared-client-interaction-contract-semantics.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json",
+    "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
+  ],
+  "implementedCommands": [
+    {
+      "formId": "command-form-api-key-onboarding",
+      "componentFixtureRef": "component-fixture-api-key-onboarding",
+      "commandRef": "command.onboardApiKey",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:key:onboard"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "validationRefs": [
+        "docs/architecture/generated-client-contract-validation-semantics.json#validationSchemaGeneration",
+        "typed-error-problem-details-model"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model",
+        "safe-denial:invalid-label"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.onboardApiKey"
+      ],
+      "idempotencyBoundaryRef": "idempotency-boundary-required-for-command",
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "docs/architecture/shared-client-interaction-contract-semantics.json",
+        "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-command-form-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "uiOnlyBusinessRulesAllowed": false,
+      "rejectedUiOnlyBusinessRuleInputs": [
+        "ui-only-required-field",
+        "presentation-only-permission-check",
+        "client-only-business-state-transition"
+      ],
+      "nonClaimBoundary": "local command form mapping only; no server mutation provider, external form submission, production command execution, deployment, staging, live-provider, compliance, or human-acceptance readiness claim"
+    }
+  ],
+  "outOfScopeSurfaces": [
+    {
+      "surface": "server-mutation-provider",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "external-form-submission",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "production-command-execution",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "query-list-detail",
+      "ownerIssueId": "USF-1022",
+      "status": "owned-by-later-issue"
+    },
+    {
+      "surface": "state-cache-query-client",
+      "ownerIssueId": "USF-1023",
+      "status": "owned-by-later-issue"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "commandsMustMapToSemanticCommandAuthority": true,
+    "validationPermissionErrorAuditMappingsMustExist": true,
+    "idempotencyBoundaryMustExist": true,
+    "tenantBoundaryMustExist": true,
+    "uiOnlyBusinessRulesMustBeRejected": true,
+    "unknownCommandFormsMustFailClosed": true,
+    "usf931StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "externalSubmissionMustRemainForbidden": true,
+    "serverMutationProviderMustRemainForbidden": true
+  },
+  "validationCommands": [
+    "strict JSON parse for this artefact and modified JSON files",
+    "corepack pnpm vitest run tests/packages/app-surface-command-form-implementation.test.ts",
+    "corepack pnpm typecheck",
+    "corepack pnpm validate-spec",
+    "corepack pnpm validate-spec:selftest",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "proofLadderClassification": {
+    "devLocal": true,
+    "unitTests": true,
+    "contractTests": true,
+    "contractTestReason": "The command form test proves mapping against local runtime semantics, shared-client command semantics, and USF-931-style validator fixtures.",
+    "composeRequired": false,
+    "composeReason": "The command form mapping uses local registry semantics and does not cross provider semantics.",
+    "stagingRequired": false,
+    "stagingReason": "The implementation is local-only and does not create public, deployment-adjacent, provider-staging, or human-acceptance evidence."
+  },
+  "nonClaims": {
+    "commandExecutionReadiness": false,
+    "productionCommandReadiness": false,
+    "providerReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "complianceReadiness": false,
+    "humanAcceptance": false
+  }
+}
