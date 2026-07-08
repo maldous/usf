@@ -588,6 +588,27 @@ function validateCommandFormStringAuthority(
   }
 }
 
+function commandFormArraysEqual(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function commandFormMatchesRegistry(
+  registered: (typeof LOCAL_COMMAND_FORM_REGISTRY.commands)[number],
+  candidate: LocalCommandFormMapping,
+): boolean {
+  for (const field of REQUIRED_COMMAND_FORM_STRING_FIELDS) {
+    if (registered[field] !== candidate[field]) {
+      return false;
+    }
+  }
+  for (const field of REQUIRED_COMMAND_FORM_ARRAY_FIELDS) {
+    if (!commandFormArraysEqual(registered[field], candidate[field])) {
+      return false;
+    }
+  }
+  return registered.uiOnlyBusinessRulesAllowed === candidate.uiOnlyBusinessRulesAllowed;
+}
+
 function validateCommandForm(
   commandForm: LocalCommandFormMapping | unknown,
   index: number,
@@ -688,6 +709,13 @@ export function exerciseLocalCommandForm(
   commandForm: LocalCommandFormMapping,
   semanticAuthority?: LocalCommandFormSemanticAuthority,
 ): LocalCommandFormExerciseOutcome {
+  const registered = LOCAL_COMMAND_FORM_REGISTRY.commands.find((candidate) => candidate.formId === commandForm.formId);
+  if (!registered) {
+    throw new Error(`command-form-unregistered:${commandForm.formId}`);
+  }
+  if (!commandFormMatchesRegistry(registered, commandForm)) {
+    throw new Error(`command-form-registry-mismatch:${commandForm.formId}`);
+  }
   const validation = validateCommandForm(commandForm, 0, semanticAuthority);
   if (validation.length > 0) {
     throw new Error(`command-form-invalid:${validation.join(",")}`);
