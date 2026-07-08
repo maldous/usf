@@ -356,6 +356,11 @@ USF133_REQUIRED_GATE_INPUTS = {
 
 # UI/browser artefact markers that the UI-agnostic foundation must not contain
 # without separate authority. Scanned over tracked first-party files only.
+AUTHORISED_UI_ARTEFACT_ROOTS = {
+    "apps/web": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+}
+
+
 def is_ui_artefact_path(path):
     base = os.path.basename(path)
     return (
@@ -364,6 +369,33 @@ def is_ui_artefact_path(path):
         or "/playwright-report" in path
         or path.split("/")[:2] == ["apps", "web"]
     )
+
+
+def is_authorised_ui_artefact_path(path):
+    for root, authority_path in AUTHORISED_UI_ARTEFACT_ROOTS.items():
+        if path != root and not path.startswith(f"{root}/"):
+            continue
+        authority, error = read_json_or_error(authority_path)
+        if error is not None or not isinstance(authority, dict):
+            return False
+        boundary = authority.get("implementationBoundary", {})
+        non_claims = authority.get("nonClaims", {})
+        return (
+            authority.get("ownerIssueId") == "USF-1017"
+            and boundary.get("workspacePackage") == root
+            and boundary.get("externalServicesAllowed") is False
+            and boundary.get("credentialsAllowed") is False
+            and boundary.get("deploymentAllowed") is False
+            and boundary.get("stagingAllowed") is False
+            and boundary.get("providerSetupAllowed") is False
+            and non_claims.get("webReadiness") is False
+            and non_claims.get("deploymentReadiness") is False
+            and non_claims.get("stagingReadiness") is False
+            and non_claims.get("productionReadiness") is False
+            and non_claims.get("liveProviderReadiness") is False
+            and non_claims.get("humanAcceptance") is False
+        )
+    return False
 
 
 class Findings:
@@ -631,9 +663,9 @@ def check_rows(F, state):
 
 def check_no_unauthorised_ui_artefacts(F, state):
     offenders = sorted(p for p in state["paths"] if is_ui_artefact_path(p))
-    # An authority marker (a future authorised UI scope) would live as an ADR; none exists.
     for path in offenders:
-        F.add("USF-PARITY-017", path, "UI/React/browser artefact present in the UI-agnostic foundation without separate authority")
+        if not is_authorised_ui_artefact_path(path):
+            F.add("USF-PARITY-017", path, "UI/React/browser artefact present in the UI-agnostic foundation without separate authority")
 
 
 def _catalogue_service_map(catalogue):
