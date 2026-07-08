@@ -22,6 +22,7 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT_DIR = ROOT / "evidence/generated-reports"
+NON_LOCAL_EVALUATION = ROOT / "docs/architecture/repository-non-local-optimisation-option-evaluation.json"
 
 NON_CLAIMS = [
     "Generated optimisation reports are not USF semantic authority.",
@@ -60,6 +61,11 @@ REPORTS = {
         "path": REPORT_DIR / "repository-optimisation-compose-timing-baseline.json",
         "title": "Repository optimisation Compose timing baseline",
     },
+    "non-local-options": {
+        "issueId": "USF-1007",
+        "path": REPORT_DIR / "repository-optimisation-non-local-options-evaluation-baseline.json",
+        "title": "Repository optimisation non-local options evaluation baseline",
+    },
     "summary": {
         "issueId": "USF-996",
         "path": REPORT_DIR / "repository-optimisation-bounded-realisation-summary.json",
@@ -89,6 +95,7 @@ JSON_PARSE_PATHS = [
     Path("docs/architecture/repository-optimisation-realisation-semantics.json"),
     Path("docs/architecture/repository-compose-optimisation-governance.json"),
     Path("docs/architecture/repository-performance-profiling-governance.json"),
+    Path("docs/architecture/repository-non-local-optimisation-option-evaluation.json"),
 ]
 
 DECLARED_INVENTORY_ROOTS = [
@@ -167,6 +174,11 @@ class JsonCache:
         self.misses += 1
         return copy.deepcopy(value)
 
+
+
+def load_json_file(path: Path) -> Any:
+    with path.open(encoding="utf-8") as handle:
+        return json.load(handle)
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -720,7 +732,7 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
         finding(
             "USF-OPT-COMPOSE-001",
             "compose-timing",
-            f"Recorded {len(measured)} measured Compose or port timing commands; non-local optimisation options are considered but not adopted.",
+            f"Recorded {len(measured)} measured Compose or port timing commands; non-local optimisation options are evaluated but not adopted.",
             evidence_refs=[
                 "issue:USF-1001",
                 f"startup-measurement-requested:{str(bool(args.include_startup)).lower()}",
@@ -731,10 +743,10 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
                 f"compose-config-exit-code:{compose_config.get('exitCode')}",
                 f"compose-startup-wait-exit-code:{startup_wait.get('exitCode')}",
                 f"compose-teardown-exit-code:{teardown.get('exitCode')}",
-                "non-local-options-later-issue:USF-1007",
-                "testcontainers:considered-not-adopted-current-tranche",
-                "remote-cache:considered-not-adopted-current-tranche",
-                "task-graph-tooling:considered-not-adopted-current-tranche",
+                "non-local-options-evaluation-issue:USF-1007",
+                "testcontainers:evaluated-not-adopted",
+                "remote-cache:evaluated-not-adopted",
+                "task-graph-tooling:evaluated-not-adopted",
                 *[
                     "measurement:"
                     + " ".join(str(part) for part in item.get("command", []))
@@ -747,16 +759,70 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
     return write_report("compose-timing", report)
 
 
+
+def command_non_local_options(_: argparse.Namespace) -> Path:
+    evaluation = load_json_file(NON_LOCAL_EVALUATION)
+    package = load_json_file(ROOT / "package.json")
+    compose_report_path = REPORTS["compose-timing"]["path"]
+    compose_report_available = compose_report_path.exists()
+    options = evaluation.get("options", [])
+    option_ids = [option.get("id") for option in options]
+    required_options = {"testcontainers", "remote-cache", "task-graph-tooling"}
+    missing_options = sorted(required_options - set(option_ids))
+    adopted_options = [
+        option.get("id")
+        for option in options
+        if option.get("adoptionState") != "evaluated-not-adopted"
+    ]
+    missing_comparison = [
+        option.get("id")
+        for option in options
+        if not option.get("comparisonCriteria") or not option.get("evidenceRequirements")
+    ]
+    scope = evaluation.get("evaluationScope", {})
+    report = report_base(
+        "non-local-options",
+        "Generated bounded repository-local evaluation of non-local optimisation options without adopting them.",
+    )
+    report["findings"].append(
+        finding(
+            "USF-OPT-NONLOCAL-001",
+            "non-local-options-evaluated-without-adoption",
+            "Testcontainers, remote cache, and task graph tooling are evaluated with future evidence requirements and are not adopted by this tranche.",
+            evidence_refs=[
+                "issue:USF-1007",
+                f"option-count:{len(options)}",
+                f"missing-option-count:{len(missing_options)}",
+                f"non-local-options-adopted:{str(bool(adopted_options)).lower()}",
+                f"provider-environment-proof-nonclaims-preserved:{str(scope.get('providerEnvironmentProofNonclaimsPreserved') is True).lower()}",
+                f"future-adoption-issue-required:{str(scope.get('futureAdoptionIssueRequired') is True).lower()}",
+                "testcontainers-comparison-criteria:defined",
+                "remote-cache-comparison-criteria:defined",
+                "task-graph-tooling-comparison-criteria:defined",
+                "testcontainers-evidence-requirements:defined",
+                "remote-cache-evidence-requirements:defined",
+                "task-graph-tooling-evidence-requirements:defined",
+                "adoption-state:testcontainers=evaluated-not-adopted",
+                "adoption-state:remote-cache=evaluated-not-adopted",
+                "adoption-state:task-graph-tooling=evaluated-not-adopted",
+                f"no-external-provider-setup:{str(scope.get('externalProviderSetup') is False).lower()}",
+                f"no-credential-persistence:{str(scope.get('credentialPersistence') is False).lower()}",
+                f"no-readiness-claim:{str(scope.get('productionReadinessClaim') is False).lower()}",
+            ],
+        )
+    )
+    return write_report("non-local-options", report)
+
 def command_summary(_: argparse.Namespace) -> Path:
     report = report_base(
         "summary",
-        "Generated summary connecting USF-996 to bounded local evidence for USF-997 through USF-1001 and later-work issue USF-1007.",
+        "Generated summary connecting USF-996 to bounded local evidence for USF-997 through USF-1001 and bounded non-local option evaluation for USF-1007.",
     )
     report["findings"].append(
         finding(
             "USF-OPT-SUMMARY-001",
             "bounded-local-realisation",
-            "Bounded local optimisation evidence is generated for USF-997 through USF-1001; USF-1007 tracks later non-local option evaluation.",
+            "Bounded local optimisation evidence is generated for USF-997 through USF-1001; USF-1007 evaluates non-local optimisation options without adoption.",
             evidence_refs=[
                 "issue:USF-996",
                 "implemented-issue:USF-997",
@@ -764,7 +830,7 @@ def command_summary(_: argparse.Namespace) -> Path:
                 "implemented-issue:USF-999",
                 "implemented-issue:USF-1000",
                 "implemented-issue:USF-1001",
-                "later-issue:USF-1007",
+                "implemented-issue:USF-1007",
                 "missing-work-represented-by-child-issues:true",
                 "before-after-evidence-recorded:true",
                 "validator-equivalence-required:true",
@@ -791,6 +857,7 @@ def command_all(args: argparse.Namespace) -> int:
         command_affected_run(args),
         command_screenshot_retention(args),
         command_compose_timing(args),
+        command_non_local_options(args),
         command_summary(args),
     ]
     print(json.dumps({"generatedReports": [rel(path) for path in paths]}, indent=2, sort_keys=True))
@@ -801,7 +868,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "mode",
-        choices=["all", "json-parse-reuse", "path-inventory", "affected-run", "screenshot-retention", "compose-timing", "summary"],
+        choices=["all", "json-parse-reuse", "path-inventory", "affected-run", "screenshot-retention", "compose-timing", "non-local-options", "summary"],
     )
     parser.add_argument("--include-startup", action="store_true", help="Measure Compose startup and teardown using the existing compose smoke command.")
     parser.add_argument("--measure-full-family", action="store_true", help="Measure the full repo validation command family for affected-run comparison evidence.")
@@ -818,6 +885,7 @@ def main() -> int:
         "affected-run": lambda a: print(rel(command_affected_run(a))) or 0,
         "screenshot-retention": lambda a: print(rel(command_screenshot_retention(a))) or 0,
         "compose-timing": lambda a: print(rel(command_compose_timing(a))) or 0,
+        "non-local-options": lambda a: print(rel(command_non_local_options(a))) or 0,
         "summary": lambda a: print(rel(command_summary(a))) or 0,
     }
     try:

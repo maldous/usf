@@ -24,7 +24,8 @@
     "USF-1001": "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json",
     "USF-997": "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
     "USF-998": "evidence/generated-reports/repository-optimisation-path-inventory-baseline.json",
-    "USF-999": "evidence/generated-reports/repository-optimisation-affected-run-baseline.json"
+    "USF-999": "evidence/generated-reports/repository-optimisation-affected-run-baseline.json",
+    "USF-1007": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json"
   },
   "boundedLocalSummaryReport": "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json",
   "fullValidationAuthorityPreserved": true,
@@ -59,7 +60,8 @@
       "evidenceReport": "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json",
       "issueId": "USF-1001",
       "status": "implemented-bounded-local"
-    }
+    },
+    "USF-1007"
   ],
   "issueCompletionEvidence": {
     "USF-997": {
@@ -110,12 +112,25 @@
         "Compose remains the canonical service-backed proof path until side-by-side equivalence and improvement evidence supports any later substitution."
       ],
       "report": "evidence/generated-reports/repository-optimisation-compose-timing-baseline.json"
+    },
+    "USF-1007": {
+      "status": "implemented-bounded-local",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "generatedReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+      "validator": "tools/validate-repository-optimisation/validate-repository-optimisation.py",
+      "nonClaims": [
+        "no Testcontainers adoption",
+        "no remote cache adoption",
+        "no task graph tooling adoption",
+        "no external provider setup",
+        "no credential persistence",
+        "no staging or deployment claim",
+        "no production readiness claim"
+      ]
     }
   },
   "issueId": "USF-996",
-  "laterWorkIssueIds": [
-    "USF-1007"
-  ],
+  "laterWorkIssueIds": [],
   "lifecycleState": "defined",
   "linearIssuesCreated": [
     {
@@ -155,6 +170,12 @@
       "purpose": "Track later comparison of Testcontainers, remote cache, and task graph tooling without adoption in the current bounded local tranche.",
       "status": "todo",
       "title": "Evaluate non-local optimisation options without adoption"
+    },
+    {
+      "issueId": "USF-1007",
+      "status": "implemented-bounded-local",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "generatedReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json"
     }
   ],
   "localRealisationCompletionBoundary": {
@@ -178,20 +199,29 @@
     "No store, compliance, release, or human-acceptance claim is made.",
     "Generated timing reports remain lower authority than semantic definitions, ADRs, validators, and runtime proof evidence."
   ],
-  "nonLocalOptimisationOptionDisposition": {
-    "remoteCache": {
-      "laterIssueId": "USF-1007",
-      "status": "considered-not-adopted-current-tranche"
+  "nonLocalOptimisationOptionDisposition": [
+    {
+      "option": "testcontainers",
+      "status": "evaluated-not-adopted",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+      "futureAdoptionIssueRequired": true
     },
-    "taskGraphTooling": {
-      "laterIssueId": "USF-1007",
-      "status": "considered-not-adopted-current-tranche"
+    {
+      "option": "remote-cache",
+      "status": "evaluated-not-adopted",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+      "futureAdoptionIssueRequired": true
     },
-    "testcontainers": {
-      "laterIssueId": "USF-1007",
-      "status": "considered-not-adopted-current-tranche"
+    {
+      "option": "task-graph-tooling",
+      "status": "evaluated-not-adopted",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "evidenceReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+      "futureAdoptionIssueRequired": true
     }
-  },
+  ],
   "nonLocalOptimisationOptionsAdopted": false,
   "policyOnlyDecisions": [
     {
@@ -296,5 +326,15 @@
       }
     ]
   },
-  "title": "Repository Optimisation Local Realisation Tranche"
+  "title": "Repository Optimisation Local Realisation Tranche",
+  "nonLocalOptionsEvaluatedWithoutAdoption": true,
+  "nonLocalOptionEvaluationArtifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+  "nonLocalOptionEvaluationReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+  "realisationEvidence": {
+    "USF-1007": {
+      "type": "bounded-local-evaluation",
+      "artifact": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "report": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json"
+    }
+  }
 }

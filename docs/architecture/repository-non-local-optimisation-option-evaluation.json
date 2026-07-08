@@ -1,0 +1,130 @@
+{
+  "id": "repository-non-local-optimisation-option-evaluation",
+  "title": "Repository non-local optimisation option evaluation",
+  "purpose": "Evaluate non-local timing optimisation options without adopting external providers, credentials, staging infrastructure, deployment claims, or production readiness claims.",
+  "authorityReferences": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/repository-optimisation-realisation-semantics.json",
+    "docs/architecture/repository-compose-optimisation-governance.json",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "docs/architecture/repository-optimisation-local-realisation-tranche.json"
+  ],
+  "linearIssueId": "USF-1007",
+  "tracksWorkOnlyStatement": "This issue tracks work only. It does not define USF semantic authority.",
+  "evaluationScope": {
+    "boundedLocalRepositoryChange": true,
+    "adoptionBoundary": false,
+    "externalProviderSetup": false,
+    "credentialPersistence": false,
+    "stagingOrDeploymentChange": false,
+    "productionReadinessClaim": false,
+    "providerEnvironmentProofNonclaimsPreserved": true,
+    "futureAdoptionIssueRequired": true,
+    "futureAdoptionAuthorityRequired": [
+      "semantic authority update",
+      "ADR or equivalent accepted decision",
+      "validator expectations",
+      "runtime proof evidence where behaviour is claimed",
+      "Linear issue tracking the adoption work only"
+    ]
+  },
+  "options": [
+    {
+      "id": "testcontainers",
+      "label": "Testcontainers for composed service lifecycle timing",
+      "adoptionState": "evaluated-not-adopted",
+      "reasonNotAdopted": "Testcontainers may reduce bespoke compose orchestration overhead and improve per-test lifecycle isolation, but adoption would introduce new runtime dependencies, image lifecycle semantics, network lifecycle semantics, and proof expectations outside the bounded local optimisation tranche.",
+      "comparisonCriteria": [
+        "repeatable cold-start and warm-start timing across at least three local runs",
+        "service readiness equivalence with the existing composed semantic harness",
+        "failure-mode equivalence for unavailable ports, unhealthy services, and teardown errors",
+        "provider-mode and environment nonclaim preservation",
+        "developer setup cost and dependency availability impact"
+      ],
+      "evidenceRequirements": [
+        "before-and-after composed service timing report",
+        "deterministic fixture lifecycle proof equivalence",
+        "validator update proving Testcontainers-specific proof cannot satisfy live-external-provider or production-live claims",
+        "rollback path preserving existing compose compatibility"
+      ],
+      "futureIssueRequiredForAdoption": true
+    },
+    {
+      "id": "remote-cache",
+      "label": "Remote cache for repeated validation and build work",
+      "adoptionState": "evaluated-not-adopted",
+      "reasonNotAdopted": "Remote cache could reduce repeated validation cost, but adoption would require external service trust boundaries, cache-key semantics, credential handling, artifact retention semantics, and false-pass protection that are not authorised in the bounded local tranche.",
+      "comparisonCriteria": [
+        "local no-cache baseline versus cache-hit and cache-miss timing",
+        "cache-key completeness for semantic artefacts, validators, package manager lockfiles, generated reports, and environment inputs",
+        "fail-closed behaviour for missing, stale, or untrusted cache entries",
+        "credential-free local fallback equivalence",
+        "auditability of cached evidence and generated report provenance"
+      ],
+      "evidenceRequirements": [
+        "cache-key design document tied to authority references",
+        "validator proof that stale or missing remote cache cannot satisfy pass evidence",
+        "credential storage and rotation decision before any external cache use",
+        "local fallback timing and correctness evidence"
+      ],
+      "futureIssueRequiredForAdoption": true
+    },
+    {
+      "id": "task-graph-tooling",
+      "label": "Task graph tooling for affected-run and validation orchestration",
+      "adoptionState": "evaluated-not-adopted",
+      "reasonNotAdopted": "Task graph tooling could improve affected-run selection and command scheduling, but adoption would redefine validation orchestration boundaries and requires explicit graph semantics so affected-run remains warn-only until authorised.",
+      "comparisonCriteria": [
+        "graph construction cost versus current direct command timing",
+        "affected-file to validator dependency completeness",
+        "fail-closed behaviour when graph metadata is missing or stale",
+        "compatibility with current Make and package script entry points",
+        "ability to keep affected-run advisory until separate authority promotes it"
+      ],
+      "evidenceRequirements": [
+        "dependency graph semantics and validator coverage mapping",
+        "before-and-after affected-run timing evidence",
+        "full validation equivalence evidence for changed-file samples",
+        "explicit authority decision before affected-run becomes pass-fail gating"
+      ],
+      "futureIssueRequiredForAdoption": true
+    }
+  ],
+  "outputs": {
+    "generatedReport": "evidence/generated-reports/repository-optimisation-non-local-options-evaluation-baseline.json",
+    "validator": "tools/validate-repository-optimisation/validate-repository-optimisation.py",
+    "command": "corepack pnpm repository-optimisation:non-local"
+  },
+  "nonGoals": [
+    "adopting Testcontainers",
+    "adopting remote cache",
+    "adopting task graph tooling",
+    "adding external providers or credentials",
+    "creating staging, deployment, store, or production-live claims",
+    "changing affected-run from warn-only to authoritative gating"
+  ],
+  "acceptanceCriteria": [
+    {
+      "criterion": "All non-local timing options are explicitly evaluated.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "No non-local option is adopted by this bounded tranche.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Each option has comparison criteria and evidence requirements for future adoption.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "Provider, environment, staging, deployment, and production-readiness nonclaims are preserved.",
+      "status": "satisfied"
+    },
+    {
+      "criterion": "A validator enforces the bounded non-adoption posture.",
+      "status": "satisfied"
+    }
+  ]
+}

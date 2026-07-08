@@ -136,7 +136,8 @@
     "linear-boundary:validate": "python3 tools/validate-linear-boundary/validate-linear-boundary.py all --json",
     "linear-boundary:selftest": "python3 tools/validate-linear-boundary/validate-linear-boundary.py selftest --json",
     "app-surface:validate": "python3 tools/validate-app-surface/validate-app-surface.py all --json",
-    "app-surface:selftest": "python3 tools/validate-app-surface/validate-app-surface.py selftest --json"
+    "app-surface:selftest": "python3 tools/validate-app-surface/validate-app-surface.py selftest --json",
+    "repository-optimisation:non-local": "python3 tools/repository-optimisation/realise-bounded-optimisation.py non-local-options"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1077.0",

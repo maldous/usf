@@ -1,0 +1,51 @@
+{
+  "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated bounded repository-local evaluation of non-local optimisation options without adopting them.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/realise-bounded-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-1007",
+        "option-count:3",
+        "missing-option-count:0",
+        "non-local-options-adopted:false",
+        "provider-environment-proof-nonclaims-preserved:true",
+        "future-adoption-issue-required:true",
+        "testcontainers-comparison-criteria:defined",
+        "remote-cache-comparison-criteria:defined",
+        "task-graph-tooling-comparison-criteria:defined",
+        "testcontainers-evidence-requirements:defined",
+        "remote-cache-evidence-requirements:defined",
+        "task-graph-tooling-evidence-requirements:defined",
+        "adoption-state:testcontainers=evaluated-not-adopted",
+        "adoption-state:remote-cache=evaluated-not-adopted",
+        "adoption-state:task-graph-tooling=evaluated-not-adopted",
+        "no-external-provider-setup:true",
+        "no-credential-persistence:true",
+        "no-readiness-claim:true"
+      ],
+      "message": "Testcontainers, remote cache, and task graph tooling are evaluated with future evidence requirements and are not adopted by this tranche.",
+      "ruleId": "USF-OPT-NONLOCAL-001",
+      "severity": "info",
+      "subject": "non-local-options-evaluated-without-adoption"
+    }
+  ],
+  "id": "usf.repository-optimisation.non-local-options",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository optimisation non-local options evaluation baseline",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}
