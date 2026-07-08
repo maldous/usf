@@ -85,6 +85,8 @@ BROWSER_TELEMETRY_NOTE = "docs/architecture/browser-telemetry-faro-foundation-pr
 APP_SURFACE_SOURCE_USE = "docs/architecture/app-surface-source-use-disposition-matrix.md"
 APP_SURFACE_TOPOLOGY = "docs/architecture/target-implementation-topology-plan.md"
 APP_SURFACE_UI_MANIFEST = "packages/ui/package.json"
+APP_SURFACE_WEB_MANIFEST = "apps/web/package.json"
+APP_SURFACE_WEB_SCAFFOLD = "docs/architecture/app-surface-web-bounded-local-scaffold.json"
 SENTRY_BOUNDARY = "docs/architecture/sentry-service-semantic-proof-boundary.json"
 SENTRY_ERROR_MATRIX = "docs/architecture/sentry-error-monitoring-disposition-matrix.json"
 CLOSURE_MATRIX = "docs/architecture/compose-service-disposition-closure-matrix.json"
@@ -256,6 +258,80 @@ def is_authorized_app_surface_ui_metadata_boundary():
         "usf-1014",
         "`packages/ui/package.json`",
         "runtime implementation",
+    )
+    return all(marker in source_use for marker in required_markers) and all(marker in topology for marker in required_markers)
+
+
+def is_authorized_app_surface_web_scaffold_boundary():
+    """Return true only for the USF-1017 bounded local web scaffold."""
+    if not os.path.isdir("apps/web"):
+        return False
+
+    expected_files = {
+        "apps/web/app/layout.tsx",
+        "apps/web/app/page.tsx",
+        "apps/web/next-env.d.ts",
+        "apps/web/next.config.mjs",
+        APP_SURFACE_WEB_MANIFEST,
+        "apps/web/src/route-registry.ts",
+        "apps/web/tsconfig.json",
+    }
+    actual_files = set()
+    for root, dirs, files in os.walk("apps/web"):
+        dirs[:] = [name for name in dirs if name != "node_modules"]
+        for filename in files:
+            actual_files.add(os.path.join(root, filename).replace("\\", "/"))
+    if actual_files != expected_files:
+        return False
+
+    manifest = read_json(APP_SURFACE_WEB_MANIFEST)
+    if not isinstance(manifest, dict):
+        return False
+    if manifest.get("name") != "@foundation/app-web" or manifest.get("private") is not True:
+        return False
+    for dependency_field in ("dependencies", "devDependencies", "peerDependencies", "optionalDependencies"):
+        if manifest.get(dependency_field):
+            return False
+
+    scaffold = read_json(APP_SURFACE_WEB_SCAFFOLD)
+    if not isinstance(scaffold, dict):
+        return False
+    boundary = scaffold.get("implementationBoundary", {})
+    non_claims = scaffold.get("nonClaims", {})
+    if not isinstance(boundary, dict) or not isinstance(non_claims, dict):
+        return False
+    if (
+        scaffold.get("ownerIssueId") != "USF-1017"
+        or boundary.get("workspacePackage") != "apps/web"
+        or boundary.get("externalServicesAllowed") is not False
+        or boundary.get("credentialsAllowed") is not False
+        or boundary.get("deploymentAllowed") is not False
+        or boundary.get("stagingAllowed") is not False
+        or boundary.get("providerSetupAllowed") is not False
+    ):
+        return False
+    for claim in (
+        "webReadiness",
+        "deploymentReadiness",
+        "cdnReadiness",
+        "stagingReadiness",
+        "productionReadiness",
+        "liveProviderReadiness",
+        "providerSetup",
+        "credentialSetup",
+        "externalServiceUse",
+        "humanAcceptance",
+    ):
+        if non_claims.get(claim) is not False:
+            return False
+
+    source_use = read_text(APP_SURFACE_SOURCE_USE).lower()
+    topology = read_text(APP_SURFACE_TOPOLOGY).lower()
+    required_markers = (
+        "usf-1017",
+        "`apps/web/package.json`",
+        "`apps/web/src/route-registry.ts`",
+        "bounded local web scaffold",
     )
     return all(marker in source_use for marker in required_markers) and all(marker in topology for marker in required_markers)
 
@@ -1260,6 +1336,8 @@ def run_checks(F, state=None):
         F.add("USF-OBSERVABILITY-022", f"{BROWSER_TELEMETRY_DEPTH}.minimalHarnessScope.uiSurfaceDisposition", "minimal proof-only UI disposition is required")
     for forbidden_path in ("apps/web", "apps/ui", "apps/browser", "packages/ui", "packages/web"):
         if os.path.exists(forbidden_path):
+            if forbidden_path == "apps/web" and is_authorized_app_surface_web_scaffold_boundary():
+                continue
             if forbidden_path == "packages/ui" and is_authorized_app_surface_ui_metadata_boundary():
                 continue
             F.add("USF-OBSERVABILITY-022", forbidden_path, "USF-225 must not add product UI/browser app paths")
