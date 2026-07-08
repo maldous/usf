@@ -1620,7 +1620,7 @@ const stateCacheAuthorityHas = (
   value: string,
 ): boolean => {
   if (values === undefined) {
-    return true;
+    return false;
   }
   return asStateCacheAuthorityValues(values)?.includes(value) ?? false;
 };
@@ -1879,5 +1879,649 @@ export const exerciseLocalStateCacheBoundary = (
     stagingUsed: false,
     deploymentUsed: false,
     nonClaimBoundary: mapping.nonClaimBoundary,
+  };
+};
+
+export type LocalAuthSessionProviderMode = "in-memory-dev-stub";
+export type LocalAuthSessionEnvironment = "dev-local";
+export type LocalAuthDecision = "allow" | "deny";
+export type LocalAuthRequestContextKind = "query" | "command";
+
+export interface LocalAuthSessionIdentityMapping {
+  readonly identityId: string;
+  readonly userRef: string;
+  readonly tenantBoundaryRef: string;
+  readonly sessionContextRef: string;
+  readonly roleRefs: readonly string[];
+  readonly permissionRefs: readonly string[];
+  readonly capabilityRefs: readonly string[];
+  readonly commandRefs: readonly string[];
+  readonly queryRefs: readonly string[];
+  readonly semanticSourceRefs: readonly string[];
+  readonly proofRefs: readonly string[];
+  readonly providerMode: string;
+  readonly productionIdentityProviderAllowed: boolean;
+  readonly liveOAuthOidcAllowed: boolean;
+  readonly credentialsAllowed: boolean;
+  readonly secureStorageClaimAllowed: boolean;
+  readonly externalProviderAllowed: boolean;
+  readonly nonClaimBoundary: string;
+}
+
+export interface LocalAuthPermissionCheckCase {
+  readonly checkId: string;
+  readonly identityRef: string;
+  readonly requestContextKind: string;
+  readonly permissionRef: string;
+  readonly tenantBoundaryRef: string;
+  readonly targetRef: string;
+  readonly expectedDecision: string;
+  readonly reasonCode: string;
+  readonly auditEventRef: string;
+}
+
+export interface LocalAuthPermissionRequest {
+  readonly identityRef: string;
+  readonly userRef: string;
+  readonly tenantBoundaryRef: string;
+  readonly permissionRef: string;
+  readonly requestContextKind: LocalAuthRequestContextKind;
+  readonly targetRef: string;
+}
+
+export interface LocalAuthPermissionDecisionResult {
+  readonly identityRef: string;
+  readonly userRef: string;
+  readonly tenantBoundaryRef: string;
+  readonly permissionRef: string;
+  readonly requestContextKind: LocalAuthRequestContextKind;
+  readonly targetRef: string;
+  readonly decision: LocalAuthDecision;
+  readonly reasonCode: string;
+  readonly providerMode: LocalAuthSessionProviderMode;
+  readonly environment: LocalAuthSessionEnvironment;
+  readonly auditEventRef: string;
+  readonly authReadinessClaimed: false;
+  readonly providerReadinessClaimed: false;
+  readonly productionIdentityReadinessClaimed: false;
+  readonly liveProviderReadinessClaimed: false;
+}
+
+export interface LocalAuthSessionDevIdentityRegistry {
+  readonly artifactId: string;
+  readonly ownerIssueId: string;
+  readonly providerMode: string;
+  readonly environment: string;
+  readonly unknownIdentityPolicy: string;
+  readonly missingPermissionPolicy: string;
+  readonly productionIdentityProviderAllowed: boolean;
+  readonly liveOAuthOidcAllowed: boolean;
+  readonly keycloakProviderSetupAllowed: boolean;
+  readonly credentialsAllowed: boolean;
+  readonly secureStorageClaimAllowed: boolean;
+  readonly externalProviderAllowed: boolean;
+  readonly identities: readonly LocalAuthSessionIdentityMapping[];
+  readonly permissionCheckCases: readonly LocalAuthPermissionCheckCase[];
+  readonly nonClaims: Record<string, boolean>;
+}
+
+export interface LocalAuthSessionDevIdentityAuthority {
+  readonly identityRefs?: ReadonlySet<string> | readonly string[];
+  readonly userRefs?: ReadonlySet<string> | readonly string[];
+  readonly tenantBoundaryRefs?: ReadonlySet<string> | readonly string[];
+  readonly sessionContextRefs?: ReadonlySet<string> | readonly string[];
+  readonly roleRefs?: ReadonlySet<string> | readonly string[];
+  readonly permissionRefs?: ReadonlySet<string> | readonly string[];
+  readonly capabilityRefs?: ReadonlySet<string> | readonly string[];
+  readonly commandRefs?: ReadonlySet<string> | readonly string[];
+  readonly queryRefs?: ReadonlySet<string> | readonly string[];
+  readonly targetRefs?: ReadonlySet<string> | readonly string[];
+  readonly auditEventRefs?: ReadonlySet<string> | readonly string[];
+  readonly semanticSourceRefs?: ReadonlySet<string> | readonly string[];
+  readonly proofRefs?: ReadonlySet<string> | readonly string[];
+}
+
+const LOCAL_AUTH_SESSION_DEV_IDENTITY_RULE = "USF-1024";
+const LOCAL_AUTH_SESSION_DEV_IDENTITY_ARTIFACT_ID = "usf.app-surface-auth-session-dev-identity-implementation-registry";
+const LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE: LocalAuthSessionProviderMode = "in-memory-dev-stub";
+const LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT: LocalAuthSessionEnvironment = "dev-local";
+const LOCAL_AUTH_SESSION_DEV_IDENTITY_REQUIRED_NON_CLAIMS = [
+  "authReadiness",
+  "providerReadiness",
+  "identityProviderReadiness",
+  "credentialReadiness",
+  "secureStorageReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "productionReadiness",
+  "liveProviderReadiness",
+  "privacyCompliance",
+  "humanAcceptance",
+] as const;
+
+const LOCAL_AUTH_SESSION_REQUIRED_IDENTITY_STRINGS = [
+  "identityId",
+  "userRef",
+  "tenantBoundaryRef",
+  "sessionContextRef",
+  "providerMode",
+  "nonClaimBoundary",
+] as const;
+
+const LOCAL_AUTH_SESSION_REQUIRED_IDENTITY_ARRAYS = [
+  "roleRefs",
+  "permissionRefs",
+  "capabilityRefs",
+  "commandRefs",
+  "queryRefs",
+  "semanticSourceRefs",
+  "proofRefs",
+] as const;
+
+const LOCAL_AUTH_SESSION_REQUIRED_CHECK_STRINGS = [
+  "checkId",
+  "identityRef",
+  "requestContextKind",
+  "permissionRef",
+  "tenantBoundaryRef",
+  "targetRef",
+  "expectedDecision",
+  "reasonCode",
+  "auditEventRef",
+] as const;
+
+const LOCAL_AUTH_SESSION_IDENTITY_FORBIDDEN_FLAGS = [
+  ["productionIdentityProviderAllowed", "production-identity-provider-not-authorised"],
+  ["liveOAuthOidcAllowed", "live-oauth-oidc-not-authorised"],
+  ["credentialsAllowed", "credentials-not-authorised"],
+  ["secureStorageClaimAllowed", "secure-storage-claim-not-authorised"],
+  ["externalProviderAllowed", "external-provider-not-authorised"],
+] as const;
+
+const LOCAL_AUTH_SESSION_REGISTRY_FORBIDDEN_FLAGS = [
+  ["productionIdentityProviderAllowed", "production-identity-provider-not-authorised"],
+  ["liveOAuthOidcAllowed", "live-oauth-oidc-not-authorised"],
+  ["keycloakProviderSetupAllowed", "keycloak-provider-setup-not-authorised"],
+  ["credentialsAllowed", "credentials-not-authorised"],
+  ["secureStorageClaimAllowed", "secure-storage-claim-not-authorised"],
+  ["externalProviderAllowed", "external-provider-not-authorised"],
+] as const;
+
+const LOCAL_AUTH_SESSION_FORBIDDEN_KEYS = [
+  "oauthClientId",
+  "oauthClientSecret",
+  "oidcIssuerUrl",
+  "keycloakRealm",
+  "keycloakClientId",
+  "credentialRef",
+  "secureStorageProvider",
+  "externalIdentityProvider",
+  "deploymentRef",
+  "stagingRef",
+] as const;
+
+export const LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY = {
+  artifactId: LOCAL_AUTH_SESSION_DEV_IDENTITY_ARTIFACT_ID,
+  ownerIssueId: LOCAL_AUTH_SESSION_DEV_IDENTITY_RULE,
+  providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+  environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+  unknownIdentityPolicy: "fail-closed",
+  missingPermissionPolicy: "fail-closed",
+  productionIdentityProviderAllowed: false,
+  liveOAuthOidcAllowed: false,
+  keycloakProviderSetupAllowed: false,
+  credentialsAllowed: false,
+  secureStorageClaimAllowed: false,
+  externalProviderAllowed: false,
+  identities: [
+    {
+      identityId: "identity.dev-local-developer",
+      userRef: "user.dev-local-fixture",
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      sessionContextRef: "session.dev-local-in-memory",
+      roleRefs: ["role.dev-local-developer"],
+      permissionRefs: ["developer:read", "developer:key:onboard"],
+      capabilityRefs: ["graphql-federation-generated-client-disposition"],
+      commandRefs: ["command.onboardApiKey"],
+      queryRefs: ["query.developerProfile"],
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/shared-client-interaction-contract-semantics.json",
+        "docs/architecture/auth-and-identity-standard.md",
+        "docs/adr/0010-authorization-policy-decision-point.md",
+        "docs/adr/0012-keycloak-sole-idp-and-token-validation.md",
+        "docs/architecture/app-surface-command-form-implementation.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-auth-session-dev-identity-implementation.json",
+        "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      providerMode: "in-memory-dev-stub",
+      productionIdentityProviderAllowed: false,
+      liveOAuthOidcAllowed: false,
+      credentialsAllowed: false,
+      secureStorageClaimAllowed: false,
+      externalProviderAllowed: false,
+      nonClaimBoundary: "local dev identity implementation only; not authentication or identity-provider readiness",
+    },
+  ],
+  permissionCheckCases: [
+    {
+      checkId: "auth-check-developer-profile-query-allowed",
+      identityRef: "identity.dev-local-developer",
+      requestContextKind: "query",
+      permissionRef: "developer:read",
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      targetRef: "query.developerProfile",
+      expectedDecision: "allow",
+      reasonCode: "permission-authorised-by-local-semantic-stub",
+      auditEventRef: "client-audit-event-emission",
+    },
+    {
+      checkId: "auth-check-api-key-command-allowed",
+      identityRef: "identity.dev-local-developer",
+      requestContextKind: "command",
+      permissionRef: "developer:key:onboard",
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      targetRef: "command.onboardApiKey",
+      expectedDecision: "allow",
+      reasonCode: "permission-authorised-by-local-semantic-stub",
+      auditEventRef: "client-audit-event-emission",
+    },
+    {
+      checkId: "auth-check-missing-permission-denied",
+      identityRef: "identity.dev-local-developer",
+      requestContextKind: "query",
+      permissionRef: "developer:admin",
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      targetRef: "query.developerProfile",
+      expectedDecision: "deny",
+      reasonCode: "permission-semantics-missing-fail-closed",
+      auditEventRef: "client-audit-event-emission",
+    },
+  ],
+  nonClaims: {
+    authReadiness: false,
+    providerReadiness: false,
+    identityProviderReadiness: false,
+    credentialReadiness: false,
+    secureStorageReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    productionReadiness: false,
+    liveProviderReadiness: false,
+    privacyCompliance: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalAuthSessionDevIdentityRegistry;
+
+const asLocalAuthAuthorityValues = (values: ReadonlySet<string> | readonly string[] | undefined): readonly string[] | undefined => {
+  if (values === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(values)) {
+    return values;
+  }
+  return Array.from(values);
+};
+
+const localAuthAuthorityHas = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+  value: string,
+): boolean => {
+  if (values === undefined) {
+    return false;
+  }
+  return asLocalAuthAuthorityValues(values)?.includes(value) ?? false;
+};
+
+const hasLocalAuthString = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0;
+
+const hasLocalAuthStringArray = (value: unknown): value is readonly string[] =>
+  Array.isArray(value) && value.length > 0 && value.every((item) => hasLocalAuthString(item));
+
+const localAuthSubject = (mapping: Pick<LocalAuthSessionIdentityMapping, "identityId"> | { readonly identityId?: unknown }): string =>
+  hasLocalAuthString(mapping.identityId) ? mapping.identityId : "local-auth-identity";
+
+const validateLocalAuthAuthorityValue = (
+  findings: string[],
+  subject: string,
+  authority: LocalAuthSessionDevIdentityAuthority | undefined,
+  authorityKey: keyof LocalAuthSessionDevIdentityAuthority,
+  value: string,
+  code: string,
+): void => {
+  if (!localAuthAuthorityHas(authority?.[authorityKey], value)) {
+    findings.push(`${subject}:${code}:${value}`);
+  }
+};
+
+const validateLocalAuthAuthorityArray = (
+  findings: string[],
+  subject: string,
+  authority: LocalAuthSessionDevIdentityAuthority | undefined,
+  authorityKey: keyof LocalAuthSessionDevIdentityAuthority,
+  values: readonly string[],
+  code: string,
+): void => {
+  for (const value of values) {
+    validateLocalAuthAuthorityValue(findings, subject, authority, authorityKey, value, code);
+  }
+};
+
+export const validateLocalAuthSessionIdentityMapping = (
+  identity: LocalAuthSessionIdentityMapping,
+  authority?: LocalAuthSessionDevIdentityAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const subject = localAuthSubject(identity);
+  const record = identity as unknown as Record<string, unknown>;
+
+  for (const field of LOCAL_AUTH_SESSION_REQUIRED_IDENTITY_STRINGS) {
+    if (!hasLocalAuthString(record[field])) {
+      findings.push(`${subject}:missing-${field}`);
+    }
+  }
+  for (const field of LOCAL_AUTH_SESSION_REQUIRED_IDENTITY_ARRAYS) {
+    if (!hasLocalAuthStringArray(record[field])) {
+      findings.push(`${subject}:missing-${field}`);
+    }
+  }
+  if (identity.providerMode !== LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE) {
+    findings.push(`${subject}:providerMode-must-be-in-memory-dev-stub`);
+  }
+  for (const [field, code] of LOCAL_AUTH_SESSION_IDENTITY_FORBIDDEN_FLAGS) {
+    if (record[field] !== false) {
+      findings.push(`${subject}:${code}`);
+    }
+  }
+  for (const key of LOCAL_AUTH_SESSION_FORBIDDEN_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      findings.push(`${subject}:forbidden-${key}`);
+    }
+  }
+  if (hasLocalAuthString(identity.identityId)) {
+    validateLocalAuthAuthorityValue(findings, subject, authority, "identityRefs", identity.identityId, "identity-authority-missing");
+  }
+  if (hasLocalAuthString(identity.userRef)) {
+    validateLocalAuthAuthorityValue(findings, subject, authority, "userRefs", identity.userRef, "user-authority-missing");
+  }
+  if (hasLocalAuthString(identity.tenantBoundaryRef)) {
+    validateLocalAuthAuthorityValue(findings, subject, authority, "tenantBoundaryRefs", identity.tenantBoundaryRef, "tenant-authority-missing");
+  }
+  if (hasLocalAuthString(identity.sessionContextRef)) {
+    validateLocalAuthAuthorityValue(findings, subject, authority, "sessionContextRefs", identity.sessionContextRef, "session-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.roleRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "roleRefs", identity.roleRefs, "role-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.permissionRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "permissionRefs", identity.permissionRefs, "permission-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.capabilityRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "capabilityRefs", identity.capabilityRefs, "capability-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.commandRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "commandRefs", identity.commandRefs, "command-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.queryRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "queryRefs", identity.queryRefs, "query-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.semanticSourceRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "semanticSourceRefs", identity.semanticSourceRefs, "semantic-source-authority-missing");
+  }
+  if (hasLocalAuthStringArray(identity.proofRefs)) {
+    validateLocalAuthAuthorityArray(findings, subject, authority, "proofRefs", identity.proofRefs, "proof-authority-missing");
+  }
+  return findings;
+};
+
+export const validateLocalAuthSessionDevIdentityRegistry = (
+  registry: LocalAuthSessionDevIdentityRegistry = LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY,
+  authority?: LocalAuthSessionDevIdentityAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const record = registry as unknown as Record<string, unknown>;
+  const registrySubject = "local-auth-session-dev-identity-registry";
+
+  if (registry.artifactId !== LOCAL_AUTH_SESSION_DEV_IDENTITY_ARTIFACT_ID) {
+    findings.push(`${registrySubject}:artifactId-mismatch`);
+  }
+  if (registry.ownerIssueId !== LOCAL_AUTH_SESSION_DEV_IDENTITY_RULE) {
+    findings.push(`${registrySubject}:ownerIssueId-mismatch`);
+  }
+  if (registry.providerMode !== LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE) {
+    findings.push(`${registrySubject}:providerMode-must-be-in-memory-dev-stub`);
+  }
+  if (registry.environment !== LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT) {
+    findings.push(`${registrySubject}:environment-must-be-dev-local`);
+  }
+  if (registry.unknownIdentityPolicy !== "fail-closed") {
+    findings.push(`${registrySubject}:unknown-identity-policy-must-fail-closed`);
+  }
+  if (registry.missingPermissionPolicy !== "fail-closed") {
+    findings.push(`${registrySubject}:missing-permission-policy-must-fail-closed`);
+  }
+  for (const [field, code] of LOCAL_AUTH_SESSION_REGISTRY_FORBIDDEN_FLAGS) {
+    if (record[field] !== false) {
+      findings.push(`${registrySubject}:${code}`);
+    }
+  }
+  for (const claim of LOCAL_AUTH_SESSION_DEV_IDENTITY_REQUIRED_NON_CLAIMS) {
+    if (registry.nonClaims?.[claim] !== false) {
+      findings.push(`${registrySubject}:nonclaim-${claim}-must-be-false`);
+    }
+  }
+  if (!Array.isArray(registry.identities) || registry.identities.length === 0) {
+    findings.push(`${registrySubject}:missing-identities`);
+  }
+  const seenIdentities = new Set<string>();
+  for (const identity of registry.identities) {
+    if (seenIdentities.has(identity.identityId)) {
+      findings.push(`${identity.identityId}:duplicate-identityId`);
+    }
+    seenIdentities.add(identity.identityId);
+    findings.push(...validateLocalAuthSessionIdentityMapping(identity, authority));
+  }
+  if (!Array.isArray(registry.permissionCheckCases) || registry.permissionCheckCases.length === 0) {
+    findings.push(`${registrySubject}:missing-permissionCheckCases`);
+    return findings;
+  }
+  let hasAllowCase = false;
+  let hasDenyCase = false;
+  for (const check of registry.permissionCheckCases) {
+    const checkRecord = check as unknown as Record<string, unknown>;
+    const subject = hasLocalAuthString(check.checkId) ? check.checkId : "local-auth-permission-check";
+    for (const field of LOCAL_AUTH_SESSION_REQUIRED_CHECK_STRINGS) {
+      if (!hasLocalAuthString(checkRecord[field])) {
+        findings.push(`${subject}:missing-${field}`);
+      }
+    }
+    if (check.expectedDecision === "allow") {
+      hasAllowCase = true;
+    } else if (check.expectedDecision === "deny") {
+      hasDenyCase = true;
+    } else {
+      findings.push(`${subject}:expectedDecision-must-be-allow-or-deny`);
+    }
+    if (check.requestContextKind !== "query" && check.requestContextKind !== "command") {
+      findings.push(`${subject}:requestContextKind-must-be-query-or-command`);
+    }
+    validateLocalAuthAuthorityValue(findings, subject, authority, "identityRefs", check.identityRef, "identity-authority-missing");
+    if (check.expectedDecision === "allow") {
+      validateLocalAuthAuthorityValue(findings, subject, authority, "permissionRefs", check.permissionRef, "permission-authority-missing");
+    }
+    validateLocalAuthAuthorityValue(findings, subject, authority, "tenantBoundaryRefs", check.tenantBoundaryRef, "tenant-authority-missing");
+    validateLocalAuthAuthorityValue(findings, subject, authority, "targetRefs", check.targetRef, "target-authority-missing");
+    validateLocalAuthAuthorityValue(findings, subject, authority, "auditEventRefs", check.auditEventRef, "audit-authority-missing");
+  }
+  if (!hasAllowCase) {
+    findings.push(`${registrySubject}:missing-allow-case`);
+  }
+  if (!hasDenyCase) {
+    findings.push(`${registrySubject}:missing-deny-case`);
+  }
+  return findings;
+};
+
+const getLocalAuthIdentity = (identityRef: string): LocalAuthSessionIdentityMapping | undefined =>
+  LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY.identities.find((identity) => identity.identityId === identityRef);
+
+export const getLocalAuthSessionIdentityById = (identityRef: string): LocalAuthSessionIdentityMapping => {
+  const identity = getLocalAuthIdentity(identityRef);
+  if (identity === undefined) {
+    throw new Error(`local-auth-identity-unknown:${identityRef}`);
+  }
+  return identity;
+};
+
+export const exerciseLocalAuthPermissionCheck = (
+  request: LocalAuthPermissionRequest,
+  authority?: LocalAuthSessionDevIdentityAuthority,
+): LocalAuthPermissionDecisionResult => {
+  const identity = getLocalAuthIdentity(request.identityRef);
+  if (identity === undefined) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "identity-semantics-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (authority === undefined) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "authority-semantics-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  const identityFindings = validateLocalAuthSessionIdentityMapping(identity, authority);
+  if (identityFindings.length > 0) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "identity-semantics-invalid-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (identity.userRef !== request.userRef) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "user-context-mismatch-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (identity.tenantBoundaryRef !== request.tenantBoundaryRef) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "tenant-context-mismatch-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (!localAuthAuthorityHas(authority?.permissionRefs, request.permissionRef) || !identity.permissionRefs.includes(request.permissionRef)) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "permission-semantics-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (!localAuthAuthorityHas(authority?.targetRefs, request.targetRef)) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "target-semantics-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (request.requestContextKind === "query" && !identity.queryRefs.includes(request.targetRef)) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "query-context-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  if (request.requestContextKind === "command" && !identity.commandRefs.includes(request.targetRef)) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "command-context-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
+  return {
+    ...request,
+    decision: "allow",
+    reasonCode: "permission-authorised-by-local-semantic-stub",
+    providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+    environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+    auditEventRef: "client-audit-event-emission",
+    authReadinessClaimed: false,
+    providerReadinessClaimed: false,
+    productionIdentityReadinessClaimed: false,
+    liveProviderReadinessClaimed: false,
   };
 };
