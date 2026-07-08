@@ -1,0 +1,140 @@
+{
+  "authorityBoundary": "This artefact records bounded repository validator implementation for the app-surface validator family. It does not create UI, mobile app, web app, route, notification provider, ad SDK, store submission, deployment, release automation, provider account, credential, staging, production, live-provider, compliance, or human-acceptance readiness.",
+  "fixtureRoots": {
+    "conforming": "tools/validate-app-surface/fixtures/conforming",
+    "plantedDefects": "tools/validate-app-surface/planted-defects"
+  },
+  "id": "app-surface-validator-implementation-tranche",
+  "implementationBoundary": {
+    "appImplementationCreated": false,
+    "conformingFixturesImplemented": true,
+    "deploymentCreated": false,
+    "plantedDefectFixturesImplemented": true,
+    "providerSetupCreated": false,
+    "readinessClaimCreated": false,
+    "storeSubmissionCreated": false,
+    "uiScaffoldingCreated": false,
+    "validatorImplemented": true
+  },
+  "implementedIssueIds": [
+    "USF-929",
+    "USF-930",
+    "USF-931",
+    "USF-932",
+    "USF-933",
+    "USF-934",
+    "USF-935",
+    "USF-936",
+    "USF-937",
+    "USF-938",
+    "USF-939",
+    "USF-940",
+    "USF-941"
+  ],
+  "implementedRules": [
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/001-semantic-backed-ui-behaviour.json",
+      "issueId": "USF-929",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/001-unbacked-ui-behaviour.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-001"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/002-route-with-capability-mapping.json",
+      "issueId": "USF-930",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/002-route-without-capability-mapping.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-002"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json",
+      "issueId": "USF-931",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-003"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json",
+      "issueId": "USF-932",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/004-query-missing-cache-privacy.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-004"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+      "issueId": "USF-933",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-005"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/006-ad-placement-with-consent-privacy.json",
+      "issueId": "USF-934",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/006-ad-placement-without-consent-privacy.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-006"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/007-store-metadata-matches-semantics.json",
+      "issueId": "USF-935",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/007-store-metadata-mismatch.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-007"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/008-privacy-disclosure-matches-inventory.json",
+      "issueId": "USF-936",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/008-privacy-disclosure-mismatch.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-008"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/009-i18n-coverage-complete.json",
+      "issueId": "USF-937",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/009-missing-i18n-coverage.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-009"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      "issueId": "USF-938",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/010-missing-accessibility-semantics.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-010"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/011-generated-client-current.json",
+      "issueId": "USF-939",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/011-stale-generated-client.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-011"
+    },
+    {
+      "conformingFixture": "tools/validate-app-surface/fixtures/conforming/012-deployment-evidence-current-commit.json",
+      "issueId": "USF-940",
+      "plantedDefect": "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-012"
+    }
+  ],
+  "issueId": "USF-941",
+  "lifecycleState": "implemented-validator-selftest-tranche",
+  "nonClaims": {
+    "advertisingCompliance": false,
+    "deploymentReady": false,
+    "humanAcceptanceComplete": false,
+    "liveProviderReady": false,
+    "mobileReady": false,
+    "monetisationReady": false,
+    "privacyCompliance": false,
+    "productUiReady": false,
+    "productionReady": false,
+    "stagingReady": false,
+    "storeReady": false,
+    "webReady": false
+  },
+  "sourceAuthorities": [
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/notification-consent-data-inventory-semantics.json",
+    "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+    "docs/architecture/app-surface-store-provisioning-semantics.json",
+    "docs/architecture/app-surface-i18n-localisation-semantics.json",
+    "docs/architecture/app-surface-proof-evidence-report-semantics.json"
+  ],
+  "title": "App Surface Validator Implementation Tranche",
+  "validationCommands": [
+    "python3 tools/validate-app-surface/validate-app-surface.py all --json",
+    "python3 tools/validate-app-surface/validate-app-surface.py selftest --json"
+  ],
+  "validatorToolPath": "tools/validate-app-surface/validate-app-surface.py"
+}

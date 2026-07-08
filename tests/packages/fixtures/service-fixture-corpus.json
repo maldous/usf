@@ -25,9 +25,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "alertmanager",
-      "composeProfiles": [
-        "observability"
-      ],
+      "composeProfiles": ["observability"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -76,32 +74,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "alert routes",
           "silence metadata",
@@ -147,9 +128,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "alloy",
-      "composeProfiles": [
-        "observability"
-      ],
+      "composeProfiles": ["observability"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -178,11 +157,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "collector components",
-          "routing labels",
-          "redaction fixtures"
-        ],
+        "staticFixtures": ["collector components", "routing labels", "redaction fixtures"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -196,37 +171,16 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
-        "dataShapeFixtures": [
-          "collector components",
-          "routing labels",
-          "redaction fixtures"
-        ]
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
+        "dataShapeFixtures": ["collector components", "routing labels", "redaction fixtures"]
       },
       "lifecycleCoverage": {
         "seed": true,
@@ -266,9 +220,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "external-caddy",
-      "composeProfiles": [
-        "gateway"
-      ],
+      "composeProfiles": ["gateway"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -317,32 +269,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "local gateway routes",
           "upstream mapping",
@@ -388,9 +323,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "clamav",
-      "composeProfiles": [
-        "scanning"
-      ],
+      "composeProfiles": ["scanning"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -439,32 +372,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "clean file",
           "eicar style synthetic malicious sample",
@@ -510,9 +426,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "clickhouse",
-      "composeProfiles": [
-        "runtime-providers"
-      ],
+      "composeProfiles": ["runtime-providers"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -561,32 +475,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "analytics events",
           "aggregations",
@@ -681,32 +578,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "dashboard metadata",
           "folder metadata",
@@ -782,13 +662,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "realm",
-          "clients",
-          "users",
-          "groups",
-          "roles"
-        ],
+        "staticFixtures": ["realm", "clients", "users", "groups", "roles"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -802,32 +676,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "realm",
           "clients",
@@ -929,32 +786,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "realm persistence",
           "client persistence",
@@ -1003,9 +843,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "localstack",
-      "composeProfiles": [
-        "provider-emulation"
-      ],
+      "composeProfiles": ["provider-emulation"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -1055,32 +893,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "s3 buckets",
           "sqs queues",
@@ -1176,32 +997,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "log streams",
           "labels",
@@ -1295,32 +1099,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "smtp messages",
           "bounce samples",
@@ -1366,9 +1153,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "meilisearch",
-      "composeProfiles": [
-        "runtime-providers"
-      ],
+      "composeProfiles": ["runtime-providers"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -1418,32 +1203,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "indexes",
           "documents",
@@ -1540,32 +1308,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "buckets",
           "object keys",
@@ -1662,9 +1413,7 @@
         "redactionPolicy": "no tenant names, user emails, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, real user data, or production data",
         "retentionPosture": "disposition retained only; no runtime fixture data retained"
       },
-      "validationCommands": [
-        "corepack pnpm test-readiness:validate"
-      ],
+      "validationCommands": ["corepack pnpm test-readiness:validate"],
       "nonTestDisposition": {
         "reason": "not required in the generated test Compose target; hermetic/dev mock identity remains lineage only and cannot satisfy test-readiness service-backed claims",
         "followUpIssue": "USF-234",
@@ -1731,32 +1480,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "streams",
           "subjects",
@@ -1836,13 +1568,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "kv paths",
-          "policies",
-          "tokens",
-          "lease markers",
-          "rotation markers"
-        ],
+        "staticFixtures": ["kv paths", "policies", "tokens", "lease markers", "rotation markers"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -1856,32 +1582,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "kv paths",
           "policies",
@@ -1978,32 +1687,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "collector routes",
           "redaction samples",
@@ -2050,9 +1742,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "pgadmin",
-      "composeProfiles": [
-        "operator-tools"
-      ],
+      "composeProfiles": ["operator-tools"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -2082,11 +1772,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "operator metadata",
-          "admin denial fixtures",
-          "access review markers"
-        ],
+        "staticFixtures": ["operator metadata", "admin denial fixtures", "access review markers"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -2100,37 +1786,16 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
-        "dataShapeFixtures": [
-          "operator metadata",
-          "admin denial fixtures",
-          "access review markers"
-        ]
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
+        "dataShapeFixtures": ["operator metadata", "admin denial fixtures", "access review markers"]
       },
       "lifecycleCoverage": {
         "seed": true,
@@ -2170,9 +1835,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "pgbackrest",
-      "composeProfiles": [
-        "backup-restore"
-      ],
+      "composeProfiles": ["backup-restore"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -2221,32 +1884,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "backup repository",
           "restore target",
@@ -2340,9 +1986,7 @@
         "redactionPolicy": "no tenant names, user emails, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, real user data, or production data",
         "retentionPosture": "disposition retained only; no runtime fixture data retained"
       },
-      "validationCommands": [
-        "corepack pnpm test-readiness:validate"
-      ],
+      "validationCommands": ["corepack pnpm test-readiness:validate"],
       "nonTestDisposition": {
         "reason": "historical service row is out of scope for generated test Compose service seeding",
         "followUpIssue": "USF-234",
@@ -2391,13 +2035,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "schemas",
-          "migrations",
-          "tenants",
-          "actors",
-          "memberships"
-        ],
+        "staticFixtures": ["schemas", "migrations", "tenants", "actors", "memberships"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -2411,32 +2049,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "schemas",
           "migrations",
@@ -2536,32 +2157,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "scrape targets",
           "counter samples",
@@ -2798,9 +2402,7 @@
         "redactionPolicy": "no tenant names, user emails, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, real user data, or production data",
         "retentionPosture": "disposition retained only; no runtime fixture data retained"
       },
-      "validationCommands": [
-        "corepack pnpm test-readiness:validate"
-      ],
+      "validationCommands": ["corepack pnpm test-readiness:validate"],
       "nonTestDisposition": {
         "reason": "historical UI row is out of scope for generated test Compose service seeding",
         "followUpIssue": "USF-234",
@@ -2818,9 +2420,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "redis",
-      "composeProfiles": [
-        "runtime-providers"
-      ],
+      "composeProfiles": ["runtime-providers"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -2870,32 +2470,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "keys",
           "ttl values",
@@ -2991,9 +2574,7 @@
         "redactionPolicy": "no tenant names, user emails, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, real user data, or production data",
         "retentionPosture": "disposition retained only; no runtime fixture data retained"
       },
-      "validationCommands": [
-        "corepack pnpm test-readiness:validate"
-      ],
+      "validationCommands": ["corepack pnpm test-readiness:validate"],
       "nonTestDisposition": {
         "reason": "not generated in the canonical test Compose target; Sentry remains bounded envelope evidence and cannot satisfy composed service-backed test readiness",
         "followUpIssue": "USF-234",
@@ -3060,9 +2641,7 @@
         "redactionPolicy": "no tenant names, user emails, tokens, raw endpoints, connection strings, stack traces, raw SDK errors, provider payloads, real tenant data, real user data, or production data",
         "retentionPosture": "disposition retained only; no runtime fixture data retained"
       },
-      "validationCommands": [
-        "corepack pnpm test-readiness:validate"
-      ],
+      "validationCommands": ["corepack pnpm test-readiness:validate"],
       "nonTestDisposition": {
         "reason": "profile-gated Sonar plugin artefact is not generated as a standalone test Compose service; SonarQube service owns synthetic scan and quality-gate fixtures",
         "followUpIssue": "USF-234",
@@ -3080,9 +2659,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "sonar-postgres",
-      "composeProfiles": [
-        "assurance"
-      ],
+      "composeProfiles": ["assurance"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -3112,11 +2689,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "synthetic projects",
-          "quality gate state persistence",
-          "scan metadata"
-        ],
+        "staticFixtures": ["synthetic projects", "quality gate state persistence", "scan metadata"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -3130,32 +2703,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "synthetic projects",
           "quality gate state persistence",
@@ -3200,9 +2756,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "sonarqube",
-      "composeProfiles": [
-        "assurance"
-      ],
+      "composeProfiles": ["assurance"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -3252,32 +2806,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "synthetic projects",
           "tokens",
@@ -3354,12 +2891,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "trace ids",
-          "span ids",
-          "correlation ids",
-          "tenant-safe attributes"
-        ],
+        "staticFixtures": ["trace ids", "span ids", "correlation ids", "tenant-safe attributes"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -3373,38 +2905,16 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
-        "dataShapeFixtures": [
-          "trace ids",
-          "span ids",
-          "correlation ids",
-          "tenant-safe attributes"
-        ]
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
+        "dataShapeFixtures": ["trace ids", "span ids", "correlation ids", "tenant-safe attributes"]
       },
       "lifecycleCoverage": {
         "seed": true,
@@ -3493,32 +3003,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "namespaces",
           "task queues",
@@ -3566,9 +3059,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "temporal-postgres",
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -3616,32 +3107,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "namespace metadata",
           "workflow history metadata",
@@ -3686,9 +3160,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "temporal-ui",
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -3718,11 +3190,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "operator view metadata",
-          "access denial marker",
-          "safe route metadata"
-        ],
+        "staticFixtures": ["operator view metadata", "access denial marker", "safe route metadata"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -3736,32 +3204,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "operator view metadata",
           "access denial marker",
@@ -3854,32 +3305,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "webhook events",
           "retry payloads",
@@ -3925,9 +3359,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "windmill",
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -3957,13 +3389,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "workspace",
-          "script",
-          "job",
-          "operator denial",
-          "approval marker"
-        ],
+        "staticFixtures": ["workspace", "script", "job", "operator denial", "approval marker"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -3977,39 +3403,16 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
-        "dataShapeFixtures": [
-          "workspace",
-          "script",
-          "job",
-          "operator denial",
-          "approval marker"
-        ]
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
+        "dataShapeFixtures": ["workspace", "script", "job", "operator denial", "approval marker"]
       },
       "lifecycleCoverage": {
         "seed": true,
@@ -4049,9 +3452,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "windmill-postgres",
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -4100,32 +3501,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "workspace metadata",
           "script metadata",
@@ -4171,9 +3555,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "windmill-redis",
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -4203,11 +3585,7 @@
         "apiModule": "tests/packages/fixtures/synthetic-fixture-corpus.ts"
       },
       "fixturePlan": {
-        "staticFixtures": [
-          "queue keys",
-          "worker cache keys",
-          "cleanup markers"
-        ],
+        "staticFixtures": ["queue keys", "worker cache keys", "cleanup markers"],
         "generatedFixtures": [
           "boundary values from deterministic seed",
           "volume sample from deterministic seed",
@@ -4221,37 +3599,16 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
-        "dataShapeFixtures": [
-          "queue keys",
-          "worker cache keys",
-          "cleanup markers"
-        ]
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
+        "dataShapeFixtures": ["queue keys", "worker cache keys", "cleanup markers"]
       },
       "lifecycleCoverage": {
         "seed": true,
@@ -4291,9 +3648,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "windmill-worker",
-      "composeProfiles": [
-        "workflow-provider"
-      ],
+      "composeProfiles": ["workflow-provider"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -4341,32 +3696,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "worker job claims",
           "activity status",
@@ -4412,9 +3750,7 @@
       "serviceCataloguePath": "spec/instances/compose-service/service-catalogue.json",
       "composeTarget": "compose/compose.test.generated.yaml",
       "composeServiceId": "wiremock",
-      "composeProfiles": [
-        "provider-mocks"
-      ],
+      "composeProfiles": ["provider-mocks"],
       "generatedInTestCompose": true,
       "requiredInTest": true,
       "dependencyDisposition": "composed-service-required",
@@ -4462,32 +3798,15 @@
           "expired credential",
           "privileged operation"
         ],
-        "actorMatrix": [
-          "synthetic actor",
-          "synthetic operator",
-          "synthetic service account"
-        ],
-        "roleMatrix": [
-          "reader",
-          "operator",
-          "admin-denied",
-          "service-account"
-        ],
-        "permissionMatrix": [
-          "allowed action",
-          "denied action",
-          "cross-tenant denied action"
-        ],
+        "actorMatrix": ["synthetic actor", "synthetic operator", "synthetic service account"],
+        "roleMatrix": ["reader", "operator", "admin-denied", "service-account"],
+        "permissionMatrix": ["allowed action", "denied action", "cross-tenant denied action"],
         "auditFixtures": [
           "value-free allow audit marker",
           "value-free deny audit marker",
           "redaction marker"
         ],
-        "readinessFixtures": [
-          "ready",
-          "degraded",
-          "unavailable fail-closed"
-        ],
+        "readinessFixtures": ["ready", "degraded", "unavailable fail-closed"],
         "dataShapeFixtures": [
           "mappings",
           "request journal records",
@@ -4544,9 +3863,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.abac-policy-decision-point",
-      "fixtureSeedIds": [
-        "fixture.semantic.abac-policy-decision-point"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.abac-policy-decision-point"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4570,14 +3887,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-abac-policy-decision-point-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4609,9 +3920,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.accessibility-a11y-gate",
-      "fixtureSeedIds": [
-        "fixture.semantic.accessibility-a11y-gate"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.accessibility-a11y-gate"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4634,14 +3943,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-accessibility-a11y-gate-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4673,9 +3976,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.alerting-incident-management-on-call-status-page",
-      "fixtureSeedIds": [
-        "fixture.semantic.alerting-incident-management-on-call-status-page"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.alerting-incident-management-on-call-status-page"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4699,14 +4000,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-alerting-incident-management-on-call-status-page-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4738,9 +4033,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.api-docs-developer-portal-sdks-rate-limits",
-      "fixtureSeedIds": [
-        "fixture.semantic.api-docs-developer-portal-sdks-rate-limits"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.api-docs-developer-portal-sdks-rate-limits"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4763,14 +4056,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-api-docs-developer-portal-sdks-rate-limits-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4802,9 +4089,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.api-keys-personal-access-tokens",
-      "fixtureSeedIds": [
-        "fixture.semantic.api-keys-personal-access-tokens"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.api-keys-personal-access-tokens"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4828,14 +4113,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-api-keys-personal-access-tokens-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4867,9 +4146,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.audit-of-privileged-access",
-      "fixtureSeedIds": [
-        "fixture.semantic.audit-of-privileged-access"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.audit-of-privileged-access"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4893,14 +4170,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-audit-of-privileged-access-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4932,9 +4203,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.authentication-platform",
-      "fixtureSeedIds": [
-        "fixture.semantic.authentication-platform"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.authentication-platform"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -4958,14 +4227,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-authentication-platform-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -4997,9 +4260,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.background-workers-job-runner",
-      "fixtureSeedIds": [
-        "fixture.semantic.background-workers-job-runner"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.background-workers-job-runner"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5023,14 +4284,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-background-workers-job-runner-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5062,9 +4317,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.backup-and-restore",
-      "fixtureSeedIds": [
-        "fixture.semantic.backup-and-restore"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.backup-and-restore"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5088,14 +4341,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-backup-and-restore-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5127,9 +4374,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.branding-and-theming",
-      "fixtureSeedIds": [
-        "fixture.semantic.branding-and-theming"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.branding-and-theming"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5152,14 +4397,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-branding-and-theming-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5217,14 +4456,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5256,9 +4489,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.build-versus-compose-decision-framework",
-      "fixtureSeedIds": [
-        "fixture.semantic.build-versus-compose-decision-framework"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.build-versus-compose-decision-framework"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5281,14 +4512,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-build-versus-compose-decision-framework-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5320,9 +4545,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.code-quality-and-secret-and-dependency-scanning",
-      "fixtureSeedIds": [
-        "fixture.semantic.code-quality-and-secret-and-dependency-scanning"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.code-quality-and-secret-and-dependency-scanning"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5346,14 +4569,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-code-quality-and-secret-and-dependency-scanning-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5385,9 +4602,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.compliance-reports-access-reviews-evidence-packs",
-      "fixtureSeedIds": [
-        "fixture.semantic.compliance-reports-access-reviews-evidence-packs"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.compliance-reports-access-reviews-evidence-packs"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5411,14 +4626,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-compliance-reports-access-reviews-evidence-packs-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5450,9 +4659,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.composed-provider-readiness-spine",
-      "fixtureSeedIds": [
-        "fixture.semantic.composed-provider-readiness-spine"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.composed-provider-readiness-spine"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5475,14 +4682,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-composed-provider-readiness-spine-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5514,9 +4715,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.configuration-registry-and-history",
-      "fixtureSeedIds": [
-        "fixture.semantic.configuration-registry-and-history"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.configuration-registry-and-history"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5539,14 +4738,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-configuration-registry-and-history-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5578,9 +4771,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.custom-domains-dns-ownership-tls-canonical",
-      "fixtureSeedIds": [
-        "fixture.semantic.custom-domains-dns-ownership-tls-canonical"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.custom-domains-dns-ownership-tls-canonical"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5603,14 +4794,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-custom-domains-dns-ownership-tls-canonical-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5669,14 +4854,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-data-governance-catalog-lineage-classification-pii-dsr-gdpr-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5708,9 +4887,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.delegated-administration-roles",
-      "fixtureSeedIds": [
-        "fixture.semantic.delegated-administration-roles"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.delegated-administration-roles"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5734,14 +4911,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-delegated-administration-roles-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5773,9 +4944,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.e2e-confidence-ladder-stage-aware",
-      "fixtureSeedIds": [
-        "fixture.semantic.e2e-confidence-ladder-stage-aware"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.e2e-confidence-ladder-stage-aware"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5798,14 +4967,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-e2e-confidence-ladder-stage-aware-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5837,9 +5000,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.end-user-profile-and-preferences-self-service",
-      "fixtureSeedIds": [
-        "fixture.semantic.end-user-profile-and-preferences-self-service"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.end-user-profile-and-preferences-self-service"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5863,14 +5024,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-end-user-profile-and-preferences-self-service-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5902,9 +5057,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.entitlement-engine",
-      "fixtureSeedIds": [
-        "fixture.semantic.entitlement-engine"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.entitlement-engine"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5928,14 +5081,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-entitlement-engine-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -5967,9 +5114,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.environment-registry-and-bootstrap",
-      "fixtureSeedIds": [
-        "fixture.semantic.environment-registry-and-bootstrap"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.environment-registry-and-bootstrap"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -5992,14 +5137,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-environment-registry-and-bootstrap-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6031,9 +5170,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.environment-specific-vs-shared-service-model",
-      "fixtureSeedIds": [
-        "fixture.semantic.environment-specific-vs-shared-service-model"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.environment-specific-vs-shared-service-model"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6056,14 +5193,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-environment-specific-vs-shared-service-model-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6095,9 +5226,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.event-bus-durable-queues-dlq-redrive",
-      "fixtureSeedIds": [
-        "fixture.semantic.event-bus-durable-queues-dlq-redrive"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.event-bus-durable-queues-dlq-redrive"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6121,14 +5250,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-event-bus-durable-queues-dlq-redrive-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6160,9 +5283,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.history-read-model-read-only-projection",
-      "fixtureSeedIds": [
-        "fixture.semantic.history-read-model-read-only-projection"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.history-read-model-read-only-projection"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6186,14 +5307,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-history-read-model-read-only-projection-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6225,9 +5340,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.i18n-runtime-and-validation",
-      "fixtureSeedIds": [
-        "fixture.semantic.i18n-runtime-and-validation"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.i18n-runtime-and-validation"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6250,14 +5363,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-i18n-runtime-and-validation-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6289,9 +5396,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.internal-service-catalog-and-readiness",
-      "fixtureSeedIds": [
-        "fixture.semantic.internal-service-catalog-and-readiness"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.internal-service-catalog-and-readiness"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6315,14 +5420,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-internal-service-catalog-and-readiness-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6354,9 +5453,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.logs-aggregation-and-tenant-scoped-search",
-      "fixtureSeedIds": [
-        "fixture.semantic.logs-aggregation-and-tenant-scoped-search"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.logs-aggregation-and-tenant-scoped-search"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6382,14 +5479,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-logs-aggregation-and-tenant-scoped-search-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6421,9 +5512,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.metrics-and-traces",
-      "fixtureSeedIds": [
-        "fixture.semantic.metrics-and-traces"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.metrics-and-traces"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6447,14 +5536,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-metrics-and-traces-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6486,9 +5569,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.mock-providers-dev-test",
-      "fixtureSeedIds": [
-        "fixture.semantic.mock-providers-dev-test"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.mock-providers-dev-test"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6511,14 +5592,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-mock-providers-dev-test-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6550,9 +5625,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.notification-delivery-and-preferences-and-channels",
-      "fixtureSeedIds": [
-        "fixture.semantic.notification-delivery-and-preferences-and-channels"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.notification-delivery-and-preferences-and-channels"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6576,14 +5649,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-notification-delivery-and-preferences-and-channels-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6615,9 +5682,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.object-storage-and-tenant-prefixes-and-signed-urls",
-      "fixtureSeedIds": [
-        "fixture.semantic.object-storage-and-tenant-prefixes-and-signed-urls"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.object-storage-and-tenant-prefixes-and-signed-urls"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6642,14 +5707,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-object-storage-and-tenant-prefixes-and-signed-urls-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6681,9 +5740,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.observability-built-in-alerting-and-incidents",
-      "fixtureSeedIds": [
-        "fixture.semantic.observability-built-in-alerting-and-incidents"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.observability-built-in-alerting-and-incidents"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6707,14 +5764,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-observability-built-in-alerting-and-incidents-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6746,9 +5797,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.openapi-drift-hard-gate",
-      "fixtureSeedIds": [
-        "fixture.semantic.openapi-drift-hard-gate"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.openapi-drift-hard-gate"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6771,14 +5820,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-openapi-drift-hard-gate-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6810,9 +5853,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.pitr-retention-legal-hold-data-residency",
-      "fixtureSeedIds": [
-        "fixture.semantic.pitr-retention-legal-hold-data-residency"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.pitr-retention-legal-hold-data-residency"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6836,14 +5877,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-pitr-retention-legal-hold-data-residency-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6875,9 +5910,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.product-catalog-plans-prices",
-      "fixtureSeedIds": [
-        "fixture.semantic.product-catalog-plans-prices"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.product-catalog-plans-prices"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6901,14 +5934,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-product-catalog-plans-prices-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -6940,9 +5967,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.provider-configuration-plane",
-      "fixtureSeedIds": [
-        "fixture.semantic.provider-configuration-plane"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.provider-configuration-plane"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -6965,14 +5990,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-provider-configuration-plane-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7004,9 +6023,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.provider-environment-classification",
-      "fixtureSeedIds": [
-        "fixture.semantic.provider-environment-classification"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.provider-environment-classification"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7029,14 +6046,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-provider-environment-classification-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7068,9 +6079,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.quota-enforcement",
-      "fixtureSeedIds": [
-        "fixture.semantic.quota-enforcement"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.quota-enforcement"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7093,14 +6102,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-quota-enforcement-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7132,9 +6135,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.rate-limiting-api",
-      "fixtureSeedIds": [
-        "fixture.semantic.rate-limiting-api"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.rate-limiting-api"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7157,14 +6158,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-rate-limiting-api-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7196,9 +6191,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.rbac-roles-and-permissions",
-      "fixtureSeedIds": [
-        "fixture.semantic.rbac-roles-and-permissions"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.rbac-roles-and-permissions"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7222,14 +6215,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-rbac-roles-and-permissions-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7261,9 +6248,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.relational-storage-and-migrations-and-rls",
-      "fixtureSeedIds": [
-        "fixture.semantic.relational-storage-and-migrations-and-rls"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.relational-storage-and-migrations-and-rls"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7287,14 +6272,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-relational-storage-and-migrations-and-rls-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7326,9 +6305,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.runtime-secrets-management",
-      "fixtureSeedIds": [
-        "fixture.semantic.runtime-secrets-management"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.runtime-secrets-management"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7351,14 +6328,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-runtime-secrets-management-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7390,9 +6361,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.scheduled-jobs-built-in-on-the-event-substrate",
-      "fixtureSeedIds": [
-        "fixture.semantic.scheduled-jobs-built-in-on-the-event-substrate"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.scheduled-jobs-built-in-on-the-event-substrate"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7416,14 +6385,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-scheduled-jobs-built-in-on-the-event-substrate-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7455,9 +6418,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.search-and-indexing-product-search",
-      "fixtureSeedIds": [
-        "fixture.semantic.search-and-indexing-product-search"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.search-and-indexing-product-search"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7481,14 +6442,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-search-and-indexing-product-search-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7520,9 +6475,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.serverless-function-runtime",
-      "fixtureSeedIds": [
-        "fixture.semantic.serverless-function-runtime"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.serverless-function-runtime"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7545,14 +6498,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-serverless-function-runtime-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7584,9 +6531,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.service-catalog-and-provider-integration-model",
-      "fixtureSeedIds": [
-        "fixture.semantic.service-catalog-and-provider-integration-model"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.service-catalog-and-provider-integration-model"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7610,14 +6555,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-service-catalog-and-provider-integration-model-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7649,9 +6588,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.sub-organisations",
-      "fixtureSeedIds": [
-        "fixture.semantic.sub-organisations"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.sub-organisations"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7675,14 +6612,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-sub-organisations-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7714,9 +6645,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.subscriptions-invoices-payment-methods-dunning",
-      "fixtureSeedIds": [
-        "fixture.semantic.subscriptions-invoices-payment-methods-dunning"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.subscriptions-invoices-payment-methods-dunning"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7739,14 +6668,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-subscriptions-invoices-payment-methods-dunning-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7778,9 +6701,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.support-mode-break-glass-access",
-      "fixtureSeedIds": [
-        "fixture.semantic.support-mode-break-glass-access"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.support-mode-break-glass-access"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7804,14 +6725,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-support-mode-break-glass-access-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7843,9 +6758,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.support-tickets-customer-health-announcements",
-      "fixtureSeedIds": [
-        "fixture.semantic.support-tickets-customer-health-announcements"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.support-tickets-customer-health-announcements"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7868,14 +6781,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-support-tickets-customer-health-announcements-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7907,9 +6814,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-canonical-domain-set-unset",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-canonical-domain-set-unset"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-canonical-domain-set-unset"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7933,14 +6838,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-canonical-domain-set-unset-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -7972,9 +6871,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-data-import-export",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-data-import-export"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-data-import-export"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -7999,14 +6896,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-data-import-export-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8038,9 +6929,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-domain-activation-auth-client",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-domain-activation-auth-client"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-domain-activation-auth-client"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8064,14 +6953,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-domain-activation-auth-client-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8103,9 +6986,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-groups",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-groups"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-groups"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8129,14 +7010,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-groups-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8168,9 +7043,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-host-identity-resolution",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-host-identity-resolution"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-host-identity-resolution"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8194,14 +7067,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-host-identity-resolution-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8233,9 +7100,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-identity-record-and-fqdn",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-identity-record-and-fqdn"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-identity-record-and-fqdn"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8259,14 +7124,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-identity-record-and-fqdn-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8298,9 +7157,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-isolation-proof",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-isolation-proof"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-isolation-proof"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8324,14 +7181,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-isolation-proof-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8363,9 +7214,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-lifecycle-provision-suspend-delete-export",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-lifecycle-provision-suspend-delete-export"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-lifecycle-provision-suspend-delete-export"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8390,14 +7239,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-lifecycle-provision-suspend-delete-export-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8429,9 +7272,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.tenant-service-clickthrough-policy",
-      "fixtureSeedIds": [
-        "fixture.semantic.tenant-service-clickthrough-policy"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.tenant-service-clickthrough-policy"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8456,14 +7297,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-tenant-service-clickthrough-policy-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8495,9 +7330,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.universal-service-foundation-scope-and-principles",
-      "fixtureSeedIds": [
-        "fixture.semantic.universal-service-foundation-scope-and-principles"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.universal-service-foundation-scope-and-principles"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8520,14 +7353,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-universal-service-foundation-scope-and-principles-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8559,9 +7386,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.usage-metering-and-meter-event-ingestion",
-      "fixtureSeedIds": [
-        "fixture.semantic.usage-metering-and-meter-event-ingestion"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.usage-metering-and-meter-event-ingestion"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8585,14 +7410,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-usage-metering-and-meter-event-ingestion-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8624,9 +7443,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.user-identity-and-tenant-membership",
-      "fixtureSeedIds": [
-        "fixture.semantic.user-identity-and-tenant-membership"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.user-identity-and-tenant-membership"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8650,14 +7467,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-user-identity-and-tenant-membership-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8689,9 +7500,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.webhooks-developer-facing",
-      "fixtureSeedIds": [
-        "fixture.semantic.webhooks-developer-facing"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.webhooks-developer-facing"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8714,14 +7523,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-webhooks-developer-facing-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8753,9 +7556,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.workflow-engine-scheduled-jobs-approvals",
-      "fixtureSeedIds": [
-        "fixture.semantic.workflow-engine-scheduled-jobs-approvals"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.workflow-engine-scheduled-jobs-approvals"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8779,14 +7580,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-workflow-engine-scheduled-jobs-approvals-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8818,9 +7613,7 @@
         "validation"
       ],
       "sourceObligationEvidenceId": "evidence.usf-239.semantic.write-only-secret-settings",
-      "fixtureSeedIds": [
-        "fixture.semantic.write-only-secret-settings"
-      ],
+      "fixtureSeedIds": ["fixture.semantic.write-only-secret-settings"],
       "ownerIssueIds": [
         "USF-239",
         "USF-241",
@@ -8843,14 +7636,8 @@
         "negativeFailClosedPath": "covered"
       },
       "deterministicSeed": "usf-248-semantic-write-only-secret-settings-v1",
-      "staticFixtureRefs": [
-        "semantic-regression-snapshot",
-        "authority-mapping-snapshot"
-      ],
-      "generatedFixtureRefs": [
-        "boundary-matrix",
-        "negative-fail-closed-matrix"
-      ],
+      "staticFixtureRefs": ["semantic-regression-snapshot", "authority-mapping-snapshot"],
+      "generatedFixtureRefs": ["boundary-matrix", "negative-fail-closed-matrix"],
       "provenance": {
         "syntheticOnly": true,
         "productionDerived": false,
@@ -8891,21 +7678,15 @@
     "proofCommand": "corepack pnpm test-readiness:fixtures"
   },
   "testLayerWiring": {
-    "unit": [
-      "tests/packages/fixtures/synthetic-fixture-corpus.test.ts"
-    ],
-    "integration": [
-      "corepack pnpm test-readiness:composed"
-    ],
+    "unit": ["tests/packages/fixtures/synthetic-fixture-corpus.test.ts"],
+    "integration": ["corepack pnpm test-readiness:composed"],
     "regression": [
       "docs/architecture/semantic-service-test-obligation-manifest.json#semanticContractObligations"
     ],
     "enterprise": [
       "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json#evidence-usf-248-synthetic-deterministic-fixture-corpus"
     ],
-    "operational": [
-      "docs/architecture/deterministic-test-fixture-lifecycle.json"
-    ]
+    "operational": ["docs/architecture/deterministic-test-fixture-lifecycle.json"]
   },
   "validationCommands": [
     "corepack pnpm test-readiness:fixtures",
@@ -8914,31 +7695,19 @@
     "corepack pnpm test"
   ],
   "enterpriseEvidenceRefs": {
-    "soaSupportMappings": [
-      "soa-usf-248-synthetic-deterministic-fixture-corpus"
-    ],
-    "evidenceRegister": [
-      "evidence-usf-248-synthetic-deterministic-fixture-corpus"
-    ],
-    "threatModelAbuseCaseRegister": [
-      "threat-usf-248-synthetic-deterministic-fixture-corpus"
-    ],
+    "soaSupportMappings": ["soa-usf-248-synthetic-deterministic-fixture-corpus"],
+    "evidenceRegister": ["evidence-usf-248-synthetic-deterministic-fixture-corpus"],
+    "threatModelAbuseCaseRegister": ["threat-usf-248-synthetic-deterministic-fixture-corpus"],
     "accessReviewPrivilegedOperationPosture": [
       "access-usf-248-synthetic-deterministic-fixture-corpus"
     ],
-    "backupRestoreResiliencePosture": [
-      "resilience-usf-248-synthetic-deterministic-fixture-corpus"
-    ],
+    "backupRestoreResiliencePosture": ["resilience-usf-248-synthetic-deterministic-fixture-corpus"],
     "incidentVulnerabilityManagementEvidence": [
       "incident-usf-248-synthetic-deterministic-fixture-corpus"
     ],
-    "privacyDataMinimisationPosture": [
-      "privacy-usf-248-synthetic-deterministic-fixture-corpus"
-    ]
+    "privacyDataMinimisationPosture": ["privacy-usf-248-synthetic-deterministic-fixture-corpus"]
   },
-  "allowedClaims": [
-    "bounded-synthetic-fixture-corpus-defined-and-validator-enforced"
-  ],
+  "allowedClaims": ["bounded-synthetic-fixture-corpus-defined-and-validator-enforced"],
   "nonClaims": [
     "final-test-readiness",
     "test-readiness",

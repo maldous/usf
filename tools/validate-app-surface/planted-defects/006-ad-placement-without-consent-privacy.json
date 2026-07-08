@@ -1,0 +1,30 @@
+{
+  "fixtureId": "ad-placement-without-consent-privacy",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-006",
+  "ownerIssueId": "USF-934",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-006",
+  "mutatedSurface": "ad-placement",
+  "mutation": "Ad placement omits privacy classification.",
+  "authorityRefs": ["docs/architecture/monetisation-ad-placement-telemetry-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "mapping": {
+    "consentRef": "regional-ads-consent-required",
+    "ageRegionPolicyRef": "age-region-policy-required",
+    "thirdPartySdkRefs": ["no-ad-sdk-adopted-currently"],
+    "storeDisclosureRef": "store-disclosure-required-before-adoption",
+    "evidenceRefs": ["validator-selftest-with-planted-defect-fixtures"]
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

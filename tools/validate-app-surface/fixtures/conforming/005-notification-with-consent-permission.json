@@ -1,0 +1,36 @@
+{
+  "fixtureId": "notification-with-consent-permission",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-005",
+  "ownerIssueId": "USF-933",
+  "coveredSurface": "notification-mapping",
+  "authorityRefs": [
+    "docs/architecture/notification-consent-data-inventory-semantics.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json"
+  ],
+  "nonClaimRefs": [
+    "docs/architecture/notification-consent-data-inventory-semantics.json",
+    "docs/architecture/app-surface-validator-implementation-tranche.json"
+  ],
+  "mapping": {
+    "consentRef": "notification-consent-required",
+    "permissionRef": "platform.notifications.write",
+    "channelLifecycleRef": "notification-channel-lifecycle-governed",
+    "optOutBoundaryRef": "notification-opt-out-required",
+    "auditRef": "notification-consent-audit-event",
+    "providerModeRef": "provider-mode-not-live-external-provider"
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

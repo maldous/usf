@@ -227,8 +227,12 @@ describe("automated machine-QA promotion transform", () => {
 
   it("retains only current and prior payloads (marks the rest payloadPruned)", () => {
     const next = computePromotion(baseStore, report, "artifacts/proof-cockpit/machine-runs/NEW");
-    const kept = next.machineRunHistory.filter((r) => r.payloadPruned === false).map((r) => r.runId);
-    const pruned = next.machineRunHistory.filter((r) => r.payloadPruned === true).map((r) => r.runId);
+    const kept = next.machineRunHistory
+      .filter((r) => r.payloadPruned === false)
+      .map((r) => r.runId);
+    const pruned = next.machineRunHistory
+      .filter((r) => r.payloadPruned === true)
+      .map((r) => r.runId);
     expect(kept.sort()).toEqual(["qa-run-new", "qa-run-prior"]);
     expect(pruned).toContain("qa-run-old");
   });
@@ -330,7 +334,12 @@ describe("proof cockpit single-decision Accept/Reject endpoints (USF-293)", () =
       method: "POST",
       redirect: "manual",
       headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
-      body: new URLSearchParams({ csrfToken: csrf, operatorAccept: "yes", returnTo: "/proof", notes: "vitest accept" }),
+      body: new URLSearchParams({
+        csrfToken: csrf,
+        operatorAccept: "yes",
+        returnTo: "/proof",
+        notes: "vitest accept",
+      }),
     });
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/proof");
@@ -344,13 +353,23 @@ describe("proof cockpit single-decision Accept/Reject endpoints (USF-293)", () =
     // and does not fabricate a final-acceptance claim.
     expect(finalDecision?.outcome).toBe("human-accepted");
     expect(finalDecision?.actor).toBe("Vitest Operator");
-    expect((finalDecision?.finalSignoff as Record<string, unknown> | undefined)?.notAutoCompleted).toBe(true);
-    expect((finalDecision?.finalSignoff as Record<string, unknown> | undefined)?.explicitBrowserAction).toBe(true);
+    expect(
+      (finalDecision?.finalSignoff as Record<string, unknown> | undefined)?.notAutoCompleted,
+    ).toBe(true);
+    expect(
+      (finalDecision?.finalSignoff as Record<string, unknown> | undefined)?.explicitBrowserAction,
+    ).toBe(true);
     expect(finalDecision?.finalAcceptanceClaimed).toBe(false);
 
     // One acceptance per open review item at its current evidence fingerprint (bulk accept-all).
     expect(perItem).toHaveLength(expectedItems);
-    expect(perItem.every((action) => typeof action.acceptanceFingerprint === "string" && (action.acceptanceFingerprint as string).length > 0)).toBe(true);
+    expect(
+      perItem.every(
+        (action) =>
+          typeof action.acceptanceFingerprint === "string" &&
+          (action.acceptanceFingerprint as string).length > 0,
+      ),
+    ).toBe(true);
     expect(perItem.every((action) => action.actor === "Vitest Operator")).toBe(true);
     expect(perItem.every((action) => action.outcome === "human-accepted")).toBe(true);
   });
@@ -383,8 +402,14 @@ describe("proof cockpit single-decision Accept/Reject endpoints (USF-293)", () =
         body: new URLSearchParams({ csrfToken: csrf, operatorAccept: "yes", returnTo: "/proof" }),
       });
       expect(response.status).toBe(303);
-      const actions = (JSON.parse(readFileSync(rejectStatePath, "utf8")) as { actions: Array<Record<string, unknown>> }).actions;
-      expect(actions.filter((action) => action.actionType === "machine-evidence-accepted")).toHaveLength(0);
+      const actions = (
+        JSON.parse(readFileSync(rejectStatePath, "utf8")) as {
+          actions: Array<Record<string, unknown>>;
+        }
+      ).actions;
+      expect(
+        actions.filter((action) => action.actionType === "machine-evidence-accepted"),
+      ).toHaveLength(0);
       const finalDecision = actions.find((action) => action.actionType === "human-final-decision");
       expect(finalDecision?.outcome).toBe("human-rejected");
       expect(finalDecision?.actor).toBe("Vitest Operator");

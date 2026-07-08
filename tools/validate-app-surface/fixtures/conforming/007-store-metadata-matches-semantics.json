@@ -1,0 +1,36 @@
+{
+  "fixtureId": "store-metadata-matches-semantics",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-007",
+  "ownerIssueId": "USF-935",
+  "coveredSurface": "store-submission-metadata",
+  "authorityRefs": [
+    "docs/architecture/app-surface-store-provisioning-semantics.json",
+    "docs/architecture/app-surface-release-provisioning-semantics.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json"
+  ],
+  "nonClaimRefs": [
+    "docs/architecture/app-surface-store-provisioning-semantics.json",
+    "docs/architecture/app-surface-validator-implementation-tranche.json"
+  ],
+  "metadata": {
+    "semanticAuthorityRef": "app-surface-store-provisioning-semantics",
+    "versionAuthorityRef": "release-version-authority-governed",
+    "releaseEvidenceRef": "release-evidence-required-before-submission",
+    "storeAssetRefs": ["store-assets-semantic-placeholder-only"],
+    "privacyInputRefs": ["privacy-disclosure-required-before-submission"],
+    "matchesCurrentSemantics": true
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

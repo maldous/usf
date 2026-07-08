@@ -14,6 +14,7 @@ TRANCHE = ROOT / "docs/architecture/repository-optimisation-local-realisation-tr
 SEMANTICS = ROOT / "docs/architecture/repository-optimisation-realisation-semantics.json"
 LINEAR_POLICY = ROOT / "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json"
 LINEAR_AUDIT = ROOT / "docs/architecture/linear-repository-delivery-audit.json"
+PACKAGE = ROOT / "package.json"
 
 REPORTS = {
     "USF-997": ROOT / "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
@@ -25,7 +26,7 @@ REPORTS = {
 }
 
 REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001"}
-REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006"}
+REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006", "USF-1008"}
 REQUIRED_REPORT_REFS = {
     "USF-997": {
         "cache-boundary:per-process",
@@ -55,6 +56,25 @@ REQUIRED_REPORT_REFS = {
         "required-checks-weakened:false",
         "timing-comparison:affected-vs-full-command-family",
         "full-command-family-measured:true",
+    },
+    "USF-1000": {
+        "retention-mode:non-destructive-report-enforced",
+        "delete-artifacts:false",
+        "allowed-root-violations:0",
+        "later-policy-required-for-deletion:true",
+    },
+    "USF-1001": {
+        "startup-measurement-requested:true",
+        "compose-phase-split:config,port,startup-wait,teardown",
+        "generated-compose-check-exit-code:0",
+        "compose-port-check-exit-code:0",
+        "compose-config-exit-code:0",
+        "compose-startup-wait-exit-code:0",
+        "compose-teardown-exit-code:0",
+        "testcontainers:considered-not-adopted-current-tranche",
+        "remote-cache:considered-not-adopted-current-tranche",
+        "task-graph-tooling:considered-not-adopted-current-tranche",
+        "non-local-options-later-issue:USF-1007",
     },
     "USF-996": {
         "missing-work-represented-by-child-issues:true",
@@ -150,12 +170,14 @@ def check_repository_artifacts(
     semantics: dict[str, Any] | None = None,
     linear_policy: dict[str, Any] | None = None,
     linear_audit: dict[str, Any] | None = None,
+    package: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     tranche_data = tranche or load_json(TRANCHE)
     semantics_data = semantics or load_json(SEMANTICS)
     policy_data = linear_policy or load_json(LINEAR_POLICY)
     audit_data = linear_audit or load_json(LINEAR_AUDIT)
+    package_data = package or load_json(PACKAGE)
 
     implemented = issue_ids(tranche_data.get("implementedInThisTranche", []))
     missing = REQUIRED_IMPLEMENTED - implemented
@@ -171,6 +193,18 @@ def check_repository_artifacts(
     commands = validation.get("commands", []) if isinstance(validation, dict) else []
     if not any("validate-repository-optimisation.py all" in str(command) for command in commands):
         findings.append(finding("USF-OPT-006", rel(SEMANTICS), "repository optimisation validator command is not recorded"))
+    scripts = package_data.get("scripts", {})
+    if not isinstance(scripts, dict):
+        findings.append(finding("USF-OPT-009", rel(PACKAGE), "package scripts must be a JSON object"))
+    else:
+        expected_scripts = {
+            "repository-optimisation:realise": "realise-bounded-optimisation.py all --include-startup --measure-full-family",
+            "repo:affected": "realise-bounded-optimisation.py affected-run --measure-full-family",
+            "compose:timing": "realise-bounded-optimisation.py compose-timing --include-startup",
+        }
+        for script_name, expected_fragment in expected_scripts.items():
+            if expected_fragment not in str(scripts.get(script_name, "")):
+                findings.append(finding("USF-OPT-009", rel(PACKAGE), f"missing or weakened optimisation command script: {script_name}"))
 
     follow_rules = policy_data.get("linearFollowUpDeliveryRules", {})
     if follow_rules.get("deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues") is not True:
@@ -211,6 +245,11 @@ def selftest() -> list[dict[str, str]]:
     mutated_policy["linearFollowUpDeliveryRules"]["deferredBlockedAndUnresolvedWorkDeliveredAsLaterLinearIssues"] = False
     tests.append(("linear-later-issues-disabled", check_repository_artifacts(linear_policy=mutated_policy), "USF-OPT-007"))
 
+    package = load_json(PACKAGE)
+    mutated_package = copy.deepcopy(package)
+    mutated_package["scripts"]["repo:affected"] = "python3 tools/repository-optimisation/realise-bounded-optimisation.py affected-run"
+    tests.append(("affected-script-weakened", check_repository_artifacts(package=mutated_package), "USF-OPT-009"))
+
     json_reuse = load_json(REPORTS["USF-997"])
     mutated_json_reuse = copy.deepcopy(json_reuse)
     for item in mutated_json_reuse.get("findings", []):
@@ -231,6 +270,20 @@ def selftest() -> list[dict[str, str]]:
         if isinstance(item, dict):
             item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "unknown-path-negative-control:full-gate-fallback"]
     tests.append(("affected-negative-control-missing", check_reports({"USF-999": mutated_affected}), "USF-OPT-008"))
+
+    screenshot = load_json(REPORTS["USF-1000"])
+    mutated_screenshot = copy.deepcopy(screenshot)
+    for item in mutated_screenshot.get("findings", []):
+        if isinstance(item, dict):
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "delete-artifacts:false"]
+    tests.append(("screenshot-retention-delete-boundary-missing", check_reports({"USF-1000": mutated_screenshot}), "USF-OPT-008"))
+
+    compose = load_json(REPORTS["USF-1001"])
+    mutated_compose = copy.deepcopy(compose)
+    for item in mutated_compose.get("findings", []):
+        if isinstance(item, dict):
+            item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "startup-measurement-requested:true"]
+    tests.append(("compose-startup-measurement-missing", check_reports({"USF-1001": mutated_compose}), "USF-OPT-008"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

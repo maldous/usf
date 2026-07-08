@@ -1,0 +1,35 @@
+{
+  "fixtureId": "generated-client-current",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-011",
+  "ownerIssueId": "USF-939",
+  "coveredSurface": "generated-client",
+  "authorityRefs": [
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/generated-ui-view-model-semantics.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json"
+  ],
+  "nonClaimRefs": [
+    "docs/architecture/generated-report-readiness-policy.md",
+    "docs/architecture/app-surface-validator-implementation-tranche.json"
+  ],
+  "generatedClient": {
+    "semanticInputHashRef": "semantic-input-hash-current",
+    "provenanceRef": "generation-provenance-current",
+    "freshnessRef": "generated-client-freshness-current",
+    "validatorEvidenceRef": "validator-selftest-with-planted-defect-fixtures",
+    "currentWithSemanticInputs": true
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "fixtureId": "privacy-disclosure-mismatch",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-008",
+  "ownerIssueId": "USF-936",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-008",
+  "mutatedSurface": "privacy-disclosure",
+  "mutation": "Privacy disclosure diverges from governed data inventory.",
+  "authorityRefs": ["docs/architecture/privacy-disclosure-sdk-vendor-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "privacy": {
+    "dataInventoryRef": "app-surface-data-inventory-required",
+    "consentRef": "consent-mapping-required",
+    "capabilityRefs": ["semantic-contract.notification-delivery-and-preferences-and-channels"],
+    "sdkVendorRefs": ["no-third-party-sdk-adopted-currently"],
+    "disclosureRefs": ["privacy-label-data-safety-required-before-submission"],
+    "permissionDisclosureRefs": ["android-ios-permission-disclosure-required"],
+    "matchesInventory": false
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

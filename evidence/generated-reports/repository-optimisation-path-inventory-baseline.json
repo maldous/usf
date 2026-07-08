@@ -14,11 +14,11 @@
         "previous-scan-comparison:git-tracked-and-untracked",
         "coverage-equivalence:passed",
         "generated-boundaries-preserved:true",
-        "previous-scan-file-count:1990",
+        "previous-scan-file-count:1992",
         "missing-from-declared:0",
         "extra-in-declared:0",
-        "declared-file-count:1990",
-        "inventory-root:docs/architecture:367",
+        "declared-file-count:1992",
+        "inventory-root:docs/architecture:369",
         "inventory-root:spec:199",
         "inventory-root:tools:1349",
         "inventory-root:evidence/generated-reports:10",
@@ -34,7 +34,7 @@
         "pruned-directory:dist",
         "pruned-directory:node_modules"
       ],
-      "message": "Declared inventory roots produced 1990 files while pruning generated dependency/cache directories; coverage equivalence passed=True.",
+      "message": "Declared inventory roots produced 1992 files while pruning generated dependency/cache directories; coverage equivalence passed=True.",
       "ruleId": "USF-OPT-PATH-001",
       "severity": "info",
       "subject": "declared-inventory"

@@ -672,12 +672,11 @@ def command_screenshot_retention(_: argparse.Namespace) -> Path:
 
 def command_compose_timing(args: argparse.Namespace) -> Path:
     measurements = []
-    measurements.append(run_command(["python3", "tools/validate-compose/check-compose-ports.py", "all", "--json"], 60))
+    measurements.append(run_command(["corepack", "pnpm", "compose:check-generated"], 90))
+    measurements.append(run_command(["corepack", "pnpm", "compose:ports:dev"], 60))
     if shutil.which("docker"):
         measurements.append(run_command(["docker", "compose", "-f", "compose/compose.dev.generated.yaml", "config", "--quiet"], 60))
         if args.include_startup:
-            measurements.append(run_command(["corepack", "pnpm", "compose:check-generated"], 90))
-            measurements.append(run_command(["corepack", "pnpm", "compose:ports:dev"], 60))
             measurements.append(run_command(["docker", "compose", "-f", "compose/compose.yaml", "up", "-d", "--wait", "--wait-timeout", "240"], 300))
             measurements.append(run_command(["docker", "compose", "-f", "compose/compose.yaml", "down", "--remove-orphans"], 120))
         else:
@@ -711,6 +710,12 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
         "Generated Compose config, port, and optional startup timing baseline for bounded local optimisation review.",
     )
     measured = [item for item in measurements if item.get("status") == "measured"]
+    by_command = {" ".join(str(part) for part in item.get("command", [])): item for item in measurements}
+    generated_check = by_command.get("corepack pnpm compose:check-generated", {})
+    port_check = by_command.get("corepack pnpm compose:ports:dev", {})
+    compose_config = by_command.get("docker compose -f compose/compose.dev.generated.yaml config --quiet", {})
+    startup_wait = by_command.get("docker compose -f compose/compose.yaml up -d --wait --wait-timeout 240", {})
+    teardown = by_command.get("docker compose -f compose/compose.yaml down --remove-orphans", {})
     report["findings"].append(
         finding(
             "USF-OPT-COMPOSE-001",
@@ -721,6 +726,11 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
                 f"startup-measurement-requested:{str(bool(args.include_startup)).lower()}",
                 f"measured-command-count:{len(measured)}",
                 "compose-phase-split:config,port,startup-wait,teardown",
+                f"generated-compose-check-exit-code:{generated_check.get('exitCode')}",
+                f"compose-port-check-exit-code:{port_check.get('exitCode')}",
+                f"compose-config-exit-code:{compose_config.get('exitCode')}",
+                f"compose-startup-wait-exit-code:{startup_wait.get('exitCode')}",
+                f"compose-teardown-exit-code:{teardown.get('exitCode')}",
                 "non-local-options-later-issue:USF-1007",
                 "testcontainers:considered-not-adopted-current-tranche",
                 "remote-cache:considered-not-adopted-current-tranche",

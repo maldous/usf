@@ -1,0 +1,32 @@
+{
+  "fixtureId": "missing-accessibility-semantics",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-010",
+  "ownerIssueId": "USF-938",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-010",
+  "mutatedSurface": "accessibility-mapping",
+  "mutation": "Accessibility mapping omits screen reader semantics and focus order.",
+  "authorityRefs": ["docs/architecture/app-surface-accessibility-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "accessibility": {
+    "keyboardNavigationRef": "keyboard-navigation-required",
+    "touchTargetRef": "touch-target-and-gesture-alternative-required",
+    "dynamicTypeRef": "dynamic-type-required",
+    "contrastRef": "contrast-boundary-required",
+    "reducedMotionRef": "reduced-motion-boundary-required",
+    "errorAnnouncementRef": "error-announcement-required",
+    "proofRefs": ["validator-selftest-with-planted-defect-fixtures"]
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

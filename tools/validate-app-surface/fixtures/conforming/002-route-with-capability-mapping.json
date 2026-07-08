@@ -1,0 +1,35 @@
+{
+  "fixtureId": "route-with-capability-mapping",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-002",
+  "ownerIssueId": "USF-930",
+  "coveredSurface": "route-mapping",
+  "authorityRefs": [
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "spec/instances/semantic-contract/authentication-platform.json"
+  ],
+  "nonClaimRefs": [
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-validator-implementation-tranche.json"
+  ],
+  "mapping": {
+    "capabilityRef": "semantic-contract.authentication-platform",
+    "permissionRefs": ["auth.login", "profile.read_self"],
+    "tenantBoundaryRef": "tenant-context-required",
+    "proofRefs": ["validator-selftest-with-planted-defect-fixtures"]
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}
