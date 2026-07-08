@@ -271,3 +271,14 @@ USF-1022 authorises the following bounded local query list/detail implementation
 The query list/detail implementation maps local developer-profile list and detail query views to governed query, capability, permission, cache freshness, cache policy, privacy classification, tenant, component-fixture, i18n, accessibility, telemetry, proof, and fail-closed references. Unknown query views must fail closed, missing query/cache/privacy authority is not authorised, and the validator must guard the real repository artefact.
 
 USF-1022 does not add package dependencies, create server-state providers, create persistent sensitive storage, introduce credentials, configure deployment, run staging proof, implement live provider queries, or claim product UI readiness, query client readiness, cache readiness, sync readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, store readiness, compliance readiness, monetisation readiness, or human acceptance.
+
+## USF-1023 app-surface state cache and query client setup
+
+The bounded local state/cache/query-client implementation is authorised only for these repository paths:
+
+- `packages/app-surface/src/index.ts`
+- `docs/architecture/app-surface-state-cache-query-client-implementation.json`
+- `tests/packages/app-surface-state-cache-query-client-implementation.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+The implementation may create in-memory local state/cache/query-client registry code and tests over existing generated-client and query-view semantics. It must not install packages, adopt a query library, create persistent sensitive storage, create external state services, add credentials, configure deployment, run staging, or claim cache/query-library/sync/offline/provider/staging/production/live-provider/compliance/human-acceptance readiness.

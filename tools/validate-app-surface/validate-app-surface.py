@@ -30,6 +30,7 @@ LOCAL_IN_MEMORY_RUNTIME = ROOT / "docs/architecture/app-surface-local-in-memory-
 SHARED_CLIENT_CONSUMPTION_PATH = ROOT / "docs/architecture/app-surface-shared-client-consumption-path.json"
 COMMAND_FORM_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-command-form-implementation.json"
 QUERY_LIST_DETAIL_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-query-list-detail-implementation.json"
+STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-state-cache-query-client-implementation.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -1104,6 +1105,331 @@ def validate_query_list_detail_implementation() -> list[dict[str, str]]:
     return failures
 
 
+
+def validate_state_cache_query_client_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-004"
+    issue_id = "USF-1023"
+    subject = rel(STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "state cache/query client implementation artefact is missing", issue_id)]
+    data = load_json(STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "state cache/query client implementation artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, subject, "artefact ownerIssueId must be USF-1023", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, subject, "artefact lifecycleState must be bounded-local-implemented", issue_id))
+    if data.get("providerMode") != "in-memory-only":
+        failures.append(finding(rule_id, subject, "providerMode must remain in-memory-only", issue_id))
+    if data.get("environment") != "dev-local":
+        failures.append(finding(rule_id, subject, "environment must remain dev-local", issue_id))
+    for path in data.get("authorityInputs", []):
+        if not isinstance(path, str) or not path_exists(path):
+            failures.append(finding(rule_id, subject, f"authority input does not exist: {path}", issue_id))
+    guard = data.get("validationGuard", {})
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "stateClassesMustMapToSemantics",
+        "serverStateAndUiOnlyBoundaryMustBeExplicit",
+        "privacyClassificationMustExist",
+        "logoutAndPurgeBehaviourMustExist",
+        "tenantBoundaryMustExist",
+        "missingStateClassificationMustFailClosed",
+        "missingPrivacyClassificationMustFailClosed",
+        "missingPurgePolicyMustFailClosed",
+        "unknownStateBoundaryMustFailClosed",
+        "persistentSensitiveStorageMustRemainForbidden",
+        "queryLibrarySetupMustRemainForbidden",
+        "syncOfflineRealtimeBackgroundMustRemainForbidden",
+        "libraryDecisionGapsMustBlockImplementation",
+        "nonClaimsMustAllBeFalse",
+    ]
+    if not isinstance(guard, dict):
+        failures.append(finding(rule_id, subject, "validationGuard must be an object", issue_id))
+    else:
+        for flag in required_guard_flags:
+            if guard.get(flag) is not True:
+                failures.append(finding(rule_id, f"{subject}.validationGuard.{flag}", "validation guard flag must be true", issue_id))
+
+    client_state = load_json(ROOT / "docs/architecture/client-state-storage-sync-semantics.json") if (ROOT / "docs/architecture/client-state-storage-sync-semantics.json").exists() else {}
+    query_impl = load_json(QUERY_LIST_DETAIL_IMPLEMENTATION) if QUERY_LIST_DETAIL_IMPLEMENTATION.exists() else {}
+    runtime = load_json(LOCAL_IN_MEMORY_RUNTIME) if LOCAL_IN_MEMORY_RUNTIME.exists() else {}
+    shared_client = load_json(SHARED_CLIENT_CONSUMPTION_PATH) if SHARED_CLIENT_CONSUMPTION_PATH.exists() else {}
+    if not isinstance(client_state, dict):
+        client_state = {}
+    if not isinstance(query_impl, dict):
+        query_impl = {}
+    if not isinstance(runtime, dict):
+        runtime = {}
+    if not isinstance(shared_client, dict):
+        shared_client = {}
+
+    implementation_gate = client_state.get("implementationGate", {})
+    if not isinstance(implementation_gate, dict):
+        failures.append(finding(rule_id, subject, "client-state implementationGate must be available", issue_id))
+    else:
+        for field in [
+            "storageImplementationAllowed",
+            "syncEngineImplementationAllowed",
+            "queryLibrarySetupAllowed",
+            "identityProviderIntegrationAllowed",
+            "realtimeProviderSetupAllowed",
+            "backgroundTaskImplementationAllowed",
+        ]:
+            if implementation_gate.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"client-state implementationGate.{field} must remain false", issue_id))
+
+    authority: dict[str, set[str]] = {
+        "stateClasses": {"server-query-cache", "ui-ephemeral-state", "session-purge-signal"},
+        "queryRefs": ids_from_semantic_inputs(runtime, "queries"),
+        "queryViewRefs": set(),
+        "capabilityIds": ids_from_semantic_inputs(runtime, "capabilities"),
+        "permissionRefs": ids_from_semantic_inputs(runtime, "permissions"),
+        "tenantBoundaryRefs": ids_from_semantic_inputs(runtime, "tenantContexts"),
+        "privacyClassificationRefs": set(),
+        "cachePolicyRefs": {"query-cache-freshness-required"},
+        "storageLocationRefs": {"in-memory-only"},
+        "retentionPolicyRefs": {
+            "docs/architecture/client-state-storage-sync-semantics.json#client-device-browser-retention",
+            "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        },
+        "purgeTriggerRefs": {
+            "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+            "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+        },
+        "logoutPurgeRefs": {"docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge"},
+        "sharedDevicePostureRefs": {"docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture"},
+        "failClosedRefs": {
+            "missing-state-classification",
+            "missing-privacy-classification",
+            "missing-purge-policy",
+            "partial-purge-fail-closed",
+            "persistent-sensitive-storage-not-authorised",
+            "query-library-setup-not-authorised",
+            "ui-only-behaviour-not-authorised",
+        },
+        "semanticSourceRefs": set(data.get("authorityInputs", [])) if isinstance(data.get("authorityInputs", []), list) else set(),
+        "proofRefs": {
+            "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+            "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+            "tools/validate-app-surface/validate-app-surface.py",
+        },
+    }
+    shared_mappings = [
+        item
+        for item in shared_client.get("mappings", [])
+        if isinstance(item, dict) and item.get("behaviourClass") == "queries"
+    ]
+    for mapping in shared_mappings:
+        if isinstance(mapping.get("commandOrQueryOrWorkflowOrEventId"), str):
+            authority["queryRefs"].add(mapping["commandOrQueryOrWorkflowOrEventId"])
+        if isinstance(mapping.get("capabilityId"), str):
+            authority["capabilityIds"].add(mapping["capabilityId"])
+        for source_field, authority_key in [
+            ("permissionRefs", "permissionRefs"),
+            ("privacyCategoryRefs", "privacyClassificationRefs"),
+        ]:
+            values = mapping.get(source_field, [])
+            if isinstance(values, list):
+                authority[authority_key].update(item for item in values if isinstance(item, str) and item.strip())
+        offline_posture = mapping.get("offlineRetryCachePosture", {})
+        if isinstance(offline_posture, dict) and isinstance(offline_posture.get("cacheSemanticsRef"), str):
+            authority["cachePolicyRefs"].add(offline_posture["cacheSemanticsRef"])
+        if isinstance(offline_posture, dict):
+            if offline_posture.get("offlineAllowed") is not False:
+                failures.append(finding(rule_id, subject, "shared-client offlineAllowed must remain false", issue_id))
+            if offline_posture.get("retryAllowed") is not False:
+                failures.append(finding(rule_id, subject, "shared-client retryAllowed must remain false", issue_id))
+    query_views = query_impl.get("implementedQueryViews", [])
+    if isinstance(query_views, list):
+        for view in query_views:
+            if not isinstance(view, dict):
+                continue
+            if isinstance(view.get("viewId"), str):
+                authority["queryViewRefs"].add(view["viewId"])
+            for field, authority_key in [
+                ("queryRef", "queryRefs"),
+                ("capabilityId", "capabilityIds"),
+                ("tenantBoundaryRef", "tenantBoundaryRefs"),
+            ]:
+                if isinstance(view.get(field), str):
+                    authority[authority_key].add(view[field])
+            for field, authority_key in [
+                ("permissionRefs", "permissionRefs"),
+                ("privacyClassificationRefs", "privacyClassificationRefs"),
+                ("cachePolicyRefs", "cachePolicyRefs"),
+            ]:
+                values = view.get(field, [])
+                if isinstance(values, list):
+                    authority[authority_key].update(item for item in values if isinstance(item, str) and item.strip())
+
+    scope = data.get("implementationScope", {})
+    if not isinstance(scope, dict):
+        failures.append(finding(rule_id, subject, "implementationScope must be an object", issue_id))
+    else:
+        expected_scope = {
+            "runtimePackage": "packages/app-surface/src/index.ts",
+            "runtimeRegistryExport": "LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY",
+            "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+            "unitTestArtefact": "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+        }
+        for field, value in expected_scope.items():
+            if scope.get(field) != value:
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} is incorrect", issue_id))
+        for field in [
+            "packageInstallationAllowed",
+            "dependencyInstallRequired",
+            "externalServicesAllowed",
+            "credentialsAllowed",
+            "deploymentAllowed",
+            "stagingAllowed",
+        ]:
+            if scope.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} must remain false", issue_id))
+        if scope.get("runtimeCodeCreatedByIssue") is not True:
+            failures.append(finding(rule_id, subject, "implementationScope.runtimeCodeCreatedByIssue must be true", issue_id))
+    library = data.get("libraryDecisionPosture", {})
+    if not isinstance(library, dict):
+        failures.append(finding(rule_id, subject, "libraryDecisionPosture must be an object", issue_id))
+    else:
+        for field in ["queryLibraryAdopted", "lockfileChangedByIssue", "repositoryDecisionGapFound", "blockingDecisionIssueRequiredNow"]:
+            if library.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"libraryDecisionPosture.{field} must remain false", issue_id))
+        if library.get("packageDependenciesAddedByIssue") != []:
+            failures.append(finding(rule_id, subject, "libraryDecisionPosture.packageDependenciesAddedByIssue must remain empty", issue_id))
+        if library.get("futureLibraryWorkMustUseSeparateAuthorityIssue") is not True:
+            failures.append(finding(rule_id, subject, "libraryDecisionPosture.futureLibraryWorkMustUseSeparateAuthorityIssue must be true", issue_id))
+
+    required_string_fields = [
+        "stateId",
+        "stateClass",
+        "stateScope",
+        "queryRef",
+        "capabilityId",
+        "tenantBoundaryRef",
+        "storageLocationRef",
+        "retentionPolicyRef",
+        "logoutPurgeRef",
+        "sharedDevicePostureRef",
+        "nonClaimBoundary",
+    ]
+    required_array_fields = [
+        "queryViewRefs",
+        "permissionRefs",
+        "privacyClassificationRefs",
+        "cachePolicyRefs",
+        "purgeTriggerRefs",
+        "failClosedRefs",
+    ]
+    forbidden_flags = {
+        "persistentSensitiveStorageAllowed": "persistent sensitive storage must remain forbidden",
+        "queryLibraryRequired": "query library setup must remain forbidden",
+        "syncAllowed": "sync must remain forbidden",
+        "offlineAllowed": "offline-first must remain forbidden",
+        "realtimeAllowed": "realtime provider must remain forbidden",
+        "backgroundRefreshAllowed": "background refresh must remain forbidden",
+    }
+    boundaries = data.get("implementedStateBoundaries", [])
+    if not isinstance(boundaries, list) or not boundaries:
+        failures.append(finding(rule_id, subject, "implementedStateBoundaries must be a non-empty array", issue_id))
+        boundaries = []
+    seen_state_ids: set[str] = set()
+    seen_state_classes: set[str] = set()
+    for index, boundary in enumerate(boundaries):
+        if not isinstance(boundary, dict):
+            failures.append(finding(rule_id, f"{subject}.implementedStateBoundaries.{index}", "state boundary must be an object", issue_id))
+            continue
+        state_id = boundary.get("stateId") if isinstance(boundary.get("stateId"), str) and boundary["stateId"].strip() else f"implementedStateBoundaries.{index}"
+        boundary_subject = f"{subject}.implementedStateBoundaries.{state_id}"
+        if state_id in seen_state_ids:
+            failures.append(finding(rule_id, boundary_subject, "duplicate stateId", issue_id))
+        seen_state_ids.add(str(state_id))
+        if isinstance(boundary.get("stateClass"), str):
+            seen_state_classes.add(boundary["stateClass"])
+        for field in required_string_fields:
+            if not isinstance(boundary.get(field), str) or not boundary[field].strip():
+                failures.append(finding(rule_id, boundary_subject, f"missing {field}", issue_id))
+        for field in required_array_fields:
+            if not has_nonempty_string_array(boundary.get(field)):
+                failures.append(finding(rule_id, boundary_subject, f"missing {field}", issue_id))
+        for field, message in forbidden_flags.items():
+            if boundary.get(field) is not False:
+                failures.append(finding(rule_id, boundary_subject, message, issue_id))
+        for field, authority_key in [
+            ("stateClass", "stateClasses"),
+            ("queryRef", "queryRefs"),
+            ("capabilityId", "capabilityIds"),
+            ("tenantBoundaryRef", "tenantBoundaryRefs"),
+            ("storageLocationRef", "storageLocationRefs"),
+            ("retentionPolicyRef", "retentionPolicyRefs"),
+            ("logoutPurgeRef", "logoutPurgeRefs"),
+            ("sharedDevicePostureRef", "sharedDevicePostureRefs"),
+        ]:
+            value = boundary.get(field)
+            if not isinstance(value, str) or value not in authority[authority_key]:
+                failures.append(finding(rule_id, boundary_subject, f"{field} lacks repository authority", issue_id))
+        for field, authority_key in [
+            ("queryViewRefs", "queryViewRefs"),
+            ("permissionRefs", "permissionRefs"),
+            ("privacyClassificationRefs", "privacyClassificationRefs"),
+            ("cachePolicyRefs", "cachePolicyRefs"),
+            ("purgeTriggerRefs", "purgeTriggerRefs"),
+            ("failClosedRefs", "failClosedRefs"),
+        ]:
+            values = boundary.get(field, [])
+            if isinstance(values, list):
+                for value in values:
+                    if not isinstance(value, str) or value not in authority[authority_key]:
+                        failures.append(finding(rule_id, boundary_subject, f"{field} lacks repository authority: {value}", issue_id))
+        for field in [
+            "privacyClassificationRefs",
+            "cachePolicyRefs",
+            "purgeTriggerRefs",
+        ]:
+            values = boundary.get(field, [])
+            if isinstance(values, list):
+                for path_ref in values:
+                    if isinstance(path_ref, str) and path_ref.startswith("docs/") and not path_ref_exists(path_ref):
+                        failures.append(finding(rule_id, boundary_subject, f"{field} path does not exist: {path_ref}", issue_id))
+    for required_class in ["server-query-cache", "ui-ephemeral-state", "session-purge-signal"]:
+        if required_class not in seen_state_classes:
+            failures.append(finding(rule_id, subject, f"missing state class: {required_class}", issue_id))
+
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    observed_out_of_scope = {
+        item.get("surface"): item
+        for item in out_of_scope
+        if isinstance(item, dict)
+    } if isinstance(out_of_scope, list) else {}
+    required_out_of_scope = {
+        "auth-session-dev-identity": {"ownerIssueId": "USF-1024", "status": "owned-by-later-issue"},
+        "live-server-state-provider": {"status": "not-authorised"},
+        "persistent-sensitive-storage": {"status": "not-authorised"},
+        "query-library-package-adoption": {"ownerIssueId": "USF-1019", "status": "not-authorised-in-this-issue"},
+        "sync-engine": {"ownerIssueId": "USF-528", "status": "blocked-by-missing-owner-decision"},
+        "offline-first-cache": {"ownerIssueId": "USF-528", "status": "blocked-by-missing-owner-decision"},
+        "realtime-subscription": {"status": "not-authorised"},
+        "background-refresh": {"status": "not-authorised"},
+        "deployment-or-staging-proof": {"status": "not-authorised"},
+    }
+    for surface, expected in required_out_of_scope.items():
+        item = observed_out_of_scope.get(surface)
+        if not isinstance(item, dict) or any(item.get(key) != value for key, value in expected.items()):
+            failures.append(finding(rule_id, subject, f"{surface} out-of-scope boundary is missing or incorrect", issue_id))
+    proof_ladder = data.get("proofLadder", {})
+    if not isinstance(proof_ladder, dict):
+        failures.append(finding(rule_id, subject, "proofLadder must be an object", issue_id))
+    else:
+        for field in ["devLocalRequired", "unitTestsRequired", "contractTestsRequired"]:
+            if proof_ladder.get(field) is not True:
+                failures.append(finding(rule_id, subject, f"proofLadder.{field} must be true", issue_id))
+        for field in ["composeRequired", "stagingRequired"]:
+            if proof_ladder.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"proofLadder.{field} must be false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -1123,6 +1449,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_route_capability_implementation())
     failures.extend(validate_command_form_implementation())
     failures.extend(validate_query_list_detail_implementation())
+    failures.extend(validate_state_cache_query_client_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -1165,6 +1492,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         ROUTE_CAPABILITY_IMPLEMENTATION,
         COMMAND_FORM_IMPLEMENTATION,
         QUERY_LIST_DETAIL_IMPLEMENTATION,
+        STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION,
     ]
     return {
         "mode": mode,
