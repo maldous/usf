@@ -2512,6 +2512,29 @@ export const exerciseLocalAuthPermissionCheck = (
       liveProviderReadinessClaimed: false,
     };
   }
+  const mappedAllowCase = LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY.permissionCheckCases.some(
+    (check) =>
+      check.expectedDecision === "allow" &&
+      check.identityRef === request.identityRef &&
+      check.tenantBoundaryRef === request.tenantBoundaryRef &&
+      check.permissionRef === request.permissionRef &&
+      check.requestContextKind === request.requestContextKind &&
+      check.targetRef === request.targetRef,
+  );
+  if (!mappedAllowCase) {
+    return {
+      ...request,
+      decision: "deny",
+      reasonCode: "permission-target-mapping-missing-fail-closed",
+      providerMode: LOCAL_AUTH_SESSION_DEV_IDENTITY_PROVIDER_MODE,
+      environment: LOCAL_AUTH_SESSION_DEV_IDENTITY_ENVIRONMENT,
+      auditEventRef: "client-audit-event-emission",
+      authReadinessClaimed: false,
+      providerReadinessClaimed: false,
+      productionIdentityReadinessClaimed: false,
+      liveProviderReadinessClaimed: false,
+    };
+  }
   return {
     ...request,
     decision: "allow",

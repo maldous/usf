@@ -121,6 +121,22 @@ describe("app-surface auth session dev identity implementation", () => {
     expect(decision.reasonCode).toBe("permission-semantics-missing-fail-closed");
   });
 
+  it("fails closed when permission and target are not an explicit mapped pair", () => {
+    const decision = exerciseLocalAuthPermissionCheck(
+      {
+        identityRef: "identity.dev-local-developer",
+        userRef: "user.dev-local-fixture",
+        tenantBoundaryRef: "tenant.dev-local-fixture",
+        permissionRef: "developer:key:onboard",
+        requestContextKind: "query",
+        targetRef: "query.developerProfile",
+      },
+      semanticAuthority,
+    );
+    expect(decision.decision).toBe("deny");
+    expect(decision.reasonCode).toBe("permission-target-mapping-missing-fail-closed");
+  });
+
   it("fails closed when semantic authority is omitted", () => {
     const decision = exerciseLocalAuthPermissionCheck({
       identityRef: "identity.dev-local-developer",
