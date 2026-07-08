@@ -154,6 +154,7 @@
       "corepack pnpm install --frozen-lockfile",
       "corepack pnpm typecheck",
       "corepack pnpm validate-spec",
+      "corepack pnpm parity",
       "make app-surface-validate",
       "make app-surface-selftest"
     ],
