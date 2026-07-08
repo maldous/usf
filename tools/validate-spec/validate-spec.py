@@ -385,6 +385,7 @@ RULES = {
     "USF-ANCHOR-007":   ("blocking", "Generated report accepted as proof freshness anchor payload"),
     "USF-ANCHOR-008":   ("blocking", "Proof freshness anchor signer is not in the approved trust root"),
     "USF-BOOTSTRAP-001": ("blocking", "Bootstrap-readiness validator failed"),
+    "USF-APPPLAN-001": ("blocking", "App-surface implementation plan path inventory is invalid"),
 }
 
 
@@ -2015,6 +2016,7 @@ def run_all_checks(ctx, F):
     check_catalogues(ctx, F)
     check_safety(ctx, F)
     validate_readiness_reconciliation(F)
+    validate_app_surface_implementation_plan_path_inventory(F)
 
 
 def check_selftest(ctx, F):
@@ -2034,7 +2036,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -2198,6 +2200,16 @@ def check_selftest(ctx, F):
                 existing_dirs=set(patch.get("existingDirs", [])),
                 spec_instance_dirs=set(patch.get("specInstanceDirs", [])),
             )
+        elif patch["target"] == "app-surface-plan-paths":
+            record = patch.get("record")
+            if not isinstance(record, dict):
+                F.add("USF-SELFTEST-001", df, "app-surface-plan-paths planted-defect needs a record object")
+                continue
+            validate_app_surface_implementation_plan_path_inventory(
+                f2,
+                record=record,
+                existing_paths=set(patch.get("existingPaths", [])),
+            )
         else:
             run_all_checks(sandbox, f2)
         if patch.get("expectedClean") is True:
@@ -2233,6 +2245,25 @@ IMPLEMENTATION_DIRECTIVE_PATHS = {
     "docs/architecture/implementation-extraction-directive.md",
 }
 IMPLEMENTATION_DIRECTIVE_TEXT_PATH = "docs/architecture/implementation-extraction-directive.md"
+APP_SURFACE_IMPLEMENTATION_PLAN_PATH = "docs/architecture/app-surface-implementation-realisation-plan.json"
+APP_SURFACE_PR306_STALE_PATHS = {
+    "docs/architecture/app-surface-accessibility-semantic-coverage.json",
+    "docs/architecture/app-surface-api-contract-realisation.json",
+    "docs/architecture/app-surface-implementation-gate.json",
+    "docs/architecture/app-surface-semantic-definition-candidate-backlog.json",
+}
+REPOSITORY_PATH_STANDALONES = {
+    "Makefile",
+    "package.json",
+    "pnpm-workspace.yaml",
+    "pnpm-lock.yaml",
+    "tsconfig.json",
+    "tsconfig.base.json",
+}
+REPOSITORY_PATH_RE = re.compile(
+    r"^(?:apps|capabilities|adapters|packages|tests|docs|evidence|tools|spec|"
+    r"config|infra|scripts|services|artifacts|\.github)/[^\s]+$"
+)
 DIRECTIVE_REQUIRED_PHRASES = {
     "authorising human",
     "linear record",
@@ -2319,6 +2350,180 @@ def _normalise_path(path):
     while path.startswith("./"):
         path = path[2:]
     return path
+
+
+def _normalise_repository_path_value(value):
+    if not isinstance(value, str):
+        return None
+    path = value.strip().strip("`").rstrip(".,;:")
+    if not path or path.startswith(("http://", "https://", "urn:", "source:")):
+        return None
+    if "*" in path or re.search(r"\s", path):
+        return None
+    path = _normalise_path(path.split("#", 1)[0])
+    if path in REPOSITORY_PATH_STANDALONES or REPOSITORY_PATH_RE.match(path):
+        return path
+    return None
+
+
+def _walk_repository_path_values(node, location="$"):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            yield from _walk_repository_path_values(value, f"{location}.{key}")
+    elif isinstance(node, list):
+        for index, value in enumerate(node):
+            yield from _walk_repository_path_values(value, f"{location}[{index}]")
+    else:
+        path = _normalise_repository_path_value(node)
+        if path is not None:
+            yield path, location
+
+
+def _path_exists_for_plan(path, existing_paths=None):
+    path = _normalise_path(path)
+    if existing_paths is not None:
+        return path in {_normalise_path(p) for p in existing_paths}
+    return os.path.exists(path)
+
+
+def _plan_inventory_list(F, inventory, key, plan_path):
+    value = inventory.get(key)
+    if not isinstance(value, list):
+        F.add("USF-APPPLAN-001", f"{plan_path}:{key}", "repository path inventory section must be an array")
+        return []
+    return value
+
+
+def _plan_inventory_path(item):
+    if not isinstance(item, dict):
+        return None
+    path = item.get("path")
+    if not isinstance(path, str):
+        return None
+    return _normalise_path(path)
+
+
+def _plan_replacement_paths(item):
+    replacements = []
+    replacement = item.get("replacementPath") if isinstance(item, dict) else None
+    if isinstance(replacement, str):
+        replacements.append(_normalise_path(replacement))
+    replacement_list = item.get("replacementPaths") if isinstance(item, dict) else None
+    if isinstance(replacement_list, list):
+        replacements.extend(_normalise_path(path) for path in replacement_list if isinstance(path, str))
+    return replacements
+
+
+def validate_app_surface_implementation_plan_path_inventory(F, plan_path=APP_SURFACE_IMPLEMENTATION_PLAN_PATH,
+                                                            record=None, existing_paths=None):
+    data = record if record is not None else load_json(plan_path, F)
+    if data is None:
+        return
+    if not isinstance(data, dict):
+        F.add("USF-APPPLAN-001", plan_path, "plan root must be an object")
+        return
+
+    guard = data.get("pathReferenceGuard")
+    if not isinstance(guard, dict):
+        F.add("USF-APPPLAN-001", f"{plan_path}:pathReferenceGuard", "path reference guard is missing")
+    else:
+        required_guard_values = {
+            "existingRepositoryPathsMustExist": True,
+            "futureToCreatePathsMustHaveOwningLinearIssue": True,
+            "invalidOrStalePathReferencesAreNotAuthority": True,
+            "guardStatus": "active-for-plan-use",
+        }
+        for key, expected in required_guard_values.items():
+            if guard.get(key) != expected:
+                F.add("USF-APPPLAN-001", f"{plan_path}:pathReferenceGuard.{key}", f"expected {expected!r}")
+
+    inventory = data.get("repositoryPathReferenceInventory")
+    if not isinstance(inventory, dict):
+        F.add("USF-APPPLAN-001", f"{plan_path}:repositoryPathReferenceInventory", "path inventory is missing")
+        return
+
+    existing_items = _plan_inventory_list(F, inventory, "existingRepositoryPaths", plan_path)
+    future_items = _plan_inventory_list(F, inventory, "futureToCreatePaths", plan_path)
+    stale_items = _plan_inventory_list(F, inventory, "removedInvalidOrStaleReferences", plan_path)
+
+    existing_paths = { _normalise_path(p) for p in existing_paths } if existing_paths is not None else None
+    classified_existing = set()
+    classified_future = set()
+    classified_stale = set()
+    replacement_paths = set()
+
+    for index, item in enumerate(existing_items):
+        subject = f"{plan_path}:repositoryPathReferenceInventory.existingRepositoryPaths[{index}]"
+        path = _plan_inventory_path(item)
+        if path is None:
+            F.add("USF-APPPLAN-001", subject, "existing path item requires a string path")
+            continue
+        if item.get("classification") != "exists-now":
+            F.add("USF-APPPLAN-001", subject, "existing path item must be classified exists-now")
+        if path in classified_existing:
+            F.add("USF-APPPLAN-001", subject, f"duplicate existing path: {path}")
+        classified_existing.add(path)
+        if not _path_exists_for_plan(path, existing_paths):
+            F.add("USF-APPPLAN-001", subject, f"existing path does not exist: {path}")
+
+    for index, item in enumerate(future_items):
+        subject = f"{plan_path}:repositoryPathReferenceInventory.futureToCreatePaths[{index}]"
+        path = _plan_inventory_path(item)
+        if path is None:
+            F.add("USF-APPPLAN-001", subject, "future path item requires a string path")
+            continue
+        if item.get("classification") != "future-to-create":
+            F.add("USF-APPPLAN-001", subject, "future path item must be classified future-to-create")
+        owner = item.get("owningLinearIssueId")
+        if not isinstance(owner, str) or not re.fullmatch(r"USF-[0-9]+", owner):
+            F.add("USF-APPPLAN-001", subject, "future path item requires owningLinearIssueId")
+        if path in classified_future:
+            F.add("USF-APPPLAN-001", subject, f"duplicate future path: {path}")
+        classified_future.add(path)
+        if _path_exists_for_plan(path, existing_paths):
+            F.add("USF-APPPLAN-001", subject, f"future-to-create path already exists: {path}")
+
+    for index, item in enumerate(stale_items):
+        subject = f"{plan_path}:repositoryPathReferenceInventory.removedInvalidOrStaleReferences[{index}]"
+        path = _plan_inventory_path(item)
+        if path is None:
+            F.add("USF-APPPLAN-001", subject, "stale path item requires a string path")
+            continue
+        if item.get("classification") != "invalid/stale":
+            F.add("USF-APPPLAN-001", subject, "stale path item must be classified invalid/stale")
+        if path in classified_stale:
+            F.add("USF-APPPLAN-001", subject, f"duplicate stale path: {path}")
+        classified_stale.add(path)
+        if _path_exists_for_plan(path, existing_paths):
+            F.add("USF-APPPLAN-001", subject, f"invalid/stale path exists and cannot be treated as removed: {path}")
+        replacements = _plan_replacement_paths(item)
+        if not replacements:
+            F.add("USF-APPPLAN-001", subject, "invalid/stale path requires replacementPath or replacementPaths")
+        for replacement in replacements:
+            replacement_paths.add(replacement)
+            if not _path_exists_for_plan(replacement, existing_paths):
+                F.add("USF-APPPLAN-001", subject, f"replacement path does not exist: {replacement}")
+
+    missing_review_paths = sorted(APP_SURFACE_PR306_STALE_PATHS - classified_stale)
+    if missing_review_paths:
+        F.add("USF-APPPLAN-001", f"{plan_path}:repositoryPathReferenceInventory.removedInvalidOrStaleReferences",
+              f"PR 306 stale path audit is missing: {missing_review_paths}")
+
+    known_current_paths = classified_existing | classified_future | replacement_paths
+    for path, location in _walk_repository_path_values(data):
+        if ".removedInvalidOrStaleReferences[" in location:
+            continue
+        if path in classified_stale:
+            F.add("USF-APPPLAN-001", f"{plan_path}:{location}",
+                  f"invalid/stale path leaked into current authority references: {path}")
+        elif path in classified_existing:
+            if not _path_exists_for_plan(path, existing_paths):
+                F.add("USF-APPPLAN-001", f"{plan_path}:{location}", f"existing path does not exist: {path}")
+        elif path in classified_future:
+            continue
+        elif path not in known_current_paths:
+            F.add("USF-APPPLAN-001", f"{plan_path}:{location}",
+                  f"repository path is not classified in repositoryPathReferenceInventory: {path}")
 
 
 def _implementation_root(path):
@@ -2569,6 +2774,7 @@ def validate_implementation_paths(F, paths, *, changed_paths=None, source_paths=
 
 
 def check_implementation(ctx, F):
+    validate_app_surface_implementation_plan_path_inventory(F)
     implementation_files = sorted(p for p in _existing_repo_paths() if _is_implementation_path(p))
     directive_files = sorted(p for p in _existing_repo_paths() if p in IMPLEMENTATION_DIRECTIVE_PATHS)
     validate_implementation_directives(F, directive_files)
