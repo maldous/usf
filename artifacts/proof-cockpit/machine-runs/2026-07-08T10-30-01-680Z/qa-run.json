@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-08T10-30-01-721Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "f52eeecbf8facad50b369b2b72fd0445ba3c3418",
+  "deploymentSha": "f52eeecbf8facad50b369b2b72fd0445ba3c3418",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:12111",
+  "startedAt": "2026-07-08T10:30:01.721Z",
+  "completedAt": "2026-07-08T10:32:39.795Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "clean",
+  "branch": "codex/usf-1013-app-surface-plan",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}
