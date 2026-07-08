@@ -1,0 +1,43 @@
+{
+  "aiGuidance": "Lowest-authority generated timing report for bounded local optimisation review only. Generated timing output is not USF semantic authority. Generated timing output is not a readiness claim. Generated timing output is not a staging, production, deployment, live-provider, store, release, compliance, or human-acceptance claim. Timing comparison is warn-only and does not hard-block CI. No external provider, remote cache, task graph, or Testcontainers migration is introduced by this tool.",
+  "authorityLevel": "generated-report",
+  "description": "Generated warn-only before and after timing comparison for bounded local optimisation review.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/measure-command-timing.py",
+    "evidence/generated-reports/repository-optimisation-local-timing-before.json",
+    "evidence/generated-reports/repository-optimisation-local-timing-after.json"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "baseline:evidence/generated-reports/repository-optimisation-local-timing-before.json",
+        "current:evidence/generated-reports/repository-optimisation-local-timing-after.json",
+        "baseline-wall-ms:22",
+        "current-wall-ms:37",
+        "delta-wall-ms:15",
+        "delta-percent:68.1818",
+        "enforcement-mode:warn-only",
+        "hard-ci-block:false"
+      ],
+      "message": "Warn-only timing comparison status=warn; baselineWallMs=22; currentWallMs=37; deltaWallMs=15; deltaPercent=68.1818; thresholdPercent=20.0.",
+      "ruleId": "USF-TIMING-COMPARE",
+      "severity": "warning",
+      "subject": "before-after-comparison"
+    }
+  ],
+  "id": "usf.repository-optimisation.timing.before-after-comparison",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Local before and after timing comparison",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

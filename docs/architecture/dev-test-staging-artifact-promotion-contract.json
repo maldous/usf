@@ -1,0 +1,238 @@
+{
+  "id": "usf.dev-test-staging-artifact-promotion-contract",
+  "title": "Dev Test Staging artifact promotion contract",
+  "purpose": "Define the schema-aligned contract and validator-owned examples for Dev-to-Test and Test-to-Staging artifact handoff records without activating a new schema file or making any readiness claim.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "generatedReportsAreAuthority": false,
+    "schemaFileCreated": false,
+    "schemaLifecyclePromoted": false,
+    "implementationRuntimeCreated": false,
+    "nonClaims": [
+      "No Dev artifact becomes Test proof by implication.",
+      "No Test artifact becomes staging proof by implication.",
+      "No staging-entry consideration becomes staging readiness.",
+      "No production, deployment, release, compliance, store, live-provider, provider, product, or human-acceptance claim is made."
+    ]
+  },
+  "sourceIssues": [
+    "USF-978",
+    "USF-979",
+    "USF-980",
+    "USF-985",
+    "USF-986"
+  ],
+  "authorityReferences": [
+    "AGENTS.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/schema-authoring-standard.md",
+    "docs/architecture/repository-environment-ladder-governance.json",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json"
+  ],
+  "requiredFields": [
+    "handoffId",
+    "handoffType",
+    "artifactRole",
+    "sourceCommit",
+    "targetCommit",
+    "issueRefs",
+    "sourceEnvironment",
+    "targetEnvironment",
+    "providerMode",
+    "observedProofLevel",
+    "claimedProofLevel",
+    "validationStatus",
+    "validatorRefs",
+    "evidenceRefs",
+    "evidenceKinds",
+    "artifactHash",
+    "hashAlgorithm",
+    "hashBasis",
+    "freshnessState",
+    "supersessionState",
+    "generatedReportNonAuthority",
+    "nonClaims",
+    "ambiguityFallback",
+    "rerunMode",
+    "inputClass"
+  ],
+  "controlledValues": {
+    "handoffTypes": [
+      "dev-to-test",
+      "test-to-staging"
+    ],
+    "environments": [
+      "dev",
+      "test",
+      "staging",
+      "production-shaped",
+      "production-live"
+    ],
+    "providerModes": [
+      "hermetic-mock",
+      "local-composed-real-service",
+      "external-sandbox",
+      "live-external-provider"
+    ],
+    "proofLevels": [
+      "discovery",
+      "in-memory",
+      "hermetic-dev",
+      "dev-compose",
+      "test-consideration",
+      "test-service-backed",
+      "staging-entry-consideration",
+      "staging-proof",
+      "production-live-proof"
+    ],
+    "validationStatuses": [
+      "pass",
+      "fail",
+      "evidence-required",
+      "owner-review-required"
+    ],
+    "freshnessStates": [
+      "current",
+      "stale",
+      "unknown"
+    ],
+    "supersessionStates": [
+      "current",
+      "superseded",
+      "historical",
+      "invalidated"
+    ],
+    "rerunModes": [
+      "not-needed",
+      "validator-only",
+      "full-applicable-proof",
+      "terminal-proof-refresh-required"
+    ],
+    "inputClasses": [
+      "known",
+      "unknown",
+      "ambiguous"
+    ],
+    "evidenceKinds": [
+      "raw-evidence",
+      "retained-proof-artifact",
+      "custody-record",
+      "generated-report"
+    ]
+  },
+  "requiredNonClaims": [
+    "test-readiness",
+    "staging-readiness",
+    "staging-proof",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "store-readiness",
+    "compliance-readiness",
+    "human-acceptance"
+  ],
+  "positiveRecords": [
+    {
+      "handoffId": "positive-dev-to-test",
+      "handoffType": "dev-to-test",
+      "artifactRole": "semantic-behaviour-artifact",
+      "sourceCommit": "0123456789abcdef0123456789abcdef01234567",
+      "targetCommit": "0123456789abcdef0123456789abcdef01234567",
+      "issueRefs": [
+        "USF-985"
+      ],
+      "sourceEnvironment": "dev",
+      "targetEnvironment": "test",
+      "providerMode": "local-composed-real-service",
+      "observedProofLevel": "dev-compose",
+      "claimedProofLevel": "test-consideration",
+      "validationStatus": "pass",
+      "validatorRefs": [
+        "tools/validate-artifact-promotion/validate-artifact-promotion.py"
+      ],
+      "evidenceRefs": [
+        "evidence/dev-compose-proof.json"
+      ],
+      "evidenceKinds": [
+        "raw-evidence",
+        "retained-proof-artifact"
+      ],
+      "artifactHash": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "hashAlgorithm": "sha256",
+      "hashBasis": "artifact-bytes",
+      "freshnessState": "current",
+      "supersessionState": "current",
+      "generatedReportNonAuthority": true,
+      "nonClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "staging-proof",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "store-readiness",
+        "compliance-readiness",
+        "human-acceptance"
+      ],
+      "ambiguityFallback": "fuller-applicable-validation",
+      "rerunMode": "validator-only",
+      "inputClass": "known",
+      "sameEnvironmentReuseRequired": false,
+      "sourceProviderMode": "local-composed-real-service",
+      "targetProviderMode": "local-composed-real-service",
+      "stagingEntryBoundary": false,
+      "stagingReadinessClaim": false
+    },
+    {
+      "handoffId": "positive-test-to-staging",
+      "handoffType": "test-to-staging",
+      "artifactRole": "staging-entry-review-artifact",
+      "sourceCommit": "fedcba9876543210fedcba9876543210fedcba98",
+      "targetCommit": "fedcba9876543210fedcba9876543210fedcba98",
+      "issueRefs": [
+        "USF-986"
+      ],
+      "sourceEnvironment": "test",
+      "targetEnvironment": "staging",
+      "providerMode": "local-composed-real-service",
+      "observedProofLevel": "test-service-backed",
+      "claimedProofLevel": "staging-entry-consideration",
+      "validationStatus": "pass",
+      "validatorRefs": [
+        "tools/validate-artifact-promotion/validate-artifact-promotion.py"
+      ],
+      "evidenceRefs": [
+        "evidence/test-service-proof.json"
+      ],
+      "evidenceKinds": [
+        "raw-evidence",
+        "retained-proof-artifact"
+      ],
+      "artifactHash": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "hashAlgorithm": "sha256",
+      "hashBasis": "artifact-bytes",
+      "freshnessState": "current",
+      "supersessionState": "current",
+      "generatedReportNonAuthority": true,
+      "nonClaims": [
+        "test-readiness",
+        "staging-readiness",
+        "staging-proof",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "store-readiness",
+        "compliance-readiness",
+        "human-acceptance"
+      ],
+      "ambiguityFallback": "fuller-applicable-validation",
+      "rerunMode": "validator-only",
+      "inputClass": "known",
+      "sameEnvironmentReuseRequired": false,
+      "sourceProviderMode": "local-composed-real-service",
+      "targetProviderMode": "local-composed-real-service",
+      "stagingEntryBoundary": true,
+      "stagingReadinessClaim": false
+    }
+  ]
+}

@@ -1,0 +1,500 @@
+{
+  "id": "usf.app-surface-platform-test-semantics",
+  "title": "App Surface Platform Test Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines USF-native platform, offline, i18n coverage, privacy-disclosure, store-metadata, ads-consent, performance, and release-smoke test semantics only. It does not implement tests, create validators, run proof, submit store metadata, deploy releases, or claim readiness.",
+  "coveredIssueIds": [
+    "USF-833",
+    "USF-834",
+    "USF-835",
+    "USF-836",
+    "USF-838",
+    "USF-839",
+    "USF-841",
+    "USF-843",
+    "USF-845",
+    "USF-847",
+    "USF-848"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+      "authorityRole": "capability coverage completion semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-test-strategy-semantics.json",
+      "authorityRole": "test strategy semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-i18n-localisation-semantics.json",
+      "authorityRole": "i18n and localisation semantics"
+    },
+    {
+      "path": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+      "authorityRole": "monetisation and ads consent semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "privacy compliance and consent proof semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "authorityRole": "release provisioning semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-store-provisioning-semantics.json",
+      "authorityRole": "store provisioning semantics"
+    },
+    {
+      "path": "docs/architecture/generated-ui-view-model-semantics.json",
+      "authorityRole": "view-model semantics"
+    },
+    {
+      "path": "docs/architecture/generated-ui-renderer-composition-semantics.json",
+      "authorityRole": "renderer composition semantics"
+    },
+    {
+      "path": "docs/architecture/client-query-cache-privacy-semantics.json",
+      "authorityRole": "client query cache and privacy semantics"
+    },
+    {
+      "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "authorityRole": "notification consent and data inventory semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "authorityRole": "privacy disclosure and SDK vendor semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-semantics.json",
+      "authorityRole": "accessibility semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityRole": "proof evidence and report semantics"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-833",
+      "modelId": "expo-mobile-e2e-strategy",
+      "purpose": "Define Expo mobile E2E scenario mapping for mobile workflows, permissions, offline posture, notifications, accessibility, privacy, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "mobile-workflow",
+        "permission",
+        "offline-posture",
+        "notification-consent",
+        "accessibility",
+        "privacy",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-834",
+      "modelId": "ios-simulator-device-test-matrix",
+      "purpose": "Define iOS simulator and device matrix semantics for iOS versions, device classes, permissions, accessibility, build profiles, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "ios-version-class",
+        "device-class",
+        "permission",
+        "accessibility",
+        "build-profile",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-835",
+      "modelId": "android-emulator-device-test-matrix",
+      "purpose": "Define Android emulator and device matrix semantics for target API, device classes, permissions, Play Integrity posture, accessibility, build profiles, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "android-api-class",
+        "device-class",
+        "permission",
+        "play-integrity-posture",
+        "accessibility",
+        "build-profile",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-836",
+      "modelId": "nextjs-playwright-e2e-strategy",
+      "purpose": "Define Next.js Playwright E2E scenario mapping for route classes, server and client boundaries, auth, caching, accessibility, localisation posture, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "route-class",
+        "server-client-boundary",
+        "auth",
+        "cache-posture",
+        "accessibility",
+        "localisation-posture",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-838",
+      "modelId": "i18n-coverage-test-strategy",
+      "purpose": "Define i18n coverage test semantics for locale coverage, missing translations, formatting, RTL layout, store listings, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "locale-coverage",
+        "missing-translation",
+        "formatting-rule",
+        "rtl-layout",
+        "store-listing",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-839",
+      "modelId": "offline-sync-test-strategy",
+      "purpose": "Define offline and sync test semantics for offline queues, cache invalidation, conflicts, background refresh, purge, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "offline-queue",
+        "cache-invalidation",
+        "conflict-resolution",
+        "background-refresh",
+        "purge",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-841",
+      "modelId": "privacy-disclosure-test-strategy",
+      "purpose": "Define privacy disclosure test semantics for privacy labels, Data Safety posture, consent, SDK registry, policy links, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "privacy-label",
+        "data-safety-posture",
+        "consent",
+        "sdk-registry",
+        "policy-link",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-843",
+      "modelId": "store-metadata-test-strategy",
+      "purpose": "Define store metadata test semantics for metadata, screenshots, privacy answers, localisation posture, links, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "store-metadata",
+        "screenshot",
+        "privacy-answer",
+        "localisation-posture",
+        "link",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-845",
+      "modelId": "ads-consent-test-strategy",
+      "purpose": "Define ads consent test semantics for CMP, UMP, ATT, regional consent, personalisation, child-directed treatment, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "cmp-consent",
+        "ump-consent",
+        "att-posture",
+        "regional-consent",
+        "personalisation",
+        "child-directed-treatment",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-847",
+      "modelId": "performance-test-strategy",
+      "purpose": "Define performance test semantics for mobile and web budgets, device and browser classes, metrics, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "mobile-performance-budget",
+        "web-performance-budget",
+        "device-class",
+        "browser-class",
+        "performance-metric",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-848",
+      "modelId": "release-smoke-test-strategy",
+      "purpose": "Define release smoke test semantics for mobile and web smoke scenarios, release channels, evidence, rollback triggers, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "mobile-smoke-scenario",
+        "web-smoke-scenario",
+        "release-channel",
+        "smoke-evidence",
+        "rollback-trigger",
+        "validator",
+        "proof"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "issueId": "USF-833",
+      "requirementId": "validator.app-surface.expo-mobile-e2e.semantic-binding",
+      "failClosedOn": [
+        "missing capability mapping",
+        "missing permission mapping",
+        "missing privacy or accessibility mapping",
+        "readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-834",
+      "requirementId": "validator.app-surface.ios-test-matrix.semantic-binding",
+      "failClosedOn": [
+        "missing iOS version class",
+        "missing device class",
+        "missing permission mapping",
+        "stale matrix evidence"
+      ]
+    },
+    {
+      "issueId": "USF-835",
+      "requirementId": "validator.app-surface.android-test-matrix.semantic-binding",
+      "failClosedOn": [
+        "missing Android API class",
+        "missing device class",
+        "missing Play Integrity posture",
+        "stale matrix evidence"
+      ]
+    },
+    {
+      "issueId": "USF-836",
+      "requirementId": "validator.app-surface.nextjs-playwright-e2e.semantic-binding",
+      "failClosedOn": [
+        "missing route class",
+        "missing server client boundary mapping",
+        "missing auth or cache posture",
+        "readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-838",
+      "requirementId": "validator.app-surface.i18n-coverage-tests.semantic-binding",
+      "failClosedOn": [
+        "missing locale coverage mapping",
+        "missing translation gap policy",
+        "missing formatting or RTL mapping",
+        "localisation readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-839",
+      "requirementId": "validator.app-surface.offline-sync-tests.semantic-binding",
+      "failClosedOn": [
+        "missing offline queue mapping",
+        "missing cache invalidation mapping",
+        "missing conflict or purge mapping",
+        "offline readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-841",
+      "requirementId": "validator.app-surface.privacy-disclosure-tests.semantic-binding",
+      "failClosedOn": [
+        "privacy disclosure not tied to data inventory",
+        "SDK registry mapping missing",
+        "consent mapping missing",
+        "privacy compliance claim without authority"
+      ]
+    },
+    {
+      "issueId": "USF-843",
+      "requirementId": "validator.app-surface.store-metadata-tests.semantic-binding",
+      "failClosedOn": [
+        "store metadata not tied to capability semantics",
+        "privacy answer mapping missing",
+        "link mapping missing",
+        "store readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-845",
+      "requirementId": "validator.app-surface.ads-consent-tests.semantic-binding",
+      "failClosedOn": [
+        "ads consent not tied to consent semantics",
+        "regional consent mapping missing",
+        "child-directed treatment mapping missing",
+        "ads readiness or legal compliance claim without authority"
+      ]
+    },
+    {
+      "issueId": "USF-847",
+      "requirementId": "validator.app-surface.performance-tests.semantic-binding",
+      "failClosedOn": [
+        "missing performance budget mapping",
+        "missing device or browser class mapping",
+        "missing metric authority mapping",
+        "performance readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-848",
+      "requirementId": "validator.app-surface.release-smoke-tests.semantic-binding",
+      "failClosedOn": [
+        "missing release channel mapping",
+        "missing smoke scenario mapping",
+        "missing rollback trigger mapping",
+        "release readiness claim without proof"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "issueId": "USF-833",
+      "requirementId": "proof.app-surface.expo-mobile-e2e.semantic-binding",
+      "expectedEvidence": [
+        "scenario-to-capability mapping",
+        "permission mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-834",
+      "requirementId": "proof.app-surface.ios-test-matrix.semantic-binding",
+      "expectedEvidence": [
+        "iOS matrix mapping",
+        "freshness and staleness evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-835",
+      "requirementId": "proof.app-surface.android-test-matrix.semantic-binding",
+      "expectedEvidence": [
+        "Android matrix mapping",
+        "freshness and staleness evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-836",
+      "requirementId": "proof.app-surface.nextjs-playwright-e2e.semantic-binding",
+      "expectedEvidence": [
+        "route-to-capability mapping",
+        "auth and cache posture mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-838",
+      "requirementId": "proof.app-surface.i18n-coverage-tests.semantic-binding",
+      "expectedEvidence": [
+        "locale coverage mapping",
+        "translation gap and formatting mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-839",
+      "requirementId": "proof.app-surface.offline-sync-tests.semantic-binding",
+      "expectedEvidence": [
+        "offline queue mapping",
+        "conflict and purge mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-841",
+      "requirementId": "proof.app-surface.privacy-disclosure-tests.semantic-binding",
+      "expectedEvidence": [
+        "privacy disclosure mapping",
+        "SDK registry mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-843",
+      "requirementId": "proof.app-surface.store-metadata-tests.semantic-binding",
+      "expectedEvidence": [
+        "metadata-to-capability mapping",
+        "privacy answer mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-845",
+      "requirementId": "proof.app-surface.ads-consent-tests.semantic-binding",
+      "expectedEvidence": [
+        "ads consent mapping",
+        "regional and child-directed treatment mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-847",
+      "requirementId": "proof.app-surface.performance-tests.semantic-binding",
+      "expectedEvidence": [
+        "performance budget mapping",
+        "device browser and metric mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-848",
+      "requirementId": "proof.app-surface.release-smoke-tests.semantic-binding",
+      "expectedEvidence": [
+        "release channel and smoke scenario mapping",
+        "rollback trigger mapping",
+        "non-claim preservation evidence"
+      ]
+    }
+  ],
+  "evaluatedIssueIds": [],
+  "testBoundary": {
+    "testImplementationCreated": false,
+    "testExecutionPerformed": false,
+    "deviceFarmConfigured": false,
+    "simulatorConfigured": false,
+    "storeSubmissionPerformed": false,
+    "legalReviewPerformed": false,
+    "readinessClaimCreated": false
+  },
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines platform and disclosure test semantics only. Test implementation, validator implementation, device setup, store submission, legal review, proof execution, and readiness claims remain separately gated."
+  },
+  "nonClaims": {
+    "mobileReadiness": false,
+    "webProductionReadiness": false,
+    "appStoreReadiness": false,
+    "googlePlayReadiness": false,
+    "privacyCompliance": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "offlineReadiness": false,
+    "storeSubmissionReadiness": false
+  }
+}

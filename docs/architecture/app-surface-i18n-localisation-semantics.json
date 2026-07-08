@@ -1,0 +1,432 @@
+{
+  "id": "usf.app-surface-i18n-localisation-semantics",
+  "title": "App Surface Internationalisation and Localisation Semantics",
+  "status": "semantic-definition",
+  "authority_scope": "Defines locale negotiation, translation catalogues, locale formatting, bidirectional layout, timezone display, regional availability, localised validation messages, store localisation, localised privacy and consent text, fallback policy, localised assets, and translation coverage validator requirements for app surfaces.",
+  "parent_issue": "USF-318",
+  "covered_issues": [
+    "USF-568",
+    "USF-569",
+    "USF-570",
+    "USF-571",
+    "USF-572",
+    "USF-573",
+    "USF-574",
+    "USF-575",
+    "USF-576",
+    "USF-577",
+    "USF-578",
+    "USF-579"
+  ],
+  "evaluated_owner_decisions": [
+    "USF-567"
+  ],
+  "authority_references": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/app-surface-accessibility-semantics.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/app-surface-store-provisioning-semantics.json",
+    "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+    "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json"
+  ],
+  "shared_dependency_mapping": [
+    "USF-331",
+    "USF-312",
+    "USF-318",
+    "USF-319",
+    "USF-320",
+    "USF-322",
+    "USF-328"
+  ],
+  "semantic_models": [
+    {
+      "issue": "USF-568",
+      "model_id": "usf.i18n.locale-negotiation",
+      "title": "Locale negotiation across mobile web and server",
+      "semantic_requirements": [
+        "Locale negotiation must define requested locale, available locale, fallback locale, platform source, server source, and proof boundary separately.",
+        "Locale selection must not imply translation completeness, launch-country support, store readiness, runtime readiness, or compliance readiness.",
+        "Future behaviour must fail closed when coverage, fallback, or semantic mapping is missing."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject locale behaviour without coverage, fallback, locale-source, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve requested locale, resolved locale, fallback decision, platform source, server source, and evidence freshness.",
+      "non_claims": [
+        "localisation-readiness",
+        "international-compliance"
+      ]
+    },
+    {
+      "issue": "USF-569",
+      "model_id": "usf.i18n.translation-key-catalogue",
+      "title": "Translation key and catalogue model",
+      "semantic_requirements": [
+        "Translation keys must map to USF capability, UI message purpose, validation source, or store/privacy source semantics.",
+        "Translation keys must not define product behaviour or validation semantics.",
+        "Missing or behaviour-changing translation keys must be validator-rejectable."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject missing, duplicate, orphaned, behaviour-changing, or source-unmapped translation keys.",
+      "proof_requirement": "Future proof must preserve translation catalogue source, semantic source mapping, locale coverage, stale status, and non-claim boundary.",
+      "non_claims": [
+        "translation-completeness",
+        "localisation-readiness"
+      ]
+    },
+    {
+      "issue": "USF-570",
+      "model_id": "usf.i18n.locale-formatting",
+      "title": "ICU plural date number and currency formatting",
+      "semantic_requirements": [
+        "Plural, date, number, currency, and unit formatting must map to locale semantics and display context.",
+        "Formatting semantics must distinguish display transformation from canonical stored values.",
+        "Financial formatting compliance and localisation readiness remain non-claims."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject locale formatting without semantic source, locale coverage, display context, and proof mapping.",
+      "proof_requirement": "Future proof must preserve formatting category, locale, canonical value source, display value source, and evidence freshness.",
+      "non_claims": [
+        "localisation-readiness",
+        "financial-formatting-compliance"
+      ]
+    },
+    {
+      "issue": "USF-571",
+      "model_id": "usf.i18n.rtl-bidirectional-layout",
+      "title": "RTL and bidirectional layout model",
+      "semantic_requirements": [
+        "RTL and bidirectional layout support must map to locale direction, UI structure, accessibility semantics, and proof expectations.",
+        "Directional rendering must not change product behaviour, permissions, or validation semantics.",
+        "Accessibility compliance remains a non-claim until separately proved."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject RTL support claims without direction mapping, layout mapping, accessibility mapping, coverage, and proof evidence.",
+      "proof_requirement": "Future proof must preserve direction source, layout mapping, affected UI surfaces, accessibility linkage, and evidence freshness.",
+      "non_claims": [
+        "localisation-readiness",
+        "accessibility-compliance"
+      ]
+    },
+    {
+      "issue": "USF-572",
+      "model_id": "usf.i18n.timezone-model",
+      "title": "Timezone model",
+      "semantic_requirements": [
+        "Timezone semantics must distinguish canonical timestamp storage, user timezone display, tenant or account timezone policy, and server processing boundaries.",
+        "Timezone display must not mutate canonical time semantics.",
+        "Runtime implementation and time-library selection remain requires evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject time displays without timezone source, display boundary, canonical-value boundary, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve canonical timestamp source, timezone source, display transformation, locale interaction, and evidence freshness.",
+      "non_claims": [
+        "localisation-readiness",
+        "compliance-readiness"
+      ]
+    },
+    {
+      "issue": "USF-573",
+      "model_id": "usf.i18n.regional-feature-flags",
+      "title": "Regional feature flags",
+      "semantic_requirements": [
+        "Regional feature flags may express availability constraints but must not define business behaviour.",
+        "Availability constraints must map to governed capability, region, locale, privacy, compliance, and proof sources.",
+        "Launch approval and compliance readiness remain requires evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "regional flags cannot define business behaviour",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject regional feature availability without capability, region, privacy, compliance-source, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve region source, capability source, enabled or disabled posture, privacy mapping, and non-claim boundary.",
+      "non_claims": [
+        "international-readiness",
+        "compliance-readiness"
+      ]
+    },
+    {
+      "issue": "USF-574",
+      "model_id": "usf.i18n.localised-validation-messages",
+      "title": "Localised validation messages",
+      "semantic_requirements": [
+        "Localised validation messages must map to a governed validation source and locale coverage.",
+        "Messages must not alter validation semantics or create new validation states.",
+        "Message production and form implementation require the applicable bounded-local implementation gate, validator coverage, and proof evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "messages cannot alter validation semantics",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject localised validation messages that lack semantic source, locale coverage, fallback mapping, or proof evidence.",
+      "proof_requirement": "Future proof must preserve validation source, message key, locale, fallback status, and evidence freshness.",
+      "non_claims": [
+        "translation-completeness",
+        "product-ui-readiness"
+      ]
+    },
+    {
+      "issue": "USF-575",
+      "model_id": "usf.i18n.localised-store-listings",
+      "title": "Localised store listings",
+      "semantic_requirements": [
+        "Localised store listing copy must map to USF capability, privacy, consent, metadata, locale, and non-claim sources.",
+        "Store listing text must not exceed governed capability or privacy semantics.",
+        "Store listing creation, translation production, store submission, and store readiness remain requires evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "store copy maps to USF capability and privacy authority",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject store listing text without locale, capability, privacy, consent, metadata, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve listing field, locale, semantic source, privacy source, consent source, and evidence freshness.",
+      "non_claims": [
+        "store-readiness",
+        "localisation-readiness"
+      ]
+    },
+    {
+      "issue": "USF-576",
+      "model_id": "usf.i18n.localised-privacy-terms-consent",
+      "title": "Localised privacy terms and consent text",
+      "semantic_requirements": [
+        "Localised privacy, terms, and consent text must map to USF privacy semantics, consent purpose, locale coverage, owner-decision source, validator requirement, and proof boundary.",
+        "Legal conclusions, publication, translation production, and compliance claims remain requires evidence.",
+        "Missing owner-decision input must be represented as recorded as requiring evidence rather than inferred."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "legal and consent text maps to USF semantics and owner decisions",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject consent or privacy text without locale, purpose, privacy-source, owner-decision-source, evidence freshness, and proof mapping.",
+      "proof_requirement": "Future proof must preserve locale, text source, consent purpose, privacy source, owner-review status, and non-claim boundary.",
+      "non_claims": [
+        "privacy-compliance",
+        "international-compliance"
+      ]
+    },
+    {
+      "issue": "USF-577",
+      "model_id": "usf.i18n.content-fallback-missing-translation",
+      "title": "Content fallback and missing translation policy",
+      "semantic_requirements": [
+        "Fallback policy must define when fallback is allowed, when missing translation fails closed, and what evidence is required.",
+        "Fallbacks must not alter product behaviour, permissions, validation, privacy text, legal text, or compliance posture.",
+        "Translation production and runtime implementation require the applicable bounded-local implementation gate, validator coverage, and proof evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "fallbacks cannot alter product behaviour",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject missing translations without approved fallback policy, semantic source, locale coverage, stale status, and proof mapping.",
+      "proof_requirement": "Future proof must preserve missing key, locale, fallback decision, failure posture, semantic source, and evidence freshness.",
+      "non_claims": [
+        "translation-completeness",
+        "localisation-readiness"
+      ]
+    },
+    {
+      "issue": "USF-578",
+      "model_id": "usf.i18n.localised-asset-generation",
+      "title": "Screenshot and localised asset generation",
+      "semantic_requirements": [
+        "Localised assets must map to capability, locale, privacy-safe fixtures, store metadata, and proof expectations.",
+        "Screenshot generation, asset upload, store submission, and store readiness remain requires evidence.",
+        "Assets must not expose personal data, secrets, or production data."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "assets map to capability, locale, and privacy authority",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject assets without locale, capability, privacy-safe fixture, store metadata, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve asset source, locale, capability source, privacy fixture source, metadata linkage, and non-claim boundary.",
+      "non_claims": [
+        "store-readiness",
+        "localisation-readiness"
+      ]
+    },
+    {
+      "issue": "USF-579",
+      "model_id": "usf.i18n.translation-coverage-validation",
+      "title": "Machine validation of translation coverage",
+      "semantic_requirements": [
+        "Translation coverage validation must define coverage rules, stale handling, missing key handling, fallback handling, planted defects, validator requirement, and proof requirement.",
+        "Coverage gaps must fail closed.",
+        "Validator implementation and validator readiness require separately authorised and proved."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "coverage gaps fail closed",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validator selftests must include missing, stale, fallback, behaviour-changing, orphaned, and unsupported-locale translation planted defects.",
+      "proof_requirement": "Future proof must preserve coverage matrix, stale status, planted-defect coverage, validator selftest result, and evidence freshness.",
+      "non_claims": [
+        "translation-completeness",
+        "validator-readiness"
+      ]
+    }
+  ],
+  "validator_requirements": [
+    {
+      "id": "usf.validator.i18n-localisation-semantics",
+      "covered_issues": [
+        "USF-568",
+        "USF-569",
+        "USF-570",
+        "USF-571",
+        "USF-572",
+        "USF-573",
+        "USF-574",
+        "USF-575",
+        "USF-576",
+        "USF-577",
+        "USF-578",
+        "USF-579"
+      ],
+      "fail_closed_conditions": [
+        "missing-locale-mapping",
+        "missing-semantic-source",
+        "missing-fallback-policy",
+        "missing-coverage-evidence",
+        "stale-translation-evidence",
+        "behaviour-changing-translation",
+        "localised-text-without-owner-decision-source",
+        "asset-without-privacy-safe-fixture",
+        "store-or-compliance-readiness-overclaim",
+        "implementation-readiness-overclaim"
+      ]
+    }
+  ],
+  "proof_requirements": [
+    {
+      "id": "usf.proof.i18n-localisation-semantics",
+      "covered_issues": [
+        "USF-568",
+        "USF-569",
+        "USF-570",
+        "USF-571",
+        "USF-572",
+        "USF-573",
+        "USF-574",
+        "USF-575",
+        "USF-576",
+        "USF-577",
+        "USF-578",
+        "USF-579"
+      ],
+      "required_evidence": [
+        "semantic-source-reference",
+        "locale-source-reference",
+        "coverage-mapping",
+        "fallback-policy-reference",
+        "privacy-source-reference-where-applicable",
+        "store-metadata-reference-where-applicable",
+        "owner-decision-status-where-applicable",
+        "evidence-freshness-record",
+        "non-claim-boundary-record"
+      ]
+    }
+  ],
+  "dependency_policy": {
+    "semantic_closure_meaning": "Closure of covered issues means their semantic model, validator requirement, proof requirement, dependency mapping, implementation gate, and non-claim boundary are recorded.",
+    "owner_decision_boundary": "USF-567 remains open and is required before USF may claim supported launch countries, supported launch languages, legal-text approval, store listing readiness, or localisation readiness.",
+    "execution_claim_boundary": "Closure of covered issues does not satisfy translation production, runtime implementation, UI implementation, store submission, legal conclusion, privacy compliance, international compliance, store readiness, localisation readiness, validator implementation, product readiness, production readiness, or live-provider readiness.",
+    "shared_dependency_issues": [
+      "USF-331",
+      "USF-312",
+      "USF-318",
+      "USF-319",
+      "USF-320",
+      "USF-322",
+      "USF-328"
+    ]
+  },
+  "evidence_freshness_semantics": {
+    "missing": "Missing evidence must not satisfy any locale, translation, formatting, fallback, store, consent, asset, validator, compliance, readiness, production, or live-provider claim.",
+    "unknown": "Unknown evidence status must not satisfy pass.",
+    "stale": "Stale evidence status must not satisfy pass.",
+    "generated_reports": "Generated reports are lower authority than raw evidence and semantic definitions."
+  },
+  "implementation_authorization": {
+    "implementation_code_authorized": false,
+    "runtime_code_authorized": false,
+    "translation_production_authorized": false,
+    "ui_implementation_authorized": false,
+    "asset_generation_authorized": false,
+    "store_submission_authorized": false,
+    "validator_implementation_authorized": false,
+    "legal_conclusion_authorized": false
+  },
+  "non_claims": [
+    "This artefact does not decide supported launch countries or languages.",
+    "This artefact does not claim localisation readiness.",
+    "This artefact does not claim translation completeness.",
+    "This artefact does not claim international compliance.",
+    "This artefact does not claim privacy compliance.",
+    "This artefact does not claim accessibility compliance.",
+    "This artefact does not claim store readiness.",
+    "This artefact does not claim product UI readiness.",
+    "This artefact does not claim validator readiness.",
+    "This artefact does not claim production readiness.",
+    "This artefact does not claim live-provider readiness."
+  ]
+}

@@ -1,0 +1,495 @@
+{
+  "id": "repository-optimisation-risk-management-governance",
+  "title": "Repository Optimisation Risk Management Governance",
+  "issueId": "USF-365",
+  "coveredIssueIds": [
+    "USF-824",
+    "USF-830",
+    "USF-840",
+    "USF-842",
+    "USF-844",
+    "USF-846"
+  ],
+  "dependencyIssueIds": [
+    "USF-386",
+    "USF-598",
+    "USF-823"
+  ],
+  "authorityBoundary": "This artefact governs optimisation risk-management planning. It does not override the Charter, Authority Model, accepted ADRs, validators, proof evidence, semantic instances, or the current-state foundation authority index.",
+  "inputArtefacts": [
+    {
+      "path": "docs/architecture/post-foundation-optimisation-strategy.json",
+      "role": "source strategy for post-foundation optimisation boundaries"
+    },
+    {
+      "path": "docs/architecture/current-state-foundation-authority-index.json",
+      "role": "current routing and authority boundary for future work"
+    },
+    {
+      "path": "docs/architecture/current-state-command-surface.json",
+      "role": "current command alias and compatibility surface"
+    },
+    {
+      "path": "docs/architecture/foundation-optimisation-evidence.json",
+      "role": "USF-230 optimisation evidence and non-claim record"
+    },
+    {
+      "path": "docs/architecture/proof-artifact-retention-policy.md",
+      "role": "machine proof artifact retention and pruning policy"
+    }
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-386",
+      "title": "Assurance classification matrix",
+      "status": "done",
+      "requiredBy": [
+        "USF-840"
+      ]
+    },
+    {
+      "issueId": "USF-598",
+      "title": "Artifact inventory and retention policy",
+      "status": "done",
+      "requiredBy": [
+        "USF-824"
+      ]
+    },
+    {
+      "issueId": "USF-823",
+      "title": "No-regression proof plan",
+      "status": "done",
+      "requiredBy": [
+        "USF-830",
+        "USF-842",
+        "USF-844",
+        "USF-846"
+      ]
+    }
+  ],
+  "baselinePreservationStrategy": {
+    "issueId": "USF-824",
+    "preservedRecordClasses": [
+      {
+        "class": "baseline-tag-evidence",
+        "storageLocation": "docs/architecture/dev-ready-foundation-baseline-tag.json",
+        "authorityRole": "commit-pinned baseline evidence for the one-off dev-ready foundation baseline",
+        "comparisonUse": "used to compare later optimisation work against the accepted baseline tag and target commit"
+      },
+      {
+        "class": "current-state-authority-index",
+        "storageLocation": "docs/architecture/current-state-foundation-authority-index.json",
+        "authorityRole": "current routing index below the constitutional layer and accepted semantic authority",
+        "comparisonUse": "used to compare future routing and lineage classifications against the current accepted entry points"
+      },
+      {
+        "class": "optimisation-evidence",
+        "storageLocation": "docs/architecture/foundation-optimisation-evidence.json",
+        "authorityRole": "execution evidence for foundation optimisation and retained non-claims",
+        "comparisonUse": "used to verify future optimisation does not weaken proof, validators, planted defects, evidence quality, runtime behaviour, or provider posture"
+      },
+      {
+        "class": "artifact-retention-policy",
+        "storageLocation": "docs/architecture/proof-artifact-retention-policy.md",
+        "authorityRole": "policy for preserving machine proof run chain of custody while pruning superseded bulk payloads",
+        "comparisonUse": "used to verify artifact references remain either retained or explicitly marked as pruned with auditable metadata"
+      }
+    ],
+    "storageRule": "Preserved records remain in their existing repository paths unless a later authorised issue defines a replacement path, archive rationale, reference update plan, and validation evidence.",
+    "authorityRule": "Generated reports and retained historical lineage remain lower authority than semantic definitions, accepted ADRs, validators, runtime proof evidence, and governed source implementation.",
+    "comparisonProcess": [
+      "Identify the baseline record and current-state routing record that the optimisation proposes to affect.",
+      "Classify whether the proposed change touches semantic authority, validation, proof evidence, generated reports, command compatibility, retained lineage, or artifact chain of custody.",
+      "Before applying a removal, rename, replacement, or pruning action, record the old reference, replacement reference, authority role, non-claim impact, and no-regression proof expectation.",
+      "After the future implementation change, verify the old or replacement reference is resolvable and that stale, unknown, missing, or generated-only evidence does not satisfy pass."
+    ],
+    "futureValidationExpectation": "Future implementation must verify preserved baseline and replacement references remain resolvable and must fail closed on missing or stale evidence."
+  },
+  "changeBatchingPolicy": {
+    "issueId": "USF-830",
+    "batchCategories": [
+      {
+        "id": "documentation-routing-only",
+        "scope": "Documentation or index edits that do not change commands, validators, proof scripts, schemas, semantic instances, runtime behaviour, or evidence artifacts.",
+        "requiredValidation": [
+          "strict JSON parse for changed JSON",
+          "reference review for changed paths",
+          "non-claim preservation review"
+        ],
+        "ownerReviewPoint": "required when the edit changes active authority routing or deprecates a previously documented entry point"
+      },
+      {
+        "id": "semantic-or-governance-definition",
+        "scope": "Semantic, governance, taxonomy, vocabulary, registry, schema-planning, or authority-boundary changes.",
+        "requiredValidation": [
+          "foundational JSON parse where applicable",
+          "affected semantic consistency review",
+          "validator expectation mapping",
+          "proof or evidence staleness mapping"
+        ],
+        "ownerReviewPoint": "required when the change changes meaning, lifecycle state, readiness boundary, or owner-decision policy"
+      },
+      {
+        "id": "command-or-tooling-surface",
+        "scope": "Make targets, package scripts, validator commands, proof commands, CI entry points, and agent-facing command aliases.",
+        "requiredValidation": [
+          "command surface mapping",
+          "compatibility alias review",
+          "no-regression proof expectation",
+          "rollback path"
+        ],
+        "ownerReviewPoint": "required before removal, rename, default-goal change, or coverage reduction"
+      },
+      {
+        "id": "proof-evidence-or-artifact",
+        "scope": "Runtime proof, machine QA, generated reports, evidence stores, artifact retention, baseline pins, and chain-of-custody records.",
+        "requiredValidation": [
+          "chain-of-custody review",
+          "staleness propagation review",
+          "reference resolvability review",
+          "provider mode and environment boundary review"
+        ],
+        "ownerReviewPoint": "required before pruning, moving, repinning, or promoting evidence used by an acceptance claim"
+      },
+      {
+        "id": "implementation-or-runtime",
+        "scope": "Runtime code, provider integration, infrastructure, service behaviour, UI implementation, deployment, or live-provider work.",
+        "requiredValidation": [
+          "explicit implementation directive",
+          "semantic authority check",
+          "validator and proof mapping",
+          "owner acceptance gate"
+        ],
+        "ownerReviewPoint": "always required before work begins"
+      }
+    ],
+    "batchSizeRule": "A batch should contain only one high-risk change class or multiple low-risk documentation-routing changes with the same validation and rollback path.",
+    "dependencyOrderRule": "Semantic authority and validator expectations must be updated before implementation, proof promotion, command removal, or readiness claims.",
+    "rollbackPointRule": "Each batch must identify the changed artefacts, the prior reference state, and the minimum safe rollback action before future implementation begins.",
+    "futureValidationExpectation": "Future implementation must report validation and proof results per batch rather than only at programme end."
+  },
+  "riskScoringModel": {
+    "issueId": "USF-840",
+    "scoringLevels": [
+      {
+        "score": 0,
+        "name": "none",
+        "meaning": "No semantic, proof, validator, evidence, command, runtime, provider, or user-facing impact.",
+        "minimumValidation": [
+          "changed-file parse or formatting check where applicable"
+        ],
+        "escalation": "no owner approval required unless the issue explicitly says otherwise"
+      },
+      {
+        "score": 1,
+        "name": "low",
+        "meaning": "Documentation-routing or metadata-only change with no authority, evidence, command, proof, or runtime effect.",
+        "minimumValidation": [
+          "strict JSON parse for changed JSON",
+          "authority-boundary review",
+          "non-claim review"
+        ],
+        "escalation": "owner review when active workflow entry points change"
+      },
+      {
+        "score": 2,
+        "name": "moderate",
+        "meaning": "Governed semantics, validator expectations, proof expectations, command aliases, retained evidence references, or compatibility posture can change but runtime behaviour remains unchanged.",
+        "minimumValidation": [
+          "affected semantic review",
+          "validator expectation mapping",
+          "proof and staleness mapping",
+          "rollback path"
+        ],
+        "escalation": "owner approval required when the change narrows compatibility, changes active authority routing, or changes evidence used by acceptance"
+      },
+      {
+        "score": 3,
+        "name": "high",
+        "meaning": "Change may remove, replace, deprecate, prune, repin, weaken, or reclassify validation, proof, evidence, command coverage, implementation behaviour, provider behaviour, environment promotion, or readiness boundaries.",
+        "minimumValidation": [
+          "no-regression proof plan",
+          "owner approval record",
+          "before and after evidence comparison",
+          "rollback path",
+          "acceptance-criteria confirmation"
+        ],
+        "escalation": "must remain blocked until owner approval and evidence are recorded"
+      }
+    ],
+    "riskDimensions": [
+      {
+        "id": "semantic-authority-impact",
+        "description": "Whether the change alters or appears to alter platform meaning, lifecycle state, readiness boundary, controlled values, or authority order."
+      },
+      {
+        "id": "assurance-impact",
+        "description": "Whether validators, planted defects, proof scripts, acceptance gates, or evidence quality could be weakened."
+      },
+      {
+        "id": "artifact-and-baseline-impact",
+        "description": "Whether retained evidence, generated reports, baseline pins, chain-of-custody records, or artifact resolvability could change."
+      },
+      {
+        "id": "command-and-compatibility-impact",
+        "description": "Whether developer, AI-agent, CI, Make, package, validator, proof, or alias entry points could change."
+      },
+      {
+        "id": "environment-provider-impact",
+        "description": "Whether provider mode, environment, staging, production-shaped, or live-external-provider boundaries could be blurred."
+      },
+      {
+        "id": "reversibility",
+        "description": "Whether the prior state can be restored without losing evidence, audit history, compatibility, or validation coverage."
+      }
+    ],
+    "scoringRule": "The overall risk score is the maximum applicable score across all dimensions, not an average. Any evidence deletion, validator weakening, command removal, implementation change, provider behaviour change, or readiness-boundary change is high risk unless a stronger USF authority classifies it otherwise.",
+    "requiredValidationsByScore": [
+      {
+        "score": 0,
+        "requiredValidations": [
+          "local changed-file sanity check"
+        ]
+      },
+      {
+        "score": 1,
+        "requiredValidations": [
+          "strict parse for changed JSON",
+          "authority-boundary and non-claim review"
+        ]
+      },
+      {
+        "score": 2,
+        "requiredValidations": [
+          "strict parse for changed JSON",
+          "affected semantic and validator expectation review",
+          "proof and evidence staleness mapping",
+          "reference resolvability plan"
+        ]
+      },
+      {
+        "score": 3,
+        "requiredValidations": [
+          "all moderate validations",
+          "no-regression proof plan",
+          "owner approval record",
+          "before and after comparison",
+          "rollback evidence",
+          "acceptance-criteria confirmation before completion"
+        ]
+      }
+    ],
+    "escalationRules": [
+      "When a change could weaken assurance, classify it high risk even if the immediate edit is small.",
+      "When a compatibility target remains referenced by AGENTS.md, CODEX.md, current-state indexes, CI, Make, package scripts, proof scripts, or docs, removal requires owner approval.",
+      "When evidence is missing, stale, unknown, generated-only, or provider-mode mismatched, the risk score cannot be reduced by inference.",
+      "When risk classification is disputed, keep the issue open and require owner decision."
+    ]
+  },
+  "ownerApprovalPolicy": {
+    "issueId": "USF-842",
+    "requiresOwnerApproval": [
+      "removing or renaming an existing command, target, package script, validator command, proof command, CI entry point, or compatibility alias",
+      "weakening or deleting validators, planted defects, proof scripts, evidence requirements, acceptance gates, or chain-of-custody metadata",
+      "moving, pruning, repinning, or replacing retained baseline evidence, proof evidence, generated reports used for review, or machine QA artifacts",
+      "changing runtime behaviour, provider behaviour, infrastructure, service contracts, UI implementation, deployment posture, environment promotion, or readiness claims",
+      "changing active authority routing in a way that makes a previously current source historical, generated, archive-only, redundant, or removable",
+      "closing or bypassing an owner-decision issue, final acceptance gate, implementation gate, staging gate, provider gate, or store-readiness gate"
+    ],
+    "approvalEvidenceRequired": [
+      "issue identifier and title",
+      "risk score and risk dimensions",
+      "changed artefacts or proposed artefacts",
+      "authority references",
+      "before and after behaviour or routing summary",
+      "validation and proof expectations",
+      "non-claim impact",
+      "rollback plan",
+      "explicit owner decision or accepted blocker disposition"
+    ],
+    "blockedUntilApprovalRule": "High-risk simplifications remain blocked until the approval evidence is recorded. An agent must not infer approval from silence, issue existence, generated reports, or passing validation alone.",
+    "futureValidationExpectation": "Future implementation must link high-risk changes to approval records before merge or Linear completion."
+  },
+  "deprecationPolicy": {
+    "issueId": "USF-844",
+    "stages": [
+      {
+        "stage": "current",
+        "meaning": "The target or tool is current and may be referenced by docs, agents, CI, proof, or users.",
+        "exitCriteria": [
+          "replacement identified",
+          "authority and command-surface mapping recorded",
+          "risk score assigned"
+        ]
+      },
+      {
+        "stage": "compatibility-alias",
+        "meaning": "The historical or compatibility entry point remains supported while users and agents migrate to the current entry point.",
+        "exitCriteria": [
+          "replacement validated",
+          "all active references updated or intentionally retained",
+          "warnings or documentation notes recorded",
+          "rollback path defined"
+        ]
+      },
+      {
+        "stage": "deprecated-retained",
+        "meaning": "The entry point is no longer preferred but remains available because active references, proof coverage, or owner approval prerequisites are not complete.",
+        "exitCriteria": [
+          "no active references remain unless explicitly approved",
+          "no-regression proof is recorded",
+          "owner approval is recorded for removal"
+        ]
+      },
+      {
+        "stage": "retirement-candidate",
+        "meaning": "The entry point may be removed only by a later authorised implementation issue.",
+        "exitCriteria": [
+          "implementation directive exists",
+          "reference audit passes",
+          "replacement coverage is same-or-stronger",
+          "rollback plan is documented"
+        ]
+      },
+      {
+        "stage": "retired",
+        "meaning": "The entry point has been removed by authorised implementation and the removal is reflected in docs, command indexes, CI, proof expectations, and Linear acceptance evidence.",
+        "exitCriteria": [
+          "none"
+        ]
+      }
+    ],
+    "warningRequirements": [
+      "Human-facing docs must identify the preferred current entry point before removal is proposed.",
+      "Agent-facing instructions must preserve compatibility wording until replacement is separately authorised and validated.",
+      "Future command-output warnings may be added only by an authorised implementation issue and must not weaken proof behaviour."
+    ],
+    "compatibilityWindow": "No fixed calendar removal window is authorised. A superseded command, target, package script, proof command, validator command, or CI entry point remains in the compatibility window until replacement authority, reference updates, no-regression proof, rollback path, and owner approval are all recorded.",
+    "validationBeforeRemoval": [
+      "reference audit across docs, agent directives, Make targets, package scripts, CI workflows, proof scripts, validators, current-state indexes, and evidence records",
+      "same-or-stronger replacement coverage review",
+      "no-regression proof against the affected assurance class",
+      "strict parse for changed JSON artefacts",
+      "non-claim preservation review"
+    ],
+    "rollbackRule": "Removal must be reversible by restoring the prior entry point or alias without changing semantics, weakening validators, or losing evidence history.",
+    "futureValidationExpectation": "Future implementation must run no-regression checks before deprecating or removing targets."
+  },
+  "compatibilityWindowPolicy": {
+    "issueId": "USF-846",
+    "windowLength": "open-ended-until-authorised-removal",
+    "minimumRequirementsBeforeClosure": [
+      "replacement entry point is defined",
+      "replacement output and coverage are validated as intended",
+      "docs, agent directives, CI, Make, package scripts, proof scripts, validators, indexes, and evidence references are audited",
+      "active references are updated or explicitly retained with rationale",
+      "owner decision is recorded for high-risk removal"
+    ],
+    "referenceUpdateRules": [
+      "Prefer current-state aliases in new human-facing instructions.",
+      "Retain historical command names as explicit compatibility aliases while referenced by governance, proof, CI, or agent directives.",
+      "Do not treat an alias as removable merely because a preferred alias exists.",
+      "Update current-state command surface and authority routing before any future removal.",
+      "Preserve generated-report and evidence non-claims when changing references."
+    ],
+    "ownerDecisionTriggers": [
+      "shortening or ending a compatibility window",
+      "removing a command that appears in AGENTS.md, CODEX.md, current-state indexes, proof scripts, CI, Make, package scripts, or evidence records",
+      "changing a command from compatibility alias to retired",
+      "changing proof, validation, or evidence coverage attached to a command"
+    ],
+    "futureValidationExpectation": "Future implementation must verify aliases and replacement commands produce intended outputs before compatibility can be narrowed."
+  },
+  "implementationBoundary": {
+    "runtimeCodeCreated": false,
+    "runtimeCodeImported": false,
+    "commandsChanged": false,
+    "validatorsChanged": false,
+    "proofScriptsChanged": false,
+    "evidenceMovedOrDeleted": false,
+    "artifactsMovedOrDeleted": false,
+    "schemasCreated": false,
+    "directoriesCreated": false
+  },
+  "nonClaims": [
+    "no-test-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-soc-readiness",
+    "no-iso27001-certification",
+    "no-enterprise-production-readiness",
+    "no-product-ui-readiness",
+    "no-browser-e2e-readiness",
+    "no-full-product-readiness",
+    "no-command-removal-authorisation",
+    "no-artifact-migration-authorisation",
+    "no-runtime-implementation-authorisation"
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-824",
+      "criterion": "Strategy identifies preserved records, storage location, authority role, and comparison process.",
+      "evidence": [
+        "baselinePreservationStrategy.preservedRecordClasses",
+        "baselinePreservationStrategy.comparisonProcess"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-830",
+      "criterion": "Policy defines batch categories, validation expectations, and owner review points.",
+      "evidence": [
+        "changeBatchingPolicy.batchCategories",
+        "changeBatchingPolicy.batchSizeRule",
+        "changeBatchingPolicy.dependencyOrderRule"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-840",
+      "criterion": "Model defines dimensions, scoring levels, required validations, and escalation rules.",
+      "evidence": [
+        "riskScoringModel.scoringLevels",
+        "riskScoringModel.riskDimensions",
+        "riskScoringModel.requiredValidationsByScore",
+        "riskScoringModel.escalationRules"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-842",
+      "criterion": "Policy states what needs owner approval and what evidence must accompany approval.",
+      "evidence": [
+        "ownerApprovalPolicy.requiresOwnerApproval",
+        "ownerApprovalPolicy.approvalEvidenceRequired",
+        "ownerApprovalPolicy.blockedUntilApprovalRule"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-844",
+      "criterion": "Policy defines stages, warnings, compatibility window, validation, and rollback.",
+      "evidence": [
+        "deprecationPolicy.stages",
+        "deprecationPolicy.warningRequirements",
+        "deprecationPolicy.compatibilityWindow",
+        "deprecationPolicy.validationBeforeRemoval",
+        "deprecationPolicy.rollbackRule"
+      ],
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-846",
+      "criterion": "Policy states window length, warning requirements, reference update rules, and owner decision triggers.",
+      "evidence": [
+        "compatibilityWindowPolicy.windowLength",
+        "deprecationPolicy.warningRequirements",
+        "compatibilityWindowPolicy.referenceUpdateRules",
+        "compatibilityWindowPolicy.ownerDecisionTriggers"
+      ],
+      "status": "satisfied"
+    }
+  ]
+}

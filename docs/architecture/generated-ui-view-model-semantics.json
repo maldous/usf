@@ -1,0 +1,396 @@
+{
+  "id": "generated-ui-view-model-semantics",
+  "title": "Generated UI and View Model Semantics",
+  "issueId": "USF-315",
+  "coveredIssueIds": [
+    "USF-334",
+    "USF-484",
+    "USF-488",
+    "USF-490"
+  ],
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact defines generated UI and view-model semantics as projections of USF capability authority. It does not create component library code, form renderer code, schema generator code, screen generation, telemetry pipeline implementation, audit pipeline implementation, mobile implementation, web implementation, generated client implementation, product UI readiness, design-system readiness, generated UI readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "spec/schemas/interface-contract.schema.json"
+  ],
+  "derivedSurfaceRule": {
+    "rule": "Every generated UI screen, form, list, workflow affordance, field, error, interaction, notification, navigation item, design token use, component primitive, and platform variance must be derived from USF capability authority and must carry an explicit semantic mapping before implementation.",
+    "failClosedWhenMissing": [
+      "capability mapping",
+      "semantic contract mapping",
+      "interface contract mapping where applicable",
+      "command or query or workflow or event mapping where applicable",
+      "permission mapping",
+      "validation mapping",
+      "error mapping",
+      "audit mapping",
+      "privacy mapping",
+      "i18n mapping",
+      "accessibility mapping",
+      "telemetry mapping",
+      "proof mapping",
+      "human review boundary"
+    ]
+  },
+  "humanReviewBoundary": {
+    "required": true,
+    "rule": "Generated UI output is never product authority. Human review is required before a generated screen, component, form, copy string, route, interaction, store metadata, accessibility assertion, or release claim can be promoted.",
+    "mustReview": [
+      "business behaviour preservation",
+      "permission and tenant boundary preservation",
+      "privacy classification",
+      "audit event mapping",
+      "validation and error copy",
+      "i18n and accessibility posture",
+      "platform variance",
+      "non-claim boundary"
+    ]
+  },
+  "platformVariancePolicy": {
+    "rule": "Mobile and web surfaces may vary layout, navigation idiom, input modality, and platform affordance, but platform variance must not change business behaviour, permission outcomes, validation rules, audit meaning, privacy classification, telemetry semantics, workflow state, or proof expectations.",
+    "allowedVariance": [
+      "layout",
+      "navigation idiom",
+      "input modality",
+      "platform affordance",
+      "gesture alternative",
+      "responsive grouping",
+      "native capability bridge when semantically authorised"
+    ],
+    "forbiddenVariance": [
+      "business behaviour",
+      "authorization outcome",
+      "tenant boundary",
+      "workflow transition",
+      "validation rule",
+      "error taxonomy",
+      "audit event meaning",
+      "privacy category",
+      "telemetry meaning",
+      "readiness claim"
+    ]
+  },
+  "commandAndQueryModel": {
+    "issueId": "USF-334",
+    "rule": "UI clients must separate reads, mutations, workflows, validation, authorization, cache expectations, audit events, and user-facing outcomes.",
+    "behaviourKinds": [
+      {
+        "id": "command",
+        "description": "A mutation or action request projected from USF command or workflow authority.",
+        "requiredMappings": [
+          "capability",
+          "command",
+          "permission",
+          "validation",
+          "error",
+          "audit-event",
+          "privacy-category",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "query",
+        "description": "A read request projected from USF query or read-model authority.",
+        "requiredMappings": [
+          "capability",
+          "query",
+          "permission",
+          "privacy-category",
+          "cache-policy",
+          "error",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "workflow",
+        "description": "A multi-step user or operator flow projected from USF workflow authority.",
+        "requiredMappings": [
+          "capability",
+          "workflow",
+          "state-transition",
+          "permission",
+          "validation",
+          "audit-event",
+          "privacy-category",
+          "error",
+          "telemetry",
+          "proof"
+        ]
+      }
+    ]
+  },
+  "commandToFormMapping": {
+    "issueId": "USF-484",
+    "rule": "A command form may exist only when the form maps to a governed command or workflow and every field, action, disabled state, confirmation, failure state, and success state has semantic backing.",
+    "requiredMappings": [
+      "capability",
+      "command",
+      "workflow when applicable",
+      "permission",
+      "field-to-validation",
+      "field-to-privacy-category",
+      "submit-action-to-audit-event",
+      "error-to-field-or-form-state",
+      "i18n-key",
+      "accessibility-name-role-state",
+      "telemetry-event",
+      "proof"
+    ],
+    "mustReject": [
+      "form without command mapping",
+      "submit action without permission mapping",
+      "field without validation mapping",
+      "field without privacy mapping",
+      "interaction without audit mapping",
+      "error state without error taxonomy mapping",
+      "copy without i18n mapping",
+      "control without accessibility mapping"
+    ]
+  },
+  "validationToFieldAndErrorMapping": {
+    "issueId": "USF-488",
+    "rule": "Field constraints, form constraints, error states, localized messages, and audit context must be projections of governed validation and error semantics.",
+    "requiredMappings": [
+      "field-id",
+      "validation-rule-id",
+      "error-id",
+      "safe-message-key",
+      "localized-message-key",
+      "accessibility-error-announcement",
+      "audit-context",
+      "privacy-category",
+      "proof"
+    ],
+    "mustReject": [
+      "field constraint without validation rule",
+      "error without governed error id",
+      "localized message without i18n key",
+      "error state without accessibility announcement",
+      "error disclosure exceeding safe error semantics",
+      "validation event without audit context where audit is required"
+    ]
+  },
+  "auditToInteractionMapping": {
+    "issueId": "USF-490",
+    "rule": "Interactions that emit, request, display, or depend on audit events must map to governed audit semantics and privacy categories before implementation.",
+    "requiredMappings": [
+      "interaction-id",
+      "capability",
+      "actor",
+      "tenant-boundary",
+      "audit-event-id",
+      "action",
+      "outcome",
+      "privacy-category",
+      "redaction-policy",
+      "retention-policy",
+      "telemetry-correlation",
+      "proof"
+    ],
+    "mustReject": [
+      "audited interaction without audit event id",
+      "audit event without actor or tenant boundary",
+      "interaction logging customer data without privacy mapping",
+      "audit display without redaction policy",
+      "audit interaction without proof mapping"
+    ]
+  },
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-GENERATED-UI-001",
+      "description": "Reject generated screens, forms, affordances, and view models that lack capability, semantic-contract, permission, validation, audit, privacy, i18n, accessibility, telemetry, proof, or human-review mapping.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-315"
+    },
+    {
+      "ruleId": "USF-UI-COMMAND-QUERY-001",
+      "description": "Reject UI commands or queries without semantic backing and explicit command, query, workflow, permission, validation, cache, audit, error, privacy, telemetry, and proof mappings where applicable.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-334"
+    },
+    {
+      "ruleId": "USF-COMMAND-FORM-001",
+      "description": "Reject command forms without command, validation, permission, audit, privacy, i18n, accessibility, telemetry, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-484"
+    },
+    {
+      "ruleId": "USF-VALIDATION-FIELD-001",
+      "description": "Reject fields or errors without validation, error taxonomy, i18n, accessibility, privacy, audit context, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-488"
+    },
+    {
+      "ruleId": "USF-AUDIT-INTERACTION-001",
+      "description": "Reject interactions without audit event, actor, tenant boundary, privacy, redaction, retention, telemetry correlation, and proof mappings where audit is required.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-490"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "generated-ui-view-model-semantic-mapping-proof",
+      "description": "Future proof must demonstrate that generated UI and view models are projections of governed USF capabilities and that missing semantic mappings fail closed.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "command-form-validation-audit-mapping-proof",
+      "description": "Future proof must demonstrate that command forms fail without validation and audit mappings and pass with conforming command, validation, field, error, audit, privacy, i18n, accessibility, telemetry, and proof mappings.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "generated UI and view-model mappings exist for the relevant capability",
+      "validator requirements are implemented and selftested",
+      "planted-defect fixtures exist for missing generated UI, command, validation, and audit mappings",
+      "proof evidence exists for mapped and rejected generated UI cases",
+      "human review is recorded before any generated UI or product UI readiness claim"
+    ]
+  },
+  "nonClaims": {
+    "componentLibraryReady": false,
+    "designSystemReady": false,
+    "generatedUiReady": false,
+    "formRendererReady": false,
+    "schemaGeneratorReady": false,
+    "mobileReady": false,
+    "webReady": false,
+    "productUiReady": false,
+    "implementationReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "complianceReady": false,
+    "monetisationReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-315",
+      "criterion": "UI view models are derived from USF capabilities.",
+      "status": "satisfied",
+      "evidence": "derivedSurfaceRule requires every generated UI and view-model element to be derived from USF capability authority."
+    },
+    {
+      "issueId": "USF-315",
+      "criterion": "Generated UI has a human review boundary.",
+      "status": "satisfied",
+      "evidence": "humanReviewBoundary requires review before promotion."
+    },
+    {
+      "issueId": "USF-315",
+      "criterion": "Platform variance cannot change business behaviour.",
+      "status": "satisfied",
+      "evidence": "platformVariancePolicy distinguishes allowed platform variance from forbidden semantic variance."
+    },
+    {
+      "issueId": "USF-315",
+      "criterion": "Validator requirements are identified.",
+      "status": "satisfied",
+      "evidence": "validatorRequirements includes USF-GENERATED-UI-001."
+    },
+    {
+      "issueId": "USF-315",
+      "criterion": "Non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "authorityBoundary, implementationGate, and nonClaims preserve no design-system, generated UI, product UI, implementation, readiness, or human-acceptance claim."
+    },
+    {
+      "issueId": "USF-334",
+      "criterion": "Commands and queries map to USF capability authority.",
+      "status": "satisfied",
+      "evidence": "commandAndQueryModel requires capability mappings for commands, queries, and workflows."
+    },
+    {
+      "issueId": "USF-334",
+      "criterion": "USF-native references resolve.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities use repository paths and the issue mappings use USF-native issue identifiers."
+    },
+    {
+      "issueId": "USF-334",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-UI-COMMAND-QUERY-001 and generated-ui-view-model-semantic-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-334",
+      "criterion": "Implementation is requires gates exist.",
+      "status": "satisfied",
+      "evidence": "implementationGate records implementation evidence requirements."
+    },
+    {
+      "issueId": "USF-334",
+      "criterion": "Non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "nonClaims preserves no UI, implementation, production, compliance, monetisation, or human-acceptance claim."
+    },
+    {
+      "issueId": "USF-484",
+      "criterion": "Machine-readable semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "commandToFormMapping defines the machine-readable command-to-form mapping requirements."
+    },
+    {
+      "issueId": "USF-488",
+      "criterion": "Machine-readable semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "validationToFieldAndErrorMapping defines validation-to-field and error mapping requirements."
+    },
+    {
+      "issueId": "USF-490",
+      "criterion": "Machine-readable semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "auditToInteractionMapping defines audit-to-interaction mapping requirements."
+    },
+    {
+      "issueId": "USF-484",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-COMMAND-FORM-001 and command-form-validation-audit-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-488",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-VALIDATION-FIELD-001 and command-form-validation-audit-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-490",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-AUDIT-INTERACTION-001 and command-form-validation-audit-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-484",
+      "criterion": "Dependencies are recorded and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    },
+    {
+      "issueId": "USF-488",
+      "criterion": "Dependencies are recorded and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    },
+    {
+      "issueId": "USF-490",
+      "criterion": "Dependencies are recorded and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    }
+  ]
+}

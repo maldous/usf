@@ -1,0 +1,910 @@
+{
+  "id": "repository-validator-regression-proofing-governance",
+  "title": "Repository validator regression-proofing governance",
+  "purpose": "Define discovery-only validator regression-proofing expectations before future UI or app-surface work changes validator load, caching, or routing.",
+  "authorityBoundary": {
+    "semanticAuthorityCreated": false,
+    "validatorCodeCreated": false,
+    "validatorImplementationChanged": false,
+    "testCodeCreated": false,
+    "readinessClaimMade": false,
+    "notes": "This artifact records regression-proofing design only. Validators enforce USF semantics but do not invent platform meaning."
+  },
+  "sourceReferences": [
+    "AGENTS.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/schema-authoring-standard.md",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "docs/architecture/repository-layout-and-fixture-governance.json",
+    "package.json",
+    "tools/",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json",
+    "docs/architecture/repository-command-surface-target-governance.json",
+    "docs/architecture/repository-assurance-improvement-opportunities-governance.json"
+  ],
+  "observedValidatorState": {
+    "stateInspected": true,
+    "validatorDirectories": [
+      "tools/validate-bootstrap",
+      "tools/validate-ci-guardrails",
+      "tools/validate-compose",
+      "tools/validate-enterprise",
+      "tools/validate-foundation-substrate-closure",
+      "tools/validate-non-ui-completeness",
+      "tools/validate-parity",
+      "tools/validate-proof-cockpit-acceptance",
+      "tools/validate-public-fqdn",
+      "tools/validate-react-non-ui-parity",
+      "tools/validate-runtime",
+      "tools/validate-spec",
+      "tools/validate-test-readiness"
+    ],
+    "plantedDefectDirectories": [
+      "tools/validate-bootstrap/planted-defects",
+      "tools/validate-ci-guardrails/planted-defects",
+      "tools/validate-compose/planted-defects",
+      "tools/validate-enterprise/planted-defects",
+      "tools/validate-foundation-substrate-closure/planted-defects",
+      "tools/validate-non-ui-completeness/planted-defects",
+      "tools/validate-parity/api-planted-defects",
+      "tools/validate-parity/audit-planted-defects",
+      "tools/validate-parity/auth-planted-defects",
+      "tools/validate-parity/authz-planted-defects",
+      "tools/validate-parity/bulk-planted-defects",
+      "tools/validate-parity/config-planted-defects",
+      "tools/validate-parity/db-planted-defects",
+      "tools/validate-parity/domain-depth-planted-defects",
+      "tools/validate-parity/files-planted-defects",
+      "tools/validate-parity/guardrails-planted-defects",
+      "tools/validate-parity/jobs-planted-defects",
+      "tools/validate-parity/notify-planted-defects",
+      "tools/validate-parity/observability-planted-defects",
+      "tools/validate-parity/planted-defects",
+      "tools/validate-parity/provider-planted-defects",
+      "tools/validate-parity/resource-planted-defects",
+      "tools/validate-parity/search-planted-defects",
+      "tools/validate-proof-cockpit-acceptance/planted-defects",
+      "tools/validate-public-fqdn/planted-defects",
+      "tools/validate-runtime/planted-defects",
+      "tools/validate-spec/planted-defects",
+      "tools/validate-test-readiness/planted-defects"
+    ],
+    "fixtureDirectories": [
+      "tools/validate-spec/fixtures",
+      "tools/validate-spec/fixtures/negative",
+      "tools/validate-spec/fixtures/negative/adr",
+      "tools/validate-spec/fixtures/negative/ai-governance",
+      "tools/validate-spec/fixtures/negative/audit-event",
+      "tools/validate-spec/fixtures/negative/command",
+      "tools/validate-spec/fixtures/negative/configuration",
+      "tools/validate-spec/fixtures/negative/data-migration",
+      "tools/validate-spec/fixtures/negative/environment",
+      "tools/validate-spec/fixtures/negative/event-contract",
+      "tools/validate-spec/fixtures/negative/evidence-envelope",
+      "tools/validate-spec/fixtures/negative/import-manifest",
+      "tools/validate-spec/fixtures/negative/interface-contract",
+      "tools/validate-spec/fixtures/negative/observability-signal",
+      "tools/validate-spec/fixtures/negative/proof-evidence",
+      "tools/validate-spec/fixtures/negative/provider-mode",
+      "tools/validate-spec/fixtures/negative/semantic-contract",
+      "tools/validate-spec/fixtures/negative/source-disposition",
+      "tools/validate-spec/fixtures/negative/source-reference",
+      "tools/validate-spec/fixtures/negative/ui-semantic-model",
+      "tools/validate-spec/fixtures/negative/validator-report",
+      "tools/validate-spec/fixtures/negative/workflow",
+      "tools/validate-spec/fixtures/positive",
+      "tools/validate-spec/fixtures/positive/adr",
+      "tools/validate-spec/fixtures/positive/ai-governance",
+      "tools/validate-spec/fixtures/positive/audit-event",
+      "tools/validate-spec/fixtures/positive/command",
+      "tools/validate-spec/fixtures/positive/configuration",
+      "tools/validate-spec/fixtures/positive/data-migration",
+      "tools/validate-spec/fixtures/positive/environment",
+      "tools/validate-spec/fixtures/positive/event-contract",
+      "tools/validate-spec/fixtures/positive/evidence-envelope",
+      "tools/validate-spec/fixtures/positive/import-manifest",
+      "tools/validate-spec/fixtures/positive/interface-contract",
+      "tools/validate-spec/fixtures/positive/observability-signal",
+      "tools/validate-spec/fixtures/positive/proof-evidence",
+      "tools/validate-spec/fixtures/positive/provider-mode",
+      "tools/validate-spec/fixtures/positive/semantic-contract",
+      "tools/validate-spec/fixtures/positive/source-disposition",
+      "tools/validate-spec/fixtures/positive/source-reference",
+      "tools/validate-spec/fixtures/positive/ui-semantic-model",
+      "tools/validate-spec/fixtures/positive/validator-report",
+      "tools/validate-spec/fixtures/positive/workflow"
+    ],
+    "manifestDirectories": [
+      "tools/validate-spec/manifests"
+    ],
+    "validationRelevantPackageScripts": [
+      "compose:ports:test",
+      "compose:test",
+      "compose:validate",
+      "enterprise:validate",
+      "foundation-substrate-closure:selftest",
+      "foundation-substrate-closure:validate",
+      "non-ui-completeness:selftest",
+      "non-ui-completeness:validate",
+      "proof-cockpit:evidence",
+      "proof-cockpit:evidence-bundle",
+      "proof-cockpit:import-check",
+      "proof-cockpit:machine-qa",
+      "proof-cockpit:playwright",
+      "proof-cockpit:promote",
+      "proof-cockpit:qa-report",
+      "proof-cockpit:selftest",
+      "proof-cockpit:serve",
+      "proof-cockpit:smoke",
+      "proof-cockpit:validate",
+      "proof:analytics:clickhouse",
+      "proof:api",
+      "proof:api:graphql-generated-client",
+      "proof:assurance:sonarqube",
+      "proof:audit",
+      "proof:auth",
+      "proof:authz",
+      "proof:backup:operations",
+      "proof:backup:pgbackrest",
+      "proof:bootstrap",
+      "proof:bulk",
+      "proof:cache:redis",
+      "proof:config",
+      "proof:db",
+      "proof:external-http-behaviour",
+      "proof:external-http-cache",
+      "proof:external-http-observability",
+      "proof:files",
+      "proof:guardrails",
+      "proof:jobs",
+      "proof:localstack",
+      "proof:mock-substrate",
+      "proof:notify",
+      "proof:observability",
+      "proof:observability:browser-telemetry",
+      "proof:observability:operations-execution",
+      "proof:observability:sentry",
+      "proof:operator-access",
+      "proof:operator-lifecycle",
+      "proof:pre-staging-external-smoke",
+      "proof:proof-review-public",
+      "proof:providers",
+      "proof:public-fqdn",
+      "proof:public-fqdn:production",
+      "proof:public-fqdn:staging",
+      "proof:public-origin",
+      "proof:public-route",
+      "proof:public-route:production",
+      "proof:public-route:staging",
+      "proof:resources",
+      "proof:scanner:clamav",
+      "proof:search",
+      "proof:search:meilisearch",
+      "proof:wiremock",
+      "proof:workflow:windmill",
+      "providers-proof",
+      "public-fqdn:selftest",
+      "public-fqdn:validate",
+      "repo:validate",
+      "runtime:proof",
+      "runtime:proof:compose",
+      "runtime:proof:in-memory",
+      "runtime:validate",
+      "test",
+      "test-compose",
+      "test-readiness",
+      "test-readiness:assurance",
+      "test-readiness:composed",
+      "test-readiness:coverage",
+      "test-readiness:fixtures",
+      "test-readiness:integration",
+      "test-readiness:selftest",
+      "test-readiness:semantic",
+      "test-readiness:validate",
+      "test:coverage",
+      "validate-bootstrap",
+      "validate-spec",
+      "validate-spec:selftest"
+    ]
+  },
+  "regressionProofingPolicy": {
+    "assuranceImpact": [
+      "Validator optimisation can create false passes if path narrowing, parse reuse, cache reuse, or generated report reuse excludes correctness-affecting inputs.",
+      "Fail-closed behaviour must be preserved for unknown controlled values, stale reports, unknown evidence status, provider-mode mismatch, environment mismatch, planned-only schemas, missing evidence, and source-import ambiguity.",
+      "Generated reports remain lower authority and cannot replace raw evidence, semantic definitions, or validator checks."
+    ],
+    "safeOptions": [
+      "Use explicit input manifests only after each manifest includes all semantic, schema, vocabulary, taxonomy, registry, evidence, fixture, and command inputs for the validator scope.",
+      "Use per-run parse caches only when cache keys include file path, content hash, lifecycle state where applicable, and strict parse error identity.",
+      "Use affected-validation routing only after planted-defect or selftest cases prove included and excluded path classes are correct.",
+      "Keep compatibility command aliases until command-surface governance authorises and validates any change."
+    ],
+    "unsafeShortcuts": [
+      "Skipping generated or evidence directories without proving they are outside the validator scope.",
+      "Treating stale generated reports as pass evidence.",
+      "Reusing parsed JSON after file content changes inside a run.",
+      "Promoting planned schemas to active because a validator or report accepts them.",
+      "Removing planted defects or selftests to speed up validators."
+    ]
+  },
+  "validationProofExpectation": [
+    "Each validator optimisation must include selftests or planted-defect cases for stale input, missing input, invalid JSON, unknown controlled value, generated-report non-authority, and omitted path classes where applicable.",
+    "Before and after comparisons must record the command surface, input manifest or scan scope, content hashes, pass or fail status, and any intentionally changed diagnostics.",
+    "A narrowed validator run must be compared against the corresponding full validator run for the selected scope before it can replace default routing.",
+    "Any unknown dependency, unclassified input, missing fixture, or stale cache condition must fail closed to the broader validation gate."
+  ],
+  "dependenciesRecorded": [
+    {
+      "issueId": "USF-386",
+      "status": "Done",
+      "role": "baseline validator and semantic gate context referenced as an upstream blocker in Linear"
+    },
+    {
+      "issueId": "USF-355",
+      "status": "Open parent",
+      "role": "validator-suite parent remains open until all child validator-suite work is complete"
+    },
+    {
+      "artifact": "docs/architecture/repository-performance-profiling-governance.json",
+      "role": "records performance constraints and deferred profiling limits that optimisation must not overclaim"
+    },
+    {
+      "artifact": "docs/architecture/repository-layout-and-fixture-governance.json",
+      "role": "records validator fixture and planted-defect location ownership"
+    }
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-526",
+      "title": "Validator regression-proofing before UI work",
+      "completionBasis": "observedValidatorState, regressionProofingPolicy, validationProofExpectation, and dependenciesRecorded satisfy the discovery checklist."
+    },
+    {
+      "issueId": "USF-772",
+      "title": "Validator property-based tests",
+      "completionBasis": "propertyBasedValidatorTestingProposal identifies candidate invariants, test cost, tooling options, and no-regression value."
+    },
+    {
+      "issueId": "USF-506",
+      "title": "Validator dependency graph",
+      "completionBasis": "validatorSuiteImprovementMatrix.dependencyGraphDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-507",
+      "title": "Validator common library extraction",
+      "completionBasis": "validatorSuiteImprovementMatrix.commonLibraryExtractionDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-508",
+      "title": "Validator performance profiling",
+      "completionBasis": "validatorSuiteImprovementMatrix.performanceProfilingDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-509",
+      "title": "Validator parallel execution",
+      "completionBasis": "validatorSuiteImprovementMatrix.parallelExecutionDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-510",
+      "title": "Validator JSON output standard",
+      "completionBasis": "validatorSuiteImprovementMatrix.jsonOutputStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-511",
+      "title": "Validator report schema standard",
+      "completionBasis": "validatorSuiteImprovementMatrix.reportSchemaStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-512",
+      "title": "Validator selftest consistency",
+      "completionBasis": "validatorSuiteImprovementMatrix.selftestConsistencyDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-514",
+      "title": "Validator false-positive and false-negative review",
+      "completionBasis": "validatorSuiteImprovementMatrix.falsePositiveNegativeReviewDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-515",
+      "title": "Validator strict warn error blocking severity model",
+      "completionBasis": "validatorSuiteImprovementMatrix.severityModelDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-516",
+      "title": "Validator documentation and help output",
+      "completionBasis": "validatorSuiteImprovementMatrix.documentationHelpOutputDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-517",
+      "title": "Validator cacheability and input hashing",
+      "completionBasis": "validatorSuiteImprovementMatrix.cacheabilityInputHashingDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-518",
+      "title": "Validator partial-run support",
+      "completionBasis": "validatorSuiteImprovementMatrix.partialRunSupportDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-520",
+      "title": "Validator stale evidence detection",
+      "completionBasis": "validatorSuiteImprovementMatrix.staleEvidenceDetectionDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-522",
+      "title": "Validator rule-to-authority traceability",
+      "completionBasis": "validatorSuiteImprovementMatrix.ruleToAuthorityTraceabilityDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-524",
+      "title": "Validator rule-to-Linear issue traceability",
+      "completionBasis": "validatorSuiteImprovementMatrix.ruleToLinearIssueTraceabilityDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-355",
+      "title": "Parent: Validator suite improvement",
+      "completionBasis": "parentValidatorSuiteImprovementClosure records complete child closure, validator inventory basis, traceability gaps, cache and partial-run risks, and UI-blocking validator gaps."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-526",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "regressionProofingPolicy.assuranceImpact",
+        "validationProofExpectation",
+        "dependenciesRecorded"
+      ]
+    },
+    {
+      "issueId": "USF-772",
+      "criterion": "Proposal identifies candidate invariants, test cost, tooling options, and no-regression value.",
+      "satisfied": true,
+      "evidence": [
+        "propertyBasedValidatorTestingProposal.candidateInvariants",
+        "propertyBasedValidatorTestingProposal.testCostModel",
+        "propertyBasedValidatorTestingProposal.toolingOptions",
+        "propertyBasedValidatorTestingProposal.noRegressionValue"
+      ]
+    },
+    {
+      "issueId": "USF-506",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.dependencyGraphDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-507",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.commonLibraryExtractionDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-508",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.performanceProfilingDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-509",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.parallelExecutionDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-510",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.jsonOutputStandardDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-511",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.reportSchemaStandardDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-512",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.selftestConsistencyDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-514",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.falsePositiveNegativeReviewDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-515",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.severityModelDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-516",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.documentationHelpOutputDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-517",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.cacheabilityInputHashingDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-518",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.partialRunSupportDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-520",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.staleEvidenceDetectionDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-522",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.ruleToAuthorityTraceabilityDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-524",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedValidatorState",
+        "validatorSuiteImprovementMatrix.ruleToLinearIssueTraceabilityDesign",
+        "regressionProofingPolicy",
+        "validationProofExpectation"
+      ]
+    },
+    {
+      "issueId": "USF-355",
+      "criteria": [
+        "Validator inventory is complete.",
+        "Rule-to-authority traceability gaps are identified.",
+        "Cache and partial-run risks are documented.",
+        "UI-blocking validator gaps are listed."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "parentValidatorSuiteImprovementClosure.validatorInventoryComplete",
+        "parentValidatorSuiteImprovementClosure.ruleToAuthorityTraceabilityGaps",
+        "parentValidatorSuiteImprovementClosure.cacheAndPartialRunRisks",
+        "parentValidatorSuiteImprovementClosure.uiBlockingValidatorGaps"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "validatorImplementationChanged": false,
+    "testCodeCreated": false,
+    "packageScriptChanged": false,
+    "commandSurfaceChanged": false,
+    "schemaActivated": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  },
+  "propertyBasedValidatorTestingProposal": {
+    "stateInspected": true,
+    "candidateInvariants": [
+      {
+        "invariant": "Unknown controlled vocabulary values fail closed.",
+        "generatorShape": "Generate allowed values, aliases, unknown strings, empty strings, case variants, and structurally valid but non-canonical values.",
+        "pilotValue": "Protects vocabulary validation from accepting aliases or unknown future values."
+      },
+      {
+        "invariant": "Taxonomy classifications remain unique and scoped to the intended taxonomy.",
+        "generatorShape": "Generate duplicate IDs, cross-taxonomy IDs, missing IDs, and valid scoped IDs.",
+        "pilotValue": "Protects taxonomy catalogue uniqueness and scope assumptions."
+      },
+      {
+        "invariant": "Schema registry lifecycle state does not become active without file and validator-checkable support.",
+        "generatorShape": "Generate planned, missing-file, invalid-file, active-with-file, and active-without-validator states.",
+        "pilotValue": "Protects schema activation safeguards before future contract or UI work."
+      },
+      {
+        "invariant": "Generated reports cannot satisfy raw evidence or semantic authority requirements.",
+        "generatorShape": "Generate proof claims backed by raw evidence, generated reports only, stale reports, unknown status, and missing evidence references.",
+        "pilotValue": "Protects authority order and fail-closed proof validation."
+      },
+      {
+        "invariant": "Provider mode and environment do not upgrade each other by implication.",
+        "generatorShape": "Generate hermetic mock, live external provider, production shaped, production live, and mismatched combinations.",
+        "pilotValue": "Protects provider/environment separation before app-surface proof expansion."
+      }
+    ],
+    "testCostModel": [
+      "Start with bounded deterministic seeds and small generated case counts per invariant.",
+      "Run property pilots behind an explicit validator selftest or assurance command until runtime cost is measured.",
+      "Keep planted-defect fixtures as non-negotiable regression coverage; properties supplement rather than replace fixtures.",
+      "Fail property runs on flakiness, seed nondeterminism, unbounded shrinking, or runtime budget breach."
+    ],
+    "toolingOptions": [
+      {
+        "option": "Use existing test runner with hand-rolled deterministic generators.",
+        "dependencyImpact": "No dependency addition required for a pilot.",
+        "risk": "Less shrink support; generator quality depends on local discipline."
+      },
+      {
+        "option": "Adopt a property-testing library only after an approved dependency decision.",
+        "dependencyImpact": "Requires dependency, lockfile, supply-chain, and runtime-cost review.",
+        "risk": "Additional dependency and potential flakiness if not seed-bounded."
+      },
+      {
+        "option": "Use schema or vocabulary fixture expansion instead of a library for catalogue invariants.",
+        "dependencyImpact": "No dependency addition, but more fixtures to maintain.",
+        "risk": "Can become fixture explosion if not risk-ranked."
+      }
+    ],
+    "noRegressionValue": [
+      "Broadens validator assurance beyond known planted defects while retaining fail-closed fixture coverage.",
+      "Exposes acceptance of aliases, unknown values, missing evidence, stale reports, and lifecycle mismatches before UI work increases validator scope.",
+      "Creates measurable pilot cases for future validator optimisation without changing default validator routing now."
+    ],
+    "futureImplementationRequirements": [
+      "Record deterministic seed, generated case count, shrink behaviour, runtime budget, and invariant owner.",
+      "Keep property tests isolated from semantic authority changes and dependency decisions.",
+      "Add failing fixture or planted-defect equivalents for any property-discovered regression before relying on it as a gate."
+    ]
+  },
+  "validatorSuiteImprovementMatrix": {
+    "stateInspected": true,
+    "scope": "Discovery/design only for validator-suite child issues. This matrix does not create shared libraries, validators, tests, commands, schemas, report schemas, or implementation code.",
+    "dependencyGraphDesign": {
+      "issueId": "USF-506",
+      "state": "Validator directories, planted-defect directories, validation package scripts, and command-surface references are inspected through observedValidatorState and related source references.",
+      "assuranceImpact": "A dependency graph prevents unsafe partial runs and cache reuse by requiring every validator input and generated-output boundary to be explicit.",
+      "validationProofExpectation": "Future graph implementation must compare full and graph-selected validator membership, run relevant selftests, and fail closed on unknown or unclassified dependencies.",
+      "dependencies": [
+        "USF-505 inventory baseline",
+        "USF-519 aggregate command design",
+        "repository command-surface governance"
+      ]
+    },
+    "commonLibraryExtractionDesign": {
+      "issueId": "USF-507",
+      "state": "Repeated concerns include strict JSON parsing, file scanning, controlled-value handling, report envelopes, and planted-defect resolution.",
+      "assuranceImpact": "Shared utilities can reduce drift, but an unsafe extraction can centralise a false-pass bug across validators.",
+      "validationProofExpectation": "Future extraction requires before-and-after validator equivalence, planted defects for shared failure modes, and unchanged diagnostics unless intentionally documented.",
+      "dependencies": [
+        "validator inventory",
+        "selftest consistency design",
+        "false-positive and false-negative review"
+      ]
+    },
+    "performanceProfilingDesign": {
+      "issueId": "USF-508",
+      "state": "Repository performance profiling evidence exists separately and identifies measured command timings and deferred profiling gaps.",
+      "assuranceImpact": "Performance work must not narrow validator scope without proving equivalence against correctness-affecting inputs.",
+      "validationProofExpectation": "Future profiling must record command, duration, memory where available, input classes, and no-regression cases before optimisation.",
+      "dependencies": [
+        "repository performance profiling governance",
+        "command critical-path analysis",
+        "validator regression-proofing policy"
+      ]
+    },
+    "parallelExecutionDesign": {
+      "issueId": "USF-509",
+      "state": "Safe parallelisation must consider shared resources including generated reports, evidence directories, service state, ports, and cache files.",
+      "assuranceImpact": "Parallel runs can reduce feedback time but can corrupt outputs or hide ordering dependencies if shared resources are not isolated.",
+      "validationProofExpectation": "Future parallel execution requires declared resource locks, deterministic output paths, before-and-after command equivalence, and planted defects for race-sensitive checks where applicable.",
+      "dependencies": [
+        "repository performance profiling governance safe parallelisation design",
+        "validator dependency graph"
+      ]
+    },
+    "jsonOutputStandardDesign": {
+      "issueId": "USF-510",
+      "state": "Validators and reports need consistent machine-readable result envelopes without treating generated reports as semantic authority.",
+      "assuranceImpact": "Consistent JSON output improves aggregation and agent review, but schema-like output contracts must not be invented as active schemas without registry and validator support.",
+      "validationProofExpectation": "Future JSON output standard must parse strictly, distinguish raw evidence from generated reports, preserve exit-code semantics, and include negative fixtures for malformed or stale output.",
+      "dependencies": [
+        "schema authoring standard",
+        "generated-report non-authority rule",
+        "report schema standard design"
+      ]
+    },
+    "reportSchemaStandardDesign": {
+      "issueId": "USF-511",
+      "state": "Validator report structure needs shape governance before aggregate or generated report consumers rely on it.",
+      "assuranceImpact": "A report schema can improve consistency, but marking a planned schema active without file and validator support would violate schema rules.",
+      "validationProofExpectation": "Future report schema work must consult the schema registry, parse strict JSON Schema, remain validator-checkable, and preserve raw evidence links.",
+      "dependencies": [
+        "schema registry",
+        "schema authoring standard",
+        "validator JSON output standard design"
+      ]
+    },
+    "selftestConsistencyDesign": {
+      "issueId": "USF-512",
+      "state": "Observed planted-defect directories show broad but uneven selftest fixture placement across validator families.",
+      "assuranceImpact": "Consistent selftests protect validator optimisation from weakening fail-closed behaviour.",
+      "validationProofExpectation": "Future selftest consistency work must keep planted defects, invalid JSON, stale evidence, unknown controlled values, and omitted path-class cases runnable by owning validators.",
+      "dependencies": [
+        "planted-defect naming and layout",
+        "fixture location governance",
+        "validator regression-proofing policy"
+      ]
+    },
+    "falsePositiveNegativeReviewDesign": {
+      "issueId": "USF-514",
+      "state": "Known risk classes include stale cache, unknown values, generated report overtrust, missing evidence, provider/environment mismatch, and narrowed path scans.",
+      "assuranceImpact": "False positives create noisy blockers while false negatives undermine USF authority and proof claims; false negatives are higher severity for fail-closed validators.",
+      "validationProofExpectation": "Future review must classify each validator rule by false-positive and false-negative risk and include negative controls for high-risk false negatives.",
+      "dependencies": [
+        "assurance improvement opportunities governance",
+        "validator regression-proofing policy"
+      ]
+    },
+    "severityModelDesign": {
+      "issueId": "USF-515",
+      "state": "Validator outcomes need explicit blocking semantics for strict errors, warnings, informational findings, stale evidence, and unknown status.",
+      "assuranceImpact": "Ambiguous severity can convert unknown or stale evidence into accidental pass evidence.",
+      "validationProofExpectation": "Future severity model must fail closed on unknown status, stale reports, missing evidence, and authority conflicts, with selftests for each severity class.",
+      "dependencies": [
+        "authority model",
+        "validator false-positive and false-negative review",
+        "generated-report non-authority rule"
+      ]
+    },
+    "documentationHelpOutputDesign": {
+      "issueId": "USF-516",
+      "state": "Validator command surfaces are exposed through package scripts, Make targets, workflows, and tool directories.",
+      "assuranceImpact": "Help output can improve agent use but must not overclaim readiness, production, staging, compliance, or provider proof scope.",
+      "validationProofExpectation": "Future help output must list scope, inputs, outputs, side effects, proof/environment relevance, generated-report boundaries, and compatibility aliases.",
+      "dependencies": [
+        "command-surface governance",
+        "current-state foundation authority index",
+        "validator JSON output standard design"
+      ]
+    },
+    "cacheabilityInputHashingDesign": {
+      "issueId": "USF-517",
+      "state": "Potential cache inputs include validator source, package scripts, Make targets, catalogues, registries, schemas, semantic instances, evidence manifests, generated report source manifests, fixtures, and command environment dimensions.",
+      "assuranceImpact": "Cache reuse can reduce repeated work but stale or under-hashed inputs can hide drift and create false passes.",
+      "validationProofExpectation": "Future cache work must include content hashes, lifecycle state, provider/environment dimensions, command identity, invalidation fixtures, and fallback to full validation on ambiguity.",
+      "dependencies": [
+        "incremental validation design",
+        "artifact hash model",
+        "validator dependency graph"
+      ]
+    },
+    "partialRunSupportDesign": {
+      "issueId": "USF-518",
+      "state": "Partial-run support depends on a complete dependency graph, cache-safe hashing, and declared path-to-validator ownership.",
+      "assuranceImpact": "Affected-only validation can improve feedback but is unsafe unless excluded inputs are proven irrelevant for the selected validator scope.",
+      "validationProofExpectation": "Future partial runs must compare selected runs with full runs, include included and excluded path-class tests, and fail closed to full validation on unknown ownership.",
+      "dependencies": [
+        "validator dependency graph",
+        "cacheability and input hashing design",
+        "layout and fixture governance"
+      ]
+    },
+    "staleEvidenceDetectionDesign": {
+      "issueId": "USF-520",
+      "state": "USF safety rules require stale, unknown, and missing evidence to fail closed and generated reports to remain lower authority.",
+      "assuranceImpact": "Stale evidence detection protects readiness and proof claims from being upgraded by old reports or missing raw evidence.",
+      "validationProofExpectation": "Future stale-evidence checks must test stale report status, unknown status, missing raw evidence, provider-mode mismatch, environment mismatch, and generated-report-only proof claims.",
+      "dependencies": [
+        "authority model",
+        "evidence rules",
+        "validator severity model design"
+      ]
+    },
+    "ruleToAuthorityTraceabilityDesign": {
+      "issueId": "USF-522",
+      "state": "Validator rules should trace to semantic definitions, ADRs, validator rule authority, runtime proof evidence expectations, or source implementation constraints as applicable.",
+      "assuranceImpact": "Traceability prevents validators from inventing semantics and helps reviewers distinguish rule enforcement from product meaning.",
+      "validationProofExpectation": "Future traceability work must fail unknown authority references closed and keep generated reports lower than semantic definitions and validator rules.",
+      "dependencies": [
+        "authority model",
+        "schema authoring standard",
+        "validator inventory and ownership"
+      ]
+    },
+    "ruleToLinearIssueTraceabilityDesign": {
+      "issueId": "USF-524",
+      "state": "Linear tracks work only and is not USF authority; traceability to Linear can support backlog management but cannot define validator semantics.",
+      "assuranceImpact": "Rule-to-issue links help manage work, but overusing Linear links can confuse operational tracking with semantic authority.",
+      "validationProofExpectation": "Future rule-to-issue traceability must keep repository authority references primary, treat Linear links as operational context, and avoid closing issues without acceptance evidence.",
+      "dependencies": [
+        "Linear work tracking policy",
+        "rule-to-authority traceability design",
+        "authority model"
+      ]
+    }
+  },
+  "parentValidatorSuiteImprovementClosure": {
+    "stateInspected": true,
+    "childStatusObservation": "Linear child issue check for USF-355 showed all children completed after USF-995 closure.",
+    "validatorInventoryComplete": {
+      "basis": "observedValidatorState records validator directories, planted-defect directories, fixture directories, manifest directories, and validation-relevant package scripts, with USF-505 completed as the inventory baseline.",
+      "residualGap": "Future implementation may add richer machine-readable inventories, but parent planning inventory criteria are satisfied for discovery closure."
+    },
+    "ruleToAuthorityTraceabilityGaps": [
+      "Rule-to-authority references need primary links to USF semantic definitions, ADRs, validator rules, runtime proof evidence expectations, or source implementation constraints, not Linear alone.",
+      "Generated reports must remain lower authority in any validator output or aggregate summary.",
+      "Unknown authority references, missing source contracts, and planned-only schema references must fail closed in future traceability validators."
+    ],
+    "cacheAndPartialRunRisks": [
+      "Under-hashed inputs can hide semantic, schema, evidence, fixture, generated-output, package-script, or command-surface drift.",
+      "Affected-only validation can exclude correctness-affecting inputs unless a complete dependency graph and path ownership model exist.",
+      "Stale parse caches, generated reports, and aggregate summaries can produce false pass evidence if not invalidated by content hash and lifecycle state.",
+      "Unknown ownership or missing hashes must fall back to broader validation."
+    ],
+    "uiBlockingValidatorGaps": [
+      "Validator regression-proofing before UI work.",
+      "Generated-client contract and lifecycle validation before UI consumption.",
+      "App-surface proof routing validation for provider mode and environment separation.",
+      "Aggregate command manifest coverage before new aggregate validator routing.",
+      "Before-and-after validator equivalence for any optimisation or refactor.",
+      "Stale evidence and generated-report non-authority detection."
+    ],
+    "parentNonClaims": [
+      "No validator code changed.",
+      "No aggregate command changed.",
+      "No cache or partial-run mechanism was implemented.",
+      "No UI readiness claim was made."
+    ]
+  }
+}

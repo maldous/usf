@@ -1,0 +1,45 @@
+{
+  "case": {
+    "claimedProofLevel": "test-service-backed",
+    "claimedProviderMode": "local-composed-real-service",
+    "collectedEvidence": true,
+    "evidenceKinds": [
+      "raw-evidence",
+      "retained-proof-artifact"
+    ],
+    "evidenceReuse": {
+      "sourceEnvironment": "integration",
+      "sourceProviderMode": "local-composed-real-service",
+      "targetEnvironment": "integration",
+      "targetProviderMode": "local-composed-real-service"
+    },
+    "fallbackOnAmbiguity": "full-validation",
+    "freshnessState": "current",
+    "generatedReportAuthoritative": false,
+    "id": "positive-dev-to-test-boundary",
+    "impactClass": "validator",
+    "nonClaims": [
+      "staging-readiness",
+      "production-readiness",
+      "deployment-readiness",
+      "live-provider-readiness",
+      "store-readiness",
+      "compliance-readiness",
+      "human-acceptance"
+    ],
+    "observedProofLevel": "dev-compose",
+    "productionLiveClaim": false,
+    "proofCockpit": {
+      "freshMachineQaClaim": true,
+      "projectionOnly": true
+    },
+    "providerMode": "local-composed-real-service",
+    "sourceEnvironment": "local",
+    "sourceStage": "dev",
+    "stagingReadinessClaim": false,
+    "targetEnvironment": "integration",
+    "targetStage": "test"
+  },
+  "expectedRule": "USF-ENV-LADDER-012",
+  "id": "011-projection-claims-fresh-machine-qa"
+}

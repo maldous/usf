@@ -1,0 +1,666 @@
+{
+  "id": "usf.repository-command-surface-target-governance",
+  "title": "Repository command surface target governance",
+  "status": "tracking-report",
+  "purpose": "Define command-surface target taxonomy, assurance boundaries, proof expectations, dependency records, destructive-command safety, and owner-decision requirements for repository optimisation planning without changing Makefile targets, package scripts, CI, validators, proof scripts, or runtime code.",
+  "authorityPosture": {
+    "isSemanticAuthority": false,
+    "tracksWorkOnly": true,
+    "doesNotOverride": [
+      "docs/architecture/charter.md",
+      "docs/architecture/authority-model.md",
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "docs/architecture/current-state-foundation-authority-index.json",
+      "docs/architecture/current-state-command-surface.json",
+      "AGENTS.md",
+      "CODEX.md",
+      "CLAUDE.md",
+      "accepted ADRs",
+      "validator results",
+      "runtime proof evidence"
+    ],
+    "generatedReportsAreNotCanonical": true
+  },
+  "currentStateInspection": {
+    "inspectedSources": [
+      "AGENTS.md current preferred command entry points",
+      "docs/architecture/current-state-foundation-authority-index.json",
+      "docs/architecture/current-state-command-surface.json",
+      "USF-384 baseline timing and cost measurement",
+      "USF-385 command critical-path analysis",
+      "USF-386 assurance classification matrix",
+      "USF-427 Dev to Test to Staging ladder semantics",
+      "USF-441 policy preventing unnecessary staging promotion",
+      "USF-598 artifact inventory and retention policy",
+      "USF-603 artifact hash and content-addressing",
+      "USF-633 artifact diffability and review ergonomics",
+      "USF-824 no-regression proof plan"
+    ],
+    "preferredHumanFacingEntryPoints": [
+      "make setup",
+      "make foundation",
+      "make dev-ready",
+      "make test-ready",
+      "make validate-coverage",
+      "make validate-assurance",
+      "make validate-evidence",
+      "make test-composed",
+      "make test-readiness-integration",
+      "make test-assurance"
+    ],
+    "compatibilityEntryPoints": [
+      "verify",
+      "parity",
+      "proof:bootstrap",
+      "validate-bootstrap",
+      "sonar-zero-issue-proof"
+    ],
+    "currentStateRules": [
+      "Current preferred aliases are workflow routers and do not upgrade readiness claims.",
+      "Compatibility aliases remain valid until a separately authorised replacement is validated.",
+      "Provider mode and environment remain separate dimensions.",
+      "Generated reports are lower authority than source evidence and semantic definitions.",
+      "Hermetic mock proof does not satisfy live external provider proof.",
+      "Production-shaped does not satisfy production-live."
+    ]
+  },
+  "dependencyStatus": [
+    {
+      "issueId": "USF-384",
+      "title": "Baseline timing and cost measurement",
+      "status": "Done",
+      "supports": [
+        "USF-400",
+        "USF-410"
+      ]
+    },
+    {
+      "issueId": "USF-385",
+      "title": "Command critical-path analysis",
+      "status": "Done",
+      "supports": [
+        "USF-398",
+        "USF-407",
+        "USF-409",
+        "USF-411",
+        "USF-412",
+        "USF-414",
+        "USF-416",
+        "USF-417",
+        "USF-420"
+      ]
+    },
+    {
+      "issueId": "USF-386",
+      "title": "Assurance classification matrix",
+      "status": "Done",
+      "supports": [
+        "USF-398",
+        "USF-400",
+        "USF-402",
+        "USF-405",
+        "USF-406",
+        "USF-407",
+        "USF-409",
+        "USF-418",
+        "USF-419"
+      ]
+    },
+    {
+      "issueId": "USF-427",
+      "title": "Dev to Test to Staging ladder semantics",
+      "status": "Done",
+      "supports": [
+        "USF-406"
+      ]
+    },
+    {
+      "issueId": "USF-441",
+      "title": "Policy preventing unnecessary staging promotion",
+      "status": "Done",
+      "supports": [
+        "USF-406"
+      ]
+    },
+    {
+      "issueId": "USF-598",
+      "title": "Artifact inventory and retention policy",
+      "status": "Done",
+      "supports": [
+        "USF-413"
+      ]
+    },
+    {
+      "issueId": "USF-603",
+      "title": "Artifact hash and content-addressing",
+      "status": "Done",
+      "supports": [
+        "USF-413"
+      ]
+    },
+    {
+      "issueId": "USF-633",
+      "title": "Artifact diffability and review ergonomics",
+      "status": "Done",
+      "supports": [
+        "USF-413"
+      ]
+    },
+    {
+      "issueId": "USF-824",
+      "title": "No-regression proof plan",
+      "status": "Done",
+      "supports": [
+        "USF-421",
+        "USF-422"
+      ]
+    }
+  ],
+  "parentIssueClosure": {
+    "issueId": "USF-352",
+    "title": "Parent: Makefile and command-surface redesign",
+    "targetTaxonomyProposed": true,
+    "existingTargetsInventoriedBeforeChanges": true,
+    "existingTargetInventory": {
+      "inventorySources": [
+        "docs/architecture/current-state-command-surface.json",
+        "docs/architecture/current-state-foundation-authority-index.json",
+        "AGENTS.md current preferred command entry points",
+        "USF-385 command critical-path analysis"
+      ],
+      "preferredHumanFacingEntryPoints": [
+        "make setup",
+        "make foundation",
+        "make dev-ready",
+        "make test-ready",
+        "make validate-coverage",
+        "make validate-assurance",
+        "make validate-evidence",
+        "make test-composed",
+        "make test-readiness-integration",
+        "make test-assurance"
+      ],
+      "compatibilityEntryPoints": [
+        "verify",
+        "parity",
+        "proof:bootstrap",
+        "validate-bootstrap",
+        "sonar-zero-issue-proof"
+      ],
+      "inventoryBoundary": "This inventory records the current preferred and compatibility entry points relevant to command-surface redesign. Future implementation must re-check the live Makefile and package script surface before changing targets."
+    },
+    "deprecationOrRemovalRisksRequireOwnerDecision": true,
+    "validationExpectationsDefinedForLaterImplementation": true,
+    "openChildCheck": {
+      "todoChildren": 0,
+      "inProgressChildren": 0
+    }
+  },
+  "targetTaxonomy": [
+    {
+      "class": "setup",
+      "primaryEntryPoint": "make setup",
+      "purpose": "Frozen dependency install and local setup routing.",
+      "assuranceBoundary": "Setup readiness only; does not prove semantic correctness, test readiness, staging suitability, or production suitability.",
+      "validationExpectation": "Future changes must preserve frozen dependency expectations and fail visibly on missing prerequisites."
+    },
+    {
+      "class": "dev",
+      "primaryEntryPoint": "make dev-ready",
+      "purpose": "Developer and AI-agent handover validation.",
+      "assuranceBoundary": "Dev-level local confidence only; does not satisfy Test, Staging, live-provider, or human acceptance proof.",
+      "validationExpectation": "Future target changes must map outputs to assurance classes and retain escalation guidance."
+    },
+    {
+      "class": "foundation",
+      "primaryEntryPoint": "make foundation",
+      "purpose": "Full local foundation gate.",
+      "assuranceBoundary": "Foundation-level repository consistency; not a product, deployment, compliance, store, production, or release claim.",
+      "validationExpectation": "Future target changes must preserve all required foundation checks or explicitly define a validator-checkable replacement."
+    },
+    {
+      "class": "test",
+      "primaryEntryPoint": "make test-ready",
+      "supportingEntryPoints": [
+        "make test-composed",
+        "make test-readiness-integration"
+      ],
+      "purpose": "Bounded test-readiness command gate and composed semantic harness routing.",
+      "assuranceBoundary": "Test proof only; does not imply staging, production-live, live-provider, or human acceptance proof.",
+      "validationExpectation": "Future target changes must map Test checks to assurance classes and preserve required evidence outputs."
+    },
+    {
+      "class": "assurance",
+      "primaryEntryPoints": [
+        "make validate-coverage",
+        "make validate-assurance",
+        "make validate-evidence",
+        "make test-assurance"
+      ],
+      "purpose": "Coverage, enterprise assurance, repository evidence, and bounded assurance proof routing.",
+      "assuranceBoundary": "Assurance-specific proof only; generated reports remain lower authority than underlying evidence.",
+      "validationExpectation": "Future changes must keep fail-closed semantics for stale, unknown, missing, provider-mismatched, or environment-mismatched evidence."
+    },
+    {
+      "class": "staging",
+      "primaryEntryPoint": "future staging validation target",
+      "purpose": "Explicit staging-relevant proof when the environment ladder requires it.",
+      "assuranceBoundary": "Staging proof must not become the default for ordinary documentation, semantic, tooling, validator, cache, or Dev/Test changes.",
+      "validationExpectation": "Future implementation must cite environment-ladder policy and preserve provider-mode and environment separation."
+    },
+    {
+      "class": "maintenance",
+      "primaryEntryPoint": "future clean, reset, explain, dry-run, and cache-clean targets",
+      "purpose": "Local maintenance and inspectability without evidence loss.",
+      "assuranceBoundary": "Maintenance output is not proof and must not delete accepted evidence or authority files by default.",
+      "validationExpectation": "Future destructive or cleanup targets must include dry-run validation, protected-path tests, and owner approval where high risk exists."
+    }
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-398",
+      "title": "Makefile target taxonomy and naming standard",
+      "currentStateInspected": true,
+      "assuranceImpact": "Target names must expose assurance level, environment relevance, provider relevance, cost, side effects, and compatibility status without treating aliases as stronger proof.",
+      "validationOrProofExpectation": "Future implementation must validate target inventory, preferred aliases, compatibility aliases, and assurance mapping against command graph and assurance matrix.",
+      "dependenciesRecorded": [
+        "USF-385",
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-400",
+      "title": "Fast local dev target",
+      "currentStateInspected": true,
+      "assuranceImpact": "Fast local feedback can reduce cost but must state that it is not full validation, Test proof, Staging proof, or readiness evidence.",
+      "validationOrProofExpectation": "Future implementation must print included checks, excluded checks, escalation triggers, and non-claim wording.",
+      "dependenciesRecorded": [
+        "USF-384",
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-402",
+      "title": "Dev validation target",
+      "currentStateInspected": true,
+      "assuranceImpact": "Dev validation must be proportionate and must not overclaim Test or Staging assurance.",
+      "validationOrProofExpectation": "Future implementation must map target outputs to assurance classes and preserve escalation to Test or Staging when required.",
+      "dependenciesRecorded": [
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-405",
+      "title": "Test validation target",
+      "currentStateInspected": true,
+      "assuranceImpact": "Test validation must require proportionate tests and evidence without becoming a staging substitute.",
+      "validationOrProofExpectation": "Future implementation must map Test checks to assurance classes and evidence outputs.",
+      "dependenciesRecorded": [
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-406",
+      "title": "Staging validation target",
+      "currentStateInspected": true,
+      "assuranceImpact": "Staging validation must remain explicit, limited to staging-relevant risks, and separate from default Dev or Test flows.",
+      "validationOrProofExpectation": "Future implementation must cite environment ladder policy and keep production-shaped, production-live, hermetic-mock, and live-external-provider distinctions intact.",
+      "dependenciesRecorded": [
+        "USF-386",
+        "USF-427",
+        "USF-441"
+      ]
+    },
+    {
+      "issueId": "USF-407",
+      "title": "Full proof target",
+      "currentStateInspected": true,
+      "assuranceImpact": "A full proof target must preserve all required assurance and must not weaken accepted proof expectations through renaming or regrouping.",
+      "validationOrProofExpectation": "Future implementation must preserve or explicitly disposition all existing proof obligations and evidence outputs.",
+      "dependenciesRecorded": [
+        "USF-385",
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-409",
+      "title": "Changed-files and affected-only target",
+      "currentStateInspected": true,
+      "assuranceImpact": "Affected-only execution can reduce cost only when input classification is complete; ambiguity must fall back to fuller gates.",
+      "validationOrProofExpectation": "Future implementation must prove affected-only equivalence for supported change classes and fail closed for unknown inputs.",
+      "dependenciesRecorded": [
+        "USF-385",
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-410",
+      "title": "Explicit expensive target warnings",
+      "currentStateInspected": true,
+      "assuranceImpact": "Warnings improve cost visibility but must not discourage required proof or imply that expensive assurance is optional when applicable.",
+      "validationOrProofExpectation": "Future implementation must preserve target exit behaviour and include non-claim wording with cost labels.",
+      "dependenciesRecorded": [
+        "USF-384"
+      ]
+    },
+    {
+      "issueId": "USF-411",
+      "title": "Target help and documentation generation",
+      "currentStateInspected": true,
+      "assuranceImpact": "Generated help can improve discoverability but must not become semantic authority or hide compatibility paths.",
+      "validationOrProofExpectation": "Future implementation must check generated documentation against target inventory, command graph, preferred aliases, and compatibility aliases.",
+      "dependenciesRecorded": [
+        "USF-385"
+      ]
+    },
+    {
+      "issueId": "USF-412",
+      "title": "Idempotent targets and safe reruns",
+      "currentStateInspected": true,
+      "assuranceImpact": "Rerun guidance must prevent stale state from creating false passes and must prevent cleanup from deleting required evidence.",
+      "validationOrProofExpectation": "Future implementation must prove rerun behaviour for changed targets and preserve stale-evidence failure behaviour.",
+      "dependenciesRecorded": [
+        "USF-385"
+      ]
+    },
+    {
+      "issueId": "USF-413",
+      "title": "Target output and artifact location standard",
+      "currentStateInspected": true,
+      "assuranceImpact": "Output locations must preserve evidence references, generated report lower authority, artifact retention, and review workflows.",
+      "validationOrProofExpectation": "Future implementation must validate artifact references, manifests, freshness markers, and generated-report source links.",
+      "dependenciesRecorded": [
+        "USF-598",
+        "USF-603",
+        "USF-633"
+      ]
+    },
+    {
+      "issueId": "USF-414",
+      "title": "Target exit-code standard",
+      "currentStateInspected": true,
+      "assuranceImpact": "Exit-code normalisation must preserve fail-closed validation and proof semantics for pass, fail, blocked, skipped, unsupported, timeout, and unknown outcomes.",
+      "validationOrProofExpectation": "Future implementation must include failure-path tests for changed commands and must not convert fail, stale, unknown, timeout, or blocked outcomes into pass.",
+      "dependenciesRecorded": [
+        "USF-385"
+      ]
+    },
+    {
+      "issueId": "USF-416",
+      "title": "Target dependency graph generation",
+      "currentStateInspected": true,
+      "assuranceImpact": "A generated graph can support affected-only checks but remains a generated report and cannot define command authority by itself.",
+      "validationOrProofExpectation": "Future implementation must compare generated graph output to known command dependencies and fail closed on unresolved edges.",
+      "dependenciesRecorded": [
+        "USF-385"
+      ]
+    },
+    {
+      "issueId": "USF-417",
+      "title": "Target dry-run and explain mode",
+      "currentStateInspected": true,
+      "assuranceImpact": "Explain output can reduce unsafe execution but must not be treated as proof execution or validation evidence.",
+      "validationOrProofExpectation": "Future implementation must validate explain output against the command graph and display side effects, artifacts, proof level, environment, provider mode, and cost.",
+      "dependenciesRecorded": [
+        "USF-385"
+      ]
+    },
+    {
+      "issueId": "USF-418",
+      "title": "Target environment-variable validation",
+      "currentStateInspected": true,
+      "assuranceImpact": "Environment-variable checks must fail closed when required inputs are missing or unsafe while avoiding unnecessary blockers for hermetic local workflows.",
+      "validationOrProofExpectation": "Future implementation must include failure cases for missing, malformed, unsafe, provider-incompatible, and environment-incompatible inputs.",
+      "dependenciesRecorded": [
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-419",
+      "title": "Target secret and credential fail-closed checks",
+      "currentStateInspected": true,
+      "assuranceImpact": "Secret checks must prevent leaks, prevent credential overclaiming, and preserve hermetic workflows where live credentials are not required.",
+      "validationOrProofExpectation": "Future implementation must include negative controls for missing, unsafe, exposed, or provider-incompatible credentials.",
+      "dependenciesRecorded": [
+        "USF-386"
+      ]
+    },
+    {
+      "issueId": "USF-420",
+      "title": "Makefile split into modules if beneficial",
+      "currentStateInspected": true,
+      "assuranceImpact": "Splitting can improve maintainability but can harm execution traceability, help output, and agent instructions if target flow becomes obscure.",
+      "validationOrProofExpectation": "Future split must pass full command-surface validation and preserve all targets and aliases unless separately dispositioned.",
+      "dependenciesRecorded": [
+        "USF-385"
+      ],
+      "ownerDecisionRequirement": "Owner decision is required before splitting the Makefile or changing include strategy."
+    },
+    {
+      "issueId": "USF-421",
+      "title": "Removal or deprecation of duplicate or superseded targets",
+      "currentStateInspected": true,
+      "assuranceImpact": "Removing or deprecating a target can break CI, agents, proof routes, or evidence references, so compatibility windows and disposition are required.",
+      "validationOrProofExpectation": "Future implementation must run before-and-after command-equivalence validation and preserve proof routes unless explicitly dispositioned.",
+      "dependenciesRecorded": [
+        "USF-824"
+      ],
+      "ownerDecisionRequirement": "Owner decision is required before removing, renaming, or deprecating a risky target."
+    },
+    {
+      "issueId": "USF-422",
+      "title": "Human-safe destructive target policy",
+      "currentStateInspected": true,
+      "assuranceImpact": "Destructive targets must protect raw evidence, accepted proof, authority files, lockfiles, and credentials while still allowing explicit cleanup when safe.",
+      "validationOrProofExpectation": "Future destructive commands must include dry-run validation, protected-path tests, and safety tests before mutation.",
+      "dependenciesRecorded": [
+        "USF-824"
+      ],
+      "ownerDecisionRequirement": "Owner decision is required for high-risk cleanup that could remove evidence, proof, source authority, dependency locks, or shared service state."
+    }
+  ],
+  "sharedCommandContracts": {
+    "exitStates": [
+      "pass",
+      "fail",
+      "blocked",
+      "skipped",
+      "unsupported",
+      "timeout",
+      "unknown"
+    ],
+    "failClosedStates": [
+      "fail",
+      "blocked",
+      "timeout",
+      "unknown",
+      "stale",
+      "missing evidence",
+      "provider mismatch",
+      "environment mismatch"
+    ],
+    "requiredTargetMetadata": [
+      "target name",
+      "command class",
+      "preferred or compatibility status",
+      "assurance class",
+      "environment relevance",
+      "provider mode relevance",
+      "side effects",
+      "artifacts produced",
+      "evidence consumed",
+      "cost label",
+      "owner decision requirement where applicable",
+      "non-claim wording"
+    ],
+    "protectedPathsAndInputs": [
+      "foundational governance artefacts",
+      "taxonomy catalogue",
+      "vocabulary catalogue",
+      "schema registry",
+      "raw evidence",
+      "accepted proof evidence",
+      "generated reports with unresolved source evidence",
+      "lockfiles",
+      "credentials and secret material"
+    ],
+    "destructiveTargetDefaults": [
+      "dry-run first",
+      "explicit confirmation for high-risk cleanup",
+      "no deletion of evidence or authority files by default",
+      "post-clean validation recommendation",
+      "owner decision required for high-risk policy changes"
+    ],
+    "affectedOnlyFallbacks": [
+      "unknown input class",
+      "unknown dependency edge",
+      "stale generated report",
+      "missing source evidence",
+      "provider mode mismatch",
+      "environment mismatch",
+      "changed lockfile",
+      "changed command graph",
+      "changed assurance matrix"
+    ]
+  },
+  "implementationBoundary": {
+    "makefileChanged": false,
+    "packageScriptsChanged": false,
+    "ciChanged": false,
+    "validatorCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "implementationCodeCreated": false,
+    "proofScriptChanged": false,
+    "targetRemoved": false,
+    "targetRenamed": false,
+    "destructiveTargetImplemented": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "criterion": "Current state inspected",
+      "satisfiedForIssues": [
+        "USF-398",
+        "USF-400",
+        "USF-402",
+        "USF-405",
+        "USF-406",
+        "USF-407",
+        "USF-409",
+        "USF-410",
+        "USF-411",
+        "USF-412",
+        "USF-413",
+        "USF-414",
+        "USF-416",
+        "USF-417",
+        "USF-418",
+        "USF-419",
+        "USF-420",
+        "USF-421",
+        "USF-422"
+      ],
+      "evidence": [
+        "currentStateInspection",
+        "coveredIssues"
+      ]
+    },
+    {
+      "criterion": "Assurance impact stated",
+      "satisfiedForIssues": [
+        "USF-398",
+        "USF-400",
+        "USF-402",
+        "USF-405",
+        "USF-406",
+        "USF-407",
+        "USF-409",
+        "USF-410",
+        "USF-411",
+        "USF-412",
+        "USF-413",
+        "USF-414",
+        "USF-416",
+        "USF-417",
+        "USF-418",
+        "USF-419",
+        "USF-420",
+        "USF-421",
+        "USF-422"
+      ],
+      "evidence": [
+        "coveredIssues.assuranceImpact"
+      ]
+    },
+    {
+      "criterion": "Validation or proof expectation defined",
+      "satisfiedForIssues": [
+        "USF-398",
+        "USF-400",
+        "USF-402",
+        "USF-405",
+        "USF-406",
+        "USF-407",
+        "USF-409",
+        "USF-410",
+        "USF-411",
+        "USF-412",
+        "USF-413",
+        "USF-414",
+        "USF-416",
+        "USF-417",
+        "USF-418",
+        "USF-419",
+        "USF-420",
+        "USF-421",
+        "USF-422"
+      ],
+      "evidence": [
+        "coveredIssues.validationOrProofExpectation",
+        "sharedCommandContracts"
+      ]
+    },
+    {
+      "criterion": "Dependencies recorded",
+      "satisfiedForIssues": [
+        "USF-398",
+        "USF-400",
+        "USF-402",
+        "USF-405",
+        "USF-406",
+        "USF-407",
+        "USF-409",
+        "USF-410",
+        "USF-411",
+        "USF-412",
+        "USF-413",
+        "USF-414",
+        "USF-416",
+        "USF-417",
+        "USF-418",
+        "USF-419"
+      ],
+      "evidence": [
+        "coveredIssues.dependenciesRecorded",
+        "dependencyStatus"
+      ]
+    },
+    {
+      "criterion": "Owner decision requirement recorded",
+      "satisfiedForIssues": [
+        "USF-420",
+        "USF-421",
+        "USF-422"
+      ],
+      "evidence": [
+        "coveredIssues.ownerDecisionRequirement"
+      ]
+    }
+  ],
+  "nonClaims": [
+    "This artefact does not implement, remove, rename, split, or deprecate any Makefile target.",
+    "This artefact does not change package scripts, CI workflows, validators, proof scripts, runtime code, or generated reports.",
+    "This artefact does not approve a Makefile split, target removal, target deprecation, destructive cleanup, or staging promotion.",
+    "This artefact does not make a readiness, staging, production, compliance, store, deployment, release, or live-provider claim.",
+    "This artefact does not treat generated command documentation or dependency graphs as semantic authority."
+  ]
+}

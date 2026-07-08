@@ -1,0 +1,313 @@
+{
+  "id": "notification-consent-data-inventory-semantics",
+  "title": "Notification, Consent, and Data Inventory Semantics",
+  "issueId": "USF-621",
+  "coveredIssueIds": [
+    "USF-493",
+    "USF-636",
+    "USF-642"
+  ],
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact defines app-surface data inventory, notification UI, consent receipt, audit event, and regional ads consent semantics. It does not create notification implementation, push provider integration, service worker implementation, ad SDK implementation, CMP implementation, legal conclusions, policy publication, provider configuration, store submission, ads compliance, privacy compliance, production readiness, live-provider readiness, product UI readiness, or human acceptance.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/generated-ui-view-model-semantics.json",
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "spec/schemas/interface-contract.schema.json"
+  ],
+  "dataInventoryModel": {
+    "issueId": "USF-621",
+    "rule": "Every app-surface capability mapping must identify data inventory requirements for fields, commands, queries, events, telemetry, storage, notifications, ads, and store disclosures before implementation or disclosure claims.",
+    "requiredMappings": [
+      "capability",
+      "semantic-contract",
+      "field-or-event-or-surface-id",
+      "surface-kind",
+      "privacy-data-category",
+      "collection-purpose",
+      "consent-purpose-where-applicable",
+      "retention-posture",
+      "deletion-or-export-relevance",
+      "store-disclosure-impact",
+      "ads-or-monetisation-impact",
+      "audit-event-relevance",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "surfaceKinds": [
+      "field",
+      "command",
+      "query",
+      "event",
+      "telemetry",
+      "storage",
+      "notification",
+      "ads",
+      "store-disclosure"
+    ],
+    "mustReject": [
+      "capability without data inventory mapping",
+      "field without privacy data category mapping",
+      "event without privacy data category mapping",
+      "notification without data inventory mapping",
+      "ads surface without consent and data inventory mapping",
+      "store disclosure impact without semantic backing"
+    ]
+  },
+  "notificationInboxToastBannerModel": {
+    "issueId": "USF-493",
+    "rule": "Notification inbox, toast, and banner UI are transient or persistent projections of governed notification semantics and must map to capability, semantic event, consent, preference, permission, privacy, audit, i18n, accessibility, telemetry, and proof requirements.",
+    "notificationKinds": [
+      {
+        "id": "in-app-inbox",
+        "requiredMappings": [
+          "capability",
+          "semantic-event",
+          "preference",
+          "permission",
+          "privacy-category",
+          "audit-event",
+          "retention",
+          "read-unread-state",
+          "i18n-key",
+          "accessibility-semantics",
+          "proof"
+        ]
+      },
+      {
+        "id": "toast",
+        "requiredMappings": [
+          "capability",
+          "semantic-event",
+          "preference",
+          "permission",
+          "privacy-category",
+          "audit-event-where-required",
+          "duration-and-dismissal",
+          "i18n-key",
+          "accessibility-announcement",
+          "proof"
+        ]
+      },
+      {
+        "id": "banner",
+        "requiredMappings": [
+          "capability",
+          "semantic-event",
+          "preference",
+          "permission",
+          "privacy-category",
+          "audit-event-where-required",
+          "action-affordance",
+          "i18n-key",
+          "accessibility-semantics",
+          "proof"
+        ]
+      }
+    ],
+    "mustReject": [
+      "notification UI without capability mapping",
+      "notification UI without consent or preference mapping",
+      "notification UI without privacy mapping",
+      "notification UI without i18n or accessibility mapping",
+      "persistent inbox item without retention mapping"
+    ]
+  },
+  "consentReceiptAndAuditEventModel": {
+    "issueId": "USF-636",
+    "rule": "Consent state must be tied to governed purposes, versions, withdrawals, receipts, audit events, actor, tenant boundary, and proof expectations.",
+    "requiredMappings": [
+      "consent-purpose",
+      "consent-version",
+      "consent-state",
+      "withdrawal-state",
+      "receipt-id",
+      "actor",
+      "tenant-boundary",
+      "audit-event-id",
+      "effective-region-where-applicable",
+      "retention-policy",
+      "proof"
+    ],
+    "mustReject": [
+      "consent state without governed purpose",
+      "consent state without version",
+      "withdrawal without audit event",
+      "receipt without actor or tenant boundary",
+      "consent-dependent behaviour without proof"
+    ]
+  },
+  "regionalAdsConsentModel": {
+    "issueId": "USF-642",
+    "rule": "Regional ads consent semantics must identify region, age or child-directed posture, personalised ads, non-personalised ads, consent purpose, audit event, privacy category, proof, dependencies, and non-claim boundaries before ad behaviour is accepted.",
+    "requiredMappings": [
+      "region",
+      "age-or-child-directed-posture",
+      "personalised-ads-posture",
+      "non-personalised-ads-posture",
+      "consent-purpose",
+      "audit-event",
+      "privacy-category",
+      "data-inventory-entry",
+      "proof",
+      "non-claim-boundary"
+    ],
+    "mustReject": [
+      "ads behaviour without regional consent mapping",
+      "ads behaviour without age or child-directed posture",
+      "personalised ads without consent purpose mapping",
+      "ads event without privacy category mapping",
+      "ads claim without proof and non-claim boundary"
+    ]
+  },
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-DATA-INVENTORY-001",
+      "description": "Reject a capability, field, command, query, event, telemetry item, storage item, notification, ads surface, or store disclosure impact without data inventory and privacy data category mapping.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-621"
+    },
+    {
+      "ruleId": "USF-NOTIFICATION-UI-001",
+      "description": "Reject notification inbox, toast, or banner UI without capability, consent or preference, permission, privacy, audit where required, i18n, accessibility, telemetry, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-493"
+    },
+    {
+      "ruleId": "USF-CONSENT-RECEIPT-001",
+      "description": "Reject consent state, withdrawal, receipt, or consent-dependent behaviour without governed purpose, version, audit event, actor, tenant boundary, retention, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-636"
+    },
+    {
+      "ruleId": "USF-ADS-CONSENT-001",
+      "description": "Reject ads behaviour when consent, region, age or child-directed posture, personalised or non-personalised ads posture, privacy, audit, and proof mappings are missing.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-642"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "notification-consent-data-inventory-semantic-proof",
+      "description": "Future proof must demonstrate that data inventory, notification UI, consent receipt, audit event, and regional ads consent records are semantically mapped and fail closed when required mappings are absent.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "data inventory mappings exist for relevant capabilities and app surfaces",
+      "notification, consent, audit, and ads consent mappings exist where applicable",
+      "validator requirements are implemented and selftested",
+      "planted-defect fixtures exist for missing data inventory, notification, consent, and ads consent mappings",
+      "proof evidence exists for mapped and rejected cases",
+      "owner acceptance is recorded before any compliance, store, notification, ads, production, live-provider, product UI, or readiness claim"
+    ]
+  },
+  "nonClaims": {
+    "notificationReady": false,
+    "pushReady": false,
+    "adsComplianceReady": false,
+    "privacyComplianceReady": false,
+    "storeReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "policyPublicationReady": false,
+    "legalConclusion": false,
+    "providerConfigurationReady": false,
+    "adSdkReady": false,
+    "cmpReady": false,
+    "productUiReady": false,
+    "implementationReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-621",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "dataInventoryModel defines the machine-readable data inventory mapping model."
+    },
+    {
+      "issueId": "USF-621",
+      "criterion": "USF-native references resolve.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities use repository paths and issue mappings use USF-native identifiers."
+    },
+    {
+      "issueId": "USF-621",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-DATA-INVENTORY-001 and notification-consent-data-inventory-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-621",
+      "criterion": "Dependencies are linked and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    },
+    {
+      "issueId": "USF-493",
+      "criterion": "Machine-readable semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "notificationInboxToastBannerModel defines inbox, toast, and banner mapping requirements."
+    },
+    {
+      "issueId": "USF-493",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-NOTIFICATION-UI-001 and notification-consent-data-inventory-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-636",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "consentReceiptAndAuditEventModel defines consent receipt and audit event semantics."
+    },
+    {
+      "issueId": "USF-636",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CONSENT-RECEIPT-001 and notification-consent-data-inventory-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-642",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "regionalAdsConsentModel defines regional ads consent semantics."
+    },
+    {
+      "issueId": "USF-642",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-ADS-CONSENT-001 and notification-consent-data-inventory-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-493",
+      "criterion": "USF-native references resolve, dependencies are recorded, and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    },
+    {
+      "issueId": "USF-636",
+      "criterion": "USF-native references resolve, dependencies are linked, and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    },
+    {
+      "issueId": "USF-642",
+      "criterion": "USF-native references resolve, dependencies are linked, and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    }
+  ]
+}

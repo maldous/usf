@@ -1,0 +1,223 @@
+{
+  "id": "repository-environment-ladder-governance",
+  "title": "Repository environment ladder governance",
+  "purpose": "Record discovery-only Dev, Test, and Staging ladder policies for promotion decisions, rollback and retry, human acceptance, and environment-specific non-claims.",
+  "authorityBoundary": {
+    "semanticAuthorityCreated": false,
+    "validatorCodeCreated": false,
+    "stagingImplemented": false,
+    "deploymentCreated": false,
+    "proofRunClaimed": false,
+    "readinessClaimMade": false,
+    "notes": "This artifact closes design criteria only. It does not create staging implementation, deployment, live-provider proof, human acceptance evidence, or readiness claims."
+  },
+  "sourceReferences": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+    "spec/instances/environment/",
+    "spec/instances/environment-promotion/",
+    "spec/instances/provider-mode/",
+    "spec/instances/runtime-proof/"
+  ],
+  "observedEnvironmentState": {
+    "stateInspected": true,
+    "baselineSemantics": [
+      "Dev, Test, and Staging are separate environment proof positions and must not upgrade each other by implication.",
+      "Provider mode and environment are separate dimensions.",
+      "Hermetic mock does not satisfy live external provider proof.",
+      "Production shaped does not satisfy production live.",
+      "Generated reports remain lower authority than raw evidence and semantic definitions.",
+      "Ambiguity, stale evidence, unknown status, or missing evidence fails closed to fuller validation."
+    ]
+  },
+  "environmentPromotionDecisionMatrix": {
+    "stateInspected": true,
+    "assuranceImpact": "A promotion matrix prevents both under-proofing risky changes and making staging proof the default for ordinary docs, semantic, validator, or Dev/Test work.",
+    "changeClasses": [
+      {
+        "class": "documentation or governance text only",
+        "minimumProof": "strict parse where applicable plus authority-reference review; no staging proof by default"
+      },
+      {
+        "class": "semantic catalogues or schema lifecycle",
+        "minimumProof": "strict JSON parse, catalogue consistency, schema-authoring checks, and relevant validators"
+      },
+      {
+        "class": "validator or command routing design",
+        "minimumProof": "validator selftest or planted-defect expectation before implementation; before-after equivalence for implementation"
+      },
+      {
+        "class": "service-backed runtime or Compose topology",
+        "minimumProof": "Test or Compose proof as scoped; staging only when staging-relevant surfaces are affected"
+      },
+      {
+        "class": "public proof, provider integration, deployment, human acceptance, or production-shaped rehearsal",
+        "minimumProof": "staging-relevant gate and owner review before claim"
+      },
+      {
+        "class": "UI or app-surface work",
+        "minimumProof": "pre-UI readiness gates plus environment/provider/proof mapping before implementation"
+      }
+    ],
+    "validationProofExpectation": "Future implementation must encode change-class routing and fall back to fuller validation when a change class is unknown, mixed, or authority-impacting.",
+    "dependencies": [
+      "USF-427",
+      "USF-429",
+      "USF-441",
+      "USF-439",
+      "USF-456"
+    ]
+  },
+  "rollbackAndRetryPolicy": {
+    "stateInspected": true,
+    "assuranceImpact": "Rollback and retry policy prevents reruns from masking stale evidence, partial failure, or environment mismatch.",
+    "policyRules": [
+      "Retry may only reuse evidence when source inputs, provider mode, environment, proof level, and freshness state still match.",
+      "Rollback must preserve failed evidence or failure references when the failure affects a proof or promotion decision.",
+      "Unknown retry cause, missing raw evidence, changed inputs, or environment/provider mismatch requires a clean rerun of the relevant fuller gate.",
+      "Rollback from staging-relevant rehearsal does not create a staging pass; it records recovery evidence for later review.",
+      "Owner review is required when rollback or retry changes the claim boundary, evidence freshness, or promotion decision."
+    ],
+    "validationProofExpectation": "Future validators should fail closed on stale retry evidence, missing failure references, mismatched provider mode, mismatched environment, and missing rollback owner metadata.",
+    "dependencies": [
+      "evidence freshness policy",
+      "artifact handoff policies",
+      "validator stale evidence detection"
+    ]
+  },
+  "humanAcceptanceRequiredProofPolicy": {
+    "stateInspected": true,
+    "assuranceImpact": "Human acceptance is required only for human-review, proof-cockpit, public proof, staging-relevant, or owner-decision surfaces; it must not become a default substitute for validators.",
+    "requiredWhen": [
+      "A change affects human review actions, proof-cockpit acceptance, screenshots, public FQDN proof, staging rehearsal, deployment-adjacent evidence, or owner-decision semantics.",
+      "A validator or generated report identifies ambiguity that cannot be resolved by machine evidence alone.",
+      "Acceptance requires interpreting screenshots, UI flows, public proof evidence, incident response evidence, privacy/security evidence, or release/rollback rehearsal evidence."
+    ],
+    "notRequiredWhen": [
+      "The change is documentation-only and has no human-acceptance semantics.",
+      "The change is semantic or JSON-only and all required validators parse and pass within their authority scope.",
+      "The change is Dev or Test scoped and has no public, staging, deployment, human-review, or proof-cockpit acceptance surface."
+    ],
+    "validationProofExpectation": "Future implementation must preserve machine validation as the default and require owner or human review only for classified human-acceptance surfaces or ambiguity.",
+    "dependencies": [
+      "proof-cockpit acceptance model",
+      "staging rehearsal evidence pack issue",
+      "environment promotion decision matrix"
+    ]
+  },
+  "environmentSpecificNonClaims": {
+    "stateInspected": true,
+    "assuranceImpact": "Explicit non-claims prevent lower-environment evidence from being read as stronger proof or readiness.",
+    "nonClaims": [
+      "Dev evidence is not Test evidence unless a Dev-to-Test handoff gate explicitly permits reuse.",
+      "Test evidence is not Staging evidence and does not by itself support staging readiness.",
+      "Staging rehearsal evidence is not deployment approval, production readiness, production-live proof, compliance certification, store readiness, or human acceptance unless separately proven and approved.",
+      "Hermetic mock proof is not live external provider proof.",
+      "Production-shaped proof is not production-live proof.",
+      "Generated reports are not canonical authority and cannot upgrade proof status without retained raw evidence.",
+      "Unknown, stale, or missing evidence is not pass evidence."
+    ],
+    "validationProofExpectation": "Future validators and reports must preserve these non-claims in generated output, aggregate summaries, artifact handoffs, and readiness-adjacent language.",
+    "dependencies": [
+      "authority model",
+      "provider mode catalogue",
+      "runtime proof semantics",
+      "evidence freshness policy"
+    ]
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-440",
+      "title": "Human-acceptance-required proof policy",
+      "completionBasis": "humanAcceptanceRequiredProofPolicy records inspected state, assurance impact, validation expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-452",
+      "title": "Environment promotion decision matrix",
+      "completionBasis": "environmentPromotionDecisionMatrix records inspected state, assurance impact, validation expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-453",
+      "title": "Environment rollback and retry policy",
+      "completionBasis": "rollbackAndRetryPolicy records inspected state, assurance impact, validation expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-455",
+      "title": "Environment-specific non-claims",
+      "completionBasis": "environmentSpecificNonClaims records inspected state, assurance impact, validation expectations, and dependencies."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-440",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "humanAcceptanceRequiredProofPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-452",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "environmentPromotionDecisionMatrix"
+      ]
+    },
+    {
+      "issueId": "USF-453",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "rollbackAndRetryPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-455",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "environmentSpecificNonClaims"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "stagingImplemented": false,
+    "deploymentCreated": false,
+    "providerConfigured": false,
+    "proofRunClaimed": false,
+    "evidenceFileCreated": false,
+    "schemaActivated": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

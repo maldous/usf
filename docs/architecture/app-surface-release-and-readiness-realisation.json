@@ -1,0 +1,69 @@
+{
+  "id": "usf.app-surface-release-and-readiness-realisation",
+  "title": "App Surface Release and Readiness Realisation",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact converts app-surface release, deployment, privacy, external-review, and owner-acceptance scope decisions into explicit scope decisions. It does not claim that external release evidence, deployment evidence, legal review, privacy compliance, store approval, or production proof exists.",
+  "coveredIssueIds": [
+    "USF-329",
+    "USF-945",
+    "USF-946",
+    "USF-947",
+    "USF-949",
+    "USF-950",
+    "USF-951"
+  ],
+  "realisedDecisions": [
+    {
+      "issueId": "USF-945",
+      "decision": "App Store provisioning is out of scope for the bounded local implementation phase. Apple account, signing, privacy label, privacy manifest, app review, TestFlight, and submission work require a fresh release evidence gate after a mobile implementation exists.",
+      "closureMeaning": "The current gate closes as not applicable to bounded local implementation, not as App Store readiness."
+    },
+    {
+      "issueId": "USF-946",
+      "decision": "Google Play provisioning is out of scope for the bounded local implementation phase. Google Play account, signing, Data Safety, permission disclosure, Play Integrity, track setup, and submission work require a fresh release evidence gate after a mobile implementation exists.",
+      "closureMeaning": "The current gate closes as not applicable to bounded local implementation, not as Google Play readiness."
+    },
+    {
+      "issueId": "USF-947",
+      "decision": "CDN deployment is out of scope for the bounded local implementation phase. Next.js provider evaluation remains policy-complete, but concrete provider credentials, DNS, TLS, deployment, rollback, logging, and live proof require a fresh deployment evidence gate after a web implementation exists.",
+      "closureMeaning": "The current gate closes as not applicable to bounded local implementation, not as CDN deployment readiness."
+    },
+    {
+      "issueId": "USF-949",
+      "decision": "Privacy compliance readiness is out of scope for bounded local implementation. Data inventory, consent evidence, store disclosure evidence, retention/deletion/export proof, external review, and legal/compliance acceptance require a fresh privacy evidence gate before any compliance claim.",
+      "closureMeaning": "The current gate closes as no compliance claim permitted, not as privacy compliance readiness."
+    },
+    {
+      "issueId": "USF-950",
+      "decision": "External review is not required before bounded local implementation that makes no store, deployment, privacy compliance, legal compliance, accessibility compliance, monetisation, live-provider, or production readiness claim. External review is mandatory before those claims or external release actions.",
+      "closureMeaning": "The current gate closes for bounded local implementation only, not as external review completion."
+    },
+    {
+      "issueId": "USF-951",
+      "decision": "Owner acceptance is granted for bounded local implementation under the non-claims and prohibited external actions in this artefact. Owner acceptance is not granted for store, CDN, privacy compliance, external review completion, staging, live-provider, or production readiness.",
+      "closureMeaning": "The owner acceptance gate closes for bounded local implementation only."
+    },
+    {
+      "issueId": "USF-329",
+      "decision": "The modern app-surface implementation gate parent closes because its local implementation children are closed and its release/deployment/compliance/review children are explicitly realised as out of scope for bounded local implementation. Fresh evidence gates are required before external release or readiness claims.",
+      "closureMeaning": "The parent closes for bounded local implementation only."
+    }
+  ],
+  "validationEvidence": [
+    "The bounded test-readiness selftest passed.",
+    "The validate-spec selftest passed with zero findings.",
+    "Strict JSON parse passed for this artefact."
+  ],
+  "globalNonClaims": [
+    "No App Store readiness is claimed.",
+    "No Google Play readiness is claimed.",
+    "No CDN deployment readiness is claimed.",
+    "No external review completion is claimed.",
+    "No privacy compliance readiness is claimed.",
+    "No legal conclusion is claimed.",
+    "No staging readiness is claimed.",
+    "No live-provider readiness is claimed.",
+    "No production readiness is claimed."
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "id": "usf.repository-optimisation-local-realisation-tranche",
+  "title": "Repository Optimisation Local Realisation Tranche",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "issueId": "USF-996",
+  "authorityNotice": "This artefact records the local optimisation realisation tranche. It does not override the Charter, Authority Model, ADRs, validator rules, runtime proof evidence, source implementation, or raw evidence. Generated timing reports remain lower authority than semantic definitions and proof evidence.",
+  "purpose": "Prevent completed optimisation semantics from remaining only design or policy by separating already implemented capabilities, policy-only decisions, local realisation work completed in this tranche, and missing bounded work tracked in Linear.",
+  "sourceReview": {
+    "linearProject": "USF Repository and Environment Optimisation Programme",
+    "linearTeam": "Universal Service Foundation",
+    "parentIssue": "USF-996",
+    "githubRepository": "maldous/usf",
+    "reviewedPullRequests": [
+      {
+        "number": 289,
+        "title": "Add timing instrumentation design artifacts",
+        "mergeCommitSha": "9bdbf4b95effc8c36b946c7eaed7f7743e9a7fc3",
+        "classification": "policy-design-only",
+        "evidence": "PR body states no implementation code, Makefile target, package script, CI workflow, validator, proof script, evidence artifact, or proof-cockpit machine evidence was changed."
+      },
+      {
+        "number": 290,
+        "title": "Add validator equivalence design",
+        "classification": "policy-design-only",
+        "evidence": "PR body states design-only and no validator behaviour, command wiring, CI workflows, proof evidence, runtime behaviour, or proof-cockpit machine evidence changed."
+      },
+      {
+        "number": 291,
+        "title": "Add regression budget thresholds",
+        "mergeCommitSha": "b97eef38449c6ed2ee2fa6fdafeda36fc3f30250",
+        "classification": "policy-design-only",
+        "evidence": "PR body states no CI workflow, Makefile target, package script, command execution, runtime behaviour, proof evidence, or proof-cockpit machine evidence changed."
+      },
+      {
+        "number": 292,
+        "title": "Add CI timeout and cost policies",
+        "classification": "policy-design-only",
+        "evidence": "PR body states no CI workflow, required check, budget enforcement, command execution, validator behaviour, runtime behaviour, proof evidence, or proof-cockpit machine evidence changed."
+      },
+      {
+        "number": 293,
+        "title": "Define CI check policy lanes",
+        "mergeCommitSha": "9b233fad6e04be2307085ec127d0ba81b7cf1e57",
+        "classification": "policy-design-only",
+        "evidence": "PR body states design-only orchestration and no workflow, branch protection, Make target, package script, validator, runtime behaviour, proof evidence, staging posture, product posture, release posture, compliance posture, store posture, or human acceptance changed."
+      },
+      {
+        "number": 294,
+        "title": "USF-639 required checks matrix",
+        "classification": "policy-design-only",
+        "evidence": "PR body states no CI workflow syntax, branch protection, Makefile target, package script, validator, runtime behaviour, proof evidence, or proof-cockpit machine evidence changed."
+      }
+    ]
+  },
+  "policyOnlyDecisions": [
+    {
+      "id": "command-target-timing-instrumentation-design",
+      "source": "PR 289 / USF-415",
+      "realisationStatus": "implemented-in-this-tranche",
+      "realisationEvidence": [
+        "tools/repository-optimisation/measure-command-timing.py",
+        "package.json scripts repo:timing:validate-spec-selftest, repo:timing:repo-validate, and repo:timing:compare"
+      ]
+    },
+    {
+      "id": "before-after-timing-comparison-methodology",
+      "source": "PR 289 / USF-826",
+      "realisationStatus": "implemented-in-this-tranche",
+      "realisationEvidence": [
+        "tools/repository-optimisation/measure-command-timing.py compare mode",
+        "evidence/generated-reports/repository-optimisation-local-timing-before-after.json"
+      ]
+    },
+    {
+      "id": "regression-budget-thresholds",
+      "source": "PR 291 / USF-770",
+      "realisationStatus": "partially-implemented-locally",
+      "realisationEvidence": [
+        "tools/repository-optimisation/measure-command-timing.py warn-only comparison threshold"
+      ],
+      "remainingWorkIssue": "USF-999"
+    },
+    {
+      "id": "ci-check-policy-lanes",
+      "source": "PR 293 / PR 294",
+      "realisationStatus": "ticketed",
+      "remainingWorkIssue": "USF-999"
+    },
+    {
+      "id": "json-parse-load-reuse",
+      "source": "USF-752",
+      "realisationStatus": "ticketed",
+      "remainingWorkIssue": "USF-997"
+    },
+    {
+      "id": "glob-path-scan-reduction",
+      "source": "USF-751 / USF-753",
+      "realisationStatus": "ticketed",
+      "remainingWorkIssue": "USF-998"
+    },
+    {
+      "id": "screenshot-profiling-and-retention",
+      "source": "USF-619 / USF-768",
+      "realisationStatus": "ticketed",
+      "remainingWorkIssue": "USF-1000"
+    },
+    {
+      "id": "compose-startup-port-timing-measurement",
+      "source": "USF-590 / USF-766",
+      "realisationStatus": "ticketed",
+      "remainingWorkIssue": "USF-1001"
+    }
+  ],
+  "alreadyImplementedCapabilities": [
+    {
+      "id": "aggregate-repository-validation-command",
+      "evidence": "package.json script repo:validate chains existing validator commands.",
+      "boundary": "Existing raw aggregate command had no timing summary before this tranche."
+    },
+    {
+      "id": "direct-validator-command-surface",
+      "evidence": "package.json exposes validate-spec, validate-bootstrap, runtime, enterprise, test-readiness, public-fqdn, artifact-promotion, environment-ladder, foundation-substrate-closure, proof-cockpit, and non-ui-completeness validation scripts.",
+      "boundary": "Existing validators remain correctness gates; timing reports do not redefine their findings."
+    },
+    {
+      "id": "compose-config-and-port-validation",
+      "evidence": "package.json exposes compose validation and compose port validator scripts.",
+      "boundary": "Compose startup phase timing remains ticketed in USF-1001."
+    }
+  ],
+  "implementedInThisTranche": [
+    {
+      "id": "local-command-timing-tool",
+      "paths": [
+        "tools/repository-optimisation/measure-command-timing.py"
+      ],
+      "capabilities": [
+        "measure local command wall-clock duration",
+        "write generated timing evidence JSON",
+        "compare baseline and current timing records",
+        "emit warn-only regression status",
+        "parse foundational JSON catalogues as a safe local measurement command"
+      ]
+    },
+    {
+      "id": "package-command-surface",
+      "paths": [
+        "package.json"
+      ],
+      "capabilities": [
+        "repo:timing:validate-spec-selftest",
+        "repo:timing:repo-validate",
+        "repo:timing:compare"
+      ]
+    },
+    {
+      "id": "before-after-local-evidence",
+      "paths": [
+        "evidence/generated-reports/repository-optimisation-local-timing-before.json",
+        "evidence/generated-reports/repository-optimisation-local-timing-after.json",
+        "evidence/generated-reports/repository-optimisation-local-timing-before-after.json"
+      ],
+      "authorityBoundary": "Generated timing evidence only; not semantic authority and not readiness proof."
+    }
+  ],
+  "linearIssuesCreated": [
+    {
+      "id": "USF-996",
+      "title": "Optimisation realisation tranche: bounded local timing implementation",
+      "url": "https://linear.app/maldous/issue/USF-996/optimisation-realisation-tranche-bounded-local-timing-implementation"
+    },
+    {
+      "id": "USF-997",
+      "title": "Implement JSON parse reuse in validator runs",
+      "url": "https://linear.app/maldous/issue/USF-997/implement-json-parse-reuse-in-validator-runs"
+    },
+    {
+      "id": "USF-998",
+      "title": "Reduce expensive glob and path scans with declared inventories",
+      "url": "https://linear.app/maldous/issue/USF-998/reduce-expensive-glob-and-path-scans-with-declared-inventories"
+    },
+    {
+      "id": "USF-999",
+      "title": "Implement changed-file affected-run selection",
+      "url": "https://linear.app/maldous/issue/USF-999/implement-changed-file-affected-run-selection"
+    },
+    {
+      "id": "USF-1000",
+      "title": "Implement screenshot profiling and retention enforcement",
+      "url": "https://linear.app/maldous/issue/USF-1000/implement-screenshot-profiling-and-retention-enforcement"
+    },
+    {
+      "id": "USF-1001",
+      "title": "Implement Compose startup and port timing measurement",
+      "url": "https://linear.app/maldous/issue/USF-1001/implement-compose-startup-and-port-timing-measurement"
+    }
+  ],
+  "nonClaims": [
+    "No external provider setup is introduced.",
+    "No remote cache adoption is introduced.",
+    "No task graph adoption is introduced.",
+    "No Testcontainers migration is introduced.",
+    "No hard CI performance block is introduced.",
+    "No runtime product behaviour is changed.",
+    "No staging readiness is claimed.",
+    "No production readiness is claimed.",
+    "No deployment readiness is claimed.",
+    "No live-provider readiness is claimed.",
+    "No store, compliance, release, or human-acceptance claim is made.",
+    "Generated timing reports remain lower authority than semantic definitions, ADRs, validators, and runtime proof evidence."
+  ]
+}

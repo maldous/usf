@@ -20,21 +20,6 @@ const FOUNDATION_CLOSURE_VALIDATOR_COMMAND = Object.freeze([
 ]);
 const LINEAR_ISSUE = "USF-293";
 const ACCEPTANCE_ISSUE = "USF-290";
-const RELATED_ISSUES = Object.freeze([
-  "USF-290",
-  "USF-291",
-  "USF-292",
-  "USF-234",
-  "USF-260",
-  "USF-267",
-  "USF-268",
-  "USF-269",
-  "USF-270",
-  "USF-271",
-  "USF-272",
-  "USF-289",
-  "USF-294",
-]);
 const PERSISTENT_EVIDENCE_ROOT = join(ROOT, "evidence/proof-evidence/proof-cockpit");
 const PERSISTENT_EVIDENCE_STORE_PATH = join(PERSISTENT_EVIDENCE_ROOT, "staging-evidence-store.json");
 const FINAL_REPORT_PATH = join(PERSISTENT_EVIDENCE_ROOT, "final-external-review-report.md");
@@ -1928,19 +1913,6 @@ function persistentStorageRows(store) {
   return Object.entries(store.storageModel).map(
     ([key, value]) => `<tr><th>${escapeHtml(titleCase(key))}</th><td>${escapeHtml(value)}</td></tr>`,
   );
-}
-
-function proofLadderFullRows() {
-  return PROOF_LADDER_LEVELS.map(([stage, source, action, status]) => `<tr>
-<td>${escapeHtml(stage)}</td>
-<td>${sourcePathCell(source)}</td>
-<td>${escapeHtml(FOUNDATION_CLOSURE_VALIDATOR_COMMAND.join(" "))}</td>
-<td>${escapeHtml(action)}</td>
-<td>${escapeHtml(status)}</td>
-<td>${escapeHtml(status.includes("human") ? "human review/signoff remains required" : "none open in machine evidence")}</td>
-<td>${escapeHtml(status.includes("complete") ? "may feed next proof stage without readiness upgrade" : "requires human decision")}</td>
-<td>${escapeHtml("no staging readiness, production readiness, SOC readiness, ISO certification, or USF-290 completion claim")}</td>
-</tr>`);
 }
 
 function recentActionRows(state, limit = 12) {

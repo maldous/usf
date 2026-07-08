@@ -1,0 +1,80 @@
+{
+  "id": "usf.environment-ladder-validator-policy",
+  "title": "Environment ladder validator policy",
+  "purpose": "Validator-owned policy for cross-family Dev, Test, Staging, production-live, provider-mode, evidence freshness, generated-report, proof-cockpit, and fallback boundaries.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "generatedReportsAreAuthority": false,
+    "runtimeCodeCreated": false,
+    "freshProofCockpitMachineQaRequired": false,
+    "nonClaims": [
+      "No staging readiness claim is made.",
+      "No production readiness claim is made.",
+      "No live-provider readiness claim is made.",
+      "No human-acceptance claim is made."
+    ]
+  },
+  "authorityReferences": [
+    "AGENTS.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/repository-environment-ladder-governance.json",
+    "docs/architecture/dev-test-staging-artifact-promotion-contract.json"
+  ],
+  "controlledValues": {
+    "stages": ["dev", "test", "staging", "production-live"],
+    "environments": ["local", "hermetic", "integration", "staging", "production-shaped", "production-live"],
+    "providerModes": ["hermetic-mock", "local-composed-real-service", "external-sandbox", "live-external-provider"],
+    "proofLevels": ["discovery", "in-memory", "hermetic-dev", "dev-compose", "test-service-backed", "staging-entry-consideration", "staging-proof", "production-live-proof"],
+    "freshnessStates": ["current", "stale", "unknown"],
+    "impactClasses": ["docs", "schema", "validator", "proof", "environment", "provider", "compose", "ui", "unknown"]
+  },
+  "requiredNonClaims": [
+    "staging-readiness",
+    "production-readiness",
+    "deployment-readiness",
+    "live-provider-readiness",
+    "store-readiness",
+    "compliance-readiness",
+    "human-acceptance"
+  ],
+  "positiveCases": [
+    {
+      "id": "positive-dev-to-test-boundary",
+      "sourceStage": "dev",
+      "targetStage": "test",
+      "sourceEnvironment": "local",
+      "targetEnvironment": "integration",
+      "providerMode": "local-composed-real-service",
+      "claimedProviderMode": "local-composed-real-service",
+      "observedProofLevel": "dev-compose",
+      "claimedProofLevel": "test-service-backed",
+      "freshnessState": "current",
+      "collectedEvidence": true,
+      "evidenceKinds": ["raw-evidence", "retained-proof-artifact"],
+      "impactClass": "validator",
+      "fallbackOnAmbiguity": "full-validation",
+      "generatedReportAuthoritative": false,
+      "productionLiveClaim": false,
+      "stagingReadinessClaim": false,
+      "evidenceReuse": {
+        "sourceProviderMode": "local-composed-real-service",
+        "targetProviderMode": "local-composed-real-service",
+        "sourceEnvironment": "integration",
+        "targetEnvironment": "integration"
+      },
+      "proofCockpit": {
+        "projectionOnly": false,
+        "freshMachineQaClaim": false
+      },
+      "nonClaims": [
+        "staging-readiness",
+        "production-readiness",
+        "deployment-readiness",
+        "live-provider-readiness",
+        "store-readiness",
+        "compliance-readiness",
+        "human-acceptance"
+      ]
+    }
+  ]
+}

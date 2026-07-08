@@ -3,7 +3,7 @@
   "description": "Remove issue-linked follow-up metadata from bounded coverage exclusions.",
   "coverageSourceClassificationPatch": [
     {
-      "classification": "bounded-deferred",
+      "classification": "bounded-evidence-requirement",
       "drop": [
         "followUpIssueIds"
       ]

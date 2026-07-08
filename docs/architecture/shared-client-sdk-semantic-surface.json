@@ -1,0 +1,218 @@
+{
+  "id": "shared-client-sdk-semantic-surface",
+  "title": "Shared Client SDK Semantic Surface",
+  "issueId": "USF-312",
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact defines the semantic surface expected of future shared generated TypeScript clients over USF capabilities. It does not create SDK implementation code, generated code, package publication, runtime wiring, provider credentials, product UI readiness, SDK readiness, production readiness, live-provider readiness, privacy compliance, monetisation readiness, or human acceptance.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "spec/schemas/interface-contract.schema.json"
+  ],
+  "semanticSurface": {
+    "description": "A future shared client SDK may expose only behaviours that are backed by USF semantic contracts, interface contracts, commands, queries, workflows, events, permissions, validation, errors, audit events, privacy classification, telemetry, offline posture, retry posture, cache semantics, and proof expectations.",
+    "clientKind": "generated-typescript-client",
+    "permittedConsumerSurfaces": [
+      "mobile-adapter",
+      "web-adapter",
+      "operator-tooling-with-explicit-authority"
+    ],
+    "mustNotDefine": [
+      "product behaviour",
+      "permission semantics",
+      "privacy classification",
+      "audit event meaning",
+      "workflow state",
+      "validation rules",
+      "error taxonomy",
+      "telemetry semantics",
+      "readiness claims",
+      "provider mode",
+      "environment promotion"
+    ]
+  },
+  "behaviourClasses": [
+    {
+      "id": "commands",
+      "requiredAuthority": "USF command, workflow, permission, validation, audit, error, privacy, telemetry, and proof mapping",
+      "clientPosture": "may invoke or encode a governed command envelope only after semantic backing exists"
+    },
+    {
+      "id": "queries",
+      "requiredAuthority": "USF query, read-model, permission, privacy, cache, error, telemetry, and proof mapping",
+      "clientPosture": "may invoke or encode a governed query envelope only after semantic backing exists"
+    },
+    {
+      "id": "workflows",
+      "requiredAuthority": "USF workflow, state transition, permission, audit, error, telemetry, and proof mapping",
+      "clientPosture": "may expose workflow entrypoints only as projections of governed workflow semantics"
+    },
+    {
+      "id": "events",
+      "requiredAuthority": "USF event, audit, observability, privacy, retention, and proof mapping",
+      "clientPosture": "may consume or publish only governed event envelopes where an interface contract permits it"
+    },
+    {
+      "id": "validation",
+      "requiredAuthority": "USF validation semantics and interface-contract request or response shape",
+      "clientPosture": "may carry validation metadata but must not invent validation rules"
+    },
+    {
+      "id": "permissions",
+      "requiredAuthority": "USF permission, role, policy, tenant boundary, and denial semantics",
+      "clientPosture": "may surface permission requirements but must not decide access authority"
+    },
+    {
+      "id": "audit-events",
+      "requiredAuthority": "USF audit event semantics, actor, tenant, action, outcome, and retention mapping",
+      "clientPosture": "may carry audit correlation metadata but must not define audit meaning"
+    },
+    {
+      "id": "errors",
+      "requiredAuthority": "USF error taxonomy, safe error envelope, retry posture, and remediation mapping",
+      "clientPosture": "may expose typed errors only when backed by governed error semantics"
+    },
+    {
+      "id": "privacy-classification",
+      "requiredAuthority": "USF privacy data category, retention, disclosure, and minimisation mapping",
+      "clientPosture": "may carry privacy metadata only as a projection of semantic authority"
+    },
+    {
+      "id": "telemetry",
+      "requiredAuthority": "USF telemetry, trace, metric, log, event, and redaction mapping",
+      "clientPosture": "may carry correlation metadata but must not define observability semantics"
+    },
+    {
+      "id": "offline-envelopes-and-retries",
+      "requiredAuthority": "USF offline posture, idempotency, retry, conflict, queue, and failure semantics",
+      "clientPosture": "may expose offline or retry affordances only when the semantic contract permits them"
+    },
+    {
+      "id": "cache-semantics",
+      "requiredAuthority": "USF cache key, invalidation, staleness, privacy, tenant isolation, and proof mapping",
+      "clientPosture": "may expose cache metadata only when backed by governed cache semantics"
+    },
+    {
+      "id": "subscriptions",
+      "requiredAuthority": "USF subscription, event stream, permission, privacy, audit, lifecycle, and proof mapping",
+      "clientPosture": "may expose subscriptions only where interface contracts and semantic contracts permit them"
+    }
+  ],
+  "requiredMappingShape": {
+    "requiredFields": [
+      "semanticContractId",
+      "interfaceContractId",
+      "behaviourClass",
+      "capabilityId",
+      "commandOrQueryOrWorkflowOrEventId",
+      "permissionRefs",
+      "validationRefs",
+      "errorRefs",
+      "auditEventRefs",
+      "privacyCategoryRefs",
+      "telemetryRefs",
+      "offlineRetryCachePosture",
+      "proofRefs",
+      "nonClaimBoundary"
+    ],
+    "failClosedOnMissing": [
+      "semanticContractId",
+      "behaviourClass",
+      "capabilityId",
+      "permissionRefs",
+      "validationRefs",
+      "errorRefs",
+      "auditEventRefs",
+      "privacyCategoryRefs",
+      "telemetryRefs",
+      "proofRefs",
+      "nonClaimBoundary"
+    ],
+    "notApplicableRule": "A mapping field may be not-applicable only when the governing semantic contract records a specific not-applicable rationale."
+  },
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-SHARED-CLIENT-SDK-001",
+      "description": "Reject a generated client behaviour that has no USF semantic contract, interface contract where applicable, capability, command, query, workflow, event, or permission backing.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-312"
+    },
+    {
+      "ruleId": "USF-SHARED-CLIENT-SDK-002",
+      "description": "Reject stale generated client metadata when its recorded source semantic contract, interface contract, or version authority no longer matches the governed inventory.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-312"
+    },
+    {
+      "ruleId": "USF-SHARED-CLIENT-SDK-003",
+      "description": "Reject generated client metadata that claims SDK readiness, package readiness, implementation readiness, product UI readiness, production readiness, live-provider readiness, privacy compliance, monetisation readiness, or human acceptance without explicit proof and owner acceptance.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-312"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "shared-client-sdk-semantic-mapping-proof",
+      "description": "Future proof must demonstrate that generated client behaviours are projections of governed USF semantic and interface contracts and that stale or unmapped generated clients fail closed.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "semantic and interface mappings exist for the relevant capabilities",
+      "validator rules are implemented and selftested",
+      "planted-defect fixtures exist for unmapped and stale generated client behaviours",
+      "proof evidence exists for generated client mapping and stale-client rejection",
+      "owner acceptance is recorded before any SDK readiness or package publication claim"
+    ]
+  },
+  "nonClaims": {
+    "sdkReady": false,
+    "generatedClientReady": false,
+    "packagePublicationReady": false,
+    "implementationReady": false,
+    "productUiReady": false,
+    "mobileReady": false,
+    "webReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "privacyComplianceReady": false,
+    "monetisationReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "criterion": "SDK semantic surface is defined before implementation.",
+      "status": "satisfied",
+      "evidence": "semanticSurface, behaviourClasses, requiredMappingShape, validatorRequirements, proofRequirements, and implementationGate define the surface while blocking implementation."
+    },
+    {
+      "criterion": "All client behaviours map to USF commands, queries, workflows, events, or permissions.",
+      "status": "satisfied",
+      "evidence": "behaviourClasses and requiredMappingShape require behaviourClass and commandOrQueryOrWorkflowOrEventId plus permissionRefs."
+    },
+    {
+      "criterion": "Validator requirements are identified for stale or unmapped generated clients.",
+      "status": "satisfied",
+      "evidence": "USF-SHARED-CLIENT-SDK-001 and USF-SHARED-CLIENT-SDK-002 identify blocking rejection rules for unmapped and stale generated clients."
+    },
+    {
+      "criterion": "Proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "proofRequirements defines shared-client-sdk-semantic-mapping-proof as specified-only future proof."
+    },
+    {
+      "criterion": "Non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "authorityBoundary, implementationGate, and nonClaims preserve no SDK, generated client, implementation, readiness, production, compliance, monetisation, or human-acceptance claim."
+    }
+  ]
+}

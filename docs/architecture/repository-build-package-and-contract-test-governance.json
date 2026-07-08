@@ -1,0 +1,978 @@
+{
+  "id": "usf.repository-build-package-and-contract-test-governance",
+  "title": "Repository build package and contract test governance",
+  "purpose": "Record design-only governance for lockfile hygiene and contract test standards before UI or package graph expansion, without dependency changes, lockfile edits, validator implementation, test implementation, or readiness claims.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "implementationCreated": false,
+    "nonClaims": [
+      "No dependency change is authorised.",
+      "No lockfile edit is authorised.",
+      "No validator implementation is authorised.",
+      "No test implementation is authorised.",
+      "No readiness, staging, production, deployment, compliance, store, release, live-provider, or human-acceptance claim is made."
+    ]
+  },
+  "sourceReferences": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "docs/architecture/supply-chain-sbom-licence-test-gate.json",
+    "docs/architecture/design-contract-compose-drift-test-suite.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "docs/architecture/repository-command-surface-target-governance.json",
+    "pnpm-workspace.yaml",
+    "tsconfig.json",
+    "tsconfig.base.json",
+    "workspace package manifests under apps, capabilities, adapters, and packages",
+    ".github/workflows/proof-anchor.yml",
+    ".github/workflows/validate-spec.yml",
+    "compose/compose.yaml",
+    "compose/compose.dev.generated.yaml",
+    "compose/compose.test.generated.yaml",
+    "compose/compose.staging.generated.yaml",
+    "compose/compose.production.generated.yaml",
+    "docs/architecture/repository-compose-optimisation-governance.json",
+    "docs/architecture/repository-compose-teardown-safety-governance.json"
+  ],
+  "observedPackageState": {
+    "packageManager": "pnpm@11.9.0",
+    "lockfile": {
+      "path": "pnpm-lock.yaml",
+      "lockfileVersion": "9.0",
+      "bytes": 182005,
+      "observedOverride": "protobufjs 7.6.4"
+    },
+    "scriptSurfaceSummary": {
+      "composeScriptsObserved": true,
+      "proofScriptsObserved": true,
+      "testReadinessScriptsObserved": true,
+      "contractRelevantScriptsObserved": [
+        "openapi:check",
+        "db:types:check",
+        "proof:api",
+        "proof:api:graphql-generated-client",
+        "compose:validate",
+        "test-readiness:integration",
+        "test-readiness:composed",
+        "validate-spec",
+        "runtime:validate"
+      ]
+    },
+    "workspace": {
+      "path": "pnpm-workspace.yaml",
+      "packageGlobs": [
+        "apps/*",
+        "capabilities/*",
+        "adapters/*",
+        "packages/*"
+      ],
+      "overrideObserved": "protobufjs 7.6.4",
+      "allowBuildsObserved": [
+        "@swc/core",
+        "esbuild",
+        "protobufjs"
+      ],
+      "minimumReleaseAgeExclusionsObserved": true,
+      "interpretation": "The workspace file declares future package roots for package-manager resolution only. These globs do not authorise creation of implementation directories, runtime code, package implementations, or readiness claims without an approved implementation directive."
+    },
+    "packageGraph": {
+      "packageManifestCount": 35,
+      "workspacePackageManifestCountExcludingRoot": 34,
+      "packageRootsObserved": [
+        "apps",
+        "capabilities",
+        "adapters",
+        "packages"
+      ],
+      "packageNameNamespaceObserved": "@foundation",
+      "duplicateDependencyRangesObserved": 0,
+      "packageLevelBuildScriptsObserved": 0,
+      "packageLevelLintScriptsObserved": 0,
+      "packageLevelTypecheckScriptsObserved": 0,
+      "rootScriptsObserved": [
+        "lint",
+        "test",
+        "typecheck"
+      ],
+      "exportsFieldsObservedOnWorkspacePackages": true,
+      "interpretation": "The current package graph is manifest-heavy and script-light: package manifests declare package names and export surfaces, while build, lint, typecheck, and test execution are routed at the repository root."
+    },
+    "typescriptConfig": {
+      "rootTsconfigPath": "tsconfig.json",
+      "baseTsconfigPath": "tsconfig.base.json",
+      "rootExtendsBase": true,
+      "projectReferenceCount": 0,
+      "baseNoEmit": true,
+      "baseComposite": null,
+      "baseIncremental": null,
+      "interpretation": "The current TypeScript configuration is layered through a root config extending the base config, with no project references and no emitted build outputs configured at the repository TypeScript layer."
+    },
+    "buildAndCacheSurface": {
+      "boundedScanMatchedFileCount": 90,
+      "dockerfileCountObserved": 0,
+      "githubWorkflowCountObserved": 2,
+      "workflowFilesObserved": [
+        ".github/workflows/proof-anchor.yml",
+        ".github/workflows/validate-spec.yml"
+      ],
+      "workflowWithPackageCacheObserved": [
+        ".github/workflows/validate-spec.yml"
+      ],
+      "composeYamlFilesObserved": [
+        "compose/compose.yaml",
+        "compose/compose.dev.generated.yaml",
+        "compose/compose.test.generated.yaml",
+        "compose/compose.staging.generated.yaml",
+        "compose/compose.production.generated.yaml"
+      ],
+      "composeFilesWithImageEntriesObserved": 5,
+      "composeFilesWithBuildSectionsObserved": 0,
+      "interpretation": "The inspected build/cache surface is currently package-manager and generated-Compose oriented. No Dockerfile or Compose build section was observed in the bounded scan, so Docker or Compose image build optimisation remains a future design and decision surface rather than an implemented build-cache surface."
+    }
+  },
+  "lockfileHygienePolicy": {
+    "stateInspected": true,
+    "rules": [
+      "Treat package.json, pnpm-lock.yaml, package manager version, workspace configuration, and relevant environment inputs as correctness-affecting package inputs.",
+      "Use frozen install semantics for validation and proof paths unless a later issue explicitly authorises a dependency update workflow.",
+      "A lockfile change must be tied to an intentional dependency, package-manager, override, or workspace change and must not be bundled with unrelated semantic edits.",
+      "Lockfile-only churn without package intent is a review evidence requirement until explained.",
+      "Cache keys for install or dependency outputs must include package.json, pnpm-lock.yaml, pnpm version, workspace configuration, platform where relevant, and any dependency override file.",
+      "Supply-chain, SBOM, licence, and provenance outputs must be regenerated or invalidated when dependency inputs change.",
+      "Unknown dependency drift fails closed to frozen reinstall and full affected validation."
+    ],
+    "assuranceImpact": {
+      "preserved": [
+        "frozen dependency install",
+        "lockfile reviewability",
+        "supply-chain and licence evidence invalidation",
+        "validation and proof non-claims"
+      ],
+      "risk": [
+        "dependency cache reuse can hide stale or unreviewed lockfile state",
+        "lockfile churn can obscure real dependency changes",
+        "package manager mismatch can make local and CI installs diverge"
+      ]
+    },
+    "validationProofExpectation": [
+      "Before implementation, compare cold and warm install behaviour where package changes are involved.",
+      "Strictly parse package metadata and preserve frozen install gates.",
+      "Invalidate SBOM, licence, provenance, dependency cache, and package proof artifacts on package or lockfile input changes.",
+      "Record dependency and cache decisions separately from semantic, validator, and runtime changes."
+    ],
+    "dependenciesRecorded": [
+      "USF-384 baseline timing and cost measurement",
+      "USF-356 parent build/package optimisation",
+      "supply-chain SBOM licence test gate"
+    ]
+  },
+  "contractTestStandard": {
+    "stateInspected": true,
+    "contractClasses": [
+      {
+        "class": "schema-and-catalogue-contract",
+        "purpose": "Prove machine-readable semantic artefacts retain strict shape, controlled values, and registry consistency.",
+        "candidateCommands": [
+          "validate-spec",
+          "validate-spec:selftest"
+        ]
+      },
+      {
+        "class": "api-contract",
+        "purpose": "Prove API contract surfaces and generated clients remain aligned before runtime or UI work depends on them.",
+        "candidateCommands": [
+          "openapi:check",
+          "proof:api",
+          "proof:api:graphql-generated-client"
+        ]
+      },
+      {
+        "class": "database-contract",
+        "purpose": "Prove database type and query contract expectations remain aligned with declared schema or generated type surfaces.",
+        "candidateCommands": [
+          "db:types:check"
+        ]
+      },
+      {
+        "class": "compose-contract",
+        "purpose": "Prove generated Compose outputs remain catalogue-driven and do not drift from service, port, profile, and hardening policy.",
+        "candidateCommands": [
+          "compose:validate",
+          "compose:check-generated"
+        ]
+      },
+      {
+        "class": "runtime-provider-contract",
+        "purpose": "Prove provider-backed runtime behaviour is exercised at the lowest sufficient proof level and escalates to Compose when provider semantics matter.",
+        "candidateCommands": [
+          "runtime:validate",
+          "runtime:proof",
+          "runtime:proof:compose",
+          "test-readiness:integration"
+        ]
+      },
+      {
+        "class": "evidence-and-proof-contract",
+        "purpose": "Prove generated reports, proof artifacts, freshness, custody, and evidence references do not overclaim authority or status.",
+        "candidateCommands": [
+          "proof-cockpit:validate",
+          "proof-cockpit:selftest",
+          "test-readiness:validate"
+        ]
+      }
+    ],
+    "assuranceImpact": {
+      "preserved": [
+        "test speed cannot replace contract correctness",
+        "contract tests do not create readiness claims by themselves",
+        "generated clients and generated reports remain lower authority than the semantic or raw evidence surfaces they derive from",
+        "ambiguity falls back to fuller affected validation or proof"
+      ],
+      "risk": [
+        "contract tests can become theatrical if they only check generated output shape",
+        "contract tests can under-prove provider behaviour if in-memory checks are treated as provider proof",
+        "contract fixtures can drift if source, generated projection, and evidence references are not tied together"
+      ]
+    },
+    "validationProofExpectation": [
+      "Future implementation must define contract fixtures and negative controls before relying on a new contract gate.",
+      "Contract tests must fail closed on missing source reference, stale generated projection, provider-mode mismatch, environment mismatch, or unknown controlled value.",
+      "Contract tests must declare whether they are source, generated projection, provider, integration, or evidence contracts.",
+      "Fallback to full applicable gates on ambiguity."
+    ],
+    "dependenciesRecorded": [
+      "USF-386 assurance classification matrix",
+      "USF-354 parent test suite architecture and optimisation",
+      "design contract compose drift test suite",
+      "generated client contract validation semantics"
+    ]
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-543",
+      "title": "Lockfile hygiene",
+      "completionBasis": "lockfileHygienePolicy records inspected package state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-466",
+      "title": "Contract test standard",
+      "completionBasis": "contractTestStandard records inspected contract classes, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-538",
+      "title": "Review pnpm workspace and cache impacts",
+      "completionBasis": "pnpmWorkspaceReviewPolicy records inspected workspace state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-553",
+      "title": "Define generated-client and build-artifact policy",
+      "completionBasis": "generatedClientAndBuildArtifactPolicy records inspected generated-client and build-artifact policy, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-539",
+      "title": "pnpm store and cache optimisation",
+      "completionBasis": "pnpmStoreAndCachePolicy records observed package-manager, lockfile, workspace, cache-key, assurance, validation, and dependency expectations."
+    },
+    {
+      "issueId": "USF-541",
+      "title": "Dependency duplication audit",
+      "completionBasis": "dependencyDuplicationAudit records the bounded package-manifest inspection and the absence of multiple-range dependency declarations."
+    },
+    {
+      "issueId": "USF-544",
+      "title": "TypeScript project references and incremental build review",
+      "completionBasis": "typescriptProjectReferencesAndIncrementalBuildReview records current tsconfig state and future reference or incremental-build preconditions."
+    },
+    {
+      "issueId": "USF-546",
+      "title": "tsconfig layering",
+      "completionBasis": "tsconfigLayeringPolicy records current root-to-base layering and future package-layer guardrails."
+    },
+    {
+      "issueId": "USF-547",
+      "title": "Lint performance",
+      "completionBasis": "lintPerformancePolicy records current root lint routing, package-script absence, assurance impact, and measured-evidence requirement."
+    },
+    {
+      "issueId": "USF-549",
+      "title": "Typecheck performance",
+      "completionBasis": "typecheckPerformancePolicy records current root typecheck routing, tsconfig state, cache expectations, and measured-evidence requirement."
+    },
+    {
+      "issueId": "USF-551",
+      "title": "Package boundary and import hygiene",
+      "completionBasis": "packageBoundaryAndImportHygienePolicy records workspace/package boundary observations and future import enforcement expectations."
+    },
+    {
+      "issueId": "USF-555",
+      "title": "Build output directories and cache keys",
+      "completionBasis": "buildOutputDirectoriesAndCacheKeysPolicy records output-surface observations, cache-key requirements, and stale-output fail-closed rules."
+    },
+    {
+      "issueId": "USF-561",
+      "title": "node_modules and cache persistence policy",
+      "completionBasis": "nodeModulesAndCachePersistencePolicy records package-cache persistence boundaries, assurance impact, validation expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-563",
+      "title": "Optional remote cache decision issue",
+      "completionBasis": "optionalRemoteCacheDecisionPreparation records remote-cache evaluation scope, adoption evidence requirements, remote-cache risks, and validation expectations."
+    },
+    {
+      "issueId": "USF-564",
+      "title": "Task graph tool decision issue",
+      "completionBasis": "taskGraphToolDecisionPreparation records current root-only script posture, task-graph evaluation scope, graph risks, and adoption evidence requirements."
+    },
+    {
+      "issueId": "USF-565",
+      "title": "Local vs CI cache parity",
+      "completionBasis": "localVsCiCacheParityPolicy records local and CI cache boundary expectations and fail-closed behaviour."
+    },
+    {
+      "issueId": "USF-566",
+      "title": "Cold-start vs warm-start timing comparison",
+      "completionBasis": "coldStartWarmStartTimingComparisonPolicy records timing comparison preconditions without claiming a timing run in this issue."
+    },
+    {
+      "issueId": "USF-557",
+      "title": "Docker layer caching",
+      "completionBasis": "dockerLayerCachingPolicy records the absence of Dockerfiles or Compose build sections in the bounded scan and future layer-cache expectations."
+    },
+    {
+      "issueId": "USF-559",
+      "title": "Compose image build optimisation",
+      "completionBasis": "composeImageBuildOptimisationPolicy records Compose image-surface observations and future image-build optimisation expectations."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-543",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState",
+        "lockfileHygienePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-466",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "contractTestStandard"
+      ]
+    },
+    {
+      "issueId": "USF-538",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.workspace",
+        "pnpmWorkspaceReviewPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-553",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "generatedClientAndBuildArtifactPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-539",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState",
+        "pnpmStoreAndCachePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-541",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.packageGraph",
+        "dependencyDuplicationAudit"
+      ]
+    },
+    {
+      "issueId": "USF-544",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.typescriptConfig",
+        "typescriptProjectReferencesAndIncrementalBuildReview"
+      ]
+    },
+    {
+      "issueId": "USF-546",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.typescriptConfig",
+        "tsconfigLayeringPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-547",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.packageGraph",
+        "lintPerformancePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-549",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.typescriptConfig",
+        "typecheckPerformancePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-551",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.packageGraph",
+        "packageBoundaryAndImportHygienePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-555",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.packageGraph",
+        "buildOutputDirectoriesAndCacheKeysPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-561",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.buildAndCacheSurface",
+        "nodeModulesAndCachePersistencePolicy"
+      ]
+    },
+    {
+      "issueId": "USF-563",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.buildAndCacheSurface",
+        "optionalRemoteCacheDecisionPreparation"
+      ]
+    },
+    {
+      "issueId": "USF-564",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.packageGraph",
+        "taskGraphToolDecisionPreparation"
+      ]
+    },
+    {
+      "issueId": "USF-565",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.buildAndCacheSurface",
+        "localVsCiCacheParityPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-566",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.buildAndCacheSurface",
+        "coldStartWarmStartTimingComparisonPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-557",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.buildAndCacheSurface",
+        "dockerLayerCachingPolicy"
+      ]
+    },
+    {
+      "issueId": "USF-559",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedPackageState.buildAndCacheSurface",
+        "composeImageBuildOptimisationPolicy"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "dependencyChanged": false,
+    "lockfileEdited": false,
+    "packageScriptChanged": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  },
+  "pnpmWorkspaceReviewPolicy": {
+    "stateInspected": true,
+    "workspaceShape": "The current workspace declares apps, capabilities, adapters, and packages roots. The roots are treated as package-manager routing declarations, not semantic approval for implementation structure.",
+    "assuranceImpact": "Workspace shape affects dependency resolution, install cache behaviour, package-boundary validation, and future contract-test routing. Unknown workspace impact must fall back to the full local foundation gate instead of narrowing validation scope.",
+    "validationProofExpectation": [
+      "Cold and warm install evidence should be compared before claiming install-cache optimisation.",
+      "Package additions must trace to an approved implementation scope and must not be justified by workspace globs alone.",
+      "Cache keys must include package manifests, pnpm-lock.yaml, pnpm-workspace.yaml, the package-manager version, overrides, and allow-build settings.",
+      "Unknown workspace impact, missing package-boundary evidence, or dependency-resolution drift must fail closed to full validation."
+    ],
+    "dependenciesRecorded": [
+      "USF-384 package and script surface review.",
+      "USF-356 developer experience and build tooling authority track.",
+      "Lockfile hygiene policy in this artifact."
+    ]
+  },
+  "generatedClientAndBuildArtifactPolicy": {
+    "stateInspected": true,
+    "policyRules": [
+      "Generated clients and build artifacts must trace to active source contracts and approved generator inputs, not to planned schemas by themselves.",
+      "Generation must be deterministic or explicitly record bounded non-determinism and its comparison rule.",
+      "Generated projections and generated reports are not semantic authority and cannot upgrade readiness claims.",
+      "Cache keys must include source contract hashes, schema lifecycle state, package-manager version, lockfile state, generator version, build configuration, and relevant environment dimensions.",
+      "UI or app-surface consumption requires source-to-output traceability, contract conformance evidence, and retained raw validation evidence.",
+      "Unknown source contracts, planned-only schema inputs, stale generated output, missing hashes, missing generator metadata, or lifecycle mismatch must fail closed."
+    ],
+    "assuranceImpact": "Generated clients and build artifacts are high-leverage integration surfaces. If their source contracts, hashes, lifecycle state, generator version, or cache keys drift, UI readiness and contract-test results can appear valid while no longer matching governed semantics.",
+    "validationProofExpectation": [
+      "Generated outputs must prove reproducibility or record an explicit deterministic comparison exception.",
+      "Contract-conformance checks must compare generated clients against the governed source contract used to generate them.",
+      "Validation must fail stale output, missing source hash, schema lifecycle mismatch, unknown generator input, or missing retention evidence.",
+      "Evidence must preserve the distinction between raw validation evidence, generated artifacts, and generated reports."
+    ],
+    "dependenciesRecorded": [
+      "USF-773 contract drift and API client conformance design.",
+      "Generated client contract validation semantics.",
+      "Artifact storage and naming governance.",
+      "Supply-chain and contract conformance governance."
+    ]
+  },
+  "pnpmStoreAndCachePolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "packageManager": "pnpm@11.9.0",
+      "lockfileVersion": "9.0",
+      "workspacePackageManifestCount": 35,
+      "workspaceGlobs": [
+        "apps/*",
+        "capabilities/*",
+        "adapters/*",
+        "packages/*"
+      ],
+      "packageLevelBuildScriptsObserved": 0
+    },
+    "assuranceImpact": "The pnpm store and install cache are high-impact optimisation surfaces because stale dependency state can make validation, proof, generated clients, and supply-chain reports appear current when their dependency inputs have changed.",
+    "validationProofExpectation": [
+      "Install-cache keys must include package.json, pnpm-lock.yaml, pnpm-workspace.yaml, pnpm version, overrides, allow-build settings, and platform where native builds can affect output.",
+      "Frozen install remains the default proof-preserving behaviour until an explicit dependency update workflow is authorised.",
+      "Dependency cache reuse must not bypass SBOM, licence, provenance, contract, or generated-artifact invalidation when package inputs change.",
+      "Unknown cache provenance or missing package input evidence must fail closed to reinstall and full affected validation."
+    ],
+    "dependenciesRecorded": [
+      "USF-543 lockfile hygiene",
+      "USF-538 pnpm workspace review",
+      "USF-384 baseline timing and cost measurement"
+    ]
+  },
+  "dependencyDuplicationAudit": {
+    "stateInspected": true,
+    "observedState": {
+      "packageManifestCount": 35,
+      "duplicateDependencyRangesObserved": 0,
+      "interpretation": "No package dependency name was observed with multiple declared ranges across dependency, development dependency, peer dependency, or optional dependency sections in the bounded package-manifest inspection."
+    },
+    "assuranceImpact": "Duplicate dependency ranges can create non-deterministic install trees, larger lockfiles, divergent local and CI behaviour, and hidden generated-client or validator drift. The current inspection found no multiple-range dependency declaration that needs a consolidation decision in this issue.",
+    "validationProofExpectation": [
+      "Future package additions should repeat duplicate-range inspection before claiming dependency hygiene remains preserved.",
+      "If duplicate ranges are introduced, consolidation requires an intentional dependency decision rather than silent lockfile churn.",
+      "Dependency duplication findings must remain separate from semantic authority and must not justify implementation changes by themselves."
+    ],
+    "dependenciesRecorded": [
+      "USF-543 lockfile hygiene",
+      "USF-356 parent build/package optimisation"
+    ]
+  },
+  "typescriptProjectReferencesAndIncrementalBuildReview": {
+    "stateInspected": true,
+    "observedState": {
+      "tsconfigFiles": [
+        "tsconfig.json",
+        "tsconfig.base.json"
+      ],
+      "projectReferenceCount": 0,
+      "compositeConfigured": false,
+      "incrementalConfigured": false,
+      "noEmitConfiguredInBase": true
+    },
+    "assuranceImpact": "Project references and incremental builds could improve future package graph feedback speed, but enabling them changes build boundaries, cache keys, emitted metadata, and affected-validation expectations. The current state does not use references or emitted incremental build artifacts.",
+    "validationProofExpectation": [
+      "Future project-reference adoption must define package ownership, reference boundaries, emitted build metadata, and cache invalidation before implementation.",
+      "Incremental build outputs must not be reused across authority-impacting changes unless their cache keys include TypeScript configuration, package manifests, source contracts, and dependency inputs.",
+      "No UI or package readiness claim follows from the absence or presence of project references alone."
+    ],
+    "dependenciesRecorded": [
+      "USF-551 package boundary and import hygiene",
+      "USF-555 build output directories and cache keys",
+      "USF-384 timing baseline before optimisation claims"
+    ]
+  },
+  "tsconfigLayeringPolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "rootExtendsBase": true,
+      "baseNoEmit": true,
+      "projectReferenceCount": 0,
+      "packageTsconfigCountObserved": 0
+    },
+    "assuranceImpact": "A simple root-to-base tsconfig layer preserves one central TypeScript policy surface today. Future per-package tsconfig layers would improve package-local ownership only if they preserve semantic, validator, generated-client, and evidence boundaries.",
+    "validationProofExpectation": [
+      "Any future package tsconfig layer must declare its responsibility, inherited strictness, emit policy, and relationship to root validation commands.",
+      "TypeScript layering must not silently weaken strict options or exclude authority-relevant source paths from validation.",
+      "Unknown tsconfig coverage must fail closed to root typecheck and full affected validation."
+    ],
+    "dependenciesRecorded": [
+      "USF-544 TypeScript project references and incremental build review",
+      "USF-549 typecheck performance"
+    ]
+  },
+  "lintPerformancePolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "rootLintScriptObserved": true,
+      "packageLevelLintScriptsObserved": 0,
+      "packageManifestCount": 35
+    },
+    "assuranceImpact": "Lint cost is currently concentrated at the root command surface rather than package-local scripts. Future lint optimisation should preserve fail-closed behaviour and avoid suppressing generated, proof, or implementation-gate failures to improve speed.",
+    "validationProofExpectation": [
+      "Any lint narrowing must map file classes and change types to mandatory lint coverage before being used as a required check replacement.",
+      "Generated files, proof surfaces, and implementation-gate code must keep explicit inclusion or exclusion rules rather than relying on broad ignore patterns.",
+      "Lint timing claims require measured baseline and after-change evidence; this issue records design policy only."
+    ],
+    "dependenciesRecorded": [
+      "USF-384 baseline timing and cost measurement",
+      "USF-478 affected-test selection",
+      "USF-479 mandatory-test selection per change type"
+    ]
+  },
+  "typecheckPerformancePolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "rootTypecheckScriptObserved": true,
+      "packageLevelTypecheckScriptsObserved": 0,
+      "projectReferenceCount": 0,
+      "noEmitConfiguredInBase": true
+    },
+    "assuranceImpact": "Typecheck cost is currently rooted in the central TypeScript configuration. Future optimisation can consider project references or affected-package selection, but only with explicit cache keys and authority-impacting fallback rules.",
+    "validationProofExpectation": [
+      "Affected typecheck selection must fall back to root typecheck when semantic authority, validators, generated contracts, shared packages, or unknown ownership are touched.",
+      "Incremental typecheck caches must include tsconfig files, package manifests, lockfile state, source files, generated contracts, and dependency inputs.",
+      "Typecheck timing claims require measured baseline and after-change evidence; this issue records design policy only."
+    ],
+    "dependenciesRecorded": [
+      "USF-544 TypeScript project references and incremental build review",
+      "USF-546 tsconfig layering",
+      "USF-384 baseline timing and cost measurement"
+    ]
+  },
+  "packageBoundaryAndImportHygienePolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "packageManifestCount": 35,
+      "workspaceRoots": [
+        "apps",
+        "capabilities",
+        "adapters",
+        "packages"
+      ],
+      "exportsFieldsObservedOnWorkspacePackages": true,
+      "rootOnlyExecutionScriptsObserved": true
+    },
+    "assuranceImpact": "Package boundaries and import hygiene protect semantic layering, generated contract traceability, and provider boundary clarity. The current manifests declare many package surfaces, but enforcement is not package-local through scripts in this issue.",
+    "validationProofExpectation": [
+      "Future import-boundary enforcement must map apps, capabilities, adapters, packages, generated contracts, and proof helpers to permitted dependency directions.",
+      "Boundary checks must not infer semantic authority from package names or workspace paths alone.",
+      "Unknown or circular ownership must fail closed to full root validation and an explicit owner decision before implementation changes."
+    ],
+    "dependenciesRecorded": [
+      "USF-538 pnpm workspace review",
+      "USF-544 TypeScript project references and incremental build review",
+      "USF-364 pre-UI repository readiness gate"
+    ]
+  },
+  "buildOutputDirectoriesAndCacheKeysPolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "packageLevelBuildScriptsObserved": 0,
+      "packageManifestsWithExportsObserved": 34,
+      "typescriptNoEmitConfigured": true,
+      "generatedClientPolicyLinked": true
+    },
+    "assuranceImpact": "Build output directories and cache keys must be defined before generated clients, package builds, or UI bundles rely on cached output. The current package manifests expose package surfaces, but no package-level build scripts or TypeScript emit outputs were observed in this issue.",
+    "validationProofExpectation": [
+      "Future build outputs must have declared output directories, source inputs, generator inputs, dependency inputs, environment dimensions, and retention or cleanup rules.",
+      "Cache keys must include package manifests, lockfile, workspace config, TypeScript config, generator versions, source contract hashes, and environment or provider dimensions where relevant.",
+      "Stale or untraceable build output must fail closed and cannot support readiness, proof, or generated-client claims."
+    ],
+    "dependenciesRecorded": [
+      "USF-553 generated-client and build-artifact policy",
+      "USF-539 pnpm store and cache optimisation",
+      "USF-384 timing baseline before optimisation claims"
+    ]
+  },
+  "nodeModulesAndCachePersistencePolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "workflowPackageCacheObserved": true,
+      "packageCacheWorkflow": ".github/workflows/validate-spec.yml",
+      "packageManager": "pnpm@11.9.0",
+      "packageManifestCount": 35,
+      "lockfileObserved": true
+    },
+    "assuranceImpact": "node_modules and package-store persistence can reduce setup cost, but stale persisted dependency state can bypass frozen install expectations, supply-chain invalidation, and generated-artifact cache boundaries.",
+    "validationProofExpectation": [
+      "Cache persistence must be keyed by package manifests, lockfile, workspace config, package-manager version, override and allow-build settings, operating system, and native-build-relevant inputs.",
+      "Unknown cache provenance, cache restore without frozen install confirmation, or dependency input drift must fail closed to reinstall and full affected validation.",
+      "Cache cleanup and retention rules must distinguish local developer convenience from CI proof evidence."
+    ],
+    "dependenciesRecorded": [
+      "USF-539 pnpm store and cache optimisation",
+      "USF-543 lockfile hygiene",
+      "USF-565 local versus CI cache parity"
+    ]
+  },
+  "optionalRemoteCacheDecisionPreparation": {
+    "stateInspected": true,
+    "observedState": {
+      "remoteCacheImplementationObserved": false,
+      "localPackageCacheObservedInWorkflow": true,
+      "evaluationApprovedByRepositoryOptimisationRealisation": true,
+      "canonicalAdoptionRequiresEvidence": true
+    },
+    "assuranceImpact": "Remote caching could reduce repeated build and validation cost, but it introduces provenance, stale output, secret exposure, and cross-environment trust risks. Agents must not adopt remote cache by implication from local cache usage.",
+    "validationProofExpectation": [
+      "Remote cache evaluation is in scope for timing optimisation.",
+      "Remote cache adoption requires explicit provenance, trust-boundary, secret-handling, invalidation, retention, and fallback proof before implementation.",
+      "Any selected remote-cache route must define cache trust boundary, secret handling, artifact provenance, invalidation, retention, and fallback to full validation.",
+      "A remote cache miss, unknown producer, stale output, or missing provenance must not satisfy proof or readiness gates."
+    ],
+    "dependenciesRecorded": [
+      "USF-852 owner decision: use remote caching",
+      "USF-539 pnpm store and cache optimisation",
+      "USF-555 build output directories and cache keys"
+    ]
+  },
+  "taskGraphToolDecisionPreparation": {
+    "stateInspected": true,
+    "observedState": {
+      "packageManifestCount": 35,
+      "packageLevelBuildScriptsObserved": 0,
+      "rootOnlyExecutionScriptsObserved": true,
+      "taskGraphToolAdopted": false
+    },
+    "assuranceImpact": "A task graph tool could make affected validation faster, but it can also hide authority-impacting changes if the graph does not understand semantic definitions, validators, generated artifacts, proof evidence, and provider-mode boundaries.",
+    "validationProofExpectation": [
+      "Task graph tooling evaluation is in scope for timing optimisation.",
+      "Task graph tooling adoption requires explicit graph-coverage, cache-key, fallback, and no-regression proof before implementation.",
+      "A future graph must model semantic authority, validators, generated projections, evidence, package manifests, TypeScript config, Compose outputs, and proof surfaces as correctness inputs.",
+      "Unknown graph coverage must fall back to full required gates."
+    ],
+    "dependenciesRecorded": [
+      "USF-551 package boundary and import hygiene",
+      "USF-478 affected-test selection",
+      "USF-479 mandatory-test selection per change type"
+    ]
+  },
+  "localVsCiCacheParityPolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "workflowPackageCacheObserved": true,
+      "localCachePersistencePolicyRequired": true,
+      "githubWorkflowCountObserved": 2,
+      "packageManager": "pnpm@11.9.0"
+    },
+    "assuranceImpact": "Local and CI cache differences can produce divergent validation outcomes. CI package cache use must not be treated as proof of local cache safety, and local cache speedups must not satisfy CI proof expectations.",
+    "validationProofExpectation": [
+      "Cache parity policy must define which cache inputs are shared across local and CI and which are intentionally environment-specific.",
+      "Validation claims must record whether dependency state came from a fresh install, a local cache, or a CI cache restore.",
+      "Unknown parity or cache mismatch must fail closed to fresh install and full affected validation."
+    ],
+    "dependenciesRecorded": [
+      "USF-539 pnpm store and cache optimisation",
+      "USF-561 node_modules and cache persistence policy",
+      "USF-384 timing baseline before optimisation claims"
+    ]
+  },
+  "coldStartWarmStartTimingComparisonPolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "measuredInThisIssue": false,
+      "baselineTimingDependency": "USF-384",
+      "packageCacheAndWorkflowInputsRecorded": true
+    },
+    "assuranceImpact": "Cold-start and warm-start timings are useful only when the input state, cache state, environment, and command surface are explicit. Timing reports are generated reports and cannot upgrade readiness claims by themselves.",
+    "validationProofExpectation": [
+      "Future cold and warm timing comparison must identify cache state, dependency state, command, environment, provider mode where relevant, and raw evidence location.",
+      "Warm-start improvement cannot justify skipping required validation, proof, or evidence collection.",
+      "Missing timing raw evidence, unknown cache state, or environment mismatch must fail closed and cannot support optimisation claims."
+    ],
+    "dependenciesRecorded": [
+      "USF-384 baseline timing and cost measurement",
+      "USF-561 node_modules and cache persistence policy",
+      "USF-565 local versus CI cache parity"
+    ]
+  },
+  "dockerLayerCachingPolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "dockerfileCountObserved": 0,
+      "composeBuildSectionsObserved": 0,
+      "composeImageEntriesObserved": 5
+    },
+    "assuranceImpact": "Docker layer caching is not currently an implemented repository build surface in the bounded scan. Future Dockerfile or image-build introduction must treat layer cache inputs as correctness-affecting and must not allow stale images to satisfy proof evidence.",
+    "validationProofExpectation": [
+      "Future Docker layer cache keys must include Dockerfile contents, package inputs, generated artifacts, source contracts, base image identifiers, build args, and environment dimensions where relevant.",
+      "Unknown image provenance, stale base image, or missing source-to-image trace must fail closed.",
+      "Docker layer cache adoption requires measured evidence before performance claims."
+    ],
+    "dependenciesRecorded": [
+      "USF-559 compose image build optimisation",
+      "USF-555 build output directories and cache keys",
+      "USF-384 timing baseline before optimisation claims"
+    ]
+  },
+  "composeImageBuildOptimisationPolicy": {
+    "stateInspected": true,
+    "observedState": {
+      "composeYamlFilesObserved": 5,
+      "composeFilesWithImageEntriesObserved": 5,
+      "composeFilesWithBuildSectionsObserved": 0,
+      "generatedComposeFilesObserved": 4
+    },
+    "assuranceImpact": "Compose currently references image surfaces without observed Compose build sections in the bounded scan. Future image build optimisation must preserve generated-Compose authority boundaries, image provenance, provider-mode distinction, and proof evidence custody.",
+    "validationProofExpectation": [
+      "Future Compose image build optimisation must define image source inputs, generated Compose provenance, tag policy, cache keys, rebuild triggers, and retained proof evidence.",
+      "Generated Compose files remain generated projections and must not become semantic authority.",
+      "Unknown image provenance, missing generated-source trace, stale generated output, or provider-mode mismatch must fail closed."
+    ],
+    "dependenciesRecorded": [
+      "USF-557 Docker layer caching",
+      "repository compose optimisation governance",
+      "compose profile orchestration and generated Compose validation surfaces"
+    ]
+  }
+}

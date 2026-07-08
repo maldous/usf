@@ -1,0 +1,634 @@
+{
+  "id": "usf.generated-ui-renderer-composition-semantics",
+  "title": "Generated UI renderer and composition semantics",
+  "status": "semantic-definition",
+  "purpose": "Define generated UI renderer, presentation-state, platform-variance, design-token, AI-assisted composition, and human-review gate semantics without creating UI implementation behaviour.",
+  "coveredIssueIds": [
+    "USF-487",
+    "USF-489",
+    "USF-491",
+    "USF-492",
+    "USF-494",
+    "USF-495",
+    "USF-496",
+    "USF-497",
+    "USF-498",
+    "USF-499",
+    "USF-500",
+    "USF-501",
+    "USF-502",
+    "USF-503",
+    "USF-504"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "role": "constitutional-authority"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "role": "authority-order"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "role": "app-surface-authority-boundary"
+    },
+    {
+      "path": "docs/architecture/generated-ui-view-model-semantics.json",
+      "role": "generated-ui-view-model-foundation"
+    },
+    {
+      "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+      "role": "generated-client-contract-foundation"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "role": "shared-client-interaction-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+      "role": "capability-coverage-foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "role": "validator-requirement-foundation"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "role": "taxonomy-catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "role": "vocabulary-catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "role": "schema-registry"
+    }
+  ],
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-331",
+      "USF-312",
+      "USF-315",
+      "USF-481",
+      "USF-490"
+    ],
+    "notSatisfiedByThisArtefact": [
+      "USF-328",
+      "USF-938"
+    ]
+  },
+  "crossCuttingRules": [
+    {
+      "id": "generated-renderers-project-semantics",
+      "requirement": "Generated renderers project USF semantic authority and MUST NOT create product behaviour, route behaviour, validation behaviour, permission behaviour, or readiness claims."
+    },
+    {
+      "id": "renderers-require-view-model-authority",
+      "requirement": "Renderer requirements depend on generated view-model mappings and capability coverage; a renderer without semantic view-model authority fails closed."
+    },
+    {
+      "id": "presentation-state-is-not-semantic-state",
+      "requirement": "Empty, loading, success, pending, retry, rollback, and conflict presentation states are UI projections and MUST NOT redefine semantic workflow, command, query, or evidence state."
+    },
+    {
+      "id": "visual-tokens-do-not-define-behaviour",
+      "requirement": "Design tokens, themes, contrast modes, density, typography, and spacing govern presentation only and MUST NOT define capability semantics or implementation readiness."
+    },
+    {
+      "id": "ai-composition-is-bounded-by-authority",
+      "requirement": "AI-assisted UI composition may propose projections only from USF semantic references and MUST NOT invent fields, routes, actions, permissions, errors, evidence, privacy mappings, or readiness claims."
+    },
+    {
+      "id": "human-review-is-a-gate-not-authority",
+      "requirement": "Human review gate semantics define review criteria and evidence expectations, but human review does not override the USF constitutional layer, semantic definitions, validator rules, or runtime proof evidence."
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-487",
+      "id": "workflow-to-wizard-mapping",
+      "purpose": "Map workflow-driven guided experiences to generated UI steps across mobile and web adapters.",
+      "requiredMappings": [
+        "workflowReference",
+        "stepReference",
+        "stateTransitionReference",
+        "commandReference",
+        "validationReference",
+        "permissionReference",
+        "auditReference",
+        "routeReference"
+      ],
+      "failClosedWhenMissing": [
+        "workflowReference",
+        "stateTransitionReference",
+        "validationReference",
+        "auditReference"
+      ],
+      "validatorRequirementId": "workflow-to-wizard-mapping-validator",
+      "proofRequirementId": "workflow-to-wizard-mapping-proof"
+    },
+    {
+      "issueId": "USF-489",
+      "id": "permission-to-affordance-mapping",
+      "purpose": "Map enabled, disabled, hidden, denied, and explained affordances to USF permissions, feature flags, and capability authority.",
+      "requiredMappings": [
+        "capabilityReference",
+        "permissionReference",
+        "featureFlagReference",
+        "affordanceStateReference",
+        "denialMessageReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "capabilityReference",
+        "permissionReference",
+        "affordanceStateReference"
+      ],
+      "validatorRequirementId": "permission-to-affordance-mapping-validator",
+      "proofRequirementId": "permission-to-affordance-mapping-proof"
+    },
+    {
+      "issueId": "USF-491",
+      "id": "empty-loading-error-success-states",
+      "purpose": "Map common presentation states to USF query, command, validation, error, and evidence semantics.",
+      "requiredMappings": [
+        "sourceStateReference",
+        "emptyStateReference",
+        "loadingStateReference",
+        "errorStateReference",
+        "successStateReference",
+        "userMessageReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "sourceStateReference",
+        "errorStateReference",
+        "userMessageReference"
+      ],
+      "validatorRequirementId": "empty-loading-error-success-states-validator",
+      "proofRequirementId": "empty-loading-error-success-states-proof"
+    },
+    {
+      "issueId": "USF-492",
+      "id": "optimistic-pending-retry-conflict-states",
+      "purpose": "Map in-flight, retryable, rollback, and conflict presentation states to capability, command, cache, and audit authority.",
+      "requiredMappings": [
+        "capabilityReference",
+        "pendingStateReference",
+        "retryStateReference",
+        "rollbackReference",
+        "conflictStateReference",
+        "cacheInvalidationReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "capabilityReference",
+        "rollbackReference",
+        "conflictStateReference",
+        "auditReference"
+      ],
+      "validatorRequirementId": "optimistic-pending-retry-conflict-states-validator",
+      "proofRequirementId": "optimistic-pending-retry-conflict-states-proof"
+    },
+    {
+      "issueId": "USF-494",
+      "id": "navigation-breadcrumb-back-stack-model",
+      "purpose": "Map navigation state, breadcrumbs, back-stack rules, route labels, and restoration behaviour to USF route and capability semantics.",
+      "requiredMappings": [
+        "routeReference",
+        "capabilityReference",
+        "breadcrumbReference",
+        "backStackReference",
+        "permissionReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "routeReference",
+        "capabilityReference",
+        "backStackReference"
+      ],
+      "validatorRequirementId": "navigation-breadcrumb-back-stack-validator",
+      "proofRequirementId": "navigation-breadcrumb-back-stack-proof"
+    },
+    {
+      "issueId": "USF-495",
+      "id": "design-tokens-semantic-model",
+      "purpose": "Map tokens, themes, contrast, density, typography, spacing, and platform variance to presentation semantics.",
+      "requiredMappings": [
+        "tokenReference",
+        "themeReference",
+        "contrastReference",
+        "densityReference",
+        "typographyReference",
+        "spacingReference",
+        "platformVarianceReference",
+        "accessibilityReference"
+      ],
+      "failClosedWhenMissing": [
+        "tokenReference",
+        "contrastReference",
+        "accessibilityReference"
+      ],
+      "validatorRequirementId": "design-tokens-semantic-model-validator",
+      "proofRequirementId": "design-tokens-semantic-model-proof"
+    },
+    {
+      "issueId": "USF-496",
+      "id": "theme-dark-mode-high-contrast-model",
+      "purpose": "Map visual mode selection to theme, contrast, accessibility, user preference, and platform semantics.",
+      "requiredMappings": [
+        "themeReference",
+        "visualModeReference",
+        "highContrastReference",
+        "userPreferenceReference",
+        "platformReference",
+        "accessibilityReference"
+      ],
+      "failClosedWhenMissing": [
+        "themeReference",
+        "visualModeReference",
+        "accessibilityReference"
+      ],
+      "validatorRequirementId": "theme-dark-mode-high-contrast-validator",
+      "proofRequirementId": "theme-dark-mode-high-contrast-proof"
+    },
+    {
+      "issueId": "USF-497",
+      "id": "component-primitive-taxonomy",
+      "purpose": "Classify generated UI primitive classes used by mobile and web adapters without defining component implementation.",
+      "requiredMappings": [
+        "primitiveClassReference",
+        "semanticRoleReference",
+        "platformAdapterReference",
+        "accessibilityReference",
+        "validationReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "primitiveClassReference",
+        "semanticRoleReference",
+        "platformAdapterReference"
+      ],
+      "validatorRequirementId": "component-primitive-taxonomy-validator",
+      "proofRequirementId": "component-primitive-taxonomy-proof"
+    },
+    {
+      "issueId": "USF-498",
+      "id": "platform-specific-ux-variance-rules",
+      "purpose": "Define allowable mobile and web presentation differences that preserve shared capability behaviour.",
+      "requiredMappings": [
+        "sharedCapabilityReference",
+        "mobileVarianceReference",
+        "webVarianceReference",
+        "permissionReference",
+        "validationReference",
+        "accessibilityReference",
+        "auditReference"
+      ],
+      "failClosedWhenMissing": [
+        "sharedCapabilityReference",
+        "mobileVarianceReference",
+        "webVarianceReference"
+      ],
+      "validatorRequirementId": "platform-specific-ux-variance-validator",
+      "proofRequirementId": "platform-specific-ux-variance-proof"
+    },
+    {
+      "issueId": "USF-499",
+      "id": "form-renderer-requirements",
+      "purpose": "Map generated form rendering to command, validation, error, permission, audit, i18n, and accessibility authority.",
+      "requiredMappings": [
+        "commandReference",
+        "fieldReference",
+        "validationReference",
+        "errorReference",
+        "permissionReference",
+        "auditReference",
+        "i18nReference",
+        "accessibilityReference"
+      ],
+      "failClosedWhenMissing": [
+        "commandReference",
+        "validationReference",
+        "auditReference"
+      ],
+      "validatorRequirementId": "form-renderer-requirements-validator",
+      "proofRequirementId": "form-renderer-requirements-proof"
+    },
+    {
+      "issueId": "USF-500",
+      "id": "table-list-grid-renderer-requirements",
+      "purpose": "Map collection rendering to query, pagination, sorting, filtering, permission, privacy, i18n, and accessibility authority.",
+      "requiredMappings": [
+        "queryReference",
+        "collectionReference",
+        "paginationReference",
+        "sortingReference",
+        "filteringReference",
+        "permissionReference",
+        "privacyReference",
+        "i18nReference",
+        "accessibilityReference"
+      ],
+      "failClosedWhenMissing": [
+        "queryReference",
+        "collectionReference",
+        "permissionReference",
+        "privacyReference"
+      ],
+      "validatorRequirementId": "table-list-grid-renderer-validator",
+      "proofRequirementId": "table-list-grid-renderer-proof"
+    },
+    {
+      "issueId": "USF-501",
+      "id": "attachment-media-renderer-requirements",
+      "purpose": "Map attachment and media rendering to file transfer, previews, uploads, downloads, retention, privacy, and audit authority.",
+      "requiredMappings": [
+        "fileTransferReference",
+        "mediaReference",
+        "previewReference",
+        "uploadReference",
+        "downloadReference",
+        "retentionReference",
+        "privacyReference",
+        "auditReference",
+        "accessibilityReference"
+      ],
+      "failClosedWhenMissing": [
+        "fileTransferReference",
+        "retentionReference",
+        "privacyReference",
+        "auditReference"
+      ],
+      "validatorRequirementId": "attachment-media-renderer-validator",
+      "proofRequirementId": "attachment-media-renderer-proof"
+    },
+    {
+      "issueId": "USF-502",
+      "id": "dashboard-analytics-renderer-requirements",
+      "purpose": "Map dashboards, metrics, charts, privacy, permissions, and proof references to generated UI renderer semantics.",
+      "requiredMappings": [
+        "metricReference",
+        "chartReference",
+        "queryReference",
+        "permissionReference",
+        "privacyReference",
+        "aggregationReference",
+        "proofReference",
+        "accessibilityReference"
+      ],
+      "failClosedWhenMissing": [
+        "metricReference",
+        "queryReference",
+        "permissionReference",
+        "privacyReference"
+      ],
+      "validatorRequirementId": "dashboard-analytics-renderer-validator",
+      "proofRequirementId": "dashboard-analytics-renderer-proof"
+    },
+    {
+      "issueId": "USF-503",
+      "id": "ai-assisted-ui-composition-boundary",
+      "purpose": "Define AI-assisted UI composition boundaries, semantic references, review requirements, validator requirements, and proof expectations.",
+      "requiredMappings": [
+        "semanticInputReference",
+        "generatedProjectionReference",
+        "forbiddenInferenceReference",
+        "reviewRequirementReference",
+        "validatorReference",
+        "proofReference"
+      ],
+      "failClosedWhenMissing": [
+        "semanticInputReference",
+        "forbiddenInferenceReference",
+        "reviewRequirementReference"
+      ],
+      "validatorRequirementId": "ai-assisted-ui-composition-boundary-validator",
+      "proofRequirementId": "ai-assisted-ui-composition-boundary-proof"
+    },
+    {
+      "issueId": "USF-504",
+      "id": "human-review-gate-generated-ui",
+      "purpose": "Define generated UI review criteria, approval boundary, evidence expectations, validator requirements, and proof expectations.",
+      "requiredMappings": [
+        "reviewCriterionReference",
+        "semanticCoverageReference",
+        "validatorResultReference",
+        "proofEvidenceReference",
+        "approvalBoundaryReference",
+        "nonClaimReference"
+      ],
+      "failClosedWhenMissing": [
+        "reviewCriterionReference",
+        "semanticCoverageReference",
+        "validatorResultReference",
+        "approvalBoundaryReference"
+      ],
+      "validatorRequirementId": "human-review-gate-generated-ui-validator",
+      "proofRequirementId": "human-review-gate-generated-ui-proof"
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "workflow-to-wizard-mapping-validator",
+      "issueId": "USF-487",
+      "requirement": "Future validators reject workflow wizard mappings without workflow, state transition, command, validation, permission, audit, and route references.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "permission-to-affordance-mapping-validator",
+      "issueId": "USF-489",
+      "requirement": "Future validators reject affordances that lack capability, permission, feature flag, affordance state, denial message, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "empty-loading-error-success-states-validator",
+      "issueId": "USF-491",
+      "requirement": "Future validators reject common UI state mappings that lack source state, error, message, and audit references.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "optimistic-pending-retry-conflict-states-validator",
+      "issueId": "USF-492",
+      "requirement": "Future validators reject optimistic, pending, retry, rollback, and conflict presentation without capability, conflict, cache, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "navigation-breadcrumb-back-stack-validator",
+      "issueId": "USF-494",
+      "requirement": "Future validators reject navigation state that lacks route, capability, breadcrumb, back-stack, permission, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "design-tokens-semantic-model-validator",
+      "issueId": "USF-495",
+      "requirement": "Future validators reject design-token sets that lack token, theme, contrast, density, typography, spacing, platform variance, and accessibility mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "theme-dark-mode-high-contrast-validator",
+      "issueId": "USF-496",
+      "requirement": "Future validators reject visual mode mappings that lack theme, high-contrast, user preference, platform, and accessibility references.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "component-primitive-taxonomy-validator",
+      "issueId": "USF-497",
+      "requirement": "Future validators reject component primitive classes without semantic role, platform adapter, accessibility, validation, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "platform-specific-ux-variance-validator",
+      "issueId": "USF-498",
+      "requirement": "Future validators reject platform variance that changes shared capability behaviour or lacks permission, validation, accessibility, and audit mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "form-renderer-requirements-validator",
+      "issueId": "USF-499",
+      "requirement": "Future validators reject form renderers without command, field, validation, error, permission, audit, i18n, and accessibility mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "table-list-grid-renderer-validator",
+      "issueId": "USF-500",
+      "requirement": "Future validators reject collection renderers without query, collection, pagination, sorting, filtering, permission, privacy, i18n, and accessibility mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "attachment-media-renderer-validator",
+      "issueId": "USF-501",
+      "requirement": "Future validators reject attachment or media renderers without file-transfer, retention, privacy, audit, and accessibility mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "dashboard-analytics-renderer-validator",
+      "issueId": "USF-502",
+      "requirement": "Future validators reject dashboards or analytics renderers without metric, query, permission, privacy, aggregation, proof, and accessibility mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "ai-assisted-ui-composition-boundary-validator",
+      "issueId": "USF-503",
+      "requirement": "Future validators reject AI-assisted UI projections that lack semantic inputs, include forbidden inference, or omit review and proof mappings.",
+      "failureMode": "fail-closed"
+    },
+    {
+      "id": "human-review-gate-generated-ui-validator",
+      "issueId": "USF-504",
+      "requirement": "Future validators reject generated UI gate closure without review criteria, semantic coverage, validator result, proof evidence, approval boundary, and non-claim mappings.",
+      "failureMode": "fail-closed"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "workflow-to-wizard-mapping-proof",
+      "issueId": "USF-487",
+      "requirement": "Future proof records trace wizard steps to workflow state transitions, commands, validation, permission, audit, and routes."
+    },
+    {
+      "id": "permission-to-affordance-mapping-proof",
+      "issueId": "USF-489",
+      "requirement": "Future proof records show each affordance derives from capability, permission, feature flag, denial message, and audit authority."
+    },
+    {
+      "id": "empty-loading-error-success-states-proof",
+      "issueId": "USF-491",
+      "requirement": "Future proof records show presentation states map to source command, query, validation, error, user-message, and audit references."
+    },
+    {
+      "id": "optimistic-pending-retry-conflict-states-proof",
+      "issueId": "USF-492",
+      "requirement": "Future proof records show pending, retry, rollback, and conflict states preserve capability, cache, and audit semantics."
+    },
+    {
+      "id": "navigation-breadcrumb-back-stack-proof",
+      "issueId": "USF-494",
+      "requirement": "Future proof records show navigation state maps to route, capability, permission, breadcrumb, back-stack, and audit authority."
+    },
+    {
+      "id": "design-tokens-semantic-model-proof",
+      "issueId": "USF-495",
+      "requirement": "Future proof records show tokens and presentation modes remain presentation-only and preserve accessibility mappings."
+    },
+    {
+      "id": "theme-dark-mode-high-contrast-proof",
+      "issueId": "USF-496",
+      "requirement": "Future proof records show visual mode choices map to theme, user preference, platform, and accessibility semantics."
+    },
+    {
+      "id": "component-primitive-taxonomy-proof",
+      "issueId": "USF-497",
+      "requirement": "Future proof records show primitive classes map to semantic role, platform adapter, accessibility, validation, and audit references."
+    },
+    {
+      "id": "platform-specific-ux-variance-proof",
+      "issueId": "USF-498",
+      "requirement": "Future proof records show mobile and web variance preserves shared capability behaviour."
+    },
+    {
+      "id": "form-renderer-requirements-proof",
+      "issueId": "USF-499",
+      "requirement": "Future proof records show generated forms map to commands, fields, validation, errors, permissions, audit, i18n, and accessibility references."
+    },
+    {
+      "id": "table-list-grid-renderer-proof",
+      "issueId": "USF-500",
+      "requirement": "Future proof records show collection renderers map to query, pagination, sorting, filtering, permission, privacy, i18n, and accessibility references."
+    },
+    {
+      "id": "attachment-media-renderer-proof",
+      "issueId": "USF-501",
+      "requirement": "Future proof records show attachment and media renderers map to file-transfer, retention, privacy, audit, and accessibility references."
+    },
+    {
+      "id": "dashboard-analytics-renderer-proof",
+      "issueId": "USF-502",
+      "requirement": "Future proof records show dashboards and charts map to metrics, queries, permissions, privacy, aggregation, proof, and accessibility references."
+    },
+    {
+      "id": "ai-assisted-ui-composition-boundary-proof",
+      "issueId": "USF-503",
+      "requirement": "Future proof records show AI-assisted UI composition uses only semantic inputs, records forbidden-inference checks, and remains review-gated."
+    },
+    {
+      "id": "human-review-gate-generated-ui-proof",
+      "issueId": "USF-504",
+      "requirement": "Future proof records show generated UI review gate decisions include review criteria, semantic coverage, validator results, proof evidence, approval boundary, and non-claims."
+    }
+  ],
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines semantic requirements only. Wizard, route, navigation, component, renderer, table, list, grid, form, media, dashboard, analytics, AI UI generator, screen generation, model provider integration, review tooling, token package, design-system, state library, file provider, feature-flag provider, and validator implementation remain blocked until later authorised gates exist."
+  },
+  "reviewBoundary": {
+    "humanReviewRequiredForGeneratedUiGate": true,
+    "humanReviewDefinesSemanticAuthority": false,
+    "validatorResultRequiredBeforeGateClosure": true,
+    "proofEvidenceRequiredBeforeGateClosure": true,
+    "generatedReportsRemainLowerAuthority": true
+  },
+  "nonClaims": {
+    "generatedUiReadiness": false,
+    "productUiReadiness": false,
+    "uxReadiness": false,
+    "routeReadiness": false,
+    "navigationReadiness": false,
+    "componentReadiness": false,
+    "rendererReadiness": false,
+    "designSystemReadiness": false,
+    "accessibilityCompliance": false,
+    "analyticsReadiness": false,
+    "fileProviderReadiness": false,
+    "aiUiGeneratorReadiness": false,
+    "modelProviderReadiness": false,
+    "reviewToolingReadiness": false,
+    "validatorImplementationReadiness": false,
+    "implementationReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}

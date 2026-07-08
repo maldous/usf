@@ -1,0 +1,772 @@
+{
+  "id": "monetisation-ad-placement-telemetry-semantics",
+  "title": "Monetisation, Ad Placement, and Telemetry Semantics",
+  "issueId": "USF-662",
+  "coveredIssueIds": [
+    "USF-349",
+    "USF-666",
+    "USF-668",
+    "USF-670",
+    "USF-671",
+    "USF-672",
+    "USF-673",
+    "USF-674",
+    "USF-682",
+    "USF-684",
+    "USF-686",
+    "USF-687",
+    "USF-690",
+    "USF-691",
+    "USF-692"
+  ],
+  "evaluatedOwnerDecisionIssueIds": [
+    "USF-664",
+    "USF-669",
+    "USF-688",
+    "USF-689"
+  ],
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact defines monetisation capability classification, client telemetry envelope, ad placement taxonomy, and ad event audit and telemetry semantics. It does not create monetisation implementation, ad UI implementation, ad inventory, ad serving, ad SDK implementation, analytics provider setup, revenue reporting, telemetry provider integration, SDK implementation, dashboard, provider setup, app submission, legal conclusion, ads compliance, monetisation readiness, observability readiness, production readiness, live-provider readiness, product UI readiness, or human acceptance.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/generated-ui-view-model-semantics.json",
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "docs/architecture/notification-consent-data-inventory-semantics.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "spec/schemas/interface-contract.schema.json"
+  ],
+  "monetisationCapabilityClassification": {
+    "issueId": "USF-662",
+    "rule": "Every app-surface monetisation behaviour must classify its capability, provider posture, consent, privacy, audit, telemetry, proof, dependency, and non-claim boundary before implementation or readiness claims.",
+    "monetisationKinds": [
+      {
+        "id": "ads",
+        "requiredMappings": [
+          "capability",
+          "placement",
+          "consent",
+          "privacy-category",
+          "regional-posture",
+          "audit-event",
+          "telemetry",
+          "proof",
+          "non-claim-boundary"
+        ]
+      },
+      {
+        "id": "subscriptions",
+        "requiredMappings": [
+          "capability",
+          "entitlement",
+          "billing-or-store-posture",
+          "permission",
+          "privacy-category",
+          "audit-event",
+          "proof",
+          "non-claim-boundary"
+        ]
+      },
+      {
+        "id": "in-app-products",
+        "requiredMappings": [
+          "capability",
+          "product",
+          "store-posture",
+          "entitlement",
+          "audit-event",
+          "proof",
+          "non-claim-boundary"
+        ]
+      },
+      {
+        "id": "web-payments",
+        "requiredMappings": [
+          "capability",
+          "payment-provider-posture",
+          "privacy-category",
+          "audit-event",
+          "proof",
+          "non-claim-boundary"
+        ]
+      },
+      {
+        "id": "revenue-analytics",
+        "requiredMappings": [
+          "capability",
+          "metric",
+          "privacy-category",
+          "consent-state",
+          "telemetry",
+          "proof",
+          "non-claim-boundary"
+        ]
+      }
+    ],
+    "mustReject": [
+      "monetisation behaviour without capability mapping",
+      "monetisation behaviour without privacy and consent mapping",
+      "monetisation behaviour without audit and proof mapping",
+      "monetisation readiness claim without owner acceptance"
+    ]
+  },
+  "clientTelemetryEnvelope": {
+    "issueId": "USF-349",
+    "rule": "Client telemetry must map interaction telemetry, diagnostics, performance, correlation context, consent state, privacy category, provider mode, environment, and evidence freshness to USF semantics.",
+    "requiredMappings": [
+      "capability",
+      "event-or-measurement",
+      "interaction-context",
+      "diagnostics-or-performance-class",
+      "correlation-context",
+      "consent-state",
+      "privacy-category",
+      "provider-mode",
+      "environment",
+      "redaction-policy",
+      "evidence-freshness",
+      "proof"
+    ],
+    "consentAwareSuppression": "Telemetry that lacks required consent, privacy category, provider mode, environment, redaction, or proof mapping must be suppressed or rejected rather than emitted.",
+    "mustReject": [
+      "telemetry without capability mapping",
+      "telemetry without privacy category mapping",
+      "telemetry without consent-aware suppression posture",
+      "telemetry without provider mode and environment mapping",
+      "telemetry claim without evidence freshness"
+    ]
+  },
+  "adPlacementTaxonomy": {
+    "issueId": "USF-674",
+    "rule": "Ad placements must use USF-native placement categories with capability, consent, privacy, frequency, audit, telemetry, validator, proof, dependency, and non-claim mappings.",
+    "placementCategories": [
+      {
+        "id": "banner",
+        "requiredMappings": [
+          "capability",
+          "surface",
+          "consent",
+          "privacy-category",
+          "frequency-rule",
+          "audit-event",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "interstitial",
+        "requiredMappings": [
+          "capability",
+          "surface",
+          "consent",
+          "privacy-category",
+          "frequency-rule",
+          "audit-event",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "rewarded",
+        "requiredMappings": [
+          "capability",
+          "surface",
+          "consent",
+          "privacy-category",
+          "reward-semantics",
+          "frequency-rule",
+          "audit-event",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "native",
+        "requiredMappings": [
+          "capability",
+          "surface",
+          "consent",
+          "privacy-category",
+          "content-boundary",
+          "frequency-rule",
+          "audit-event",
+          "telemetry",
+          "proof"
+        ]
+      }
+    ],
+    "mustReject": [
+      "ad placement without approved taxonomy category",
+      "ad placement without capability mapping",
+      "ad placement without consent or privacy mapping",
+      "ad placement without audit and telemetry mapping",
+      "ad placement without non-claim boundary"
+    ]
+  },
+  "adEventAuditAndTelemetryModel": {
+    "issueId": "USF-686",
+    "rule": "Ad events must map impressions, clicks, rewards, consent, privacy categories, audit events, telemetry suppression, validators, proof, and non-claims before emission.",
+    "eventKinds": [
+      {
+        "id": "impression",
+        "requiredMappings": [
+          "placement",
+          "capability",
+          "consent-state",
+          "privacy-category",
+          "audit-event",
+          "telemetry-envelope",
+          "suppression-rule",
+          "proof"
+        ]
+      },
+      {
+        "id": "click",
+        "requiredMappings": [
+          "placement",
+          "capability",
+          "consent-state",
+          "privacy-category",
+          "audit-event",
+          "telemetry-envelope",
+          "suppression-rule",
+          "proof"
+        ]
+      },
+      {
+        "id": "reward",
+        "requiredMappings": [
+          "placement",
+          "capability",
+          "reward-semantics",
+          "consent-state",
+          "privacy-category",
+          "audit-event",
+          "telemetry-envelope",
+          "suppression-rule",
+          "proof"
+        ]
+      }
+    ],
+    "mustReject": [
+      "ad event without placement mapping",
+      "ad event without consent and privacy mapping",
+      "ad event without audit event mapping",
+      "ad event without telemetry suppression posture",
+      "ad event without proof mapping"
+    ]
+  },
+  "additionalSemanticModels": [
+    {
+      "issueId": "USF-666",
+      "modelId": "admob-mobile-ads-semantics",
+      "purpose": "Define AdMob mobile ads semantics for ad units, consent, ATT, UMP, child-directed treatment, privacy data, audit events, telemetry, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "mobile-ad-unit",
+        "consent-state",
+        "att-status",
+        "ump-consent-posture",
+        "child-directed-treatment",
+        "privacy-data-category",
+        "audit-event",
+        "telemetry",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664",
+        "USF-669"
+      ]
+    },
+    {
+      "issueId": "USF-668",
+      "modelId": "adsense-web-ads-semantics",
+      "purpose": "Define AdSense web ads semantics for web ad surfaces, consent, regional rules, privacy data, audit events, telemetry, validators, proof expectations, and non-claims.",
+      "requiredMappings": [
+        "web-ad-surface",
+        "consent-state",
+        "regional-rule",
+        "privacy-data-category",
+        "audit-event",
+        "telemetry",
+        "provider-posture-placeholder",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664",
+        "USF-669"
+      ]
+    },
+    {
+      "issueId": "USF-670",
+      "modelId": "ump-cmp-consent-flow-for-ads",
+      "purpose": "Define UMP and CMP consent flow semantics for ads consent requests, updates, denial, withdrawal, regional applicability, ATT interaction, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "consent-request",
+        "consent-update",
+        "consent-denial",
+        "consent-withdrawal",
+        "regional-applicability",
+        "att-interaction",
+        "audit-event",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-638",
+        "USF-664"
+      ]
+    },
+    {
+      "issueId": "USF-671",
+      "modelId": "att-to-ads-behaviour-matrix",
+      "purpose": "Define ATT-to-ads behaviour semantics for ATT status, consent state, personalised ads, non-personalised ads, ad loading, audit events, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "att-status",
+        "consent-state",
+        "personalised-ads-posture",
+        "non-personalised-ads-posture",
+        "ad-loading-permission",
+        "audit-event",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664"
+      ]
+    },
+    {
+      "issueId": "USF-672",
+      "modelId": "personalised-non-personalised-ads-model",
+      "purpose": "Define personalised and non-personalised ads semantics for consent, ATT, regional restrictions, child-directed treatment, user settings, audit events, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "consent-state",
+        "att-status",
+        "regional-restriction",
+        "child-directed-treatment",
+        "user-setting",
+        "audit-event",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664",
+        "USF-634"
+      ]
+    },
+    {
+      "issueId": "USF-673",
+      "modelId": "regional-restrictions-child-directed-ad-treatment",
+      "purpose": "Define regional restrictions and child-directed treatment for ads with region, age posture, prohibited placement, consent, validator, proof, and non-claim mappings.",
+      "requiredMappings": [
+        "region",
+        "age-posture",
+        "child-directed-treatment",
+        "prohibited-placement",
+        "consent-state",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-634",
+        "USF-664"
+      ]
+    },
+    {
+      "issueId": "USF-682",
+      "modelId": "ad-frequency-capping-session-rules",
+      "purpose": "Define ad frequency capping and session rule semantics for session boundaries, caps, pacing, consent, age posture, user experience, audit events, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "session-boundary",
+        "frequency-cap",
+        "pacing-rule",
+        "consent-state",
+        "age-posture",
+        "user-experience-boundary",
+        "audit-event",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664"
+      ]
+    },
+    {
+      "issueId": "USF-684",
+      "modelId": "rewarded-interstitial-banner-native-ad-policies",
+      "purpose": "Define rewarded, interstitial, banner, and native ad policy semantics for allowed ad formats, prohibited contexts, consent, reward semantics, audit, telemetry, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "allowed-ad-format",
+        "prohibited-context",
+        "consent-state",
+        "reward-semantics",
+        "audit-event",
+        "telemetry",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664"
+      ]
+    },
+    {
+      "issueId": "USF-687",
+      "modelId": "subscription-in-app-purchase-posture",
+      "purpose": "Define subscription and in-app purchase posture semantics for product catalogue authority, store products, entitlement effects, receipts, privacy, audit, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "product-catalogue-authority",
+        "store-product",
+        "entitlement-effect",
+        "receipt",
+        "privacy-category",
+        "audit-event",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-688",
+        "USF-689"
+      ]
+    },
+    {
+      "issueId": "USF-690",
+      "modelId": "web-payments-payment-provider-posture",
+      "purpose": "Define web payment and payment-provider posture semantics for web payment capability, provider authority, privacy, audit, receipts, entitlements, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "web-payment-capability",
+        "payment-provider-authority",
+        "privacy-category",
+        "audit-event",
+        "receipt",
+        "entitlement",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-688",
+        "USF-689"
+      ]
+    },
+    {
+      "issueId": "USF-691",
+      "modelId": "revenue-analytics-privacy-constraints",
+      "purpose": "Define revenue analytics and privacy constraint semantics for revenue events, privacy categories, consent, aggregation, audit, telemetry suppression, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "revenue-event",
+        "privacy-category",
+        "consent-state",
+        "aggregation-policy",
+        "audit-event",
+        "telemetry-suppression",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-807"
+      ]
+    },
+    {
+      "issueId": "USF-692",
+      "modelId": "ads-proof-compliance-gate",
+      "purpose": "Define ads proof and compliance gate semantics for ads provider posture, consent, privacy, placement, regional restrictions, SDK registry, evidence freshness, validators, planted defects, and non-claims.",
+      "requiredMappings": [
+        "ads-provider-posture",
+        "consent-state",
+        "privacy-category",
+        "placement",
+        "regional-restriction",
+        "sdk-registry",
+        "evidence-freshness",
+        "planted-defect",
+        "proof"
+      ],
+      "requiresOwnerDecisionEvaluation": [
+        "USF-664",
+        "USF-669"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-AD-MOBILE-001",
+      "description": "Reject AdMob mobile ads semantics without ad unit, consent, ATT, UMP, child-directed treatment, privacy data, audit, telemetry, proof, and owner decision dependency mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-666"
+    },
+    {
+      "ruleId": "USF-AD-WEB-001",
+      "description": "Reject AdSense web ads semantics without web ad surface, consent, regional rule, privacy data, audit, telemetry, proof, and owner decision dependency mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-668"
+    },
+    {
+      "ruleId": "USF-AD-CONSENT-001",
+      "description": "Reject UMP or CMP ads consent semantics without consent request, update, denial, withdrawal, regional applicability, ATT interaction, audit, proof, and owner decision dependency mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-670"
+    },
+    {
+      "ruleId": "USF-AD-ATT-001",
+      "description": "Reject ATT-to-ads behaviour semantics without ATT status, consent state, personalised and non-personalised ads posture, ad loading, audit, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-671"
+    },
+    {
+      "ruleId": "USF-AD-PERSONALISATION-001",
+      "description": "Reject ads personalisation semantics without consent, ATT, regional restriction, child-directed treatment, user setting, audit, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-672"
+    },
+    {
+      "ruleId": "USF-AD-REGION-001",
+      "description": "Reject regional or child-directed ad treatment semantics without region, age posture, prohibited placement, consent, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-673"
+    },
+    {
+      "ruleId": "USF-AD-FREQUENCY-001",
+      "description": "Reject ad frequency or session semantics without session boundary, cap, pacing, consent, age posture, user experience, audit, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-682"
+    },
+    {
+      "ruleId": "USF-AD-FORMAT-001",
+      "description": "Reject rewarded, interstitial, banner, or native ad policy semantics without format, prohibited context, consent, reward, audit, telemetry, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-684"
+    },
+    {
+      "ruleId": "USF-MONETISATION-STORE-001",
+      "description": "Reject subscription or in-app purchase semantics without product catalogue authority, store product, entitlement, receipt, privacy, audit, proof, and owner decision dependency mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-687"
+    },
+    {
+      "ruleId": "USF-MONETISATION-WEB-PAYMENT-001",
+      "description": "Reject web payment semantics without payment capability, provider authority, privacy, audit, receipt, entitlement, proof, and owner decision dependency mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-690"
+    },
+    {
+      "ruleId": "USF-MONETISATION-REVENUE-001",
+      "description": "Reject revenue analytics semantics without revenue event, privacy category, consent, aggregation, audit, telemetry suppression, proof, and provider decision dependency mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-691"
+    },
+    {
+      "ruleId": "USF-ADS-PROOF-GATE-001",
+      "description": "Reject ads proof gate semantics without provider posture, consent, privacy, placement, regional restriction, SDK registry, evidence freshness, planted defect, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-692"
+    },
+    {
+      "ruleId": "USF-MONETISATION-001",
+      "description": "Reject monetisation behaviour without capability, consent, privacy, audit, telemetry, proof, dependency, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-662"
+    },
+    {
+      "ruleId": "USF-CLIENT-TELEMETRY-001",
+      "description": "Reject telemetry without capability, consent, privacy, provider mode, environment, redaction, evidence freshness, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-349"
+    },
+    {
+      "ruleId": "USF-AD-PLACEMENT-001",
+      "description": "Reject ad placements without approved taxonomy, capability, consent, privacy, frequency, audit, telemetry, proof, and non-claim mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-674"
+    },
+    {
+      "ruleId": "USF-AD-EVENT-001",
+      "description": "Reject ad event emission without consent, privacy, audit, telemetry suppression, placement, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-686"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "admob-mobile-ads-semantic-proof",
+      "issueId": "USF-666",
+      "description": "Future proof must show AdMob mobile ad unit, consent, ATT, UMP, child-directed treatment, privacy data, audit, telemetry, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "adsense-web-ads-semantic-proof",
+      "issueId": "USF-668",
+      "description": "Future proof must show AdSense web ad surface, consent, regional rule, privacy data, audit, telemetry, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "ump-cmp-ads-consent-semantic-proof",
+      "issueId": "USF-670",
+      "description": "Future proof must show consent request, update, denial, withdrawal, regional applicability, ATT interaction, audit, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "att-ads-behaviour-semantic-proof",
+      "issueId": "USF-671",
+      "description": "Future proof must show ATT status, consent state, personalised and non-personalised ads posture, ad loading permission, audit, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "ads-personalisation-semantic-proof",
+      "issueId": "USF-672",
+      "description": "Future proof must show consent, ATT, regional restrictions, child-directed treatment, user settings, audit, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "ads-regional-child-directed-semantic-proof",
+      "issueId": "USF-673",
+      "description": "Future proof must show region, age posture, child-directed treatment, prohibited placement, consent, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "ad-frequency-session-semantic-proof",
+      "issueId": "USF-682",
+      "description": "Future proof must show session boundary, frequency cap, pacing, consent, age posture, user experience, audit, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "ad-format-policy-semantic-proof",
+      "issueId": "USF-684",
+      "description": "Future proof must show allowed ad formats, prohibited contexts, consent, reward semantics, audit, telemetry, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "subscription-iap-posture-semantic-proof",
+      "issueId": "USF-687",
+      "description": "Future proof must show product catalogue authority, store product, entitlement effect, receipt, privacy, audit, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "web-payments-posture-semantic-proof",
+      "issueId": "USF-690",
+      "description": "Future proof must show web payment capability, provider authority, privacy, audit, receipt, entitlement, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "revenue-analytics-privacy-semantic-proof",
+      "issueId": "USF-691",
+      "description": "Future proof must show revenue event, privacy category, consent, aggregation, audit, telemetry suppression, provider decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "ads-proof-compliance-gate-semantic-proof",
+      "issueId": "USF-692",
+      "description": "Future proof must show ads provider posture, consent, privacy, placement, regional restriction, SDK registry, evidence freshness, planted defects, owner decision dependency, and non-claim mappings.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "monetisation-ad-placement-telemetry-semantic-proof",
+      "description": "Future proof must demonstrate that monetisation behaviours, client telemetry, ad placements, and ad events are semantically mapped and fail closed when required mappings are absent.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "monetisation, telemetry, ad placement, and ad event mappings exist for relevant capabilities",
+      "consent and privacy prerequisites are complete for relevant behaviours",
+      "validator requirements are implemented and selftested",
+      "planted-defect fixtures exist for missing monetisation, telemetry, ad placement, and ad event mappings",
+      "proof evidence exists for mapped and rejected cases",
+      "owner acceptance is recorded before any monetisation, ads, telemetry, provider, production, product UI, or readiness claim"
+    ]
+  },
+  "nonClaims": {
+    "monetisationReady": false,
+    "adsComplianceReady": false,
+    "adSdkReady": false,
+    "adServingReady": false,
+    "adInventoryReady": false,
+    "analyticsReady": false,
+    "observabilityReady": false,
+    "telemetryProviderReady": false,
+    "revenueReportingReady": false,
+    "productUiReady": false,
+    "implementationReady": false,
+    "storeReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "legalConclusion": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-662",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "monetisationCapabilityClassification defines ads, subscriptions, in-app products, web payments, and revenue analytics classifications."
+    },
+    {
+      "issueId": "USF-349",
+      "criterion": "Telemetry events map to capability and privacy semantics.",
+      "status": "satisfied",
+      "evidence": "clientTelemetryEnvelope requires capability, event or measurement, consent state, privacy category, provider mode, environment, redaction, evidence freshness, and proof mappings."
+    },
+    {
+      "issueId": "USF-349",
+      "criterion": "Consent-aware suppression is defined.",
+      "status": "satisfied",
+      "evidence": "clientTelemetryEnvelope.consentAwareSuppression defines fail-closed suppression."
+    },
+    {
+      "issueId": "USF-674",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "adPlacementTaxonomy defines banner, interstitial, rewarded, and native placement categories."
+    },
+    {
+      "issueId": "USF-686",
+      "criterion": "Semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "adEventAuditAndTelemetryModel defines impression, click, and reward event mappings."
+    },
+    {
+      "issueId": "USF-662",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-MONETISATION-001 and monetisation-ad-placement-telemetry-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-349",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CLIENT-TELEMETRY-001 and monetisation-ad-placement-telemetry-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-674",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-AD-PLACEMENT-001 and monetisation-ad-placement-telemetry-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-686",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-AD-EVENT-001 and monetisation-ad-placement-telemetry-semantic-proof are recorded."
+    },
+    {
+      "issueId": "USF-662",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-349",
+      "criterion": "USF-native references resolve and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities and nonClaims preserve no observability readiness, compliance readiness, or production readiness claim."
+    },
+    {
+      "issueId": "USF-674",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    },
+    {
+      "issueId": "USF-686",
+      "criterion": "USF-native references resolve, dependencies are linked, implementation requires applicable gate evidence, and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, implementationGate, and nonClaims record dependencies, block implementation, and preserve non-claims."
+    }
+  ]
+}

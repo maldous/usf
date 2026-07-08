@@ -1,0 +1,215 @@
+{
+  "id": "usf.repository-optimisation-realisation-semantics",
+  "title": "Repository Optimisation Realisation Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact converts repository optimisation planning scope decisions into explicit USF repository policy decisions. It does not authorise runtime product implementation, external provider mutation, deployment, store submission, staging readiness, production readiness, or live-provider readiness.",
+  "coveredIssueIds": [
+    "USF-351",
+    "USF-353",
+    "USF-357",
+    "USF-358",
+    "USF-360",
+    "USF-362",
+    "USF-364",
+    "USF-475",
+    "USF-477",
+    "USF-478",
+    "USF-479",
+    "USF-539",
+    "USF-544",
+    "USF-547",
+    "USF-549",
+    "USF-557",
+    "USF-559",
+    "USF-563",
+    "USF-564",
+    "USF-565",
+    "USF-566",
+    "USF-587",
+    "USF-590",
+    "USF-667",
+    "USF-749",
+    "USF-750",
+    "USF-751",
+    "USF-752",
+    "USF-753",
+    "USF-754",
+    "USF-755",
+    "USF-763",
+    "USF-765",
+    "USF-766",
+    "USF-767",
+    "USF-768",
+    "USF-813",
+    "USF-982"
+  ],
+  "sourceAuthorities": [
+    "docs/architecture/repository-layout-and-fixture-governance.json",
+    "docs/architecture/repository-compose-optimisation-governance.json",
+    "docs/architecture/repository-compose-teardown-safety-governance.json",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "docs/architecture/repository-environment-ladder-governance.json",
+    "docs/architecture/repository-test-suite-governance.json",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+    "docs/architecture/repository-ci-optimisation-governance.json",
+    "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+    "docs/architecture/repository-build-package-and-contract-test-governance.json",
+    "docs/architecture/pre-ui-repository-readiness-realisation.json"
+  ],
+  "realisedDecisions": [
+    {
+      "decisionId": "repository-structure-policy",
+      "issueIds": [
+        "USF-360"
+      ],
+      "decision": "Keep the current top-level repository structure for the next implementation phase. Do not move authority artefacts, validators, evidence, generated outputs, tests, or tooling merely for tidiness. Clarify ownership through governance, manifests, and command routing before any future move.",
+      "implementationBoundary": "No directory move is authorised by this decision."
+    },
+    {
+      "decisionId": "glob-scope-policy",
+      "issueIds": [
+        "USF-753"
+      ],
+      "decision": "Default repository scanning must be manifest-first or explicitly scoped. Broad recursive scans must exclude generated outputs, dependency folders, build artifacts, evidence payloads, and cache directories unless the command purpose explicitly requires them.",
+      "implementationBoundary": "Future validator changes must preserve fail-closed semantics when a scoped manifest is missing or stale."
+    },
+    {
+      "decisionId": "json-load-reuse-policy",
+      "issueIds": [
+        "USF-752"
+      ],
+      "decision": "Validators and aggregate commands must prefer per-run JSON load reuse for foundation catalogues, registries, manifests, and schema documents. Cache reuse is process-local, content-addressed where practical, and invalidated by path, mtime, size, or hash changes.",
+      "implementationBoundary": "No cross-run correctness cache may satisfy authority checks without revalidation of source content identity."
+    },
+    {
+      "decisionId": "file-io-hot-path-policy",
+      "issueIds": [
+        "USF-751"
+      ],
+      "decision": "File IO hot paths must read declared inputs once per command phase where practical, avoid repeated full-repository walks, and use explicit inventories for generated, evidence, and fixture trees.",
+      "implementationBoundary": "Optimisation must not skip authority files or hide missing-evidence failures."
+    },
+    {
+      "decisionId": "exhaustive-timing-option-evaluation-policy",
+      "issueIds": [
+        "USF-475",
+        "USF-477",
+        "USF-478",
+        "USF-479",
+        "USF-539",
+        "USF-544",
+        "USF-547",
+        "USF-549",
+        "USF-557",
+        "USF-559",
+        "USF-563",
+        "USF-564",
+        "USF-565",
+        "USF-566",
+        "USF-667",
+        "USF-749",
+        "USF-750",
+        "USF-751",
+        "USF-752",
+        "USF-753",
+        "USF-754",
+        "USF-755",
+        "USF-763",
+        "USF-765",
+        "USF-766",
+        "USF-767",
+        "USF-768"
+      ],
+      "decision": "All timing options are in scope for consideration. This includes Compose profile minimisation, Testcontainers substitution trials, in-memory-safe routing, service-specific proof harnesses, warm service reuse, reset-cost reduction, dynamic or isolated ports, test sharding, test parallelisation, affected-test selection, mandatory-test selection, flake detection, timing reports, incremental validation, aggregate command manifests, cached and affected-only validation, JSON parse reuse, path and glob pruning, large-artifact avoidance, screenshot capture reduction, browser-phase profiling, network-free defaults, package-store caching, remote-cache evaluation, task-graph tooling evaluation, TypeScript project references, incremental typecheck, lint/typecheck partitioning, Docker layer caching, Compose image-build caching, CI timing dashboards, CI performance budgets, and per-PR timing reporting. Evaluation scope is explicit: no timing option is excluded from analysis.",
+      "implementationBoundary": "Evaluation scope is not adoption. A timing option may become default only after before-and-after measurement, serial-versus-optimised equivalence where applicable, provider-mode and environment preservation, evidence-retention preservation, planted-defect or negative-control preservation, cache invalidation proof, and fail-closed fallback on ambiguity."
+    },
+    {
+      "decisionId": "docker-and-compose-startup-policy",
+      "issueIds": [
+        "USF-357",
+        "USF-590",
+        "USF-766"
+      ],
+      "decision": "Compose startup defaults to the smallest profile that proves the requested change class. Heavy provider services such as LocalStack, MinIO, Keycloak, Postgres, and observability stacks are profile-gated and start only when the test or proof obligation requires them.",
+      "implementationBoundary": "Profile-gated omission is never readiness evidence for omitted services."
+    },
+    {
+      "decisionId": "testcontainers-comparative-timing-policy",
+      "issueIds": [
+        "USF-587",
+        "USF-590"
+      ],
+      "decision": "Testcontainers is in scope as a timing-optimisation candidate for selected provider and service-specific checks. Compose remains the canonical service-backed proof path until side-by-side timing, reliability, provider-mode, evidence-preservation, and cleanup-equivalence proof shows same-or-stronger coverage. The comparative lane must measure startup, teardown, reset, isolation, and flake behaviour against current catalogue-governed Compose profiles before any canonical substitution.",
+      "implementationBoundary": "This decision authorises comparative timing work only. It does not adopt Testcontainers as canonical, remove Compose obligations, satisfy omitted service coverage, or claim a timing improvement without measured evidence."
+    },
+    {
+      "decisionId": "network-dependency-policy",
+      "issueIds": [
+        "USF-767"
+      ],
+      "decision": "Default local validation and proof commands must avoid network dependency except when the command purpose is explicitly external-provider, dependency-install, or release-proof work. Network-dependent steps require command labelling and retained evidence of provider mode.",
+      "implementationBoundary": "Hermetic proof must not be upgraded to live-external-provider proof."
+    },
+    {
+      "decisionId": "screenshot-generation-policy",
+      "issueIds": [
+        "USF-768"
+      ],
+      "decision": "Screenshot generation is bounded to explicit machine-QA and proof-cockpit obligations. Screenshots must be content-addressed or manifest-listed where retained, and must not be generated by default for non-visual semantic or validator work.",
+      "implementationBoundary": "A screenshot is generated report evidence and does not override raw evidence or semantic authority."
+    },
+    {
+      "decisionId": "artifact-promotion-policy",
+      "issueIds": [
+        "USF-358",
+        "USF-982"
+      ],
+      "decision": "Artifact promotion uses content-addressed manifests, source command identity, provider mode, environment class, freshness metadata, and explicit invalidation rules. Promotion between Dev, Test, Compose, and Staging is allowed only when the manifest records the exact evidence boundary and non-claims.",
+      "implementationBoundary": "Artifact reuse must fail closed on missing, stale, wrong-commit, wrong-provider-mode, or generated-only evidence."
+    },
+    {
+      "decisionId": "environment-ladder-policy",
+      "issueIds": [
+        "USF-353"
+      ],
+      "decision": "The environment ladder is fixed as Dev, Test, Compose, and Staging, with provider mode recorded separately from environment. Dev favours fast local feedback, Test requires governed validation, Compose proves service integration where needed, and Staging requires explicit staging evidence. No environment upgrades provider mode by implication.",
+      "implementationBoundary": "Staging-shaped evidence is not production-live evidence."
+    },
+    {
+      "decisionId": "pre-ui-owner-decision",
+      "issueIds": [
+        "USF-364",
+        "USF-813"
+      ],
+      "decision": "Bounded local app-surface implementation may begin after the semantic and repository gates closed in this pass, provided it remains local implementation work and does not claim store, CDN, privacy compliance, external review, staging, live-provider, or production readiness. Release, deployment, store, privacy, and external review work require their own evidence gates.",
+      "implementationBoundary": "This authorises no external provider mutation and no readiness claim."
+    },
+    {
+      "decisionId": "programme-closure-policy",
+      "issueIds": [
+        "USF-351",
+        "USF-362"
+      ],
+      "decision": "Repository optimisation planning is realised as explicit operating policy for the next implementation phase. Remaining optimisation is continuous improvement, not an evidence requirement to bounded local app-surface implementation unless it changes authority, validators, evidence, commands, provider mode, or environment semantics.",
+      "implementationBoundary": "Continuous optimisation must not weaken validators, proof evidence, or non-claims."
+    }
+  ],
+  "validationEvidence": [
+    "The bounded test-readiness selftest passed.",
+    "The validate-spec selftest passed with zero findings.",
+    "Strict JSON parse passed for the foundational catalogues during this pass.",
+    "Strict JSON parse passed for this artefact."
+  ],
+  "globalNonClaims": [
+    "No runtime product implementation is created by this artefact.",
+    "No provider account setup is authorised by this artefact.",
+    "No credential setup is authorised by this artefact.",
+    "No deployment is authorised by this artefact.",
+    "No store submission is authorised by this artefact.",
+    "No staging readiness is claimed by this artefact.",
+    "No live-provider readiness is claimed by this artefact.",
+    "No production readiness is claimed by this artefact."
+  ]
+}

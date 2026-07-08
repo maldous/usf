@@ -1,0 +1,735 @@
+{
+  "id": "repository-aggregate-validator-command-manifest-governance",
+  "title": "Repository aggregate validator command manifest governance",
+  "purpose": "Define discovery-only manifest and semantic command-instance coverage for aggregate validator command surfaces before any aggregate orchestrator or canonical aggregate command change.",
+  "authorityBoundary": {
+    "semanticAuthorityCreated": false,
+    "commandCreated": false,
+    "commandRenamed": false,
+    "makefileChanged": false,
+    "packageScriptChanged": false,
+    "workflowChanged": false,
+    "validatorCodeCreated": false,
+    "readinessClaimMade": false,
+    "notes": "This artifact defines manifest design expectations only. Existing compatibility commands remain compatibility commands and generated reports remain lower authority."
+  },
+  "sourceReferences": [
+    "package.json",
+    "Makefile",
+    ".github/workflows/",
+    "spec/instances/command/",
+    "tools/",
+    "docs/architecture/repository-command-surface-target-governance.json",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/no-regression-proof-before-after-validator-equivalence.md",
+    "docs/architecture/current-state-foundation-authority-index.md"
+  ],
+  "currentAggregateValidatorCommandSurfaces": {
+    "stateInspected": true,
+    "packageScripts": [
+      {
+        "name": "compose:check-generated",
+        "invocation": "python3 tools/generate-compose/generate-compose.py all --check && python3 tools/validate-compose/validate-compose.py generated --json"
+      },
+      {
+        "name": "compose:config",
+        "invocation": "pnpm compose:check-generated && docker compose -f compose/compose.yaml config --quiet"
+      },
+      {
+        "name": "compose:dev",
+        "invocation": "docker compose -f compose/compose.dev.generated.yaml config --quiet"
+      },
+      {
+        "name": "compose:generate",
+        "invocation": "python3 tools/generate-compose/generate-compose.py all"
+      },
+      {
+        "name": "compose:hardening",
+        "invocation": "python3 tools/validate-compose/validate-compose.py hardening --json"
+      },
+      {
+        "name": "compose:policy",
+        "invocation": "python3 tools/validate-compose/validate-compose.py policy --json"
+      },
+      {
+        "name": "compose:ports",
+        "invocation": "python3 tools/validate-compose/check-compose-ports.py all --json"
+      },
+      {
+        "name": "compose:ports:dev",
+        "invocation": "python3 tools/validate-compose/check-compose-ports.py dev --json"
+      },
+      {
+        "name": "compose:ports:profiles",
+        "invocation": "python3 tools/validate-compose/check-compose-ports.py profiles --json"
+      },
+      {
+        "name": "compose:ports:staging",
+        "invocation": "python3 tools/validate-compose/check-compose-ports.py staging --json"
+      },
+      {
+        "name": "compose:ports:test",
+        "invocation": "python3 tools/validate-compose/check-compose-ports.py test --json"
+      },
+      {
+        "name": "compose:production",
+        "invocation": "docker compose -f compose/compose.production.generated.yaml config --quiet && python3 tools/validate-compose/validate-compose.py policy --json"
+      },
+      {
+        "name": "compose:security",
+        "invocation": "python3 tools/validate-compose/validate-compose.py security --json"
+      },
+      {
+        "name": "compose:smoke",
+        "invocation": "bash -lc 'pnpm compose:check-generated && pnpm compose:ports:dev && docker compose -f compose/compose.yaml up -d --wait --wait-timeout 240; status=$?; docker compose -f compose/compose.yaml down --remove-orphans; exit $status'"
+      },
+      {
+        "name": "compose:staging",
+        "invocation": "docker compose -f compose/compose.staging.generated.yaml config --quiet"
+      },
+      {
+        "name": "compose:test",
+        "invocation": "docker compose -f compose/compose.test.generated.yaml config --quiet"
+      },
+      {
+        "name": "compose:validate",
+        "invocation": "python3 tools/validate-compose/validate-compose.py all --json"
+      },
+      {
+        "name": "enterprise:validate",
+        "invocation": "python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      },
+      {
+        "name": "foundation-substrate-closure:selftest",
+        "invocation": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py selftest --json"
+      },
+      {
+        "name": "foundation-substrate-closure:validate",
+        "invocation": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json"
+      },
+      {
+        "name": "non-ui-completeness:selftest",
+        "invocation": "python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py selftest --json"
+      },
+      {
+        "name": "non-ui-completeness:validate",
+        "invocation": "python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py all --json"
+      },
+      {
+        "name": "parity",
+        "invocation": "python3 tools/validate-parity/validate-parity.py all --json && python3 tools/validate-parity/validate-db.py all --json && python3 tools/validate-parity/validate-authz.py all --json && python3 tools/validate-parity/validate-audit.py all --json && python3 tools/validate-parity/validate-config.py all --json && python3 tools/validate-parity/validate-files.py all --json && python3 tools/validate-parity/validate-auth.py all --json && python3 tools/validate-parity/validate-jobs.py all --json && python3 tools/validate-parity/validate-notify.py all --json && python3 tools/validate-parity/validate-api.py all --json && python3 tools/validate-parity/validate-providers.py all --json && python3 tools/validate-parity/validate-observability.py all --json && python3 tools/validate-parity/validate-guardrails.py all --json && python3 tools/validate-parity/validate-bulk.py all --json && python3 tools/validate-parity/validate-search.py all --json && python3 tools/validate-parity/validate-resources.py all --json && python3 tools/validate-parity/validate-domain-depth.py all --json && python3 tools/validate-compose/validate-compose.py all --json && python3 tools/validate-runtime/validate-runtime.py all --json && python3 tools/validate-enterprise/validate-enterprise.py all --json"
+      },
+      {
+        "name": "proof-cockpit:evidence",
+        "invocation": "node apps/staging-proof-cockpit/src/machine-qa.mjs"
+      },
+      {
+        "name": "proof-cockpit:evidence-bundle",
+        "invocation": "node apps/staging-proof-cockpit/src/machine-qa.mjs"
+      },
+      {
+        "name": "proof-cockpit:import-check",
+        "invocation": "node apps/staging-proof-cockpit/src/machine-qa.mjs -- --full"
+      },
+      {
+        "name": "proof-cockpit:machine-qa",
+        "invocation": "node apps/staging-proof-cockpit/src/machine-qa.mjs"
+      },
+      {
+        "name": "proof-cockpit:playwright",
+        "invocation": "node apps/staging-proof-cockpit/src/machine-qa.mjs"
+      },
+      {
+        "name": "proof-cockpit:promote",
+        "invocation": "node apps/staging-proof-cockpit/src/promote.mjs"
+      },
+      {
+        "name": "proof-cockpit:qa-report",
+        "invocation": "node apps/staging-proof-cockpit/src/machine-qa.mjs"
+      },
+      {
+        "name": "proof-cockpit:selftest",
+        "invocation": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py selftest --json"
+      },
+      {
+        "name": "proof-cockpit:serve",
+        "invocation": "node apps/staging-proof-cockpit/src/server.mjs"
+      },
+      {
+        "name": "proof-cockpit:smoke",
+        "invocation": "node apps/staging-proof-cockpit/src/smoke.mjs"
+      },
+      {
+        "name": "proof-cockpit:validate",
+        "invocation": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json"
+      },
+      {
+        "name": "proof:analytics:clickhouse",
+        "invocation": "tsx packages/proof/src/clickhouse-composed-proof.ts"
+      },
+      {
+        "name": "proof:api",
+        "invocation": "tsx packages/proof/src/api-contracts-proof.ts"
+      },
+      {
+        "name": "proof:api:graphql-generated-client",
+        "invocation": "tsx packages/proof/src/graphql-generated-client-execution-proof.ts"
+      },
+      {
+        "name": "proof:assurance:sonarqube",
+        "invocation": "tsx packages/proof/src/sonarqube-composed-proof.ts"
+      },
+      {
+        "name": "proof:audit",
+        "invocation": "tsx packages/proof/src/audit-evidence-proof.ts"
+      },
+      {
+        "name": "proof:auth",
+        "invocation": "tsx packages/proof/src/auth-identity-proof.ts"
+      },
+      {
+        "name": "proof:authz",
+        "invocation": "tsx packages/proof/src/authz-rls-consistency-proof.ts"
+      },
+      {
+        "name": "proof:backup:operations",
+        "invocation": "tsx packages/proof/src/backup-restore-operations-execution-proof.ts"
+      },
+      {
+        "name": "proof:backup:pgbackrest",
+        "invocation": "tsx packages/proof/src/pgbackrest-configured-proof.ts"
+      },
+      {
+        "name": "proof:bootstrap",
+        "invocation": "tsx packages/proof/src/bootstrap-proof.ts"
+      },
+      {
+        "name": "proof:bulk",
+        "invocation": "tsx packages/proof/src/import-export-bulk-proof.ts"
+      },
+      {
+        "name": "proof:cache:redis",
+        "invocation": "tsx packages/proof/src/redis-composed-proof.ts"
+      },
+      {
+        "name": "proof:config",
+        "invocation": "tsx packages/proof/src/config-secrets-proof.ts"
+      },
+      {
+        "name": "proof:db",
+        "invocation": "tsx packages/proof/src/db-rls-isolation-proof.ts"
+      },
+      {
+        "name": "proof:external-http-behaviour",
+        "invocation": "tsx packages/proof/src/external-http-behaviour-proof.ts"
+      },
+      {
+        "name": "proof:external-http-cache",
+        "invocation": "tsx packages/proof/src/external-http-cache-proof.ts"
+      },
+      {
+        "name": "proof:external-http-observability",
+        "invocation": "tsx packages/proof/src/external-http-observability-proof.ts"
+      },
+      {
+        "name": "proof:files",
+        "invocation": "tsx packages/proof/src/files-storage-proof.ts"
+      },
+      {
+        "name": "proof:guardrails",
+        "invocation": "tsx packages/proof/src/rate-limits-abuse-controls-proof.ts"
+      },
+      {
+        "name": "proof:jobs",
+        "invocation": "tsx packages/proof/src/jobs-workflows-proof.ts"
+      },
+      {
+        "name": "proof:localstack",
+        "invocation": "tsx packages/proof/src/localstack-composed-proof.ts"
+      },
+      {
+        "name": "proof:mock-substrate",
+        "invocation": "tsx packages/proof/src/mock-provider-substrate-proof.ts"
+      },
+      {
+        "name": "proof:notify",
+        "invocation": "tsx packages/proof/src/notifications-messaging-proof.ts"
+      },
+      {
+        "name": "proof:observability",
+        "invocation": "tsx packages/proof/src/observability-telemetry-proof.ts"
+      },
+      {
+        "name": "proof:observability:browser-telemetry",
+        "invocation": "tsx packages/proof/src/browser-telemetry-faro-proof.ts"
+      },
+      {
+        "name": "proof:observability:operations-execution",
+        "invocation": "tsx packages/proof/src/observability-operations-execution-proof.ts"
+      },
+      {
+        "name": "proof:observability:sentry",
+        "invocation": "tsx packages/proof/src/sentry-sdk-envelope-proof.ts"
+      },
+      {
+        "name": "proof:operator-access",
+        "invocation": "tsx packages/proof/src/operator-access-proof.ts"
+      },
+      {
+        "name": "proof:operator-lifecycle",
+        "invocation": "tsx packages/proof/src/operator-access-lifecycle-proof.ts"
+      },
+      {
+        "name": "proof:pre-staging-external-smoke",
+        "invocation": "tsx packages/proof/src/pre-staging-external-smoke-proof.ts"
+      },
+      {
+        "name": "proof:proof-review-public",
+        "invocation": "tsx packages/proof/src/proof-review-public-proof.ts"
+      },
+      {
+        "name": "proof:providers",
+        "invocation": "tsx packages/proof/src/provider-adapters-proof.ts"
+      },
+      {
+        "name": "proof:public-fqdn",
+        "invocation": "tsx packages/proof/src/public-fqdn-proof.ts all"
+      },
+      {
+        "name": "proof:public-fqdn:production",
+        "invocation": "tsx packages/proof/src/public-fqdn-proof.ts production"
+      },
+      {
+        "name": "proof:public-fqdn:staging",
+        "invocation": "tsx packages/proof/src/public-fqdn-proof.ts staging"
+      },
+      {
+        "name": "proof:public-origin",
+        "invocation": "tsx packages/proof/src/public-proof-origin-proof.ts"
+      },
+      {
+        "name": "proof:public-route",
+        "invocation": "tsx packages/proof/src/public-route-telemetry-proof.ts all"
+      },
+      {
+        "name": "proof:public-route:production",
+        "invocation": "tsx packages/proof/src/public-route-telemetry-proof.ts production"
+      },
+      {
+        "name": "proof:public-route:staging",
+        "invocation": "tsx packages/proof/src/public-route-telemetry-proof.ts staging"
+      },
+      {
+        "name": "proof:resources",
+        "invocation": "tsx packages/proof/src/resource-lifecycle-proof.ts"
+      },
+      {
+        "name": "proof:scanner:clamav",
+        "invocation": "tsx packages/proof/src/clamav-composed-proof.ts"
+      },
+      {
+        "name": "proof:search",
+        "invocation": "tsx packages/proof/src/search-indexing-proof.ts"
+      },
+      {
+        "name": "proof:search:meilisearch",
+        "invocation": "tsx packages/proof/src/meilisearch-composed-proof.ts"
+      },
+      {
+        "name": "proof:wiremock",
+        "invocation": "tsx packages/proof/src/wiremock-composed-proof.ts"
+      },
+      {
+        "name": "proof:workflow:windmill",
+        "invocation": "tsx packages/proof/src/windmill-configured-proof.ts"
+      },
+      {
+        "name": "providers-proof",
+        "invocation": "pnpm proof:providers"
+      },
+      {
+        "name": "public-fqdn:selftest",
+        "invocation": "python3 tools/validate-public-fqdn/validate-public-fqdn.py selftest --json"
+      },
+      {
+        "name": "public-fqdn:validate",
+        "invocation": "python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json"
+      },
+      {
+        "name": "repo:validate",
+        "invocation": "python3 tools/validate-spec/validate-spec.py all --json && python3 tools/validate-bootstrap/validate-bootstrap.py all --json && python3 tools/validate-runtime/validate-runtime.py all --json && python3 tools/validate-enterprise/validate-enterprise.py all --json && python3 tools/validate-test-readiness/validate-test-readiness.py all --json && python3 tools/validate-public-fqdn/validate-public-fqdn.py all --json && python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json && python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json && python3 tools/validate-non-ui-completeness/validate-non-ui-completeness.py all --json"
+      },
+      {
+        "name": "runtime:proof",
+        "invocation": "tsx packages/proof/src/runtime-application-proof.ts all"
+      },
+      {
+        "name": "runtime:proof:compose",
+        "invocation": "tsx packages/proof/src/runtime-application-proof.ts compose"
+      },
+      {
+        "name": "runtime:proof:in-memory",
+        "invocation": "tsx packages/proof/src/runtime-application-proof.ts in-memory"
+      },
+      {
+        "name": "runtime:validate",
+        "invocation": "python3 tools/validate-runtime/validate-runtime.py all --json"
+      },
+      {
+        "name": "test",
+        "invocation": "vitest run"
+      },
+      {
+        "name": "test-compose",
+        "invocation": "pnpm compose:validate && pnpm compose:dev && pnpm compose:test && pnpm compose:staging && pnpm compose:production && pnpm compose:smoke"
+      },
+      {
+        "name": "test-readiness",
+        "invocation": "pnpm test-readiness:validate && pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration && pnpm test-readiness:coverage && pnpm test-readiness:assurance"
+      },
+      {
+        "name": "test-readiness:assurance",
+        "invocation": "pnpm proof:assurance:sonarqube"
+      },
+      {
+        "name": "test-readiness:composed",
+        "invocation": "pnpm test-readiness:semantic && pnpm test-readiness:fixtures && pnpm test-readiness:integration"
+      },
+      {
+        "name": "test-readiness:coverage",
+        "invocation": "pnpm test:coverage"
+      },
+      {
+        "name": "test-readiness:fixtures",
+        "invocation": "tsx packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
+      },
+      {
+        "name": "test-readiness:integration",
+        "invocation": "tsx packages/proof/src/composed-service-integration-matrix-proof.ts"
+      },
+      {
+        "name": "test-readiness:selftest",
+        "invocation": "python3 tools/validate-test-readiness/validate-test-readiness.py selftest --json"
+      },
+      {
+        "name": "test-readiness:semantic",
+        "invocation": "tsx packages/proof/src/composed-semantic-test-harness-proof.ts"
+      },
+      {
+        "name": "test-readiness:validate",
+        "invocation": "python3 tools/validate-test-readiness/validate-test-readiness.py all --json"
+      },
+      {
+        "name": "test:coverage",
+        "invocation": "vitest run --coverage"
+      },
+      {
+        "name": "validate-bootstrap",
+        "invocation": "python3 tools/validate-bootstrap/validate-bootstrap.py all --json"
+      },
+      {
+        "name": "validate-spec",
+        "invocation": "python3 tools/validate-spec/validate-spec.py all --json"
+      },
+      {
+        "name": "validate-spec:selftest",
+        "invocation": "python3 tools/validate-spec/validate-spec.py selftest --json"
+      }
+    ],
+    "makeTargets": [
+      "foundation",
+      "dev-ready",
+      "test-ready",
+      "test",
+      "test-composed",
+      "test-coverage",
+      "test-assurance",
+      "test-readiness-validate",
+      "test-readiness-semantic",
+      "test-readiness-fixtures",
+      "test-readiness-integration",
+      "test-readiness-coverage",
+      "test-readiness-selftest",
+      "proof-cockpit-validate",
+      "proof-cockpit-selftest",
+      "foundation-substrate-closure-validate",
+      "foundation-substrate-closure-selftest",
+      "public-fqdn-validate",
+      "public-fqdn-selftest",
+      "public-proof-origin",
+      "public-fqdn-proof",
+      "public-fqdn-proof-staging",
+      "public-fqdn-proof-production",
+      "public-route-proof",
+      "public-route-proof-staging",
+      "public-route-proof-production",
+      "proof-review-public",
+      "proof-review-up",
+      "proof-review-down",
+      "proof-review-repin",
+      "external-http-behaviour-proof",
+      "external-http-cache-proof",
+      "external-http-observability-proof",
+      "pre-staging-external-smoke-proof",
+      "validate-foundation",
+      "validate-coverage",
+      "validate-assurance",
+      "validate-evidence",
+      "validate-bootstrap",
+      "assurance",
+      "runtime-proof",
+      "runtime-proof-in-memory",
+      "runtime-proof-compose",
+      "sonar-zero-issue-proof",
+      "sonarqube-assurance-proof",
+      "runtime-validate",
+      "enterprise-validate",
+      "compose-generate",
+      "compose-validate",
+      "compose-policy",
+      "compose-check-generated",
+      "compose-dev",
+      "compose-test",
+      "compose-staging",
+      "compose-production",
+      "compose-ports",
+      "compose-ports-dev",
+      "compose-ports-test",
+      "compose-ports-staging",
+      "compose-ports-profiles",
+      "compose-hardening",
+      "compose-security",
+      "test-compose",
+      "parity",
+      "db-proof",
+      "authz-proof",
+      "audit-proof",
+      "config-proof",
+      "auth-proof",
+      "jobs-proof",
+      "notify-proof",
+      "api-proof",
+      "api-graphql-generated-client-proof",
+      "providers-proof",
+      "observability-proof",
+      "observability-browser-telemetry-proof",
+      "observability-operations-execution-proof",
+      "operator-lifecycle-proof",
+      "sentry-observability-proof",
+      "guardrails-proof",
+      "bulk-proof",
+      "search-proof",
+      "search-proof-meilisearch",
+      "scanner-proof-clamav",
+      "clickhouse-analytics-proof",
+      "pgbackrest-proof",
+      "backup-operations-proof",
+      "windmill-workflow-proof",
+      "wiremock-proof",
+      "localstack-proof",
+      "redis-cache-proof",
+      "mock-substrate-proof",
+      "resources-proof",
+      "files-proof",
+      "verify"
+    ],
+    "workflowFiles": [
+      ".github/workflows/proof-anchor.yml",
+      ".github/workflows/validate-spec.yml"
+    ],
+    "semanticCommandInstances": [
+      "spec/instances/command/authentication-slice-proof.json",
+      "spec/instances/command/proof-review-down.json",
+      "spec/instances/command/proof-review-repin.json",
+      "spec/instances/command/proof-review-up.json",
+      "spec/instances/command/validate-bootstrap-all.json",
+      "spec/instances/command/validate-spec-all.json",
+      "spec/instances/command/validate-spec-evidence.json",
+      "spec/instances/command/validate-spec-pr.json",
+      "spec/instances/command/validate-spec-real-instances.json",
+      "spec/instances/command/validate-spec-selftest.json"
+    ],
+    "validatorToolDirectories": [
+      "tools/validate-bootstrap",
+      "tools/validate-ci-guardrails",
+      "tools/validate-compose",
+      "tools/validate-enterprise",
+      "tools/validate-foundation-substrate-closure",
+      "tools/validate-non-ui-completeness",
+      "tools/validate-parity",
+      "tools/validate-proof-cockpit-acceptance",
+      "tools/validate-public-fqdn",
+      "tools/validate-react-non-ui-parity",
+      "tools/validate-runtime",
+      "tools/validate-spec",
+      "tools/validate-test-readiness"
+    ],
+    "observation": "Current aggregate validation is represented by package-script and Make-target chaining plus semantic command instances and CI workflow invocations, not by a first-class aggregate child-command manifest."
+  },
+  "missingSemanticCommandInstanceOrManifestFields": [
+    "Stable command id distinct from compatibility alias text.",
+    "Parent aggregate command id or null for root commands.",
+    "Child command membership with ordering or declared parallel safety.",
+    "Invocation string and command surface owner.",
+    "Input path classes and source manifests.",
+    "Side-effect class and generated-output paths.",
+    "Provider mode and environment relevance.",
+    "Expected raw output format and generated report boundaries.",
+    "Selftest and planted-defect relationship.",
+    "Timing fields and cost observation hooks.",
+    "Cacheability and invalidation inputs.",
+    "Raw child-output retention requirement.",
+    "Fallback rule when membership, cache, or affected-only scope is ambiguous."
+  ],
+  "candidateCommandManifestShape": {
+    "format": "strict JSON if materialised in the future",
+    "topLevelFields": [
+      "manifestId",
+      "manifestVersion",
+      "authorityReferences",
+      "generatedReportAuthorityBoundary",
+      "commands",
+      "aggregates",
+      "validationExpectations",
+      "retentionExpectations",
+      "cacheReusePreconditions",
+      "nonClaims"
+    ],
+    "commandFields": [
+      "commandId",
+      "displayName",
+      "compatibilityAliases",
+      "parentAggregateIds",
+      "invocation",
+      "owner",
+      "inputClasses",
+      "sideEffectClass",
+      "providerModeRelevance",
+      "environmentRelevance",
+      "expectedOutputFormat",
+      "rawOutputRetention",
+      "generatedReportOutputs",
+      "selftestMode",
+      "plantedDefectInputs",
+      "timingFields",
+      "cacheability",
+      "fallbackOnAmbiguity"
+    ],
+    "aggregateFields": [
+      "aggregateId",
+      "children",
+      "orderingRule",
+      "parallelSafetyRule",
+      "membershipHashInputs",
+      "beforeAfterEquivalenceRequirement",
+      "rawChildOutputRetentionRequirement"
+    ]
+  },
+  "rawOutputRetentionAndGeneratedReportBoundary": {
+    "rawChildOutputRetention": [
+      "Aggregate validation must preserve child command identity, exit status, raw output or raw output reference, timing observation if captured, and generated report references separately.",
+      "Raw child output or retained reference is the audit trail for aggregate summaries and must not be replaced by a generated summary alone."
+    ],
+    "generatedReportNonAuthority": [
+      "Generated aggregate summaries are generated reports and remain lower authority than semantic definitions, ADRs, validator rules, runtime proof evidence, and source implementation.",
+      "A generated aggregate pass does not define intended behaviour and cannot upgrade provider mode, environment, staging, production, compliance, or readiness claims."
+    ]
+  },
+  "deduplicationAndCacheReusePreconditions": [
+    "Child command membership must be complete and hashed before deduplicating work.",
+    "Cache keys must include command id, invocation, package manager and lockfile where relevant, input file hashes, semantic catalogue hashes, schema lifecycle state, fixture and planted-defect inputs, provider mode, environment relevance, and generated-output source manifests.",
+    "Deduplication must preserve raw child-output retention and diagnostics for each aggregate parent that consumed the child result.",
+    "Affected-only or cached runs must fall back to full validation on unknown input ownership, missing hash, stale output, changed command membership, or missing planted-defect coverage.",
+    "Compatibility aliases must not be over-canonicalized into new readiness claims."
+  ],
+  "validationAndPlantedDefectExpectations": [
+    "Future implementation must parse any manifest as strict JSON if machine-readable.",
+    "Future implementation must run affected validator selftests and all modes for changed aggregate membership.",
+    "Future implementation must compare aggregate child membership before and after manifest introduction.",
+    "Future implementation must run validator equivalence checks for changed routing, output envelope, cache reuse, or deduplication.",
+    "Future implementation must retain planted-defect expectations for each validator family and fail closed when a child command lacks planted-defect or selftest mapping.",
+    "Fresh proof-cockpit machine QA remains terminal to USF-966 unless a later issue explicitly changes that proof boundary."
+  ],
+  "dependenciesAndFollowOns": {
+    "blockersSatisfied": [
+      {
+        "issueId": "USF-519",
+        "status": "Done",
+        "role": "aggregate validator command design discovery"
+      },
+      {
+        "issueId": "USF-827",
+        "status": "Done",
+        "role": "before and after validator equivalence design"
+      }
+    ],
+    "relatedFollowOns": [
+      {
+        "issueId": "USF-993",
+        "role": "environment ladder validator aggregate wiring after no-regression proof"
+      },
+      {
+        "issueId": "USF-415",
+        "role": "target timing instrumentation"
+      },
+      {
+        "issueId": "USF-826",
+        "role": "before and after timing comparison"
+      },
+      {
+        "issueId": "USF-823",
+        "role": "no-regression proof plan"
+      },
+      {
+        "issueId": "USF-966",
+        "role": "terminal proof-cockpit machine QA boundary"
+      }
+    ]
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-995",
+      "title": "Aggregate validator command manifest and semantic command-instance coverage",
+      "completionBasis": "currentAggregateValidatorCommandSurfaces, missingSemanticCommandInstanceOrManifestFields, candidateCommandManifestShape, rawOutputRetentionAndGeneratedReportBoundary, deduplicationAndCacheReusePreconditions, validationAndPlantedDefectExpectations, and dependenciesAndFollowOns satisfy discovery criteria."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-995",
+      "criteria": [
+        "Current aggregate validator command surfaces are inventoried.",
+        "Missing semantic command-instance or manifest fields are listed.",
+        "Candidate command manifest shape is defined.",
+        "Raw child-output retention and generated-report non-authority are specified.",
+        "Deduplication and cache reuse preconditions are specified.",
+        "Validation and planted-defect expectations for future implementation are defined.",
+        "Dependencies and blocked follow-on issues are recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "currentAggregateValidatorCommandSurfaces",
+        "missingSemanticCommandInstanceOrManifestFields",
+        "candidateCommandManifestShape",
+        "rawOutputRetentionAndGeneratedReportBoundary",
+        "deduplicationAndCacheReusePreconditions",
+        "validationAndPlantedDefectExpectations",
+        "dependenciesAndFollowOns"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "commandCreated": false,
+    "commandRenamed": false,
+    "makefileChanged": false,
+    "packageScriptChanged": false,
+    "workflowChanged": false,
+    "schemaActivated": false,
+    "proofRunClaimed": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

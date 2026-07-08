@@ -1,0 +1,157 @@
+{
+  "id": "usf.app-surface-implementation-gate-closure-semantics",
+  "title": "App Surface Implementation Gate Closure Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact records which app-surface gates are semantically closable from repository authority and which remain requires evidence by external proof, provider setup, store account evidence, compliance review, or owner acceptance. It does not authorise implementation/runtime code, provider account setup, credential setup, deployment, store submission, or readiness claims.",
+  "sourceAuthorities": [
+    "docs/architecture/app-surface-semantic-definition-backlog-closure.json",
+    "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+    "docs/architecture/mobile-adapter-semantic-surface.json",
+    "docs/architecture/app-surface-web-adapter-semantics.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "docs/architecture/app-surface-test-strategy-semantics.json",
+    "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+    "docs/adr/0016-expo-mobile-adapter-posture.md",
+    "docs/adr/0017-nextjs-web-adapter-posture.md",
+    "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
+    "docs/adr/0019-no-universal-screen-overreach.md",
+    "docs/adr/0020-platform-ux-behind-shared-semantics.md",
+    "docs/adr/0021-store-and-cdn-automation-posture.md",
+    "docs/adr/0022-ads-monetisation-and-consent-posture.md",
+    "docs/adr/0023-i18n-accessibility-baseline.md"
+  ],
+  "closableGates": [
+    {
+      "issueId": "USF-942",
+      "gateId": "expo-implementation-ready-gate",
+      "closureMeaning": "The semantic prerequisites, ADR coverage, dependency decisions, validator expectations, proof expectations, and non-claim boundaries needed before a future Expo implementation directive can begin are recorded.",
+      "remainingRequirementsBeforeRuntimeWork": [
+        "an explicit implementation directive",
+        "dependency installation approval",
+        "validator execution required by the implementation directive",
+        "runtime proof collection required by the implementation directive"
+      ],
+      "nonClaims": [
+        "No Expo app implementation exists from this gate.",
+        "No native module implementation exists from this gate.",
+        "No EAS build or submit readiness is claimed.",
+        "No App Store or Google Play readiness is claimed.",
+        "No production readiness is claimed."
+      ]
+    },
+    {
+      "issueId": "USF-943",
+      "gateId": "nextjs-implementation-ready-gate",
+      "closureMeaning": "The semantic prerequisites, ADR coverage, dependency decisions, validator expectations, proof expectations, and non-claim boundaries needed before a future Next.js implementation directive can begin are recorded.",
+      "remainingRequirementsBeforeRuntimeWork": [
+        "an explicit implementation directive",
+        "dependency installation approval",
+        "validator execution required by the implementation directive",
+        "runtime proof collection required by the implementation directive"
+      ],
+      "nonClaims": [
+        "No Next.js app implementation exists from this gate.",
+        "No route implementation exists from this gate.",
+        "No CDN deployment readiness is claimed.",
+        "No live-provider readiness is claimed.",
+        "No production readiness is claimed."
+      ]
+    },
+    {
+      "issueId": "USF-944",
+      "gateId": "shared-client-sdk-implementation-ready-gate",
+      "closureMeaning": "The semantic prerequisites, ADR coverage, dependency decisions, validator expectations, proof expectations, and non-claim boundaries needed before a future shared client SDK implementation directive can begin are recorded.",
+      "remainingRequirementsBeforeRuntimeWork": [
+        "an explicit implementation directive",
+        "dependency installation approval",
+        "generated-client freshness validation required by the implementation directive",
+        "runtime or contract proof collection required by the implementation directive"
+      ],
+      "nonClaims": [
+        "No SDK implementation exists from this gate.",
+        "No generated client code exists from this gate.",
+        "No package publication readiness is claimed.",
+        "No production readiness is claimed."
+      ]
+    },
+    {
+      "issueId": "USF-948",
+      "gateId": "ads-monetisation-ready-gate",
+      "closureMeaning": "The current USF owner-decision baseline disables ads and monetisation for the initial posture. Therefore there is no ads or monetisation implementation to ready. Future ads, billing, or monetisation work requires a superseding owner decision and a fresh gate.",
+      "remainingRequirementsBeforeRuntimeWork": [
+        "a superseding monetisation owner decision",
+        "privacy and consent authority",
+        "external review where applicable",
+        "provider-specific validator and proof evidence"
+      ],
+      "nonClaims": [
+        "No ads implementation is authorised.",
+        "No billing implementation is authorised.",
+        "No monetisation readiness is claimed.",
+        "No privacy compliance readiness is claimed.",
+        "No legal conclusion is claimed."
+      ]
+    }
+  ],
+  "globalNonClaims": [
+    "No runtime implementation code is created or authorised by this artefact.",
+    "No dependency installation is authorised by this artefact.",
+    "No provider account setup is authorised by this artefact.",
+    "No credential setup is authorised by this artefact.",
+    "No deployment is authorised by this artefact.",
+    "No store submission is authorised by this artefact.",
+    "No privacy compliance readiness is claimed by this artefact.",
+    "No legal conclusion is claimed by this artefact.",
+    "No live external provider readiness is claimed by this artefact.",
+    "No production readiness is claimed by this artefact."
+  ],
+  "externalEvidenceRequirements": [
+    {
+      "issueId": "USF-945",
+      "gateId": "app-store-provisioning-ready-gate",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "Requires Apple account, signing, credential custody, app metadata, privacy label, privacy manifest, review evidence, and human approval evidence that are not present in repository authority."
+    },
+    {
+      "issueId": "USF-946",
+      "gateId": "google-play-provisioning-ready-gate",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "Requires Google Play account, signing/key management, credential custody, release track, Data Safety, permission disclosure, Play Integrity, review evidence, and human approval evidence that are not present in repository authority."
+    },
+    {
+      "issueId": "USF-947",
+      "gateId": "cdn-deployment-ready-gate",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "Requires concrete provider selection, provider account evidence, DNS/TLS/domain evidence, environment and secret handling evidence, rollback/logging evidence, and deployment proof that are not present in repository authority."
+    },
+    {
+      "issueId": "USF-949",
+      "gateId": "privacy-compliance-ready-gate",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "Requires privacy compliance evidence, external review where applicable, store privacy disclosures, consent proof, retention/deletion/export proof, data inventory confirmation, and legal/compliance acceptance that are not present in repository authority."
+    },
+    {
+      "issueId": "USF-950",
+      "gateId": "full-external-review-gate",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "Requires owner-selected external review evidence. Repository semantics can identify review requirements but cannot substitute for external privacy, legal, store policy, ads policy, security, accessibility, internationalisation, CDN/provider, or monetisation review."
+    },
+    {
+      "issueId": "USF-951",
+      "gateId": "owner-acceptance-gate",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "Requires final owner acceptance after store, CDN, privacy, and external review gates are resolved or explicitly accepted as remaining evidence requirements. The owner approval in chat authorises agent decisions, but it does not create missing external proof evidence."
+    },
+    {
+      "issueId": "USF-329",
+      "gateId": "modern-app-surface-implementation-gate-parent",
+      "safeNextState": "remain-open",
+      "evidenceRequirement": "The parent gate is closed for bounded local implementation; external provisioning, privacy, external review, and owner acceptance remain evidence requirements for external readiness claims."
+    }
+  ]
+}

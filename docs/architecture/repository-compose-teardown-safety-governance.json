@@ -1,0 +1,162 @@
+{
+  "id": "usf.repository-compose-teardown-safety-governance",
+  "title": "Repository Compose teardown safety governance",
+  "status": "tracking-report",
+  "purpose": "Define safe, reset, and destructive Compose teardown policy classes with confirmation expectations while preserving proof evidence, generated-report boundaries, and fail-closed validation behaviour.",
+  "authorityPosture": {
+    "isSemanticAuthority": false,
+    "tracksWorkOnly": true,
+    "doesNotOverride": [
+      "docs/architecture/charter.md",
+      "docs/architecture/authority-model.md",
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "USF validator results",
+      "runtime proof evidence",
+      "accepted ADRs"
+    ],
+    "generatedReportsAreNotCanonical": true
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-596",
+      "title": "Compose teardown safety",
+      "completionBasis": "This artefact classifies safe, reset, and destructive teardown actions and records confirmation expectations. Dependency USF-386 is Done."
+    }
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-386",
+      "title": "Assurance classification matrix",
+      "status": "Done",
+      "supports": [
+        "USF-596"
+      ]
+    }
+  ],
+  "teardownPolicy": {
+    "safeActions": [
+      {
+        "actionClass": "inspect status",
+        "examples": [
+          "list relevant Compose services",
+          "show health status",
+          "show bound ports"
+        ],
+        "confirmation": "none required",
+        "evidenceRule": "read-only inspection must not alter proof or evidence state"
+      },
+      {
+        "actionClass": "stop running services without deleting state",
+        "examples": [
+          "stop service containers",
+          "leave volumes in place",
+          "leave artifacts and evidence in place"
+        ],
+        "confirmation": "safe default when command scope is explicit",
+        "evidenceRule": "accepted proof evidence, raw evidence, and generated reports remain untouched"
+      }
+    ],
+    "resetActions": [
+      {
+        "actionClass": "reset test-scoped service state",
+        "examples": [
+          "remove test-only containers",
+          "recreate test-only volumes",
+          "clear service state that is classified as rebuildable"
+        ],
+        "confirmation": "explicit reset mode plus dry-run summary before mutation",
+        "evidenceRule": "raw proof evidence and accepted proof artifacts must be collected or explicitly out of scope before reset"
+      },
+      {
+        "actionClass": "reset local Compose environment",
+        "examples": [
+          "stop services",
+          "recreate local service state",
+          "preserve evidence and source authority"
+        ],
+        "confirmation": "explicit reset mode with clear list of changed resources",
+        "evidenceRule": "unknown resource ownership must block reset or fall back to safe stop"
+      }
+    ],
+    "destructiveActions": [
+      {
+        "actionClass": "remove volumes or persisted service data",
+        "examples": [
+          "delete named volumes",
+          "delete persisted database state",
+          "delete service caches"
+        ],
+        "confirmation": "owner-approved policy plus explicit human confirmation",
+        "evidenceRule": "must not delete evidence or audit material required for a proof claim"
+      },
+      {
+        "actionClass": "delete proof artifacts or evidence-adjacent outputs",
+        "examples": [
+          "delete screenshots",
+          "delete proof bundles",
+          "delete generated reports"
+        ],
+        "confirmation": "blocked by default; requires separately authorised retention or pruning policy",
+        "evidenceRule": "raw evidence and accepted proof evidence are protected by default"
+      }
+    ]
+  },
+  "confirmationExpectations": [
+    {
+      "class": "safe",
+      "expectation": "May run with explicit scope and no destructive side effects."
+    },
+    {
+      "class": "reset",
+      "expectation": "Requires dry-run summary, explicit reset mode, and evidence-preservation notice."
+    },
+    {
+      "class": "destructive",
+      "expectation": "Requires owner-approved policy, explicit human confirmation, protected-path checks, and no unresolved evidence dependency."
+    }
+  ],
+  "validationProofExpectation": [
+    "Future implementation must prove cleanup preserves required evidence.",
+    "Future implementation must prove reset restores test state when reset is the claimed behaviour.",
+    "Future implementation must fail closed when resource ownership, evidence relevance, provider mode, or environment classification is unknown.",
+    "Future implementation must keep stale, missing, blocked, timeout, and unknown outcomes as non-pass states."
+  ],
+  "protectedResources": [
+    "raw evidence",
+    "accepted proof evidence",
+    "generated reports whose source evidence is still required",
+    "foundational governance artefacts",
+    "taxonomy catalogue",
+    "vocabulary catalogue",
+    "schema registry",
+    "lockfiles",
+    "credentials and secret material"
+  ],
+  "implementationBoundary": {
+    "composeChanged": false,
+    "makefileChanged": false,
+    "packageScriptsChanged": false,
+    "destructiveCommandImplemented": false,
+    "resetCommandImplemented": false,
+    "evidenceDeleted": false,
+    "runtimeCodeCreated": false,
+    "implementationCodeCreated": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-596",
+      "criterion": "Teardown policy classifies safe, reset, and destructive actions with confirmation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "teardownPolicy",
+        "confirmationExpectations"
+      ]
+    }
+  ],
+  "nonClaims": [
+    "This artefact does not implement Compose teardown, reset, clean, or destructive commands.",
+    "This artefact does not delete evidence, artifacts, volumes, generated reports, or service state.",
+    "This artefact does not make a Test, Staging, production, deployment, live-provider, or readiness claim.",
+    "This artefact does not approve high-risk destructive cleanup."
+  ]
+}

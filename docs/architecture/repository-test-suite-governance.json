@@ -1,0 +1,681 @@
+{
+  "id": "repository-test-suite-governance",
+  "title": "Repository test suite governance",
+  "purpose": "Record discovery-only test-suite standards and pre-UI test gates without adding tests, changing commands, or claiming readiness.",
+  "authorityBoundary": {
+    "semanticAuthorityCreated": false,
+    "testCodeCreated": false,
+    "validatorCodeCreated": false,
+    "commandChanged": false,
+    "readinessClaimMade": false,
+    "notes": "This artifact closes planning criteria only. USF-960 remains open for actual failing-test resolution."
+  },
+  "sourceReferences": [
+    "docs/architecture/repository-layout-and-fixture-governance.json",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "docs/architecture/repository-build-package-and-contract-test-governance.json",
+    "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+    "tests/",
+    "packages/proof/src/",
+    "package.json"
+  ],
+  "observedTestState": {
+    "stateInspected": true,
+    "testFileCount": 63,
+    "testDirectories": [
+      "tests/adapters",
+      "tests/apps",
+      "tests/capabilities",
+      "tests/packages",
+      "tests/packages/auth",
+      "tests/packages/data-lifecycle",
+      "tests/packages/fixtures"
+    ],
+    "proofPackageTestFiles": [
+      "packages/proof/src/composed-semantic-test-harness-proof.ts",
+      "packages/proof/src/deterministic-test-fixture-lifecycle-proof.ts"
+    ],
+    "baselineBlocker": {
+      "issueId": "USF-960",
+      "status": "Open or in progress",
+      "reason": "Actual failing-test resolution requires implementation or test fixes and is excluded from discovery-only closure."
+    }
+  },
+  "testSuiteImprovementMatrix": {
+    "unitTestStandardDesign": {
+      "issueId": "USF-465",
+      "title": "Unit test standard",
+      "stateInspected": true,
+      "guidance": [
+        "Fast semantic units remain close to package or capability ownership.",
+        "Unit tests must not replace contract, integration, proof, or validator tests."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "validatorSelftestStandardDesign": {
+      "issueId": "USF-467",
+      "title": "Validator selftest standard",
+      "stateInspected": true,
+      "guidance": [
+        "Validator selftests and planted defects remain required for validator changes.",
+        "Selftests must fail closed on invalid JSON, unknown controlled values, stale evidence, and omitted path classes."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "integrationTestStandardDesign": {
+      "issueId": "USF-469",
+      "title": "Integration test standard",
+      "stateInspected": true,
+      "guidance": [
+        "Integration tests cover cross-package, app, adapter, provider, and persistence boundaries.",
+        "Integration scope must declare services, fixtures, provider mode, environment, and evidence expectations."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "composeIntegrationTestStandardDesign": {
+      "issueId": "USF-470",
+      "title": "Compose integration test standard",
+      "stateInspected": true,
+      "guidance": [
+        "Compose integration tests are required for service-backed or provider-backed local proof where in-memory proof is insufficient.",
+        "Compose tests must preserve healthcheck, teardown, artifact, and generated-report boundaries."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "proofEvidenceRegressionTestStandardDesign": {
+      "issueId": "USF-471",
+      "title": "Proof/evidence regression test standard",
+      "stateInspected": true,
+      "guidance": [
+        "Proof and evidence regression tests protect evidence envelopes, freshness, provider/environment separation, and generated-report non-authority.",
+        "Regression tests must not treat generated reports as raw evidence."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "snapshotGoldenFilePolicyDesign": {
+      "issueId": "USF-472",
+      "title": "Snapshot and golden-file policy",
+      "stateInspected": true,
+      "guidance": [
+        "Snapshot or golden files are allowed only with source authority, update owner, diff review, and stale-output controls.",
+        "Generated snapshots need source manifests and must not become semantic authority."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "fixtureLifecyclePolicyDesign": {
+      "issueId": "USF-473",
+      "title": "Fixture lifecycle policy",
+      "stateInspected": true,
+      "guidance": [
+        "Fixtures need owner, source/generated classification, invalidation inputs, and resolution rules.",
+        "Fixture movement requires command and reference validation."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "testDataGenerationPolicyDesign": {
+      "issueId": "USF-474",
+      "title": "Test data generation policy",
+      "stateInspected": true,
+      "guidance": [
+        "Generated test data must be deterministic or record bounded non-determinism.",
+        "Generated data must preserve provider mode, environment, privacy, and evidence non-claims."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "testShardingParallelisationDesign": {
+      "issueId": "USF-475",
+      "title": "Test sharding and parallelisation",
+      "stateInspected": true,
+      "guidance": [
+        "Sharding and parallelisation require isolated resources, deterministic output paths, and before-after result equivalence.",
+        "Unknown shared state falls back to serial or fuller validation."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "testFlakePolicyDesign": {
+      "issueId": "USF-476",
+      "title": "Test flake detection and quarantine policy",
+      "stateInspected": true,
+      "guidance": [
+        "Flake detection records repeatability, seed, environment, provider mode, timing, and affected tests.",
+        "Quarantine does not convert a required gate to pass; owner review and rollback are required."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "testTimingReportDesign": {
+      "issueId": "USF-477",
+      "title": "Test timing report",
+      "stateInspected": true,
+      "guidance": [
+        "Timing reports should record command, scope, environment, cache state, duration, and failure status.",
+        "Timing data is performance evidence only and not readiness evidence."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "affectedTestSelectionDesign": {
+      "issueId": "USF-478",
+      "title": "Affected-test selection",
+      "stateInspected": true,
+      "guidance": [
+        "Affected-test selection requires a path-to-test ownership map, dependency graph, source hashes, and excluded path-class proof.",
+        "Unknown ownership falls back to broader test gates."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "mandatoryTestSelectionDesign": {
+      "issueId": "USF-479",
+      "title": "Mandatory-test selection per change type",
+      "stateInspected": true,
+      "guidance": [
+        "Change classes map to minimum required test suites and proof gates.",
+        "UI, schema, validator, runtime, evidence, provider, and command-surface changes have different required gates."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "mutationNegativeControlDesign": {
+      "issueId": "USF-480",
+      "title": "Mutation or negative-control testing opportunities",
+      "stateInspected": true,
+      "guidance": [
+        "Mutation and negative controls should target high-risk false negatives before broad mutation tooling.",
+        "Negative controls supplement planted defects and must have deterministic budgets."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "coverageThresholdDesign": {
+      "issueId": "USF-482",
+      "title": "Coverage reporting and meaningful thresholds",
+      "stateInspected": true,
+      "guidance": [
+        "Coverage thresholds must be meaningful by risk and semantic obligation, not a single vanity percentage.",
+        "Coverage reports must distinguish measured coverage from proof or semantic completeness."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "coverageTheatreAvoidanceDesign": {
+      "issueId": "USF-483",
+      "title": "Avoiding coverage theatre",
+      "stateInspected": true,
+      "guidance": [
+        "Coverage should protect authority-linked obligations and high-risk behaviour rather than inflate pass metrics.",
+        "Uncovered critical semantics are more important than high aggregate coverage percentages."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    },
+    "preUiRequiredTestsGateDesign": {
+      "issueId": "USF-485",
+      "title": "Tests required before UI work begins",
+      "stateInspected": true,
+      "guidance": [
+        "Before UI work, required tests include unit, integration, contract, generated-client conformance, validator selftests, proof/evidence regression, app-surface semantic tests, and environment/proof routing checks.",
+        "Optional tests include property, mutation, browser/mobile, screenshot, and accessibility tests once scope and owner are defined."
+      ],
+      "assuranceImpact": "The design improves test ownership, selection, or proof value while preserving existing validation, proof, evidence, and non-claims.",
+      "validationProofExpectation": "Future implementation must run affected tests or fuller gates on ambiguity and must preserve planted-defect, fixture, evidence, command, provider, and environment boundaries where applicable.",
+      "dependencies": [
+        "USF-354 parent test-suite track",
+        "USF-464 test inventory baseline",
+        "repository layout and fixture governance",
+        "validator regression-proofing governance"
+      ]
+    }
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-465",
+      "title": "Unit test standard",
+      "completionBasis": "testSuiteImprovementMatrix.unitTestStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-467",
+      "title": "Validator selftest standard",
+      "completionBasis": "testSuiteImprovementMatrix.validatorSelftestStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-469",
+      "title": "Integration test standard",
+      "completionBasis": "testSuiteImprovementMatrix.integrationTestStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-470",
+      "title": "Compose integration test standard",
+      "completionBasis": "testSuiteImprovementMatrix.composeIntegrationTestStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-471",
+      "title": "Proof/evidence regression test standard",
+      "completionBasis": "testSuiteImprovementMatrix.proofEvidenceRegressionTestStandardDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-472",
+      "title": "Snapshot and golden-file policy",
+      "completionBasis": "testSuiteImprovementMatrix.snapshotGoldenFilePolicyDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-473",
+      "title": "Fixture lifecycle policy",
+      "completionBasis": "testSuiteImprovementMatrix.fixtureLifecyclePolicyDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-474",
+      "title": "Test data generation policy",
+      "completionBasis": "testSuiteImprovementMatrix.testDataGenerationPolicyDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-475",
+      "title": "Test sharding and parallelisation",
+      "completionBasis": "testSuiteImprovementMatrix.testShardingParallelisationDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-476",
+      "title": "Test flake detection and quarantine policy",
+      "completionBasis": "testSuiteImprovementMatrix.testFlakePolicyDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-477",
+      "title": "Test timing report",
+      "completionBasis": "testSuiteImprovementMatrix.testTimingReportDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-478",
+      "title": "Affected-test selection",
+      "completionBasis": "testSuiteImprovementMatrix.affectedTestSelectionDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-479",
+      "title": "Mandatory-test selection per change type",
+      "completionBasis": "testSuiteImprovementMatrix.mandatoryTestSelectionDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-480",
+      "title": "Mutation or negative-control testing opportunities",
+      "completionBasis": "testSuiteImprovementMatrix.mutationNegativeControlDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-482",
+      "title": "Coverage reporting and meaningful thresholds",
+      "completionBasis": "testSuiteImprovementMatrix.coverageThresholdDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-483",
+      "title": "Avoiding coverage theatre",
+      "completionBasis": "testSuiteImprovementMatrix.coverageTheatreAvoidanceDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    },
+    {
+      "issueId": "USF-485",
+      "title": "Tests required before UI work begins",
+      "completionBasis": "testSuiteImprovementMatrix.preUiRequiredTestsGateDesign records inspected state, assurance impact, validation and proof expectations, and dependencies."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-465",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.unitTestStandardDesign"
+      ]
+    },
+    {
+      "issueId": "USF-467",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.validatorSelftestStandardDesign"
+      ]
+    },
+    {
+      "issueId": "USF-469",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.integrationTestStandardDesign"
+      ]
+    },
+    {
+      "issueId": "USF-470",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.composeIntegrationTestStandardDesign"
+      ]
+    },
+    {
+      "issueId": "USF-471",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.proofEvidenceRegressionTestStandardDesign"
+      ]
+    },
+    {
+      "issueId": "USF-472",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.snapshotGoldenFilePolicyDesign"
+      ]
+    },
+    {
+      "issueId": "USF-473",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.fixtureLifecyclePolicyDesign"
+      ]
+    },
+    {
+      "issueId": "USF-474",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.testDataGenerationPolicyDesign"
+      ]
+    },
+    {
+      "issueId": "USF-475",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.testShardingParallelisationDesign"
+      ]
+    },
+    {
+      "issueId": "USF-476",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.testFlakePolicyDesign"
+      ]
+    },
+    {
+      "issueId": "USF-477",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.testTimingReportDesign"
+      ]
+    },
+    {
+      "issueId": "USF-478",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.affectedTestSelectionDesign"
+      ]
+    },
+    {
+      "issueId": "USF-479",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.mandatoryTestSelectionDesign"
+      ]
+    },
+    {
+      "issueId": "USF-480",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.mutationNegativeControlDesign"
+      ]
+    },
+    {
+      "issueId": "USF-482",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.coverageThresholdDesign"
+      ]
+    },
+    {
+      "issueId": "USF-483",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.coverageTheatreAvoidanceDesign"
+      ]
+    },
+    {
+      "issueId": "USF-485",
+      "criteria": [
+        "State inspected.",
+        "Assurance impact stated.",
+        "Validation/proof expectation defined.",
+        "Dependencies recorded."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "observedTestState",
+        "testSuiteImprovementMatrix.preUiRequiredTestsGateDesign"
+      ]
+    }
+  ],
+  "excludedIssues": [
+    {
+      "issueId": "USF-960",
+      "reason": "Actual failing-test resolution is implementation/test-fix work, not discovery-only governance."
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "testCodeCreated": false,
+    "validatorCodeCreated": false,
+    "commandChanged": false,
+    "packageScriptChanged": false,
+    "workflowChanged": false,
+    "proofRunClaimed": false,
+    "readinessClaimMade": false,
+    "newDirectoryCreated": false
+  }
+}

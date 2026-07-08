@@ -1,0 +1,419 @@
+{
+  "id": "usf.app-surface-owner-decision-baseline-semantics",
+  "title": "App Surface Owner Decision Baseline Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact records USF-native owner-decision semantics for app-surface planning. It records evaluated owner decisions for bounded local app-surface implementation. It does not authorise provider account setup, credential setup, deployment, store submission, legal compliance claims, privacy compliance claims, production readiness claims, or live-provider readiness claims.",
+  "decisionScope": {
+    "appliesTo": [
+      "mobile adapter planning",
+      "web adapter planning",
+      "shared client planning",
+      "store provisioning planning",
+      "CDN planning",
+      "ads and monetisation planning",
+      "privacy and consent planning",
+      "observability planning",
+      "security planning",
+      "internationalisation planning"
+    ],
+    "doesNotApplyTo": [
+      "runtime implementation",
+      "provider account creation",
+      "provider credential use",
+      "store submission",
+      "production deployment",
+      "legal advice",
+      "external certification"
+    ]
+  },
+  "globalNonClaims": [
+    "Bounded local app-surface implementation is governed by docs/architecture/pre-ui-repository-readiness-realisation.json and the applicable implementation gates.",
+    "Dependency installation is governed by bounded local implementation scope and frozen dependency policy.",
+    "No provider account setup is authorised.",
+    "No credential setup is authorised.",
+    "No store submission is authorised.",
+    "No deployment is authorised.",
+    "No privacy compliance readiness is claimed.",
+    "No legal conclusion is claimed.",
+    "No production readiness is claimed.",
+    "No live external provider readiness is claimed."
+  ],
+  "decisions": [
+    {
+      "issueId": "USF-375",
+      "decisionId": "mobile-local-storage-engine-policy",
+      "decision": "Authoritative durable mobile client state must use a SQLite-class transactional store when offline persistence is required. Secrets, tokens, and credentials must use operating-system secure storage. AsyncStorage-class and MMKV-class stores may be used only for non-authoritative UI cache or preference data when later implementation authority explicitly permits that use.",
+      "permits": [
+        "semantic planning for SQLite-class durable storage",
+        "semantic planning for operating-system secure storage",
+        "non-authoritative UI cache modelling"
+      ],
+      "forbids": [
+        "treating AsyncStorage-class or MMKV-class stores as authoritative records by default",
+        "storing secrets outside operating-system secure storage",
+        "installing any storage dependency from this decision alone"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "storage implementation authority exists",
+        "retention and purge proof expectations exist",
+        "privacy and security validators cover the chosen store"
+      ]
+    },
+    {
+      "issueId": "USF-388",
+      "decisionId": "expo-managed-cng-versus-bare-native-policy",
+      "decision": "Expo managed configuration with CNG or prebuild is the preferred mobile adapter posture. Bare native project ownership is an exception path only when a USF semantic requirement, security requirement, native capability requirement, or proof requirement cannot be satisfied through the managed CNG path.",
+      "permits": [
+        "semantic planning for Expo managed CNG",
+        "semantic planning for prebuild evidence",
+        "exception analysis for bare native requirements"
+      ],
+      "forbids": [
+        "generating native projects from this decision alone",
+        "treating bare native as the default posture",
+        "claiming App Store or Google Play readiness"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "Expo implementation gate closes",
+        "native capability bridge semantics are mapped",
+        "release proof gates close"
+      ]
+    },
+    {
+      "issueId": "USF-460",
+      "decisionId": "nextjs-deployment-provider-posture",
+      "decision": "Next.js deployment remains provider-neutral at the semantic layer. Cloudflare, Netlify, Vercel, and self-hosted options remain candidates, but no provider is canonical until the CDN/provider gate verifies runtime support, evidence collection, secrets handling, rollback, logs, data residency, and owner approval.",
+      "permits": [
+        "provider-neutral web adapter planning",
+        "provider comparison against USF evidence requirements",
+        "route and deployment semantics that are independent of one provider"
+      ],
+      "forbids": [
+        "deploying to any provider from this decision alone",
+        "creating provider credentials",
+        "claiming CDN readiness"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "CDN provider gate closes",
+        "deployment evidence requirements are satisfied",
+        "owner-approved provider credentials exist outside this semantic decision"
+      ]
+    },
+    {
+      "issueId": "USF-736",
+      "decisionId": "cdn-provider-for-nextjs-web",
+      "decision": "The CDN provider posture is provider-neutral until a later implementation gate selects a concrete provider. Any selected provider must satisfy custom domain, TLS, preview deployment, branch control, environment, secret, logging, rollback, purge, cache, provenance, and evidence requirements before deployment readiness can be claimed.",
+      "permits": [
+        "CDN capability comparison",
+        "provider-neutral release evidence modelling",
+        "deployment gate planning"
+      ],
+      "forbids": [
+        "DNS changes from this decision alone",
+        "provider account setup from this decision alone",
+        "deployment readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "provider selection is approved",
+        "provider-specific validator expectations exist",
+        "deployment proof evidence is collected"
+      ]
+    },
+    {
+      "issueId": "USF-567",
+      "decisionId": "supported-countries-and-languages-at-launch",
+      "decision": "The initial localisation planning baseline is English with en-US and en-AU locale profiles. This is a semantic planning baseline only, not a public launch approval. Any public country, language, store listing, privacy text, terms text, or regional feature claim requires external review and the relevant release gates close.",
+      "permits": [
+        "English localisation planning",
+        "en-US locale profile modelling",
+        "en-AU locale profile modelling",
+        "locale fallback and translation-key validation planning"
+      ],
+      "forbids": [
+        "public launch country approval from this decision alone",
+        "legal-text readiness claims",
+        "store listing readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "external review gate closes",
+        "store provisioning gates close",
+        "privacy and terms text evidence exists"
+      ]
+    },
+    {
+      "issueId": "USF-664",
+      "decisionId": "ads-provider-model",
+      "decision": "Ads are disabled by default for the initial app-surface posture. No ads provider is selected for implementation. Any future ad provider must be approved through privacy, consent, child-directed policy, SDK registry, telemetry, and external review gates before integration.",
+      "permits": [
+        "no-ads default planning",
+        "future provider comparison",
+        "ad consent requirement modelling"
+      ],
+      "forbids": [
+        "ad SDK integration from this decision alone",
+        "ad provider account setup",
+        "personalised ads readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "ads monetisation gate closes",
+        "privacy compliance gate closes",
+        "external review gate closes"
+      ]
+    },
+    {
+      "issueId": "USF-669",
+      "decisionId": "ad-manager-or-alternative-ads-platform",
+      "decision": "Ad Manager and alternative ad-serving platforms are out of scope for the initial posture. They may be reconsidered only through a later owner decision with provider-specific data, consent, regional, SDK, validator, and proof analysis.",
+      "permits": [
+        "explicit no-ad-manager baseline",
+        "future provider re-evaluation"
+      ],
+      "forbids": [
+        "Ad Manager setup",
+        "alternative ad platform setup",
+        "ad-serving readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "ads provider model is reopened or superseded",
+        "external review permits ad-serving scope",
+        "privacy and consent proof exists"
+      ]
+    },
+    {
+      "issueId": "USF-688",
+      "decisionId": "apple-iap-and-google-play-billing-model",
+      "decision": "Apple IAP and Google Play Billing are out of scope for the initial posture. Paid digital goods, subscriptions, entitlement fulfilment, and billing provider integrations require separate semantic authority, store policy review, validator coverage, and proof evidence.",
+      "permits": [
+        "no-billing default planning",
+        "future entitlement semantic modelling"
+      ],
+      "forbids": [
+        "billing implementation",
+        "store product setup",
+        "subscription readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "billing semantic authority exists",
+        "store policy review completes",
+        "billing proof expectations exist"
+      ]
+    },
+    {
+      "issueId": "USF-689",
+      "decisionId": "app-store-and-play-store-monetisation-model",
+      "decision": "The initial store monetisation posture is free with no ads, no paid app price, no in-app products, and no subscriptions. Any monetisation model requires later owner approval, privacy and consent mapping where applicable, store policy review, validator coverage, and proof evidence.",
+      "permits": [
+        "free app planning",
+        "non-monetised release evidence modelling"
+      ],
+      "forbids": [
+        "paid app setup",
+        "in-app product setup",
+        "subscription setup",
+        "ads monetisation setup"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "monetisation gate closes",
+        "external review gate closes",
+        "store provisioning gates close"
+      ]
+    },
+    {
+      "issueId": "USF-704",
+      "decisionId": "store-account-ownership-and-release-authority",
+      "decision": "Apple and Google store accounts, signing authority, release approval, and credential custody remain owner-controlled. Agents must not create accounts, assign roles, create signing credentials, or submit builds. Any release requires explicit human owner approval and auditable evidence.",
+      "permits": [
+        "store account prerequisite modelling",
+        "human release authority modelling",
+        "credential custody requirement modelling"
+      ],
+      "forbids": [
+        "agent-created store accounts",
+        "agent-created signing credentials",
+        "automated store submission without explicit owner approval"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "owner account access exists",
+        "credential custody policy is satisfied",
+        "release proof evidence exists"
+      ]
+    },
+    {
+      "issueId": "USF-708",
+      "decisionId": "eas-versus-self-hosted-build-and-submit",
+      "decision": "EAS Build and EAS Submit are the preferred managed mobile build and submission path after implementation authority exists. Self-hosted or Fastlane-based flows remain fallback options only where evidence, security, cost, or platform requirements justify them.",
+      "permits": [
+        "EAS-first release planning",
+        "fallback comparison for self-hosted and Fastlane flows",
+        "build provenance requirement modelling"
+      ],
+      "forbids": [
+        "EAS setup from this decision alone",
+        "CI secret setup from this decision alone",
+        "build execution from this decision alone"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "mobile implementation gate closes",
+        "store account authority exists",
+        "release proof requirements are satisfied"
+      ]
+    },
+    {
+      "issueId": "USF-785",
+      "decisionId": "certificate-pinning-posture",
+      "decision": "Certificate pinning is not enabled by default. Platform TLS, correct certificate validation, HTTPS-only transport, and web security headers remain the baseline. Pinning may be introduced only with a documented threat model, rotation procedure, recovery procedure, provider compatibility, validator coverage, and proof evidence.",
+      "permits": [
+        "non-pinning default security posture",
+        "future pinning exception analysis",
+        "rotation and recovery proof modelling"
+      ],
+      "forbids": [
+        "pinning implementation from this decision alone",
+        "security certification claims",
+        "readiness claims without rotation and recovery proof"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "pinning threat model exists",
+        "rotation and recovery procedures are validated",
+        "security proof gate closes"
+      ]
+    },
+    {
+      "issueId": "USF-807",
+      "decisionId": "analytics-and-crash-provider",
+      "decision": "No third-party analytics or crash provider is selected by default. App-surface diagnostics must be privacy-safe, consent-aware, data-minimising, and evidence-backed. A concrete provider requires later owner approval, SDK data inventory, consent mapping, retention mapping, validator coverage, and proof evidence.",
+      "permits": [
+        "first-party privacy-safe diagnostic modelling",
+        "provider comparison",
+        "consent-aware telemetry requirement modelling"
+      ],
+      "forbids": [
+        "analytics SDK installation from this decision alone",
+        "crash SDK installation from this decision alone",
+        "provider credential setup",
+        "privacy readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "observability proof gate closes",
+        "privacy compliance gate closes",
+        "provider-specific evidence exists"
+      ]
+    },
+    {
+      "issueId": "USF-634",
+      "decisionId": "child-directed-and-family-policy-posture",
+      "decision": "The initial app-surface posture is not child-directed and does not target family-program distribution. Children, family, age-gated, or child-directed claims require separate owner approval, external review, regional policy mapping, ads restrictions, analytics restrictions, store metadata mapping, validator coverage, and proof evidence.",
+      "permits": [
+        "not-child-directed default planning",
+        "future children and family policy analysis"
+      ],
+      "forbids": [
+        "child-directed product claims",
+        "family program readiness claims",
+        "child-directed ads or analytics readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "external review gate closes",
+        "privacy compliance gate closes",
+        "store provisioning gates close"
+      ]
+    },
+    {
+      "issueId": "USF-638",
+      "decisionId": "cmp-provider-posture",
+      "decision": "Consent management remains provider-neutral by default. No CMP or UMP provider is selected for implementation. Any CMP or UMP integration requires privacy data inventory, regional consent mapping, ads and analytics decisions where applicable, external review, validator coverage, and proof evidence.",
+      "permits": [
+        "provider-neutral consent modelling",
+        "future CMP and UMP provider comparison",
+        "regional consent requirement modelling"
+      ],
+      "forbids": [
+        "CMP setup from this decision alone",
+        "UMP setup from this decision alone",
+        "legal compliance readiness claims"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "privacy compliance gate closes",
+        "external review gate closes",
+        "provider-specific consent evidence exists"
+      ]
+    },
+    {
+      "issueId": "USF-523",
+      "decisionId": "query-library-model",
+      "decision": "TanStack Query is the preferred query and cache library for future shared TypeScript and web client implementation after implementation authority exists. Mobile use remains subject to Expo compatibility and the mobile adapter gate. Query behaviour must remain an adapter over USF command, query, cache, retry, idempotency, tenant, permission, and privacy semantics.",
+      "permits": [
+        "TanStack Query planning",
+        "query cache semantic mapping",
+        "retry and idempotency proof planning"
+      ],
+      "forbids": [
+        "dependency installation from this decision alone",
+        "cache semantics that override USF authority",
+        "query readiness claims without validators"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "shared client SDK gate closes",
+        "mobile and web adapter gates close where applicable",
+        "validator coverage exists"
+      ]
+    },
+    {
+      "issueId": "USF-525",
+      "decisionId": "ui-only-store-library-model",
+      "decision": "The default UI-only state model is local component state, route state, and explicit view-model state. A global UI-only store library is not selected by default and may be introduced only for non-authoritative UI state when a concrete implementation requirement justifies it.",
+      "permits": [
+        "local UI state planning",
+        "route state planning",
+        "view-model state planning",
+        "future global UI-only store exception analysis"
+      ],
+      "forbids": [
+        "global UI store dependency installation from this decision alone",
+        "using UI-only state as product authority",
+        "readiness claims based on UI state shape"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "view-model semantics are mapped",
+        "shared client SDK gate closes",
+        "implementation authority exists"
+      ]
+    },
+    {
+      "issueId": "USF-528",
+      "decisionId": "offline-first-scope-and-capability-classification",
+      "decision": "USF is not globally offline-first by default. App surfaces may support offline-tolerant read caches and explicit offline-safe UI states. Offline mutation queues are allowed only for capability-specific idempotent command envelopes with retention, purge, conflict, replay, tenant, permission, audit, and proof semantics.",
+      "permits": [
+        "offline-tolerant read cache planning",
+        "offline-safe UI state planning",
+        "capability-specific offline command envelope analysis"
+      ],
+      "forbids": [
+        "general offline-first readiness claims",
+        "offline mutation queues without idempotency semantics",
+        "sync engine implementation from this decision alone"
+      ],
+      "downstreamEvaluationAndExecutionRequirements": [
+        "capability-specific offline semantics exist",
+        "retention and purge proof exists",
+        "shared client SDK gate closes"
+      ]
+    }
+  ],
+  "closurePolicy": {
+    "ownerDecisionIssueMayCloseWhen": [
+      "the issue maps to one decision in this artefact",
+      "the Linear issue records checked acceptance criteria",
+      "the issue comment records that the decision is semantic only",
+      "downstream implementation and readiness gates remain separately requires evidence"
+    ],
+    "implementationGateMayCloseWhen": [
+      "all prerequisite semantic artefacts parse as strict JSON where applicable",
+      "all prerequisite owner decisions are closed or explicitly recorded as nonblocking with USF authority",
+      "validators and proof expectations required by the gate are identified",
+      "non-claims are preserved",
+      "no implementation/runtime code is created by the gate closure itself"
+    ]
+  }
+}

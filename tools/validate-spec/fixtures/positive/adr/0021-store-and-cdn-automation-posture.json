@@ -1,0 +1,69 @@
+{
+  "id": "0021-store-and-cdn-automation-posture",
+  "kind": "adr",
+  "title": "Store and CDN Automation Posture",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-07-08",
+  "context": "USF needs release automation semantics for mobile stores and web CDN deployment, but account ownership, credentials, provider selection, release authority, and deployment proof must remain separate from planning artefacts.",
+  "decision": "USF may plan automated store provisioning, EAS-first mobile build and submit flows, and provider-neutral CDN deployment flows. Execution remains blocked until owner-controlled account authority, credential custody, provider selection, validator coverage, proof evidence, and explicit human release approval exist. Agents must not create accounts, credentials, DNS changes, builds, submissions, or deployments from this ADR alone.",
+  "consequences": [
+    "Store and CDN automation have rank-2 posture coverage.",
+    "Implementation-ready gates still need account, credential, provider, proof, and owner approval evidence.",
+    "Agents have explicit stop conditions for release-related external mutations."
+  ],
+  "invariants": [
+    "Store accounts and release authority remain owner-controlled.",
+    "EAS is the preferred mobile build and submit path only after implementation authority exists.",
+    "CDN provider selection remains separately gated.",
+    "No external account, credential, store, DNS, build, submission, or deployment mutation is authorised by this ADR."
+  ],
+  "permittedChanges": [
+    "Define release automation validators and evidence envelopes under later authorised work.",
+    "Select concrete store and CDN provider workflows after gates close."
+  ],
+  "forbiddenDrift": [
+    "Do not create or mutate external provider accounts from semantic planning.",
+    "Do not treat automated release scripts as release authority.",
+    "Do not claim store, CDN, live-provider, or production readiness from this ADR."
+  ],
+  "aiAlignmentRules": [
+    "Plan release automation only as semantics until explicit gates close. Never create credentials, accounts, DNS changes, store submissions, builds, or deployments from this ADR alone.",
+    "Agents must not implement runtime code from this ADR alone; a separate authorised implementation directive is required.",
+    "Agents must preserve USF semantic authority above framework, provider, store, SDK, and UI implementation choices."
+  ],
+  "semanticRefs": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+    "docs/architecture/app-surface-release-provisioning-semantics.json",
+    "docs/architecture/app-surface-store-provisioning-semantics.json",
+    "docs/architecture/app-surface-web-cdn-release-semantics.json"
+  ],
+  "sourceRefs": [],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "Automation can make releases auditable, but release authority and credentials are high-risk external controls. Keeping automation semantics separate from execution protects USF from false readiness and unauthorised external mutations.",
+  "description": "Records the decision that store provisioning, mobile build submission, and CDN deployment are automation-planned but blocked from execution until account, credential, provider, proof, and owner-approval gates close.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Plan release automation only as semantics until explicit gates close. Never create credentials, accounts, DNS changes, store submissions, builds, or deployments from this ADR alone."
+}

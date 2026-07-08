@@ -74,7 +74,7 @@
       "rationale": "These implementation files already have deterministic unit coverage and can fail closed at a 100 percent coverage threshold without relying on composed services or hidden local state."
     },
     {
-      "classification": "bounded-deferred",
+      "classification": "bounded-evidence-requirement",
       "paths": [
         "apps/**",
         "adapters/**",

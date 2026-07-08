@@ -1,0 +1,47 @@
+{
+  "expectedRule": "USF-ARTIFACT-PROMOTION-010",
+  "id": "009-missing-nonclaim",
+  "record": {
+    "ambiguityFallback": "fuller-applicable-validation",
+    "artifactHash": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "artifactRole": "semantic-behaviour-artifact",
+    "claimedProofLevel": "test-consideration",
+    "evidenceKinds": [
+      "raw-evidence",
+      "retained-proof-artifact"
+    ],
+    "evidenceRefs": [
+      "evidence/dev-compose-proof.json"
+    ],
+    "freshnessState": "current",
+    "generatedReportNonAuthority": true,
+    "handoffId": "positive-dev-to-test",
+    "handoffType": "dev-to-test",
+    "hashAlgorithm": "sha256",
+    "hashBasis": "artifact-bytes",
+    "inputClass": "known",
+    "issueRefs": [
+      "USF-985"
+    ],
+    "nonClaims": [
+      "production-readiness"
+    ],
+    "observedProofLevel": "dev-compose",
+    "providerMode": "local-composed-real-service",
+    "rerunMode": "validator-only",
+    "sameEnvironmentReuseRequired": false,
+    "sourceCommit": "0123456789abcdef0123456789abcdef01234567",
+    "sourceEnvironment": "dev",
+    "sourceProviderMode": "local-composed-real-service",
+    "stagingEntryBoundary": false,
+    "stagingReadinessClaim": false,
+    "supersessionState": "current",
+    "targetCommit": "0123456789abcdef0123456789abcdef01234567",
+    "targetEnvironment": "test",
+    "targetProviderMode": "local-composed-real-service",
+    "validationStatus": "pass",
+    "validatorRefs": [
+      "tools/validate-artifact-promotion/validate-artifact-promotion.py"
+    ]
+  }
+}

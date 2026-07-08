@@ -1,0 +1,70 @@
+{
+  "id": "0019-no-universal-screen-overreach",
+  "kind": "adr",
+  "title": "No Universal Screen Overreach",
+  "authorityLevel": "adr",
+  "decisionStatus": "accepted",
+  "date": "2026-07-08",
+  "context": "USF supports mobile and web app surfaces, but the Authority Model requires semantics to define product meaning. A universal screen abstraction can hide platform obligations, accessibility differences, store constraints, navigation differences, and proof requirements.",
+  "decision": "USF must not impose a universal-screen abstraction that treats mobile and web screens as identical product authority. Shared semantics may define capabilities, view models, validation, permissions, states, and evidence expectations. Platform adapters may render those semantics differently when the variance is explicit and does not contradict shared authority. This ADR does not authorise UI implementation.",
+  "consequences": [
+    "Mobile and web UI work remains semantics-defined but platform-aware.",
+    "Shared view models can exist without becoming universal screen authority.",
+    "Future agents must preserve platform-specific proof and accessibility obligations."
+  ],
+  "invariants": [
+    "Shared semantics define capability and view-model authority, not universal screen identity.",
+    "Mobile and web adapters may differ where platform semantics require it.",
+    "Platform variance must remain traceable to shared semantics or explicit platform requirements.",
+    "UI implementation remains blocked until implementation gates close."
+  ],
+  "permittedChanges": [
+    "Define shared view-model contracts that multiple adapters render differently.",
+    "Add platform-specific UX mappings when backed by semantic authority."
+  ],
+  "forbiddenDrift": [
+    "Do not create a universal screen layer that overrides platform semantics.",
+    "Do not infer product behaviour from shared UI component shape.",
+    "Do not erase accessibility, navigation, store, or platform proof differences."
+  ],
+  "aiAlignmentRules": [
+    "Do not force mobile and web into identical screens. Share semantics and view models where valid, but keep platform renderers and proof obligations explicit.",
+    "Agents must not implement runtime code from this ADR alone; a separate authorised implementation directive is required.",
+    "Agents must preserve USF semantic authority above framework, provider, store, SDK, and UI implementation choices."
+  ],
+  "semanticRefs": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+    "docs/architecture/mobile-adapter-semantic-surface.json",
+    "docs/architecture/app-surface-web-adapter-semantics.json",
+    "docs/architecture/generated-ui-renderer-composition-semantics.json",
+    "docs/architecture/generated-ui-view-model-semantics.json"
+  ],
+  "sourceRefs": [],
+  "proofRefs": [],
+  "validatorRefs": [
+    "tools/validate-spec/validate-spec.py"
+  ],
+  "rationale": "Shared semantics are valuable, but collapsing platform surfaces into one screen model would make implementation structure look canonical and would obscure platform-specific UX, accessibility, release, and proof obligations.",
+  "description": "Records the decision that USF does not use a universal-screen abstraction that erases platform differences or lets UI structure define product semantics.",
+  "lifecycleState": "active",
+  "ontologyConcepts": [
+    "ADR",
+    "Semantic Contract",
+    "Capability"
+  ],
+  "taxonomyRefs": [
+    "authority-classification",
+    "semantic-architecture-classification"
+  ],
+  "vocabularyRefs": [
+    "authority-levels",
+    "artefact-kinds",
+    "provider-modes",
+    "environment-classes"
+  ],
+  "aiGuidance": "Do not force mobile and web into identical screens. Share semantics and view models where valid, but keep platform renderers and proof obligations explicit."
+}

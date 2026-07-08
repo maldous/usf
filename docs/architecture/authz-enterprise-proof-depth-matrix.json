@@ -21,8 +21,8 @@
   ],
   "acceptanceCriteriaMapping": [
     {
-      "criterion": "Each deferred authorization control is implemented with proof or explicitly reclassified.",
-      "evidence": "controls array records proven-local, bounded-local-proof, transferred, or deferred-with-owner status for every USF-141 control."
+      "criterion": "Each authorization control is evaluated with proof or an explicit evidence requirement.",
+      "evidence": "controls array records proven-local, bounded-local-proof, transferred, or evaluated-with-owner status for every USF-141 control."
     },
     {
       "criterion": "PDP synchronous behaviour is preserved.",
@@ -34,7 +34,7 @@
     },
     {
       "criterion": "Validator coverage exists for any new authorization claim.",
-      "evidence": "USF-AUTHZ-008 through USF-AUTHZ-013 validate the USF-141 matrix, proof linkage, deferred metadata, sync PDP, and non-claims."
+      "evidence": "USF-AUTHZ-008 through USF-AUTHZ-013 validate the USF-141 matrix, proof linkage, evidence requirement metadata, sync PDP, and non-claims."
     },
     {
       "criterion": "No live provider or certification readiness claim is made without proof.",
@@ -102,7 +102,7 @@
       ],
       "proofCommand": "make authz-proof",
       "validationCommand": "python3 tools/validate-parity/validate-authz.py all --json",
-      "nonClaimBoundary": "classification ABAC is proven; device, network, relationship, assurance, and geo attributes remain deferred"
+      "nonClaimBoundary": "classification ABAC is proven; device, network, relationship, assurance, and geo attributes remain evidence requirements"
     },
     {
       "id": "policy-input-versioned-schema",
@@ -122,7 +122,7 @@
     },
     {
       "id": "delegation-and-impersonation",
-      "status": "deferred-with-owner",
+      "status": "evaluated-with-owner",
       "owner": "platform-identity-foundation",
       "riskOwner": "platform-identity-risk-owner",
       "controlOwner": "platform-identity-control-owner",
@@ -133,12 +133,12 @@
         "USF-155",
         "USF-169"
       ],
-      "deferredReason": "No authorised delegation or impersonation product surface exists in the current foundation scope; any future surface needs explicit original/effective actor, expiry, PDP, and audit proof.",
+      "evidenceRequirementReason": "No authorised delegation or impersonation product surface exists in the current foundation scope; any future surface needs explicit original/effective actor, expiry, PDP, and audit proof.",
       "nonClaimBoundary": "delegation and impersonation readiness are not claimed"
     },
     {
       "id": "field-level-authorization",
-      "status": "deferred-with-owner",
+      "status": "evaluated-with-owner",
       "owner": "platform-identity-foundation",
       "riskOwner": "platform-identity-risk-owner",
       "controlOwner": "platform-identity-control-owner",
@@ -149,7 +149,7 @@
         "USF-155",
         "USF-163"
       ],
-      "deferredReason": "Classification-based stronger read permission is proven, but field visibility and mutability policy surfaces remain domain-specific deferred depth.",
+      "evidenceRequirementReason": "Classification-based stronger read permission is proven, but field visibility and mutability policy surfaces remain domain-specific evaluated evidence depth.",
       "nonClaimBoundary": "field-level authorization readiness is not claimed"
     },
     {
@@ -163,7 +163,7 @@
       "followUpIssues": [
         "USF-149"
       ],
-      "deferredReason": "Authentication token and session runtime depth belongs to the auth/identity source issue; token claims remain inputs only and do not authorize.",
+      "evidenceRequirementReason": "Authentication token and session runtime depth belongs to the auth/identity source issue; token claims remain inputs only and do not authorize.",
       "nonClaimBoundary": "live IdP, browser session, and token lifecycle readiness are not claimed by USF-141"
     },
     {
@@ -177,7 +177,7 @@
       "followUpIssues": [
         "USF-161"
       ],
-      "deferredReason": "Distributed rate-limit and abuse-control enforcement belongs to the guardrails source issue.",
+      "evidenceRequirementReason": "Distributed rate-limit and abuse-control enforcement belongs to the guardrails source issue.",
       "nonClaimBoundary": "production or distributed authorization rate limiting is not claimed"
     },
     {
@@ -191,7 +191,7 @@
       "followUpIssues": [
         "USF-151"
       ],
-      "deferredReason": "The local PDP re-evaluates current membership on every decision; long-running workflow revalidation belongs to jobs/workflows source depth.",
+      "evidenceRequirementReason": "The local PDP re-evaluates current membership on every decision; long-running workflow revalidation belongs to jobs/workflows source depth.",
       "nonClaimBoundary": "workflow replay, long-running revalidation, and production orchestration readiness are not claimed"
     },
     {

@@ -1,0 +1,110 @@
+{
+  "id": "usf.app-surface-semantic-definition-backlog-closure",
+  "title": "App-surface semantic-definition backlog closure",
+  "purpose": "Record closure of the app-surface semantic-definition backlog as a planning and governance closure record before any UI implementation, app-surface readiness claim, staging claim, deployment claim, store claim, or owner acceptance claim.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "generatedReportIsAuthority": false,
+    "semanticAuthorityPreserved": true,
+    "nonClaims": [
+      "This report does not authorise UI implementation.",
+      "This report does not authorise runtime implementation.",
+      "This report does not claim app-surface readiness.",
+      "This report does not claim staging readiness.",
+      "This report does not claim production readiness.",
+      "This report does not claim deployment readiness.",
+      "This report does not claim store submission readiness.",
+      "This report does not claim owner acceptance."
+    ]
+  },
+  "sourceReferences": [
+    "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+    "docs/architecture/repository-test-suite-governance.json",
+    "docs/architecture/repository-validator-regression-proofing-governance.json",
+    "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+    "docs/architecture/repository-environment-ladder-governance.json",
+    "docs/architecture/repository-developer-experience-proof-ladder-guide-governance.json",
+    "docs/architecture/authority-model.md",
+    "AGENTS.md"
+  ],
+  "linearStatusSnapshot": {
+    "snapshotScope": "Linear issues in the USF Repository and Environment Optimisation Programme with the semantic-definition label.",
+    "openSemanticDefinitionIssuesObserved": [
+      {
+        "issueId": "USF-952",
+        "title": "USF Programme Orchestration: app-surface semantics and repo/environment optimisation",
+        "reasonOpen": "overall orchestration remains in progress"
+      },
+      {
+        "issueId": "USF-954",
+        "title": "App-surface semantic-definition backlog closure report",
+        "reasonOpen": "this closure report issue itself"
+      },
+      {
+        "issueId": "USF-956",
+        "title": "Final owner acceptance: app-surface semantics and repo/environment optimisation closure",
+        "reasonOpen": "final owner acceptance is not complete and cannot be inferred"
+      }
+    ],
+    "nonClosureSemanticDefinitionWorkObserved": false,
+    "interpretation": "No remaining non-orchestration semantic-definition issue was observed in Todo, Backlog, or In Progress status during this sweep. The remaining labelled issues are closure, orchestration, and final owner acceptance controls."
+  },
+  "closureFindings": {
+    "semanticDefinitionBacklogClosure": true,
+    "implementationGateOpen": true,
+    "ownerAcceptanceOpen": true,
+    "repoEnvironmentOptimisationOpen": true,
+    "proofRefreshOpen": true,
+    "baselineBlockersOpen": true,
+    "summary": "The app-surface semantic-definition backlog can be reported as closed for planning purposes, but repository and environment optimisation, proof refresh, baseline evidence requirement resolution, and final owner acceptance remain open. This report must not be used as implementation permission."
+  },
+  "appSurfaceNonReadinessBoundaries": [
+    "Semantic-definition closure is not UI implementation readiness.",
+    "Validator design is not validator implementation unless the validator exists and has run.",
+    "Proof expectation planning is not runtime proof evidence.",
+    "Generated reports are not canonical semantic authority.",
+    "No owner acceptance is inferred from issue closure.",
+    "No implementation work may begin unless separately authorised by an approved directive and prerequisite gates."
+  ],
+  "validationProofExpectation": [
+    "Before any UI implementation claim, the final pre-UI owner decision gate must be resolved.",
+    "Before any readiness claim, open baseline evidence requirements, proof refresh work, and required validators must be resolved and evidenced.",
+    "Any future closure report update must distinguish semantic closure, validator implementation, proof evidence, repository readiness, and owner acceptance."
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-954",
+      "title": "App-surface semantic-definition backlog closure report",
+      "completionBasis": "This report records the semantic-definition backlog closure basis, remaining orchestration and owner-acceptance controls, non-readiness boundaries, and validation expectations."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-954",
+      "criteria": [
+        "Closure report exists.",
+        "Remaining open semantic-definition labelled issues are identified.",
+        "Implementation and readiness non-claims are explicit.",
+        "Owner acceptance remains open and is not inferred.",
+        "Strict JSON parse passed for the report and the three catalogue JSON files."
+      ],
+      "satisfied": true,
+      "evidence": [
+        "linearStatusSnapshot",
+        "closureFindings",
+        "appSurfaceNonReadinessBoundaries"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "uiImplemented": false,
+    "proofRunPerformed": false,
+    "readinessClaimMade": false,
+    "ownerAcceptanceClaimed": false,
+    "newDirectoryCreated": false
+  }
+}

@@ -1,0 +1,892 @@
+{
+  "id": "app-surface-release-provisioning-semantics",
+  "title": "App surface release provisioning semantics",
+  "lifecycleState": "semantic-definition",
+  "authorityLayer": "semantic-definition",
+  "trackedWorkOnly": true,
+  "semanticAuthorityNotice": "This artefact defines USF semantic inputs and gates only. Linear tracks the work and does not define USF semantic authority.",
+  "coveredIssueIds": [
+    "USF-706",
+    "USF-707",
+    "USF-709",
+    "USF-710",
+    "USF-711",
+    "USF-712",
+    "USF-724",
+    "USF-725",
+    "USF-726",
+    "USF-727",
+    "USF-728",
+    "USF-729",
+    "USF-730",
+    "USF-731",
+    "USF-732"
+  ],
+  "evaluatedIssueIds": [
+    "USF-704",
+    "USF-705",
+    "USF-708",
+    "USF-713",
+    "USF-722",
+    "USF-723"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/directory-and-file-naming-standard.md",
+      "authorityRole": "naming-standard"
+    },
+    {
+      "path": "docs/architecture/schema-authoring-standard.md",
+      "authorityRole": "schema-standard"
+    },
+    {
+      "path": "docs/architecture/git-practices-standard.md",
+      "authorityRole": "git-standard"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy-catalog"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary-catalog"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema-registry"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-security-proof-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    },
+    {
+      "path": "docs/architecture/app-surface-observability-privacy-semantics.json",
+      "authorityRole": "related-semantic-contract"
+    }
+  ],
+  "implementationGate": {
+    "runtimeImplementationAllowed": false,
+    "releaseExecutionAllowed": false,
+    "deploymentAllowed": false,
+    "storeSubmissionAllowed": false,
+    "storeAppealAllowed": false,
+    "resubmissionAllowed": false,
+    "credentialCreationAllowed": false,
+    "ciConfigurationAllowed": false,
+    "buildExecutionAllowed": false,
+    "sbomGenerationAllowed": false,
+    "signingImplementationAllowed": false,
+    "otaPublicationAllowed": false,
+    "rolloutExecutionAllowed": false,
+    "approvalExecutionAllowed": false,
+    "productChangeAllowed": false,
+    "legalConclusionAllowed": false,
+    "readinessClaimAllowed": false,
+    "productionReadinessClaimAllowed": false,
+    "storeReadinessClaimAllowed": false,
+    "liveProviderReadinessClaimAllowed": false,
+    "reason": "This artefact defines release and provisioning semantic mappings, validator requirements, proof requirements, dependency mappings, and non-claims. It does not authorise builds, releases, submissions, credentials, deployments, legal conclusions, or readiness claims."
+  },
+  "semanticModels": [
+    {
+      "id": "certificates-profiles-signing-key-management",
+      "issueId": "USF-706",
+      "purpose": "Define certificates, profiles, signing, and key management semantics for key custody, signing authority, rotation, evidence, secret handling, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "certificate-to-custody-boundary",
+        "profile-to-release-authority",
+        "signing-key-to-rotation-policy",
+        "signing-action-to-evidence-requirement",
+        "secret-handling-to-redaction-policy",
+        "missing-signing-authority-or-evidence-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "store-account-ownership",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "security-proof-secrets-model",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "credentialCreation": false,
+        "keyGeneration": false,
+        "credentialStorage": false,
+        "buildExecution": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "eas-credentials-policy",
+      "issueId": "USF-707",
+      "purpose": "Define EAS credentials policy semantics for credential custody, automation boundaries, secret handling, signing evidence, validators, proof expectations, dependencies, and non-claims.",
+      "requiredMappings": [
+        "credential-to-custody-boundary",
+        "credential-to-automation-boundary",
+        "secret-to-handling-rule",
+        "signing-use-to-evidence-requirement",
+        "credential-change-to-audit-event",
+        "credential-policy-gap-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "certificates-profiles-signing-key-management",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "eas-versus-self-hosted-build-submit-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "easSetup": false,
+        "credentialCreation": false,
+        "credentialStorage": false,
+        "buildExecution": false,
+        "provisioningReadiness": false
+      }
+    },
+    {
+      "id": "eas-build-automation-semantics",
+      "issueId": "USF-709",
+      "purpose": "Define EAS Build automation semantics for profiles, environments, secrets, signing, provenance, SBOM, validators, proof expectations, dependencies, and non-claims.",
+      "requiredMappings": [
+        "build-profile-to-environment",
+        "build-profile-to-secret-scope",
+        "build-profile-to-signing-authority",
+        "build-output-to-provenance-record",
+        "build-output-to-sbom-expectation",
+        "build-automation-claim-without-service-decision-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "eas-versus-self-hosted-build-submit-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "eas-credentials-policy",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "build-provenance-sbom-signing-evidence",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "easSetup": false,
+        "ciImplementation": false,
+        "buildExecution": false,
+        "credentialSetup": false,
+        "releaseReadiness": false
+      }
+    },
+    {
+      "id": "eas-submit-automation-semantics",
+      "issueId": "USF-710",
+      "purpose": "Define EAS Submit automation semantics for submission profiles, credentials, store authority, metadata, approvals, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "submit-profile-to-store-authority",
+        "submit-profile-to-credential-boundary",
+        "submit-profile-to-metadata-source",
+        "submit-action-to-approval-gate",
+        "submit-action-to-evidence-requirement",
+        "store-submission-claim-without-authority-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "store-account-ownership",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "eas-versus-self-hosted-build-submit-decision",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "store-metadata-generation",
+          "semanticContractPath": "docs/architecture/app-surface-store-provisioning-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "easSetup": false,
+        "submitExecution": false,
+        "credentialSetup": false,
+        "storeSubmission": false,
+        "storeReadiness": false
+      }
+    },
+    {
+      "id": "testflight-internal-testing-pipeline",
+      "issueId": "USF-711",
+      "purpose": "Define TestFlight and internal testing pipeline semantics for testing tracks, testers, builds, approvals, privacy disclosures, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "testing-track-to-eligible-tester-group",
+        "build-to-testing-track",
+        "testing-track-to-approval-requirement",
+        "testing-track-to-privacy-disclosure",
+        "testing-track-to-evidence-requirement",
+        "testing-readiness-claim-without-proof-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "apple-account-prerequisites",
+          "semanticContractPath": "docs/architecture/app-surface-store-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "eas-build-automation",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "privacy-compliance-consent-proof",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "testflightSetup": false,
+        "testerInvitation": false,
+        "buildUpload": false,
+        "appReviewSubmission": false,
+        "testingReadiness": false
+      }
+    },
+    {
+      "id": "play-track-release-semantics",
+      "issueId": "USF-712",
+      "purpose": "Define Google Play internal, closed, open, and production track semantics for release tracks, testers, staged rollout, review status, Data Safety, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "play-track-to-release-stage",
+        "play-track-to-tester-eligibility",
+        "play-track-to-staged-rollout-policy",
+        "play-track-to-review-status",
+        "play-track-to-data-safety-reference",
+        "play-track-readiness-claim-without-proof-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "google-play-account-prerequisites",
+          "semanticContractPath": "docs/architecture/app-surface-store-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "phased-staged-rollout-semantics",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "store-privacy-compliance-checklist",
+          "semanticContractPath": "docs/architecture/app-surface-store-provisioning-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "playConsoleSetup": false,
+        "buildUpload": false,
+        "releaseCreation": false,
+        "googlePlayReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "release-notes-changelog-generation",
+      "issueId": "USF-724",
+      "purpose": "Define release notes and changelog generation semantics without publishing marketing copy or store metadata.",
+      "requiredMappings": [
+        "capability-change-to-release-note-entry",
+        "release-note-entry-to-non-claim-boundary",
+        "release-note-entry-to-localisation-input",
+        "release-note-entry-to-store-metadata-input",
+        "release-note-generation-to-audit-event",
+        "unsupported-readiness-claim-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "capability-coverage-matrix",
+          "semanticContractPath": "docs/architecture/app-surface-capability-coverage-matrix.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "store-metadata-generation",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "productReadiness": false,
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "phased-staged-rollout-semantics",
+      "issueId": "USF-725",
+      "purpose": "Define rollout stages, eligibility, rollback, health checks, evidence, validator, proof, dependency, and non-claim mappings.",
+      "requiredMappings": [
+        "rollout-stage-to-eligibility-rule",
+        "rollout-stage-to-health-check",
+        "rollout-stage-to-rollback-trigger",
+        "rollout-stage-to-evidence-requirement",
+        "rollout-stage-to-approval-gate",
+        "missing-health-approval-or-rollback-evidence-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "release-approval-gates",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "release-health-monitoring",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "store-track-semantics",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "rollback-hotfix-policy",
+      "issueId": "USF-726",
+      "purpose": "Define rollback and hotfix policy semantics for mobile store limits, OTA rollback, web CDN rollback, approvals, evidence, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "release-surface-to-rollback-limit",
+        "hotfix-scope-to-semantic-authority-check",
+        "rollback-action-to-approval-requirement",
+        "rollback-action-to-proof-evidence",
+        "hotfix-action-to-audit-event",
+        "missing-rollback-evidence-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "eas-update-policy",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "cdn-rollback-semantics",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "release-approval-gates",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "productionReadiness": false,
+        "storeReadiness": false,
+        "cdnReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "ota-update-policy-limits",
+      "issueId": "USF-727",
+      "purpose": "Define OTA update policy and limits for allowed update scope, store policy limits, rollback, runtime version, approvals, evidence, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "ota-change-to-allowed-scope",
+        "ota-change-to-store-policy-limit",
+        "runtime-version-to-update-eligibility",
+        "ota-update-to-rollback-policy",
+        "ota-update-to-approval-requirement",
+        "ota-plan-without-semantic-scope-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "eas-update-policy",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "app-versioning-semantics",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "otaReadiness": false,
+        "appStoreReadiness": false,
+        "googlePlayReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "build-provenance-sbom-signing-evidence",
+      "issueId": "USF-728",
+      "purpose": "Define build provenance, SBOM, signing, attestation, freshness, validator, proof, dependency, and non-claim mappings.",
+      "requiredMappings": [
+        "commit-to-build-evidence",
+        "build-input-to-provenance-record",
+        "dependency-inventory-to-sbom-evidence",
+        "signature-to-signing-authority-record",
+        "attestation-to-evidence-freshness",
+        "wrong-commit-or-stale-build-evidence-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "eas-build-automation",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "dependency-policy",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "signing-key-management",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "supplyChainApproval": false,
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "ci-store-credential-secret-handling",
+      "issueId": "USF-729",
+      "purpose": "Define CI and store credential secret handling semantics for secret scopes, custody, rotation, redaction, audit, provider boundaries, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "secret-to-scope",
+        "secret-to-custody-boundary",
+        "secret-to-rotation-policy",
+        "secret-to-redaction-rule",
+        "credential-use-to-audit-event",
+        "credential-exposure-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "signing-key-management",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "eas-credentials-policy",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "security-proof-secrets-model",
+          "semanticContractPath": "docs/architecture/app-surface-security-proof-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "securityApproval": false,
+        "provisioningReadiness": false,
+        "storeReadiness": false,
+        "productionReadiness": false
+      }
+    },
+    {
+      "id": "release-approval-gate-model",
+      "issueId": "USF-730",
+      "purpose": "Define release approval gate semantics for owner approvals, validator pass criteria, proof evidence, non-claims, store and CDN release boundaries, dependencies, and evidence requirements.",
+      "requiredMappings": [
+        "release-boundary-to-owner-approval",
+        "release-boundary-to-validator-pass-criteria",
+        "release-boundary-to-proof-evidence",
+        "release-boundary-to-store-or-cdn-scope",
+        "release-boundary-to-evidence requirement-state",
+        "missing-semantic-validator-proof-or-owner-approval-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "build-provenance",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "compliance-gate",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "app-review-gate",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "web-release-gate",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "releaseReadiness": false,
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "human-final-approval-boundary",
+      "issueId": "USF-731",
+      "purpose": "Define human final approval boundary semantics for human approval, automation limits, evidence review, release authority, exceptions, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "release-action-to-human-approval-requirement",
+        "automation-action-to-automation-limit",
+        "evidence-review-to-approval-input",
+        "release-authority-to-human-boundary",
+        "exception-to-owner-decision",
+        "missing-final-human-approval-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "store-account-ownership",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "release-approval-gates",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "human-acceptance-cockpit-extension",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "releaseReadiness": false,
+        "storeReadiness": false,
+        "productionReadiness": false,
+        "liveProviderReadiness": false
+      }
+    },
+    {
+      "id": "store-review-rejection-response-workflow",
+      "issueId": "USF-732",
+      "purpose": "Define store review rejection response workflow semantics for rejection classification, authority references, owner decisions, corrective actions, resubmission evidence, validators, proof, and non-claims.",
+      "requiredMappings": [
+        "store-rejection-to-classification",
+        "store-rejection-to-usf-authority-reference",
+        "store-rejection-to-owner-decision",
+        "corrective-action-to-semantic-authority-check",
+        "resubmission-evidence-to-proof-input",
+        "semantic-overclaim-in-rejection-response-to-fail-closed-state"
+      ],
+      "dependencyMapping": [
+        {
+          "dependency": "store-metadata",
+          "semanticContractPath": null,
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "compliance-checklist",
+          "semanticContractPath": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+          "requiredForImplementation": true
+        },
+        {
+          "dependency": "release-approval-gates",
+          "semanticContractPath": "docs/architecture/app-surface-release-provisioning-semantics.json",
+          "requiredForImplementation": true
+        }
+      ],
+      "nonClaims": {
+        "appStoreReadiness": false,
+        "googlePlayReadiness": false,
+        "complianceReadiness": false,
+        "productionReadiness": false
+      }
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "id": "validate-certificates-profiles-signing-key-management",
+      "issueId": "USF-706",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject signing or key management semantics without custody boundary, release authority, rotation policy, evidence mapping, secret handling, and fail-closed handling."
+    },
+    {
+      "id": "validate-eas-credentials-policy",
+      "issueId": "USF-707",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject credential policy semantics without custody boundary, automation boundary, secret handling, signing evidence, audit mapping, and fail-closed handling."
+    },
+    {
+      "id": "validate-eas-build-automation-semantics",
+      "issueId": "USF-709",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject EAS Build automation semantics without profile, environment, secret, signing, provenance, SBOM, service-decision dependency, and non-claim mappings."
+    },
+    {
+      "id": "validate-eas-submit-automation-semantics",
+      "issueId": "USF-710",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject EAS Submit automation semantics without store authority, credential boundary, metadata source, approval gate, evidence, and non-claim mappings."
+    },
+    {
+      "id": "validate-testflight-internal-testing-pipeline",
+      "issueId": "USF-711",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject TestFlight or internal testing semantics without track, tester, build, approval, privacy disclosure, evidence, and fail-closed mappings."
+    },
+    {
+      "id": "validate-play-track-release-semantics",
+      "issueId": "USF-712",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject Google Play track semantics without track classification, tester eligibility, staged rollout, review status, Data Safety, evidence, and fail-closed mappings."
+    },
+    {
+      "id": "validate-release-notes-changelog-generation",
+      "issueId": "USF-724",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject release notes or changelog entries that claim unsupported readiness, invent behaviour, lack capability-change mapping, or bypass non-claim boundaries."
+    },
+    {
+      "id": "validate-phased-staged-rollout-semantics",
+      "issueId": "USF-725",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject staged rollout semantics without rollout stage, eligibility, health check, rollback trigger, approval, and evidence mappings."
+    },
+    {
+      "id": "validate-rollback-hotfix-policy",
+      "issueId": "USF-726",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject rollback or hotfix semantics without surface-specific limits, semantic-authority checks, approval mapping, evidence mapping, and fail-closed handling."
+    },
+    {
+      "id": "validate-ota-update-policy-limits",
+      "issueId": "USF-727",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject OTA update plan semantics without allowed-scope mapping, store-policy limits, runtime-version eligibility, rollback policy, approval, and proof mapping."
+    },
+    {
+      "id": "validate-build-provenance-sbom-signing-evidence",
+      "issueId": "USF-728",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject release proof semantics when build evidence is missing, stale, pinned to the wrong commit, lacks SBOM mapping, lacks signing evidence, or lacks attestation freshness."
+    },
+    {
+      "id": "validate-ci-store-credential-secret-handling",
+      "issueId": "USF-729",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject build or submit automation semantics that expose governed credentials, lack custody, lack rotation, lack redaction, lack audit mapping, or bypass provider boundaries."
+    },
+    {
+      "id": "validate-release-approval-gate-model",
+      "issueId": "USF-730",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject release gate semantics unless required semantic definitions, validator expectations, proof evidence, owner approvals, release boundaries, and evidence requirement states are represented."
+    },
+    {
+      "id": "validate-human-final-approval-boundary",
+      "issueId": "USF-731",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject release gate semantics that allow automation to bypass required human approval, evidence review, release authority, exception mapping, or fail-closed handling."
+    },
+    {
+      "id": "validate-store-review-rejection-response-workflow",
+      "issueId": "USF-732",
+      "validatorType": "future-semantic-validator",
+      "requirement": "Reject store rejection response semantics that lack rejection classification, USF authority references, owner decision mapping, corrective-action mapping, resubmission evidence, or semantic-overclaim blocking."
+    }
+  ],
+  "proofRequirements": [
+    {
+      "id": "prove-certificates-profiles-signing-key-management",
+      "issueId": "USF-706",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show certificate custody, profile release authority, signing key rotation policy, signing evidence, secret handling, and implementation blocking."
+    },
+    {
+      "id": "prove-eas-credentials-policy",
+      "issueId": "USF-707",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show credential custody, automation boundaries, secret handling, signing evidence, audit mapping, and implementation blocking."
+    },
+    {
+      "id": "prove-eas-build-automation-semantics",
+      "issueId": "USF-709",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show build profiles, environments, secret scopes, signing authority, provenance records, SBOM expectations, service-decision dependency, and non-claim boundaries."
+    },
+    {
+      "id": "prove-eas-submit-automation-semantics",
+      "issueId": "USF-710",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show submit profiles, store authority, credential boundary, metadata source, approval gate, evidence requirements, and non-claim boundaries."
+    },
+    {
+      "id": "prove-testflight-internal-testing-pipeline",
+      "issueId": "USF-711",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show testing tracks, tester eligibility, build mapping, approval requirements, privacy disclosures, evidence requirements, and implementation blocking."
+    },
+    {
+      "id": "prove-play-track-release-semantics",
+      "issueId": "USF-712",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show Play track classification, tester eligibility, staged rollout policy, review status, Data Safety linkage, evidence requirements, and implementation blocking."
+    },
+    {
+      "id": "prove-release-notes-changelog-generation",
+      "issueId": "USF-724",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show capability-change mapping, non-claim boundaries, localisation inputs, store metadata inputs, audit mapping, and fail-closed handling for unsupported readiness claims."
+    },
+    {
+      "id": "prove-phased-staged-rollout-semantics",
+      "issueId": "USF-725",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show rollout stages, eligibility, health checks, rollback triggers, evidence requirements, approval gates, and implementation blocking."
+    },
+    {
+      "id": "prove-rollback-hotfix-policy",
+      "issueId": "USF-726",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show mobile store rollback limits, OTA rollback limits, CDN rollback limits, approval requirements, evidence mappings, audit mappings, and fail-closed handling."
+    },
+    {
+      "id": "prove-ota-update-policy-limits",
+      "issueId": "USF-727",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show allowed update scope, store policy limits, runtime version eligibility, rollback policy, approval requirements, evidence mappings, and implementation blocking."
+    },
+    {
+      "id": "prove-build-provenance-sbom-signing-evidence",
+      "issueId": "USF-728",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show commit binding, build inputs, dependency inventory, SBOM evidence, signing evidence, attestations, freshness state, and fail-closed handling for wrong-commit or stale evidence."
+    },
+    {
+      "id": "prove-ci-store-credential-secret-handling",
+      "issueId": "USF-729",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show secret scope, custody boundary, rotation policy, redaction rule, provider boundary, audit event, and fail-closed handling for credential exposure."
+    },
+    {
+      "id": "prove-release-approval-gate-model",
+      "issueId": "USF-730",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show owner approval requirements, validator pass criteria, proof evidence, store and CDN release boundaries, dependencies, evidence requirements, and fail-closed handling."
+    },
+    {
+      "id": "prove-human-final-approval-boundary",
+      "issueId": "USF-731",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show human approval requirements, automation limits, evidence review inputs, release authority, exception handling, and fail-closed handling when required human approval is absent."
+    },
+    {
+      "id": "prove-store-review-rejection-response-workflow",
+      "issueId": "USF-732",
+      "proofType": "future-semantic-proof",
+      "expectation": "Proof must show rejection classification, USF authority references, owner decisions, corrective actions, resubmission evidence, and semantic-overclaim prevention."
+    }
+  ],
+  "evidenceFreshnessSemantics": {
+    "freshnessRequired": true,
+    "missingEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "wrongCommitEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "dependencyPolicy": {
+    "semanticDependencyLinksRequired": true,
+    "nullSemanticContractPathMeansDependencyIsKnownButNotYetSatisfiedForImplementation": true,
+    "implementationMayProceedWithNullSemanticContractPath": false,
+    "readinessEvidenceDependencies": [
+      "USF-704",
+      "USF-705",
+      "USF-708",
+      "USF-713",
+      "USF-722",
+      "USF-723"
+    ]
+  },
+  "nonClaims": {
+    "productReadiness": false,
+    "releaseReadiness": false,
+    "webReleaseReadiness": false,
+    "storeReadiness": false,
+    "appStoreReadiness": false,
+    "googlePlayReadiness": false,
+    "complianceReadiness": false,
+    "securityApproval": false,
+    "supplyChainApproval": false,
+    "provisioningReadiness": false,
+    "otaReadiness": false,
+    "cdnReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "runtimeImplementation": false,
+    "releaseExecution": false,
+    "deployment": false,
+    "storeSubmission": false,
+    "storeAppeal": false,
+    "resubmission": false,
+    "credentialCreation": false,
+    "ciConfiguration": false,
+    "buildExecution": false,
+    "sbomGeneration": false,
+    "signingImplementation": false,
+    "otaPublication": false,
+    "rolloutExecution": false,
+    "approvalExecution": false,
+    "productChange": false,
+    "legalConclusion": false
+  }
+}

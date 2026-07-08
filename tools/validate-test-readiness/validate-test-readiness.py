@@ -4148,7 +4148,7 @@ def check_coverage_gate(F: Findings, state: dict[str, Any]) -> None:
         F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#sourceClassifications", "source classifications must be a list")
         source_rows = []
     classifications = _row_by_id(source_rows, "classification")
-    if "in-scope" not in classifications or "bounded-deferred" not in classifications or "generated-or-type-only-excluded" not in classifications:
+    if "in-scope" not in classifications or "bounded-evidence-requirement" not in classifications or "generated-or-type-only-excluded" not in classifications:
         F.add("USF-TEST-READINESS-098", f"{COVERAGE_GATE_PATH}#sourceClassifications", "required source classifications are missing")
     for classification, row in classifications.items():
         if not isinstance(row.get("paths"), list) or not row.get("paths"):

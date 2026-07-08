@@ -1,0 +1,482 @@
+{
+  "id": "usf.mobile-adapter-release-compliance-semantics",
+  "title": "Mobile Adapter Release and Compliance Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines USF-native mobile adapter release, provisioning, compliance, diagnostics, accessibility, localisation, store-review, platform-manifest, integrity, validator, proof, dependency, and non-claim semantics only. It does not implement mobile code, generate native projects, install dependencies, configure providers, create credentials, execute builds, submit stores, run reviews, or claim readiness.",
+  "coveredIssueIds": [
+    "USF-387",
+    "USF-389",
+    "USF-390",
+    "USF-391",
+    "USF-392",
+    "USF-393",
+    "USF-394",
+    "USF-395",
+    "USF-396",
+    "USF-397",
+    "USF-399",
+    "USF-401",
+    "USF-403",
+    "USF-404",
+    "USF-408"
+  ],
+  "deferredOwnerDecisionIssueIds": [
+    "USF-375",
+    "USF-388"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/standards-profile.md",
+      "authorityRole": "foundational-governance"
+    },
+    {
+      "path": "docs/architecture/ontology.md",
+      "authorityRole": "semantic-definition"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "authorityRole": "shared client SDK semantic surface"
+    },
+    {
+      "path": "docs/architecture/mobile-adapter-semantic-surface.json",
+      "authorityRole": "mobile adapter semantic surface"
+    },
+    {
+      "path": "docs/architecture/app-surface-security-proof-semantics.json",
+      "authorityRole": "security proof semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "authorityRole": "release provisioning semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-store-provisioning-semantics.json",
+      "authorityRole": "store provisioning semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-i18n-localisation-semantics.json",
+      "authorityRole": "i18n and localisation semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-semantics.json",
+      "authorityRole": "accessibility semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-platform-test-semantics.json",
+      "authorityRole": "platform test semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityRole": "proof evidence and report semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "authorityRole": "privacy compliance and consent proof semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "authorityRole": "privacy disclosure and SDK vendor semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-observability-privacy-semantics.json",
+      "authorityRole": "observability privacy semantics"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "semanticModels": [
+    {
+      "issueId": "USF-387",
+      "modelId": "mobile-native-module-config-plugin-policy",
+      "purpose": "Define native module and config plugin policy for USF mobile adapters without installing native modules, config plugins, dependencies, or generating native projects.",
+      "requiredMappings": [
+        "native-module-to-capability-authority",
+        "config-plugin-to-review-gate",
+        "native-permission-to-platform-disclosure",
+        "sdk-dependency-to-privacy-registry",
+        "unapproved-native-extension-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-331",
+        "USF-312",
+        "USF-388"
+      ]
+    },
+    {
+      "issueId": "USF-389",
+      "modelId": "mobile-eas-build-profile-semantics",
+      "purpose": "Define EAS Build profile semantics for development, preview, staging, and production-shaped profiles without executing builds or creating credentials.",
+      "requiredMappings": [
+        "build-profile-to-environment",
+        "build-profile-to-provider-mode",
+        "credential-requirement-to-setup-block",
+        "build-provenance-to-proof-input",
+        "production-shaped-profile-to-non-production-live-boundary"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-322",
+        "USF-331",
+        "USF-388"
+      ]
+    },
+    {
+      "issueId": "USF-390",
+      "modelId": "mobile-eas-submit-profile-semantics",
+      "purpose": "Define EAS Submit profile semantics for internal, TestFlight, closed, beta, and production release paths without performing store submission, account setup, or credential creation.",
+      "requiredMappings": [
+        "submit-profile-to-store-track",
+        "store-track-to-approval-gate",
+        "submission-metadata-to-proof-input",
+        "credential-requirement-to-setup-block",
+        "store-submission-to-readiness-non-claim"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-322",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-391",
+      "modelId": "mobile-eas-update-ota-rollback-semantics",
+      "purpose": "Define EAS Update OTA policy and rollback semantics for runtime version, compatibility, update channel, rollback, approval, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "runtime-version-to-compatibility-rule",
+        "update-channel-to-release-track",
+        "ota-update-to-approval-gate",
+        "rollback-target-to-proof-input",
+        "published-update-to-readiness-non-claim"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-322",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-392",
+      "modelId": "mobile-app-version-build-number-semantics",
+      "purpose": "Define app versioning and build-number semantics for version authority, build number, release notes, compatibility, store metadata, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "version-to-release-authority",
+        "build-number-to-platform-sequence",
+        "release-notes-to-capability-change",
+        "compatibility-to-runtime-version",
+        "store-metadata-to-version-proof"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-322",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-393",
+      "modelId": "mobile-crash-error-reporting-semantics",
+      "purpose": "Define crash and error reporting semantics for diagnostics, consent, privacy, telemetry, release health, validators, proof, dependencies, and non-claims without provider selection or SDK integration.",
+      "requiredMappings": [
+        "diagnostic-event-to-privacy-classification",
+        "crash-data-to-consent-state",
+        "error-event-to-telemetry-category",
+        "release-health-signal-to-proof-input",
+        "provider-selection-to-owner-decision-block"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-325",
+        "USF-807"
+      ]
+    },
+    {
+      "issueId": "USF-394",
+      "modelId": "mobile-performance-budget-semantics",
+      "purpose": "Define mobile performance budgets for startup, interaction, network, memory, battery, bundle, evidence, validators, proof, dependencies, and non-claims without benchmarking or optimization implementation.",
+      "requiredMappings": [
+        "startup-budget-to-device-class",
+        "interaction-budget-to-capability-class",
+        "network-budget-to-route-class",
+        "memory-battery-budget-to-evidence-requirement",
+        "budget-exceedance-to-fail-closed-proof-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-326",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-395",
+      "modelId": "mobile-accessibility-semantic-requirements",
+      "purpose": "Define mobile accessibility semantic requirements for screen reader, focus, touch target, dynamic type, reduced motion, contrast, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "screen-reader-requirement-to-control-semantics",
+        "focus-order-to-navigation-model",
+        "touch-target-to-input-affordance",
+        "dynamic-type-to-layout-boundary",
+        "contrast-motion-to-accessibility-proof"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-319",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-396",
+      "modelId": "mobile-i18n-rtl-font-scaling-requirements",
+      "purpose": "Define mobile i18n, RTL layout, and font scaling requirements for locale, translation, bidirectional layout, font scaling, store asset, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "mobile-locale-to-i18n-authority",
+        "translation-key-to-mobile-surface",
+        "rtl-layout-to-accessibility-boundary",
+        "font-scaling-to-layout-proof",
+        "store-asset-locale-to-metadata-proof"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-318",
+        "USF-319",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-397",
+      "modelId": "mobile-screenshot-store-asset-requirements",
+      "purpose": "Define mobile screenshots and store asset generation requirements for assets, locale, privacy, store metadata, proof, validator, approval, dependencies, and non-claims.",
+      "requiredMappings": [
+        "screenshot-to-capability-claim",
+        "asset-locale-to-i18n-authority",
+        "store-asset-to-privacy-disclosure",
+        "metadata-asset-to-review-proof",
+        "asset-generation-to-readiness-non-claim"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-318",
+        "USF-322",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-399",
+      "modelId": "mobile-app-review-proof-gate",
+      "purpose": "Define the mobile app review proof gate for app review metadata, privacy, permissions, screenshots, release notes, approval, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "review-metadata-to-capability-authority",
+        "privacy-answer-to-data-inventory",
+        "permission-disclosure-to-platform-manifest",
+        "release-notes-to-version-authority",
+        "review-proof-to-store-readiness-non-claim"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-322",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-401",
+      "modelId": "ios-entitlements-privacy-manifest-model",
+      "purpose": "Define iOS entitlements and privacy manifest semantics for entitlement, required reason API, third-party SDK, privacy manifest, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "ios-entitlement-to-capability-authority",
+        "required-reason-api-to-privacy-manifest-entry",
+        "third-party-sdk-to-manifest-disclosure",
+        "privacy-manifest-to-store-review-proof",
+        "missing-entitlement-authority-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-324",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-403",
+      "modelId": "android-manifest-permissions-target-sdk-model",
+      "purpose": "Define Android manifest, permissions, and target SDK semantics for manifest entries, permissions, target API, Data Safety, disclosure, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "android-permission-to-capability-purpose",
+        "target-sdk-to-platform-policy-boundary",
+        "manifest-entry-to-data-safety-disclosure",
+        "play-console-answer-to-proof-input",
+        "missing-permission-purpose-to-fail-closed-state"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-324",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-404",
+      "modelId": "mobile-integrity-provider-posture",
+      "purpose": "Define Play Integrity, App Attest, and DeviceCheck posture for integrity signals, abuse risk, privacy, telemetry, enforcement, validators, proof, dependencies, and non-claims without provider integration or enforcement implementation.",
+      "requiredMappings": [
+        "integrity-signal-to-device-trust-state",
+        "abuse-risk-to-client-handling",
+        "integrity-check-to-privacy-impact",
+        "enforcement-action-to-proof-gate",
+        "provider-integration-to-setup-block"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-320",
+        "USF-324",
+        "USF-331"
+      ]
+    },
+    {
+      "issueId": "USF-408",
+      "modelId": "mobile-release-runbook-evidence-model",
+      "purpose": "Define the mobile release runbook and evidence model for release steps, approvals, provenance, store metadata, rollback, health monitoring, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "release-step-to-approval-gate",
+        "build-provenance-to-evidence-record",
+        "store-metadata-to-review-proof",
+        "rollback-plan-to-release-channel",
+        "release-health-to-post-release-proof"
+      ],
+      "dependsOnIssueIds": [
+        "USF-313",
+        "USF-322",
+        "USF-325",
+        "USF-326"
+      ]
+    }
+  ],
+  "validatorRequirementGroup": {
+    "id": "validator.mobile-adapter.release-compliance-semantics",
+    "coveredIssueIds": [
+      "USF-387",
+      "USF-389",
+      "USF-390",
+      "USF-391",
+      "USF-392",
+      "USF-393",
+      "USF-394",
+      "USF-395",
+      "USF-396",
+      "USF-397",
+      "USF-399",
+      "USF-401",
+      "USF-403",
+      "USF-404",
+      "USF-408"
+    ],
+    "failClosedOn": [
+      "missing release or compliance semantic mapping",
+      "missing permission privacy or proof mapping",
+      "missing platform manifest or store metadata mapping where applicable",
+      "missing dependency mapping",
+      "owner decision treated as resolved",
+      "provider setup or readiness overclaim"
+    ]
+  },
+  "proofRequirementGroup": {
+    "id": "proof.mobile-adapter.release-compliance-semantics",
+    "coveredIssueIds": [
+      "USF-387",
+      "USF-389",
+      "USF-390",
+      "USF-391",
+      "USF-392",
+      "USF-393",
+      "USF-394",
+      "USF-395",
+      "USF-396",
+      "USF-397",
+      "USF-399",
+      "USF-401",
+      "USF-403",
+      "USF-404",
+      "USF-408"
+    ],
+    "requiredEvidence": [
+      "semantic source reference",
+      "release or platform mapping",
+      "privacy or permission mapping where applicable",
+      "store metadata or manifest mapping where applicable",
+      "dependency mapping",
+      "evidence freshness record",
+      "non-claim boundary record"
+    ]
+  },
+  "dependencyPolicy": {
+    "ownerDecisionIssuesRemainOpen": [
+      "USF-375",
+      "USF-388",
+      "USF-807"
+    ],
+    "implementationMayProceedWithOpenOwnerDecision": false,
+    "providerCredentialStoreAndNativeSetupRemainBlocked": true,
+    "storeSubmissionRequiresSeparateAuthority": true,
+    "releaseExecutionRequiresSeparateAuthority": true
+  },
+  "implementationAuthorization": {
+    "mobileImplementationCodeAuthorized": false,
+    "nativeProjectGenerationAuthorized": false,
+    "dependencyInstallationAuthorized": false,
+    "providerSetupAuthorized": false,
+    "credentialSetupAuthorized": false,
+    "easBuildExecutionAuthorized": false,
+    "easSubmitExecutionAuthorized": false,
+    "otaPublicationAuthorized": false,
+    "storeSubmissionAuthorized": false,
+    "reviewResponseAuthorized": false,
+    "testExecutionAuthorized": false,
+    "legalConclusionAuthorized": false,
+    "readinessClaimAuthorized": false
+  },
+  "evidenceFreshnessSemantics": {
+    "missingEvidenceSatisfiesProof": false,
+    "unknownEvidenceSatisfiesProof": false,
+    "staleEvidenceSatisfiesProof": false,
+    "generatedReportSatisfiesProofWithoutUnderlyingEvidence": false,
+    "requiredFailureState": "fail-closed"
+  },
+  "nonClaims": {
+    "mobileReadiness": false,
+    "nativeReadiness": false,
+    "expoReadiness": false,
+    "appStoreReadiness": false,
+    "googlePlayReadiness": false,
+    "storeReadiness": false,
+    "privacyCompliance": false,
+    "securityApproval": false,
+    "accessibilityCompliance": false,
+    "localisationReadiness": false,
+    "releaseReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false
+  }
+}

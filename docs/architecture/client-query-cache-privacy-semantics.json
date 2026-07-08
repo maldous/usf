@@ -1,0 +1,612 @@
+{
+  "id": "client-query-cache-privacy-semantics",
+  "title": "Client Query, Cache, and Privacy Semantics",
+  "issueId": "USF-320",
+  "coveredIssueIds": [
+    "USF-316",
+    "USF-521",
+    "USF-344",
+    "USF-350",
+    "USF-486",
+    "USF-530"
+  ],
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact defines semantic requirements for app-surface privacy classification, consent and audit posture, query view mapping, and cache invalidation. It does not create legal conclusions, compliance certification, privacy policy publication, store submission, provider integration, cache implementation, query library setup, list/detail/search implementation, renderer implementation, product UI readiness, cache readiness, sync readiness, store readiness, production readiness, live-provider readiness, monetisation readiness, or human acceptance.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/current-state-foundation-authority-index.md",
+    "docs/architecture/current-state-foundation-authority-index.json",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/app-surface-capability-coverage-matrix.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/generated-ui-view-model-semantics.json",
+    "spec/schemas/semantic-contract.schema.json",
+    "spec/schemas/interface-contract.schema.json"
+  ],
+  "clientStateSynchronisationSemantics": {
+    "issueId": "USF-316",
+    "rule": "Client state and data-synchronisation behaviours must be USF-defined and must map server state, UI-only state, persistent local state, offline posture, sync queues, cache invalidation, revalidation, multi-device consistency, realtime subscriptions, background refresh, retention, purge, and shared-device posture to capability semantics before implementation.",
+    "stateClasses": [
+      {
+        "id": "server-state",
+        "description": "Data obtained from governed USF queries or subscriptions.",
+        "requiredMappings": [
+          "capability",
+          "query-or-subscription",
+          "permission",
+          "privacy-category",
+          "cache-policy",
+          "revalidation-trigger",
+          "proof"
+        ]
+      },
+      {
+        "id": "ui-only-state",
+        "description": "Local presentation state with no authority over business behaviour.",
+        "requiredMappings": [
+          "view-model",
+          "screen-or-component-context",
+          "non-authority-boundary",
+          "accessibility-impact",
+          "proof"
+        ]
+      },
+      {
+        "id": "persistent-local-state",
+        "description": "Device or browser retained state that requires retention, purge, shared-device, and privacy posture.",
+        "requiredMappings": [
+          "capability",
+          "privacy-category",
+          "retention-policy",
+          "purge-trigger",
+          "shared-device-posture",
+          "proof"
+        ]
+      },
+      {
+        "id": "offline-queue",
+        "description": "Evaluated command or workflow intent that must preserve idempotency, conflict, retry, tenant, privacy, and audit semantics.",
+        "requiredMappings": [
+          "capability",
+          "command-or-workflow",
+          "idempotency",
+          "conflict-policy",
+          "retry-policy",
+          "tenant-boundary",
+          "privacy-category",
+          "audit-event",
+          "proof"
+        ]
+      },
+      {
+        "id": "cached-query-state",
+        "description": "Cached query projection governed by cache, invalidation, revalidation, stale data, tenant isolation, and privacy purge semantics.",
+        "requiredMappings": [
+          "capability",
+          "query",
+          "cache-key",
+          "invalidation-event",
+          "revalidation-trigger",
+          "stale-data-message",
+          "tenant-isolation",
+          "privacy-purge",
+          "proof"
+        ]
+      },
+      {
+        "id": "realtime-subscription-state",
+        "description": "Realtime projection governed by event, permission, privacy, audit, lifecycle, recovery, and proof semantics.",
+        "requiredMappings": [
+          "capability",
+          "event",
+          "permission",
+          "privacy-category",
+          "audit-event",
+          "subscription-lifecycle",
+          "recovery-policy",
+          "proof"
+        ]
+      },
+      {
+        "id": "background-refresh-state",
+        "description": "Background refresh posture governed by platform constraints, permission, privacy, cache, telemetry, and proof semantics.",
+        "requiredMappings": [
+          "capability",
+          "refresh-trigger",
+          "platform-constraint",
+          "permission",
+          "privacy-category",
+          "cache-policy",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "shared-device-state",
+        "description": "State visible on shared or privacy-sensitive devices governed by purge, logout, session expiry, redaction, and proof semantics.",
+        "requiredMappings": [
+          "capability",
+          "privacy-category",
+          "logout-purge",
+          "session-expiry-purge",
+          "redaction-policy",
+          "shared-device-warning",
+          "proof"
+        ]
+      }
+    ],
+    "mustReject": [
+      "state class without USF definition",
+      "offline behaviour without capability mapping",
+      "cache behaviour without invalidation mapping",
+      "persistent local state without retention and purge mapping",
+      "shared-device state without privacy and purge mapping",
+      "sync behaviour without proof expectation"
+    ]
+  },
+  "serverClientStateClassification": {
+    "issueId": "USF-521",
+    "rule": "Server state and client state must be classified before any app-surface storage, cache, query, synchronization, or UI state implementation is accepted.",
+    "serverStateDefinition": {
+      "description": "Server state is data whose source of truth is governed by USF query, command, event, subscription, or semantic contract authority outside the local app surface.",
+      "requiredMappings": [
+        "capability",
+        "query-command-event-or-subscription",
+        "permission",
+        "tenant-boundary",
+        "privacy-category",
+        "cache-policy",
+        "freshness-policy",
+        "proof"
+      ]
+    },
+    "clientStateDefinition": {
+      "description": "Client state is local presentation, session, persistence, cache, offline, or device/browser state that must not redefine server-side capability, permission, validation, audit, or lifecycle semantics.",
+      "requiredMappings": [
+        "state-class",
+        "surface-context",
+        "non-authority-boundary",
+        "privacy-category-where-applicable",
+        "retention-or-purge-policy-where-applicable",
+        "accessibility-impact-where-applicable",
+        "proof"
+      ]
+    },
+    "classificationBoundaries": [
+      "UI-only state must not define business behaviour.",
+      "Cached server state remains server state and must preserve freshness, staleness, tenant, privacy, and purge mappings.",
+      "Persistent client state requires retention, purge, shared-device, and privacy posture before implementation.",
+      "Offline queued mutations are client-held intents and must still map to command authority, idempotency, conflict, audit, privacy, and proof semantics.",
+      "Unknown or mixed state classes must fail closed until explicitly classified."
+    ],
+    "mustReject": [
+      "state without server-or-client classification",
+      "client state defining capability behaviour",
+      "cached server state without freshness or purge mapping",
+      "persistent client state without retention and privacy mapping",
+      "offline intent without command authority mapping",
+      "state implementation readiness claim without proof"
+    ]
+  },
+  "privacySemanticFoundation": {
+    "issueId": "USF-320",
+    "rule": "App-surface privacy, consent, disclosure, and international compliance semantics must be derived from USF capabilities and semantic contracts, with store disclosure requirements represented as requirements only and never as compliance claims.",
+    "dataCategoryMappingRequirements": [
+      "capability",
+      "semantic contract",
+      "field or event identifier",
+      "client surface",
+      "data category reference",
+      "collection purpose",
+      "consent purpose where applicable",
+      "retention posture",
+      "deletion or export relevance",
+      "store disclosure impact",
+      "audit event relevance",
+      "proof or evidence reference",
+      "non-claim boundary"
+    ],
+    "clientDataSurfaces": [
+      "fields",
+      "commands",
+      "queries",
+      "events",
+      "telemetry",
+      "diagnostics",
+      "storage",
+      "notifications",
+      "ad events",
+      "generated view models"
+    ],
+    "storeDisclosurePosture": "Store disclosure impact must be represented for each relevant client data surface without claiming Apple privacy compliance, Google Play Data Safety compliance, ATT compliance, international compliance, or store readiness.",
+    "consentAndAuditPosture": "Consent purpose, consent receipt, audit event, actor, tenant boundary, retention, deletion, export, redaction, and proof requirements must be identified before any privacy, consent, store, ads, analytics, diagnostics, or SDK usage claim is accepted."
+  },
+  "cacheInvalidationSemantics": {
+    "issueId": "USF-344",
+    "rule": "Client cache invalidation must be capability and event driven, tenant-safe, privacy-aware, and explicit about stale data, revalidation triggers, mutation outcomes, privacy purge, and user messaging.",
+    "requiredMappings": [
+      "query-key",
+      "capability",
+      "event",
+      "mutation-outcome",
+      "stale-data-policy",
+      "revalidation-trigger",
+      "privacy-purge-rule",
+      "tenant-isolation-rule",
+      "user-message",
+      "proof"
+    ],
+    "mustReject": [
+      "cache rule without capability mapping",
+      "cache invalidation without event mapping",
+      "privacy purge without privacy data category mapping",
+      "tenant-scoped cache without tenant isolation mapping",
+      "stale data display without user messaging posture"
+    ]
+  },
+  "clientPrivacyClassification": {
+    "issueId": "USF-350",
+    "rule": "Every client field and event must have a privacy classification requirement before implementation or store disclosure claims.",
+    "requiredMappings": [
+      "field-or-event-id",
+      "capability",
+      "client surface",
+      "privacy data category",
+      "consent purpose where applicable",
+      "store disclosure impact",
+      "diagnostics or telemetry impact",
+      "storage or retention impact",
+      "audit relevance",
+      "proof"
+    ],
+    "mustReject": [
+      "field without privacy classification requirement",
+      "event without privacy classification requirement",
+      "telemetry without privacy mapping",
+      "diagnostic payload without privacy mapping",
+      "notification payload without privacy mapping",
+      "ad event without consent purpose mapping",
+      "store disclosure value without semantic backing"
+    ]
+  },
+  "queryViewModelMapping": {
+    "issueId": "USF-486",
+    "rule": "Query-driven list, detail, and search views must map to USF query authority, cache posture, privacy, permissions, i18n, accessibility, telemetry, and proof before implementation.",
+    "viewKinds": [
+      {
+        "id": "list",
+        "requiredMappings": [
+          "capability",
+          "query",
+          "result item shape",
+          "permission",
+          "cache policy",
+          "privacy category",
+          "empty state",
+          "error state",
+          "i18n key",
+          "accessibility semantics",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "detail",
+        "requiredMappings": [
+          "capability",
+          "query",
+          "record identity",
+          "permission",
+          "cache policy",
+          "privacy category",
+          "not-found state",
+          "error state",
+          "i18n key",
+          "accessibility semantics",
+          "telemetry",
+          "proof"
+        ]
+      },
+      {
+        "id": "search",
+        "requiredMappings": [
+          "capability",
+          "query",
+          "search input semantics",
+          "permission",
+          "cache policy",
+          "privacy category",
+          "result ranking posture",
+          "empty state",
+          "error state",
+          "i18n key",
+          "accessibility semantics",
+          "telemetry",
+          "proof"
+        ]
+      }
+    ]
+  },
+  "cacheInvalidationByCapabilityAndEvent": {
+    "issueId": "USF-530",
+    "rule": "Cache invalidation must identify the capability, event, affected query keys, affected view models, tenant scope, privacy purge effect, revalidation trigger, proof expectation, and implementation block.",
+    "requiredMappings": [
+      "capability",
+      "event",
+      "affected-query-key",
+      "affected-view-model",
+      "tenant-scope",
+      "privacy-purge-effect",
+      "revalidation-trigger",
+      "stale-data-message",
+      "proof"
+    ],
+    "mustReject": [
+      "event without cache invalidation posture",
+      "mutation outcome without affected query key mapping",
+      "privacy purge without affected view model mapping",
+      "tenant-scoped event without tenant cache isolation mapping"
+    ]
+  },
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-CLIENT-STATE-001",
+      "description": "Reject client state, cache, sync, persistence, offline, background refresh, realtime subscription, or shared-device behaviour without USF state class, capability, privacy, retention, purge, validator, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-316"
+    },
+    {
+      "ruleId": "USF-CLIENT-STATE-CLASSIFICATION-001",
+      "description": "Reject app-surface state without explicit server-state or client-state classification, authority boundary, privacy posture, freshness or retention mapping where applicable, and proof expectation.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-521"
+    },
+    {
+      "ruleId": "USF-PRIVACY-FOUNDATION-001",
+      "description": "Reject privacy labels, data safety statements, consent flows, SDK usage, store disclosure values, or client data surfaces without USF semantic backing and evidence requirements.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-320"
+    },
+    {
+      "ruleId": "USF-CACHE-INVALIDATION-001",
+      "description": "Reject cache rules without capability, event, privacy, tenant isolation, stale data, revalidation, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-344"
+    },
+    {
+      "ruleId": "USF-CLIENT-PRIVACY-001",
+      "description": "Reject client fields, events, telemetry, diagnostics, notifications, storage, or ad events without privacy category, consent purpose where applicable, store disclosure impact, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-350"
+    },
+    {
+      "ruleId": "USF-QUERY-VIEW-001",
+      "description": "Reject query-driven list, detail, or search views without query, cache, privacy, permission, i18n, accessibility, telemetry, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-486"
+    },
+    {
+      "ruleId": "USF-CACHE-EVENT-001",
+      "description": "Reject cache invalidation records without capability, event, affected query key, affected view model, tenant scope, privacy purge, revalidation trigger, stale data message, and proof mappings.",
+      "severity": "blocking",
+      "ownerIssueId": "USF-530"
+    }
+  ],
+  "proofRequirements": [
+    {
+      "proofId": "client-query-cache-privacy-semantic-mapping-proof",
+      "description": "Future proof must demonstrate that query views, cache invalidation, and client field or event privacy classifications are projections of governed USF capabilities and fail closed when mappings are absent.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "server-client-state-classification-proof",
+      "description": "Future proof must demonstrate that every state entry is classified as server state, UI-only state, persistent local state, offline queue, cached query state, realtime subscription state, background refresh state, or shared-device state, and that unknown or mixed state classes fail closed.",
+      "currentStatus": "specified-only"
+    },
+    {
+      "proofId": "privacy-disclosure-nonclaim-proof",
+      "description": "Future proof must demonstrate that store disclosure, consent, privacy label, Data Safety, ATT, ads, analytics, diagnostics, and SDK usage artefacts cannot claim compliance or readiness without explicit semantic backing, evidence, and owner acceptance.",
+      "currentStatus": "specified-only"
+    }
+  ],
+  "implementationGate": {
+    "implementationRequiresGateEvidence": true,
+    "implementationEvaluationRequirements": [
+      "client query, cache, and privacy mappings exist for the relevant capability",
+      "validator requirements are implemented and selftested",
+      "planted-defect fixtures exist for missing cache, privacy, query-view, disclosure, consent, and event mappings",
+      "proof evidence exists for mapped and rejected query, cache, and privacy cases",
+      "owner acceptance is recorded before any compliance, store, cache, sync, query, product UI, or readiness claim"
+    ]
+  },
+  "nonClaims": {
+    "legalConclusion": false,
+    "privacyComplianceReady": false,
+    "internationalComplianceReady": false,
+    "attComplianceReady": false,
+    "dataSafetyComplianceReady": false,
+    "storeReady": false,
+    "storeSubmissionReady": false,
+    "privacyPolicyPublicationReady": false,
+    "providerIntegrationReady": false,
+    "cacheReady": false,
+    "syncReady": false,
+    "queryLibraryReady": false,
+    "generatedUiReady": false,
+    "productUiReady": false,
+    "implementationReady": false,
+    "offlineFirstReady": false,
+    "dataSyncReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "monetisationReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-521",
+      "criterion": "Server state versus client state classification is defined.",
+      "status": "satisfied",
+      "evidence": "serverClientStateClassification defines serverStateDefinition, clientStateDefinition, classificationBoundaries, and fail-closed rejection conditions."
+    },
+    {
+      "issueId": "USF-521",
+      "criterion": "State classes map to USF capability and privacy semantics.",
+      "status": "satisfied",
+      "evidence": "clientStateSynchronisationSemantics stateClasses and serverClientStateClassification requiredMappings require capability, permission, tenant, privacy, cache, freshness, retention, purge, accessibility, and proof mappings where applicable."
+    },
+    {
+      "issueId": "USF-521",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CLIENT-STATE-CLASSIFICATION-001 and server-client-state-classification-proof are recorded."
+    },
+    {
+      "issueId": "USF-521",
+      "criterion": "Implementation requires applicable gate evidence and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "implementationGate and nonClaims preserve no state library, cache, sync, offline-first, data-sync, product UI, production, or live-provider readiness claim."
+    },
+    {
+      "issueId": "USF-316",
+      "criterion": "State classes are USF-defined.",
+      "status": "satisfied",
+      "evidence": "clientStateSynchronisationSemantics defines server-state, ui-only-state, persistent-local-state, offline-queue, cached-query-state, realtime-subscription-state, background-refresh-state, and shared-device-state."
+    },
+    {
+      "issueId": "USF-316",
+      "criterion": "Offline and cache behaviours map to capability semantics.",
+      "status": "satisfied",
+      "evidence": "offline-queue and cached-query-state require capability, command or query, retry or invalidation, tenant, privacy, and proof mappings."
+    },
+    {
+      "issueId": "USF-316",
+      "criterion": "Privacy retention and purge rules are identified.",
+      "status": "satisfied",
+      "evidence": "persistent-local-state, cached-query-state, and shared-device-state require privacy category, retention policy, purge triggers, redaction, and proof mappings."
+    },
+    {
+      "issueId": "USF-316",
+      "criterion": "Validator requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CLIENT-STATE-001 identifies the blocking validator expectation."
+    },
+    {
+      "issueId": "USF-316",
+      "criterion": "Non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "authorityBoundary, implementationGate, and nonClaims preserve no state library, cache store, sync engine, offline-first readiness, data-sync readiness, production readiness, or privacy compliance claim."
+    },
+    {
+      "issueId": "USF-320",
+      "criterion": "Data categories are mapped from USF capabilities.",
+      "status": "satisfied",
+      "evidence": "privacySemanticFoundation requires capability, semantic contract, field or event identifier, data category reference, consent purpose, store disclosure impact, audit relevance, and proof mapping."
+    },
+    {
+      "issueId": "USF-320",
+      "criterion": "Store disclosure requirements are represented without claiming compliance.",
+      "status": "satisfied",
+      "evidence": "storeDisclosurePosture represents disclosure impact while nonClaims keep compliance and store readiness false."
+    },
+    {
+      "issueId": "USF-320",
+      "criterion": "Consent and audit requirements are identified.",
+      "status": "satisfied",
+      "evidence": "consentAndAuditPosture identifies consent purpose, receipt, audit event, actor, tenant boundary, retention, deletion, export, redaction, and proof requirements."
+    },
+    {
+      "issueId": "USF-320",
+      "criterion": "Validator requirements are identified and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "USF-PRIVACY-FOUNDATION-001 and nonClaims preserve validator expectations and no compliance or store readiness claim."
+    },
+    {
+      "issueId": "USF-344",
+      "criterion": "Cache invalidation is capability and event driven.",
+      "status": "satisfied",
+      "evidence": "cacheInvalidationSemantics requires query key, capability, event, mutation outcome, stale data policy, revalidation trigger, privacy purge, tenant isolation, user message, and proof mappings."
+    },
+    {
+      "issueId": "USF-344",
+      "criterion": "Privacy and tenant purge rules are identified.",
+      "status": "satisfied",
+      "evidence": "cacheInvalidationSemantics requires privacy purge and tenant isolation mappings."
+    },
+    {
+      "issueId": "USF-344",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CACHE-INVALIDATION-001 and client-query-cache-privacy-semantic-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-350",
+      "criterion": "Every client field and event has a privacy classification requirement.",
+      "status": "satisfied",
+      "evidence": "clientPrivacyClassification requires a privacy classification requirement for fields, commands, queries, events, telemetry, diagnostics, storage, notifications, ad events, and generated view models."
+    },
+    {
+      "issueId": "USF-350",
+      "criterion": "Store disclosure impact is identified.",
+      "status": "satisfied",
+      "evidence": "clientPrivacyClassification requires store disclosure impact for relevant fields and events."
+    },
+    {
+      "issueId": "USF-350",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CLIENT-PRIVACY-001 and privacy-disclosure-nonclaim-proof are recorded."
+    },
+    {
+      "issueId": "USF-486",
+      "criterion": "Machine-readable semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "queryViewModelMapping defines list, detail, and search mappings."
+    },
+    {
+      "issueId": "USF-486",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-QUERY-VIEW-001 and client-query-cache-privacy-semantic-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-530",
+      "criterion": "Machine-readable semantic artefact exists or is specified.",
+      "status": "satisfied",
+      "evidence": "cacheInvalidationByCapabilityAndEvent defines capability and event cache invalidation mappings."
+    },
+    {
+      "issueId": "USF-530",
+      "criterion": "Validator and proof requirements are identified.",
+      "status": "satisfied",
+      "evidence": "USF-CACHE-EVENT-001 and client-query-cache-privacy-semantic-mapping-proof are recorded."
+    },
+    {
+      "issueId": "USF-344",
+      "criterion": "USF-native references resolve and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities use repository paths and nonClaims preserve no cache or sync readiness claim."
+    },
+    {
+      "issueId": "USF-350",
+      "criterion": "USF-native references resolve and non-claims are preserved.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities use repository paths and nonClaims preserve no privacy compliance, store readiness, or international compliance claim."
+    },
+    {
+      "issueId": "USF-486",
+      "criterion": "USF-native references resolve, dependencies are recorded, and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    },
+    {
+      "issueId": "USF-530",
+      "criterion": "USF-native references resolve, dependencies are recorded, and implementation requires applicable gate evidence.",
+      "status": "satisfied",
+      "evidence": "sourceAuthorities, coveredIssueIds, and implementationGate record dependencies and block implementation."
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+{
+  "id": "usf.app-surface-test-strategy-semantics",
+  "title": "App Surface Test Strategy Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines USF-native app-surface test strategy semantics only. It does not implement tests, create validators, claim readiness, or override the USF constitutional layer.",
+  "coveredIssueIds": [
+    "USF-831",
+    "USF-832",
+    "USF-837",
+    "USF-849"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+      "authorityRole": "generated client contract validation semantics"
+    },
+    {
+      "path": "docs/architecture/generated-ui-view-model-semantics.json",
+      "authorityRole": "generated view-model semantics"
+    },
+    {
+      "path": "docs/architecture/generated-ui-renderer-composition-semantics.json",
+      "authorityRole": "renderer composition semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-semantics.json",
+      "authorityRole": "accessibility semantic foundation"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityRole": "proof evidence and report semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "authorityRole": "validator planted-defect requirements"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-331",
+      "USF-481",
+      "USF-490",
+      "USF-491",
+      "USF-492",
+      "USF-494",
+      "USF-495",
+      "USF-496",
+      "USF-497",
+      "USF-498",
+      "USF-499",
+      "USF-500",
+      "USF-501",
+      "USF-502",
+      "USF-503",
+      "USF-504",
+      "USF-600",
+      "USF-602",
+      "USF-604",
+      "USF-606",
+      "USF-607",
+      "USF-608",
+      "USF-609",
+      "USF-610",
+      "USF-611",
+      "USF-612",
+      "USF-613",
+      "USF-818",
+      "USF-821",
+      "USF-822",
+      "USF-938"
+    ],
+    "notSatisfiedByThisArtefact": [
+      "USF-833",
+      "USF-834",
+      "USF-835",
+      "USF-836",
+      "USF-838",
+      "USF-839",
+      "USF-841",
+      "USF-843",
+      "USF-845",
+      "USF-847",
+      "USF-848"
+    ],
+    "requiresOwnerDecisionEvaluation": [
+      "USF-807"
+    ]
+  },
+  "semanticModels": [
+    {
+      "issueId": "USF-831",
+      "modelId": "unit-component-test-strategy",
+      "purpose": "Define how unit and component tests must tie assertions to governed semantic contracts, generated clients, view-model semantics, accessibility semantics, validator expectations, and proof evidence.",
+      "requiredMappings": [
+        "semantic-contract-reference",
+        "generated-client-reference",
+        "view-model-reference",
+        "accessibility-reference",
+        "validator-reference",
+        "proof-evidence-reference",
+        "non-claim-reference"
+      ],
+      "forbiddenInterpretations": [
+        "passing tests alone define intended behaviour",
+        "framework setup equals test readiness",
+        "component tests imply product UI readiness"
+      ]
+    },
+    {
+      "issueId": "USF-832",
+      "modelId": "generated-client-contract-test-strategy",
+      "purpose": "Define how generated client contract tests must map commands, queries, typed errors, validation, authorization, audit events, validators, proof, and non-claims to USF semantic authority.",
+      "requiredMappings": [
+        "command-contract-reference",
+        "query-contract-reference",
+        "typed-error-reference",
+        "validation-reference",
+        "authorization-reference",
+        "audit-event-reference",
+        "validator-reference",
+        "proof-evidence-reference",
+        "non-claim-reference"
+      ],
+      "forbiddenInterpretations": [
+        "generated client implementation exists",
+        "SDK readiness is claimed",
+        "live-provider readiness is claimed"
+      ]
+    },
+    {
+      "issueId": "USF-837",
+      "modelId": "accessibility-test-strategy",
+      "purpose": "Define how accessibility tests must bind screen reader, focus, contrast, keyboard, mobile accessibility, evidence, validators, and proof expectations to accessibility semantics.",
+      "requiredMappings": [
+        "screen-reader-reference",
+        "focus-order-reference",
+        "contrast-reference",
+        "keyboard-reference",
+        "touch-gesture-reference",
+        "dynamic-type-reference",
+        "reduced-motion-reference",
+        "error-announcement-reference",
+        "media-alternative-reference",
+        "proof-evidence-reference",
+        "non-claim-reference"
+      ],
+      "forbiddenInterpretations": [
+        "accessibility certification is claimed",
+        "audit execution has occurred",
+        "product UI readiness is claimed"
+      ]
+    },
+    {
+      "issueId": "USF-849",
+      "modelId": "validator-selftest-planted-defect-strategy",
+      "purpose": "Define validator selftest and planted-defect requirements proving future app-surface validators reject missing, stale, ambiguous, or overclaimed semantic evidence.",
+      "requiredMappings": [
+        "validator-rule-reference",
+        "planted-defect-reference",
+        "negative-case-reference",
+        "stale-evidence-reference",
+        "missing-evidence-reference",
+        "proof-evidence-reference",
+        "non-claim-reference"
+      ],
+      "forbiddenInterpretations": [
+        "validator implementation is complete",
+        "selftests have been implemented",
+        "validator completion is claimed"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "issueId": "USF-831",
+      "requirementId": "validator.app-surface.unit-component-tests.semantic-binding",
+      "failClosedOn": [
+        "test without semantic authority reference",
+        "test without generated-client or view-model mapping where applicable",
+        "test without accessibility mapping where applicable",
+        "generated report treated as canonical evidence"
+      ]
+    },
+    {
+      "issueId": "USF-832",
+      "requirementId": "validator.app-surface.generated-client-contract-tests.semantic-binding",
+      "failClosedOn": [
+        "contract test without command or query authority reference",
+        "typed error not mapped",
+        "authorization expectation missing",
+        "audit event expectation missing",
+        "SDK readiness claim without proof evidence"
+      ]
+    },
+    {
+      "issueId": "USF-837",
+      "requirementId": "validator.app-surface.accessibility-tests.semantic-binding",
+      "failClosedOn": [
+        "accessibility test without accessibility semantic reference",
+        "proof evidence missing",
+        "proof evidence stale",
+        "accessibility certification claim without authority"
+      ]
+    },
+    {
+      "issueId": "USF-849",
+      "requirementId": "validator.app-surface.selftests.planted-defects",
+      "failClosedOn": [
+        "missing planted-defect coverage",
+        "negative case omitted",
+        "stale evidence accepted",
+        "unknown evidence status accepted",
+        "generated report accepted without raw evidence"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "issueId": "USF-831",
+      "requirementId": "proof.app-surface.unit-component-tests.semantic-binding",
+      "expectedEvidence": [
+        "test-to-semantic-contract mapping",
+        "validator-result evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-832",
+      "requirementId": "proof.app-surface.generated-client-contract-tests.semantic-binding",
+      "expectedEvidence": [
+        "generated-client contract coverage mapping",
+        "typed-error coverage mapping",
+        "validator-result evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-837",
+      "requirementId": "proof.app-surface.accessibility-tests.semantic-binding",
+      "expectedEvidence": [
+        "accessibility-semantic coverage mapping",
+        "freshness and staleness evidence",
+        "validator-result evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-849",
+      "requirementId": "proof.app-surface.validator-selftests.planted-defects",
+      "expectedEvidence": [
+        "planted-defect fixture mapping",
+        "negative-case result evidence",
+        "stale-evidence rejection evidence",
+        "missing-evidence rejection evidence",
+        "non-claim preservation evidence"
+      ]
+    }
+  ],
+  "testStrategyBoundary": {
+    "semanticStrategyDefined": true,
+    "testImplementationCreated": false,
+    "testExecutionPerformed": false,
+    "validatorImplementationCreated": false,
+    "ciConfigurationCreated": false,
+    "readinessClaimCreated": false
+  },
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines semantic test strategy and future validator expectations only. Runtime implementation, test implementation, CI setup, and readiness claims remain requires separately authorised and validated gate evidence before readiness claims."
+  },
+  "nonClaims": {
+    "testReadiness": false,
+    "validatorCompletion": false,
+    "implementationReadiness": false,
+    "productUiReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "accessibilityCertification": false,
+    "sdkReadiness": false
+  }
+}

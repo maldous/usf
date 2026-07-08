@@ -1,0 +1,589 @@
+{
+  "id": "usf.repository-performance-profiling-governance",
+  "title": "Repository performance profiling governance",
+  "status": "tracking-report",
+  "purpose": "Consolidate measured baseline timing, memory, bottleneck, incremental-validation, and safe-parallelisation guidance for repository optimisation work without changing implementation behaviour or weakening validation gates.",
+  "authorityPosture": {
+    "isSemanticAuthority": false,
+    "isGeneratedReport": false,
+    "tracksWorkOnly": true,
+    "doesNotOverride": [
+      "docs/architecture/charter.md",
+      "docs/architecture/authority-model.md",
+      "docs/architecture/standards-profile.md",
+      "docs/architecture/current-state-foundation-authority-index.md",
+      "accepted ADRs",
+      "validator results",
+      "runtime proof evidence"
+    ]
+  },
+  "measurementSources": [
+    {
+      "issueId": "USF-384",
+      "title": "Baseline timing and cost measurement",
+      "status": "Done",
+      "sourceKind": "Linear baseline timing completion comment",
+      "observedAt": "2026-07-06",
+      "scope": [
+        "warm workspace command timing",
+        "warm workspace peak memory",
+        "isolated cold install observation",
+        "artifact size observation",
+        "slowest-command ranking",
+        "failure and timeout discovery"
+      ],
+      "repositoryFilesModifiedBySourceIssue": false,
+      "freshProfilingRunPerformedByThisArtefact": false
+    }
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-384",
+      "title": "Baseline timing and cost measurement",
+      "status": "Done",
+      "usedBy": [
+        "USF-749",
+        "USF-750",
+        "USF-765"
+      ]
+    },
+    {
+      "issueId": "USF-385",
+      "title": "Command critical-path analysis",
+      "status": "Done",
+      "usedBy": [
+        "USF-763"
+      ]
+    },
+    {
+      "issueId": "USF-603",
+      "title": "Artifact hash and content-addressing",
+      "status": "Done",
+      "usedBy": [
+        "USF-755"
+      ]
+    },
+    {
+      "issueId": "USF-616",
+      "title": "Evidence invalidation rules",
+      "status": "Done",
+      "usedBy": [
+        "USF-755"
+      ]
+    },
+    {
+      "issueId": "USF-620",
+      "title": "Large artifact Git impact review",
+      "status": "Todo",
+      "blocks": [
+        "USF-754"
+      ]
+    }
+  ],
+  "coveredIssues": [
+    {
+      "issueId": "USF-749",
+      "title": "Performance bottleneck profiling",
+      "completionBasis": "USF-384 supplied profiled command timings, slowest-command ranking, failures, peak memory observations, artifact observations, and assurance impact. This artefact consolidates candidate fixes and the required no-regression posture."
+    },
+    {
+      "issueId": "USF-750",
+      "title": "Validator bottleneck profiling",
+      "completionBasis": "USF-384 identified validator-heavy commands and slow aggregate validation behaviour. This artefact records bottlenecks and no-regression tests required before any optimisation."
+    },
+    {
+      "issueId": "USF-755",
+      "title": "Incremental validation design",
+      "completionBasis": "This artefact defines input classes, hash strategy, cache key inputs, planted invalidation cases, and fail-closed fallback expectations."
+    },
+    {
+      "issueId": "USF-763",
+      "title": "Safe parallelisation opportunities",
+      "completionBasis": "USF-385 supplied command critical-path analysis. This artefact records safe parallel tasks, unsafe serial tasks, shared resources, and a serial-versus-parallel validation plan."
+    },
+    {
+      "issueId": "USF-765",
+      "title": "Memory usage profile",
+      "completionBasis": "USF-384 supplied per-command peak memory observations. This artefact records memory-heavy commands, risk, and safe optimisation candidates."
+    }
+  ],
+  "realisedTimingOptionCoverage": [
+    {
+      "issueId": "USF-751",
+      "title": "IO hotspot profiling",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include declared-input inventories, one-pass reads, path-class manifests, large-tree exclusions, generated-output exclusion, and bytes-read measurement. Adoption requires coverage equivalence and fail-closed fallback on unknown inputs."
+    },
+    {
+      "issueId": "USF-752",
+      "title": "Duplicate JSON parse cost analysis",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include per-run parse reuse, catalogue and registry object reuse, schema-document reuse, content-addressed invalidation, and planted invalid JSON regression checks. Adoption requires strict parse behaviour to remain equivalent."
+    },
+    {
+      "issueId": "USF-753",
+      "title": "Glob and directory scan optimisation plan",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include manifest-first scanning, explicit path-class inventories, generated/evidence/cache exclusion, and affected-only directory walks. Adoption requires proof that no authority, validator, evidence, fixture, or command-surface input is omitted."
+    },
+    {
+      "issueId": "USF-754",
+      "title": "Large artifact scan avoidance",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include artifact manifests, retained-hash indexes, generated-report exclusion, evidence-retention class filters, and large-object path policies. Adoption must not hide raw evidence, accepted proof artifacts, or referenced generated reports."
+    },
+    {
+      "issueId": "USF-766",
+      "title": "Compose startup profiling",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include phase-split Compose timing, profile minimisation, warm-service reuse where safe, Testcontainers comparison, reset-cost measurement, healthcheck critical-path profiling, and service-specific isolation. Adoption requires provider-mode and environment equivalence."
+    },
+    {
+      "issueId": "USF-767",
+      "title": "Network dependency profiling",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include network-free defaults, dependency cache hit-rate measurement, provider-call labelling, local mirror/cache consideration, and explicit external-provider command classification. Adoption must not turn hermetic proof into live-provider proof."
+    },
+    {
+      "issueId": "USF-768",
+      "title": "Screenshot generation cost review",
+      "realisation": "In scope for exhaustive timing evaluation. Candidate options include screenshot count and byte measurement, proof-only capture, deduplicated content-addressed capture, lazy report rendering, and browser-phase profiling. Adoption must preserve referenceability where screenshots are proof evidence."
+    }
+  ],
+  "baselineMeasurements": [
+    {
+      "command": "install warm",
+      "durationSeconds": 1,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 144
+    },
+    {
+      "command": "validate spec",
+      "durationSeconds": 32,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "validate spec selftest",
+      "durationSeconds": 13,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "enterprise validation",
+      "durationSeconds": 38,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 137
+    },
+    {
+      "command": "runtime validation",
+      "durationSeconds": 6,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "compose validation",
+      "durationSeconds": 1,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "test-readiness validation",
+      "durationSeconds": 10,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "proof-cockpit acceptance validation",
+      "durationSeconds": 4,
+      "status": "fail",
+      "peakMemoryMegabytesApprox": 316
+    },
+    {
+      "command": "foundation substrate closure validation",
+      "durationSeconds": 0,
+      "durationNote": "less than 1 second",
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "lint",
+      "durationSeconds": 4,
+      "status": "fail",
+      "peakMemoryMegabytesApprox": 733
+    },
+    {
+      "command": "typecheck",
+      "durationSeconds": 9,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 1080
+    },
+    {
+      "command": "test suite",
+      "durationSeconds": 12,
+      "status": "fail",
+      "peakMemoryMegabytesApprox": 2140
+    },
+    {
+      "command": "repo aggregate validation",
+      "durationSeconds": 104,
+      "status": "fail",
+      "peakMemoryMegabytesApprox": 317
+    },
+    {
+      "command": "proof-cockpit smoke",
+      "durationSeconds": 3,
+      "status": "pass",
+      "peakMemoryMegabytesApprox": 194
+    },
+    {
+      "command": "proof-cockpit machine QA",
+      "durationSeconds": 120,
+      "durationNote": "timed out at 120 seconds",
+      "status": "timeout",
+      "peakMemoryMegabytesApprox": 138
+    },
+    {
+      "command": "compose smoke",
+      "durationSeconds": 2,
+      "status": "fail",
+      "peakMemoryMegabytesApprox": 142
+    },
+    {
+      "command": "build script",
+      "status": "not available",
+      "observation": "missing from the root package script surface"
+    }
+  ],
+  "coldCacheObservation": {
+    "scope": "isolated local clone with separate package store",
+    "installDurationSeconds": 4,
+    "status": "pass",
+    "downloadedPackageCount": 515,
+    "peakMemoryMegabytesApprox": 1410,
+    "filesystemOutputGigabytesApprox": 1.1,
+    "cloneSizeGigabytesApprox": 1.2,
+    "packageStoreSizeMegabytesApprox": 20
+  },
+  "artifactAndNetworkObservation": {
+    "evidenceDirectorySizeMegabytesApprox": 1.8,
+    "artifactsDirectorySizeMegabytesApprox": 105,
+    "downloadedPackageCountObservedDuringColdInstall": 515,
+    "packetLevelNetworkTimingMeasured": false
+  },
+  "slowestCommandRanking": [
+    {
+      "rank": 1,
+      "command": "proof-cockpit machine QA",
+      "durationSeconds": 120,
+      "status": "timeout"
+    },
+    {
+      "rank": 2,
+      "command": "repo aggregate validation",
+      "durationSeconds": 104,
+      "status": "fail"
+    },
+    {
+      "rank": 3,
+      "command": "enterprise validation",
+      "durationSeconds": 38,
+      "status": "pass"
+    },
+    {
+      "rank": 4,
+      "command": "validate spec",
+      "durationSeconds": 32,
+      "status": "pass"
+    },
+    {
+      "rank": 5,
+      "command": "validate spec selftest",
+      "durationSeconds": 13,
+      "status": "pass"
+    },
+    {
+      "rank": 6,
+      "command": "test suite",
+      "durationSeconds": 12,
+      "status": "fail"
+    },
+    {
+      "rank": 7,
+      "command": "test-readiness validation",
+      "durationSeconds": 10,
+      "status": "pass"
+    },
+    {
+      "rank": 8,
+      "command": "typecheck",
+      "durationSeconds": 9,
+      "status": "pass"
+    },
+    {
+      "rank": 9,
+      "command": "runtime validation",
+      "durationSeconds": 6,
+      "status": "pass"
+    },
+    {
+      "rank": 10,
+      "command": "proof-cockpit acceptance validation, lint, cold isolated install",
+      "durationSeconds": 4,
+      "status": "mixed"
+    }
+  ],
+  "bottleneckFindings": [
+    {
+      "area": "proof-cockpit machine QA",
+      "measurement": "Timed out at 120 seconds with browser context closure error recorded by USF-384.",
+      "candidateFixes": [
+        "Separate browser startup, navigation, screenshot, and assertion phases in future profiling.",
+        "Preserve timeout and failure evidence instead of converting timeout to pass.",
+        "Require before-and-after output comparison before reducing capture scope."
+      ],
+      "assuranceImpact": "Any optimisation must keep machine QA failures visible and must not convert timeout or unknown status into pass."
+    },
+    {
+      "area": "repo aggregate validation",
+      "measurement": "104 seconds, failed, about 317 MB peak memory.",
+      "candidateFixes": [
+        "Use dependency-aware gating to avoid repeated work only when input hashes prove equivalence.",
+        "Split independent read-only validation phases only after serial-versus-parallel comparison passes.",
+        "Preserve aggregate failure ordering in generated summaries."
+      ],
+      "assuranceImpact": "Aggregate validation cannot be shortened by skipping required validators or hiding known failing gates."
+    },
+    {
+      "area": "validator-heavy commands",
+      "measurement": "Enterprise validation 38 seconds, validate spec 32 seconds, validate spec selftest 13 seconds, all pass.",
+      "candidateFixes": [
+        "Measure duplicate parse cost before adding shared parse cache.",
+        "Use content-addressed invalidation for semantic artefacts, catalogues, registries, schemas, and evidence.",
+        "Keep planted invalid and missing-input cases in validator selftests."
+      ],
+      "assuranceImpact": "Validator optimisation must remain fail-closed on invalid JSON, unknown controlled values, stale reports, and missing evidence."
+    },
+    {
+      "area": "test suite",
+      "measurement": "12 seconds, failed, about 2.14 GB peak memory.",
+      "candidateFixes": [
+        "Do not treat performance work as test repair.",
+        "Profile per-test memory only after current failure causes are tracked.",
+        "Avoid parallelising service-backed tests until port and fixture isolation are proven."
+      ],
+      "assuranceImpact": "Known failing tests remain evidence requirements and cannot be hidden by narrower command aliases."
+    }
+  ],
+  "validatorBottleneckNoRegressionTests": [
+    {
+      "testClass": "semantic catalogue parse",
+      "requiredBeforeOptimisation": "Strict parse must still fail on invalid JSON and must still check taxonomy, vocabulary, and schema registry inputs."
+    },
+    {
+      "testClass": "planted validator defects",
+      "requiredBeforeOptimisation": "Known bad schema states, unknown vocabulary values, missing evidence, stale reports, provider mismatch, and environment mismatch must remain failing cases."
+    },
+    {
+      "testClass": "aggregate comparison",
+      "requiredBeforeOptimisation": "Serial and optimised command paths must produce equivalent pass, fail, and evidence requirement classifications before any shortcut becomes default."
+    },
+    {
+      "testClass": "generated report dependency",
+      "requiredBeforeOptimisation": "Generated report freshness must not satisfy proof claims without the underlying evidence."
+    }
+  ],
+  "memoryProfile": [
+    {
+      "command": "test suite",
+      "peakMemoryMegabytesApprox": 2140,
+      "risk": "Highest observed peak memory and currently failing.",
+      "safeOptimisationCandidates": [
+        "Profile per-test memory after current failures are handled.",
+        "Preserve failing-test visibility.",
+        "Avoid service-backed parallelism until isolation is proven."
+      ]
+    },
+    {
+      "command": "typecheck",
+      "peakMemoryMegabytesApprox": 1080,
+      "risk": "Second-highest observed peak memory but passing.",
+      "safeOptimisationCandidates": [
+        "Avoid changing type coverage to reduce memory.",
+        "Consider caching only after lockfile and source hash inputs are included."
+      ]
+    },
+    {
+      "command": "lint",
+      "peakMemoryMegabytesApprox": 733,
+      "risk": "High memory and currently failing.",
+      "safeOptimisationCandidates": [
+        "Fix lint evidence requirements separately before performance claims.",
+        "Do not narrow lint scope without proving excluded paths are intentionally outside scope."
+      ]
+    },
+    {
+      "command": "repo aggregate validation",
+      "peakMemoryMegabytesApprox": 317,
+      "risk": "Long duration with moderate memory and known failure.",
+      "safeOptimisationCandidates": [
+        "Deduplicate read-only validation phases only with content-addressed invalidation.",
+        "Keep aggregate failure status and evidence requirement visibility."
+      ]
+    },
+    {
+      "command": "proof-cockpit acceptance validation",
+      "peakMemoryMegabytesApprox": 316,
+      "risk": "Moderate memory and currently failing.",
+      "safeOptimisationCandidates": [
+        "Separate acceptance semantics from runtime proof evidence.",
+        "Do not allow human acceptance labels to imply final acceptance without authority."
+      ]
+    }
+  ],
+  "incrementalValidationDesign": {
+    "issueId": "USF-755",
+    "inputClasses": [
+      "constitutional and foundational governance documents",
+      "taxonomy catalogue",
+      "vocabulary catalogue",
+      "schema registry",
+      "future schema files",
+      "validator source and configuration",
+      "proof evidence inputs",
+      "generated report inputs",
+      "package manifest and lockfile inputs",
+      "compose and service configuration inputs",
+      "command surface definitions"
+    ],
+    "hashStrategy": {
+      "principle": "Use content-addressed hashes over canonical input bytes plus canonical repository-relative path, not modification time alone.",
+      "includeDependencyClosure": true,
+      "includeToolVersions": true,
+      "includeProviderModeAndEnvironmentWhereRelevant": true,
+      "failClosedOnUnknownInput": true
+    },
+    "cacheKeyInputs": [
+      "command identifier",
+      "semantic input hash set",
+      "validator or proof script hash",
+      "package manifest hash",
+      "lockfile hash",
+      "toolchain version",
+      "environment classification",
+      "provider mode classification",
+      "evidence freshness marker",
+      "generated report source evidence hash"
+    ],
+    "plantedInvalidationCases": [
+      "taxonomy catalogue value changed",
+      "vocabulary value removed or renamed",
+      "schema registry lifecycle state changed",
+      "schema file missing when registry marks it active",
+      "invalid JSON introduced into a catalogue",
+      "runtime proof evidence removed",
+      "generated report retained after source evidence changed",
+      "package lockfile changed",
+      "provider mode changed from hermetic-mock to live-external-provider",
+      "environment changed from production-shaped to production-live",
+      "compose service configuration changed"
+    ],
+    "fallbackRule": "Run the full relevant validation path when an input class, dependency, hash, provider mode, environment, evidence freshness marker, or generated report source cannot be resolved."
+  },
+  "safeParallelisationDesign": {
+    "issueId": "USF-763",
+    "safeParallelTasks": [
+      "independent strict JSON parse checks for separate catalogues after file discovery is complete",
+      "read-only documentation consistency scans that do not write shared reports",
+      "independent validator selftests that do not share mutable fixtures",
+      "report formatting after all source evidence has already been collected",
+      "non-overlapping artefact metadata inspection when no pruning or mutation occurs"
+    ],
+    "unsafeSerialTasks": [
+      "package installation or lockfile mutation",
+      "compose up, compose healthcheck, and compose down on shared loopback ports",
+      "tests that share service containers, seeded fixtures, or mutable evidence directories",
+      "validators that write to the same generated report path",
+      "proof-cockpit browser automation using shared browser context",
+      "any task whose output ordering is part of the evidence or audit trail"
+    ],
+    "sharedResources": [
+      "package store",
+      "lockfile",
+      "evidence directory",
+      "artifact directory",
+      "generated report paths",
+      "compose project resources",
+      "loopback ports",
+      "browser context",
+      "temporary test fixtures",
+      "cache directories"
+    ],
+    "validationPlan": [
+      "Run serial and parallel forms against the same input set.",
+      "Compare exit status, issue classification, generated report content, evidence references, and evidence requirement visibility.",
+      "Reject parallel execution if ordering, nondeterminism, or shared-resource contention changes the result.",
+      "Keep serial execution as the fallback on any ambiguity."
+    ]
+  },
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "commandSurfaceChanged": false,
+    "evidenceFilesCreated": false,
+    "optimisationImplemented": false
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-749",
+      "criterion": "Report lists profiled commands, bottlenecks, measurements, and candidate fixes with assurance impact.",
+      "satisfied": true,
+      "evidence": [
+        "baselineMeasurements",
+        "slowestCommandRanking",
+        "bottleneckFindings"
+      ]
+    },
+    {
+      "issueId": "USF-750",
+      "criterion": "Profile report identifies top bottlenecks and no-regression tests needed before optimisation.",
+      "satisfied": true,
+      "evidence": [
+        "bottleneckFindings",
+        "validatorBottleneckNoRegressionTests"
+      ]
+    },
+    {
+      "issueId": "USF-755",
+      "criterion": "Design names input classes, hash strategy, cache key inputs, and planted invalidation cases.",
+      "satisfied": true,
+      "evidence": [
+        "incrementalValidationDesign"
+      ]
+    },
+    {
+      "issueId": "USF-763",
+      "criterion": "Report lists safe parallel tasks, unsafe tasks, shared resources, and validation plan.",
+      "satisfied": true,
+      "evidence": [
+        "safeParallelisationDesign"
+      ]
+    },
+    {
+      "issueId": "USF-765",
+      "criterion": "Report identifies memory-heavy commands, peak usage, risk, and safe optimisation candidates.",
+      "satisfied": true,
+      "evidence": [
+        "memoryProfile"
+      ]
+    }
+  ],
+  "validationPlanForFutureOptimisation": [
+    "Compare before-and-after command durations against USF-384 without hiding known failures.",
+    "Compare serial and parallel command outputs before enabling parallel defaults.",
+    "Keep full validation as the fallback whenever input resolution, cache state, evidence freshness, provider mode, or environment is unknown.",
+    "Require explicit evidence before claiming measured speedup for any timing option."
+  ],
+  "nonClaims": [
+    "This artefact does not implement performance optimisation.",
+    "This artefact does not change validators, commands, package scripts, compose files, or runtime code.",
+    "This artefact does not make a readiness, staging, product, production, compliance, store, deployment, or release claim.",
+    "This artefact does not treat generated reports as semantic authority.",
+    "This artefact does not claim measured speedup for any timing option without before-and-after evidence."
+  ]
+}

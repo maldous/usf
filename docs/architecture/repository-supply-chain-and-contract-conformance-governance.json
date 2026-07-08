@@ -1,0 +1,271 @@
+{
+  "id": "usf.repository-supply-chain-and-contract-conformance-governance",
+  "title": "Repository supply-chain and contract conformance governance",
+  "purpose": "Record design-only governance for SBOM generation, dependency licence policy, supply-chain provenance, and contract conformance test prerequisites without scanner implementation, attestation implementation, schema activation, contract test implementation, or readiness claims.",
+  "authorityBoundary": {
+    "linearIsAuthority": false,
+    "externalStandardComplianceClaimed": false,
+    "legalConclusionMade": false,
+    "nonClaims": [
+      "No SBOM generator is implemented.",
+      "No licence scanner is implemented.",
+      "No provenance or attestation system is implemented.",
+      "No contract conformance test is implemented.",
+      "No schema is activated.",
+      "No generated client pipeline is made ready.",
+      "No readiness, staging, production, deployment, compliance, store, release, live-provider, or human-acceptance claim is made."
+    ]
+  },
+  "sourceReferences": [
+    "docs/architecture/supply-chain-sbom-licence-test-gate.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/design-contract-compose-drift-test-suite.json",
+    "docs/architecture/repository-build-package-and-contract-test-governance.json",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+    "spec/registries/schema-registry.json",
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
+  "dependencyStatus": [
+    {
+      "issueId": "USF-543",
+      "title": "Lockfile hygiene",
+      "status": "Done",
+      "usedFor": [
+        "frozen dependency input basis",
+        "SBOM and licence report invalidation trigger",
+        "supply-chain provenance dependency input"
+      ]
+    },
+    {
+      "issueId": "USF-603",
+      "title": "Artifact hash and content-addressing",
+      "status": "Done",
+      "usedFor": [
+        "artifact and provenance hash expectations"
+      ]
+    },
+    {
+      "issueId": "USF-466",
+      "title": "Contract test standard",
+      "status": "Done",
+      "usedFor": [
+        "contract conformance test class and fallback expectations"
+      ]
+    }
+  ],
+  "sbomGenerationProposal": {
+    "format": "CycloneDX JSON is the preferred candidate format for dependency SBOM generation; SPDX JSON remains a review option if owner or legal workflow requires it. This is a format proposal only and does not claim compliance with either standard.",
+    "scope": [
+      "root package manifest dependencies",
+      "root package manifest devDependencies",
+      "pnpm-lock.yaml resolved packages",
+      "future workspace packages when introduced",
+      "future build artifacts only when a build artifact policy explicitly adds them"
+    ],
+    "generationTrigger": [
+      "package.json changes",
+      "pnpm-lock.yaml changes",
+      "pnpm version changes",
+      "dependency override changes",
+      "workspace package graph changes",
+      "explicit supply-chain validation command in future implementation"
+    ],
+    "retention": "Retain generated SBOM as an audit artifact tied to source commit, lockfile hash, package manager version, generation tool version, and validation result. The SBOM is a generated report and does not prove functional correctness.",
+    "validationExpectations": [
+      "SBOM input hash matches current package.json and pnpm-lock.yaml.",
+      "SBOM package count and root dependencies reconcile with frozen lockfile inputs.",
+      "Unknown or stale SBOM state fails closed for supply-chain reporting.",
+      "Generated SBOM carries a non-authority marker and source input references."
+    ]
+  },
+  "licencePolicyProposal": {
+    "scanner": "Use a lockfile-derived licence scanner in a future implementation. The scanner must report package name, version, resolved licence expression, source metadata, confidence, and unknown values without making legal conclusions.",
+    "thresholds": {
+      "allowCandidate": [
+        "MIT",
+        "Apache-2.0",
+        "BSD-2-Clause",
+        "BSD-3-Clause",
+        "ISC"
+      ],
+      "reviewRequiredCandidate": [
+        "MPL-2.0",
+        "LGPL-family",
+        "GPL-family",
+        "AGPL-family",
+        "SSPL-family",
+        "BUSL-family",
+        "custom",
+        "proprietary",
+        "unknown",
+        "missing"
+      ],
+      "blockCandidate": "No hard block list is defined without owner and legal review; unknown or missing licence data blocks automatic pass."
+    },
+    "reviewProcess": [
+      "Scanner report identifies allow, review-required, unknown, and missing licence classifications.",
+      "Review-required dependencies require owner or legal decision before dependency adoption is treated as accepted.",
+      "Unknown or missing licence metadata fails closed until resolved or explicitly risk-accepted.",
+      "Licence policy changes are governance changes and do not alter semantic authority."
+    ],
+    "unresolvedLegalQuestions": [
+      "Which copyleft licences are acceptable for runtime dependencies, development dependencies, generated assets, or tooling only.",
+      "Whether transitive optional dependencies require the same review threshold as direct dependencies.",
+      "Who owns legal approval and risk acceptance for review-required classifications.",
+      "How third-party notice generation will be retained and published if required."
+    ],
+    "validationExpectations": [
+      "Licence report derives from frozen lockfile inputs.",
+      "Unknown, missing, malformed, or ambiguous licence values fail closed.",
+      "Report output records input hashes, scanner version, generated-report non-authority, and owner-review-needed states."
+    ]
+  },
+  "supplyChainProvenanceProposal": {
+    "scope": [
+      "dependency input provenance for package.json, pnpm-lock.yaml, package manager version, and override state",
+      "build artifact provenance when build artifacts become governed outputs",
+      "proof bundle provenance for retained proof-cockpit and evidence bundles",
+      "generated report provenance for generated lower-authority reports"
+    ],
+    "metadata": [
+      "source commit",
+      "package manifest hash",
+      "lockfile hash",
+      "package manager version",
+      "builder or tool identity",
+      "command or workflow name",
+      "environment",
+      "provider mode where relevant",
+      "input manifest digest",
+      "output artifact hash",
+      "artifact path",
+      "generated-report non-authority marker",
+      "evidence and custody references where relevant"
+    ],
+    "storage": "Store provenance as a generated audit artifact or manifest adjacent to the artifact it describes, with content hashes and reference-resolution expectations. Provenance records do not replace validators, raw evidence, or semantic authority.",
+    "ownerDecisions": [
+      "Whether to adopt an attestation format and toolchain.",
+      "Whether provenance must be signed and which identity signs it.",
+      "Whether CI-only provenance is sufficient or local provenance is also required.",
+      "Retention class for provenance records and external publication rules."
+    ],
+    "validationExpectations": [
+      "Provenance ties to exact inputs and artifacts by hash.",
+      "Unknown, stale, unsigned when signing is required, or mismatched provenance fails closed for provenance claims.",
+      "Provenance never upgrades generated reports, environment, provider mode, or proof level by implication."
+    ]
+  },
+  "contractConformanceDesign": {
+    "prerequisites": [
+      "The contract must have active semantic authority or an accepted decision authorising conformance expectations.",
+      "If schema-backed, the schema registry lifecycle state must permit validation use.",
+      "Generated clients must trace to the exact source contract and generated-client semantics.",
+      "Fixtures must identify whether they exercise source contracts, generated projections, provider behaviour, or evidence records.",
+      "Planned schemas and planned contracts must be labelled as planned and must not be tested as active authority."
+    ],
+    "plannedVsActiveSeparation": {
+      "planned": "Planned contracts may have design checks, parse checks, registry consistency checks, and future fixture plans, but they do not create runtime or generated-client conformance obligations.",
+      "active": "Active contracts may have conformance tests only after source authority, lifecycle state, fixtures, validators, and failure expectations are defined.",
+      "forbidden": "A test must not imply schema activation, generated-client readiness, UI readiness, runtime readiness, or provider readiness from a planned contract."
+    },
+    "conformanceMatrix": [
+      {
+        "surface": "schema and registry contract",
+        "prerequisite": "schema registry lifecycle allows validation and strict JSON parse passes",
+        "futureValidation": "parse schema and instance JSON, enforce registry lifecycle, and fail closed on unknown lifecycle state"
+      },
+      {
+        "surface": "API or generated-client contract",
+        "prerequisite": "source contract and generated-client mapping are authoritative for the tested surface",
+        "futureValidation": "verify generated output traces to exact source contract and fails on drift"
+      },
+      {
+        "surface": "Compose contract",
+        "prerequisite": "service catalogue and generated Compose target are in scope",
+        "futureValidation": "validate catalogue-driven generated output and fail on profile, port, or hardening drift"
+      },
+      {
+        "surface": "evidence or report contract",
+        "prerequisite": "raw evidence, generated projection, freshness, and custody roles are distinct",
+        "futureValidation": "fail on generated-report authority upgrade, stale evidence, unknown freshness, or unresolved references"
+      }
+    ],
+    "validationProofExpectation": [
+      "Future implementation must parse JSON strictly where JSON contracts or instances are involved.",
+      "Future implementation must respect schema registry lifecycle and must not activate planned schemas by testing them as active.",
+      "Ambiguous contract status falls back to design-only or fuller validation, not a pass.",
+      "Generated clients require source-to-output trace and drift checks before readiness claims are considered."
+    ]
+  },
+  "coveredIssues": [
+    {
+      "issueId": "USF-789",
+      "title": "SBOM generation",
+      "completionBasis": "sbomGenerationProposal states format, scope, generation trigger, retention, and validation expectations."
+    },
+    {
+      "issueId": "USF-791",
+      "title": "License policy",
+      "completionBasis": "licencePolicyProposal states scanner, thresholds, review process, and unresolved legal questions."
+    },
+    {
+      "issueId": "USF-793",
+      "title": "Supply-chain provenance",
+      "completionBasis": "supplyChainProvenanceProposal defines provenance scope, metadata, storage, and owner decisions."
+    },
+    {
+      "issueId": "USF-773",
+      "title": "Contract conformance tests",
+      "completionBasis": "contractConformanceDesign states prerequisites for contract tests and separates planned from active contracts."
+    }
+  ],
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-789",
+      "criterion": "Proposal states format, scope, generation trigger, retention, and validation expectations.",
+      "satisfied": true,
+      "evidence": [
+        "sbomGenerationProposal"
+      ]
+    },
+    {
+      "issueId": "USF-791",
+      "criterion": "Policy proposal states scanner, thresholds, review process, and unresolved legal questions.",
+      "satisfied": true,
+      "evidence": [
+        "licencePolicyProposal"
+      ]
+    },
+    {
+      "issueId": "USF-793",
+      "criterion": "Proposal defines provenance scope, metadata, storage, and owner decisions.",
+      "satisfied": true,
+      "evidence": [
+        "supplyChainProvenanceProposal"
+      ]
+    },
+    {
+      "issueId": "USF-773",
+      "criterion": "Design states prerequisites for contract tests and separates planned from active contracts.",
+      "satisfied": true,
+      "evidence": [
+        "contractConformanceDesign"
+      ]
+    }
+  ],
+  "implementationBoundary": {
+    "implementationCodeCreated": false,
+    "runtimeCodeCreated": false,
+    "validatorCodeCreated": false,
+    "testCodeCreated": false,
+    "scannerImplemented": false,
+    "sbomGenerated": false,
+    "licenceReportGenerated": false,
+    "provenanceImplemented": false,
+    "attestationSystemImplemented": false,
+    "schemaActivated": false,
+    "generatedClientPipelineChanged": false,
+    "newDirectoryCreated": false
+  }
+}

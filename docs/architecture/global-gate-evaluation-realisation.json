@@ -1,0 +1,75 @@
+{
+  "id": "usf.global-gate-evaluation-realisation",
+  "title": "Global Gate Evaluation Realisation",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact records the current USF-wide gate evaluation posture after the app-surface and repository optimisation closure pass. It does not override historical records, ADRs, raw evidence, proof evidence, validator rules, or foundational vocabulary and schema definitions.",
+  "scope": {
+    "activeOperationalTracking": "Linear open issues in Todo, Backlog, and In Progress were searched for hold, dependency, and gate wording during this pass and returned no matches.",
+    "activeMachineReadableGateSet": [
+      "docs/architecture/client-state-storage-sync-semantics.json",
+      "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "docs/architecture/enterprise-control-evidence-test-suite.json",
+      "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+      "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "docs/architecture/generated-ui-view-model-semantics.json",
+      "docs/architecture/client-query-cache-privacy-semantics.json",
+      "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+      "docs/architecture/authz-enterprise-proof-depth-matrix.json",
+      "docs/architecture/dev-test-staging-artifact-promotion-contract.json",
+      "docs/architecture/external-http-cache-provider-proof-gate.json",
+      "docs/architecture/test-coverage-gate.json",
+      "docs/architecture/supply-chain-sbom-licence-test-gate.json"
+    ],
+    "appSurfaceAndOptimisationGateSet": [
+      "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+      "docs/architecture/app-surface-implementation-gate-closure-semantics.json",
+      "docs/architecture/app-surface-release-and-readiness-realisation.json",
+      "docs/architecture/repository-optimisation-realisation-semantics.json",
+      "docs/architecture/repository-compose-optimisation-governance.json",
+      "docs/architecture/repository-performance-profiling-governance.json",
+      "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+      "docs/architecture/repository-build-package-and-contract-test-governance.json",
+      "docs/architecture/repository-ci-optimisation-governance.json",
+      "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+      "docs/architecture/pre-ui-repository-readiness-realisation.json"
+    ]
+  },
+  "realisedPolicy": [
+    {
+      "decisionId": "all-options-evaluated",
+      "decision": "No active current-state gate may exclude an option merely because earlier planning was cautious. Options are either evaluated and accepted, evaluated and rejected, or retained as evidence requirements for a stronger claim. Evaluation does not by itself create implementation, provider mutation, external review, deployment, or readiness evidence."
+    },
+    {
+      "decisionId": "external-claim-evidence-boundary",
+      "decision": "Store approval, CDN deployment, legal review, privacy compliance, live-provider behaviour, staging readiness, production readiness, and deployment readiness remain evidence requirements for those specific claims. They are not planning gates blocking bounded local implementation unless the requested claim depends on them."
+    },
+    {
+      "decisionId": "historical-record-boundary",
+      "decision": "Historical ADRs, source-lineage records, retained proof records, schema vocabulary tokens, and generated evidence projections may preserve older wording when the wording describes past state, source disposition, or a non-claim boundary. Such wording is not an active gate unless a current-state artefact or open Linear issue makes it one."
+    },
+    {
+      "decisionId": "active-gate-terminology",
+      "decision": "Active current-state machine-readable gates use evaluated issue sets, implementation evidence requirements, owner-decision evaluation requirements, and evidence-required statuses rather than planning hold language."
+    }
+  ],
+  "validationEvidence": [
+    "Strict JSON parse passed for the updated active machine-readable gate set.",
+    "Strict JSON parse passed for the updated app-surface and repository optimisation JSON set.",
+    "The validate-spec selftest passed with zero findings after the app-surface and optimisation cleanup.",
+    "Linear open issue search for Todo, Backlog, and In Progress issues matching hold, dependency, or gate wording returned no matches."
+  ],
+  "nonClaims": [
+    "No historical record is rewritten by this artefact.",
+    "No runtime product implementation is created by this artefact.",
+    "No provider account setup is authorised by this artefact.",
+    "No credential setup is authorised by this artefact.",
+    "No deployment is authorised by this artefact.",
+    "No store submission is authorised by this artefact.",
+    "No privacy or legal compliance conclusion is claimed by this artefact.",
+    "No staging readiness is claimed by this artefact.",
+    "No live-provider readiness is claimed by this artefact.",
+    "No production readiness is claimed by this artefact."
+  ]
+}

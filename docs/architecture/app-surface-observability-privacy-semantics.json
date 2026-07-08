@@ -1,0 +1,421 @@
+{
+  "id": "usf.app-surface-observability-privacy-semantics",
+  "title": "App Surface Observability Privacy Semantics",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact defines provider-independent observability, telemetry, diagnostics, and consent-suppression semantics for app surfaces. It does not select an analytics provider, install SDKs, configure collectors, create runtime code, or claim observability, privacy, production, or live-provider readiness.",
+  "coveredIssueIds": [
+    "USF-806",
+    "USF-809",
+    "USF-810",
+    "USF-811",
+    "USF-812",
+    "USF-814",
+    "USF-815",
+    "USF-816",
+    "USF-817"
+  ],
+  "sourceAuthorities": [
+    {
+      "path": "docs/architecture/charter.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/authority-model.md",
+      "authorityRole": "constitutional"
+    },
+    {
+      "path": "docs/architecture/app-surface-authority-model-extension.json",
+      "authorityRole": "app-surface authority extension"
+    },
+    {
+      "path": "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+      "authorityRole": "capability coverage completion semantics"
+    },
+    {
+      "path": "docs/architecture/client-query-cache-privacy-semantics.json",
+      "authorityRole": "client query cache privacy semantics"
+    },
+    {
+      "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+      "authorityRole": "consent and data inventory semantics"
+    },
+    {
+      "path": "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+      "authorityRole": "privacy disclosure and SDK vendor semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityRole": "proof evidence and report semantics"
+    },
+    {
+      "path": "spec/taxonomies/taxonomy-catalog.json",
+      "authorityRole": "taxonomy catalogue"
+    },
+    {
+      "path": "spec/vocabularies/vocabulary-catalog.json",
+      "authorityRole": "vocabulary catalogue"
+    },
+    {
+      "path": "spec/registries/schema-registry.json",
+      "authorityRole": "schema registry"
+    }
+  ],
+  "dependencyIssues": {
+    "satisfied": [
+      "USF-331",
+      "USF-327",
+      "USF-481",
+      "USF-490",
+      "USF-932",
+      "USF-936"
+    ],
+    "notSatisfiedByThisArtefact": [
+      "USF-807"
+    ]
+  },
+  "externalStandardsPosture": {
+    "openTelemetryStylePrinciples": "inspired-by",
+    "openTelemetryComplianceClaimed": false,
+    "privacyComplianceClaimed": false
+  },
+  "semanticModels": [
+    {
+      "issueId": "USF-806",
+      "modelId": "cross-platform-observability-envelope",
+      "purpose": "Define provider-independent observability envelope semantics for traces, metrics, logs, spans, baggage, privacy classification, consent, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "trace",
+        "metric",
+        "log",
+        "span",
+        "baggage",
+        "privacy-classification",
+        "consent-state",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-809",
+      "modelId": "mobile-crash-reporting",
+      "purpose": "Define mobile crash reporting semantics for crash data, privacy categories, consent, provider posture placeholders, release health linkage, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "crash-event",
+        "error-boundary",
+        "privacy-category",
+        "consent-state",
+        "release-channel",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-810",
+      "modelId": "web-vitals-reporting",
+      "purpose": "Define web vitals reporting semantics for metrics, route classification, privacy, consent, provider posture placeholders, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "web-vital-metric",
+        "route-classification",
+        "sampling-policy",
+        "privacy-category",
+        "consent-state",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-811",
+      "modelId": "user-interaction-telemetry",
+      "purpose": "Define user interaction telemetry semantics for interactions, audit boundaries, privacy categories, consent, suppression, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "interaction",
+        "audit-boundary",
+        "privacy-category",
+        "consent-state",
+        "suppression-rule",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-812",
+      "modelId": "performance-budgets",
+      "purpose": "Define performance budget semantics for mobile and web load, render, memory, bundle, network, route classes, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "load-budget",
+        "render-budget",
+        "memory-budget",
+        "bundle-budget",
+        "network-budget",
+        "route-class",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-814",
+      "modelId": "privacy-safe-diagnostics",
+      "purpose": "Define diagnostics semantics for diagnostic fields, redaction, sampling, consent, retention, provider posture placeholders, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "diagnostic-field",
+        "redaction",
+        "sampling",
+        "consent-state",
+        "retention",
+        "provider-posture-placeholder",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-815",
+      "modelId": "consent-aware-telemetry-suppression",
+      "purpose": "Define telemetry suppression semantics for consent state, event suppression, offline queues, retries, diagnostics, ads telemetry posture, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "consent-state",
+        "event-suppression",
+        "offline-queue",
+        "retry-policy",
+        "diagnostic-event",
+        "ads-telemetry-posture",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-816",
+      "modelId": "release-health-monitoring",
+      "purpose": "Define release health monitoring semantics for crash rate, error rate, vitals, rollout thresholds, alerts, rollback triggers, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "crash-rate",
+        "error-rate",
+        "vitals",
+        "rollout-threshold",
+        "alert-threshold",
+        "rollback-trigger",
+        "validator",
+        "proof"
+      ]
+    },
+    {
+      "issueId": "USF-817",
+      "modelId": "synthetic-monitoring",
+      "purpose": "Define synthetic monitoring semantics for scenarios, routes, providers, environments, privacy, evidence, validators, proof, dependencies, and non-claims.",
+      "requiredMappings": [
+        "synthetic-scenario",
+        "route",
+        "provider-posture-placeholder",
+        "environment",
+        "privacy-category",
+        "evidence",
+        "validator",
+        "proof"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "issueId": "USF-806",
+      "requirementId": "validator.app-surface.observability-envelope.semantic-binding",
+      "failClosedOn": [
+        "telemetry without semantic mapping",
+        "telemetry without privacy classification",
+        "telemetry without consent mapping",
+        "provider readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-809",
+      "requirementId": "validator.app-surface.mobile-crash-reporting.semantic-binding",
+      "failClosedOn": [
+        "crash field without privacy classification",
+        "crash event without consent mapping",
+        "crash provider selected without owner decision",
+        "crash reporting readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-810",
+      "requirementId": "validator.app-surface.web-vitals.semantic-binding",
+      "failClosedOn": [
+        "web vital without metric definition",
+        "web vital without route classification",
+        "web vital without privacy and consent mapping",
+        "web vitals readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-811",
+      "requirementId": "validator.app-surface.user-interaction-telemetry.semantic-binding",
+      "failClosedOn": [
+        "interaction event without capability mapping",
+        "interaction event without audit boundary",
+        "interaction event without privacy category",
+        "interaction event emitted when consent requires suppression"
+      ]
+    },
+    {
+      "issueId": "USF-812",
+      "requirementId": "validator.app-surface.performance-budgets.semantic-binding",
+      "failClosedOn": [
+        "budget without surface type",
+        "budget without route class",
+        "budget without measurement evidence expectation",
+        "performance readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-814",
+      "requirementId": "validator.app-surface.privacy-safe-diagnostics.semantic-binding",
+      "failClosedOn": [
+        "diagnostic field without privacy classification",
+        "diagnostic field without redaction posture",
+        "diagnostic field without retention posture",
+        "diagnostics readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-815",
+      "requirementId": "validator.app-surface.telemetry-consent-suppression.semantic-binding",
+      "failClosedOn": [
+        "telemetry emission without consent state",
+        "suppression rule missing",
+        "offline queue bypasses suppression",
+        "ads telemetry emitted without privacy mapping"
+      ]
+    },
+    {
+      "issueId": "USF-816",
+      "requirementId": "validator.app-surface.release-health.semantic-binding",
+      "failClosedOn": [
+        "release health threshold without metric binding",
+        "rollback trigger without evidence expectation",
+        "alert threshold without ownership mapping",
+        "release health readiness claim without proof"
+      ]
+    },
+    {
+      "issueId": "USF-817",
+      "requirementId": "validator.app-surface.synthetic-monitoring.semantic-binding",
+      "failClosedOn": [
+        "synthetic scenario without route binding",
+        "synthetic evidence without environment binding",
+        "provider monitor setup claimed without provider authority",
+        "synthetic monitoring readiness claim without proof"
+      ]
+    }
+  ],
+  "proofRequirements": [
+    {
+      "issueId": "USF-806",
+      "requirementId": "proof.app-surface.observability-envelope.semantic-binding",
+      "expectedEvidence": [
+        "telemetry-to-semantic mapping",
+        "privacy classification evidence",
+        "consent mapping evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-809",
+      "requirementId": "proof.app-surface.mobile-crash-reporting.semantic-binding",
+      "expectedEvidence": [
+        "crash data inventory",
+        "privacy and consent mapping",
+        "release health linkage",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-810",
+      "requirementId": "proof.app-surface.web-vitals.semantic-binding",
+      "expectedEvidence": [
+        "web vital metric mapping",
+        "route classification mapping",
+        "privacy and consent mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-811",
+      "requirementId": "proof.app-surface.user-interaction-telemetry.semantic-binding",
+      "expectedEvidence": [
+        "interaction-to-capability mapping",
+        "audit boundary mapping",
+        "suppression evidence",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-812",
+      "requirementId": "proof.app-surface.performance-budgets.semantic-binding",
+      "expectedEvidence": [
+        "budget-to-surface mapping",
+        "route class mapping",
+        "measurement expectation mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-814",
+      "requirementId": "proof.app-surface.privacy-safe-diagnostics.semantic-binding",
+      "expectedEvidence": [
+        "diagnostic field inventory",
+        "redaction mapping",
+        "retention mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-815",
+      "requirementId": "proof.app-surface.telemetry-consent-suppression.semantic-binding",
+      "expectedEvidence": [
+        "consent state mapping",
+        "suppression rule mapping",
+        "offline queue suppression mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-816",
+      "requirementId": "proof.app-surface.release-health.semantic-binding",
+      "expectedEvidence": [
+        "release metric mapping",
+        "threshold mapping",
+        "rollback trigger mapping",
+        "non-claim preservation evidence"
+      ]
+    },
+    {
+      "issueId": "USF-817",
+      "requirementId": "proof.app-surface.synthetic-monitoring.semantic-binding",
+      "expectedEvidence": [
+        "synthetic scenario mapping",
+        "route and environment mapping",
+        "evidence collection expectation",
+        "non-claim preservation evidence"
+      ]
+    }
+  ],
+  "implementationGate": {
+    "implementationAllowed": false,
+    "reason": "This artefact defines provider-independent semantics only. Analytics provider selection, SDK installation, collector setup, runtime telemetry, diagnostics implementation, proof execution, and readiness claims remain separately gated."
+  },
+  "nonClaims": {
+    "observabilityReadiness": false,
+    "analyticsReadiness": false,
+    "diagnosticsReadiness": false,
+    "privacyCompliance": false,
+    "performanceReadiness": false,
+    "releaseHealthReadiness": false,
+    "syntheticMonitoringReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "providerSelection": false,
+    "providerSetup": false,
+    "sdkImplementation": false
+  }
+}

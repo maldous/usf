@@ -1,0 +1,70 @@
+{
+  "id": "usf.pre-ui-repository-readiness-realisation",
+  "title": "Pre-UI Repository Readiness Realisation",
+  "artifactType": "semantic-definition",
+  "lifecycleState": "defined",
+  "authorityNotice": "This artefact records the explicit final pre-UI owner decision for bounded local app-surface implementation. It supersedes discovery-only blocker treatment for USF-813 and USF-364 without authorising staging, deployment, store, live-provider, compliance, or production readiness claims.",
+  "coveredIssueIds": [
+    "USF-364",
+    "USF-813"
+  ],
+  "decision": {
+    "ownerDecision": "Bounded local app-surface implementation may begin once the semantic, ADR, implementation-ready, test architecture, and optimisation realisation gates recorded in this pass are closed.",
+    "allowedScope": [
+      "local Expo mobile adapter implementation",
+      "local Next.js web adapter implementation",
+      "local shared client SDK implementation",
+      "local app-surface tests and validators required by the implementation directive"
+    ],
+    "notAllowedScope": [
+      "App Store provisioning or submission",
+      "Google Play provisioning or submission",
+      "CDN deployment",
+      "external provider account setup",
+      "credential setup",
+      "privacy compliance readiness claim",
+      "legal compliance conclusion",
+      "external review completion claim",
+      "staging readiness claim",
+      "live-provider readiness claim",
+      "production readiness claim"
+    ]
+  },
+  "acceptanceCriteriaConfirmation": [
+    {
+      "criterion": "UI-blocking repo issues are listed.",
+      "status": "satisfied",
+      "evidence": "repository-optimisation-realisation-semantics.json lists remaining release, deployment, provider, privacy, external review, staging, live-provider, and production boundaries as non-implementation blockers."
+    },
+    {
+      "criterion": "Non-blocking improvements are separated.",
+      "status": "satisfied",
+      "evidence": "repository-optimisation-realisation-semantics.json classifies continuous optimisation as nonblocking unless it changes authority, validators, evidence, commands, provider mode, or environment semantics."
+    },
+    {
+      "criterion": "Owner decision criteria are defined.",
+      "status": "satisfied",
+      "evidence": "This artefact records allowed and not-allowed scope for the pre-UI owner decision."
+    },
+    {
+      "criterion": "The gate states no product UI or staging readiness claim.",
+      "status": "satisfied",
+      "evidence": "authorityNotice, notAllowedScope, and globalNonClaims preserve no-readiness boundaries."
+    }
+  ],
+  "validationEvidence": [
+    "The bounded test-readiness selftest passed.",
+    "The validate-spec selftest passed with zero findings.",
+    "Strict JSON parse passed for this artefact."
+  ],
+  "globalNonClaims": [
+    "No product UI readiness is claimed.",
+    "No staging readiness is claimed.",
+    "No deployment readiness is claimed.",
+    "No store readiness is claimed.",
+    "No privacy compliance readiness is claimed.",
+    "No legal conclusion is claimed.",
+    "No live-provider readiness is claimed.",
+    "No production readiness is claimed."
+  ]
+}

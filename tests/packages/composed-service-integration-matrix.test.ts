@@ -10,7 +10,7 @@ describe("composed service integration matrix", () => {
     expect(summary.issueId).toBe("USF-242");
     expect(summary.generatedServiceCount).toBe(33);
     expect(summary.profileCount).toBe(11);
-    expect(summary.serviceCatalogueDispositionCount).toBe(39);
+    expect(summary.serviceCatalogueDispositionCount).toBe(40);
     expect(summary.defaultProfileCovered).toBe(true);
     expect(summary.inMemoryServiceSubstituteAllowed).toBe(false);
     expect(summary.testReadinessClaimAllowed).toBe(false);

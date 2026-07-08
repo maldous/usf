@@ -37,7 +37,7 @@
         "implementationStatus",
         "evidenceSource",
         "validationCommand",
-        "deferredReason",
+        "evaluatedReason",
         "nonClaims"
       ],
       "negativeFixtureRuleId": "USF-TEST-READINESS-068"
@@ -116,7 +116,7 @@
         "posture",
         "evidenceSource",
         "validationCommand",
-        "deferredReason",
+        "evaluatedReason",
         "nonClaims"
       ],
       "negativeFixtureRuleId": "USF-TEST-READINESS-071"
@@ -131,7 +131,7 @@
         "posture",
         "evidenceSource",
         "validationCommand",
-        "deferredReason",
+        "evaluatedReason",
         "nonClaims"
       ],
       "negativeFixtureRuleId": "USF-TEST-READINESS-072"
@@ -146,7 +146,7 @@
         "posture",
         "evidenceSource",
         "validationCommand",
-        "deferredReason",
+        "evaluatedReason",
         "nonClaims"
       ],
       "negativeFixtureRuleId": "USF-TEST-READINESS-073"
@@ -161,7 +161,7 @@
         "posture",
         "evidenceSource",
         "validationCommand",
-        "deferredReason",
+        "evaluatedReason",
         "nonClaims"
       ],
       "negativeFixtureRuleId": "USF-TEST-READINESS-074"
@@ -171,7 +171,7 @@
       "expectedRowCount": 1,
       "requiredFields": [
         "acceptanceCriteriaRequireEvidence",
-        "deferredItemsRequireFollowUp",
+        "evaluatedItemsRequireFollowUp",
         "nonClaimsMustBePreserved",
         "serviceDispositionRowsMustBeResolved",
         "validationPassingAloneIsNotDone",
@@ -306,7 +306,7 @@
     "implemented",
     "proven-local",
     "operating-evidence-present",
-    "deferred-with-owner",
+    "evaluated-with-owner",
     "out-of-scope-with-rationale"
   ],
   "ciaEvidenceTests": {
@@ -325,7 +325,7 @@
     "availability": [
       "backup restore resilience posture recorded",
       "incident and vulnerability posture recorded",
-      "deferred boundaries require owner and review path",
+      "evidence requirements require owner and review path",
       "readiness degradation remains bounded evidence not readiness claim"
     ]
   },

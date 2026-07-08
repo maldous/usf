@@ -1,0 +1,726 @@
+{
+  "id": "app-surface-validator-planted-defect-matrix",
+  "title": "App Surface Validator Planted Defect Matrix",
+  "issueIds": [
+    "USF-849",
+    "USF-929",
+    "USF-930",
+    "USF-931",
+    "USF-932",
+    "USF-933",
+    "USF-934",
+    "USF-935",
+    "USF-936",
+    "USF-937",
+    "USF-938",
+    "USF-939",
+    "USF-940",
+    "USF-941"
+  ],
+  "orchestrationIssueId": "USF-952",
+  "lifecycleState": "issue-scoped-planning",
+  "authorityBoundary": "This matrix records planned app-surface validator and planted-defect requirements only. It does not create validator code, planted-defect fixtures, UI implementation, app implementation, store submission automation, deployment automation, compliance assertions, or readiness claims. It is subordinate to USF semantic definitions, ADRs, validators, runtime proof evidence, source implementation, and generated reports in the USF authority order.",
+  "requirementModel": {
+    "ownerIssueId": "USF-849",
+    "suiteIssueId": "USF-941",
+    "parentValidatorSuiteIssueId": "USF-328",
+    "purpose": "Specify the future app-surface validator selftest and planted-defect requirement model before any app-surface validator, fixture, UI, app, store, deployment, compliance, or readiness implementation begins.",
+    "validatorRequirement": "A future app-surface validator suite must fail closed for each rule listed in validatorRequirements, must expose deterministic selftest coverage for planted-defect and conforming fixture classes, and must report rule id, subject, owner issue, severity, and safe remediation without treating generated reports as semantic authority.",
+    "proofRequirement": "Future proof is limited to validator selftest evidence showing each planted-defect fixture fails with the expected rule id and each conforming fixture class passes inside the non-claim boundary. This matrix does not itself provide executed proof.",
+    "dependencyMapping": {
+      "lineageAndGuardrailInputs": [
+        "USF-468",
+        "USF-513"
+      ],
+      "validatorRequirementIssues": [
+        "USF-929",
+        "USF-930",
+        "USF-931",
+        "USF-932",
+        "USF-933",
+        "USF-934",
+        "USF-935",
+        "USF-936",
+        "USF-937",
+        "USF-938",
+        "USF-939",
+        "USF-940"
+      ],
+      "suiteAggregationIssue": "USF-941",
+      "orchestrationIssue": "USF-952"
+    },
+    "implementationGateRequirement": "Implementation requires semantic authority, validator rule implementation, distinct planted-defect fixtures, conforming fixtures, selftest evidence, proof/evidence mapping, and non-claim preservation review exist for every listed requirement."
+  },
+  "acceptanceCriteriaTrace": [
+    {
+      "issueId": "USF-849",
+      "criterion": "Requirement artefact exists or is specified.",
+      "evidence": "This machine-readable matrix specifies the validator selftest and planted-defect requirement model in requirementModel and validatorRequirements.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-849",
+      "criterion": "USF-native references resolve.",
+      "evidence": "sourceAuthorities uses repository-local paths; issue references use USF issue identifiers; dependencyMapping names USF issue identifiers only.",
+      "status": "requires-validation"
+    },
+    {
+      "issueId": "USF-849",
+      "criterion": "Validator requirement is identified.",
+      "evidence": "requirementModel.validatorRequirement and validatorRequirements identify the future fail-closed app-surface validator rule expectations.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-849",
+      "criterion": "Proof requirement is identified.",
+      "evidence": "requirementModel.proofRequirement and fixtureRequirements.futureSelftestPassCriteria define future selftest proof expectations without claiming executed proof.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-849",
+      "criterion": "Dependencies are linked.",
+      "evidence": "dependencyMapping links USF-468, USF-513, USF-929 through USF-940, USF-941, and USF-952 as the relevant tracked work items.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-849",
+      "criterion": "Implementation requires semantic and validator gates exist.",
+      "evidence": "requirementModel.implementationBlock and each validatorRequirements item's implementationRequires evidenceUntil list preserve the block.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-941",
+      "criterion": "Machine-readable planted-defect matrix exists or is updated.",
+      "evidence": "This file is the app-surface validator planted-defect matrix and covers USF-929 through USF-940.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-941",
+      "criterion": "Each validator requirement has at least one planted-defect expectation.",
+      "evidence": "Each validatorRequirements item has a plantedDefect object with fixtureId, mutatedSurface, mutation, expectedFailureRuleId, and expectedSeverity.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-941",
+      "criterion": "Future selftest pass criteria are identified.",
+      "evidence": "fixtureRequirements.futureSelftestPassCriteria identifies future selftest pass criteria.",
+      "status": "satisfied"
+    },
+    {
+      "issueId": "USF-941",
+      "criterion": "Proof or evidence requirement is identified.",
+      "evidence": "requirementModel.proofRequirement and each validatorRequirements item's proofExpectation define the future proof boundary.",
+      "status": "satisfied"
+    }
+  ],
+  "sourceAuthorities": {
+    "charter": "docs/architecture/charter.md",
+    "authorityModel": "docs/architecture/authority-model.md",
+    "currentStateFoundationAuthorityIndex": "docs/architecture/current-state-foundation-authority-index.md",
+    "aiUiCompositionBoundary": "docs/architecture/ai-ui-composition-boundary.md",
+    "futureAiSemanticTestGuardrail": "docs/architecture/future-ai-delivered-work-semantic-test-guardrail.json",
+    "uiSemanticModelSchema": "spec/schemas/ui-semantic-model.schema.json",
+    "validatorReportSchema": "spec/schemas/validator-report.schema.json",
+    "authenticationLoginUiSemanticModel": "spec/instances/ui-semantic-model/authentication-login.json"
+  },
+  "trackingBoundary": {
+    "linearTracksWorkOnly": true,
+    "linearDefinesSemanticAuthority": false,
+    "repositoryArtefactsDefineTruth": true,
+    "validatorsEnforceConsistency": true
+  },
+  "proofLadderBoundary": {
+    "lowestSufficientFutureProof": "validator-selftest-with-planted-defect-fixtures",
+    "composeRequiredByThisPlanningArtifact": false,
+    "stagingRequiredByThisPlanningArtifact": false,
+    "humanAcceptanceRequiredByThisPlanningArtifact": false,
+    "freshProofCockpitMachineEvidenceRequirement": "requires-terminal-orchestration-gate-USF-966-after-controlled-work-completes"
+  },
+  "fixtureRequirements": {
+    "perValidatorRequirementDistinctPlantedDefectRequired": true,
+    "duplicateDefectMaySatisfyMultipleRequirements": false,
+    "defectFixtureMustDeclare": [
+      "fixtureId",
+      "targetRuleId",
+      "ownerIssueId",
+      "mutatedSurface",
+      "mutation",
+      "expectedFailureRuleId",
+      "expectedSeverity",
+      "authorityRefs",
+      "nonClaimRefs"
+    ],
+    "conformingFixtureMustDeclare": [
+      "fixtureId",
+      "targetRuleId",
+      "ownerIssueId",
+      "coveredSurface",
+      "authorityRefs",
+      "expectedPassBoundary"
+    ],
+    "futureSelftestPassCriteria": [
+      "Every listed validator requirement has at least one distinct planted-defect fixture.",
+      "Every planted-defect fixture fails closed with the listed expected rule id and blocking or error severity.",
+      "Every listed validator requirement has at least one conforming fixture or conforming fixture class that passes without widening readiness claims.",
+      "Missing source authority, stale evidence, generated-report authority inversion, provider-mode mismatch, environment mismatch, or missing non-claim remains a failure.",
+      "Failure output identifies rule id, subject, issue owner, and safe remediation without exposing secrets, provider credentials, live endpoints, raw tenant data, stack traces, or unsupported readiness claims."
+    ]
+  },
+  "claims": {
+    "validatorImplemented": false,
+    "plantedDefectFixturesImplemented": false,
+    "validatorSelftestPassing": false,
+    "uiImplementationReady": false,
+    "appImplementationReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "accessibilityCompliance": false,
+    "internationalReadiness": false,
+    "humanAcceptance": false
+  },
+  "validatorRequirements": [
+    {
+      "issueId": "USF-929",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-001",
+      "title": "Reject UI behaviour not backed by semantics",
+      "dependencyIssueIds": [
+        "USF-327",
+        "USF-331"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any route, view, journey, user action, state, validation, error, permission, telemetry, audit, notification, ad placement, or data-display behaviour that is present only in UI or generated projection material without a USF semantic model, interface contract, semantic contract, or accepted ADR authority reference.",
+      "failClosedOn": [
+        "missing-ui-semantic-model-reference",
+        "missing-interface-or-semantic-contract-reference",
+        "generated-report-treated-as-authority",
+        "source-implementation-invents-behaviour",
+        "missing-non-claim-boundary"
+      ],
+      "plantedDefect": {
+        "fixtureId": "unbacked-ui-behaviour",
+        "mutatedSurface": "ui-semantic-model",
+        "mutation": "Introduce a UI-visible behaviour that has no backing UI semantic model, interface contract, semantic contract, or ADR reference.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-001",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "semantic-backed-ui-behaviour",
+        "coveredSurface": "ui-semantic-model",
+        "expectedPassBoundary": "The fixture maps the UI behaviour to source semantic authority and preserves non-claims."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail the unbacked behaviour fixture and pass the conforming semantic-backed fixture.",
+      "assurancePreserved": "UI work remains semantic-first and cannot define behaviour by visual design, generated reports, screenshots, or source implementation alone.",
+      "implementationEvaluationRequirements": [
+        "semantic-authority-exists",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists",
+        "selftest-covers-rule"
+      ]
+    },
+    {
+      "issueId": "USF-930",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-002",
+      "title": "Reject route without capability mapping",
+      "dependencyIssueIds": [
+        "USF-327",
+        "USF-331",
+        "USF-368",
+        "USF-423"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any Expo or Next.js route, deep link, tab, stack, server-rendered page, route group, or protected navigation target without an explicit capability, permission, tenant-boundary, and proof-mapping reference.",
+      "failClosedOn": [
+        "missing-capability-reference",
+        "missing-permission-reference",
+        "missing-tenant-boundary-reference",
+        "unmapped-route-group",
+        "missing-route-proof-reference"
+      ],
+      "plantedDefect": {
+        "fixtureId": "route-without-capability-mapping",
+        "mutatedSurface": "route-mapping",
+        "mutation": "Declare a mobile or web route without capability and permission mapping.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-002",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "route-with-capability-mapping",
+        "coveredSurface": "route-mapping",
+        "expectedPassBoundary": "The route maps to capability, permission, tenant boundary, and proof references."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail unmapped routes and pass conforming Expo and Next.js route fixtures.",
+      "assurancePreserved": "Navigation surfaces cannot expose behaviour outside capability and permission authority.",
+      "implementationEvaluationRequirements": [
+        "route-semantics-exist",
+        "capability-mapping-exists",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-931",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-003",
+      "title": "Reject command form without validation and audit mapping",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-334",
+        "USF-484",
+        "USF-488",
+        "USF-490"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any form, action sheet, mutation screen, workflow action, or command UI without command authority, input validation semantics, error semantics, audit event mapping, idempotency or retry boundary, and required permission mapping.",
+      "failClosedOn": [
+        "missing-command-reference",
+        "missing-validation-model",
+        "missing-audit-event-reference",
+        "missing-error-model",
+        "missing-permission-reference"
+      ],
+      "plantedDefect": {
+        "fixtureId": "command-form-missing-validation-audit",
+        "mutatedSurface": "command-form",
+        "mutation": "Declare a command form with a capability but omit validation and audit mapping.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-003",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "command-form-with-validation-audit",
+        "coveredSurface": "command-form",
+        "expectedPassBoundary": "The command form maps command authority, validation, errors, audit event, permission, and retry or idempotency boundary."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail command forms missing validation or audit mapping and pass conforming mapped command form fixtures.",
+      "assurancePreserved": "State-changing UI cannot bypass validation, authorization, auditability, or error semantics.",
+      "implementationEvaluationRequirements": [
+        "command-semantics-exist",
+        "validation-and-audit-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-932",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-004",
+      "title": "Reject query without cache and privacy mapping",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-334",
+        "USF-344",
+        "USF-350",
+        "USF-486",
+        "USF-530"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any read model, query screen, list, detail, search, filter, or generated query client binding without query authority, cache/freshness semantics, privacy classification, tenant boundary, error semantics, and proof mapping.",
+      "failClosedOn": [
+        "missing-query-reference",
+        "missing-cache-or-freshness-model",
+        "missing-privacy-classification",
+        "missing-tenant-boundary-reference",
+        "missing-query-proof-reference"
+      ],
+      "plantedDefect": {
+        "fixtureId": "query-missing-cache-privacy",
+        "mutatedSurface": "query-view",
+        "mutation": "Declare a query-backed view without cache/freshness and privacy mapping.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-004",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "query-with-cache-privacy",
+        "coveredSurface": "query-view",
+        "expectedPassBoundary": "The query view maps query authority, cache/freshness, privacy classification, tenant boundary, and proof references."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail queries missing cache or privacy mapping and pass conforming mapped query fixtures.",
+      "assurancePreserved": "Read surfaces cannot silently overexpose data, ignore privacy classification, or treat stale generated output as current.",
+      "implementationEvaluationRequirements": [
+        "query-semantics-exist",
+        "cache-and-privacy-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-933",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-005",
+      "title": "Reject notification without consent and permission mapping",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-371",
+        "USF-372",
+        "USF-436",
+        "USF-493",
+        "USF-636",
+        "USF-642"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any push, email, in-app, SMS, browser notification, permission prompt, notification preference, or notification-triggering workflow without consent, permission, channel, lifecycle, opt-out, audit, and provider-mode mapping.",
+      "failClosedOn": [
+        "missing-consent-reference",
+        "missing-permission-reference",
+        "missing-channel-lifecycle",
+        "missing-opt-out-boundary",
+        "provider-mode-overclaim"
+      ],
+      "plantedDefect": {
+        "fixtureId": "notification-without-consent-permission",
+        "mutatedSurface": "notification-mapping",
+        "mutation": "Declare a notification pathway without consent and permission mapping.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-005",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "notification-with-consent-permission",
+        "coveredSurface": "notification-mapping",
+        "expectedPassBoundary": "The notification mapping carries consent, permission, channel, lifecycle, opt-out, audit, and provider-mode references without live-provider claims."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail unmapped notifications and pass conforming mobile and web notification fixtures.",
+      "assurancePreserved": "Notification behaviour cannot bypass consent, permission, lifecycle, provider-mode, or opt-out authority.",
+      "implementationEvaluationRequirements": [
+        "notification-semantics-exist",
+        "consent-and-permission-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-934",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-006",
+      "title": "Reject ad placement without consent and privacy mapping",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-662",
+        "USF-670",
+        "USF-671",
+        "USF-672",
+        "USF-673",
+        "USF-674",
+        "USF-686"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any ad placement, monetisation surface, tracking identifier, attribution event, store disclosure, or third-party SDK reference without semantic consent, privacy, age/region, policy, placement, and evidence mapping.",
+      "failClosedOn": [
+        "missing-ad-consent-reference",
+        "missing-privacy-classification",
+        "missing-age-or-region-policy",
+        "missing-third-party-sdk-reference",
+        "advertising-readiness-overclaim"
+      ],
+      "plantedDefect": {
+        "fixtureId": "ad-placement-without-consent-privacy",
+        "mutatedSurface": "ad-placement",
+        "mutation": "Declare an ad placement without consent and privacy mapping.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-006",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "ad-placement-with-consent-privacy",
+        "coveredSurface": "ad-placement",
+        "expectedPassBoundary": "The ad placement maps consent, privacy, age/region, third-party SDK, store disclosure, and non-claim references."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail ad placements missing consent or privacy mapping and pass conforming mapped ad placement fixtures.",
+      "assurancePreserved": "Monetisation surfaces cannot appear without consent, privacy, disclosure, and non-claim controls.",
+      "implementationEvaluationRequirements": [
+        "advertising-semantics-exist",
+        "consent-and-privacy-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-935",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-007",
+      "title": "Reject store submission metadata mismatch",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-392",
+        "USF-397",
+        "USF-713",
+        "USF-722",
+        "USF-723",
+        "USF-724",
+        "USF-730"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject store, TestFlight, Google Play, screenshot, listing, release-note, privacy-link, policy-link, version, or build-number metadata that does not match current USF semantic authority, release metadata, evidence, and non-claim boundaries.",
+      "failClosedOn": [
+        "store-metadata-semantic-mismatch",
+        "version-or-build-number-mismatch",
+        "screenshot-or-media-mismatch",
+        "release-notes-mismatch",
+        "missing-release-approval-evidence"
+      ],
+      "plantedDefect": {
+        "fixtureId": "store-metadata-mismatch",
+        "mutatedSurface": "store-submission-metadata",
+        "mutation": "Declare store submission metadata with a version, listing, screenshot, release note, or privacy input that diverges from governed semantics or release evidence.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-007",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "store-metadata-matches-semantics",
+        "coveredSurface": "store-submission-metadata",
+        "expectedPassBoundary": "The metadata maps to semantic authority, version authority, release evidence, store asset references, and preserved non-claims without store readiness claims."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail mismatched store metadata and pass conforming store metadata fixtures.",
+      "assurancePreserved": "Store-facing metadata cannot drift from semantic authority, release evidence, version authority, privacy inputs, or non-claims.",
+      "implementationEvaluationRequirements": [
+        "store-metadata-semantics-exist",
+        "release-and-version-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-936",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-008",
+      "title": "Reject privacy label and data-safety mismatch",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-621",
+        "USF-622",
+        "USF-623",
+        "USF-625",
+        "USF-626",
+        "USF-654",
+        "USF-655"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject Apple privacy label, privacy manifest, required-reason API, Google Play Data Safety, Android permission disclosure, vendor, SDK, or subprocessor disclosure data that does not trace to USF data inventory, consent, capability, and third-party SDK mappings.",
+      "failClosedOn": [
+        "privacy-label-data-inventory-mismatch",
+        "data-safety-capability-mismatch",
+        "required-reason-api-unmapped",
+        "android-permission-disclosure-unmapped",
+        "vendor-or-sdk-practice-unmapped"
+      ],
+      "plantedDefect": {
+        "fixtureId": "privacy-disclosure-mismatch",
+        "mutatedSurface": "privacy-disclosure",
+        "mutation": "Declare privacy label or data-safety disclosure data that diverges from data inventory, consent, capability, SDK, or vendor mapping.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-008",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "privacy-disclosure-matches-inventory",
+        "coveredSurface": "privacy-disclosure",
+        "expectedPassBoundary": "The disclosure maps to data inventory, consent, capability, third-party SDK, vendor, permission, and non-claim references without compliance claims."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail mismatched privacy disclosure fixtures and pass conforming privacy disclosure fixtures.",
+      "assurancePreserved": "Store privacy and data-safety disclosures cannot drift from governed data inventory, consent, vendor, SDK, and capability mappings.",
+      "implementationEvaluationRequirements": [
+        "privacy-disclosure-semantics-exist",
+        "data-inventory-and-sdk-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-937",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-009",
+      "title": "Reject missing i18n coverage",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-568",
+        "USF-569",
+        "USF-570",
+        "USF-571",
+        "USF-574",
+        "USF-575",
+        "USF-576",
+        "USF-579"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any mobile or web app-surface mapping that omits required locale negotiation, translation keys, ICU format coverage, right-to-left handling, localised validation, localised consent, localised store listing, fallback policy, or coverage validation reference.",
+      "failClosedOn": [
+        "missing-translation-key",
+        "missing-icu-formatting-coverage",
+        "missing-rtl-coverage",
+        "missing-localised-validation-or-consent-text",
+        "missing-translation-coverage-evidence"
+      ],
+      "plantedDefect": {
+        "fixtureId": "missing-i18n-coverage",
+        "mutatedSurface": "localisation-coverage",
+        "mutation": "Declare a UI surface with required user-facing text but omit translation coverage, ICU, right-to-left, fallback, or localised consent references.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-009",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "i18n-coverage-complete",
+        "coveredSurface": "localisation-coverage",
+        "expectedPassBoundary": "The surface maps required text to locale negotiation, translation keys, ICU, right-to-left, fallback, localised validation or consent text, and coverage validation references."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail missing translation coverage fixtures and pass conforming localisation coverage fixtures.",
+      "assurancePreserved": "Internationalisation-sensitive surfaces cannot ship semantics that omit translation, formatting, directionality, fallback, or localised policy text obligations.",
+      "implementationEvaluationRequirements": [
+        "i18n-semantics-exist",
+        "translation-coverage-mappings-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-938",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-010",
+      "title": "Reject missing accessibility semantics",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-600",
+        "USF-602",
+        "USF-604",
+        "USF-606",
+        "USF-607",
+        "USF-608",
+        "USF-609",
+        "USF-610",
+        "USF-611",
+        "USF-612",
+        "USF-613"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject any UI/view-model mapping without required accessibility semantics for screen readers, focus order, keyboard navigation, touch target and gesture alternatives, dynamic type, contrast, reduced motion, error announcements, alt text, captions, and proof evidence references.",
+      "failClosedOn": [
+        "missing-screen-reader-semantics",
+        "missing-focus-or-keyboard-semantics",
+        "missing-touch-or-gesture-alternative",
+        "missing-dynamic-type-contrast-or-motion-boundary",
+        "missing-accessibility-proof-reference"
+      ],
+      "plantedDefect": {
+        "fixtureId": "missing-accessibility-semantics",
+        "mutatedSurface": "accessibility-mapping",
+        "mutation": "Declare a UI/view-model mapping while omitting one or more required accessibility semantics or proof references.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-010",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "accessibility-semantics-complete",
+        "coveredSurface": "accessibility-mapping",
+        "expectedPassBoundary": "The mapping carries screen reader, focus, keyboard, touch, gesture, dynamic type, contrast, reduced motion, error announcement, alt text, caption, and proof references without compliance claims."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail missing accessibility semantics fixtures and pass conforming accessibility mapping fixtures.",
+      "assurancePreserved": "Accessibility semantics cannot be evaluated behind visual design or implementation alone.",
+      "implementationEvaluationRequirements": [
+        "accessibility-semantics-exist",
+        "accessibility-proof-mapping-exists",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-939",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-011",
+      "title": "Reject stale generated clients",
+      "dependencyIssueIds": [
+        "USF-330",
+        "USF-331",
+        "USF-333",
+        "USF-339",
+        "USF-481",
+        "USF-821",
+        "USF-822"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject generated client SDKs, TypeScript clients, command/query models, validation schemas, typed error models, capability-to-screen mappings, view-models, or UI projections when their provenance, semantic input hash, generated evidence, or freshness metadata is stale relative to current governed semantic definitions.",
+      "failClosedOn": [
+        "missing-generation-provenance",
+        "semantic-input-hash-mismatch",
+        "stale-generated-evidence",
+        "stale-view-model-projection",
+        "generated-client-readiness-overclaim"
+      ],
+      "plantedDefect": {
+        "fixtureId": "stale-generated-client",
+        "mutatedSurface": "generated-client",
+        "mutation": "Declare a generated client, schema, or view-model projection with stale provenance or mismatched semantic input hash.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-011",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "generated-client-current",
+        "coveredSurface": "generated-client",
+        "expectedPassBoundary": "The generated client or projection traces to current semantic inputs, current provenance, current generated evidence, and preserved non-claims."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail stale generated client/view-model fixtures and pass regenerated current fixtures.",
+      "assurancePreserved": "Generated client and UI projection artifacts cannot outrank source semantics or stale evidence checks.",
+      "implementationEvaluationRequirements": [
+        "generated-client-authority-model-exists",
+        "freshness-and-provenance-rules-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    },
+    {
+      "issueId": "USF-940",
+      "ruleId": "USF-APP-SURFACE-VALIDATOR-012",
+      "title": "Reject deployment evidence pinned to wrong commit",
+      "dependencyIssueIds": [
+        "USF-331",
+        "USF-728",
+        "USF-761",
+        "USF-818",
+        "USF-821",
+        "USF-822"
+      ],
+      "workType": "validator-requirement",
+      "rejectionCondition": "Reject store, CDN, app review, release, deployment, OTA update, EAS Build, EAS Submit, release health, generated report, or provenance evidence that is pinned to a Git commit, semantic version, build number, artifact hash, or semantic authority input that does not match the governed source state being evaluated.",
+      "failClosedOn": [
+        "commit-pin-mismatch",
+        "semantic-version-authority-mismatch",
+        "artifact-hash-mismatch",
+        "stale-generated-report",
+        "deployment-readiness-overclaim"
+      ],
+      "plantedDefect": {
+        "fixtureId": "deployment-evidence-wrong-commit",
+        "mutatedSurface": "deployment-evidence",
+        "mutation": "Declare store, CDN, app review, release, OTA, or deployment evidence pinned to a non-current commit or mismatched semantic version authority.",
+        "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-012",
+        "expectedSeverity": "blocking"
+      },
+      "conformingFixture": {
+        "fixtureId": "deployment-evidence-current-commit",
+        "coveredSurface": "deployment-evidence",
+        "expectedPassBoundary": "The evidence pins to the governed commit, semantic version authority, artifact hash, provenance references, freshness model, and non-claim boundary."
+      },
+      "proofExpectation": "Future app-surface validator selftests fail evidence pinned to the wrong commit and pass evidence pinned to the current governed commit.",
+      "assurancePreserved": "Evidence freshness, provenance, and generated report boundaries remain fail-closed for store, CDN, app review, release, and deployment evidence.",
+      "implementationEvaluationRequirements": [
+        "deployment-evidence-authority-model-exists",
+        "provenance-and-freshness-rules-exist",
+        "validator-rule-exists",
+        "distinct-planted-defect-fixture-exists"
+      ]
+    }
+  ],
+  "coverageSummary": {
+    "validatorRequirementCount": 12,
+    "plannedDistinctPlantedDefectCount": 12,
+    "plannedConformingFixtureClassCount": 12,
+    "ownerIssuesCovered": [
+      "USF-929",
+      "USF-930",
+      "USF-931",
+      "USF-932",
+      "USF-933",
+      "USF-934",
+      "USF-935",
+      "USF-936",
+      "USF-937",
+      "USF-938",
+      "USF-939",
+      "USF-940"
+    ],
+    "suiteIssuesCovered": [
+      "USF-849",
+      "USF-941"
+    ],
+    "implementationGate": "No app-surface validator implementation may be treated as complete until each planned rule has a concrete rule implementation, distinct planted-defect fixture, conforming fixture, selftest evidence, proof/evidence mapping, and non-claim preservation review."
+  }
+}

@@ -1,0 +1,393 @@
+{
+  "id": "usf.app-surface-auth-session-security-semantics",
+  "title": "App Surface Auth Session Security Semantics",
+  "status": "semantic-definition",
+  "authority_scope": "Defines cross-platform authentication, session, credential, tenant, permission-affordance, self-service, and audit semantics for app surfaces.",
+  "parent_issue": "USF-317",
+  "covered_issues": [
+    "USF-540",
+    "USF-542",
+    "USF-545",
+    "USF-548",
+    "USF-550",
+    "USF-552",
+    "USF-554",
+    "USF-556",
+    "USF-558",
+    "USF-560",
+    "USF-562"
+  ],
+  "authority_references": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/app-surface-authority-model-extension.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+    "docs/architecture/privacy-disclosure-sdk-vendor-semantics.json",
+    "docs/architecture/app-surface-security-proof-semantics.json",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json"
+  ],
+  "shared_dependency_mapping": [
+    "USF-331",
+    "USF-312",
+    "USF-317",
+    "USF-320",
+    "USF-324"
+  ],
+  "semantic_models": [
+    {
+      "issue": "USF-540",
+      "model_id": "usf.auth.oidc-oauth-client-posture",
+      "title": "OIDC and OAuth client posture for mobile and web",
+      "semantic_requirements": [
+        "OAuth and OIDC client posture must map authentication, authorization, permission, audit, privacy, and proof dimensions separately.",
+        "Provider integration, credentials, and live-provider evidence are execution concerns and must not be inferred from this semantic model.",
+        "Authentication readiness must not be claimed until semantic, validator, proof, and implementation gates are satisfied."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject OAuth or OIDC behaviour without semantic, permission, audit, privacy, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve client posture, requested scopes or claims, permission mapping, privacy mapping, audit mapping, and provider-mode evidence.",
+      "non_claims": [
+        "auth-readiness",
+        "live-provider-readiness",
+        "production-readiness",
+        "compliance-readiness"
+      ]
+    },
+    {
+      "issue": "USF-542",
+      "model_id": "usf.auth.pkce-native-redirect-uri",
+      "title": "PKCE and native redirect URI semantics",
+      "semantic_requirements": [
+        "Native redirect URI semantics must define redirect authority, callback ownership, privacy mapping, and proof expectations.",
+        "PKCE use must be treated as a proof requirement for supported native auth flows, not as implementation readiness.",
+        "Credential setup and identity provider configuration remain requires evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject native auth flows without redirect URI authority, PKCE posture, permission mapping, audit mapping, privacy mapping, and proof evidence.",
+      "proof_requirement": "Future proof must preserve native redirect URI policy, callback ownership, PKCE posture, provider mode, and audit evidence.",
+      "non_claims": [
+        "mobile-auth-readiness",
+        "live-provider-readiness"
+      ]
+    },
+    {
+      "issue": "USF-545",
+      "model_id": "usf.auth.web-cookie-session-csrf",
+      "title": "Web cookie session and CSRF semantics",
+      "semantic_requirements": [
+        "Web session semantics must distinguish session identity, cookie policy, CSRF posture, audit, privacy, and proof.",
+        "Cookie configuration, web auth implementation, provider setup, and compliance readiness remain requires evidence.",
+        "CSRF posture must be validated against route, session, origin, and capability semantics."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject web auth behaviour without session, cookie, CSRF, audit, privacy, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve session policy, cookie policy, CSRF posture, route mapping, audit mapping, and evidence freshness.",
+      "non_claims": [
+        "auth-readiness",
+        "compliance-readiness"
+      ]
+    },
+    {
+      "issue": "USF-548",
+      "model_id": "usf.auth.token-refresh-revocation",
+      "title": "Token refresh and revocation semantics",
+      "semantic_requirements": [
+        "Token lifecycle semantics must define refresh, revocation, expiry, audit, privacy, and proof boundaries.",
+        "Token implementation and identity provider integration remain requires evidence.",
+        "Revocation semantics must fail closed when audit or proof mapping is absent."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject token lifecycle behaviour without refresh, revocation, audit, privacy, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve token lifecycle policy, revocation trigger mapping, audit evidence, privacy mapping, and provider-mode evidence.",
+      "non_claims": [
+        "auth-readiness",
+        "production-readiness"
+      ]
+    },
+    {
+      "issue": "USF-550",
+      "model_id": "usf.auth.passkeys-webauthn-fido2-posture",
+      "title": "Passkeys WebAuthn and FIDO2 posture",
+      "semantic_requirements": [
+        "Passkey posture must define credential lifecycle, recovery, audit, privacy, proof, and fallback boundaries.",
+        "Passkey implementation and identity provider integration remain requires evidence.",
+        "Compliance readiness must not be inferred from passkey posture."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "USF-native references resolve",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject passkey flows without credential lifecycle, recovery, audit, privacy, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve credential lifecycle posture, recovery posture, fallback mapping, audit evidence, and provider-mode evidence.",
+      "non_claims": [
+        "passkey-readiness",
+        "compliance-readiness"
+      ]
+    },
+    {
+      "issue": "USF-552",
+      "model_id": "usf.auth.biometric-unlock",
+      "title": "Biometric unlock semantics",
+      "semantic_requirements": [
+        "Biometric unlock may unlock a local session context but must not redefine authorization.",
+        "Fallback and reauthentication semantics must be explicit.",
+        "Native biometric implementation, native integration, and identity provider integration remain requires evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "unlock does not redefine authorization",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject biometric unlock without auth, audit, privacy, fallback, reauthentication, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve biometric posture, fallback mapping, reauthentication trigger mapping, local-unlock boundary, and audit evidence.",
+      "non_claims": [
+        "biometric-readiness",
+        "auth-readiness"
+      ]
+    },
+    {
+      "issue": "USF-554",
+      "model_id": "usf.auth.step-up-authentication",
+      "title": "Step-up authentication model",
+      "semantic_requirements": [
+        "Step-up triggers must map to governed capabilities, permission authority, risk posture, audit, privacy, and proof.",
+        "Risk provider setup and step-up implementation require the applicable bounded-local implementation gate, validator coverage, and proof evidence.",
+        "Security readiness must not be inferred from the presence of step-up semantics."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "step-up triggers map to USF capability and permission authority",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject step-up flows without capability, permission, risk, audit, privacy, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve trigger mapping, permission mapping, risk posture, audit evidence, and evidence freshness.",
+      "non_claims": [
+        "auth-readiness",
+        "security-readiness"
+      ]
+    },
+    {
+      "issue": "USF-556",
+      "model_id": "usf.auth.tenant-switching",
+      "title": "Tenant switching model",
+      "semantic_requirements": [
+        "Tenant switching must map to tenant authority, session context, purge rules, permission checks, audit, and proof.",
+        "Tenant switching must not imply multi-tenant runtime readiness.",
+        "Implementation requires tenant, permission, purge, and audit gates exist."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "tenant switching maps to USF tenant authority",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject tenant switching without tenant authority, session context, purge, permission, audit, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve tenant context transition, purge evidence, permission evidence, audit evidence, and denial handling.",
+      "non_claims": [
+        "multi-tenant-readiness",
+        "auth-readiness"
+      ]
+    },
+    {
+      "issue": "USF-558",
+      "model_id": "usf.auth.role-permission-ui-affordances",
+      "title": "Role and permission mapping to UI affordances",
+      "semantic_requirements": [
+        "UI affordances may reflect permissions but must not define permissions.",
+        "Denial messaging, hidden affordances, disabled affordances, audit, and proof must map back to authorization authority.",
+        "UI implementation and authorization implementation require the applicable bounded-local implementation gate, validator coverage, and proof evidence."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "UI affordances cannot define permissions",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject affordances without role, permission, denial, audit, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve permission source, affordance state, denial message mapping, audit evidence, and non-claim boundary.",
+      "non_claims": [
+        "auth-readiness",
+        "product-ui-readiness"
+      ]
+    },
+    {
+      "issue": "USF-560",
+      "model_id": "usf.auth.account-deletion-export-self-service",
+      "title": "Account deletion export and self-service semantics",
+      "semantic_requirements": [
+        "Account deletion, export, and self-service semantics must map to data governance, privacy, DSR, audit, and proof requirements.",
+        "Legal conclusions and compliance claims remain requires evidence.",
+        "Self-service implementation requires validator and proof gates exist."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "deletion and export map to USF data governance semantics",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject self-service flows without deletion, export, DSR, audit, privacy, dependency, and proof mapping.",
+      "proof_requirement": "Future proof must preserve deletion request mapping, export request mapping, DSR posture, audit evidence, evidence freshness, and non-claim boundary.",
+      "non_claims": [
+        "privacy-compliance",
+        "DSR-compliance"
+      ]
+    },
+    {
+      "issue": "USF-562",
+      "model_id": "usf.auth.security-event-audit",
+      "title": "Security event and audit semantics",
+      "semantic_requirements": [
+        "Security events must map to USF audit authority, privacy semantics, proof expectations, and validator checks.",
+        "Event pipeline implementation and telemetry integration remain requires evidence.",
+        "Security readiness and compliance readiness must not be inferred from event definitions."
+      ],
+      "acceptance_confirmation": [
+        "machine-readable semantic artefact exists",
+        "security events map to USF audit authority",
+        "validator and proof requirements identified",
+        "dependencies recorded",
+        "implementation requires the applicable bounded-local implementation gate, validator coverage, and proof evidence"
+      ],
+      "validator_requirement": "Future validators must reject security events without audit, privacy, dependency, evidence freshness, and proof mapping.",
+      "proof_requirement": "Future proof must preserve event taxonomy, triggering authority, audit destination semantics, privacy classification, and evidence freshness.",
+      "non_claims": [
+        "security-readiness",
+        "compliance-readiness"
+      ]
+    }
+  ],
+  "validator_requirements": [
+    {
+      "id": "usf.validator.auth-session-security",
+      "covered_issues": [
+        "USF-540",
+        "USF-542",
+        "USF-545",
+        "USF-548",
+        "USF-550",
+        "USF-552",
+        "USF-554",
+        "USF-556",
+        "USF-558",
+        "USF-560",
+        "USF-562"
+      ],
+      "fail_closed_conditions": [
+        "missing-semantic-mapping",
+        "missing-permission-mapping",
+        "missing-audit-mapping",
+        "missing-privacy-mapping",
+        "missing-proof-requirement",
+        "implementation-readiness-overclaim",
+        "live-provider-readiness-overclaim",
+        "compliance-readiness-overclaim"
+      ]
+    }
+  ],
+  "proof_requirements": [
+    {
+      "id": "usf.proof.auth-session-security",
+      "covered_issues": [
+        "USF-540",
+        "USF-542",
+        "USF-545",
+        "USF-548",
+        "USF-550",
+        "USF-552",
+        "USF-554",
+        "USF-556",
+        "USF-558",
+        "USF-560",
+        "USF-562"
+      ],
+      "required_evidence": [
+        "semantic-source-reference",
+        "permission-source-reference",
+        "privacy-source-reference",
+        "audit-source-reference",
+        "provider-mode-where-applicable",
+        "environment-where-applicable",
+        "evidence-freshness-record",
+        "non-claim-boundary-record"
+      ]
+    }
+  ],
+  "dependency_policy": {
+    "semantic_closure_meaning": "Closure of the covered issues means their semantic model, validator requirement, proof requirement, dependencies, implementation gate, and non-claims are recorded.",
+    "execution_claim_boundary": "Closure of the covered issues does not satisfy implementation, identity provider setup, native integration, credential setup, live-provider proof, legal compliance, product UI readiness, production readiness, or security readiness.",
+    "shared_dependency_issues": [
+      "USF-331",
+      "USF-312",
+      "USF-317",
+      "USF-320",
+      "USF-324"
+    ]
+  },
+  "evidence_freshness_semantics": {
+    "missing": "Missing evidence must not satisfy any auth, session, token, passkey, biometric, tenant, permission, self-service, audit, compliance, production, or live-provider claim.",
+    "unknown": "Unknown evidence status must not satisfy pass.",
+    "stale": "Stale evidence status must not satisfy pass.",
+    "generated_reports": "Generated reports are lower authority than raw evidence and semantic definitions."
+  },
+  "implementation_authorization": {
+    "implementation_code_authorized": false,
+    "runtime_code_authorized": false,
+    "identity_provider_setup_authorized": false,
+    "credential_setup_authorized": false,
+    "native_integration_authorized": false,
+    "telemetry_pipeline_authorized": false,
+    "legal_conclusion_authorized": false
+  },
+  "non_claims": [
+    "This artefact does not claim authentication readiness.",
+    "This artefact does not claim identity provider readiness.",
+    "This artefact does not claim biometric readiness.",
+    "This artefact does not claim passkey readiness.",
+    "This artefact does not claim multi-tenant readiness.",
+    "This artefact does not claim product UI readiness.",
+    "This artefact does not claim privacy compliance.",
+    "This artefact does not claim DSR compliance.",
+    "This artefact does not claim security readiness.",
+    "This artefact does not claim production readiness.",
+    "This artefact does not claim live-provider readiness."
+  ]
+}

@@ -88,6 +88,39 @@ of ordinary semantic validation:
 This avoids failing general verification because an optional profile port, or a
 port for an environment not being started, is occupied on a developer host.
 
+## Local Port Conflict Diagnostics and Safe Smoke
+
+When local Compose smoke fails because a required loopback port is occupied, the
+first diagnostic step is the target-specific port preflight:
+
+```bash
+corepack pnpm compose:ports:dev
+```
+
+The preflight is repeatable and non-destructive. It reports occupied required dev
+ports without stopping services. A failed preflight is an actionable local host
+state conflict, not a semantic validation pass and not proof that Compose may fall
+back to in-memory behaviour.
+
+When a smoke rerun is needed on a developer machine that may already have a
+default Compose project, use an explicit temporary project name:
+
+```bash
+COMPOSE_PROJECT_NAME=usfsmoke-local corepack pnpm compose:smoke
+```
+
+The temporary project name scopes the `up` and `down --remove-orphans` lifecycle
+to the smoke project instead of the default repository project. Agents and
+developers MUST NOT stop or remove unrelated user services to clear a port unless
+the user explicitly instructs that action. If the preflight still reports a
+conflict, the safe remediation is to identify the owning local process or stack
+and request explicit action before stopping it.
+
+Passing this local smoke path proves only that the bounded local dev Compose
+preflight and smoke lifecycle completed on the current host. It does not claim
+staging readiness, production readiness, provider readiness, deployment readiness,
+or full test readiness.
+
 ## Production Exposure
 
 Production generated Compose is a policy and requirements representation. It MUST
