@@ -30,6 +30,17 @@ interface RouteEvidence {
   readonly result: "pass" | "fail";
 }
 
+interface UnauthenticatedProbeEvidence {
+  readonly path: string;
+  readonly url: string;
+  readonly attempted: boolean;
+  readonly status: number | null;
+  readonly denied: boolean;
+  readonly leakedMarkerResults: Record<string, boolean>;
+  readonly safeErrorCode: string | null;
+  readonly result: "pass" | "fail";
+}
+
 interface ProofReviewPublicProofResult {
   readonly status: "pass" | "fail";
   readonly proof: "proof-review-public-human-acknowledgement-proof";
@@ -51,6 +62,7 @@ interface ProofReviewPublicProofResult {
   readonly browserE2eReadinessClaim: false;
   readonly fullProductReadinessClaim: false;
   readonly routeEvidence: readonly RouteEvidence[];
+  readonly unauthenticatedOpenReviewProbe: UnauthenticatedProbeEvidence | null;
   readonly failureReasons: readonly string[];
   readonly checks: readonly string[];
   readonly nonClaims: readonly string[];
@@ -221,6 +233,7 @@ async function fetchRoute(
       body.includes(CLOSED_DEFAULT_MARKER) &&
       !contentType.includes("text/html") &&
       !Object.values(markerResults).some(Boolean) &&
+      !Object.values(anyOfMarkerResults).some(Boolean) &&
       inlineImageCount === 0;
     const result =
       expectedGateMode === "open-review"
@@ -272,6 +285,56 @@ async function fetchRoute(
   }
 }
 
+async function fetchUnauthenticatedOpenReviewProbe(
+  origin: string,
+): Promise<UnauthenticatedProbeEvidence> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  const expectation = ROUTES[0]!;
+  const url = `${origin}${expectation.path}`;
+  try {
+    const response = await fetch(url, {
+      redirect: "follow",
+      signal: controller.signal,
+    });
+    const body = await response.text();
+    const markers = [...expectation.expectedMarkers, ...(expectation.anyOfMarkers ?? [])];
+    const leakedMarkerResults = Object.fromEntries(
+      markers.map((marker) => [marker, body.includes(marker)]),
+    );
+    const denied = response.status === 401 || response.status === 403;
+    const result = denied && !Object.values(leakedMarkerResults).some(Boolean) ? "pass" : "fail";
+    return {
+      path: expectation.path,
+      url,
+      attempted: true,
+      status: response.status,
+      denied,
+      leakedMarkerResults,
+      safeErrorCode: null,
+      result,
+    };
+  } catch (error) {
+    return {
+      path: expectation.path,
+      url,
+      attempted: true,
+      status: null,
+      denied: false,
+      leakedMarkerResults: Object.fromEntries(
+        [...expectation.expectedMarkers, ...(expectation.anyOfMarkers ?? [])].map((marker) => [
+          marker,
+          false,
+        ]),
+      ),
+      safeErrorCode: safeErrorCode(error),
+      result: "fail",
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function runProofReviewPublicProof(
   origin = process.env.USF_PROOF_REVIEW_ORIGIN ?? DEFAULT_ORIGIN,
 ): Promise<ProofReviewPublicProofResult> {
@@ -279,11 +342,16 @@ export async function runProofReviewPublicProof(
   const expectedGateMode = expectedGateModeFromEnv();
   const authorizationHeader =
     expectedGateMode === "open-review" ? openReviewAuthorizationHeader() : undefined;
-  const routeEvidence = await Promise.all(
-    ROUTES.map((route) =>
-      fetchRoute(normalizedOrigin, route, expectedGateMode, authorizationHeader),
+  const [routeEvidence, unauthenticatedOpenReviewProbe] = await Promise.all([
+    Promise.all(
+      ROUTES.map((route) =>
+        fetchRoute(normalizedOrigin, route, expectedGateMode, authorizationHeader),
+      ),
     ),
-  );
+    expectedGateMode === "open-review"
+      ? fetchUnauthenticatedOpenReviewProbe(normalizedOrigin)
+      : Promise.resolve(null),
+  ]);
   const routeFailureReasons = routeEvidence
     .filter((route) => route.result === "fail")
     .map((route) => {
@@ -295,14 +363,31 @@ export async function runProofReviewPublicProof(
         .filter(([, observed]) => observed)
         .map(([marker]) => marker)
         .join(",");
+      const leakedAnyOfMarkers = Object.entries(route.anyOfMarkerResults)
+        .filter(([, observed]) => observed)
+        .map(([marker]) => marker)
+        .join(",");
       const missingAnyOf = route.anyOfMarkerMatched
         ? ""
         : Object.keys(route.anyOfMarkerResults).join("|");
       if (expectedGateMode === "closed-default") {
-        return `${route.path}:status=${route.status ?? route.safeErrorCode}:closedDefault=${route.closedDefaultMatched}:contentType=${route.contentTypeMatched}:inlineImages=${route.inlineImageCount}:leakedMarkers=${leakedMarkers}`;
+        return `${route.path}:status=${route.status ?? route.safeErrorCode}:closedDefault=${route.closedDefaultMatched}:contentType=${route.contentTypeMatched}:inlineImages=${route.inlineImageCount}:leakedMarkers=${leakedMarkers}:leakedAnyOfMarkers=${leakedAnyOfMarkers}`;
       }
       return `${route.path}:status=${route.status ?? route.safeErrorCode}:contentType=${route.contentTypeMatched}:inlineImages=${route.inlineImageCount}:missingMarkers=${missingMarkers}:missingAnyOf=${missingAnyOf}`;
     });
+  const unauthenticatedOpenReviewFailureReasons =
+    unauthenticatedOpenReviewProbe && unauthenticatedOpenReviewProbe.result === "fail"
+      ? [
+          `${unauthenticatedOpenReviewProbe.path}:unauthenticatedStatus=${
+            unauthenticatedOpenReviewProbe.status ?? unauthenticatedOpenReviewProbe.safeErrorCode
+          }:denied=${unauthenticatedOpenReviewProbe.denied}:leakedMarkers=${Object.entries(
+            unauthenticatedOpenReviewProbe.leakedMarkerResults,
+          )
+            .filter(([, observed]) => observed)
+            .map(([marker]) => marker)
+            .join(",")}`,
+        ]
+      : [];
   const openReviewCredentialConfigured =
     expectedGateMode !== "open-review" || authorizationHeader !== undefined;
   const failureReasons = [
@@ -312,6 +397,7 @@ export async function runProofReviewPublicProof(
           "open-review mode requires USF_PROOF_REVIEW_BASIC_USER and USF_PROOF_REVIEW_BASIC_PASSWORD; credentials are intentionally not accepted in the URL",
         ]),
     ...routeFailureReasons,
+    ...unauthenticatedOpenReviewFailureReasons,
   ];
   const status = failureReasons.length === 0 ? "pass" : "fail";
 
@@ -336,10 +422,12 @@ export async function runProofReviewPublicProof(
     browserE2eReadinessClaim: false,
     fullProductReadinessClaim: false,
     routeEvidence,
+    unauthenticatedOpenReviewProbe,
     failureReasons,
     checks:
       expectedGateMode === "open-review"
         ? [
+            "live public proof landing route returns HTTP 401 or HTTP 403 to an unauthenticated requester",
             "live public proof landing route returns HTTP 200 HTML to an authenticated operator",
             "live public proof review route exposes either no-pending baseline status or a current review item to an authenticated operator",
             "live public proof review item route exposes one-item human review controls to an authenticated operator",
@@ -347,7 +435,7 @@ export async function runProofReviewPublicProof(
             "live public screenshot gallery renders inline image evidence",
             "live public final report route exposes printable external-review report sections",
             "live public signoff route keeps final signoff separate and non-automatic",
-            "502, unavailable upstream, missing controls, hidden screenshots, missing credentials, or unauthorised access fail this proof",
+            "502, unavailable upstream, missing controls, hidden screenshots, missing credentials, public unauthenticated access, or unauthorised access fail this proof",
           ]
         : [
             "live public HTTPS edge is reachable for every proof review route",
