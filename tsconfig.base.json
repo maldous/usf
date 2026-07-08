@@ -67,6 +67,9 @@
       "@foundation/app-work": [
         "apps/work/src/worker.ts"
       ],
+      "@foundation/app-surface": [
+        "packages/app-surface/src/index.ts"
+      ],
       "@foundation/capability-audit": [
         "capabilities/audit/src/index.ts"
       ],

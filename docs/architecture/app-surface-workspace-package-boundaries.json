@@ -110,18 +110,25 @@
     {
       "boundaryId": "local-app-surface-runtime-boundary",
       "path": "packages/app-surface",
-      "classification": "future-to-create",
+      "classification": "exists-now",
       "owningLinearIssueId": "USF-1016",
       "workspaceCovered": true,
-      "createdByThisIssue": false,
-      "mayCreateRuntimeCode": false,
+      "createdByThisIssue": true,
+      "mayCreateRuntimeCode": true,
       "packageDependenciesAllowedByThisIssue": false,
-      "proofLevel": "dev-local-in-memory-runtime-boundary",
-      "purpose": "Future local in-memory app-surface runtime boundary.",
+      "proofLevel": "dev-local-in-memory-runtime",
+      "purpose": "Bounded local in-memory app-surface runtime for semantic component-fixture proof.",
       "nonClaims": [
-        "No local app-surface runtime exists from this boundary artefact.",
-        "No external provider, credential, staging, deployment, or production readiness is claimed."
-      ]
+        "No web runtime, mobile runtime, product UI readiness, external provider, credential, network, staging, deployment, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance is claimed.",
+        "The package is dependency-free and validates local in-memory fixture execution only.",
+        "Missing capability or permission semantics fail closed before fixture execution."
+      ],
+      "packageManifest": "packages/app-surface/package.json",
+      "sourceUseDispositionPath": "docs/architecture/app-surface-source-use-disposition-matrix.md",
+      "targetTopologyPath": "docs/architecture/target-implementation-topology-plan.md",
+      "implementationArtefact": "packages/app-surface/src/index.ts",
+      "unitTestArtefact": "tests/packages/app-surface-local-in-memory-runtime.test.ts",
+      "runtimeMappingArtefact": "docs/architecture/app-surface-local-in-memory-runtime.json"
     },
     {
       "boundaryId": "generated-artifact-boundary",
@@ -144,7 +151,7 @@
   "dependencyPolicy": {
     "dependenciesAddedByThisIssue": [],
     "lockfileUpdateAllowed": true,
-    "lockfileUpdateScope": "Workspace importer metadata only if required by pnpm for the new packages/ui manifest.",
+    "lockfileUpdateScope": "Workspace importer metadata only if required by pnpm for dependency-free app-surface package manifests.",
     "globalInstallsAllowed": false,
     "remoteCacheAllowed": false,
     "taskGraphToolingAllowed": false,
@@ -170,12 +177,14 @@
     "stagingRequired": false,
     "commands": [
       "strict JSON parse for docs/architecture/app-surface-shared-client-consumption-path.json",
-      "corepack pnpm vitest run tests/packages/app-surface-shared-client-consumption.test.ts"
+      "corepack pnpm vitest run tests/packages/app-surface-shared-client-consumption.test.ts",
+      "strict JSON parse for docs/architecture/app-surface-local-in-memory-runtime.json",
+      "corepack pnpm vitest run tests/packages/app-surface-local-in-memory-runtime.test.ts"
     ]
   },
   "readinessVerdict": {
     "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_BOUNDARY_VALIDATION",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "Package boundaries are explicit and the authorised UI placeholder manifest exists, but app, client, runtime, tests, timing, staging classification, and closure proof remain open child work."
+    "reason": "Package boundaries are explicit and the authorised UI, shared-client, and local in-memory app-surface runtime boundaries exist, but web, mobile, route, command, query, state/cache, auth/session, i18n, accessibility, notification, monetisation, store, deployment evidence, timing, staging classification, and closure proof remain open child work."
   }
 }
