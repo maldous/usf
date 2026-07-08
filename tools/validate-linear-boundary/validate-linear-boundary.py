@@ -85,6 +85,7 @@ REFERENCE_SCAN_BINARY_SUFFIXES = {
     ".webp",
     ".zip",
 }
+REFERENCE_SCAN_EXCLUDED_DIR_NAMES = {".claude", ".codex", ".git"}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -307,7 +308,7 @@ def iter_repository_reference_scan_files() -> list[Path]:
     excluded_files = {AUDIT.resolve(), DISPOSITION.resolve()}
     files: list[Path] = []
     for path in ROOT.rglob("*"):
-        if ".git" in path.parts:
+        if any(part in REFERENCE_SCAN_EXCLUDED_DIR_NAMES for part in path.parts):
             continue
         if not path.is_file():
             continue
