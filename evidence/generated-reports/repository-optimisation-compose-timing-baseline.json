@@ -1,0 +1,43 @@
+{
+  "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated Compose config, port, and optional startup timing baseline for bounded local optimisation review.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/realise-bounded-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-1001",
+        "startup-measurement-requested:true",
+        "measured-command-count:3",
+        "non-local-options-later-issue:USF-1007",
+        "testcontainers:considered-not-adopted-current-tranche",
+        "remote-cache:considered-not-adopted-current-tranche",
+        "task-graph-tooling:considered-not-adopted-current-tranche",
+        "measurement:python3 tools/validate-compose/check-compose-ports.py all --json:status=measured:exit=1:wall-ms=36",
+        "measurement:docker compose -f compose/compose.dev.generated.yaml config --quiet:status=measured:exit=0:wall-ms=52",
+        "measurement:bash -lc corepack pnpm compose:check-generated && corepack pnpm compose:ports:dev && docker compose -f compose/compose.yaml up -d --wait --wait-timeout 240; status=$?; docker compose -f compose/compose.yaml down --remove-orphans; exit $status:status=measured:exit=0:wall-ms=27194"
+      ],
+      "message": "Recorded 3 measured Compose or port timing commands; non-local optimisation options are considered but not adopted.",
+      "ruleId": "USF-OPT-COMPOSE-001",
+      "severity": "info",
+      "subject": "compose-timing"
+    }
+  ],
+  "id": "usf.repository-optimisation.compose-timing",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository optimisation Compose timing baseline",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

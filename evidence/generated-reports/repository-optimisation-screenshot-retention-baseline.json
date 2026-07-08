@@ -1,0 +1,58 @@
+{
+  "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated screenshot-equivalent profiling and non-destructive retention baseline for proof-cockpit artefacts.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/realise-bounded-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-1000",
+        "retention-mode:non-destructive-report-enforced",
+        "delete-artifacts:false",
+        "allowed-root-violations:0",
+        "later-policy-required-for-deletion:true",
+        "image-count:188",
+        "image-bytes:69322489",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/composed-service-screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/external-review-bundle/composed-service-screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/external-review-bundle/screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/proof-cockpit-screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/composed-service-screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/external-review-bundle/composed-service-screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/external-review-bundle/screenshot-manifest.json",
+        "screenshot-manifest:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/proof-cockpit-screenshot-manifest.json",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/screenshots/alerts.png:2045602",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/screenshots/alerts.png:2045602",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/screenshots/signoff.png:1344336",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/screenshots/signoff.png:1344336",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/screenshots/capabilities.png:1071711",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/screenshots/capabilities.png:1071711",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/screenshots/first-capability-detail.png:1022493",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/screenshots/first-capability-detail.png:1022493",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T02-07-23-213Z/screenshots/machine-import-run.png:927299",
+        "largest-image:artifacts/proof-cockpit/machine-runs/2026-07-08T01-55-11-721Z/screenshots/machine-import-run.png:927299"
+      ],
+      "message": "Profiled 188 screenshot-equivalent image artefacts totalling 69322489 bytes with non-destructive retention enforcement.",
+      "ruleId": "USF-OPT-SCREENSHOT-001",
+      "severity": "info",
+      "subject": "screenshot-profile"
+    }
+  ],
+  "id": "usf.repository-optimisation.screenshot-retention",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository optimisation screenshot profiling and retention baseline",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

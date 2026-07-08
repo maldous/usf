@@ -1,0 +1,53 @@
+{
+  "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated warn-only affected-run recommendation baseline. It never replaces full validation authority.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/realise-bounded-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-999",
+        "enforcement-mode:warn-only",
+        "hard-ci-block:false",
+        "authoritative-full-gate:corepack pnpm repo:validate",
+        "changed-file-count:6",
+        "changed-file:docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+        "changed-file:docs/architecture/linear-repository-delivery-audit.json",
+        "changed-file:docs/architecture/repository-optimisation-local-realisation-tranche.json",
+        "changed-file:docs/architecture/repository-optimisation-realisation-semantics.json",
+        "changed-file:package.json",
+        "changed-file:tools/validate-spec/validate-spec.py",
+        "recommended-command:corepack pnpm repo:validate",
+        "recommended-command:python3 tools/validate-linear-boundary/validate-linear-boundary.py all --json",
+        "recommended-command:python3 tools/validate-repository-optimisation/validate-repository-optimisation.py all --json",
+        "affected-rule:docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json:linear-boundary",
+        "affected-rule:docs/architecture/linear-repository-delivery-audit.json:linear-boundary",
+        "affected-rule:docs/architecture/repository-optimisation-local-realisation-tranche.json:repository-optimisation",
+        "affected-rule:docs/architecture/repository-optimisation-realisation-semantics.json:repository-optimisation",
+        "affected-rule:package.json:package-command-surface",
+        "affected-rule:tools/validate-spec/validate-spec.py:full-gate-fallback"
+      ],
+      "message": "Computed warn-only affected-run recommendations for 6 changed files.",
+      "ruleId": "USF-OPT-AFFECTED-001",
+      "severity": "info",
+      "subject": "affected-run"
+    }
+  ],
+  "id": "usf.repository-optimisation.affected-run",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository optimisation affected-run warn-only baseline",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

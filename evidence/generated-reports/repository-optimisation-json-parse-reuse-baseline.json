@@ -1,0 +1,49 @@
+{
+  "aiGuidance": "Lowest-authority generated optimisation evidence. Generated optimisation reports are not USF semantic authority. Generated optimisation reports are not readiness claims. Full validation remains the authority unless a later accepted policy changes required checks. Affected-run selection is warn-only. No remote cache adoption is introduced. No task graph tooling adoption is introduced. No Testcontainers migration or adoption is introduced. No external provider, credential, staging, production, deployment, store, release, compliance, or human-acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated baseline proving a per-process JSON cache can reuse parsed governance artefacts without weakening strict JSON parsing.",
+  "evidenceRefs": [
+    "tools/repository-optimisation/realise-bounded-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-997",
+        "parse-reuse-mode:per-process-path-cache",
+        "strict-json-parse-preserved:true",
+        "cache-hits:10",
+        "cache-misses:10",
+        "unique-parsed-path-count:10",
+        "parsed-path:spec/taxonomies/taxonomy-catalog.json",
+        "parsed-path:spec/vocabularies/vocabulary-catalog.json",
+        "parsed-path:spec/registries/schema-registry.json",
+        "parsed-path:docs/architecture/current-state-foundation-authority-index.json",
+        "parsed-path:docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+        "parsed-path:docs/architecture/linear-repository-delivery-audit.json",
+        "parsed-path:docs/architecture/repository-optimisation-local-realisation-tranche.json",
+        "parsed-path:docs/architecture/repository-optimisation-realisation-semantics.json",
+        "parsed-path:docs/architecture/repository-compose-optimisation-governance.json",
+        "parsed-path:docs/architecture/repository-performance-profiling-governance.json"
+      ],
+      "message": "Parsed 10 JSON artefacts once and reused cached objects on a second pass with 10 cache hits.",
+      "ruleId": "USF-OPT-JSON-001",
+      "severity": "info",
+      "subject": "json-parse-reuse"
+    }
+  ],
+  "id": "usf.repository-optimisation.json-parse-reuse",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository optimisation JSON parse reuse baseline",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}
