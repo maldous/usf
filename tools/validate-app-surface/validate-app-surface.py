@@ -32,6 +32,7 @@ COMMAND_FORM_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-command-form
 QUERY_LIST_DETAIL_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-query-list-detail-implementation.json"
 STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-state-cache-query-client-implementation.json"
 AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-auth-session-dev-identity-implementation.json"
+I18N_BASELINE_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-i18n-baseline-implementation.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -1696,6 +1697,214 @@ def validate_auth_session_dev_identity_implementation() -> list[dict[str, str]]:
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 
+
+def validate_i18n_baseline_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-006"
+    issue_id = "USF-1025"
+    subject = rel(I18N_BASELINE_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not I18N_BASELINE_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "i18n baseline implementation artefact is missing", issue_id)]
+    data = load_json(I18N_BASELINE_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "i18n baseline implementation artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, subject, "artefact ownerIssueId must be USF-1025", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, subject, "artefact lifecycleState must be bounded-local-implemented", issue_id))
+    for path in data.get("authorityInputs", []):
+        if not isinstance(path, str) or not path_exists(path):
+            failures.append(finding(rule_id, subject, f"authority input does not exist: {path}", issue_id))
+
+    scope = data.get("implementationScope", {})
+    if not isinstance(scope, dict):
+        failures.append(finding(rule_id, subject, "implementationScope must be an object", issue_id))
+    else:
+        expected_scope = {
+            "runtimePackage": "packages/app-surface/src/index.ts",
+            "runtimeRegistryExport": "LOCAL_I18N_REGISTRY",
+            "runtimeLookupExport": "translateLocalAppSurfaceText",
+            "webConsumerPath": "apps/web/app/page.tsx",
+            "mobileConsumerPath": "apps/mobile/App.tsx",
+            "unitTestArtefact": "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+            "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+            "providerMode": "in-memory-only",
+            "environment": "dev-local",
+        }
+        for field, value in expected_scope.items():
+            if scope.get(field) != value:
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} is incorrect", issue_id))
+        for field in ["packageInstallationAllowed", "dependencyInstallRequired", "externalServicesAllowed", "credentialsAllowed", "deploymentAllowed", "stagingAllowed"]:
+            if scope.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} must remain false", issue_id))
+        if scope.get("runtimeCodeCreatedByIssue") is not True:
+            failures.append(finding(rule_id, subject, "implementationScope.runtimeCodeCreatedByIssue must be true", issue_id))
+        for field in ["runtimePackage", "webConsumerPath", "mobileConsumerPath", "unitTestArtefact", "validatorGuard"]:
+            path = scope.get(field)
+            if not isinstance(path, str) or not path_exists(path):
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} path must exist", issue_id))
+
+    guard = data.get("validationGuard", {})
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "routeAndComponentStringsMustHaveCatalogueEntries",
+        "surfaceCoverageMustMapToImplementationPaths",
+        "missingTranslationsMustFailClosed",
+        "unsupportedLocalesMustFailClosed",
+        "fallbackPolicyMustBeExplicit",
+        "behaviourChangingTranslationsMustRemainForbidden",
+        "usf937StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "externalTranslationProviderMustRemainForbidden",
+        "storeLocaleMetadataMustRemainForbidden",
+    ]
+    if not isinstance(guard, dict):
+        failures.append(finding(rule_id, subject, "validationGuard must be an object", issue_id))
+    else:
+        for flag in required_guard_flags:
+            if guard.get(flag) is not True:
+                failures.append(finding(rule_id, f"{subject}.validationGuard.{flag}", "validation guard flag must be true", issue_id))
+
+    fallback = data.get("fallbackPolicy", {})
+    if not isinstance(fallback, dict):
+        failures.append(finding(rule_id, subject, "fallbackPolicy must be an object", issue_id))
+    else:
+        expected_fallback = {
+            "defaultLocale": "en-US",
+            "fallbackLocale": "en-US",
+            "missingTranslationPolicy": "fail-closed",
+            "unsupportedLocalePolicy": "fail-closed",
+            "behaviourChangingFallbackAllowed": False,
+            "legalPrivacyConsentFallbackAllowed": False,
+        }
+        for field, value in expected_fallback.items():
+            if fallback.get(field) != value:
+                failures.append(finding(rule_id, subject, f"fallbackPolicy.{field} is incorrect", issue_id))
+
+    locales = data.get("implementedLocales", [])
+    if not isinstance(locales, list) or not locales:
+        failures.append(finding(rule_id, subject, "implementedLocales must be a non-empty array", issue_id))
+    else:
+        if not any(isinstance(item, dict) and item.get("locale") == "en-US" and item.get("direction") == "ltr" for item in locales):
+            failures.append(finding(rule_id, subject, "implementedLocales must include en-US ltr", issue_id))
+
+    catalogue = data.get("translationCatalogue", [])
+    if not isinstance(catalogue, list) or not catalogue:
+        failures.append(finding(rule_id, subject, "translationCatalogue must be a non-empty array", issue_id))
+        catalogue = []
+    catalogue_keys: set[str] = set()
+    catalogue_surfaces: set[str] = set()
+    for index, entry in enumerate(catalogue):
+        if not isinstance(entry, dict):
+            failures.append(finding(rule_id, f"{subject}.translationCatalogue.{index}", "translation entry must be an object", issue_id))
+            continue
+        key = entry.get("key") if isinstance(entry.get("key"), str) and entry["key"].strip() else f"translationCatalogue.{index}"
+        entry_subject = f"{subject}.translationCatalogue.{key}"
+        for field in ["key", "locale"]:
+            if not isinstance(entry.get(field), str) or not entry[field].strip():
+                failures.append(finding(rule_id, entry_subject, f"missing {field}", issue_id))
+        if entry.get("locale") != "en-US":
+            failures.append(finding(rule_id, entry_subject, "locale must be en-US for bounded local baseline", issue_id))
+        for field in ["surfaceRefs", "semanticSourceRefs"]:
+            if not has_nonempty_string_array(entry.get(field)):
+                failures.append(finding(rule_id, entry_subject, f"missing {field}", issue_id))
+        if entry.get("behaviourChangingAllowed") is not False:
+            failures.append(finding(rule_id, entry_subject, "behaviour-changing translation must remain forbidden", issue_id))
+        if key in catalogue_keys:
+            failures.append(finding(rule_id, entry_subject, "duplicate translation key", issue_id))
+        catalogue_keys.add(str(key))
+        for surface in entry.get("surfaceRefs", []) if isinstance(entry.get("surfaceRefs", []), list) else []:
+            if isinstance(surface, str) and surface.strip():
+                catalogue_surfaces.add(surface)
+
+    coverage = data.get("surfaceCoverage", [])
+    if not isinstance(coverage, list) or not coverage:
+        failures.append(finding(rule_id, subject, "surfaceCoverage must be a non-empty array", issue_id))
+        coverage = []
+    required_surfaces = {
+        "web-route-developer-home": "apps/web/app/page.tsx",
+        "mobile-screen-developer-home": "apps/mobile/App.tsx",
+        "query-view-developer-profile-list": "packages/app-surface/src/index.ts",
+        "query-view-developer-profile-detail": "packages/app-surface/src/index.ts",
+        "command-form-api-key-onboarding": "packages/app-surface/src/index.ts",
+    }
+    observed_surfaces: set[str] = set()
+    for index, item in enumerate(coverage):
+        if not isinstance(item, dict):
+            failures.append(finding(rule_id, f"{subject}.surfaceCoverage.{index}", "surface coverage entry must be an object", issue_id))
+            continue
+        surface_id = item.get("surfaceId") if isinstance(item.get("surfaceId"), str) and item["surfaceId"].strip() else f"surfaceCoverage.{index}"
+        surface_subject = f"{subject}.surfaceCoverage.{surface_id}"
+        observed_surfaces.add(str(surface_id))
+        for field in ["surfaceId", "surfaceKind", "implementationPath"]:
+            if not isinstance(item.get(field), str) or not item[field].strip():
+                failures.append(finding(rule_id, surface_subject, f"missing {field}", issue_id))
+        implementation_path = item.get("implementationPath")
+        if not isinstance(implementation_path, str) or not path_exists(implementation_path):
+            failures.append(finding(rule_id, surface_subject, "implementationPath must exist", issue_id))
+        if surface_id in required_surfaces and implementation_path != required_surfaces[surface_id]:
+            failures.append(finding(rule_id, surface_subject, "implementationPath does not match expected bounded local surface", issue_id))
+        if surface_id not in catalogue_surfaces:
+            failures.append(finding(rule_id, surface_subject, "surface lacks translation catalogue coverage", issue_id))
+        if not has_nonempty_string_array(item.get("translationKeyRefs")):
+            failures.append(finding(rule_id, surface_subject, "missing translationKeyRefs", issue_id))
+        else:
+            for key in item["translationKeyRefs"]:
+                if key not in catalogue_keys:
+                    failures.append(finding(rule_id, surface_subject, f"translation key missing from catalogue: {key}", issue_id))
+        if not has_nonempty_string_array(item.get("proofRefs")):
+            failures.append(finding(rule_id, surface_subject, "missing proofRefs", issue_id))
+        else:
+            for proof_ref in item["proofRefs"]:
+                if isinstance(proof_ref, str) and proof_ref.startswith(("docs/", "tests/", "tools/")) and not path_exists(proof_ref):
+                    failures.append(finding(rule_id, surface_subject, f"proofRef path does not exist: {proof_ref}", issue_id))
+    missing_surfaces = set(required_surfaces) - observed_surfaces
+    for surface_id in sorted(missing_surfaces):
+        failures.append(finding(rule_id, subject, f"required surface coverage is missing: {surface_id}", issue_id))
+
+    if USF937_CONFORMING := ROOT / "tools/validate-app-surface/fixtures/conforming/009-i18n-coverage-complete.json":
+        if not USF937_CONFORMING.exists():
+            failures.append(finding(rule_id, subject, "USF-937 conforming fixture must exist", issue_id))
+        else:
+            conforming = load_json(USF937_CONFORMING)
+            if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-009":
+                failures.append(finding(rule_id, rel(USF937_CONFORMING), "USF-937 conforming fixture must remain wired", issue_id))
+    if USF937_PLANTED := ROOT / "tools/validate-app-surface/planted-defects/009-missing-i18n-coverage.json":
+        if not USF937_PLANTED.exists():
+            failures.append(finding(rule_id, subject, "USF-937 planted fixture must exist", issue_id))
+        else:
+            planted = load_json(USF937_PLANTED)
+            if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-009":
+                failures.append(finding(rule_id, rel(USF937_PLANTED), "USF-937 planted fixture must remain wired", issue_id))
+
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    observed_out_of_scope = {item.get("surface"): item for item in out_of_scope if isinstance(item, dict)} if isinstance(out_of_scope, list) else {}
+    required_out_of_scope = {
+        "international-readiness": {"status": "not-authorised"},
+        "professional-localisation": {"status": "not-authorised"},
+        "store-locale-metadata": {"status": "not-authorised"},
+        "legal-privacy-consent-translation": {"status": "not-authorised"},
+        "accessibility-baseline": {"ownerIssueId": "USF-1026", "status": "owned-by-later-issue"},
+    }
+    for surface, expected in required_out_of_scope.items():
+        item = observed_out_of_scope.get(surface)
+        if not isinstance(item, dict) or any(item.get(key) != value for key, value in expected.items()):
+            failures.append(finding(rule_id, subject, f"{surface} out-of-scope boundary is missing or incorrect", issue_id))
+
+    proof_ladder = data.get("proofLadder", {})
+    if not isinstance(proof_ladder, dict):
+        failures.append(finding(rule_id, subject, "proofLadder must be an object", issue_id))
+    else:
+        for field in ["devLocalRequired", "unitTestsRequired", "contractTestsRequired"]:
+            if proof_ladder.get(field) is not True:
+                failures.append(finding(rule_id, subject, f"proofLadder.{field} must be true", issue_id))
+        for field in ["composeRequired", "stagingRequired"]:
+            if proof_ladder.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"proofLadder.{field} must be false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -1717,6 +1926,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_query_list_detail_implementation())
     failures.extend(validate_state_cache_query_client_implementation())
     failures.extend(validate_auth_session_dev_identity_implementation())
+    failures.extend(validate_i18n_baseline_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -1761,6 +1971,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         QUERY_LIST_DETAIL_IMPLEMENTATION,
         STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION,
         AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION,
+        I18N_BASELINE_IMPLEMENTATION,
     ]
     return {
         "mode": mode,

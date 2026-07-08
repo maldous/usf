@@ -1,0 +1,350 @@
+{
+  "artifactId": "usf.app-surface-i18n-baseline-implementation",
+  "title": "App-surface i18n baseline implementation",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1025",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local i18n baseline implementation for USF-1025. It maps route, screen, command, and query surface strings to a local translation catalogue and fail-closed missing-translation policy. It does not claim international readiness, localisation readiness, store locale readiness, product UI readiness, production readiness, deployment readiness, staging readiness, compliance readiness, or human acceptance.",
+  "implementationScope": {
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_I18N_REGISTRY",
+    "runtimeLookupExport": "translateLocalAppSurfaceText",
+    "webConsumerPath": "apps/web/app/page.tsx",
+    "mobileConsumerPath": "apps/mobile/App.tsx",
+    "unitTestArtefact": "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "providerMode": "in-memory-only",
+    "environment": "dev-local",
+    "packageInstallationAllowed": false,
+    "dependencyInstallRequired": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "runtimeCodeCreatedByIssue": true
+  },
+  "authorityInputs": [
+    "docs/architecture/app-surface-i18n-localisation-semantics.json",
+    "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+    "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+    "docs/architecture/app-surface-command-form-implementation.json",
+    "docs/architecture/app-surface-query-list-detail-implementation.json",
+    "tools/validate-app-surface/fixtures/conforming/009-i18n-coverage-complete.json",
+    "tools/validate-app-surface/planted-defects/009-missing-i18n-coverage.json"
+  ],
+  "fallbackPolicy": {
+    "defaultLocale": "en-US",
+    "fallbackLocale": "en-US",
+    "missingTranslationPolicy": "fail-closed",
+    "unsupportedLocalePolicy": "fail-closed",
+    "behaviourChangingFallbackAllowed": false,
+    "legalPrivacyConsentFallbackAllowed": false,
+    "explicitPolicyReason": "The bounded local app-surface slice has one catalogue locale only. Missing keys and unsupported locales fail closed rather than silently falling back to invented text."
+  },
+  "implementedLocales": [
+    {
+      "locale": "en-US",
+      "direction": "ltr",
+      "catalogueStatus": "bounded-local-fixture-catalogue",
+      "nonClaimBoundary": "This catalogue supports local proof only and does not claim translation completeness or localisation readiness."
+    }
+  ],
+  "translationCatalogue": [
+    {
+      "key": "web.developerHome.heading",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "web-route-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "web.developerHome.description",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "web-route-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "mobile.developerHome.kicker",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "mobile-screen-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "mobile.developerHome.title",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "mobile-screen-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "mobile.developerHome.body",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "mobile-screen-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "mobile.developerHome.capabilityLabel",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "mobile-screen-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "mobile.developerHome.permissionLabel",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "mobile-screen-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "mobile.developerHome.unknownScreenPolicyLabel",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "mobile-screen-developer-home"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "query.developerProfile.emptyState",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "query-view-developer-profile-list"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#query-list-empty-error-state-keys"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "query.developerProfile.notFoundState",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "query-view-developer-profile-detail"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#query-detail-not-found-error-state-keys"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "query.developerProfile.errorState",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "command.apiKeyOnboarding.title",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "command-form-api-key-onboarding"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "command.apiKeyOnboarding.submitLabel",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "command-form-api-key-onboarding"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"
+      ],
+      "behaviourChangingAllowed": false
+    },
+    {
+      "key": "command.apiKeyOnboarding.invalidLabelError",
+      "locale": "en-US",
+      "surfaceRefs": [
+        "command-form-api-key-onboarding"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"
+      ],
+      "behaviourChangingAllowed": false
+    }
+  ],
+  "surfaceCoverage": [
+    {
+      "surfaceId": "web-route-developer-home",
+      "surfaceKind": "web-route-component",
+      "implementationPath": "apps/web/app/page.tsx",
+      "translationKeyRefs": [
+        "web.developerHome.heading",
+        "web.developerHome.description"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ]
+    },
+    {
+      "surfaceId": "mobile-screen-developer-home",
+      "surfaceKind": "mobile-screen-component",
+      "implementationPath": "apps/mobile/App.tsx",
+      "translationKeyRefs": [
+        "mobile.developerHome.kicker",
+        "mobile.developerHome.title",
+        "mobile.developerHome.body",
+        "mobile.developerHome.capabilityLabel",
+        "mobile.developerHome.permissionLabel",
+        "mobile.developerHome.unknownScreenPolicyLabel"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ]
+    },
+    {
+      "surfaceId": "query-view-developer-profile-list",
+      "surfaceKind": "query-list-view-state",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "translationKeyRefs": [
+        "query.developerProfile.emptyState",
+        "query.developerProfile.errorState"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ]
+    },
+    {
+      "surfaceId": "query-view-developer-profile-detail",
+      "surfaceKind": "query-detail-view-state",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "translationKeyRefs": [
+        "query.developerProfile.notFoundState",
+        "query.developerProfile.errorState"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ]
+    },
+    {
+      "surfaceId": "command-form-api-key-onboarding",
+      "surfaceKind": "command-form-view-state",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "translationKeyRefs": [
+        "command.apiKeyOnboarding.title",
+        "command.apiKeyOnboarding.submitLabel",
+        "command.apiKeyOnboarding.invalidLabelError"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ]
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "routeAndComponentStringsMustHaveCatalogueEntries": true,
+    "surfaceCoverageMustMapToImplementationPaths": true,
+    "missingTranslationsMustFailClosed": true,
+    "unsupportedLocalesMustFailClosed": true,
+    "fallbackPolicyMustBeExplicit": true,
+    "behaviourChangingTranslationsMustRemainForbidden": true,
+    "usf937StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "externalTranslationProviderMustRemainForbidden": true,
+    "storeLocaleMetadataMustRemainForbidden": true
+  },
+  "proofLadder": {
+    "devLocalRequired": true,
+    "unitTestsRequired": true,
+    "contractTestsRequired": true,
+    "contractTestReason": "The app-surface validator retains USF-937-style i18n coverage fixtures and checks the real implementation artefact.",
+    "composeRequired": false,
+    "composeReason": "No provider semantics are crossed by this local in-memory translation catalogue.",
+    "stagingRequired": false,
+    "stagingReason": "This implementation is local-only and does not create public, deployment-adjacent, provider-staging, or human-acceptance evidence."
+  },
+  "outOfScopeSurfaces": [
+    {
+      "surface": "international-readiness",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "professional-localisation",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "store-locale-metadata",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "legal-privacy-consent-translation",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "accessibility-baseline",
+      "ownerIssueId": "USF-1026",
+      "status": "owned-by-later-issue"
+    }
+  ],
+  "validationCommands": [
+    "strict JSON parse for this artefact and modified JSON files",
+    "corepack pnpm vitest run tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+    "corepack pnpm typecheck",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "nonClaims": {
+    "internationalReadiness": false,
+    "localisationReadiness": false,
+    "translationCompleteness": false,
+    "professionalLocalisationReadiness": false,
+    "storeLocaleReadiness": false,
+    "productUiReadiness": false,
+    "productionReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "liveProviderReadiness": false,
+    "complianceReadiness": false,
+    "humanAcceptance": false
+  }
+}

@@ -2548,3 +2548,594 @@ export const exerciseLocalAuthPermissionCheck = (
     liveProviderReadinessClaimed: false,
   };
 };
+
+export type LocalI18nLocale = "en-US";
+export type LocalI18nProviderMode = "in-memory-only";
+export type LocalI18nEnvironment = "dev-local";
+export type LocalI18nMissingTranslationPolicy = "fail-closed";
+export type LocalI18nUnsupportedLocalePolicy = "fail-closed";
+
+export interface LocalI18nTranslationEntry {
+  readonly key: string;
+  readonly locale: string;
+  readonly value: string;
+  readonly semanticSourceRefs: readonly string[];
+  readonly surfaceRefs: readonly string[];
+  readonly behaviourChangingAllowed: boolean;
+}
+
+export interface LocalI18nCatalogue {
+  readonly locale: string;
+  readonly direction: "ltr";
+  readonly entries: readonly LocalI18nTranslationEntry[];
+}
+
+export interface LocalI18nSurfaceCoverageMapping {
+  readonly surfaceId: string;
+  readonly surfaceKind: string;
+  readonly implementationPath: string;
+  readonly translationKeyRefs: readonly string[];
+  readonly semanticSourceRefs: readonly string[];
+  readonly proofRefs: readonly string[];
+}
+
+export interface LocalI18nFallbackPolicy {
+  readonly defaultLocale: string;
+  readonly fallbackLocale: string;
+  readonly missingTranslationPolicy: LocalI18nMissingTranslationPolicy;
+  readonly unsupportedLocalePolicy: LocalI18nUnsupportedLocalePolicy;
+  readonly behaviourChangingFallbackAllowed: false;
+  readonly legalPrivacyConsentFallbackAllowed: false;
+}
+
+export interface LocalI18nRegistry {
+  readonly artifactId: string;
+  readonly ownerIssueId: string;
+  readonly providerMode: string;
+  readonly environment: string;
+  readonly defaultLocale: string;
+  readonly supportedLocales: readonly string[];
+  readonly fallbackPolicy: LocalI18nFallbackPolicy;
+  readonly catalogues: readonly LocalI18nCatalogue[];
+  readonly surfaceCoverage: readonly LocalI18nSurfaceCoverageMapping[];
+  readonly externalTranslationProviderAllowed: boolean;
+  readonly translationProductionClaimAllowed: boolean;
+  readonly professionalLocalisationClaimAllowed: boolean;
+  readonly storeLocaleMetadataAllowed: boolean;
+  readonly nonClaims: Record<string, boolean>;
+}
+
+export interface LocalI18nAuthority {
+  readonly localeRefs?: ReadonlySet<string> | readonly string[];
+  readonly surfaceRefs?: ReadonlySet<string> | readonly string[];
+  readonly semanticSourceRefs?: ReadonlySet<string> | readonly string[];
+  readonly proofRefs?: ReadonlySet<string> | readonly string[];
+  readonly translationKeyRefs?: ReadonlySet<string> | readonly string[];
+}
+
+export interface LocalI18nTranslationResult {
+  readonly key: string;
+  readonly requestedLocale: string;
+  readonly resolvedLocale: LocalI18nLocale;
+  readonly value: string;
+  readonly providerMode: LocalI18nProviderMode;
+  readonly environment: LocalI18nEnvironment;
+  readonly fallbackUsed: false;
+  readonly missingTranslationFailedClosed: false;
+  readonly localisationReadinessClaimed: false;
+  readonly translationCompletenessClaimed: false;
+  readonly storeLocaleReadinessClaimed: false;
+  readonly humanAcceptanceClaimed: false;
+}
+
+const LOCAL_I18N_RULE = "USF-1025";
+const LOCAL_I18N_ARTIFACT_ID = "usf.app-surface-i18n-baseline-registry";
+const LOCAL_I18N_PROVIDER_MODE: LocalI18nProviderMode = "in-memory-only";
+const LOCAL_I18N_ENVIRONMENT: LocalI18nEnvironment = "dev-local";
+const LOCAL_I18N_DEFAULT_LOCALE: LocalI18nLocale = "en-US";
+const LOCAL_I18N_REQUIRED_NON_CLAIMS = [
+  "internationalReadiness",
+  "localisationReadiness",
+  "translationCompleteness",
+  "professionalLocalisationReadiness",
+  "storeLocaleReadiness",
+  "productUiReadiness",
+  "productionReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "liveProviderReadiness",
+  "complianceReadiness",
+  "humanAcceptance",
+] as const;
+
+const LOCAL_I18N_FORBIDDEN_REGISTRY_FLAGS = [
+  ["externalTranslationProviderAllowed", "external-translation-provider-not-authorised"],
+  ["translationProductionClaimAllowed", "translation-production-claim-not-authorised"],
+  ["professionalLocalisationClaimAllowed", "professional-localisation-claim-not-authorised"],
+  ["storeLocaleMetadataAllowed", "store-locale-metadata-not-authorised"],
+] as const;
+
+const LOCAL_I18N_FORBIDDEN_KEYS = [
+  "translationProvider",
+  "translationApiKey",
+  "translationMemoryProvider",
+  "storeLocaleProvider",
+  "legalApprovalRef",
+  "deploymentRef",
+  "stagingRef",
+] as const;
+
+export const LOCAL_I18N_REGISTRY = {
+  artifactId: LOCAL_I18N_ARTIFACT_ID,
+  ownerIssueId: LOCAL_I18N_RULE,
+  providerMode: LOCAL_I18N_PROVIDER_MODE,
+  environment: LOCAL_I18N_ENVIRONMENT,
+  defaultLocale: LOCAL_I18N_DEFAULT_LOCALE,
+  supportedLocales: [LOCAL_I18N_DEFAULT_LOCALE],
+  fallbackPolicy: {
+    defaultLocale: LOCAL_I18N_DEFAULT_LOCALE,
+    fallbackLocale: LOCAL_I18N_DEFAULT_LOCALE,
+    missingTranslationPolicy: "fail-closed",
+    unsupportedLocalePolicy: "fail-closed",
+    behaviourChangingFallbackAllowed: false,
+    legalPrivacyConsentFallbackAllowed: false,
+  },
+  catalogues: [
+    {
+      locale: LOCAL_I18N_DEFAULT_LOCALE,
+      direction: "ltr",
+      entries: [
+        {
+          key: "web.developerHome.heading",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "USF local app surface",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["web-route-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "web.developerHome.description",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "This bounded local route is mapped to governed USF capability and permission semantics.",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["web-route-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "mobile.developerHome.kicker",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "USF bounded local mobile scaffold",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["mobile-screen-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "mobile.developerHome.title",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "Developer home",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["mobile-screen-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "mobile.developerHome.body",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "This local Expo surface renders governed screen metadata only. Product behaviour remains owned by USF semantic artefacts.",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["mobile-screen-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "mobile.developerHome.capabilityLabel",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "Capability",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["mobile-screen-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "mobile.developerHome.permissionLabel",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "Permission",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["mobile-screen-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "mobile.developerHome.unknownScreenPolicyLabel",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "Unknown screen policy",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#usf.i18n.translation-key-catalogue"],
+          surfaceRefs: ["mobile-screen-developer-home"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "query.developerProfile.emptyState",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "No local developer profile fixture is available.",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#query-list-empty-error-state-keys"],
+          surfaceRefs: ["query-view-developer-profile-list"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "query.developerProfile.notFoundState",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "The local developer profile fixture was not found.",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#query-detail-not-found-error-state-keys"],
+          surfaceRefs: ["query-view-developer-profile-detail"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "query.developerProfile.errorState",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "The local developer profile fixture could not be rendered.",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"],
+          surfaceRefs: ["query-view-developer-profile-list", "query-view-developer-profile-detail"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "command.apiKeyOnboarding.title",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "API key onboarding",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"],
+          surfaceRefs: ["command-form-api-key-onboarding"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "command.apiKeyOnboarding.submitLabel",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "Record local API key onboarding fixture",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"],
+          surfaceRefs: ["command-form-api-key-onboarding"],
+          behaviourChangingAllowed: false,
+        },
+        {
+          key: "command.apiKeyOnboarding.invalidLabelError",
+          locale: LOCAL_I18N_DEFAULT_LOCALE,
+          value: "The local API key label fixture is invalid.",
+          semanticSourceRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#localised-validation-messages"],
+          surfaceRefs: ["command-form-api-key-onboarding"],
+          behaviourChangingAllowed: false,
+        },
+      ],
+    },
+  ],
+  surfaceCoverage: [
+    {
+      surfaceId: "web-route-developer-home",
+      surfaceKind: "web-route-component",
+      implementationPath: "apps/web/app/page.tsx",
+      translationKeyRefs: ["web.developerHome.heading", "web.developerHome.description"],
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      ],
+    },
+    {
+      surfaceId: "mobile-screen-developer-home",
+      surfaceKind: "mobile-screen-component",
+      implementationPath: "apps/mobile/App.tsx",
+      translationKeyRefs: [
+        "mobile.developerHome.kicker",
+        "mobile.developerHome.title",
+        "mobile.developerHome.body",
+        "mobile.developerHome.capabilityLabel",
+        "mobile.developerHome.permissionLabel",
+        "mobile.developerHome.unknownScreenPolicyLabel",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      ],
+    },
+    {
+      surfaceId: "query-view-developer-profile-list",
+      surfaceKind: "query-list-view-state",
+      implementationPath: "packages/app-surface/src/index.ts",
+      translationKeyRefs: ["query.developerProfile.emptyState", "query.developerProfile.errorState"],
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      ],
+    },
+    {
+      surfaceId: "query-view-developer-profile-detail",
+      surfaceKind: "query-detail-view-state",
+      implementationPath: "packages/app-surface/src/index.ts",
+      translationKeyRefs: ["query.developerProfile.notFoundState", "query.developerProfile.errorState"],
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      ],
+    },
+    {
+      surfaceId: "command-form-api-key-onboarding",
+      surfaceKind: "command-form-view-state",
+      implementationPath: "packages/app-surface/src/index.ts",
+      translationKeyRefs: [
+        "command.apiKeyOnboarding.title",
+        "command.apiKeyOnboarding.submitLabel",
+        "command.apiKeyOnboarding.invalidLabelError",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-command-form-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      ],
+    },
+  ],
+  externalTranslationProviderAllowed: false,
+  translationProductionClaimAllowed: false,
+  professionalLocalisationClaimAllowed: false,
+  storeLocaleMetadataAllowed: false,
+  nonClaims: {
+    internationalReadiness: false,
+    localisationReadiness: false,
+    translationCompleteness: false,
+    professionalLocalisationReadiness: false,
+    storeLocaleReadiness: false,
+    productUiReadiness: false,
+    productionReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    liveProviderReadiness: false,
+    complianceReadiness: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalI18nRegistry;
+
+const asLocalI18nAuthorityValues = (values: ReadonlySet<string> | readonly string[] | undefined): readonly string[] | undefined => {
+  if (values === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(values)) {
+    return values;
+  }
+  return Array.from(values);
+};
+
+const localI18nAuthorityHas = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+  value: string,
+): boolean => asLocalI18nAuthorityValues(values)?.includes(value) ?? false;
+
+const localI18nCatalogueForLocale = (
+  registry: LocalI18nRegistry,
+  locale: string,
+): LocalI18nCatalogue | undefined => registry.catalogues.find((catalogue) => catalogue.locale === locale);
+
+const localI18nTranslationEntryForKey = (
+  registry: LocalI18nRegistry,
+  locale: string,
+  key: string,
+): LocalI18nTranslationEntry | undefined => localI18nCatalogueForLocale(registry, locale)?.entries.find((entry) => entry.key === key);
+
+export const validateLocalI18nRegistry = (
+  registry: LocalI18nRegistry = LOCAL_I18N_REGISTRY,
+  authority?: LocalI18nAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const registryRecord = registry as unknown as Record<string, unknown>;
+  const registrySubject = "local-i18n-registry";
+
+  if (registry.artifactId !== LOCAL_I18N_ARTIFACT_ID) {
+    findings.push(`${registrySubject}:artifactId-mismatch`);
+  }
+  if (registry.ownerIssueId !== LOCAL_I18N_RULE) {
+    findings.push(`${registrySubject}:ownerIssueId-mismatch`);
+  }
+  if (registry.providerMode !== LOCAL_I18N_PROVIDER_MODE) {
+    findings.push(`${registrySubject}:providerMode-mismatch`);
+  }
+  if (registry.environment !== LOCAL_I18N_ENVIRONMENT) {
+    findings.push(`${registrySubject}:environment-mismatch`);
+  }
+  if (registry.defaultLocale !== LOCAL_I18N_DEFAULT_LOCALE) {
+    findings.push(`${registrySubject}:default-locale-mismatch`);
+  }
+  if (!registry.supportedLocales.includes(LOCAL_I18N_DEFAULT_LOCALE)) {
+    findings.push(`${registrySubject}:default-locale-not-supported`);
+  }
+  for (const [field, code] of LOCAL_I18N_FORBIDDEN_REGISTRY_FLAGS) {
+    if (registryRecord[field] !== false) {
+      findings.push(`${registrySubject}:${code}`);
+    }
+  }
+  for (const key of LOCAL_I18N_FORBIDDEN_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(registryRecord, key)) {
+      findings.push(`${registrySubject}:forbidden-${key}`);
+    }
+  }
+  for (const claim of LOCAL_I18N_REQUIRED_NON_CLAIMS) {
+    if (registry.nonClaims?.[claim] !== false) {
+      findings.push(`${registrySubject}:nonclaim-${claim}-must-be-false`);
+    }
+  }
+
+  const fallback = registry.fallbackPolicy;
+  if (!isRecord(fallback)) {
+    findings.push(`${registrySubject}:missing-fallback-policy`);
+  } else {
+    if (fallback.defaultLocale !== registry.defaultLocale) {
+      findings.push(`${registrySubject}:fallback-default-locale-mismatch`);
+    }
+    if (fallback.fallbackLocale !== registry.defaultLocale) {
+      findings.push(`${registrySubject}:fallback-locale-must-be-default-locale`);
+    }
+    if (fallback.missingTranslationPolicy !== "fail-closed") {
+      findings.push(`${registrySubject}:missing-translation-policy-must-fail-closed`);
+    }
+    if (fallback.unsupportedLocalePolicy !== "fail-closed") {
+      findings.push(`${registrySubject}:unsupported-locale-policy-must-fail-closed`);
+    }
+    if (fallback.behaviourChangingFallbackAllowed !== false) {
+      findings.push(`${registrySubject}:behaviour-changing-fallback-not-authorised`);
+    }
+    if (fallback.legalPrivacyConsentFallbackAllowed !== false) {
+      findings.push(`${registrySubject}:legal-privacy-consent-fallback-not-authorised`);
+    }
+  }
+
+  if (!Array.isArray(registry.catalogues) || registry.catalogues.length === 0) {
+    findings.push(`${registrySubject}:missing-catalogues`);
+  }
+  const seenKeys = new Set<string>();
+  const allKeys = new Set<string>();
+  for (const catalogue of registry.catalogues) {
+    if (!registry.supportedLocales.includes(catalogue.locale)) {
+      findings.push(`${registrySubject}:catalogue-locale-unsupported:${catalogue.locale}`);
+    }
+    if (catalogue.direction !== "ltr") {
+      findings.push(`${registrySubject}:only-ltr-baseline-authorised:${catalogue.locale}`);
+    }
+    for (const entry of catalogue.entries) {
+      const subject = `local-i18n-entry:${entry.key || "missing"}`;
+      if (!isNonEmptyString(entry.key)) {
+        findings.push(`${subject}:missing-key`);
+      }
+      if (!isNonEmptyString(entry.value)) {
+        findings.push(`${subject}:missing-value`);
+      }
+      if (entry.locale !== catalogue.locale) {
+        findings.push(`${subject}:locale-mismatch`);
+      }
+      if (!hasNonEmptyStringArray(entry.semanticSourceRefs)) {
+        findings.push(`${subject}:missing-semanticSourceRefs`);
+      }
+      if (!hasNonEmptyStringArray(entry.surfaceRefs)) {
+        findings.push(`${subject}:missing-surfaceRefs`);
+      }
+      if (entry.behaviourChangingAllowed !== false) {
+        findings.push(`${subject}:behaviour-changing-translation-not-authorised`);
+      }
+      const duplicateKey = `${entry.locale}:${entry.key}`;
+      if (seenKeys.has(duplicateKey)) {
+        findings.push(`${subject}:duplicate-key`);
+      }
+      seenKeys.add(duplicateKey);
+      allKeys.add(entry.key);
+      if (authority) {
+        if (!localI18nAuthorityHas(authority.localeRefs, entry.locale)) {
+          findings.push(`${subject}:locale-authority-missing:${entry.locale}`);
+        }
+        for (const sourceRef of entry.semanticSourceRefs) {
+          if (!localI18nAuthorityHas(authority.semanticSourceRefs, sourceRef)) {
+            findings.push(`${subject}:semantic-source-authority-missing:${sourceRef}`);
+          }
+        }
+        for (const surfaceRef of entry.surfaceRefs) {
+          if (!localI18nAuthorityHas(authority.surfaceRefs, surfaceRef)) {
+            findings.push(`${subject}:surface-authority-missing:${surfaceRef}`);
+          }
+        }
+      }
+    }
+  }
+
+  if (!Array.isArray(registry.surfaceCoverage) || registry.surfaceCoverage.length === 0) {
+    findings.push(`${registrySubject}:missing-surface-coverage`);
+  }
+  for (const coverage of registry.surfaceCoverage) {
+    const subject = `local-i18n-surface:${coverage.surfaceId || "missing"}`;
+    if (!isNonEmptyString(coverage.surfaceId)) {
+      findings.push(`${subject}:missing-surfaceId`);
+    }
+    if (!isNonEmptyString(coverage.surfaceKind)) {
+      findings.push(`${subject}:missing-surfaceKind`);
+    }
+    if (!isNonEmptyString(coverage.implementationPath)) {
+      findings.push(`${subject}:missing-implementationPath`);
+    }
+    if (!hasNonEmptyStringArray(coverage.translationKeyRefs)) {
+      findings.push(`${subject}:missing-translationKeyRefs`);
+    }
+    if (!hasNonEmptyStringArray(coverage.semanticSourceRefs)) {
+      findings.push(`${subject}:missing-semanticSourceRefs`);
+    }
+    if (!hasNonEmptyStringArray(coverage.proofRefs)) {
+      findings.push(`${subject}:missing-proofRefs`);
+    }
+    for (const key of coverage.translationKeyRefs) {
+      if (!allKeys.has(key)) {
+        findings.push(`${subject}:translation-key-missing:${key}`);
+      }
+    }
+    if (authority) {
+      if (!localI18nAuthorityHas(authority.surfaceRefs, coverage.surfaceId)) {
+        findings.push(`${subject}:surface-authority-missing:${coverage.surfaceId}`);
+      }
+      for (const key of coverage.translationKeyRefs) {
+        if (!localI18nAuthorityHas(authority.translationKeyRefs, key)) {
+          findings.push(`${subject}:translation-key-authority-missing:${key}`);
+        }
+      }
+      for (const proofRef of coverage.proofRefs) {
+        if (!localI18nAuthorityHas(authority.proofRefs, proofRef)) {
+          findings.push(`${subject}:proof-authority-missing:${proofRef}`);
+        }
+      }
+    }
+  }
+
+  return findings;
+};
+
+export const getLocalI18nTranslationEntry = (
+  key: string,
+  locale: string = LOCAL_I18N_DEFAULT_LOCALE,
+  registry: LocalI18nRegistry = LOCAL_I18N_REGISTRY,
+): LocalI18nTranslationEntry => {
+  if (!registry.supportedLocales.includes(locale)) {
+    throw new Error(`local-i18n-unsupported-locale-fail-closed:${locale}`);
+  }
+  const entry = localI18nTranslationEntryForKey(registry, locale, key);
+  if (entry === undefined) {
+    throw new Error(`local-i18n-missing-translation-fail-closed:${locale}:${key}`);
+  }
+  return entry;
+};
+
+export const translateLocalAppSurfaceText = (
+  key: string,
+  locale: string = LOCAL_I18N_DEFAULT_LOCALE,
+  registry: LocalI18nRegistry = LOCAL_I18N_REGISTRY,
+): LocalI18nTranslationResult => {
+  const findings = validateLocalI18nRegistry(registry);
+  if (findings.length > 0) {
+    throw new Error(`local-i18n-registry-invalid:${findings.join(",")}`);
+  }
+  const entry = getLocalI18nTranslationEntry(key, locale, registry);
+  return {
+    key,
+    requestedLocale: locale,
+    resolvedLocale: LOCAL_I18N_DEFAULT_LOCALE,
+    value: entry.value,
+    providerMode: LOCAL_I18N_PROVIDER_MODE,
+    environment: LOCAL_I18N_ENVIRONMENT,
+    fallbackUsed: false,
+    missingTranslationFailedClosed: false,
+    localisationReadinessClaimed: false,
+    translationCompletenessClaimed: false,
+    storeLocaleReadinessClaimed: false,
+    humanAcceptanceClaimed: false,
+  };
+};

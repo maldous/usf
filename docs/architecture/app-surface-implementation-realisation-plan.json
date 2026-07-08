@@ -399,6 +399,14 @@
       {
         "path": "tests/packages/app-surface-query-list-detail-implementation.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -551,10 +559,11 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, and auth/session dev identity runtime mappings now exist; i18n/accessibility and later app surfaces remain issue-scoped work",
+      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, and i18n baseline runtime mappings now exist; accessibility and later app surfaces remain issue-scoped work",
       "queryListDetailRegistryFound": true,
       "stateCacheQueryClientBoundary": "implemented-by-USF-1023",
-      "authSessionDevIdentityImplementation": "implemented-by-USF-1024"
+      "authSessionDevIdentityImplementation": "implemented-by-USF-1024",
+      "i18nBaselineImplementation": "implemented-by-USF-1025"
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -887,7 +896,16 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-i18n-proof",
       "mayInstallPackages": "only-through-USF-1019",
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "repositoryArtefact": "docs/architecture/app-surface-i18n-baseline-implementation.json",
+      "currentRepositoryStatus": "bounded-local-i18n-baseline-implemented",
+      "implementedLocale": "en-US",
+      "runtimeCodeCreatedByIssue": true,
+      "runtimePackage": "packages/app-surface/src/index.ts",
+      "validatorGuardAdded": "tools/validate-app-surface/validate-app-surface.py",
+      "unitTestArtefact": "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1026",
@@ -1224,12 +1242,12 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Initial broader state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, local in-memory component-fixture runtime, route capability mapping, command form mapping, and query list/detail mapping are not yet implemented.",
+    "Initial broader accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, local in-memory component-fixture runtime, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, and i18n baseline mappings are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, and query list/detail mapping are now repository-owned, but state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, and i18n baseline are now repository-owned, but accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }
