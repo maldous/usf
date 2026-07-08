@@ -25,6 +25,287 @@
     "implementationAuthority": "Runtime code is permitted only inside child issues that explicitly allow runtime code and only after the relevant repository artefacts define the behaviour being implemented.",
     "externalAuthority": "No external repository, provider, generated report, store, deployment target, or Linear issue is treated as USF authority."
   },
+  "pathReferenceGuard": {
+    "existingRepositoryPathsMustExist": true,
+    "futureToCreatePathsMustHaveOwningLinearIssue": true,
+    "invalidOrStalePathReferencesAreNotAuthority": true,
+    "minimumMachineCheck": "Strict JSON parse plus existence check for every repositoryPathReferenceInventory.existingRepositoryPaths entry.",
+    "guardStatus": "active-for-plan-use"
+  },
+  "repositoryPathReferenceInventory": {
+    "existingRepositoryPaths": [
+      {
+        "path": "apps/api",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/public-proof-origin",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/staging-proof-cockpit",
+        "classification": "exists-now"
+      },
+      {
+        "path": "apps/work",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/adr/0016-expo-mobile-adapter-posture.md",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/adr/0017-nextjs-web-adapter-posture.md",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-accessibility-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-authority-model-extension.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-capability-coverage-matrix.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-implementation-gate-closure-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-observability-privacy-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-platform-test-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-release-and-readiness-realisation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-security-proof-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-semantic-definition-backlog-closure.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-store-provisioning-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-test-strategy-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-validator-implementation-tranche.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-web-adapter-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-web-cdn-release-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/client-query-cache-privacy-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/client-state-storage-sync-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/mobile-adapter-semantic-surface.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/repository-optimisation-local-realisation-tranche.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/contracts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/core",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/openapi",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/ports",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/proof",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/proof/src/graphql-generated-client-execution-proof.ts",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/source",
+        "classification": "exists-now"
+      },
+      {
+        "path": "packages/test",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tools/validate-app-surface/validate-app-surface.py",
+        "classification": "exists-now"
+      }
+    ],
+    "workspacePatterns": [
+      {
+        "pattern": "apps/*",
+        "classification": "workspace-pattern"
+      },
+      {
+        "pattern": "capabilities/*",
+        "classification": "workspace-pattern"
+      },
+      {
+        "pattern": "adapters/*",
+        "classification": "workspace-pattern"
+      },
+      {
+        "pattern": "packages/*",
+        "classification": "workspace-pattern"
+      }
+    ],
+    "futureToCreatePaths": [
+      {
+        "path": "apps/web",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1017"
+      },
+      {
+        "path": "apps/mobile",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1018"
+      },
+      {
+        "path": "packages/client",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1015"
+      },
+      {
+        "path": "packages/ui",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1014"
+      },
+      {
+        "path": "packages/app-surface",
+        "classification": "future-to-create",
+        "owningLinearIssueId": "USF-1016"
+      }
+    ],
+    "removedInvalidOrStaleReferences": [
+      {
+        "path": "docs/architecture/app-surface-accessibility-semantic-coverage.json",
+        "classification": "invalid/stale",
+        "replacementPath": "docs/architecture/app-surface-accessibility-semantics.json"
+      },
+      {
+        "path": "docs/architecture/app-surface-api-contract-realisation.json",
+        "classification": "invalid/stale",
+        "replacementPaths": [
+          "docs/architecture/shared-client-interaction-contract-semantics.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json"
+        ]
+      },
+      {
+        "path": "docs/architecture/app-surface-implementation-gate.json",
+        "classification": "invalid/stale",
+        "replacementPath": "docs/architecture/app-surface-implementation-gate-closure-semantics.json"
+      },
+      {
+        "path": "docs/architecture/app-surface-semantic-definition-candidate-backlog.json",
+        "classification": "invalid/stale",
+        "replacementPath": "docs/architecture/app-surface-semantic-definition-backlog-closure.json"
+      }
+    ]
+  },
   "currentInventory": {
     "appSurfaceValidator": {
       "implementationTranche": "docs/architecture/app-surface-validator-implementation-tranche.json",
@@ -45,13 +326,27 @@
       ]
     },
     "appSurfaceSemanticArtefacts": [
-      "docs/architecture/app-surface-accessibility-semantic-coverage.json",
-      "docs/architecture/app-surface-api-contract-realisation.json",
-      "docs/architecture/app-surface-implementation-gate.json",
+      "docs/architecture/app-surface-accessibility-semantics.json",
+      "docs/architecture/app-surface-auth-session-security-semantics.json",
+      "docs/architecture/app-surface-authority-model-extension.json",
+      "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+      "docs/architecture/app-surface-capability-coverage-matrix.json",
+      "docs/architecture/app-surface-i18n-localisation-semantics.json",
+      "docs/architecture/app-surface-implementation-gate-closure-semantics.json",
+      "docs/architecture/app-surface-observability-privacy-semantics.json",
+      "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+      "docs/architecture/app-surface-platform-test-semantics.json",
+      "docs/architecture/app-surface-proof-evidence-report-semantics.json",
       "docs/architecture/app-surface-release-and-readiness-realisation.json",
+      "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "docs/architecture/app-surface-security-proof-semantics.json",
       "docs/architecture/app-surface-semantic-definition-backlog-closure.json",
-      "docs/architecture/app-surface-semantic-definition-candidate-backlog.json",
+      "docs/architecture/app-surface-store-provisioning-semantics.json",
+      "docs/architecture/app-surface-test-strategy-semantics.json",
       "docs/architecture/app-surface-validator-implementation-tranche.json",
+      "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "docs/architecture/app-surface-web-adapter-semantics.json",
+      "docs/architecture/app-surface-web-cdn-release-semantics.json",
       "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json"
     ],
     "adapterAndClientDecisionArtefacts": [
@@ -59,8 +354,10 @@
       "docs/adr/0017-nextjs-web-adapter-posture.md",
       "docs/adr/0018-shared-client-sdk-adapter-strategy.md",
       "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "docs/architecture/shared-client-interaction-contract-semantics.json",
       "docs/architecture/generated-client-contract-validation-semantics.json",
-      "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+      "docs/architecture/mobile-adapter-semantic-surface.json"
     ],
     "stateQueryAndSurfaceSemantics": [
       "docs/architecture/client-query-cache-privacy-semantics.json",
@@ -410,7 +707,7 @@
         "USF-1022",
         "USF-1023"
       ],
-      "objective": "Implement route, command, query, and state/cache mappings over semantic artefacts."
+      "objective": "Implement route, command, query, and state and cache mappings over semantic artefacts."
     },
     {
       "step": 5,
@@ -561,9 +858,16 @@
       "make validate-evidence"
     ],
     "commandsForThisPlanningIssue": [
-      "strict JSON parse for docs/architecture/app-surface-implementation-realisation-plan.json",
-      "make app-surface-validate",
-      "make app-surface-selftest"
+      {
+        "commandClass": "strict-json-parse",
+        "targetPath": "docs/architecture/app-surface-implementation-realisation-plan.json"
+      },
+      {
+        "command": "make app-surface-validate"
+      },
+      {
+        "command": "make app-surface-selftest"
+      }
     ],
     "commandsForLaterImplementationIssues": [
       "frozen package install after dependency changes",
