@@ -1,0 +1,366 @@
+{
+  "artifactId": "usf.app-surface-accessibility-baseline-implementation",
+  "title": "App-surface accessibility baseline implementation",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1026",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local accessibility baseline implementation for USF-1026. It maps implemented route, screen, command, and query surfaces to local accessibility semantics and fail-closed missing-semantics behaviour. It does not claim accessibility compliance, accessibility certification, product UI readiness, production readiness, deployment readiness, staging readiness, provider readiness, or human acceptance.",
+  "implementationScope": {
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_ACCESSIBILITY_REGISTRY",
+    "runtimeLookupExport": "getLocalAccessibilitySurfaceById",
+    "webConsumerPath": "apps/web/app/page.tsx",
+    "mobileConsumerPath": "apps/mobile/App.tsx",
+    "unitTestArtefact": "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "providerMode": "in-memory-only",
+    "environment": "dev-local",
+    "packageInstallationAllowed": false,
+    "dependencyInstallRequired": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "runtimeCodeCreatedByIssue": true
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-accessibility-semantics.json",
+      "role": "authority-input",
+      "description": "Accessibility semantic authority for labels, roles, state, focus, keyboard, screen-reader, and related requirements."
+    },
+    {
+      "path": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      "role": "authority-input",
+      "description": "Web scaffold implementation authority consumed by the accessibility baseline."
+    },
+    {
+      "path": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "role": "authority-input",
+      "description": "Mobile scaffold implementation authority consumed by the accessibility baseline."
+    },
+    {
+      "path": "docs/architecture/app-surface-command-form-implementation.json",
+      "role": "authority-input",
+      "description": "Command/form implementation authority consumed by the accessibility baseline."
+    },
+    {
+      "path": "docs/architecture/app-surface-query-list-detail-implementation.json",
+      "role": "authority-input",
+      "description": "Query/list/detail implementation authority consumed by the accessibility baseline."
+    },
+    {
+      "path": "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      "role": "authority-input",
+      "description": "Conforming USF-938-style accessibility validator fixture."
+    },
+    {
+      "path": "tools/validate-app-surface/planted-defects/010-missing-accessibility-semantics.json",
+      "role": "authority-input",
+      "description": "Planted USF-938-style missing accessibility semantics defect fixture."
+    }
+  ],
+  "surfaceAccessibilityMappings": [
+    {
+      "surfaceId": "web-route-developer-home",
+      "surfaceKind": "web-route-component",
+      "platform": "web",
+      "implementationPath": "apps/web/app/page.tsx",
+      "capabilityRef": "graphql-federation-generated-client-disposition",
+      "labelRefs": [
+        "web.developerHome.heading",
+        "web.developerHome.description"
+      ],
+      "roleRefs": [
+        "main-landmark",
+        "heading-level-1",
+        "paragraph-description"
+      ],
+      "stateRefs": [
+        "route-loaded",
+        "permission-gated-private-route"
+      ],
+      "screenReaderRef": "screen-reader-semantics-required",
+      "focusOrderRef": "focus-order-required",
+      "keyboardNavigationRef": "keyboard-navigation-required",
+      "touchTargetRef": "touch-target-and-gesture-alternative-required",
+      "dynamicTypeRef": "dynamic-type-required",
+      "contrastRef": "contrast-boundary-required",
+      "reducedMotionRef": "reduced-motion-boundary-required",
+      "errorAnnouncementRef": "error-announcement-required",
+      "interactiveSurface": false,
+      "keyboardReachable": true,
+      "focusOrderDefined": true,
+      "screenReaderLabelled": true,
+      "errorAnnouncementDefined": true,
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "nonClaimBoundary": "local accessibility metadata for the bounded web route only; no compliance, audit, product UI, deployment, staging, production, or human-acceptance readiness claim"
+    },
+    {
+      "surfaceId": "mobile-screen-developer-home",
+      "surfaceKind": "mobile-screen-component",
+      "platform": "mobile",
+      "implementationPath": "apps/mobile/App.tsx",
+      "capabilityRef": "graphql-federation-generated-client-disposition",
+      "labelRefs": [
+        "mobile.developerHome.kicker",
+        "mobile.developerHome.title",
+        "mobile.developerHome.body",
+        "mobile.developerHome.capabilityLabel",
+        "mobile.developerHome.permissionLabel",
+        "mobile.developerHome.unknownScreenPolicyLabel"
+      ],
+      "roleRefs": [
+        "screen",
+        "header",
+        "summary-card",
+        "text"
+      ],
+      "stateRefs": [
+        "screen-loaded",
+        "permission-gated-private-screen"
+      ],
+      "screenReaderRef": "screen-reader-semantics-required",
+      "focusOrderRef": "focus-order-required",
+      "keyboardNavigationRef": "keyboard-navigation-required",
+      "touchTargetRef": "touch-target-and-gesture-alternative-required",
+      "dynamicTypeRef": "dynamic-type-required",
+      "contrastRef": "contrast-boundary-required",
+      "reducedMotionRef": "reduced-motion-boundary-required",
+      "errorAnnouncementRef": "error-announcement-required",
+      "interactiveSurface": false,
+      "keyboardReachable": true,
+      "focusOrderDefined": true,
+      "screenReaderLabelled": true,
+      "errorAnnouncementDefined": true,
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "nonClaimBoundary": "local accessibility metadata for the bounded mobile screen only; no compliance, audit, mobile readiness, store readiness, deployment, staging, production, or human-acceptance readiness claim"
+    },
+    {
+      "surfaceId": "query-view-developer-profile-list",
+      "surfaceKind": "query-list-view-state",
+      "platform": "shared-local",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "capabilityRef": "graphql-federation-generated-client-disposition",
+      "labelRefs": [
+        "query.developerProfile.emptyState",
+        "query.developerProfile.errorState"
+      ],
+      "roleRefs": [
+        "list-region",
+        "empty-state",
+        "error-state"
+      ],
+      "stateRefs": [
+        "empty",
+        "error",
+        "loaded"
+      ],
+      "screenReaderRef": "screen-reader-semantics-required",
+      "focusOrderRef": "focus-order-required",
+      "keyboardNavigationRef": "keyboard-navigation-required",
+      "touchTargetRef": "touch-target-and-gesture-alternative-required",
+      "dynamicTypeRef": "dynamic-type-required",
+      "contrastRef": "contrast-boundary-required",
+      "reducedMotionRef": "reduced-motion-boundary-required",
+      "errorAnnouncementRef": "error-announcement-required",
+      "interactiveSurface": false,
+      "keyboardReachable": true,
+      "focusOrderDefined": true,
+      "screenReaderLabelled": true,
+      "errorAnnouncementDefined": true,
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "nonClaimBoundary": "local accessibility metadata for a query list view-state only; no product UI, compliance, audit, deployment, staging, production, or human-acceptance readiness claim"
+    },
+    {
+      "surfaceId": "query-view-developer-profile-detail",
+      "surfaceKind": "query-detail-view-state",
+      "platform": "shared-local",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "capabilityRef": "graphql-federation-generated-client-disposition",
+      "labelRefs": [
+        "query.developerProfile.notFoundState",
+        "query.developerProfile.errorState"
+      ],
+      "roleRefs": [
+        "detail-region",
+        "not-found-state",
+        "error-state"
+      ],
+      "stateRefs": [
+        "not-found",
+        "error",
+        "loaded"
+      ],
+      "screenReaderRef": "screen-reader-semantics-required",
+      "focusOrderRef": "focus-order-required",
+      "keyboardNavigationRef": "keyboard-navigation-required",
+      "touchTargetRef": "touch-target-and-gesture-alternative-required",
+      "dynamicTypeRef": "dynamic-type-required",
+      "contrastRef": "contrast-boundary-required",
+      "reducedMotionRef": "reduced-motion-boundary-required",
+      "errorAnnouncementRef": "error-announcement-required",
+      "interactiveSurface": false,
+      "keyboardReachable": true,
+      "focusOrderDefined": true,
+      "screenReaderLabelled": true,
+      "errorAnnouncementDefined": true,
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "nonClaimBoundary": "local accessibility metadata for a query detail view-state only; no product UI, compliance, audit, deployment, staging, production, or human-acceptance readiness claim"
+    },
+    {
+      "surfaceId": "command-form-api-key-onboarding",
+      "surfaceKind": "command-form-view-state",
+      "platform": "shared-local",
+      "implementationPath": "packages/app-surface/src/index.ts",
+      "capabilityRef": "graphql-federation-generated-client-disposition",
+      "labelRefs": [
+        "command.apiKeyOnboarding.title",
+        "command.apiKeyOnboarding.submitLabel",
+        "command.apiKeyOnboarding.invalidLabelError"
+      ],
+      "roleRefs": [
+        "form",
+        "submit-control",
+        "validation-error"
+      ],
+      "stateRefs": [
+        "idle",
+        "validation-error",
+        "submitted"
+      ],
+      "screenReaderRef": "screen-reader-semantics-required",
+      "focusOrderRef": "focus-order-required",
+      "keyboardNavigationRef": "keyboard-navigation-required",
+      "touchTargetRef": "touch-target-and-gesture-alternative-required",
+      "dynamicTypeRef": "dynamic-type-required",
+      "contrastRef": "contrast-boundary-required",
+      "reducedMotionRef": "reduced-motion-boundary-required",
+      "errorAnnouncementRef": "error-announcement-required",
+      "interactiveSurface": true,
+      "keyboardReachable": true,
+      "focusOrderDefined": true,
+      "screenReaderLabelled": true,
+      "errorAnnouncementDefined": true,
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-command-form-implementation.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "nonClaimBoundary": "local accessibility metadata for a command form view-state only; no product UI, compliance, audit, deployment, staging, production, or human-acceptance readiness claim"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "implementedSurfacesMustHaveAccessibilityMappings": true,
+    "missingAccessibilitySemanticsMustFailClosed": true,
+    "keyboardFocusScreenReaderAndLabelExpectationsMustBeRepresented": true,
+    "touchTargetDynamicTypeContrastReducedMotionAndErrorAnnouncementRefsMustExist": true,
+    "surfaceCoverageMustMapToImplementationPaths": true,
+    "usf938StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "externalAuditMustRemainForbidden": true,
+    "complianceAndCertificationClaimsMustRemainForbidden": true
+  },
+  "proofLadder": {
+    "devLocalRequired": true,
+    "unitTestsRequired": true,
+    "contractTestsRequired": true,
+    "contractTestReason": "The app-surface validator retains USF-938-style accessibility fixtures and checks the real implementation artefact.",
+    "composeRequired": false,
+    "composeReason": "No provider semantics are crossed by this local in-memory accessibility metadata registry.",
+    "stagingRequired": false,
+    "stagingReason": "This implementation is local-only and does not create public, deployment-adjacent, provider-staging, or human-acceptance evidence."
+  },
+  "outOfScopeSurfaces": [
+    {
+      "surfaceId": "accessibility-compliance",
+      "status": "not-authorised",
+      "reason": "Not authorised by USF-1026 bounded local accessibility baseline scope."
+    },
+    {
+      "surfaceId": "accessibility-certification",
+      "status": "not-authorised",
+      "reason": "Not authorised by USF-1026 bounded local accessibility baseline scope."
+    },
+    {
+      "surfaceId": "external-accessibility-audit",
+      "status": "not-authorised",
+      "reason": "Not authorised by USF-1026 bounded local accessibility baseline scope."
+    },
+    {
+      "surfaceId": "device-lab-proof",
+      "status": "not-authorised",
+      "reason": "Not authorised by USF-1026 bounded local accessibility baseline scope."
+    },
+    {
+      "surfaceId": "human-acceptance",
+      "status": "not-authorised",
+      "reason": "Not authorised by USF-1026 bounded local accessibility baseline scope."
+    }
+  ],
+  "validationCommands": [
+    "strict JSON parse for this artefact and modified JSON files",
+    "corepack pnpm vitest run tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+    "corepack pnpm typecheck",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "nonClaims": {
+    "accessibilityCompliance": false,
+    "accessibilityCertification": false,
+    "productUiReadiness": false,
+    "routeReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "auditExecutionReadiness": false,
+    "productionReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}

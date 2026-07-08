@@ -1,8 +1,9 @@
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
-import { translateLocalAppSurfaceText } from "@foundation/app-surface";
+import { getLocalAccessibilitySurfaceById, translateLocalAppSurfaceText } from "@foundation/app-surface";
 import { MOBILE_SCREEN_REGISTRY, getMobileScreenById } from "./src/screen-registry";
 
 const homeScreen = getMobileScreenById("mobile-screen-developer-home");
+const accessibility = getLocalAccessibilitySurfaceById(homeScreen.screenId);
 const text = {
   kicker: translateLocalAppSurfaceText("mobile.developerHome.kicker"),
   title: translateLocalAppSurfaceText("mobile.developerHome.title"),
@@ -16,11 +17,22 @@ export default function App() {
   return (
     <View style={styles.shell}>
       <StatusBar barStyle="dark-content" />
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        accessibilityLabel={text.title.value}
+        accessibilityHint={text.body.value}
+      >
         <Text style={styles.kicker}>{text.kicker.value}</Text>
-        <Text style={styles.title}>{text.title.value}</Text>
+        <Text accessibilityRole="header" style={styles.title}>
+          {text.title.value}
+        </Text>
         <Text style={styles.body}>{text.body.value}</Text>
-        <View style={styles.card}>
+        <View
+          accessible
+          accessibilityLabel={`${text.capabilityLabel.value}: ${homeScreen.capabilityId}. ${text.permissionLabel.value}: ${homeScreen.permissionRefs.join(", ")}.`}
+          accessibilityHint={accessibility.errorAnnouncementRef}
+          style={styles.card}
+        >
           <Text style={styles.label}>{text.capabilityLabel.value}</Text>
           <Text style={styles.value}>{homeScreen.capabilityId}</Text>
           <Text style={styles.label}>{text.permissionLabel.value}</Text>
