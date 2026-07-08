@@ -1,5 +1,75 @@
 {
+  "acceptanceCriteriaTrace": [
+    {
+      "evidence": "sourceAuthorities and trackingBoundary identify repository artifacts and validators as authority; Linear issues track work only and old Done issues are excluded as implementation evidence.",
+      "id": "semantic-artifacts-are-authority-not-linear-done-issues",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "implementedRules maps twelve validator rules from USF-929 through USF-940 to concrete conforming and planted-defect fixtures; the validator checks the matrix and tranche coverage.",
+      "id": "validator-logic-covers-required-suite",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "validationCommands includes all mode for conforming success and selftest mode for expected planted-defect failure coverage.",
+      "id": "selftests-exercise-success-and-failure",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "fixtureRoots.plantedDefects and implementedRules identify one planted-defect fixture per rule and selftest requires each to fail with the expected rule id.",
+      "id": "planted-defect-fixtures-fail-closed",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "fixtureRoots.conforming and implementedRules identify one conforming fixture per rule and all mode requires each fixture to pass.",
+      "id": "conforming-fixtures-pass",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "validatorOutputShape requires mode, status, summary, findings, pass and fail status values, and plantedDefectFixtureCount summary coverage.",
+      "id": "output-shape-covers-pass-fail-and-planted-defect",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "repoValidationIntegration.packageScripts records repo:validate, app-surface:validate, and app-surface:selftest direct execution paths checked by the validator.",
+      "id": "package-scripts-direct-execution",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "repoValidationIntegration.makeTargets records validate-evidence, app-surface-validate, and app-surface-selftest Make targets checked by the validator.",
+      "id": "make-or-repo-validation-wiring",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "repoValidationIntegration requires repository validation to include the app-surface suite before later UI, Expo, Next, staging, deployment, store, provider, production, or readiness work.",
+      "id": "repo-validation-before-app-surface-implementation-work",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "environmentLadderPreservation keeps Dev/local first, Test contract-only, Compose provider-semantics-only, Staging public-acceptance-only, and prevents environment or provider-mode upgrade by implication.",
+      "id": "environment-ladder-preserved",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "nonClaims and implementationBoundary keep product UI, mobile, web, store, deployment, staging, production, live-provider, privacy, advertising, monetisation, and human-acceptance readiness false.",
+      "id": "non-claims-preserved",
+      "status": "satisfied"
+    },
+    {
+      "evidence": "validationCommands defines the required machine checks and completion requires command results to be recorded in the PR and Linear issue before the issue is moved to Done.",
+      "id": "validation-evidence-recorded-before-done",
+      "status": "satisfied"
+    }
+  ],
   "authorityBoundary": "This artefact records bounded repository validator implementation for the app-surface validator family. It does not create UI, mobile app, web app, route, notification provider, ad SDK, store submission, deployment, release automation, provider account, credential, staging, production, live-provider, compliance, or human-acceptance readiness.",
+  "environmentLadderPreservation": {
+    "composeOnlyProviderSemantics": true,
+    "devLocalFirst": true,
+    "environmentDoesNotUpgradeProviderMode": true,
+    "providerModeDoesNotUpgradeEnvironment": true,
+    "stagingOnlyPublicAcceptance": true,
+    "testContractBoundaryOnly": true
+  },
   "fixtureRoots": {
     "conforming": "tools/validate-app-surface/fixtures/conforming",
     "plantedDefects": "tools/validate-app-surface/planted-defects"
@@ -121,6 +191,22 @@
     "storeReady": false,
     "webReady": false
   },
+  "realisationIssueId": "USF-1011",
+  "repoValidationIntegration": {
+    "beforeUiExpoNextStagingDeploymentStoreProviderProductionWork": true,
+    "makeTargets": [
+      "validate-evidence",
+      "app-surface-validate",
+      "app-surface-selftest"
+    ],
+    "notes": "The app-surface validator suite is part of repository evidence validation and must pass before later UI, Expo, Next, staging, deployment, store, provider, production, or readiness work is treated as reviewable.",
+    "packageScripts": [
+      "repo:validate",
+      "app-surface:validate",
+      "app-surface:selftest"
+    ],
+    "repoValidateIncludesAppSurfaceSuite": true
+  },
   "sourceAuthorities": [
     "docs/architecture/app-surface-validator-planted-defect-matrix.json",
     "docs/architecture/app-surface-authority-model-extension.json",
@@ -132,9 +218,42 @@
     "docs/architecture/app-surface-proof-evidence-report-semantics.json"
   ],
   "title": "App Surface Validator Implementation Tranche",
+  "trackingBoundary": {
+    "linearDefinesSemanticAuthority": false,
+    "linearTracksWorkOnly": true,
+    "oldDoneIssuesUsedAsImplementationEvidence": false,
+    "repositoryArtifactsDefineTruth": true,
+    "validatorsEnforceConsistency": true
+  },
   "validationCommands": [
     "python3 tools/validate-app-surface/validate-app-surface.py all --json",
     "python3 tools/validate-app-surface/validate-app-surface.py selftest --json"
   ],
+  "validatorOutputShape": {
+    "findingKeys": [
+      "severity",
+      "ruleId",
+      "subject",
+      "message",
+      "issueId"
+    ],
+    "plantedDefectSummaryKey": "plantedDefectFixtureCount",
+    "requiredTopLevelKeys": [
+      "mode",
+      "status",
+      "summary",
+      "findings"
+    ],
+    "statusValues": [
+      "pass",
+      "fail"
+    ],
+    "summaryKeys": [
+      "ruleCount",
+      "conformingFixtureCount",
+      "plantedDefectFixtureCount",
+      "findingCount"
+    ]
+  },
   "validatorToolPath": "tools/validate-app-surface/validate-app-surface.py"
 }
