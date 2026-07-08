@@ -2261,6 +2261,7 @@ DIRECTIVE_PLACEHOLDER_PHRASES = {
     "todo",
 }
 AUTHORIZED_IMPLEMENTATION_ROOTS = {
+    "apps/web",
     "apps/api",
     "apps/public-proof-origin",
     "apps/staging-proof-cockpit",

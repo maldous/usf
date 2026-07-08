@@ -1,0 +1,167 @@
+{
+  "artifactId": "usf.app-surface-web-bounded-local-scaffold",
+  "title": "App-surface web bounded local scaffold",
+  "lifecycleState": "bounded-local-implemented",
+  "ownerIssueId": "USF-1017",
+  "parentIssueId": "USF-1012",
+  "authorityNotice": "This artefact records the bounded local Next.js web scaffold implemented for USF-1017. It maps local routes to governed USF capability, permission, tenant, privacy, validation, error, audit, and fixture semantics. It does not define product behaviour from Next.js files, select a provider, configure a CDN, create credentials, deploy, expose a public route, or claim web, staging, production, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+  "postureVerification": {
+    "selectedFramework": "nextjs",
+    "selectedPostureArtefact": "docs/adr/0017-nextjs-web-adapter-posture.md",
+    "webAdapterSemanticArtefact": "docs/architecture/app-surface-web-adapter-semantics.json",
+    "implementationGateClosureArtefact": "docs/architecture/app-surface-implementation-gate-closure-semantics.json",
+    "boundedLocalImplementationDirective": "docs/architecture/app-surface-implementation-realisation-plan.json",
+    "verifiedBeforeScaffoldCreation": true
+  },
+  "implementationBoundary": {
+    "workspacePackage": "apps/web",
+    "packageName": "@foundation/app-web",
+    "framework": "nextjs",
+    "appRouterDirectory": "apps/web/app",
+    "routeRegistry": "apps/web/src/route-registry.ts",
+    "nextConfig": "apps/web/next.config.mjs",
+    "runtimeCodeAllowedByIssue": true,
+    "runtimeCodeScope": "bounded local web scaffold only",
+    "workspacePackageExternalDependencySectionsAllowed": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "providerSetupAllowed": false
+  },
+  "dependencyInstallation": {
+    "packageManager": "pnpm@11.9.0",
+    "rootDependencyPins": [
+      {
+        "packageName": "next",
+        "version": "16.2.10",
+        "reason": "Required Next.js framework runtime for the bounded local web scaffold."
+      },
+      {
+        "packageName": "react",
+        "version": "19.2.7",
+        "reason": "Required React runtime peer for Next.js route components."
+      },
+      {
+        "packageName": "react-dom",
+        "version": "19.2.7",
+        "reason": "Required React DOM runtime peer for Next.js route components."
+      }
+    ],
+    "rootDevDependencyPins": [
+      {
+        "packageName": "@types/react",
+        "version": "19.2.17",
+        "reason": "Required TypeScript typing for local React route components."
+      },
+      {
+        "packageName": "@types/react-dom",
+        "version": "19.2.3",
+        "reason": "Required TypeScript typing for local React DOM integration."
+      }
+    ],
+    "rejectedPackages": [
+      "deployment SDKs",
+      "CDN provider SDKs",
+      "analytics SDKs",
+      "ads SDKs",
+      "CMP or UMP SDKs",
+      "remote cache tooling",
+      "task graph tooling",
+      "Testcontainers"
+    ],
+    "transitiveBuildApprovals": [
+      {
+        "packageName": "sharp",
+        "version": "0.34.5",
+        "reason": "Transitive Next.js image-processing dependency requiring pnpm allowBuilds approval during frozen install. The scaffold does not claim image CDN, optimisation readiness, provider readiness, or deployment readiness from this approval."
+      }
+    ]
+  },
+  "routeRegistry": {
+    "artifactId": "usf.app-surface-web-bounded-local-route-registry",
+    "implementationPath": "apps/web/src/route-registry.ts",
+    "unknownRoutePolicy": "fail-closed",
+    "routes": [
+      {
+        "routeId": "web-route-developer-home",
+        "path": "/",
+        "nextRouteSegment": "app/page.tsx",
+        "routeClass": "private",
+        "renderingBoundary": "server-component",
+        "capabilityId": "graphql-federation-generated-client-disposition",
+        "permissionRefs": [
+          "developer:read"
+        ],
+        "tenantBoundaryRef": "tenant-context.developer-local",
+        "privacyCategoryRefs": [
+          "privacy.developer-profile-local"
+        ],
+        "validationRefs": [
+          "validation.generated-client-current"
+        ],
+        "errorRefs": [
+          "error.missing-generated-client-input"
+        ],
+        "auditEventRefs": [
+          "audit.generated-client-consumption"
+        ],
+        "componentFixtureRefs": [
+          "component-fixture-developer-profile-summary"
+        ],
+        "semanticSourceRefs": [
+          "docs/architecture/app-surface-local-in-memory-runtime.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json",
+          "docs/architecture/app-surface-web-adapter-semantics.json"
+        ],
+        "nonClaimBoundary": "local Next.js route scaffold only; no web, deployment, CDN, staging, production, live-provider, or human-acceptance readiness claim"
+      }
+    ]
+  },
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "routeRegistryMustMatchThisArtefact": true,
+    "unknownRoutesMustFailClosed": true,
+    "missingCapabilityOrPermissionAuthorityMustFailClosed": true,
+    "workspacePackageMustNotDeclareExternalDependencySections": true
+  },
+  "validationCommands": [
+    "strict JSON parse for this artefact and modified JSON files",
+    "corepack pnpm install --frozen-lockfile",
+    "corepack pnpm --filter @foundation/app-web typecheck",
+    "corepack pnpm --filter @foundation/app-web routes:check",
+    "corepack pnpm vitest run tests/apps/app-surface-web-bounded-local-scaffold.test.ts",
+    "corepack pnpm typecheck",
+    "corepack pnpm validate-spec",
+    "make app-surface-validate",
+    "make app-surface-selftest",
+    "make validate-evidence"
+  ],
+  "proofLadderClassification": {
+    "devLocal": true,
+    "unitTests": true,
+    "contractTests": false,
+    "composeRequired": false,
+    "composeReason": "The bounded web scaffold uses local route registry semantics and does not cross provider semantics.",
+    "stagingRequired": false,
+    "stagingReason": "The scaffold is local-only and does not create public, deployment-adjacent, provider-staging, or human-acceptance evidence."
+  },
+  "nonClaims": {
+    "webReadiness": false,
+    "deploymentReadiness": false,
+    "cdnReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "providerSetup": false,
+    "credentialSetup": false,
+    "externalServiceUse": false,
+    "humanAcceptance": false,
+    "accessibilityCompliance": false,
+    "internationalisationReadiness": false,
+    "seoReadiness": false,
+    "monetisationReadiness": false,
+    "storeReadiness": false,
+    "complianceReadiness": false
+  }
+}

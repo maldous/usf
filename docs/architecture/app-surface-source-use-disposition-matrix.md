@@ -50,3 +50,19 @@ This matrix records target-file treatment for bounded app-surface workspace/pack
 - `apps/web` and `apps/mobile` remain future-to-create paths owned by their separate Linear issues and require their own topology, source-use, and validation coverage before files are created.
 - `packages/client` exists only as the USF-1015 bounded local shared-client consumption adapter and does not create generated SDK readiness, package publication readiness, product UI readiness, public API readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance.
 - `packages/app-surface` exists only as the USF-1016 bounded local in-memory runtime and does not create web readiness, mobile readiness, route scaffold readiness, product UI readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, compliance readiness, monetisation readiness, or human acceptance.
+
+## USF-1017 web bounded local scaffold source-use disposition
+
+| Path | Status | Disposition | Non-claim boundary |
+| --- | --- | --- | --- |
+| `apps/web/package.json` | USF-authored | Bounded local web workspace package manifest for USF-1017. External dependencies remain pinned at the root package manifest. | Does not claim web readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, or human acceptance. |
+| `apps/web/tsconfig.json` | USF-authored | Local typecheck configuration for the bounded Next.js scaffold. | Does not claim full browser, accessibility, internationalisation, SEO, provider, deployment, or production proof. |
+| `apps/web/next-env.d.ts` | USF-authored | Next.js local TypeScript ambient reference for the bounded scaffold. | Does not define product semantics or deployment readiness. |
+| `apps/web/next.config.mjs` | USF-authored | Empty provider-neutral Next.js config for local scaffold execution. | Does not configure provider, CDN, DNS, redirects, headers, deployment, staging, or production. |
+| `apps/web/app/layout.tsx` | USF-authored | Minimal local App Router layout for bounded scaffold proof. | Does not define product semantics from framework shape. |
+| `apps/web/app/page.tsx` | USF-authored | Minimal local route component consuming the governed route registry. | Does not invent UI-only product behaviour. |
+| `apps/web/src/route-registry.ts` | USF-authored | Route-to-capability and permission mapping plus fail-closed validator for USF-1017. | Does not claim public route, provider, deployment, staging, production, or human-acceptance readiness. |
+| `docs/architecture/app-surface-web-bounded-local-scaffold.json` | USF-authored | Repository-owned web scaffold authority map, package pins, route mapping, validation guard, proof ladder, and non-claims. | Does not select a provider or claim readiness beyond dev-local route proof. |
+| `tests/apps/app-surface-web-bounded-local-scaffold.test.ts` | USF-authored | Unit tests for web posture verification, route authority mapping, unknown-route fail-closed behavior, and non-claim preservation. | Does not require external providers, credentials, Compose, staging, deployment, or human acceptance. |
+
+USF-1017 adds a bounded local Next.js scaffold only. It does not change the status of mobile, command/form, query/list/detail, state/cache, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, or parent closure work.

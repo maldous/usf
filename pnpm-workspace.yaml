@@ -9,6 +9,7 @@ allowBuilds:
   "@swc/core": true
   esbuild: true
   protobufjs: true
+  sharp: true
 minimumReleaseAgeExclude:
   - prettier@3.9.1
   - "@aws-sdk/checksums@3.1000.10"

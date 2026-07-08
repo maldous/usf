@@ -186,5 +186,36 @@
     "issueState": "READY_FOR_DEV_LOCAL_PACKAGE_BOUNDARY_VALIDATION",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
     "reason": "Package boundaries are explicit and the authorised UI, shared-client, and local in-memory app-surface runtime boundaries exist, but web, mobile, route, command, query, state/cache, auth/session, i18n, accessibility, notification, monetisation, store, deployment evidence, timing, staging classification, and closure proof remain open child work."
+  },
+  "webAppBoundedLocalScaffoldBoundary": {
+    "boundaryId": "web-app-bounded-local-scaffold-boundary",
+    "ownerIssueId": "USF-1017",
+    "status": "exists-now",
+    "packagePath": "apps/web",
+    "packageName": "@foundation/app-web",
+    "mayCreateRuntimeCode": true,
+    "runtimeCodeScope": "bounded local Next.js route scaffold only",
+    "externalDependencySectionsAllowedInWorkspacePackage": false,
+    "dependencyPinsOwnedAtRoot": [
+      "next@16.2.10",
+      "react@19.2.7",
+      "react-dom@19.2.7",
+      "@types/react@19.2.17",
+      "@types/react-dom@19.2.3"
+    ],
+    "requiredRepositoryArtefacts": [
+      "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      "apps/web/src/route-registry.ts",
+      "tests/apps/app-surface-web-bounded-local-scaffold.test.ts"
+    ],
+    "prohibitedClaims": [
+      "web-readiness",
+      "deployment-readiness",
+      "cdn-readiness",
+      "staging-readiness",
+      "production-readiness",
+      "live-provider-readiness",
+      "human-acceptance"
+    ]
   }
 }
