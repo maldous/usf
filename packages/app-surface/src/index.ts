@@ -3620,3 +3620,584 @@ export const describeLocalAccessibilitySurface = (
     humanAcceptanceClaimed: false,
   };
 };
+
+export type LocalNotificationProviderMode = "local-non-live-only";
+export type LocalNotificationEnvironment = "dev-local";
+export type LocalNotificationSurfaceKind = "in-app-inbox" | "toast" | "banner";
+export type LocalNotificationDecision = "allow-local-record" | "deny";
+
+export interface LocalNotificationSurfaceMapping {
+  readonly surfaceId: string;
+  readonly surfaceKind: LocalNotificationSurfaceKind;
+  readonly channel: "in-app";
+  readonly classification: string;
+  readonly implementationPath: string;
+  readonly capabilityRef: string;
+  readonly semanticEventRef: string;
+  readonly consentRef: string;
+  readonly permissionRef: string;
+  readonly preferenceRef: string;
+  readonly privacyCategoryRef: string;
+  readonly dataInventoryRef: string;
+  readonly channelLifecycleRef: string;
+  readonly optOutBoundaryRef: string;
+  readonly auditRef: string;
+  readonly telemetryRef: string;
+  readonly i18nRef: string;
+  readonly accessibilityRef: string;
+  readonly retentionRef: string;
+  readonly providerModeRef: string;
+  readonly localOnly: true;
+  readonly consentRequired: true;
+  readonly permissionRequired: true;
+  readonly preferenceRequired: true;
+  readonly auditRequired: true;
+  readonly liveDeliveryAllowed: false;
+  readonly pushProviderAllowed: false;
+  readonly mobilePushCredentialsAllowed: false;
+  readonly serviceWorkerPushAllowed: false;
+  readonly externalProviderAllowed: false;
+  readonly semanticSourceRefs: readonly string[];
+  readonly proofRefs: readonly string[];
+  readonly nonClaimBoundary: string;
+}
+
+export interface LocalNotificationRegistry {
+  readonly artifactId: string;
+  readonly ownerIssueId: string;
+  readonly parentIssueId: string;
+  readonly providerMode: LocalNotificationProviderMode;
+  readonly environment: LocalNotificationEnvironment;
+  readonly missingSemanticsPolicy: "fail-closed";
+  readonly surfaces: readonly LocalNotificationSurfaceMapping[];
+  readonly externalProviderAllowed: false;
+  readonly credentialsAllowed: false;
+  readonly pushProviderAllowed: false;
+  readonly mobilePushCredentialsAllowed: false;
+  readonly serviceWorkerPushAllowed: false;
+  readonly providerSetupAllowed: false;
+  readonly liveDeliveryAllowed: false;
+  readonly deploymentAllowed: false;
+  readonly stagingAllowed: false;
+  readonly notificationReadinessClaimAllowed: false;
+  readonly nonClaims: Record<string, false>;
+}
+
+export interface LocalNotificationAuthority {
+  readonly surfaceRefs?: ReadonlySet<string> | readonly string[];
+  readonly capabilityRefs?: ReadonlySet<string> | readonly string[];
+  readonly consentRefs?: ReadonlySet<string> | readonly string[];
+  readonly permissionRefs?: ReadonlySet<string> | readonly string[];
+  readonly preferenceRefs?: ReadonlySet<string> | readonly string[];
+  readonly semanticSourceRefs?: ReadonlySet<string> | readonly string[];
+  readonly proofRefs?: ReadonlySet<string> | readonly string[];
+}
+
+export interface LocalNotificationExerciseRequest {
+  readonly surfaceId: string;
+  readonly consentRef?: string;
+  readonly permissionRef?: string;
+  readonly preferenceRef?: string;
+}
+
+export interface LocalNotificationExerciseResult {
+  readonly surfaceId: string;
+  readonly decision: LocalNotificationDecision;
+  readonly reasonCode: string;
+  readonly providerMode: LocalNotificationProviderMode;
+  readonly environment: LocalNotificationEnvironment;
+  readonly notificationReadyClaimed: false;
+  readonly pushReadyClaimed: false;
+  readonly liveProviderReadyClaimed: false;
+  readonly stagingReadyClaimed: false;
+  readonly productionReadyClaimed: false;
+  readonly humanAcceptanceClaimed: false;
+}
+
+export interface LocalNotificationSurfaceDescription {
+  readonly surfaceId: string;
+  readonly surfaceKind: LocalNotificationSurfaceKind;
+  readonly channel: "in-app";
+  readonly capabilityRef: string;
+  readonly consentRef: string;
+  readonly permissionRef: string;
+  readonly preferenceRef: string;
+  readonly providerModeRef: string;
+  readonly notificationReadyClaimed: false;
+  readonly pushReadyClaimed: false;
+  readonly liveProviderReadyClaimed: false;
+  readonly stagingReadyClaimed: false;
+  readonly productionReadyClaimed: false;
+  readonly humanAcceptanceClaimed: false;
+}
+
+export const LOCAL_NOTIFICATION_CONSENT_PERMISSION_RULE = "USF-1027";
+export const LOCAL_NOTIFICATION_CONSENT_PERMISSION_ARTIFACT_ID =
+  "usf.app-surface-notification-consent-permission-registry";
+export const LOCAL_NOTIFICATION_PROVIDER_MODE: LocalNotificationProviderMode = "local-non-live-only";
+export const LOCAL_NOTIFICATION_ENVIRONMENT: LocalNotificationEnvironment = "dev-local";
+
+const LOCAL_NOTIFICATION_REQUIRED_NON_CLAIMS = [
+  "notificationReady",
+  "pushReady",
+  "providerConfigurationReady",
+  "providerReadiness",
+  "mobilePushReadiness",
+  "serviceWorkerPushReadiness",
+  "privacyCompliance",
+  "productUiReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "productionReadiness",
+  "liveProviderReadiness",
+  "humanAcceptance",
+] as const;
+
+const LOCAL_NOTIFICATION_FORBIDDEN_REGISTRY_FLAGS = [
+  ["externalProviderAllowed", "external-provider-not-authorised"],
+  ["credentialsAllowed", "credentials-not-authorised"],
+  ["pushProviderAllowed", "push-provider-not-authorised"],
+  ["mobilePushCredentialsAllowed", "mobile-push-credentials-not-authorised"],
+  ["serviceWorkerPushAllowed", "service-worker-push-not-authorised"],
+  ["providerSetupAllowed", "provider-setup-not-authorised"],
+  ["liveDeliveryAllowed", "live-delivery-not-authorised"],
+  ["deploymentAllowed", "deployment-not-authorised"],
+  ["stagingAllowed", "staging-not-authorised"],
+  ["notificationReadinessClaimAllowed", "notification-readiness-claim-not-authorised"],
+] as const;
+
+const LOCAL_NOTIFICATION_FORBIDDEN_SURFACE_FLAGS = [
+  ["liveDeliveryAllowed", "live-delivery-not-authorised"],
+  ["pushProviderAllowed", "push-provider-not-authorised"],
+  ["mobilePushCredentialsAllowed", "mobile-push-credentials-not-authorised"],
+  ["serviceWorkerPushAllowed", "service-worker-push-not-authorised"],
+  ["externalProviderAllowed", "external-provider-not-authorised"],
+] as const;
+
+const LOCAL_NOTIFICATION_FORBIDDEN_KEYS = [
+  "providerConfig",
+  "pushProvider",
+  "pushCredential",
+  "providerCredentials",
+  "credentials",
+  "serviceWorkerRegistration",
+  "fcmSenderId",
+  "apnsKey",
+  "webPushVapidKey",
+  "liveDeliveryEndpoint",
+] as const;
+
+export const LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY = {
+  artifactId: LOCAL_NOTIFICATION_CONSENT_PERMISSION_ARTIFACT_ID,
+  ownerIssueId: LOCAL_NOTIFICATION_CONSENT_PERMISSION_RULE,
+  parentIssueId: "USF-1012",
+  providerMode: LOCAL_NOTIFICATION_PROVIDER_MODE,
+  environment: LOCAL_NOTIFICATION_ENVIRONMENT,
+  missingSemanticsPolicy: "fail-closed",
+  surfaces: [
+    {
+      surfaceId: "notification-surface-developer-inbox",
+      surfaceKind: "in-app-inbox",
+      channel: "in-app",
+      classification: "transactional",
+      implementationPath: "packages/app-surface/src/index.ts",
+      capabilityRef: "semantic-contract.notification-delivery-and-preferences-and-channels",
+      semanticEventRef: "notification.created",
+      consentRef: "notification-consent-required",
+      permissionRef: "platform.notifications.write",
+      preferenceRef: "notification-preference-required",
+      privacyCategoryRef: "notification-privacy-category-required",
+      dataInventoryRef: "notification-data-inventory-required",
+      channelLifecycleRef: "notification-channel-lifecycle-governed",
+      optOutBoundaryRef: "notification-opt-out-required",
+      auditRef: "notification-consent-audit-event",
+      telemetryRef: "notification-telemetry-proof-required",
+      i18nRef: "notification-i18n-key-required",
+      accessibilityRef: "notification-accessibility-semantics-required",
+      retentionRef: "notification-retention-required",
+      providerModeRef: "provider-mode-not-live-external-provider",
+      localOnly: true,
+      consentRequired: true,
+      permissionRequired: true,
+      preferenceRequired: true,
+      auditRequired: true,
+      liveDeliveryAllowed: false,
+      pushProviderAllowed: false,
+      mobilePushCredentialsAllowed: false,
+      serviceWorkerPushAllowed: false,
+      externalProviderAllowed: false,
+      semanticSourceRefs: [
+        "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+        "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-notification-consent-permission-surface.json",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+        "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json",
+      ],
+      nonClaimBoundary:
+        "local in-app inbox notification mapping only; no push provider, provider credential, service worker, deployment, staging, production, privacy compliance, notification readiness, or human-acceptance claim",
+    },
+    {
+      surfaceId: "notification-surface-developer-toast",
+      surfaceKind: "toast",
+      channel: "in-app",
+      classification: "workflow",
+      implementationPath: "packages/app-surface/src/index.ts",
+      capabilityRef: "semantic-contract.notification-delivery-and-preferences-and-channels",
+      semanticEventRef: "notification.queued",
+      consentRef: "notification-consent-required",
+      permissionRef: "platform.notifications.write",
+      preferenceRef: "notification-preference-required",
+      privacyCategoryRef: "notification-privacy-category-required",
+      dataInventoryRef: "notification-data-inventory-required",
+      channelLifecycleRef: "notification-channel-lifecycle-governed",
+      optOutBoundaryRef: "notification-opt-out-required",
+      auditRef: "notification-consent-audit-event",
+      telemetryRef: "notification-telemetry-proof-required",
+      i18nRef: "notification-i18n-key-required",
+      accessibilityRef: "notification-accessibility-semantics-required",
+      retentionRef: "notification-retention-required",
+      providerModeRef: "provider-mode-not-live-external-provider",
+      localOnly: true,
+      consentRequired: true,
+      permissionRequired: true,
+      preferenceRequired: true,
+      auditRequired: true,
+      liveDeliveryAllowed: false,
+      pushProviderAllowed: false,
+      mobilePushCredentialsAllowed: false,
+      serviceWorkerPushAllowed: false,
+      externalProviderAllowed: false,
+      semanticSourceRefs: [
+        "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+        "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-notification-consent-permission-surface.json",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+        "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json",
+      ],
+      nonClaimBoundary:
+        "local in-app toast notification mapping only; no push provider, provider credential, service worker, deployment, staging, production, privacy compliance, notification readiness, or human-acceptance claim",
+    },
+    {
+      surfaceId: "notification-surface-developer-banner",
+      surfaceKind: "banner",
+      channel: "in-app",
+      classification: "operational",
+      implementationPath: "packages/app-surface/src/index.ts",
+      capabilityRef: "semantic-contract.notification-delivery-and-preferences-and-channels",
+      semanticEventRef: "notification.read",
+      consentRef: "notification-consent-required",
+      permissionRef: "platform.notifications.write",
+      preferenceRef: "notification-preference-required",
+      privacyCategoryRef: "notification-privacy-category-required",
+      dataInventoryRef: "notification-data-inventory-required",
+      channelLifecycleRef: "notification-channel-lifecycle-governed",
+      optOutBoundaryRef: "notification-opt-out-required",
+      auditRef: "notification-consent-audit-event",
+      telemetryRef: "notification-telemetry-proof-required",
+      i18nRef: "notification-i18n-key-required",
+      accessibilityRef: "notification-accessibility-semantics-required",
+      retentionRef: "notification-retention-required",
+      providerModeRef: "provider-mode-not-live-external-provider",
+      localOnly: true,
+      consentRequired: true,
+      permissionRequired: true,
+      preferenceRequired: true,
+      auditRequired: true,
+      liveDeliveryAllowed: false,
+      pushProviderAllowed: false,
+      mobilePushCredentialsAllowed: false,
+      serviceWorkerPushAllowed: false,
+      externalProviderAllowed: false,
+      semanticSourceRefs: [
+        "docs/architecture/notification-consent-data-inventory-semantics.json",
+        "docs/architecture/notifications-and-messaging-standard.md",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+        "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json",
+        "docs/architecture/app-surface-i18n-baseline-implementation.json",
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-notification-consent-permission-surface.json",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+        "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json",
+      ],
+      nonClaimBoundary:
+        "local in-app banner notification mapping only; no push provider, provider credential, service worker, deployment, staging, production, privacy compliance, notification readiness, or human-acceptance claim",
+    },
+  ],
+  externalProviderAllowed: false,
+  credentialsAllowed: false,
+  pushProviderAllowed: false,
+  mobilePushCredentialsAllowed: false,
+  serviceWorkerPushAllowed: false,
+  providerSetupAllowed: false,
+  liveDeliveryAllowed: false,
+  deploymentAllowed: false,
+  stagingAllowed: false,
+  notificationReadinessClaimAllowed: false,
+  nonClaims: {
+    notificationReady: false,
+    pushReady: false,
+    providerConfigurationReady: false,
+    providerReadiness: false,
+    mobilePushReadiness: false,
+    serviceWorkerPushReadiness: false,
+    privacyCompliance: false,
+    productUiReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    productionReadiness: false,
+    liveProviderReadiness: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalNotificationRegistry;
+
+const asLocalNotificationAuthorityValues = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+): readonly string[] | undefined => {
+  if (values === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(values)) {
+    return values;
+  }
+  return Array.from(values);
+};
+
+const localNotificationAuthorityHas = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+  value: string,
+): boolean => asLocalNotificationAuthorityValues(values)?.includes(value) ?? false;
+
+export const validateLocalNotificationConsentPermissionRegistry = (
+  registry: LocalNotificationRegistry = LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY,
+  authority?: LocalNotificationAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const registryRecord = registry as unknown as Record<string, unknown>;
+  const registrySubject = "local-notification-consent-permission-registry";
+
+  if (registry.artifactId !== LOCAL_NOTIFICATION_CONSENT_PERMISSION_ARTIFACT_ID) {
+    findings.push(`${registrySubject}:artifactId-mismatch`);
+  }
+  if (registry.ownerIssueId !== LOCAL_NOTIFICATION_CONSENT_PERMISSION_RULE) {
+    findings.push(`${registrySubject}:ownerIssueId-mismatch`);
+  }
+  if (registry.providerMode !== LOCAL_NOTIFICATION_PROVIDER_MODE) {
+    findings.push(`${registrySubject}:providerMode-mismatch`);
+  }
+  if (registry.environment !== LOCAL_NOTIFICATION_ENVIRONMENT) {
+    findings.push(`${registrySubject}:environment-mismatch`);
+  }
+  if (registry.missingSemanticsPolicy !== "fail-closed") {
+    findings.push(`${registrySubject}:missing-semantics-policy-must-fail-closed`);
+  }
+  for (const [field, code] of LOCAL_NOTIFICATION_FORBIDDEN_REGISTRY_FLAGS) {
+    if (registryRecord[field] !== false) {
+      findings.push(`${registrySubject}:${code}`);
+    }
+  }
+  for (const key of LOCAL_NOTIFICATION_FORBIDDEN_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(registryRecord, key)) {
+      findings.push(`${registrySubject}:forbidden-${key}`);
+    }
+  }
+  for (const claim of LOCAL_NOTIFICATION_REQUIRED_NON_CLAIMS) {
+    if (registry.nonClaims?.[claim] !== false) {
+      findings.push(`${registrySubject}:nonclaim-${claim}-must-be-false`);
+    }
+  }
+
+  if (!Array.isArray(registry.surfaces) || registry.surfaces.length === 0) {
+    findings.push(`${registrySubject}:missing-surfaces`);
+    return findings;
+  }
+
+  const seenSurfaces = new Set<string>();
+  for (const surface of registry.surfaces) {
+    const subject = `local-notification-surface:${surface.surfaceId || "missing"}`;
+    const surfaceRecord = surface as unknown as Record<string, unknown>;
+    if (!isNonEmptyString(surface.surfaceId)) {
+      findings.push(`${subject}:missing-surfaceId`);
+    }
+    if (seenSurfaces.has(surface.surfaceId)) {
+      findings.push(`${subject}:duplicate-surfaceId`);
+    }
+    seenSurfaces.add(surface.surfaceId);
+    for (const field of [
+      "surfaceKind",
+      "channel",
+      "classification",
+      "implementationPath",
+      "capabilityRef",
+      "semanticEventRef",
+      "consentRef",
+      "permissionRef",
+      "preferenceRef",
+      "privacyCategoryRef",
+      "dataInventoryRef",
+      "channelLifecycleRef",
+      "optOutBoundaryRef",
+      "auditRef",
+      "telemetryRef",
+      "i18nRef",
+      "accessibilityRef",
+      "retentionRef",
+      "providerModeRef",
+      "nonClaimBoundary",
+    ] as const) {
+      if (!isNonEmptyString(surface[field])) {
+        findings.push(`${subject}:missing-${field}`);
+      }
+    }
+    for (const field of ["semanticSourceRefs", "proofRefs"] as const) {
+      if (!hasNonEmptyStringArray(surface[field])) {
+        findings.push(`${subject}:missing-${field}`);
+      }
+    }
+    for (const field of ["localOnly", "consentRequired", "permissionRequired", "preferenceRequired", "auditRequired"] as const) {
+      if (surface[field] !== true) {
+        findings.push(`${subject}:${field}-must-be-true`);
+      }
+    }
+    for (const [field, code] of LOCAL_NOTIFICATION_FORBIDDEN_SURFACE_FLAGS) {
+      if (surfaceRecord[field] !== false) {
+        findings.push(`${subject}:${code}`);
+      }
+    }
+    for (const key of LOCAL_NOTIFICATION_FORBIDDEN_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(surfaceRecord, key)) {
+        findings.push(`${subject}:forbidden-${key}`);
+      }
+    }
+    if (surface.providerModeRef !== "provider-mode-not-live-external-provider") {
+      findings.push(`${subject}:provider-mode-ref-must-remain-not-live-external-provider`);
+    }
+    if (authority) {
+      if (!localNotificationAuthorityHas(authority.surfaceRefs, surface.surfaceId)) {
+        findings.push(`${subject}:surface-authority-missing:${surface.surfaceId}`);
+      }
+      if (!localNotificationAuthorityHas(authority.capabilityRefs, surface.capabilityRef)) {
+        findings.push(`${subject}:capability-authority-missing:${surface.capabilityRef}`);
+      }
+      if (!localNotificationAuthorityHas(authority.consentRefs, surface.consentRef)) {
+        findings.push(`${subject}:consent-authority-missing:${surface.consentRef}`);
+      }
+      if (!localNotificationAuthorityHas(authority.permissionRefs, surface.permissionRef)) {
+        findings.push(`${subject}:permission-authority-missing:${surface.permissionRef}`);
+      }
+      if (!localNotificationAuthorityHas(authority.preferenceRefs, surface.preferenceRef)) {
+        findings.push(`${subject}:preference-authority-missing:${surface.preferenceRef}`);
+      }
+      for (const sourceRef of surface.semanticSourceRefs) {
+        if (!localNotificationAuthorityHas(authority.semanticSourceRefs, sourceRef)) {
+          findings.push(`${subject}:semantic-source-authority-missing:${sourceRef}`);
+        }
+      }
+      for (const proofRef of surface.proofRefs) {
+        if (!localNotificationAuthorityHas(authority.proofRefs, proofRef)) {
+          findings.push(`${subject}:proof-authority-missing:${proofRef}`);
+        }
+      }
+    }
+  }
+
+  return findings;
+};
+
+export const getLocalNotificationSurfaceById = (
+  surfaceId: string,
+  registry: LocalNotificationRegistry = LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY,
+): LocalNotificationSurfaceMapping => {
+  const findings = validateLocalNotificationConsentPermissionRegistry(registry);
+  if (findings.length > 0) {
+    throw new Error(`local-notification-consent-permission-registry-invalid:${findings.join(",")}`);
+  }
+  const surface = registry.surfaces.find((candidate) => candidate.surfaceId === surfaceId);
+  if (surface === undefined) {
+    throw new Error(`local-notification-surface-missing-fail-closed:${surfaceId}`);
+  }
+  return surface;
+};
+
+export const exerciseLocalNotificationSurface = (
+  request: LocalNotificationExerciseRequest,
+  registry: LocalNotificationRegistry = LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY,
+): LocalNotificationExerciseResult => {
+  const surface = getLocalNotificationSurfaceById(request.surfaceId, registry);
+  const denied = (reasonCode: string): LocalNotificationExerciseResult => ({
+    surfaceId: surface.surfaceId,
+    decision: "deny",
+    reasonCode,
+    providerMode: registry.providerMode,
+    environment: registry.environment,
+    notificationReadyClaimed: false,
+    pushReadyClaimed: false,
+    liveProviderReadyClaimed: false,
+    stagingReadyClaimed: false,
+    productionReadyClaimed: false,
+    humanAcceptanceClaimed: false,
+  });
+
+  if (request.consentRef !== surface.consentRef) {
+    return denied("notification-consent-mapping-missing-fail-closed");
+  }
+  if (request.permissionRef !== surface.permissionRef) {
+    return denied("notification-permission-mapping-missing-fail-closed");
+  }
+  if (request.preferenceRef !== surface.preferenceRef) {
+    return denied("notification-preference-mapping-missing-fail-closed");
+  }
+
+  return {
+    surfaceId: surface.surfaceId,
+    decision: "allow-local-record",
+    reasonCode: "local-notification-consent-permission-mapped",
+    providerMode: registry.providerMode,
+    environment: registry.environment,
+    notificationReadyClaimed: false,
+    pushReadyClaimed: false,
+    liveProviderReadyClaimed: false,
+    stagingReadyClaimed: false,
+    productionReadyClaimed: false,
+    humanAcceptanceClaimed: false,
+  };
+};
+
+export const describeLocalNotificationSurface = (
+  surfaceId: string,
+  registry: LocalNotificationRegistry = LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY,
+): LocalNotificationSurfaceDescription => {
+  const surface = getLocalNotificationSurfaceById(surfaceId, registry);
+  return {
+    surfaceId: surface.surfaceId,
+    surfaceKind: surface.surfaceKind,
+    channel: surface.channel,
+    capabilityRef: surface.capabilityRef,
+    consentRef: surface.consentRef,
+    permissionRef: surface.permissionRef,
+    preferenceRef: surface.preferenceRef,
+    providerModeRef: surface.providerModeRef,
+    notificationReadyClaimed: false,
+    pushReadyClaimed: false,
+    liveProviderReadyClaimed: false,
+    stagingReadyClaimed: false,
+    productionReadyClaimed: false,
+    humanAcceptanceClaimed: false,
+  };
+};

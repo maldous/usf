@@ -36,6 +36,9 @@ I18N_BASELINE_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-i18n-baseli
 ACCESSIBILITY_BASELINE_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-accessibility-baseline-implementation.json"
 ACCESSIBILITY_USF938_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
 ACCESSIBILITY_USF938_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/010-missing-accessibility-semantics.json"
+NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-notification-consent-permission-surface.json"
+NOTIFICATION_USF933_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json"
+NOTIFICATION_USF933_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -2121,6 +2124,245 @@ def validate_accessibility_baseline_implementation() -> list[dict[str, str]]:
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 
+
+def validate_notification_consent_permission_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-008"
+    issue_id = "USF-1027"
+    subject = rel(NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+
+    if not NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "notification consent and permission implementation artefact is missing", issue_id)]
+
+    data = load_json(NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "notification consent and permission implementation artefact must be an object", issue_id)]
+
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "notification consent and permission implementation must be owned by USF-1027", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "notification consent and permission lifecycleState must be bounded-local-implemented", issue_id))
+
+    authority_inputs = data.get("authorityInputs", [])
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        failures.append(finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty list", issue_id))
+    else:
+        for index, entry in enumerate(authority_inputs):
+            entry_subject = f"{subject}.authorityInputs[{index}]"
+            if not isinstance(entry, dict):
+                failures.append(finding(rule_id, entry_subject, "authority input must be an object", issue_id))
+                continue
+            path_ref = entry.get("path")
+            if not isinstance(path_ref, str) or not path_ref.strip():
+                failures.append(finding(rule_id, f"{entry_subject}.path", "authority input must name a repository path", issue_id))
+            elif not path_exists(path_ref):
+                failures.append(finding(rule_id, f"{entry_subject}.path", "authority input path must exist", issue_id))
+
+    implementation_scope = data.get("implementationScope", {})
+    if not isinstance(implementation_scope, dict):
+        failures.append(finding(rule_id, f"{subject}.implementationScope", "implementationScope must be an object", issue_id))
+        implementation_scope = {}
+
+    expected_scope_values = {
+        "runtimePackage": "packages/app-surface/src/index.ts",
+        "runtimeRegistryExport": "LOCAL_NOTIFICATION_CONSENT_PERMISSION_REGISTRY",
+        "runtimeLookupExport": "getLocalNotificationSurfaceById",
+        "runtimeExerciseExport": "exerciseLocalNotificationSurface",
+        "unitTestArtefact": "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+        "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+        "providerMode": "local-non-live-only",
+        "environment": "dev-local",
+    }
+    for field, expected in expected_scope_values.items():
+        if implementation_scope.get(field) != expected:
+            failures.append(finding(rule_id, f"{subject}.implementationScope.{field}", f"implementationScope.{field} must be {expected}", issue_id))
+
+    expected_scope_false = [
+        "packageInstallationAllowed",
+        "dependencyInstallRequired",
+        "externalServicesAllowed",
+        "credentialsAllowed",
+        "providerSetupAllowed",
+        "pushProviderAllowed",
+        "mobilePushCredentialsAllowed",
+        "serviceWorkerPushAllowed",
+        "deploymentAllowed",
+        "stagingAllowed",
+    ]
+    for field in expected_scope_false:
+        if implementation_scope.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.implementationScope.{field}", "implementation scope flag must remain false", issue_id))
+    if implementation_scope.get("runtimeCodeCreatedByIssue") is not True:
+        failures.append(finding(rule_id, f"{subject}.implementationScope.runtimeCodeCreatedByIssue", "runtimeCodeCreatedByIssue must be true for USF-1027", issue_id))
+
+    for field in ["runtimePackage", "unitTestArtefact", "validatorGuard"]:
+        path_ref = implementation_scope.get(field)
+        if isinstance(path_ref, str) and path_ref.strip() and not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.implementationScope.{field}", "implementation scope path must exist", issue_id))
+
+    validation_guard = data.get("validationGuard", {})
+    if not isinstance(validation_guard, dict):
+        failures.append(finding(rule_id, f"{subject}.validationGuard", "validationGuard must be an object", issue_id))
+        validation_guard = {}
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "consentAndPermissionMappingsMustBeExplicit",
+        "preferencePrivacyAuditI18nAccessibilityAndProofMappingsMustBeExplicit",
+        "missingConsentOrPermissionMustFailClosed",
+        "missingPreferenceMustFailClosed",
+        "noRealProviderOrCredentialMayBeIntroduced",
+        "noPushProviderMobilePushCredentialOrServiceWorkerPushMayBeIntroduced",
+        "localOnlyProviderBoundaryMustBePreserved",
+        "usf933StyleFixtureMustRemainPresent",
+        "surfaceCoverageMustMapToImplementationPaths",
+        "nonClaimsMustAllBeFalse",
+    ]
+    for field in required_guard_flags:
+        if validation_guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+
+    required_surfaces = {
+        "notification-surface-developer-inbox": "packages/app-surface/src/index.ts",
+        "notification-surface-developer-toast": "packages/app-surface/src/index.ts",
+        "notification-surface-developer-banner": "packages/app-surface/src/index.ts",
+    }
+    mappings = data.get("notificationConsentPermissionMappings", [])
+    observed_surfaces: set[str] = set()
+    if not isinstance(mappings, list) or not mappings:
+        failures.append(finding(rule_id, f"{subject}.notificationConsentPermissionMappings", "notificationConsentPermissionMappings must be a non-empty list", issue_id))
+    else:
+        required_string_fields = [
+            "surfaceId",
+            "surfaceKind",
+            "channel",
+            "classification",
+            "implementationPath",
+            "capabilityRef",
+            "semanticEventRef",
+            "consentRef",
+            "permissionRef",
+            "preferenceRef",
+            "privacyCategoryRef",
+            "dataInventoryRef",
+            "channelLifecycleRef",
+            "optOutBoundaryRef",
+            "auditRef",
+            "telemetryRef",
+            "i18nRef",
+            "accessibilityRef",
+            "retentionRef",
+            "providerModeRef",
+            "nonClaimBoundary",
+        ]
+        required_array_fields = ["semanticSourceRefs", "proofRefs"]
+        required_true_fields = ["localOnly", "consentRequired", "permissionRequired", "preferenceRequired", "auditRequired"]
+        required_false_fields = [
+            "liveDeliveryAllowed",
+            "pushProviderAllowed",
+            "mobilePushCredentialsAllowed",
+            "serviceWorkerPushAllowed",
+            "externalProviderAllowed",
+        ]
+        for index, entry in enumerate(mappings):
+            entry_subject = f"{subject}.notificationConsentPermissionMappings[{index}]"
+            if not isinstance(entry, dict):
+                failures.append(finding(rule_id, entry_subject, "notification mapping must be an object", issue_id))
+                continue
+            surface_id = entry.get("surfaceId")
+            if isinstance(surface_id, str):
+                observed_surfaces.add(surface_id)
+                expected_path = required_surfaces.get(surface_id)
+                if expected_path and entry.get("implementationPath") != expected_path:
+                    failures.append(finding(rule_id, f"{entry_subject}.implementationPath", "surface implementation path does not match required app-surface path", issue_id))
+            for field in required_string_fields:
+                if not isinstance(entry.get(field), str) or not entry.get(field, "").strip():
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "notification mapping field must be a non-empty string", issue_id))
+            for field in required_array_fields:
+                if not has_nonempty_string_array(entry.get(field)):
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "notification mapping field must be a non-empty string array", issue_id))
+            for field in required_true_fields:
+                if entry.get(field) is not True:
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "notification mapping field must be true", issue_id))
+            for field in required_false_fields:
+                if entry.get(field) is not False:
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "notification mapping field must be false", issue_id))
+            if entry.get("providerModeRef") != "provider-mode-not-live-external-provider":
+                failures.append(finding(rule_id, f"{entry_subject}.providerModeRef", "providerModeRef must remain provider-mode-not-live-external-provider", issue_id))
+            implementation_path = entry.get("implementationPath")
+            if isinstance(implementation_path, str) and implementation_path.strip() and not path_exists(implementation_path):
+                failures.append(finding(rule_id, f"{entry_subject}.implementationPath", "notification implementation path must exist", issue_id))
+            proof_refs = entry.get("proofRefs", [])
+            if isinstance(proof_refs, list):
+                for proof_index, proof_ref in enumerate(proof_refs):
+                    if not path_ref_exists(proof_ref):
+                        failures.append(finding(rule_id, f"{entry_subject}.proofRefs[{proof_index}]", "notification proof reference path must exist", issue_id))
+            semantic_source_refs = entry.get("semanticSourceRefs", [])
+            if isinstance(semantic_source_refs, list):
+                for semantic_index, semantic_ref in enumerate(semantic_source_refs):
+                    if not path_ref_exists(semantic_ref):
+                        failures.append(finding(rule_id, f"{entry_subject}.semanticSourceRefs[{semantic_index}]", "notification semantic source reference path must exist", issue_id))
+
+    missing_surfaces = set(required_surfaces) - observed_surfaces
+    for surface_id in sorted(missing_surfaces):
+        failures.append(finding(rule_id, f"{subject}.notificationConsentPermissionMappings.{surface_id}", "implemented notification surface must have consent and permission mapping", issue_id))
+
+    if not NOTIFICATION_USF933_CONFORMING.exists():
+        failures.append(finding(rule_id, rel(NOTIFICATION_USF933_CONFORMING), "USF-933-style conforming notification fixture is missing", issue_id))
+    else:
+        conforming = load_json(NOTIFICATION_USF933_CONFORMING)
+        if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-005":
+            failures.append(finding(rule_id, rel(NOTIFICATION_USF933_CONFORMING), "USF-933-style conforming fixture must target notification validator rule 005", issue_id))
+        mapping = conforming.get("mapping") if isinstance(conforming, dict) else None
+        if not isinstance(mapping, dict) or mapping.get("consentRef") != "notification-consent-required" or mapping.get("permissionRef") != "platform.notifications.write":
+            failures.append(finding(rule_id, rel(NOTIFICATION_USF933_CONFORMING), "USF-933-style conforming fixture must carry notification consent and permission refs", issue_id))
+
+    if not NOTIFICATION_USF933_PLANTED.exists():
+        failures.append(finding(rule_id, rel(NOTIFICATION_USF933_PLANTED), "USF-933-style planted notification defect fixture is missing", issue_id))
+    else:
+        planted = load_json(NOTIFICATION_USF933_PLANTED)
+        if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-005":
+            failures.append(finding(rule_id, rel(NOTIFICATION_USF933_PLANTED), "USF-933-style planted fixture must fail notification validator rule 005", issue_id))
+
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    required_out_of_scope = {
+        "push-provider",
+        "mobile-push-credentials",
+        "service-worker-push",
+        "live-delivery-provider",
+        "notification-readiness",
+        "human-acceptance",
+    }
+    observed_out_of_scope: set[str] = set()
+    if not isinstance(out_of_scope, list) or not out_of_scope:
+        failures.append(finding(rule_id, f"{subject}.outOfScopeSurfaces", "outOfScopeSurfaces must be a non-empty list", issue_id))
+    else:
+        for index, entry in enumerate(out_of_scope):
+            entry_subject = f"{subject}.outOfScopeSurfaces[{index}]"
+            if not isinstance(entry, dict):
+                failures.append(finding(rule_id, entry_subject, "out-of-scope surface must be an object", issue_id))
+                continue
+            surface_id = entry.get("surfaceId")
+            if isinstance(surface_id, str):
+                observed_out_of_scope.add(surface_id)
+            if entry.get("status") != "not-authorised":
+                failures.append(finding(rule_id, f"{entry_subject}.status", "out-of-scope notification surface must remain not-authorised", issue_id))
+    for surface_id in sorted(required_out_of_scope - observed_out_of_scope):
+        failures.append(finding(rule_id, f"{subject}.outOfScopeSurfaces.{surface_id}", "required out-of-scope notification surface is missing", issue_id))
+
+    proof_ladder = data.get("proofLadder", {})
+    if not isinstance(proof_ladder, dict):
+        failures.append(finding(rule_id, f"{subject}.proofLadder", "proofLadder must be an object", issue_id))
+        proof_ladder = {}
+    for field in ["devLocalRequired", "unitTestsRequired", "contractTestsRequired"]:
+        if proof_ladder.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must be true", issue_id))
+    for field in ["composeRequired", "stagingRequired"]:
+        if proof_ladder.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must remain false", issue_id))
+
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -2144,6 +2386,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_auth_session_dev_identity_implementation())
     failures.extend(validate_i18n_baseline_implementation())
     failures.extend(validate_accessibility_baseline_implementation())
+    failures.extend(validate_notification_consent_permission_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -2190,6 +2433,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION,
         I18N_BASELINE_IMPLEMENTATION,
         ACCESSIBILITY_BASELINE_IMPLEMENTATION,
+        NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION,
     ]
     return {
         "mode": mode,
