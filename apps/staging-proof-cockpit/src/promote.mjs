@@ -116,6 +116,58 @@ export function computePromotion(store, report, artifactDir) {
   return next;
 }
 
+function computeServiceEvidenceSummary(runDir) {
+  const serviceEvidenceManifestPath = join(runDir, "service-evidence-manifest.json");
+  if (!existsSync(serviceEvidenceManifestPath)) {
+    return {};
+  }
+
+  const serviceEvidenceManifest = JSON.parse(readFileSync(serviceEvidenceManifestPath, "utf8"));
+  const services = Array.isArray(serviceEvidenceManifest.services) ? serviceEvidenceManifest.services : [];
+
+  return {
+    serviceEvidenceCount: services.length,
+    authenticatedServiceUiCaptureCount: services.filter(
+      (service) => service.authenticatedCaptureRequired === true,
+    ).length,
+    authPostureMismatchCount: services.filter((service) => service.authPostureMismatch === true).length,
+    serviceTargetObservationCount: services.filter(
+      (service) => typeof service.targetSystemObservation === "string" && service.targetSystemObservation.length > 0,
+    ).length,
+  };
+}
+
+function computeBundleLatestMachineRun(existingLatest, latest, report, serviceEvidenceSummary) {
+  const evidenceRecordCount = Array.isArray(report.evidence)
+    ? report.evidence.length
+    : existingLatest?.evidenceRecordCount;
+
+  return {
+    ...(existingLatest ?? {}),
+    runId: latest.runId,
+    artifactDir: latest.artifactDir,
+    reportJson: latest.reportJson,
+    externalReviewBundle: latest.externalReviewBundle,
+    passCount: latest.passCount,
+    warnCount: latest.warnCount,
+    failCount: latest.failCount,
+    unresolvedGapCount: latest.gapCount,
+    screenshotCount: latest.screenshotCount,
+    serviceEvidenceCount: serviceEvidenceSummary.serviceEvidenceCount ?? latest.serviceEvidenceCount,
+    evidenceRecordCount: evidenceRecordCount ?? 0,
+    sourceSha: latest.sourceSha,
+    deploymentSha: latest.deploymentSha,
+    authenticatedServiceUiCaptureCount:
+      serviceEvidenceSummary.authenticatedServiceUiCaptureCount ??
+      existingLatest?.authenticatedServiceUiCaptureCount ??
+      0,
+    authPostureMismatchCount:
+      serviceEvidenceSummary.authPostureMismatchCount ?? existingLatest?.authPostureMismatchCount ?? 0,
+    serviceTargetObservationCount:
+      serviceEvidenceSummary.serviceTargetObservationCount ?? existingLatest?.serviceTargetObservationCount ?? 0,
+  };
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const runDir = args.runDir || newestRunDir();
@@ -138,10 +190,17 @@ function main() {
   const nextStore = computePromotion(store, report, artifactDir);
   writeFileSync(STORE_PATH, `${JSON.stringify(nextStore, null, 2)}\n`);
 
-  // Repoint the evidence-side external-review bundle at the promoted run.
-  if (existsSync(BUNDLE_MANIFEST_PATH) && priorArtifactTs && priorArtifactTs !== ts) {
-    const manifest = readFileSync(BUNDLE_MANIFEST_PATH, "utf8");
-    writeFileSync(BUNDLE_MANIFEST_PATH, manifest.split(priorArtifactTs).join(ts));
+  // Repoint the evidence-side external-review bundle at the promoted run and
+  // keep its retained latest-run summary in sync with the promoted report.
+  if (existsSync(BUNDLE_MANIFEST_PATH) && priorArtifactTs) {
+    const manifest = JSON.parse(readFileSync(BUNDLE_MANIFEST_PATH, "utf8").split(priorArtifactTs).join(ts));
+    manifest.latestMachineRun = computeBundleLatestMachineRun(
+      manifest.latestMachineRun,
+      nextStore.latestMachineRun,
+      report,
+      computeServiceEvidenceSummary(runDir),
+    );
+    writeFileSync(BUNDLE_MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`);
   }
 
   // Retention: keep only the current and immediately-prior run payloads on disk.
