@@ -1,0 +1,222 @@
+{
+  "artifactId": "usf.app-surface-query-list-detail-implementation",
+  "title": "App-surface query list and detail implementation",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "ownerIssueId": "USF-1022",
+  "parentIssueId": "USF-1012",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records bounded local query list/detail implementation authority for USF-1022.",
+    "linearAuthority": "Linear tracks this work only and does not define USF semantic authority.",
+    "implementationAuthority": "packages/app-surface/src/index.ts may implement only local in-memory query view mapping helpers defined by this artefact.",
+    "validatorAuthority": "tools/validate-app-surface/validate-app-surface.py enforces the repository-owned query list/detail guard but does not invent product meaning."
+  },
+  "implementationScope": {
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_QUERY_LIST_DETAIL_REGISTRY",
+    "unitTestArtefact": "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "providerMode": "in-memory-only",
+    "environment": "dev-local",
+    "packageInstallationAllowed": false,
+    "runtimeCodeCreatedByIssue": true
+  },
+  "authorityInputs": [
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "docs/architecture/app-surface-local-in-memory-runtime.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+    "docs/architecture/app-surface-i18n-localisation-semantics.json",
+    "docs/architecture/app-surface-accessibility-semantics.json",
+    "docs/architecture/app-surface-observability-privacy-semantics.json",
+    "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json",
+    "tools/validate-app-surface/planted-defects/004-query-missing-cache-privacy.json"
+  ],
+  "implementedQueryViews": [
+    {
+      "viewId": "query-view-developer-profile-list",
+      "viewKind": "list",
+      "componentFixtureRef": "component-fixture-developer-profile-summary",
+      "queryRef": "query.developerProfile",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "cacheFreshnessRef": "query-cache-freshness-required",
+      "cachePolicyRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping"
+      ],
+      "privacyClassificationRefs": [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.developerProfile"
+      ],
+      "i18nKeyRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#query-list-empty-error-state-keys"
+      ],
+      "accessibilityRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json#query-list-keyboard-focus-screen-reader-labels"
+      ],
+      "telemetryRefs": [
+        "tenant-user-context-propagation",
+        "docs/architecture/generated-client-contract-validation-semantics.json#capabilityToScreenViewModelMapping"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "resultItemShapeRef": "developer-profile-summary-result-item",
+      "emptyStateRef": "developer-profile-summary-empty-state",
+      "errorStateRef": "developer-profile-summary-error-state",
+      "nonClaimBoundary": "local query list view-model mapping only; no live server-state provider, persistent storage, query library readiness, cache readiness, sync readiness, deployment, staging, privacy compliance, production, live-provider, or human-acceptance readiness claim"
+    },
+    {
+      "viewId": "query-view-developer-profile-detail",
+      "viewKind": "detail",
+      "componentFixtureRef": "component-fixture-developer-profile-summary",
+      "queryRef": "query.developerProfile",
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "cacheFreshnessRef": "query-cache-freshness-required",
+      "cachePolicyRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping"
+      ],
+      "privacyClassificationRefs": [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "errorRefs": [
+        "typed-error-problem-details-model"
+      ],
+      "auditEventRefs": [
+        "client-audit-event-emission",
+        "graphql.developerProfile"
+      ],
+      "i18nKeyRefs": [
+        "docs/architecture/app-surface-i18n-localisation-semantics.json#query-detail-not-found-error-state-keys"
+      ],
+      "accessibilityRefs": [
+        "docs/architecture/app-surface-accessibility-semantics.json#query-detail-keyboard-focus-screen-reader-labels"
+      ],
+      "telemetryRefs": [
+        "tenant-user-context-propagation",
+        "docs/architecture/generated-client-contract-validation-semantics.json#capabilityToScreenViewModelMapping"
+      ],
+      "semanticSourceRefs": [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
+      ],
+      "proofRefs": [
+        "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "recordIdentityRef": "developer-profile-summary-record-identity",
+      "notFoundStateRef": "developer-profile-summary-not-found-state",
+      "errorStateRef": "developer-profile-summary-error-state",
+      "nonClaimBoundary": "local query detail view-model mapping only; no live server-state provider, persistent storage, query library readiness, cache readiness, sync readiness, deployment, staging, privacy compliance, production, live-provider, or human-acceptance readiness claim"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "queryViewsMustMapToSemanticQueryAuthority": true,
+    "cacheFreshnessAndPolicyMustExist": true,
+    "privacyClassificationMustExist": true,
+    "tenantBoundaryMustExist": true,
+    "permissionErrorAuditTelemetryMappingsMustExist": true,
+    "i18nAndAccessibilityRefsMustExist": true,
+    "unknownQueryViewsMustFailClosed": true,
+    "usf932StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "liveServerStateProviderMustRemainForbidden": true,
+    "persistentSensitiveStorageMustRemainForbidden": true
+  },
+  "outOfScopeSurfaces": [
+    {
+      "surface": "live-server-state-provider",
+      "status": "not-authorised",
+      "reason": "USF-1022 is bounded to local in-memory query view mapping proof."
+    },
+    {
+      "surface": "persistent-sensitive-storage",
+      "status": "not-authorised",
+      "reason": "Persistent sensitive storage requires separate state/cache authority."
+    },
+    {
+      "surface": "realtime-subscription",
+      "status": "not-authorised",
+      "reason": "Realtime semantics are not part of this bounded query list/detail proof."
+    },
+    {
+      "surface": "background-refresh",
+      "status": "not-authorised",
+      "reason": "Background refresh semantics are not part of this bounded query list/detail proof."
+    },
+    {
+      "surface": "state-cache-query-client",
+      "ownerIssueId": "USF-1023",
+      "status": "owned-by-later-issue",
+      "reason": "USF-1022 records query view mappings only and does not select or implement a query client."
+    }
+  ],
+  "proofLadder": {
+    "devLocal": {
+      "reached": true,
+      "required": true
+    },
+    "unit": {
+      "reached": true,
+      "required": true
+    },
+    "contract": {
+      "reached": true,
+      "required": true
+    },
+    "compose": {
+      "reached": false,
+      "required": false,
+      "reason": "No provider semantics are crossed by this local in-memory query list/detail mapping."
+    },
+    "staging": {
+      "reached": false,
+      "required": false,
+      "reason": "No public, provider-staging, deployment-adjacent, or human-acceptance surface is implemented by USF-1022."
+    }
+  },
+  "nonClaims": {
+    "cacheReadiness": false,
+    "syncReadiness": false,
+    "queryLibraryReadiness": false,
+    "serverStateProviderReadiness": false,
+    "persistentStorageReadiness": false,
+    "providerReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "humanAcceptance": false
+  }
+}

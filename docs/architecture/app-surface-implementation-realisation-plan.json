@@ -391,6 +391,14 @@
       {
         "path": "tests/packages/app-surface-command-form-implementation.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -543,7 +551,8 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "Bounded local Next.js web and Expo mobile scaffolds, local in-memory app-surface runtime, route capability mapping, and command form registry now exist for dev-local proof."
+      "currentConclusion": "Bounded local Next.js web and Expo mobile scaffolds, local in-memory app-surface runtime, route capability mapping, command form registry, and query list/detail registry now exist for dev-local proof.",
+      "queryListDetailRegistryFound": true
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -840,7 +849,19 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-query-proof",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": true
+      "mayCreateRuntimeCode": true,
+      "repositoryArtefact": "docs/architecture/app-surface-query-list-detail-implementation.json",
+      "currentRepositoryStatus": "bounded-local-query-list-detail-mapping-implemented",
+      "implementedQueryViews": [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail"
+      ],
+      "runtimeCodeCreatedByIssue": true,
+      "runtimePackage": "packages/app-surface/src/index.ts",
+      "validatorGuardAdded": "tools/validate-app-surface/validate-app-surface.py",
+      "unitTestArtefact": "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1023",
@@ -1201,12 +1222,12 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Initial broader query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, local in-memory component-fixture runtime, route capability mapping, and command form mapping are not yet implemented.",
+    "Initial broader state, auth, i18n, accessibility, notification, negative monetisation, store metadata, and deployment evidence pinning surfaces beyond the existing bounded web route scaffold, bounded mobile screen scaffold, local in-memory component-fixture runtime, route capability mapping, command form mapping, and query list/detail mapping are not yet implemented.",
     "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, and command form mapping are now repository-owned, but query, state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, and query list/detail mapping are now repository-owned, but state, auth, i18n, accessibility, notification, negative monetisation, store metadata, deployment evidence pinning, unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }

@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Document type** | Architecture / source-use disposition matrix |
-| **Status** | Draft / USF-1021 bounded command/form coverage |
+| **Status** | Draft / USF-1022 bounded query/list/detail coverage |
 | **Authority level** | Reviewable source-use matrix; subordinate to the Charter, Authority Model, accepted ADRs, validator rules, runtime proof evidence, semantic instances, and the app-surface implementation realisation plan |
-| **Issue scope** | USF-1014, USF-1015, USF-1016, USF-1017, USF-1018, USF-1020, USF-1021 |
+| **Issue scope** | USF-1014, USF-1015, USF-1016, USF-1017, USF-1018, USF-1020, USF-1021, USF-1022 |
 | **Source row basis** | `docs/architecture/app-surface-implementation-realisation-plan.json`, `docs/architecture/app-surface-workspace-package-boundaries.json`, `docs/architecture/target-implementation-topology-plan.md` |
 
-This matrix records target-file treatment for bounded app-surface workspace/package boundary work, the USF-1015 local shared-client consumption path, the USF-1016 local in-memory app-surface runtime, the USF-1017 bounded local web scaffold, the USF-1018 bounded local mobile scaffold, the USF-1020 route-capability implementation, and the USF-1021 bounded local command/form implementation. It does not authorise external provider setup, deployment, staging, store setup, live-provider integration, production readiness, monetisation readiness, package publication readiness, generated SDK readiness, or direct runtime/application code import from source lineage.
+This matrix records target-file treatment for bounded app-surface workspace/package boundary work, the USF-1015 local shared-client consumption path, the USF-1016 local in-memory app-surface runtime, the USF-1017 bounded local web scaffold, the USF-1018 bounded local mobile scaffold, the USF-1020 route-capability implementation, the USF-1021 bounded local command/form implementation, and the USF-1022 bounded local query/list/detail implementation. It does not authorise external provider setup, deployment, staging, store setup, live-provider integration, production readiness, monetisation readiness, package publication readiness, generated SDK readiness, or direct runtime/application code import from source lineage.
 
 ## Treatment Rules
 
@@ -102,4 +102,15 @@ USF-1020 consolidates the currently implemented bounded local web route and mobi
 | `tests/packages/app-surface-command-form-implementation.test.ts` | USF-authored | Unit and contract-style tests proving command/form mappings pass when governed and fail closed for missing command authority, missing validation/audit mappings, UI-only business rules, unknown forms, missing proof refs, and non-claim drift. | Does not require external providers, credentials, Compose, staging, deployment, stores, native signing, EAS, or human acceptance. |
 | `tools/validate-app-surface/validate-app-surface.py` | USF-authored | Adds a real implementation guard for the USF-1021 command/form artefact while preserving the existing synthetic fixture suite and USF-1020 route-capability guard. | Does not infer product behaviour from package files or upgrade validator success into provider, deployment, staging, production, compliance, monetisation, or human-acceptance readiness. |
 
-USF-1021 implements a bounded local command/form mapping only. It does not implement query/list/detail, state/cache/query client, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, deployment, provider setup, or parent closure work.
+USF-1021 implements a bounded local command/form mapping only. The USF-1021 boundary does not implement query/list/detail, state/cache/query client, auth/session, i18n, accessibility, notifications, ads, store metadata, deployment evidence, Compose, staging, deployment, provider setup, or parent closure work.
+
+## USF-1022 query list and detail implementation source-use disposition
+
+| Path | Status | Disposition | Non-claim boundary |
+| --- | --- | --- | --- |
+| `packages/app-surface/src/index.ts` | USF-authored | Extends the existing dependency-free local app-surface package with a query list/detail registry validator and local exercise helper over governed query, capability, permission, cache freshness, cache policy, privacy classification, tenant, error, audit, i18n, accessibility, telemetry, component-fixture, semantic-source, and proof references. | Does not create a server-state provider, persistent sensitive storage, query client readiness, realtime subscription, background refresh, network call, credential use, deployment, staging, live-provider readiness, privacy compliance readiness, or human acceptance. |
+| `docs/architecture/app-surface-query-list-detail-implementation.json` | USF-authored | Repository-owned query list/detail implementation map for bounded local developer-profile list and detail query views. | Does not claim query execution readiness beyond local mapping proof and does not authorise state/cache/query client setup, auth/session, provider setup, deployment, staging, production, compliance, or human acceptance. |
+| `tests/packages/app-surface-query-list-detail-implementation.test.ts` | USF-authored | Unit and contract-style tests proving query list/detail mappings pass when governed and fail closed for missing query authority, missing cache/privacy mappings, unknown views, missing proof refs, and non-claim drift. | Does not require external providers, credentials, Compose, staging, deployment, stores, native signing, EAS, or human acceptance. |
+| `tools/validate-app-surface/validate-app-surface.py` | USF-authored | Adds a real implementation guard for the USF-1022 query list/detail artefact while preserving the existing synthetic fixture suite and USF-1020/USF-1021 real implementation guards. | Does not infer product behaviour from package files or upgrade validator success into provider, deployment, staging, production, compliance, monetisation, or human-acceptance readiness. |
+
+USF-1022 implements bounded local query list/detail mappings only. It does not implement state/cache/query client setup, auth/session, i18n runtime, accessibility runtime, notifications, ads, store metadata, deployment evidence, Compose, staging, deployment, provider setup, or parent closure work.

@@ -258,3 +258,16 @@ USF-1021 authorises the following bounded local command/form implementation path
 The command/form implementation maps the local API-key onboarding command form to governed command, validation, permission, error, audit, idempotency, tenant, component-fixture, semantic-source, and proof references. Unknown command forms must fail closed, UI-only business rules are not authorised, and the validator must guard the real repository artefact.
 
 USF-1021 does not add package dependencies, create server mutation providers, submit forms to external services, introduce credentials, configure deployment, run staging proof, execute production commands, or claim product UI readiness, command execution readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, store readiness, compliance readiness, monetisation readiness, or human acceptance.
+
+## USF-1022 app-surface query list and detail implementation
+
+USF-1022 authorises the following bounded local query list/detail implementation paths only:
+
+- `packages/app-surface/src/index.ts`
+- `docs/architecture/app-surface-query-list-detail-implementation.json`
+- `tests/packages/app-surface-query-list-detail-implementation.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+The query list/detail implementation maps local developer-profile list and detail query views to governed query, capability, permission, cache freshness, cache policy, privacy classification, tenant, component-fixture, i18n, accessibility, telemetry, proof, and fail-closed references. Unknown query views must fail closed, missing query/cache/privacy authority is not authorised, and the validator must guard the real repository artefact.
+
+USF-1022 does not add package dependencies, create server-state providers, create persistent sensitive storage, introduce credentials, configure deployment, run staging proof, implement live provider queries, or claim product UI readiness, query client readiness, cache readiness, sync readiness, deployment readiness, staging readiness, production readiness, live-provider readiness, store readiness, compliance readiness, monetisation readiness, or human acceptance.
