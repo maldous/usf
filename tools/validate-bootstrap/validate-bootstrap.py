@@ -286,6 +286,10 @@ def current_head():
     return git_value("rev-parse", "HEAD") or ""
 
 
+def current_short_head():
+    return git_value("rev-parse", "--short", "HEAD") or ""
+
+
 def remote_main_head():
     return git_value("rev-parse", "origin/main") or ""
 
@@ -568,7 +572,10 @@ def check_anchor_for_current_main(F):
         return
     if current_branch() != "main" or remote_main_head() != head:
         return
-    tag = f"proof-anchor-{head[:7]}"
+    short_head = current_short_head()
+    if not short_head:
+        return
+    tag = f"proof-anchor-{short_head}"
     if not remote_has_tag(tag):
         F.add("USF-BOOTSTRAP-006", tag, "origin does not expose proof-anchor tag for current main")
 

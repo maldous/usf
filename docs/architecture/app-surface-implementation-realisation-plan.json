@@ -30,6 +30,8 @@
     "futureToCreatePathsMustHaveOwningLinearIssue": true,
     "invalidOrStalePathReferencesAreNotAuthority": true,
     "minimumMachineCheck": "Strict JSON parse plus existence check for every repositoryPathReferenceInventory.existingRepositoryPaths entry.",
+    "validatorRuleId": "USF-APPPLAN-001",
+    "validatorCommand": "corepack pnpm validate-spec",
     "guardStatus": "active-for-plan-use"
   },
   "repositoryPathReferenceInventory": {
@@ -989,6 +991,10 @@
       {
         "commandClass": "strict-json-parse",
         "targetPath": "docs/architecture/app-surface-implementation-realisation-plan.json"
+      },
+      {
+        "command": "corepack pnpm validate-spec",
+        "guardedRuleId": "USF-APPPLAN-001"
       },
       {
         "command": "make app-surface-validate"

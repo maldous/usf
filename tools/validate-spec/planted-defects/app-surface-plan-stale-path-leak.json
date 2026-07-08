@@ -1,0 +1,61 @@
+{
+  "target": "app-surface-plan-paths",
+  "expectedRule": "USF-APPPLAN-001",
+  "existingPaths": [
+    "docs/architecture/app-surface-accessibility-semantics.json"
+  ],
+  "record": {
+    "pathReferenceGuard": {
+      "existingRepositoryPathsMustExist": true,
+      "futureToCreatePathsMustHaveOwningLinearIssue": true,
+      "invalidOrStalePathReferencesAreNotAuthority": true,
+      "minimumMachineCheck": "Strict JSON parse plus existence check for every repositoryPathReferenceInventory.existingRepositoryPaths entry.",
+      "guardStatus": "active-for-plan-use"
+    },
+    "repositoryPathReferenceInventory": {
+      "existingRepositoryPaths": [
+        {
+          "path": "docs/architecture/app-surface-accessibility-semantics.json",
+          "classification": "exists-now"
+        }
+      ],
+      "workspacePatterns": [],
+      "futureToCreatePaths": [
+        {
+          "path": "apps/mobile",
+          "classification": "future-to-create",
+          "owningLinearIssueId": "USF-1018"
+        }
+      ],
+      "removedInvalidOrStaleReferences": [
+        {
+          "path": "docs/architecture/app-surface-accessibility-semantic-coverage.json",
+          "classification": "invalid/stale",
+          "replacementPath": "docs/architecture/app-surface-accessibility-semantics.json"
+        },
+        {
+          "path": "docs/architecture/app-surface-api-contract-realisation.json",
+          "classification": "invalid/stale",
+          "replacementPaths": [
+            "docs/architecture/app-surface-accessibility-semantics.json"
+          ]
+        },
+        {
+          "path": "docs/architecture/app-surface-implementation-gate.json",
+          "classification": "invalid/stale",
+          "replacementPath": "docs/architecture/app-surface-accessibility-semantics.json"
+        },
+        {
+          "path": "docs/architecture/app-surface-semantic-definition-candidate-backlog.json",
+          "classification": "invalid/stale",
+          "replacementPath": "docs/architecture/app-surface-accessibility-semantics.json"
+        }
+      ]
+    },
+    "currentInventory": {
+      "appSurfaceSemanticArtefacts": [
+        "docs/architecture/app-surface-accessibility-semantic-coverage.json"
+      ]
+    }
+  }
+}
