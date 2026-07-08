@@ -39,6 +39,15 @@ ACCESSIBILITY_USF938_PLANTED = ROOT / "tools/validate-app-surface/planted-defect
 NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-notification-consent-permission-surface.json"
 NOTIFICATION_USF933_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/005-notification-with-consent-permission.json"
 NOTIFICATION_USF933_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/005-notification-without-consent-permission.json"
+ADS_MONETISATION_PLACEHOLDER_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json"
+ADS_USF934_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/006-ad-placement-with-consent-privacy.json"
+ADS_USF934_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/006-ad-placement-without-consent-privacy.json"
+STORE_METADATA_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-store-metadata-semantic-surface.json"
+STORE_USF935_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/007-store-metadata-matches-semantics.json"
+STORE_USF935_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/007-store-metadata-mismatch.json"
+DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-deployment-evidence-pinning-surface.json"
+DEPLOYMENT_USF940_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/012-deployment-evidence-current-commit.json"
+DEPLOYMENT_USF940_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -2366,6 +2375,251 @@ def validate_notification_consent_permission_implementation() -> list[dict[str, 
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 
+
+def validate_ads_monetisation_placeholder_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-009"
+    issue_id = "USF-1028"
+    subject = rel(ADS_MONETISATION_PLACEHOLDER_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not ADS_MONETISATION_PLACEHOLDER_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "ads and monetisation placeholder artefact is missing", issue_id)]
+    data = load_json(ADS_MONETISATION_PLACEHOLDER_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "ads and monetisation placeholder artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "ads placeholder artefact must be owned by USF-1028", issue_id))
+    if data.get("lifecycleState") != "dev-local-negative-placeholder-implemented":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "ads placeholder lifecycleState must be dev-local-negative-placeholder-implemented", issue_id))
+    for index, authority_input in enumerate(data.get("authorityInputs", [])):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+    validation_guard = data.get("validationGuard", {})
+    for field in [
+        "existingAuthorityPathsMustExist",
+        "noLiveAdOrMonetisationSdkMayBeIntegrated",
+        "adPlacementWithoutConsentAndPrivacyMappingMustFailClosed",
+        "noLivePlaceholderBoundaryMustBeExplicit",
+        "usf934StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "noExternalServiceCredentialDeploymentOrProviderSetup",
+    ]:
+        if not isinstance(validation_guard, dict) or validation_guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    mappings = data.get("placeholderMappings", [])
+    if not isinstance(mappings, list) or not mappings:
+        failures.append(finding(rule_id, f"{subject}.placeholderMappings", "placeholderMappings must be a non-empty list", issue_id))
+    else:
+        for index, mapping in enumerate(mappings):
+            entry_subject = f"{subject}.placeholderMappings[{index}]"
+            if not isinstance(mapping, dict):
+                failures.append(finding(rule_id, entry_subject, "ads placeholder mapping must be an object", issue_id))
+                continue
+            for field in ["surfaceId", "surfaceKind", "implementationPath", "consentRef", "privacyClassificationRef", "ageRegionPolicyRef", "storeDisclosureRef", "nonClaimBoundary"]:
+                if not isinstance(mapping.get(field), str) or not mapping.get(field, "").strip():
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "ads placeholder field must be a non-empty string", issue_id))
+            for field in ["thirdPartySdkRefs", "evidenceRefs", "semanticSourceRefs"]:
+                if not has_nonempty_string_array(mapping.get(field)):
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "ads placeholder field must be a non-empty string array", issue_id))
+            if mapping.get("implementationPath") != subject:
+                failures.append(finding(rule_id, f"{entry_subject}.implementationPath", "ads placeholder implementationPath must point to this artefact", issue_id))
+            if mapping.get("localOnly") is not True:
+                failures.append(finding(rule_id, f"{entry_subject}.localOnly", "ads placeholder must remain localOnly", issue_id))
+            for field in [
+                "liveAdServingAllowed",
+                "adSdkAllowed",
+                "consentManagementPlatformAllowed",
+                "umpProviderFlowAllowed",
+                "attProviderFlowAllowed",
+                "subscriptionOrPurchaseAllowed",
+                "monetisationProviderAllowed",
+                "externalProviderAllowed",
+            ]:
+                if mapping.get(field) is not False:
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "ads placeholder forbidden capability must be false", issue_id))
+            if "no-ad-sdk-adopted-currently" not in mapping.get("thirdPartySdkRefs", []):
+                failures.append(finding(rule_id, f"{entry_subject}.thirdPartySdkRefs", "ads placeholder must preserve no-ad-sdk-adopted-currently", issue_id))
+            for field in ["evidenceRefs", "semanticSourceRefs"]:
+                for ref_index, ref_value in enumerate(mapping.get(field, [])):
+                    if not path_ref_exists(ref_value):
+                        failures.append(finding(rule_id, f"{entry_subject}.{field}[{ref_index}]", "ads placeholder path reference must exist", issue_id))
+    if not ADS_USF934_CONFORMING.exists():
+        failures.append(finding(rule_id, rel(ADS_USF934_CONFORMING), "USF-934-style conforming ad fixture is missing", issue_id))
+    else:
+        conforming = load_json(ADS_USF934_CONFORMING)
+        if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-006":
+            failures.append(finding(rule_id, rel(ADS_USF934_CONFORMING), "USF-934-style conforming fixture must target ad validator rule 006", issue_id))
+    if not ADS_USF934_PLANTED.exists():
+        failures.append(finding(rule_id, rel(ADS_USF934_PLANTED), "USF-934-style planted ad defect fixture is missing", issue_id))
+    else:
+        planted = load_json(ADS_USF934_PLANTED)
+        if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-006":
+            failures.append(finding(rule_id, rel(ADS_USF934_PLANTED), "USF-934-style planted fixture must fail ad validator rule 006", issue_id))
+    proof_ladder = data.get("proofLadder", {})
+    for field in ["devLocalFixtureProof", "strictJsonParseRequired", "appSurfaceValidatorAllRequired", "appSurfaceSelftestRequired", "repositoryEvidenceValidationRequired"]:
+        if not isinstance(proof_ladder, dict) or proof_ladder.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must be true", issue_id))
+    for field in ["composeRequired", "stagingRequired"]:
+        if not isinstance(proof_ladder, dict) or proof_ladder.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
+def validate_store_metadata_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-010"
+    issue_id = "USF-1029"
+    subject = rel(STORE_METADATA_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not STORE_METADATA_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "store metadata semantic artefact is missing", issue_id)]
+    data = load_json(STORE_METADATA_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "store metadata semantic artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "store metadata artefact must be owned by USF-1029", issue_id))
+    if data.get("lifecycleState") != "dev-local-metadata-fixture-implemented":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "store metadata lifecycleState must be dev-local-metadata-fixture-implemented", issue_id))
+    for index, authority_input in enumerate(data.get("authorityInputs", [])):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+    validation_guard = data.get("validationGuard", {})
+    for field in [
+        "existingAuthorityPathsMustExist",
+        "storeMetadataFixturesMustRemainLocalOnly",
+        "metadataMismatchMustFailClosed",
+        "noStoreRecordSubmissionOrAccountMayBeCreated",
+        "usf935StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "appStoreAndPlayStoreReadinessNonClaimsMustBePreserved",
+    ]:
+        if not isinstance(validation_guard, dict) or validation_guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    metadata = data.get("metadataSurface", {})
+    if not isinstance(metadata, dict):
+        failures.append(finding(rule_id, f"{subject}.metadataSurface", "metadataSurface must be an object", issue_id))
+        metadata = {}
+    for field in ["surfaceId", "surfaceKind", "implementationPath", "semanticAuthorityRef", "versionAuthorityRef", "releaseEvidenceRef", "nonClaimBoundary"]:
+        if not isinstance(metadata.get(field), str) or not metadata.get(field, "").strip():
+            failures.append(finding(rule_id, f"{subject}.metadataSurface.{field}", "store metadata field must be a non-empty string", issue_id))
+    for field in ["storeAssetRefs", "privacyInputRefs", "evidenceRefs", "semanticSourceRefs"]:
+        if not has_nonempty_string_array(metadata.get(field)):
+            failures.append(finding(rule_id, f"{subject}.metadataSurface.{field}", "store metadata field must be a non-empty string array", issue_id))
+    if metadata.get("implementationPath") != subject:
+        failures.append(finding(rule_id, f"{subject}.metadataSurface.implementationPath", "store metadata implementationPath must point to this artefact", issue_id))
+    if metadata.get("matchesCurrentSemantics") is not True:
+        failures.append(finding(rule_id, f"{subject}.metadataSurface.matchesCurrentSemantics", "store metadata must match current semantics", issue_id))
+    if metadata.get("localOnly") is not True:
+        failures.append(finding(rule_id, f"{subject}.metadataSurface.localOnly", "store metadata must remain localOnly", issue_id))
+    for field in ["appStoreRecordCreated", "playStoreRecordCreated", "storeAccountConfigured", "storeSubmissionCreated", "appReviewSubmitted"]:
+        if metadata.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.metadataSurface.{field}", "store action flag must remain false", issue_id))
+    for field in ["evidenceRefs", "semanticSourceRefs"]:
+        for ref_index, ref_value in enumerate(metadata.get(field, [])):
+            if not path_ref_exists(ref_value):
+                failures.append(finding(rule_id, f"{subject}.metadataSurface.{field}[{ref_index}]", "store metadata path reference must exist", issue_id))
+    if not STORE_USF935_CONFORMING.exists():
+        failures.append(finding(rule_id, rel(STORE_USF935_CONFORMING), "USF-935-style conforming store fixture is missing", issue_id))
+    else:
+        conforming = load_json(STORE_USF935_CONFORMING)
+        if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-007":
+            failures.append(finding(rule_id, rel(STORE_USF935_CONFORMING), "USF-935-style conforming fixture must target store validator rule 007", issue_id))
+    if not STORE_USF935_PLANTED.exists():
+        failures.append(finding(rule_id, rel(STORE_USF935_PLANTED), "USF-935-style planted store defect fixture is missing", issue_id))
+    else:
+        planted = load_json(STORE_USF935_PLANTED)
+        if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-007":
+            failures.append(finding(rule_id, rel(STORE_USF935_PLANTED), "USF-935-style planted fixture must fail store validator rule 007", issue_id))
+    proof_ladder = data.get("proofLadder", {})
+    for field in ["devLocalFixtureProof", "strictJsonParseRequired", "appSurfaceValidatorAllRequired", "appSurfaceSelftestRequired", "repositoryEvidenceValidationRequired"]:
+        if not isinstance(proof_ladder, dict) or proof_ladder.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must be true", issue_id))
+    for field in ["composeRequired", "stagingRequired"]:
+        if not isinstance(proof_ladder, dict) or proof_ladder.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
+def validate_deployment_evidence_pinning_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-011"
+    issue_id = "USF-1030"
+    subject = rel(DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "deployment evidence pinning artefact is missing", issue_id)]
+    data = load_json(DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "deployment evidence pinning artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "deployment evidence artefact must be owned by USF-1030", issue_id))
+    if data.get("lifecycleState") != "dev-local-evidence-fixture-implemented":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "deployment evidence lifecycleState must be dev-local-evidence-fixture-implemented", issue_id))
+    for index, authority_input in enumerate(data.get("authorityInputs", [])):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+    validation_guard = data.get("validationGuard", {})
+    for field in [
+        "existingAuthorityPathsMustExist",
+        "evidenceFixturesRequireCommitPinning",
+        "unknownOrWrongCommitEvidenceMustFailClosed",
+        "noDeploymentMayBePerformed",
+        "usf940StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "stagingAndDeploymentNonClaimsMustBePreserved",
+    ]:
+        if not isinstance(validation_guard, dict) or validation_guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    deployment = data.get("deploymentEvidenceSurface", {})
+    if not isinstance(deployment, dict):
+        failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface", "deploymentEvidenceSurface must be an object", issue_id))
+        deployment = {}
+    for field in ["surfaceId", "surfaceKind", "implementationPath", "targetCommitRef", "commitBinding", "artifactHashRef", "freshnessRef", "semanticVersionAuthorityRef", "nonClaimBoundary"]:
+        if not isinstance(deployment.get(field), str) or not deployment.get(field, "").strip():
+            failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.{field}", "deployment evidence field must be a non-empty string", issue_id))
+    for field in ["provenanceRefs", "evidenceRefs", "semanticSourceRefs"]:
+        if not has_nonempty_string_array(deployment.get(field)):
+            failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.{field}", "deployment evidence field must be a non-empty string array", issue_id))
+    if deployment.get("implementationPath") != subject:
+        failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.implementationPath", "deployment evidence implementationPath must point to this artefact", issue_id))
+    if deployment.get("commitBinding") == "current-git-head":
+        if deployment.get("targetCommitRef") != "__CURRENT_GIT_HEAD__":
+            failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.targetCommitRef", "current-git-head binding must use dynamic commit token", issue_id))
+    elif deployment.get("targetCommitRef") != current_head():
+        failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.targetCommitRef", "deployment evidence is not pinned to the governed current commit", issue_id))
+    if deployment.get("localOnly") is not True:
+        failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.localOnly", "deployment evidence fixture must remain localOnly", issue_id))
+    for field in ["deploymentPerformed", "stagingProofCreated", "cdnConfigured", "providerSetupCreated", "releaseAutomationCreated", "productionEvidenceCreated"]:
+        if deployment.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.{field}", "deployment action flag must remain false", issue_id))
+    for field in ["evidenceRefs", "semanticSourceRefs"]:
+        for ref_index, ref_value in enumerate(deployment.get(field, [])):
+            if not path_ref_exists(ref_value):
+                failures.append(finding(rule_id, f"{subject}.deploymentEvidenceSurface.{field}[{ref_index}]", "deployment evidence path reference must exist", issue_id))
+    if not DEPLOYMENT_USF940_CONFORMING.exists():
+        failures.append(finding(rule_id, rel(DEPLOYMENT_USF940_CONFORMING), "USF-940-style conforming deployment fixture is missing", issue_id))
+    else:
+        conforming = load_json(DEPLOYMENT_USF940_CONFORMING)
+        if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-012":
+            failures.append(finding(rule_id, rel(DEPLOYMENT_USF940_CONFORMING), "USF-940-style conforming fixture must target deployment validator rule 012", issue_id))
+    if not DEPLOYMENT_USF940_PLANTED.exists():
+        failures.append(finding(rule_id, rel(DEPLOYMENT_USF940_PLANTED), "USF-940-style planted deployment defect fixture is missing", issue_id))
+    else:
+        planted = load_json(DEPLOYMENT_USF940_PLANTED)
+        if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-012":
+            failures.append(finding(rule_id, rel(DEPLOYMENT_USF940_PLANTED), "USF-940-style planted fixture must fail deployment validator rule 012", issue_id))
+    proof_ladder = data.get("proofLadder", {})
+    for field in ["devLocalFixtureProof", "strictJsonParseRequired", "appSurfaceValidatorAllRequired", "appSurfaceSelftestRequired", "repositoryEvidenceValidationRequired"]:
+        if not isinstance(proof_ladder, dict) or proof_ladder.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must be true", issue_id))
+    for field in ["composeRequired", "stagingRequired"]:
+        if not isinstance(proof_ladder, dict) or proof_ladder.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -2390,6 +2644,9 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_i18n_baseline_implementation())
     failures.extend(validate_accessibility_baseline_implementation())
     failures.extend(validate_notification_consent_permission_implementation())
+    failures.extend(validate_ads_monetisation_placeholder_implementation())
+    failures.extend(validate_store_metadata_implementation())
+    failures.extend(validate_deployment_evidence_pinning_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -2437,6 +2694,9 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         I18N_BASELINE_IMPLEMENTATION,
         ACCESSIBILITY_BASELINE_IMPLEMENTATION,
         NOTIFICATION_CONSENT_PERMISSION_IMPLEMENTATION,
+        ADS_MONETISATION_PLACEHOLDER_IMPLEMENTATION,
+        STORE_METADATA_IMPLEMENTATION,
+        DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION,
     ]
     return {
         "mode": mode,

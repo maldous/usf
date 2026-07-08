@@ -1,0 +1,116 @@
+{
+  "artifactId": "usf.app-surface-deployment-evidence-pinning-surface",
+  "title": "App-surface deployment evidence pinning surface",
+  "ownerIssueId": "USF-1030",
+  "lifecycleState": "dev-local-evidence-fixture-implemented",
+  "authorityNotice": "This artefact records the bounded local deployment evidence pinning surface for USF-1030. It proves local commit binding, artifact hash, provenance, freshness, semantic version authority, and wrong-commit fail-closed semantics without deploying anything. It does not create deployment, staging, CDN, provider setup, release automation, production evidence, deployment readiness, staging readiness, production readiness, live-provider readiness, release readiness, or human acceptance.",
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "authorityType": "semantic-definition",
+      "description": "Proof evidence report semantics for commit-pinned evidence."
+    },
+    {
+      "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "authorityType": "semantic-definition",
+      "description": "Release and semantic version authority."
+    },
+    {
+      "path": "tools/validate-app-surface/fixtures/conforming/012-deployment-evidence-current-commit.json",
+      "authorityType": "validator-fixture",
+      "description": "USF-940-style conforming deployment evidence fixture."
+    },
+    {
+      "path": "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json",
+      "authorityType": "validator-planted-defect",
+      "description": "USF-940-style planted defect proving wrong-commit deployment evidence fails closed."
+    }
+  ],
+  "deploymentEvidenceSurface": {
+    "surfaceId": "deployment-evidence-local-current-commit-fixture",
+    "surfaceKind": "local-evidence-fixture",
+    "implementationPath": "docs/architecture/app-surface-deployment-evidence-pinning-surface.json",
+    "targetCommitRef": "__CURRENT_GIT_HEAD__",
+    "commitBinding": "current-git-head",
+    "artifactHashRef": "artifact-hash-required-before-deployment-claim",
+    "provenanceRefs": [
+      "commit-provenance-required"
+    ],
+    "freshnessRef": "freshness-must-fail-closed",
+    "semanticVersionAuthorityRef": "semantic-version-authority-required",
+    "evidenceRefs": [
+      "tools/validate-app-surface/fixtures/conforming/012-deployment-evidence-current-commit.json",
+      "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json"
+    ],
+    "semanticSourceRefs": [
+      "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+      "docs/architecture/app-surface-release-provisioning-semantics.json"
+    ],
+    "localOnly": true,
+    "deploymentPerformed": false,
+    "stagingProofCreated": false,
+    "cdnConfigured": false,
+    "providerSetupCreated": false,
+    "releaseAutomationCreated": false,
+    "productionEvidenceCreated": false,
+    "nonClaimBoundary": "local deployment evidence pinning fixture only; no deployment, staging, CDN, provider setup, release automation, production evidence, deployment readiness, staging readiness, production readiness, live-provider readiness, release readiness, or human-acceptance claim"
+  },
+  "outOfScopeDeploymentActions": [
+    {
+      "actionId": "deployment",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "staging-proof",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "cdn-configuration",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "provider-setup",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "release-automation",
+      "status": "not-authorised"
+    },
+    {
+      "actionId": "production-evidence",
+      "status": "not-authorised"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "evidenceFixturesRequireCommitPinning": true,
+    "unknownOrWrongCommitEvidenceMustFailClosed": true,
+    "noDeploymentMayBePerformed": true,
+    "usf940StyleFixtureMustRemainPresent": true,
+    "nonClaimsMustAllBeFalse": true,
+    "stagingAndDeploymentNonClaimsMustBePreserved": true
+  },
+  "proofLadder": {
+    "devLocalFixtureProof": true,
+    "strictJsonParseRequired": true,
+    "appSurfaceValidatorAllRequired": true,
+    "appSurfaceSelftestRequired": true,
+    "repositoryEvidenceValidationRequired": true,
+    "composeRequired": false,
+    "stagingRequired": false
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false,
+    "releaseReadiness": false
+  }
+}
