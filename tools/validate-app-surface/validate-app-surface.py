@@ -29,8 +29,11 @@ MOBILE_SCAFFOLD = ROOT / "docs/architecture/app-surface-mobile-bounded-local-sca
 LOCAL_IN_MEMORY_RUNTIME = ROOT / "docs/architecture/app-surface-local-in-memory-runtime.json"
 SHARED_CLIENT_CONSUMPTION_PATH = ROOT / "docs/architecture/app-surface-shared-client-consumption-path.json"
 COMMAND_FORM_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-command-form-implementation.json"
+QUERY_LIST_DETAIL_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-query-list-detail-implementation.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
+USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
+USF932_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/004-query-missing-cache-privacy.json"
 USF930_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/002-route-with-capability-mapping.json"
 USF930_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/002-route-without-capability-mapping.json"
 
@@ -848,6 +851,259 @@ def validate_command_form_implementation() -> list[dict[str, str]]:
     return failures
 
 
+def validate_query_list_detail_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-003"
+    issue_id = "USF-1022"
+    subject = rel(QUERY_LIST_DETAIL_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not QUERY_LIST_DETAIL_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "query list/detail implementation artefact is missing", issue_id)]
+    data = load_json(QUERY_LIST_DETAIL_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "query list/detail implementation artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, subject, "artefact ownerIssueId must be USF-1022", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, subject, "artefact lifecycleState must be bounded-local-implemented", issue_id))
+    for path in data.get("authorityInputs", []):
+        if not isinstance(path, str) or not path_exists(path):
+            failures.append(finding(rule_id, subject, f"authority input does not exist: {path}", issue_id))
+    guard = data.get("validationGuard", {})
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "queryViewsMustMapToSemanticQueryAuthority",
+        "cacheFreshnessAndPolicyMustExist",
+        "privacyClassificationMustExist",
+        "tenantBoundaryMustExist",
+        "permissionErrorAuditTelemetryMappingsMustExist",
+        "i18nAndAccessibilityRefsMustExist",
+        "unknownQueryViewsMustFailClosed",
+        "usf932StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "liveServerStateProviderMustRemainForbidden",
+        "persistentSensitiveStorageMustRemainForbidden",
+    ]
+    if not isinstance(guard, dict):
+        failures.append(finding(rule_id, subject, "validationGuard must be an object", issue_id))
+    else:
+        for flag in required_guard_flags:
+            if guard.get(flag) is not True:
+                failures.append(finding(rule_id, f"{subject}.validationGuard.{flag}", "validation guard flag must be true", issue_id))
+
+    runtime = load_json(LOCAL_IN_MEMORY_RUNTIME) if LOCAL_IN_MEMORY_RUNTIME.exists() else {}
+    shared_client = load_json(SHARED_CLIENT_CONSUMPTION_PATH) if SHARED_CLIENT_CONSUMPTION_PATH.exists() else {}
+    conforming = load_json(USF932_CONFORMING) if USF932_CONFORMING.exists() else {}
+    planted = load_json(USF932_PLANTED) if USF932_PLANTED.exists() else {}
+    if not isinstance(runtime, dict):
+        runtime = {}
+    if not isinstance(shared_client, dict):
+        shared_client = {}
+    authority: dict[str, set[str]] = {
+        "queryRefs": ids_from_semantic_inputs(runtime, "queries"),
+        "capabilityIds": ids_from_semantic_inputs(runtime, "capabilities"),
+        "permissionRefs": ids_from_semantic_inputs(runtime, "permissions"),
+        "tenantBoundaryRefs": ids_from_semantic_inputs(runtime, "tenantContexts"),
+        "errorRefs": ids_from_semantic_inputs(runtime, "errorRefs"),
+        "auditEventRefs": ids_from_semantic_inputs(runtime, "auditEvents"),
+        "cacheFreshnessRefs": set(),
+        "cachePolicyRefs": set(),
+        "privacyClassificationRefs": set(),
+        "telemetryRefs": set(),
+    }
+    shared_mappings = [
+        item
+        for item in shared_client.get("mappings", [])
+        if isinstance(item, dict) and item.get("behaviourClass") == "queries"
+    ]
+    for mapping in shared_mappings:
+        if isinstance(mapping.get("commandOrQueryOrWorkflowOrEventId"), str):
+            authority["queryRefs"].add(mapping["commandOrQueryOrWorkflowOrEventId"])
+        if isinstance(mapping.get("capabilityId"), str):
+            authority["capabilityIds"].add(mapping["capabilityId"])
+        for source_field, authority_key in [
+            ("permissionRefs", "permissionRefs"),
+            ("errorRefs", "errorRefs"),
+            ("auditEventRefs", "auditEventRefs"),
+            ("privacyCategoryRefs", "privacyClassificationRefs"),
+            ("telemetryRefs", "telemetryRefs"),
+        ]:
+            values = mapping.get(source_field, [])
+            if isinstance(values, list):
+                authority[authority_key].update(item for item in values if isinstance(item, str) and item.strip())
+        offline_posture = mapping.get("offlineRetryCachePosture", {})
+        if isinstance(offline_posture, dict) and isinstance(offline_posture.get("cacheSemanticsRef"), str):
+            authority["cachePolicyRefs"].add(offline_posture["cacheSemanticsRef"])
+    shared_by_query = {
+        mapping.get("commandOrQueryOrWorkflowOrEventId"): mapping
+        for mapping in shared_mappings
+        if isinstance(mapping.get("commandOrQueryOrWorkflowOrEventId"), str)
+    }
+    conforming_query = conforming.get("query", {}) if isinstance(conforming, dict) else {}
+    if isinstance(conforming_query, dict):
+        if isinstance(conforming_query.get("cacheFreshnessRef"), str):
+            authority["cacheFreshnessRefs"].add(conforming_query["cacheFreshnessRef"])
+        if isinstance(conforming_query.get("privacyClassificationRef"), str):
+            authority["privacyClassificationRefs"].add(conforming_query["privacyClassificationRef"])
+    authority["cachePolicyRefs"].update(
+        [
+            "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+            "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping",
+        ]
+    )
+    component_fixtures = runtime.get("componentFixtures", []) if isinstance(runtime.get("componentFixtures", []), list) else []
+    fixtures_by_id = {
+        fixture.get("fixtureId"): fixture
+        for fixture in component_fixtures
+        if isinstance(fixture, dict) and isinstance(fixture.get("fixtureId"), str)
+    }
+    required_string_fields = [
+        "viewId",
+        "viewKind",
+        "componentFixtureRef",
+        "queryRef",
+        "capabilityId",
+        "tenantBoundaryRef",
+        "cacheFreshnessRef",
+        "errorStateRef",
+        "nonClaimBoundary",
+    ]
+    required_array_fields = [
+        "permissionRefs",
+        "cachePolicyRefs",
+        "privacyClassificationRefs",
+        "errorRefs",
+        "auditEventRefs",
+        "i18nKeyRefs",
+        "accessibilityRefs",
+        "telemetryRefs",
+        "semanticSourceRefs",
+        "proofRefs",
+    ]
+    query_views = data.get("implementedQueryViews", [])
+    if not isinstance(query_views, list) or not query_views:
+        failures.append(finding(rule_id, subject, "implementedQueryViews must be a non-empty array", issue_id))
+        query_views = []
+    seen_kinds: set[str] = set()
+    seen_ids: set[str] = set()
+    for index, view in enumerate(query_views):
+        if not isinstance(view, dict):
+            failures.append(finding(rule_id, f"{subject}.implementedQueryViews.{index}", "implemented query view must be an object", issue_id))
+            continue
+        view_id = view.get("viewId") if isinstance(view.get("viewId"), str) and view["viewId"].strip() else f"implementedQueryViews.{index}"
+        view_subject = f"{subject}.implementedQueryViews.{view_id}"
+        if view_id in seen_ids:
+            failures.append(finding(rule_id, view_subject, "duplicate viewId", issue_id))
+        seen_ids.add(str(view_id))
+        if isinstance(view.get("viewKind"), str):
+            seen_kinds.add(view["viewKind"])
+        for field in required_string_fields:
+            if not isinstance(view.get(field), str) or not view[field].strip():
+                failures.append(finding(rule_id, view_subject, f"missing {field}", issue_id))
+        for field in required_array_fields:
+            if not has_nonempty_string_array(view.get(field)):
+                failures.append(finding(rule_id, view_subject, f"missing {field}", issue_id))
+        if view.get("viewKind") not in {"list", "detail"}:
+            failures.append(finding(rule_id, view_subject, "viewKind must be list or detail", issue_id))
+        if view.get("viewKind") == "list":
+            for field in ["resultItemShapeRef", "emptyStateRef"]:
+                if not isinstance(view.get(field), str) or not view[field].strip():
+                    failures.append(finding(rule_id, view_subject, f"missing {field}", issue_id))
+        if view.get("viewKind") == "detail":
+            for field in ["recordIdentityRef", "notFoundStateRef"]:
+                if not isinstance(view.get(field), str) or not view[field].strip():
+                    failures.append(finding(rule_id, view_subject, f"missing {field}", issue_id))
+        for field in [
+            "cachePolicyRefs",
+            "privacyClassificationRefs",
+            "i18nKeyRefs",
+            "accessibilityRefs",
+            "semanticSourceRefs",
+            "proofRefs",
+        ]:
+            values = view.get(field, [])
+            if isinstance(values, list):
+                for path_ref in values:
+                    if not path_ref_exists(path_ref):
+                        failures.append(finding(rule_id, view_subject, f"{field} path does not exist: {path_ref}", issue_id))
+        for field, authority_key in [
+            ("queryRef", "queryRefs"),
+            ("capabilityId", "capabilityIds"),
+            ("tenantBoundaryRef", "tenantBoundaryRefs"),
+            ("cacheFreshnessRef", "cacheFreshnessRefs"),
+        ]:
+            value = view.get(field)
+            if not isinstance(value, str) or value not in authority[authority_key]:
+                failures.append(finding(rule_id, view_subject, f"{field} lacks repository authority", issue_id))
+        for field, authority_key in [
+            ("permissionRefs", "permissionRefs"),
+            ("cachePolicyRefs", "cachePolicyRefs"),
+            ("privacyClassificationRefs", "privacyClassificationRefs"),
+            ("errorRefs", "errorRefs"),
+            ("auditEventRefs", "auditEventRefs"),
+            ("telemetryRefs", "telemetryRefs"),
+        ]:
+            values = view.get(field, [])
+            if isinstance(values, list):
+                for value in values:
+                    if not isinstance(value, str) or value not in authority[authority_key]:
+                        failures.append(finding(rule_id, view_subject, f"{field} lacks repository authority: {value}", issue_id))
+        fixture = fixtures_by_id.get(view.get("componentFixtureRef"))
+        if not isinstance(fixture, dict):
+            failures.append(finding(rule_id, view_subject, "componentFixtureRef must map to local runtime fixture authority", issue_id))
+        else:
+            fixture_queries = fixture.get("queryRefs", [])
+            if view.get("queryRef") not in fixture_queries:
+                failures.append(finding(rule_id, view_subject, "component fixture must reference the queryRef", issue_id))
+        shared_mapping = shared_by_query.get(view.get("queryRef"))
+        if not isinstance(shared_mapping, dict):
+            failures.append(finding(rule_id, view_subject, "queryRef must map to shared-client query authority", issue_id))
+        else:
+            for field in ["capabilityId", "permissionRefs", "errorRefs", "auditEventRefs"]:
+                if view.get(field) != shared_mapping.get(field):
+                    failures.append(finding(rule_id, view_subject, f"{field} must match shared-client query authority", issue_id))
+            for field, view_field in [
+                ("privacyCategoryRefs", "privacyClassificationRefs"),
+                ("telemetryRefs", "telemetryRefs"),
+            ]:
+                shared_values = shared_mapping.get(field, [])
+                view_values = set(view.get(view_field, [])) if isinstance(view.get(view_field), list) else set()
+                if isinstance(shared_values, list):
+                    for value in shared_values:
+                        if isinstance(value, str) and value not in view_values:
+                            failures.append(finding(rule_id, view_subject, f"{view_field} must include shared-client query authority: {value}", issue_id))
+            offline_posture = shared_mapping.get("offlineRetryCachePosture", {})
+            if isinstance(offline_posture, dict) and isinstance(offline_posture.get("cacheSemanticsRef"), str):
+                cache_values = set(view.get("cachePolicyRefs", [])) if isinstance(view.get("cachePolicyRefs"), list) else set()
+                if offline_posture["cacheSemanticsRef"] not in cache_values:
+                    failures.append(finding(rule_id, view_subject, "cachePolicyRefs must include shared-client cache semantics authority", issue_id))
+    for required_kind in ["list", "detail"]:
+        if required_kind not in seen_kinds:
+            failures.append(finding(rule_id, subject, f"implementedQueryViews must include {required_kind}", issue_id))
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    observed_out_of_scope = {
+        item.get("surface"): item
+        for item in out_of_scope
+        if isinstance(item, dict)
+    } if isinstance(out_of_scope, list) else {}
+    required_out_of_scope = {
+        "live-server-state-provider": {"status": "not-authorised"},
+        "persistent-sensitive-storage": {"status": "not-authorised"},
+        "realtime-subscription": {"status": "not-authorised"},
+        "background-refresh": {"status": "not-authorised"},
+        "state-cache-query-client": {"ownerIssueId": "USF-1023", "status": "owned-by-later-issue"},
+    }
+    for surface, expected in required_out_of_scope.items():
+        item = observed_out_of_scope.get(surface)
+        if not isinstance(item, dict) or any(item.get(key) != value for key, value in expected.items()):
+            failures.append(finding(rule_id, subject, f"{surface} out-of-scope boundary is missing or incorrect", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-004":
+        failures.append(finding(rule_id, rel(USF932_CONFORMING), "USF-932 conforming fixture must remain wired", issue_id))
+    if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-004":
+        failures.append(finding(rule_id, rel(USF932_PLANTED), "USF-932 planted fixture must remain wired", issue_id))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -866,6 +1122,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_makefile_wiring())
     failures.extend(validate_route_capability_implementation())
     failures.extend(validate_command_form_implementation())
+    failures.extend(validate_query_list_detail_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -907,6 +1164,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
     real_implementation_paths = [
         ROUTE_CAPABILITY_IMPLEMENTATION,
         COMMAND_FORM_IMPLEMENTATION,
+        QUERY_LIST_DETAIL_IMPLEMENTATION,
     ]
     return {
         "mode": mode,

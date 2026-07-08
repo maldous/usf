@@ -738,3 +738,486 @@ export function exerciseLocalCommandForm(
     deploymentUsed: false,
   };
 }
+
+export type LocalQueryViewKind = "list" | "detail";
+
+export type LocalQueryListDetailMapping = {
+  viewId: string;
+  viewKind: LocalQueryViewKind;
+  componentFixtureRef: string;
+  queryRef: string;
+  capabilityId: string;
+  permissionRefs: string[];
+  tenantBoundaryRef: string;
+  cacheFreshnessRef: string;
+  cachePolicyRefs: string[];
+  privacyClassificationRefs: string[];
+  errorRefs: string[];
+  auditEventRefs: string[];
+  i18nKeyRefs: string[];
+  accessibilityRefs: string[];
+  telemetryRefs: string[];
+  semanticSourceRefs: string[];
+  proofRefs: string[];
+  resultItemShapeRef?: string;
+  recordIdentityRef?: string;
+  emptyStateRef?: string;
+  notFoundStateRef?: string;
+  errorStateRef: string;
+  nonClaimBoundary: string;
+};
+
+export type LocalQueryListDetailRegistry = {
+  artifactId: string;
+  ownerIssueId: string;
+  providerMode: LocalAppSurfaceProviderMode;
+  environment: LocalAppSurfaceEnvironment;
+  queryViews: LocalQueryListDetailMapping[];
+  unknownQueryViewPolicy: "fail-closed";
+  serverStateProviderAllowed: false;
+  persistentSensitiveStorageAllowed: false;
+  realtimeSubscriptionAllowed: false;
+  backgroundRefreshAllowed: false;
+  nonClaims: Record<string, boolean>;
+};
+
+export type LocalQueryListDetailSemanticAuthority = {
+  queryRefs: ReadonlySet<string>;
+  capabilityIds: ReadonlySet<string>;
+  permissionIds: ReadonlySet<string>;
+  tenantBoundaryIds: ReadonlySet<string>;
+  cacheFreshnessRefs: ReadonlySet<string>;
+  cachePolicyRefs: ReadonlySet<string>;
+  privacyClassificationRefs: ReadonlySet<string>;
+  errorIds: ReadonlySet<string>;
+  auditEventIds: ReadonlySet<string>;
+  componentFixtureIds: ReadonlySet<string>;
+  i18nKeyRefs: ReadonlySet<string>;
+  accessibilityRefs: ReadonlySet<string>;
+  telemetryRefs: ReadonlySet<string>;
+  semanticSourceRefs: ReadonlySet<string>;
+  proofRefs: ReadonlySet<string>;
+};
+
+export type LocalQueryListDetailValidationResult = {
+  ok: boolean;
+  findings: string[];
+};
+
+export type LocalQueryListDetailExerciseOutcome = {
+  viewId: string;
+  viewKind: LocalQueryViewKind;
+  queryRef: string;
+  capabilityId: string;
+  tenantBoundaryRef: string;
+  permissionRefsChecked: string[];
+  cacheFreshnessRefChecked: string;
+  cachePolicyRefsChecked: string[];
+  privacyClassificationRefsChecked: string[];
+  errorRefsAvailable: string[];
+  auditEventRefsEmitted: string[];
+  i18nKeyRefsChecked: string[];
+  accessibilityRefsChecked: string[];
+  telemetryRefsChecked: string[];
+  providerMode: LocalAppSurfaceProviderMode;
+  serverStateProviderUsed: false;
+  persistentSensitiveStorageUsed: false;
+  realtimeSubscriptionUsed: false;
+  backgroundRefreshUsed: false;
+  stagingUsed: false;
+  deploymentUsed: false;
+};
+
+const REQUIRED_QUERY_VIEW_STRING_FIELDS = [
+  "viewId",
+  "viewKind",
+  "componentFixtureRef",
+  "queryRef",
+  "capabilityId",
+  "tenantBoundaryRef",
+  "cacheFreshnessRef",
+  "errorStateRef",
+  "nonClaimBoundary",
+] as const;
+
+const REQUIRED_QUERY_VIEW_ARRAY_FIELDS = [
+  "permissionRefs",
+  "cachePolicyRefs",
+  "privacyClassificationRefs",
+  "errorRefs",
+  "auditEventRefs",
+  "i18nKeyRefs",
+  "accessibilityRefs",
+  "telemetryRefs",
+  "semanticSourceRefs",
+  "proofRefs",
+] as const;
+
+const REQUIRED_QUERY_VIEW_NON_CLAIMS = [
+  "cacheReadiness",
+  "syncReadiness",
+  "queryLibraryReadiness",
+  "serverStateProviderReadiness",
+  "persistentStorageReadiness",
+  "providerReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "productionReadiness",
+  "liveProviderReadiness",
+  "privacyCompliance",
+  "humanAcceptance",
+] as const;
+
+export const LOCAL_QUERY_LIST_DETAIL_REGISTRY = {
+  artifactId: "usf.app-surface-query-list-detail-registry",
+  ownerIssueId: "USF-1022",
+  providerMode: "in-memory-only",
+  environment: "dev-local",
+  unknownQueryViewPolicy: "fail-closed",
+  serverStateProviderAllowed: false,
+  persistentSensitiveStorageAllowed: false,
+  realtimeSubscriptionAllowed: false,
+  backgroundRefreshAllowed: false,
+  queryViews: [
+    {
+      viewId: "query-view-developer-profile-list",
+      viewKind: "list",
+      componentFixtureRef: "component-fixture-developer-profile-summary",
+      queryRef: "query.developerProfile",
+      capabilityId: "graphql-federation-generated-client-disposition",
+      permissionRefs: ["developer:read"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      cacheFreshnessRef: "query-cache-freshness-required",
+      cachePolicyRefs: [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping",
+      ],
+      privacyClassificationRefs: [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+      ],
+      errorRefs: ["typed-error-problem-details-model"],
+      auditEventRefs: ["client-audit-event-emission", "graphql.developerProfile"],
+      i18nKeyRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#query-list-empty-error-state-keys"],
+      accessibilityRefs: ["docs/architecture/app-surface-accessibility-semantics.json#query-list-keyboard-focus-screen-reader-labels"],
+      telemetryRefs: [
+        "tenant-user-context-propagation",
+        "docs/architecture/generated-client-contract-validation-semantics.json#capabilityToScreenViewModelMapping",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json",
+      ],
+      proofRefs: [
+        "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      resultItemShapeRef: "developer-profile-summary-result-item",
+      emptyStateRef: "developer-profile-summary-empty-state",
+      errorStateRef: "developer-profile-summary-error-state",
+      nonClaimBoundary: "local query list view-model mapping only; no live server-state provider, persistent storage, query library readiness, cache readiness, sync readiness, deployment, staging, privacy compliance, production, live-provider, or human-acceptance readiness claim",
+    },
+    {
+      viewId: "query-view-developer-profile-detail",
+      viewKind: "detail",
+      componentFixtureRef: "component-fixture-developer-profile-summary",
+      queryRef: "query.developerProfile",
+      capabilityId: "graphql-federation-generated-client-disposition",
+      permissionRefs: ["developer:read"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      cacheFreshnessRef: "query-cache-freshness-required",
+      cachePolicyRefs: [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping",
+      ],
+      privacyClassificationRefs: [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+      ],
+      errorRefs: ["typed-error-problem-details-model"],
+      auditEventRefs: ["client-audit-event-emission", "graphql.developerProfile"],
+      i18nKeyRefs: ["docs/architecture/app-surface-i18n-localisation-semantics.json#query-detail-not-found-error-state-keys"],
+      accessibilityRefs: ["docs/architecture/app-surface-accessibility-semantics.json#query-detail-keyboard-focus-screen-reader-labels"],
+      telemetryRefs: [
+        "tenant-user-context-propagation",
+        "docs/architecture/generated-client-contract-validation-semantics.json#capabilityToScreenViewModelMapping",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json",
+      ],
+      proofRefs: [
+        "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      recordIdentityRef: "developer-profile-summary-record-identity",
+      notFoundStateRef: "developer-profile-summary-not-found-state",
+      errorStateRef: "developer-profile-summary-error-state",
+      nonClaimBoundary: "local query detail view-model mapping only; no live server-state provider, persistent storage, query library readiness, cache readiness, sync readiness, deployment, staging, privacy compliance, production, live-provider, or human-acceptance readiness claim",
+    },
+  ],
+  nonClaims: {
+    cacheReadiness: false,
+    syncReadiness: false,
+    queryLibraryReadiness: false,
+    serverStateProviderReadiness: false,
+    persistentStorageReadiness: false,
+    providerReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    productionReadiness: false,
+    liveProviderReadiness: false,
+    privacyCompliance: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalQueryListDetailRegistry;
+
+function validateQueryViewNonClaims(nonClaims: unknown): string[] {
+  if (!isRecord(nonClaims)) {
+    return ["query-list-detail-registry:missing-non-claims"];
+  }
+  const findings: string[] = [];
+  for (const claim of REQUIRED_QUERY_VIEW_NON_CLAIMS) {
+    if (!(claim in nonClaims)) {
+      findings.push(`query-list-detail-registry:missing-non-claim:${claim}`);
+    } else if (nonClaims[claim] !== false) {
+      findings.push(`query-list-detail-registry:overclaimed:${claim}`);
+    }
+  }
+  for (const [claim, value] of Object.entries(nonClaims)) {
+    if (value !== false) {
+      findings.push(`query-list-detail-registry:overclaimed:${claim}`);
+    }
+  }
+  return findings;
+}
+
+function validateQueryViewArrayAuthority(
+  findings: string[],
+  viewId: string,
+  refs: unknown,
+  authorityIds: ReadonlySet<string>,
+  findingPrefix: string,
+): void {
+  const values = hasNonEmptyStringArray(refs) ? refs : [];
+  for (const ref of values) {
+    if (!authorityIds.has(ref)) {
+      findings.push(`${viewId}:${findingPrefix}:${ref}`);
+    }
+  }
+}
+
+function validateQueryViewStringAuthority(
+  findings: string[],
+  viewId: string,
+  ref: unknown,
+  authorityIds: ReadonlySet<string>,
+  findingPrefix: string,
+): void {
+  if (!isNonEmptyString(ref) || !authorityIds.has(ref)) {
+    findings.push(`${viewId}:${findingPrefix}:${isNonEmptyString(ref) ? ref : "missing"}`);
+  }
+}
+
+function queryViewArraysEqual(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function queryViewMatchesRegistry(
+  registered: (typeof LOCAL_QUERY_LIST_DETAIL_REGISTRY.queryViews)[number],
+  candidate: LocalQueryListDetailMapping,
+): boolean {
+  for (const field of REQUIRED_QUERY_VIEW_STRING_FIELDS) {
+    if (registered[field] !== candidate[field]) {
+      return false;
+    }
+  }
+  for (const field of REQUIRED_QUERY_VIEW_ARRAY_FIELDS) {
+    if (!queryViewArraysEqual(registered[field], candidate[field])) {
+      return false;
+    }
+  }
+  if (registered.viewKind === "list") {
+    return registered.resultItemShapeRef === candidate.resultItemShapeRef && registered.emptyStateRef === candidate.emptyStateRef;
+  }
+  return registered.recordIdentityRef === candidate.recordIdentityRef && registered.notFoundStateRef === candidate.notFoundStateRef;
+}
+
+function validateQueryView(
+  queryView: LocalQueryListDetailMapping | unknown,
+  index: number,
+  semanticAuthority?: LocalQueryListDetailSemanticAuthority,
+): string[] {
+  if (!isRecord(queryView)) {
+    return [`query-view-${index}:missing`];
+  }
+  const viewId = isNonEmptyString(queryView.viewId) ? queryView.viewId : `query-view-${index}`;
+  const findings: string[] = [];
+  for (const field of REQUIRED_QUERY_VIEW_STRING_FIELDS) {
+    if (!isNonEmptyString(queryView[field])) {
+      findings.push(`${viewId}:missing-${field}`);
+    }
+  }
+  for (const field of REQUIRED_QUERY_VIEW_ARRAY_FIELDS) {
+    if (!hasNonEmptyStringArray(queryView[field])) {
+      findings.push(`${viewId}:missing-${field}`);
+    }
+  }
+  if (queryView.viewKind !== "list" && queryView.viewKind !== "detail") {
+    findings.push(`${viewId}:unknown-viewKind`);
+  }
+  if (queryView.viewKind === "list") {
+    if (!isNonEmptyString(queryView.resultItemShapeRef)) {
+      findings.push(`${viewId}:missing-resultItemShapeRef`);
+    }
+    if (!isNonEmptyString(queryView.emptyStateRef)) {
+      findings.push(`${viewId}:missing-emptyStateRef`);
+    }
+  }
+  if (queryView.viewKind === "detail") {
+    if (!isNonEmptyString(queryView.recordIdentityRef)) {
+      findings.push(`${viewId}:missing-recordIdentityRef`);
+    }
+    if (!isNonEmptyString(queryView.notFoundStateRef)) {
+      findings.push(`${viewId}:missing-notFoundStateRef`);
+    }
+  }
+  for (const key of FORBIDDEN_EXTERNAL_KEYS) {
+    if (key in queryView) {
+      findings.push(`${viewId}:${key}-not-authorised`);
+    }
+  }
+  if (semanticAuthority) {
+    validateQueryViewStringAuthority(findings, viewId, queryView.queryRef, semanticAuthority.queryRefs, "query-authority-missing");
+    validateQueryViewStringAuthority(findings, viewId, queryView.capabilityId, semanticAuthority.capabilityIds, "capability-authority-missing");
+    validateQueryViewStringAuthority(findings, viewId, queryView.tenantBoundaryRef, semanticAuthority.tenantBoundaryIds, "tenant-authority-missing");
+    validateQueryViewStringAuthority(findings, viewId, queryView.componentFixtureRef, semanticAuthority.componentFixtureIds, "component-fixture-authority-missing");
+    validateQueryViewStringAuthority(findings, viewId, queryView.cacheFreshnessRef, semanticAuthority.cacheFreshnessRefs, "cache-freshness-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.permissionRefs, semanticAuthority.permissionIds, "permission-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.cachePolicyRefs, semanticAuthority.cachePolicyRefs, "cache-policy-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.privacyClassificationRefs, semanticAuthority.privacyClassificationRefs, "privacy-classification-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.errorRefs, semanticAuthority.errorIds, "error-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.auditEventRefs, semanticAuthority.auditEventIds, "audit-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.i18nKeyRefs, semanticAuthority.i18nKeyRefs, "i18n-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.accessibilityRefs, semanticAuthority.accessibilityRefs, "accessibility-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.telemetryRefs, semanticAuthority.telemetryRefs, "telemetry-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.semanticSourceRefs, semanticAuthority.semanticSourceRefs, "semantic-source-authority-missing");
+    validateQueryViewArrayAuthority(findings, viewId, queryView.proofRefs, semanticAuthority.proofRefs, "proof-authority-missing");
+  }
+  return findings;
+}
+
+export function validateLocalQueryListDetailRegistry(
+  registry: LocalQueryListDetailRegistry | unknown,
+  semanticAuthority?: LocalQueryListDetailSemanticAuthority,
+): LocalQueryListDetailValidationResult {
+  if (!isRecord(registry)) {
+    return { ok: false, findings: ["query-list-detail-registry:missing"] };
+  }
+  const findings: string[] = [];
+  if (registry.ownerIssueId !== "USF-1022") {
+    findings.push("query-list-detail-registry:unexpected-owner-issue");
+  }
+  if (registry.providerMode !== "in-memory-only") {
+    findings.push("query-list-detail-registry:provider-mode-must-be-in-memory-only");
+  }
+  if (registry.environment !== "dev-local") {
+    findings.push("query-list-detail-registry:environment-must-be-dev-local");
+  }
+  if (registry.unknownQueryViewPolicy !== "fail-closed") {
+    findings.push("query-list-detail-registry:unknown-query-view-policy-must-fail-closed");
+  }
+  if (registry.serverStateProviderAllowed !== false) {
+    findings.push("query-list-detail-registry:server-state-provider-not-authorised");
+  }
+  if (registry.persistentSensitiveStorageAllowed !== false) {
+    findings.push("query-list-detail-registry:persistent-sensitive-storage-not-authorised");
+  }
+  if (registry.realtimeSubscriptionAllowed !== false) {
+    findings.push("query-list-detail-registry:realtime-subscription-not-authorised");
+  }
+  if (registry.backgroundRefreshAllowed !== false) {
+    findings.push("query-list-detail-registry:background-refresh-not-authorised");
+  }
+  if (!Array.isArray(registry.queryViews) || registry.queryViews.length === 0) {
+    findings.push("query-list-detail-registry:missing-queryViews");
+  } else {
+    const seenViewIds = new Set<string>();
+    const viewKinds = new Set<string>();
+    registry.queryViews.forEach((queryView, index) => {
+      findings.push(...validateQueryView(queryView, index, semanticAuthority));
+      if (isRecord(queryView) && isNonEmptyString(queryView.viewId)) {
+        if (seenViewIds.has(queryView.viewId)) {
+          findings.push(`${queryView.viewId}:duplicate-view-id`);
+        }
+        seenViewIds.add(queryView.viewId);
+      }
+      if (isRecord(queryView) && isNonEmptyString(queryView.viewKind)) {
+        viewKinds.add(queryView.viewKind);
+      }
+    });
+    for (const requiredKind of ["list", "detail"]) {
+      if (!viewKinds.has(requiredKind)) {
+        findings.push(`query-list-detail-registry:missing-view-kind:${requiredKind}`);
+      }
+    }
+  }
+  findings.push(...validateQueryViewNonClaims(registry.nonClaims));
+  return { ok: findings.length === 0, findings };
+}
+
+export function getLocalQueryViewById(viewId: string): LocalQueryListDetailMapping {
+  const queryView = LOCAL_QUERY_LIST_DETAIL_REGISTRY.queryViews.find((candidate) => candidate.viewId === viewId);
+  if (!queryView) {
+    throw new Error(`query-view-unknown:${viewId}`);
+  }
+  return queryView;
+}
+
+export function exerciseLocalQueryView(
+  queryView: LocalQueryListDetailMapping,
+  semanticAuthority?: LocalQueryListDetailSemanticAuthority,
+): LocalQueryListDetailExerciseOutcome {
+  const registered = LOCAL_QUERY_LIST_DETAIL_REGISTRY.queryViews.find((candidate) => candidate.viewId === queryView.viewId);
+  if (!registered) {
+    throw new Error(`query-view-unregistered:${queryView.viewId}`);
+  }
+  if (!queryViewMatchesRegistry(registered, queryView)) {
+    throw new Error(`query-view-registry-mismatch:${queryView.viewId}`);
+  }
+  const validation = validateQueryView(queryView, 0, semanticAuthority);
+  if (validation.length > 0) {
+    throw new Error(`query-view-invalid:${validation.join(",")}`);
+  }
+  return {
+    viewId: queryView.viewId,
+    viewKind: queryView.viewKind,
+    queryRef: queryView.queryRef,
+    capabilityId: queryView.capabilityId,
+    tenantBoundaryRef: queryView.tenantBoundaryRef,
+    permissionRefsChecked: [...queryView.permissionRefs],
+    cacheFreshnessRefChecked: queryView.cacheFreshnessRef,
+    cachePolicyRefsChecked: [...queryView.cachePolicyRefs],
+    privacyClassificationRefsChecked: [...queryView.privacyClassificationRefs],
+    errorRefsAvailable: [...queryView.errorRefs],
+    auditEventRefsEmitted: [...queryView.auditEventRefs],
+    i18nKeyRefsChecked: [...queryView.i18nKeyRefs],
+    accessibilityRefsChecked: [...queryView.accessibilityRefs],
+    telemetryRefsChecked: [...queryView.telemetryRefs],
+    providerMode: "in-memory-only",
+    serverStateProviderUsed: false,
+    persistentSensitiveStorageUsed: false,
+    realtimeSubscriptionUsed: false,
+    backgroundRefreshUsed: false,
+    stagingUsed: false,
+    deploymentUsed: false,
+  };
+}
