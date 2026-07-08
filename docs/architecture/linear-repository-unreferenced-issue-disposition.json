@@ -1,0 +1,1792 @@
+{
+  "id": "usf.linear-repository-unreferenced-issue-disposition",
+  "issueId": "USF-1004",
+  "parentIssueId": "USF-1003",
+  "sourceAuditArtifact": "docs/architecture/linear-repository-delivery-audit.json",
+  "sourcePolicyArtifact": "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+  "recordedAtUtc": "2026-07-08T04:54:30Z",
+  "dispositionPurpose": "Provide repository-owned disposition for the USF-1003 repository-unreferenced issue-key audit set without treating Linear as semantic authority.",
+  "repositoryReferenceScan": {
+    "scope": "Current repository text search excluding the original delivery audit artifact, this disposition artifact, and .git.",
+    "auditSetIssueCount": 138,
+    "repositoryReferencePresentCount": 49,
+    "requiresSafeFullContentDispositionCount": 89,
+    "requiresSafeFullContentDispositionFollowUpIssueId": "USF-1008",
+    "doesNotInspectRawLinearDescriptionsOrComments": true,
+    "doesNotClaimRepositoryReferenceEqualsCompletion": true
+  },
+  "dispositionModel": [
+    {
+      "value": "repository-reference-present-current",
+      "meaning": "The current repository contains at least one reference to the Linear issue key outside the original audit artifact. This is traceability evidence only and does not prove semantic completion."
+    },
+    {
+      "value": "requires-safe-full-content-disposition",
+      "meaning": "The current repository has no reference outside the original audit artifact, so a safe full-content Linear description and comment review is required before classifying the issue as duplicate, canceled, obsolete, operational-only, superseded, external, or a genuine missing repository deliverable."
+    }
+  ],
+  "perKeyDispositions": [
+    {
+      "issueId": "USF-5",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/adr/0006-proof-freshness-anchor-carrier.md",
+        "docs/adr/0007-proof-anchor-ci-signing-identity.md",
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/app-surface-i18n-localisation-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 109,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-6",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ai-agent-work-packet-and-review-contract.md",
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "docs/architecture/app-surface-test-strategy-semantics.json",
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 40,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-7",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/adr/0006-proof-freshness-anchor-carrier.md",
+        "docs/adr/0007-proof-anchor-ci-signing-identity.md",
+        "docs/architecture/ai-agent-work-packet-and-review-contract.md",
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "docs/architecture/app-surface-release-provisioning-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 125,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-8",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-capability-coverage-completion-semantics.json",
+        "docs/architecture/app-surface-capability-coverage-matrix.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 38,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-9",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/adr/0005-hexagonal-architecture.md",
+        "docs/adr/0006-proof-freshness-anchor-carrier.md",
+        "docs/adr/0007-proof-anchor-ci-signing-identity.md",
+        "docs/architecture/ai-agent-work-packet-and-review-contract.md",
+        "docs/architecture/app-surface-accessibility-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 145,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-10",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/adr/0005-hexagonal-architecture.md",
+        "docs/adr/0006-proof-freshness-anchor-carrier.md",
+        "docs/adr/0007-proof-anchor-ci-signing-identity.md",
+        "docs/adr/0009-bootstrap-readiness-marker-and-dev-test-boundary.md",
+        "docs/architecture/bootstrap-readiness-governance.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 171,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-11",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/adr/0005-hexagonal-architecture.md",
+        "docs/architecture/bootstrap-readiness-governance.md",
+        "docs/architecture/complete-readiness-blocker-register.md",
+        "docs/architecture/final-v2-readiness-reconciliation.md",
+        "docs/architecture/foundation-completeness-audit.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 77,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-12",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-13",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "adapters/db/migrations/0002-enterprise-persistence-metadata.sql",
+        "adapters/db/migrations/0004-enterprise-db-proof-depth.sql",
+        "adapters/idp/src/hermetic-keycloak.ts",
+        "adapters/idp/src/keycloak-verifier.ts",
+        "adapters/wf/src/index.ts"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 206,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-14",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "adapters/db/migrations/0003-files.sql",
+        "adapters/secrets/src/index.ts",
+        "adapters/store/src/index.ts",
+        "apps/api/src/server.ts",
+        "capabilities/config/src/registry.ts"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 66,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-15",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "capabilities/notify/src/enterprise-messaging-controls.ts",
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 68,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-16",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+        "docs/architecture/authz-enterprise-proof-depth-matrix.json",
+        "docs/architecture/bootstrap-source-use-disposition-matrix.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 86,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-17",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "docs/architecture/auth-identity-enterprise-proof-depth-matrix.json",
+        "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+        "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json",
+        "docs/architecture/backup-restore-execution-proof-source-use-disposition-matrix.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 84,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-18",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md",
+        "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 102,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-19",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json",
+        "docs/architecture/audit-enterprise-proof-depth-matrix.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 108,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-20",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "adapters/mail/src/index.ts",
+        "adapters/obs/src/index.ts",
+        "docs/architecture/analytics-event-store-provider-disposition-matrix.json",
+        "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+        "docs/architecture/backup-restore-dr-rpo-rto-operational-proof-depth.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 81,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-21",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-gateway-enterprise-proof-depth-matrix.json",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 88,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-22",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docs/architecture/api-and-contract-surface-standard.md",
+        "docs/architecture/api-contracts-source-use-disposition-matrix.md",
+        "docs/architecture/api-graphql-generated-client-disposition-matrix.json",
+        "docs/architecture/api-public-compatibility-release-governance-matrix.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 76,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-23",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+        "docs/architecture/adversarial-formal-semantic-testing-suite.md",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 109,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-24",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.md",
+        "docs/architecture/bootstrap-source-use-disposition-matrix.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 63,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-25",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/adversarial-formal-semantic-testing-suite.json",
+        "docs/architecture/adversarial-formal-semantic-testing-suite.md",
+        "docs/architecture/bootstrap-source-use-disposition-matrix.md",
+        "docs/architecture/compose-profile-orchestration.json",
+        "docs/architecture/compose-profile-orchestration.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 54,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-26",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "AGENTS.md",
+        "apps/public-proof-origin/src/server.mjs",
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docker/caddy/Caddyfile",
+        "docs/adr/0015-operator-authenticated-staging-proof-cockpit-access-surface.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 70,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-27",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docs/architecture/enterprise-iso-style-evidence-foundation.json",
+        "docs/architecture/enterprise-iso-style-evidence-foundation.md",
+        "docs/architecture/external-http-observability-evidence-gate.json",
+        "docs/architecture/external-http-observability-evidence-gate.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 22,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-28",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "docs/architecture/enterprise-iso-style-evidence-foundation.json",
+        "docs/architecture/enterprise-iso-style-evidence-foundation.md",
+        "docs/architecture/external-http-provider-configuration-evidence-pack.json",
+        "docs/architecture/external-http-provider-configuration-evidence-pack.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 10,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-29",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "apps/staging-proof-cockpit/src/machine-qa.mjs",
+        "apps/staging-proof-cockpit/src/server.mjs",
+        "apps/staging-proof-cockpit/src/smoke.mjs",
+        "artifacts/proof-cockpit/machine-runs/2026-07-08T04-14-30-974Z/chain-of-custody.json",
+        "artifacts/proof-cockpit/machine-runs/2026-07-08T04-14-30-974Z/evidence-index.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 94,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-32",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/app-surface-capability-coverage-matrix.json",
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-implementation-gate-closure-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 15,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-34",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/monetisation-ad-placement-telemetry-semantics.json",
+        "docs/architecture/shared-client-interaction-contract-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-35",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+        "docs/architecture/repository-build-package-and-contract-test-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 11,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-36",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/mobile-adapter-semantic-surface.json",
+        "docs/architecture/pre-ui-repository-readiness-realisation.json",
+        "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "docs/architecture/repository-assurance-improvement-opportunities-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 10,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-37",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/mobile-adapter-release-compliance-semantics.json",
+        "docs/architecture/mobile-adapter-semantic-surface.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-40",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/mobile-adapter-release-compliance-semantics.json",
+        "docs/architecture/repository-command-surface-target-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-41",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+        "docs/architecture/repository-command-surface-target-governance.json",
+        "docs/architecture/repository-developer-experience-guidance-governance.json",
+        "docs/architecture/repository-optimisation-local-realisation-tranche.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-42",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/app-surface-web-adapter-semantics.json",
+        "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "docs/architecture/repository-command-surface-target-governance.json",
+        "docs/architecture/repository-compose-optimisation-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 8,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-43",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/app-surface-web-adapter-semantics.json",
+        "docs/architecture/repository-compose-optimisation-governance.json",
+        "docs/architecture/repository-environment-ladder-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-44",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-web-adapter-semantics.json",
+        "docs/architecture/repository-command-surface-target-governance.json",
+        "docs/architecture/repository-environment-ladder-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-45",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-web-adapter-semantics.json",
+        "docs/architecture/repository-environment-ladder-governance.json",
+        "docs/architecture/repository-traceability-determinism-security-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-46",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/app-surface-web-adapter-semantics.json",
+        "docs/architecture/repository-build-package-and-contract-test-governance.json",
+        "docs/architecture/repository-supply-chain-and-contract-conformance-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 7,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-48",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+        "docs/architecture/app-surface-test-strategy-semantics.json",
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 9,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-49",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+        "docs/architecture/app-surface-test-strategy-semantics.json",
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/generated-ui-renderer-composition-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 7,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-50",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-proof-evidence-report-semantics.json",
+        "docs/architecture/app-surface-test-strategy-semantics.json",
+        "docs/architecture/generated-ui-renderer-composition-semantics.json",
+        "docs/architecture/repository-validator-regression-proofing-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 5,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-51",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/repository-aggregate-validator-command-manifest-governance.json",
+        "docs/architecture/repository-validator-regression-proofing-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-52",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-state-storage-sync-semantics.json",
+        "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "docs/architecture/repository-traceability-determinism-security-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 6,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-53",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-state-storage-sync-semantics.json",
+        "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "docs/architecture/repository-build-package-and-contract-test-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 6,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-54",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/repository-build-package-and-contract-test-governance.json",
+        "docs/architecture/repository-optimisation-realisation-semantics.json",
+        "docs/architecture/repository-supply-chain-and-contract-conformance-governance.json",
+        "docs/architecture/repository-traceability-determinism-security-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 5,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-55",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+        "docs/architecture/repository-build-package-and-contract-test-governance.json",
+        "docs/architecture/repository-optimisation-realisation-semantics.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-56",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/app-surface-i18n-localisation-semantics.json",
+        "docs/architecture/app-surface-owner-decision-baseline-semantics.json",
+        "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+        "docs/architecture/repository-build-package-and-contract-test-governance.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 6,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-120",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-121",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-122",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-123",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-124",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-125",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-126",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-127",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-128",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-129",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-130",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-131",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-132",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-194",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-297",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-311",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-321",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-367",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-443",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-444",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-446",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-448",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-450",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-463",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-580",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-601",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-605",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-614",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-615",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-617",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-618",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-629",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-630",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-637",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-640",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-643",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-645",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-647",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-649",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-651",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-653",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-656",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-657",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-658",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-659",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-660",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-663",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-665",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-769",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-825",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-828",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-829",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-850",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-851",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-854",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-855",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-856",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-857",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-858",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-859",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-953",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-955",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-957",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-958",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-959",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-961",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-963",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-964",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-965",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-967",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-968",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-969",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-970",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-971",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-972",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-973",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-974",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-975",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-976",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-977",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-983",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-984",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-987",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-988",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-990",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-991",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-992",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-994",
+      "disposition": "requires-safe-full-content-disposition",
+      "repositoryReferenceEvidencePathSample": [],
+      "repositoryReferenceEvidencePathSampleCount": 0,
+      "repositoryReferenceEvidenceTotalPathCount": 0,
+      "followUpIssueId": "USF-1008",
+      "completionClaim": "not-complete",
+      "reason": "No current repository reference was found outside the original audit artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+    },
+    {
+      "issueId": "USF-1002",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+        "tools/validate-linear-boundary/validate-linear-boundary.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-1003",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-linear-boundary/validate-linear-boundary.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-1004",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+        "tools/validate-linear-boundary/validate-linear-boundary.py",
+        "tools/validate-repository-optimisation/validate-repository-optimisation.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    },
+    {
+      "issueId": "USF-1005",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+        "tools/validate-linear-boundary/validate-linear-boundary.py",
+        "tools/validate-repository-optimisation/validate-repository-optimisation.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "The current repository contains at least one reference to this issue outside the original audit artifact. This does not by itself prove the issue is semantically complete."
+    }
+  ],
+  "unresolvedWorkDelivery": {
+    "deliveryMode": "linear-issue-follow-up",
+    "followUpIssueId": "USF-1008",
+    "followUpIssueTitle": "Complete unresolved repository-unreferenced Linear key disposition after safe full-content evidence",
+    "unresolvedIssueIds": [
+      "USF-12",
+      "USF-120",
+      "USF-121",
+      "USF-122",
+      "USF-123",
+      "USF-124",
+      "USF-125",
+      "USF-126",
+      "USF-127",
+      "USF-128",
+      "USF-129",
+      "USF-130",
+      "USF-131",
+      "USF-132",
+      "USF-194",
+      "USF-297",
+      "USF-311",
+      "USF-321",
+      "USF-367",
+      "USF-443",
+      "USF-444",
+      "USF-446",
+      "USF-448",
+      "USF-450",
+      "USF-463",
+      "USF-580",
+      "USF-601",
+      "USF-605",
+      "USF-614",
+      "USF-615",
+      "USF-617",
+      "USF-618",
+      "USF-629",
+      "USF-630",
+      "USF-637",
+      "USF-640",
+      "USF-643",
+      "USF-645",
+      "USF-647",
+      "USF-649",
+      "USF-651",
+      "USF-653",
+      "USF-656",
+      "USF-657",
+      "USF-658",
+      "USF-659",
+      "USF-660",
+      "USF-663",
+      "USF-665",
+      "USF-769",
+      "USF-825",
+      "USF-828",
+      "USF-829",
+      "USF-850",
+      "USF-851",
+      "USF-854",
+      "USF-855",
+      "USF-856",
+      "USF-857",
+      "USF-858",
+      "USF-859",
+      "USF-953",
+      "USF-955",
+      "USF-957",
+      "USF-958",
+      "USF-959",
+      "USF-961",
+      "USF-963",
+      "USF-964",
+      "USF-965",
+      "USF-967",
+      "USF-968",
+      "USF-969",
+      "USF-970",
+      "USF-971",
+      "USF-972",
+      "USF-973",
+      "USF-974",
+      "USF-975",
+      "USF-976",
+      "USF-977",
+      "USF-983",
+      "USF-984",
+      "USF-987",
+      "USF-988",
+      "USF-990",
+      "USF-991",
+      "USF-992",
+      "USF-994"
+    ],
+    "unresolvedIssueCount": 89,
+    "followUpIssueDoesNotDefineSemanticAuthority": true,
+    "followUpIssueDoesNotSatisfyAcceptanceUntilValidated": true
+  },
+  "completionBoundary": {
+    "doesNotClaimFullDescriptionAndCommentExport": true,
+    "doesNotClaimEveryLinearIssueIsRepositoryComplete": true,
+    "doesNotTreatDoneStatusAsProof": true,
+    "doesNotCreateImplementationCode": true,
+    "linearRemainsWorkTrackingOnly": true,
+    "repositoryArtifactsRemainAuthoritative": true
+  },
+  "nonClaims": [
+    "No product implementation readiness claim.",
+    "No provider setup claim.",
+    "No deployment claim.",
+    "No staging, production, live-provider, store, release, legal, compliance, or human-acceptance claim."
+  ]
+}

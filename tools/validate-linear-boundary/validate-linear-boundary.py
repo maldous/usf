@@ -13,6 +13,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json"
 AUDIT = ROOT / "docs/architecture/linear-repository-delivery-audit.json"
+DISPOSITION = ROOT / "docs/architecture/linear-repository-unreferenced-issue-disposition.json"
+EXPORT_AVAILABILITY = ROOT / "docs/architecture/linear-full-content-export-availability.json"
 
 RULES = {
     "USF-LINEAR-001": "Linear boundary policy is missing or malformed",
@@ -21,6 +23,8 @@ RULES = {
     "USF-LINEAR-004": "Repository delivery audit does not capture required follow-up issues",
     "USF-LINEAR-005": "Repository command or validator path depends on Linear access",
     "USF-LINEAR-006": "Unresolved Linear work delivery rules are missing or malformed",
+    "USF-LINEAR-007": "Repository-unreferenced Linear issue disposition is missing or malformed",
+    "USF-LINEAR-008": "Linear full-content export availability boundary is missing or malformed",
 }
 
 DISALLOWED_RUNTIME_MARKERS = (
@@ -64,7 +68,10 @@ REQUIRED_UNRESOLVED_WORK_TYPES = {
     "repository-unreferenced-issue-key-disposition",
     "credentialed-full-description-and-comment-export-reconciliation",
     "deferred-blocked-unresolved-linear-work-later-issue-delivery",
+    "safe-full-content-disposition-for-repository-unreferenced-issue-keys",
 }
+
+REQUIRED_FOLLOW_UP_ISSUES = ("USF-1004", "USF-1005", "USF-1006", "USF-1008")
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -129,6 +136,10 @@ def check_policy(policy: dict[str, Any]) -> list[dict[str, str]]:
     missing_states = REQUIRED_FOLLOW_UP_STATES - states
     if missing_states:
         findings.append(finding("USF-LINEAR-006", "linearFollowUpDeliveryRules.coveredWorkStates", f"missing states: {', '.join(sorted(missing_states))}"))
+    later_work_ids = set(follow_up.get("laterWorkTrackingIssueIds", []))
+    for required in REQUIRED_FOLLOW_UP_ISSUES:
+        if required not in later_work_ids:
+            findings.append(finding("USF-LINEAR-006", "linearFollowUpDeliveryRules.laterWorkTrackingIssueIds", f"missing later-work issue {required}"))
     return findings
 
 
@@ -144,7 +155,7 @@ def check_audit(audit: dict[str, Any]) -> list[dict[str, str]]:
     if not isinstance(issue_range, dict) or issue_range.get("count", 0) < 1003:
         findings.append(finding("USF-LINEAR-003", "issueKeyRangeAudited", "audit must cover at least USF-1 through USF-1003"))
     child_ids = {item.get("id") for item in audit.get("newChildIssuesCreated", []) if isinstance(item, dict)}
-    for required in ("USF-1004", "USF-1005", "USF-1006"):
+    for required in REQUIRED_FOLLOW_UP_ISSUES:
         if required not in child_ids:
             findings.append(finding("USF-LINEAR-004", "newChildIssuesCreated", f"missing child issue {required}"))
     delivery = audit.get("unresolvedLinearWorkDelivery")
@@ -162,7 +173,7 @@ def check_audit(audit: dict[str, Any]) -> list[dict[str, str]]:
             if delivery.get(key) is not True:
                 findings.append(finding("USF-LINEAR-006", f"unresolvedLinearWorkDelivery.{key}", "value must be true"))
         follow_up_ids = set(delivery.get("followUpIssueIds", []))
-        for required in ("USF-1004", "USF-1005", "USF-1006"):
+        for required in REQUIRED_FOLLOW_UP_ISSUES:
             if required not in follow_up_ids:
                 findings.append(finding("USF-LINEAR-006", "unresolvedLinearWorkDelivery.followUpIssueIds", f"missing follow-up issue {required}"))
         work_types = set(delivery.get("coveredUnresolvedWorkTypes", []))
@@ -172,6 +183,106 @@ def check_audit(audit: dict[str, Any]) -> list[dict[str, str]]:
     copied = audit.get("linearOnlySemanticKnowledgeCopied", [])
     if not any(isinstance(item, dict) and item.get("repositoryPath") == str(POLICY.relative_to(ROOT)) for item in copied):
         findings.append(finding("USF-LINEAR-004", "linearOnlySemanticKnowledgeCopied", "USF-1002 boundary knowledge must be copied into repository policy"))
+    return findings
+
+
+def check_disposition(disposition: dict[str, Any]) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    if disposition.get("issueId") != "USF-1004" or disposition.get("parentIssueId") != "USF-1003":
+        findings.append(finding("USF-LINEAR-007", str(DISPOSITION.relative_to(ROOT)), "disposition must be scoped to USF-1004 with parent USF-1003"))
+    if disposition.get("sourceAuditArtifact") != str(AUDIT.relative_to(ROOT)):
+        findings.append(finding("USF-LINEAR-007", "sourceAuditArtifact", "must point to the repository delivery audit artifact"))
+    scan = disposition.get("repositoryReferenceScan")
+    per_key = disposition.get("perKeyDispositions")
+    if not isinstance(scan, dict):
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan", "object is required"))
+        return findings
+    if not isinstance(per_key, list):
+        findings.append(finding("USF-LINEAR-007", "perKeyDispositions", "list is required"))
+        return findings
+    if scan.get("auditSetIssueCount") != len(per_key):
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.auditSetIssueCount", "must match per-key disposition count"))
+    if scan.get("auditSetIssueCount") != 138:
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.auditSetIssueCount", "must remain 138 for the USF-1003 audit set"))
+    required_full = [
+        item for item in per_key
+        if isinstance(item, dict) and item.get("disposition") == "requires-safe-full-content-disposition"
+    ]
+    referenced = [
+        item for item in per_key
+        if isinstance(item, dict) and item.get("disposition") == "repository-reference-present-current"
+    ]
+    if scan.get("requiresSafeFullContentDispositionCount") != len(required_full):
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.requiresSafeFullContentDispositionCount", "must match per-key unresolved disposition count"))
+    if scan.get("repositoryReferencePresentCount") != len(referenced):
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.repositoryReferencePresentCount", "must match per-key referenced disposition count"))
+    if scan.get("requiresSafeFullContentDispositionFollowUpIssueId") != "USF-1008":
+        findings.append(finding("USF-LINEAR-007", "repositoryReferenceScan.requiresSafeFullContentDispositionFollowUpIssueId", "must be USF-1008"))
+    for item in required_full:
+        if item.get("followUpIssueId") != "USF-1008" or item.get("completionClaim") != "not-complete":
+            findings.append(finding("USF-LINEAR-007", item.get("issueId", "perKeyDispositions"), "unresolved dispositions must be carried by USF-1008 and marked not complete"))
+    delivery = disposition.get("unresolvedWorkDelivery")
+    if not isinstance(delivery, dict) or delivery.get("followUpIssueId") != "USF-1008":
+        findings.append(finding("USF-LINEAR-007", "unresolvedWorkDelivery.followUpIssueId", "must be USF-1008"))
+    boundary = disposition.get("completionBoundary")
+    if not isinstance(boundary, dict):
+        findings.append(finding("USF-LINEAR-007", "completionBoundary", "object is required"))
+    else:
+        required_true = [
+            "doesNotClaimFullDescriptionAndCommentExport",
+            "doesNotClaimEveryLinearIssueIsRepositoryComplete",
+            "doesNotTreatDoneStatusAsProof",
+            "doesNotCreateImplementationCode",
+            "linearRemainsWorkTrackingOnly",
+            "repositoryArtifactsRemainAuthoritative",
+        ]
+        for key in required_true:
+            if boundary.get(key) is not True:
+                findings.append(finding("USF-LINEAR-007", f"completionBoundary.{key}", "value must be true"))
+    return findings
+
+
+def check_export_availability(availability: dict[str, Any]) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    if availability.get("issueId") != "USF-1005" or availability.get("parentIssueId") != "USF-1003":
+        findings.append(finding("USF-LINEAR-008", str(EXPORT_AVAILABILITY.relative_to(ROOT)), "availability artifact must be scoped to USF-1005 with parent USF-1003"))
+    safety = availability.get("credentialSafetyBoundary")
+    if not isinstance(safety, dict):
+        findings.append(finding("USF-LINEAR-008", "credentialSafetyBoundary", "object is required"))
+    else:
+        if safety.get("chatProvidedCredentialShellUseAllowed") is not False:
+            findings.append(finding("USF-LINEAR-008", "credentialSafetyBoundary.chatProvidedCredentialShellUseAllowed", "value must be false"))
+        for key in ("credentialPrinted", "credentialPersisted", "credentialCommitted"):
+            if safety.get(key) is not False:
+                findings.append(finding("USF-LINEAR-008", f"credentialSafetyBoundary.{key}", "value must be false"))
+    current = availability.get("currentExecutionAvailability")
+    if not isinstance(current, dict):
+        findings.append(finding("USF-LINEAR-008", "currentExecutionAvailability", "object is required"))
+    else:
+        if current.get("rawApiKeyBulkExportStatus") != "explicitly-unavailable-in-current-execution":
+            findings.append(finding("USF-LINEAR-008", "currentExecutionAvailability.rawApiKeyBulkExportStatus", "must record explicit unavailability for the current execution"))
+        if current.get("fullDescriptionAndCommentExportClaimed") is not False:
+            findings.append(finding("USF-LINEAR-008", "currentExecutionAvailability.fullDescriptionAndCommentExportClaimed", "value must be false"))
+    safe_output = availability.get("repositorySafeOutputRules")
+    if not isinstance(safe_output, dict):
+        findings.append(finding("USF-LINEAR-008", "repositorySafeOutputRules", "object is required"))
+    else:
+        for key in ("storeRawLinearDescriptions", "storeRawLinearComments", "storeCredentials"):
+            if safe_output.get(key) is not False:
+                findings.append(finding("USF-LINEAR-008", f"repositorySafeOutputRules.{key}", "value must be false"))
+        for key in ("storeClassificationsOnly", "linearContentIsOperationalEvidenceNotSemanticAuthority"):
+            if safe_output.get(key) is not True:
+                findings.append(finding("USF-LINEAR-008", f"repositorySafeOutputRules.{key}", "value must be true"))
+    delivery = availability.get("unresolvedWorkDelivery")
+    if not isinstance(delivery, dict) or "USF-1008" not in set(delivery.get("followUpIssueIds", [])):
+        findings.append(finding("USF-LINEAR-008", "unresolvedWorkDelivery.followUpIssueIds", "must include USF-1008"))
+    boundary = availability.get("completionBoundary")
+    if not isinstance(boundary, dict):
+        findings.append(finding("USF-LINEAR-008", "completionBoundary", "object is required"))
+    else:
+        for key in ("doesNotClaimFullExportRan", "doesNotClaimEveryFullDescriptionOrCommentWasInspected", "doesNotUseLinearAsSemanticAuthority", "doesNotCreateImplementationCode"):
+            if boundary.get(key) is not True:
+                findings.append(finding("USF-LINEAR-008", f"completionBoundary.{key}", "value must be true"))
     return findings
 
 
@@ -205,7 +316,13 @@ def check_runtime_linear_dependency() -> list[dict[str, str]]:
     return findings
 
 
-def validate(policy: dict[str, Any] | None = None, audit: dict[str, Any] | None = None, include_runtime_scan: bool = True) -> list[dict[str, str]]:
+def validate(
+    policy: dict[str, Any] | None = None,
+    audit: dict[str, Any] | None = None,
+    disposition: dict[str, Any] | None = None,
+    availability: dict[str, Any] | None = None,
+    include_runtime_scan: bool = True,
+) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     try:
         policy_data = load_json(POLICY) if policy is None else policy
@@ -215,8 +332,18 @@ def validate(policy: dict[str, Any] | None = None, audit: dict[str, Any] | None 
         audit_data = load_json(AUDIT) if audit is None else audit
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         return [finding("USF-LINEAR-003", str(AUDIT.relative_to(ROOT)), str(exc))]
+    try:
+        disposition_data = load_json(DISPOSITION) if disposition is None else disposition
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return [finding("USF-LINEAR-007", str(DISPOSITION.relative_to(ROOT)), str(exc))]
+    try:
+        availability_data = load_json(EXPORT_AVAILABILITY) if availability is None else availability
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return [finding("USF-LINEAR-008", str(EXPORT_AVAILABILITY.relative_to(ROOT)), str(exc))]
     findings.extend(check_policy(policy_data))
     findings.extend(check_audit(audit_data))
+    findings.extend(check_disposition(disposition_data))
+    findings.extend(check_export_availability(availability_data))
     if include_runtime_scan:
         findings.extend(check_runtime_linear_dependency())
     return findings
@@ -225,19 +352,29 @@ def validate(policy: dict[str, Any] | None = None, audit: dict[str, Any] | None 
 def selftest() -> list[dict[str, str]]:
     policy = load_json(POLICY)
     audit = load_json(AUDIT)
+    disposition = load_json(DISPOSITION)
+    availability = load_json(EXPORT_AVAILABILITY)
     tests = []
 
     mutated_policy = copy.deepcopy(policy)
     mutated_policy["boundary"]["linearDefinesSemanticAuthority"] = True
-    tests.append(("policy-allows-linear-authority", validate(mutated_policy, audit, include_runtime_scan=False), "USF-LINEAR-002"))
+    tests.append(("policy-allows-linear-authority", validate(mutated_policy, audit, disposition, availability, include_runtime_scan=False), "USF-LINEAR-002"))
 
     mutated_audit = copy.deepcopy(audit)
     mutated_audit["newChildIssuesCreated"] = [item for item in mutated_audit.get("newChildIssuesCreated", []) if item.get("id") != "USF-1004"]
-    tests.append(("audit-missing-child-issue", validate(policy, mutated_audit, include_runtime_scan=False), "USF-LINEAR-004"))
+    tests.append(("audit-missing-child-issue", validate(policy, mutated_audit, disposition, availability, include_runtime_scan=False), "USF-LINEAR-004"))
 
     mutated_audit = copy.deepcopy(audit)
     mutated_audit["unresolvedLinearWorkDelivery"]["deliveryMode"] = "repository-complete"
-    tests.append(("audit-invalid-unresolved-work-delivery", validate(policy, mutated_audit, include_runtime_scan=False), "USF-LINEAR-006"))
+    tests.append(("audit-invalid-unresolved-work-delivery", validate(policy, mutated_audit, disposition, availability, include_runtime_scan=False), "USF-LINEAR-006"))
+
+    mutated_disposition = copy.deepcopy(disposition)
+    mutated_disposition["repositoryReferenceScan"]["requiresSafeFullContentDispositionFollowUpIssueId"] = "USF-1004"
+    tests.append(("disposition-missing-follow-up", validate(policy, audit, mutated_disposition, availability, include_runtime_scan=False), "USF-LINEAR-007"))
+
+    mutated_availability = copy.deepcopy(availability)
+    mutated_availability["credentialSafetyBoundary"]["credentialPrinted"] = True
+    tests.append(("availability-credential-printed", validate(policy, audit, disposition, mutated_availability, include_runtime_scan=False), "USF-LINEAR-008"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected_rule in tests:

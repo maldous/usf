@@ -46,27 +46,13 @@
     "compose/**"
   ],
   "enterpriseEvidenceRefs": {
-    "soaSupportMappings": [
-      "soa-usf-255-supply-chain-sbom-licence"
-    ],
-    "evidenceRegister": [
-      "evidence-usf-255-supply-chain-sbom-licence"
-    ],
-    "threatModelAbuseCaseRegister": [
-      "threat-usf-255-supply-chain-sbom-licence"
-    ],
-    "accessReviewPrivilegedOperationPosture": [
-      "access-usf-255-supply-chain-sbom-licence"
-    ],
-    "backupRestoreResiliencePosture": [
-      "resilience-usf-255-supply-chain-sbom-licence"
-    ],
-    "incidentVulnerabilityManagementEvidence": [
-      "incident-usf-255-supply-chain-sbom-licence"
-    ],
-    "privacyDataMinimisationPosture": [
-      "privacy-usf-255-supply-chain-sbom-licence"
-    ]
+    "soaSupportMappings": ["soa-usf-255-supply-chain-sbom-licence"],
+    "evidenceRegister": ["evidence-usf-255-supply-chain-sbom-licence"],
+    "threatModelAbuseCaseRegister": ["threat-usf-255-supply-chain-sbom-licence"],
+    "accessReviewPrivilegedOperationPosture": ["access-usf-255-supply-chain-sbom-licence"],
+    "backupRestoreResiliencePosture": ["resilience-usf-255-supply-chain-sbom-licence"],
+    "incidentVulnerabilityManagementEvidence": ["incident-usf-255-supply-chain-sbom-licence"],
+    "privacyDataMinimisationPosture": ["privacy-usf-255-supply-chain-sbom-licence"]
   },
   "claimBoundaries": {
     "testReadinessClaimAllowed": false,
@@ -89,12 +75,7 @@
       "id": "package-manager-and-lockfile",
       "categoryId": "supply-chain-sbom-licence",
       "scope": "package manager pin, toolchain engine pin, .npmrc posture, lockfile version, direct dependency lockfile root importer alignment, frozen install posture",
-      "evidenceRefs": [
-        "package.json",
-        ".npmrc",
-        "pnpm-lock.yaml",
-        "pnpm-workspace.yaml"
-      ],
+      "evidenceRefs": ["package.json", ".npmrc", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
       "testAssertion": "The issue-local Vitest suite fails on floating direct dependency specifiers, missing package-manager/toolchain posture, missing lockfile root importer entries, lockfile specifier drift, or override drift."
     },
     {
@@ -159,12 +140,7 @@
     ]
   },
   "workspaceBoundary": {
-    "workspaceGlobs": [
-      "apps/*",
-      "capabilities/*",
-      "adapters/*",
-      "packages/*"
-    ],
+    "workspaceGlobs": ["apps/*", "capabilities/*", "adapters/*", "packages/*"],
     "expectedPackageJsonCountIncludingRoot": 35,
     "expectedWorkspacePackageCount": 34,
     "workspacePackageNamePrefix": "@foundation/",
@@ -209,30 +185,17 @@
       },
       {
         "id": "identity-and-secrets-sdks",
-        "packageNames": [
-          "@keycloak/keycloak-admin-client",
-          "node-vault"
-        ],
+        "packageNames": ["@keycloak/keycloak-admin-client", "node-vault"],
         "owner": "platform-identity-secrets-foundation"
       },
       {
         "id": "data-messaging-and-storage-sdks",
-        "packageNames": [
-          "@nats-io/transport-node",
-          "kysely",
-          "minio",
-          "pg",
-          "redis"
-        ],
+        "packageNames": ["@nats-io/transport-node", "kysely", "minio", "pg", "redis"],
         "owner": "platform-data-foundation"
       },
       {
         "id": "api-contract-runtime-sdks",
-        "packageNames": [
-          "@sinclair/typebox",
-          "fastify",
-          "graphql"
-        ],
+        "packageNames": ["@sinclair/typebox", "fastify", "graphql"],
         "owner": "platform-api-contract-foundation"
       },
       {
@@ -303,8 +266,8 @@
     "issueLocalTestBacked": true,
     "sharedReadinessValidatorCategoryBacked": true,
     "freshSbomValidatorBacked": false,
-    "evidenceRequirementId": "usf255-sbom-generation-not-wired",
-    "sbomReadinessClaimAllowed": false
+    "sbomReadinessClaimAllowed": false,
+    "blockerId": "usf255-sbom-generation-not-wired"
   },
   "provenancePosture": {
     "proofAnchorWorkflowPresent": ".github/workflows/proof-anchor.yml",
@@ -356,33 +319,29 @@
     "composeTargetPath": "compose/compose.test.generated.yaml",
     "imageServiceCount": 36,
     "composeImageLineCount": 33,
-    "digestPinnedServiceIds": [
-      "windmill",
-      "windmill-worker",
-      "pgbackrest"
-    ],
+    "digestPinnedServiceIds": ["windmill", "windmill-worker", "pgbackrest"],
     "movingTagBlockers": [
       {
         "serviceId": "clamav",
         "image": "clamav/clamav:stable",
-        "evidenceRequirementId": "usf255-compose-image-moving-tag-clamav"
+        "blockerId": "usf255-compose-image-moving-tag-clamav"
       }
     ],
     "composeTargetMissingImageBlockers": [
       {
         "serviceId": "sonar-oidc-plugin",
         "image": "curlimages/curl:8.11.1",
-        "evidenceRequirementId": "usf255-compose-generated-target-missing-sonar-oidc-plugin"
+        "blockerId": "usf255-compose-generated-target-missing-sonar-oidc-plugin"
       },
       {
         "serviceId": "public-proof-origin",
         "image": "node:24.16.0-alpine3.22",
-        "evidenceRequirementId": "usf266-compose-generated-target-missing-public-proof-origin"
+        "blockerId": "usf266-compose-generated-target-missing-public-proof-origin"
       },
       {
         "serviceId": "staging-proof-cockpit",
         "image": "node:24.16.0-alpine3.22",
-        "evidenceRequirementId": "usf255-compose-generated-target-missing-staging-proof-cockpit"
+        "blockerId": "usf255-compose-generated-target-missing-staging-proof-cockpit"
       }
     ],
     "partialTagReviewRequired": [
@@ -423,9 +382,9 @@
       "missing-lockfile-evidence",
       "missing-licence-posture",
       "missing-advisory-posture",
-      "missing-sbom-or-evaluated-evidence-requirement",
+      "missing-sbom-or-deferred-evidence",
       "unsupported-supply-chain-readiness-overclaim",
-      "floating-compose-image-without-evidence-requirement",
+      "floating-compose-image-without-blocker",
       "missing-owner",
       "missing-package-manager-toolchain-posture"
     ]

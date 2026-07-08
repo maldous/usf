@@ -1,0 +1,51 @@
+{
+  "id": "usf.linear-full-content-export-availability",
+  "issueId": "USF-1005",
+  "parentIssueId": "USF-1003",
+  "sourceAuditArtifact": "docs/architecture/linear-repository-delivery-audit.json",
+  "sourcePolicyArtifact": "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
+  "recordedAtUtc": "2026-07-08T04:54:30Z",
+  "purpose": "Record whether a credential-safe full Linear description and comment export route is available in the current execution without making Linear semantic authority.",
+  "credentialSafetyBoundary": {
+    "credentialName": "LINEAR_API_KEY",
+    "unloggedEnvironmentCredentialPresent": false,
+    "chatProvidedCredentialShellUseAllowed": false,
+    "credentialPrinted": false,
+    "credentialPersisted": false,
+    "credentialCommitted": false,
+    "reasonChatProvidedCredentialShellUseIsForbidden": "Using a chat-provided secret in a shell command would expose the secret in command text or logs. The repository policy requires secrets not be printed, logged, committed, echoed, or persisted."
+  },
+  "currentExecutionAvailability": {
+    "rawApiKeyBulkExportStatus": "explicitly-unavailable-in-current-execution",
+    "rawApiKeyBulkExportReason": "LINEAR_API_KEY was not present as an unlogged environment variable, and using the chat-provided value in a shell command is not credential-safe.",
+    "approvedConnectorIssueFetchAvailable": true,
+    "approvedConnectorCommentListAvailable": true,
+    "approvedConnectorBulkRepositoryExportClaimed": false,
+    "fullDescriptionAndCommentExportClaimed": false
+  },
+  "repositorySafeOutputRules": {
+    "storeRawLinearDescriptions": false,
+    "storeRawLinearComments": false,
+    "storeCredentials": false,
+    "storeClassificationsOnly": true,
+    "linearContentIsOperationalEvidenceNotSemanticAuthority": true
+  },
+  "unresolvedWorkDelivery": {
+    "deliveryMode": "linear-issue-follow-up",
+    "followUpIssueIds": [
+      "USF-1008"
+    ],
+    "additionalUnresolvedWorkMustBecomeNarrowLinearIssues": true,
+    "repositoryUnreferencedKeySetRemainsOwnedByIssueId": "USF-1004"
+  },
+  "completionBoundary": {
+    "doesNotClaimFullExportRan": true,
+    "doesNotClaimEveryFullDescriptionOrCommentWasInspected": true,
+    "doesNotUseLinearAsSemanticAuthority": true,
+    "doesNotCreateImplementationCode": true
+  },
+  "nonClaims": [
+    "No change to USF semantic authority order.",
+    "No provider, deployment, readiness, legal, store, production, live-provider, release, compliance, or human-acceptance claim."
+  ]
+}

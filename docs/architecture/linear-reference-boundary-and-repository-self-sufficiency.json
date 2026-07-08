@@ -55,14 +55,16 @@
     "laterWorkTrackingIssueIds": [
       "USF-1004",
       "USF-1005",
-      "USF-1006"
+      "USF-1006",
+      "USF-1008"
     ],
     "remainingWorkIsTrackedByLinearFollowUpIssues": true,
     "rule": "Linear items discovered during repository delivery audit must be dispositioned in repository-owned artefacts. If future work remains, that work is delivered for tracking purposes by creating or linking a Linear follow-up issue, not by treating Linear text, status, comments, labels, or project fields as USF semantic authority.",
     "trackedLaterWorkCategories": [
       "repository-unreferenced issue key disposition",
       "credentialed full Linear description and comment export reconciliation",
-      "deferred blocked unresolved credential-gated externally gated duplicate canceled obsolete and operational-only work delivery"
+      "deferred blocked unresolved credential-gated externally gated duplicate canceled obsolete and operational-only work delivery",
+      "safe full-content disposition for repository-unreferenced issue keys"
     ],
     "unresolvedWorkRequiresRepositoryDisposition": true
   },

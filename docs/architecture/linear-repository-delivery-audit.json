@@ -1613,6 +1613,13 @@
       "purpose": "Track later delivery of deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only Linear work as Linear issues or explicit repository-owned dispositions.",
       "status": "todo",
       "title": "Create later-work issues for deferred blocked and unresolved Linear delivery gaps"
+    },
+    {
+      "id": "USF-1008",
+      "parentIssueId": "USF-1004",
+      "purpose": "Complete unresolved repository-unreferenced Linear key disposition after safe full-content evidence is available.",
+      "authorityBoundary": "Tracks later work only and does not define USF semantic authority.",
+      "createdByThisAuditPath": true
     }
   ],
   "nonClaims": [
@@ -1865,7 +1872,15 @@
     "linearAuthorityCandidateFileCount": 115,
     "reasonFullyRealisedListIsEmpty": "This aggregate audit avoids overclaiming individual issue completion from metadata alone. It verifies repository coverage, copies the Linear boundary policy, and captures unresolved issue-key coverage in child issues.",
     "repositoryReferencedIssueCount": 868,
-    "repositoryUnreferencedIssueCount": 138
+    "repositoryUnreferencedIssueCount": 138,
+    "repositoryUnreferencedCurrentDispositionArtifact": "docs/architecture/linear-repository-unreferenced-issue-disposition.json",
+    "fullContentExportAvailabilityArtifact": "docs/architecture/linear-full-content-export-availability.json",
+    "currentRepositoryReferenceReconciliation": {
+      "auditSetIssueCount": 138,
+      "repositoryReferencePresentCount": 49,
+      "requiresSafeFullContentDispositionCount": 89,
+      "requiresSafeFullContentDispositionFollowUpIssueId": "USF-1008"
+    }
   },
   "title": "Linear Repository Delivery Audit",
   "unresolvedLinearWorkDelivery": {
@@ -1873,13 +1888,15 @@
     "coveredUnresolvedWorkTypes": [
       "repository-unreferenced-issue-key-disposition",
       "credentialed-full-description-and-comment-export-reconciliation",
-      "deferred-blocked-unresolved-linear-work-later-issue-delivery"
+      "deferred-blocked-unresolved-linear-work-later-issue-delivery",
+      "safe-full-content-disposition-for-repository-unreferenced-issue-keys"
     ],
     "deliveryMode": "linear-issue-follow-up",
     "followUpIssueIds": [
       "USF-1004",
       "USF-1005",
-      "USF-1006"
+      "USF-1006",
+      "USF-1008"
     ],
     "followUpIssueResponsibilities": [
       {
@@ -1893,6 +1910,10 @@
       {
         "issueId": "USF-1006",
         "responsibility": "Enumerate deferred, blocked, unresolved, credential-gated, externally gated, duplicate, canceled, obsolete, and operational-only categories from repository audit evidence and ensure each has later-work Linear tracking or explicit repository disposition."
+      },
+      {
+        "issueId": "USF-1008",
+        "responsibility": "Complete unresolved repository-unreferenced key disposition for 89 issue keys after safe full Linear description and comment evidence is available."
       }
     ],
     "followUpIssuesDoNotCompleteThisAuditWork": true,
