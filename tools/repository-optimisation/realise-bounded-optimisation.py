@@ -438,16 +438,10 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
     if shutil.which("docker"):
         measurements.append(run_command(["docker", "compose", "-f", "compose/compose.dev.generated.yaml", "config", "--quiet"], 60))
         if args.include_startup:
-            measurements.append(
-                run_command(
-                    [
-                        "bash",
-                        "-lc",
-                        "corepack pnpm compose:check-generated && corepack pnpm compose:ports:dev && docker compose -f compose/compose.yaml up -d --wait --wait-timeout 240; status=$?; docker compose -f compose/compose.yaml down --remove-orphans; exit $status",
-                    ],
-                    330,
-                )
-            )
+            measurements.append(run_command(["corepack", "pnpm", "compose:check-generated"], 90))
+            measurements.append(run_command(["corepack", "pnpm", "compose:ports:dev"], 60))
+            measurements.append(run_command(["docker", "compose", "-f", "compose/compose.yaml", "up", "-d", "--wait", "--wait-timeout", "240"], 300))
+            measurements.append(run_command(["docker", "compose", "-f", "compose/compose.yaml", "down", "--remove-orphans"], 120))
         else:
             measurements.append(
                 {
@@ -488,6 +482,7 @@ def command_compose_timing(args: argparse.Namespace) -> Path:
                 "issue:USF-1001",
                 f"startup-measurement-requested:{str(bool(args.include_startup)).lower()}",
                 f"measured-command-count:{len(measured)}",
+                "compose-phase-split:config,port,startup-wait,teardown",
                 "non-local-options-later-issue:USF-1007",
                 "testcontainers:considered-not-adopted-current-tranche",
                 "remote-cache:considered-not-adopted-current-tranche",

@@ -403,10 +403,18 @@ class Findings:
         return [f for f in self.items if f["severity"] in ("blocking", "error")]
 
 
+_JSON_CACHE = {}
+
+
 def load_json(path, F):
+    abspath = os.path.abspath(path)
     try:
-        with open(path, encoding="utf-8") as fh:
-            return json.load(fh)
+        stat = os.stat(abspath)
+        key = (abspath, stat.st_mtime_ns, stat.st_size)
+        if key not in _JSON_CACHE:
+            with open(abspath, encoding="utf-8") as fh:
+                _JSON_CACHE[key] = json.load(fh)
+        return copy.deepcopy(_JSON_CACHE[key])
     except json.JSONDecodeError as e:
         F.add("USF-PARSE-001", path, f"{e.msg} at line {e.lineno} column {e.colno}")
     except OSError as e:

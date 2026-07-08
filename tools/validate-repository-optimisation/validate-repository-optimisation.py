@@ -89,6 +89,7 @@ def check_reports(reports: dict[str, dict[str, Any]] | None = None) -> list[dict
     compose = loaded.get("USF-1001") if loaded and "USF-1001" in loaded else load_json(REPORTS["USF-1001"])
     compose_refs = refs(compose)
     required_compose_refs = {
+        "compose-phase-split:config,port,startup-wait,teardown",
         "testcontainers:considered-not-adopted-current-tranche",
         "remote-cache:considered-not-adopted-current-tranche",
         "task-graph-tooling:considered-not-adopted-current-tranche",
