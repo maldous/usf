@@ -1,0 +1,29 @@
+{
+  "fixtureId": "query-missing-cache-privacy",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-004",
+  "ownerIssueId": "USF-932",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-004",
+  "mutatedSurface": "query-view",
+  "mutation": "Query omits cache freshness and privacy classification mappings.",
+  "authorityRefs": ["docs/architecture/client-query-cache-privacy-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "query": {
+    "queryRef": "semantic-query.search.results",
+    "tenantBoundaryRef": "tenant-context-required",
+    "errorModelRef": "typed-error.query-failed",
+    "proofRefs": ["validator-selftest-with-planted-defect-fixtures"]
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

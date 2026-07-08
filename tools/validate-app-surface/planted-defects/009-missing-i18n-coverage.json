@@ -1,0 +1,31 @@
+{
+  "fixtureId": "missing-i18n-coverage",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-009",
+  "ownerIssueId": "USF-937",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-009",
+  "mutatedSurface": "localisation-coverage",
+  "mutation": "Localisation coverage omits translation keys.",
+  "authorityRefs": ["docs/architecture/app-surface-i18n-localisation-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "localisation": {
+    "localeNegotiationRef": "locale-negotiation-required",
+    "icuFormatCoverageRef": "icu-formatting-required",
+    "rtlCoverageRef": "rtl-handling-required",
+    "fallbackPolicyRef": "fallback-locale-policy-required",
+    "localisedValidationOrConsentRefs": ["localised-consent-text-required"],
+    "coverageValidationRef": "translation-coverage-validator-required"
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "fixtureId": "unbacked-ui-behaviour",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-001",
+  "ownerIssueId": "USF-929",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-001",
+  "mutatedSurface": "ui-semantic-model",
+  "mutation": "UI-visible behaviour lacks semantic authority references.",
+  "authorityRefs": ["docs/architecture/app-surface-validator-planted-defect-matrix.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "behaviour": {
+    "capabilityRef": "semantic-contract.authentication-platform",
+    "permissionRefs": ["auth.login"],
+    "validationRefs": ["login-input-validation-semantics"],
+    "proofRefs": ["validator-selftest-with-planted-defect-fixtures"]
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

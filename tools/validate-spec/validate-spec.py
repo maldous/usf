@@ -146,6 +146,7 @@ AUTHORIZED_TOOLING = {
     "tools/repository-optimisation/realise-bounded-optimisation.py",
     "tools/validate-linear-boundary/validate-linear-boundary.py",
     "tools/validate-repository-optimisation/validate-repository-optimisation.py",
+    "tools/validate-app-surface/validate-app-surface.py",
     "tools/validate-spec/validate-spec.py",
     "tools/validate-spec/requirements.txt",
     "tools/validate-parity/validate-parity.py",

@@ -1,0 +1,30 @@
+{
+  "fixtureId": "notification-without-consent-permission",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-005",
+  "ownerIssueId": "USF-933",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-005",
+  "mutatedSurface": "notification-mapping",
+  "mutation": "Notification omits consent mapping.",
+  "authorityRefs": ["docs/architecture/notification-consent-data-inventory-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "mapping": {
+    "permissionRef": "platform.notifications.write",
+    "channelLifecycleRef": "notification-channel-lifecycle-governed",
+    "optOutBoundaryRef": "notification-opt-out-required",
+    "auditRef": "notification-consent-audit-event",
+    "providerModeRef": "provider-mode-not-live-external-provider"
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

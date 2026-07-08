@@ -1,0 +1,37 @@
+{
+  "fixtureId": "i18n-coverage-complete",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-009",
+  "ownerIssueId": "USF-937",
+  "coveredSurface": "localisation-coverage",
+  "authorityRefs": [
+    "docs/architecture/app-surface-i18n-localisation-semantics.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "spec/instances/semantic-contract/i18n-runtime-and-validation.json"
+  ],
+  "nonClaimRefs": [
+    "docs/architecture/app-surface-i18n-localisation-semantics.json",
+    "docs/architecture/app-surface-validator-implementation-tranche.json"
+  ],
+  "localisation": {
+    "localeNegotiationRef": "locale-negotiation-required",
+    "translationKeys": ["auth.login.title", "consent.notification.body"],
+    "icuFormatCoverageRef": "icu-formatting-required",
+    "rtlCoverageRef": "rtl-handling-required",
+    "fallbackPolicyRef": "fallback-locale-policy-required",
+    "localisedValidationOrConsentRefs": ["localised-consent-text-required"],
+    "coverageValidationRef": "translation-coverage-validator-required"
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

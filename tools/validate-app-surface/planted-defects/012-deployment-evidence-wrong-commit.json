@@ -1,0 +1,31 @@
+{
+  "fixtureId": "deployment-evidence-wrong-commit",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-012",
+  "ownerIssueId": "USF-940",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-012",
+  "mutatedSurface": "deployment-evidence",
+  "mutation": "Deployment evidence is pinned to a non-current commit.",
+  "authorityRefs": ["docs/architecture/app-surface-proof-evidence-report-semantics.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "deployment": {
+    "targetCommitRef": "0000000000000000000000000000000000000000",
+    "commitBinding": "literal",
+    "artifactHashRef": "artifact-hash-required-before-deployment-claim",
+    "provenanceRefs": ["commit-provenance-required"],
+    "freshnessRef": "freshness-must-fail-closed",
+    "semanticVersionAuthorityRef": "semantic-version-authority-required"
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

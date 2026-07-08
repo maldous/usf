@@ -1,0 +1,29 @@
+{
+  "fixtureId": "command-form-missing-validation-audit",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-003",
+  "ownerIssueId": "USF-931",
+  "expectedFailureRuleId": "USF-APP-SURFACE-VALIDATOR-003",
+  "mutatedSurface": "command-form",
+  "mutation": "Command form omits validation and audit mappings.",
+  "authorityRefs": ["docs/architecture/app-surface-validator-planted-defect-matrix.json"],
+  "nonClaimRefs": ["docs/architecture/app-surface-validator-implementation-tranche.json"],
+  "command": {
+    "commandRef": "semantic-command.profile.update_self",
+    "errorModelRef": "typed-error.profile-update-failed",
+    "permissionRefs": ["profile.update_self"],
+    "idempotencyBoundaryRef": "idempotency-boundary-required-for-command"
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

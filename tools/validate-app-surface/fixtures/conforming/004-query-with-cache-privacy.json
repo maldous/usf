@@ -1,0 +1,36 @@
+{
+  "fixtureId": "query-with-cache-privacy",
+  "targetRuleId": "USF-APP-SURFACE-VALIDATOR-004",
+  "ownerIssueId": "USF-932",
+  "coveredSurface": "query-view",
+  "authorityRefs": [
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+    "spec/instances/semantic-contract/search-and-indexing-product-search.json"
+  ],
+  "nonClaimRefs": [
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "docs/architecture/app-surface-validator-implementation-tranche.json"
+  ],
+  "query": {
+    "queryRef": "semantic-query.search.results",
+    "cacheFreshnessRef": "query-cache-freshness-required",
+    "privacyClassificationRef": "privacy-classification-required",
+    "tenantBoundaryRef": "tenant-context-required",
+    "errorModelRef": "typed-error.query-failed",
+    "proofRefs": ["validator-selftest-with-planted-defect-fixtures"]
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "advertisingCompliance": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}
