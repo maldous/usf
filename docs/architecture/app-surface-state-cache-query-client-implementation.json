@@ -1,0 +1,271 @@
+{
+  "artifactId": "usf.app-surface-state-cache-query-client-implementation",
+  "title": "App-surface state cache and query client setup",
+  "ownerIssueId": "USF-1023",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "providerMode": "in-memory-only",
+  "environment": "dev-local",
+  "authorityInputs": [
+    "docs/architecture/client-state-storage-sync-semantics.json",
+    "docs/architecture/client-query-cache-privacy-semantics.json",
+    "docs/architecture/app-surface-local-in-memory-runtime.json",
+    "docs/architecture/app-surface-query-list-detail-implementation.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json"
+  ],
+  "implementationScope": {
+    "runtimeBoundary": "bounded local in-memory state, cache, and query-client mapping only",
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "unitTestArtefact": "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+    "runtimeCodeCreatedByIssue": true,
+    "packageInstallationAllowed": false,
+    "dependencyInstallRequired": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false
+  },
+  "libraryDecisionPosture": {
+    "queryLibraryAdopted": false,
+    "packageDependenciesAddedByIssue": [],
+    "lockfileChangedByIssue": false,
+    "repositoryDecisionGapFound": false,
+    "implementationDecision": "USF-1023 implements a dependency-free local boundary over existing generated-client and query-view semantics. The client-state semantic gate keeps queryLibrarySetupAllowed false, so adopting a real query library remains outside this issue and would require separate repository authority and package proof.",
+    "blockingDecisionIssueRequiredNow": false,
+    "futureLibraryWorkMustUseSeparateAuthorityIssue": true
+  },
+  "implementedStateBoundaries": [
+    {
+      "stateId": "state-cache-developer-profile-query-result",
+      "stateClass": "server-query-cache",
+      "stateScope": "server-state-query-result",
+      "queryRef": "query.developerProfile",
+      "queryViewRefs": [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail"
+      ],
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "privacyClassificationRefs": [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "cachePolicyRefs": [
+        "query-cache-freshness-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping"
+      ],
+      "storageLocationRef": "in-memory-only",
+      "retentionPolicyRef": "docs/architecture/client-state-storage-sync-semantics.json#client-device-browser-retention",
+      "purgeTriggerRefs": [
+        "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture"
+      ],
+      "logoutPurgeRef": "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      "sharedDevicePostureRef": "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      "failClosedRefs": [
+        "missing-state-classification",
+        "missing-privacy-classification",
+        "missing-purge-policy",
+        "partial-purge-fail-closed",
+        "persistent-sensitive-storage-not-authorised",
+        "query-library-setup-not-authorised"
+      ],
+      "persistentSensitiveStorageAllowed": false,
+      "queryLibraryRequired": false,
+      "syncAllowed": false,
+      "offlineAllowed": false,
+      "realtimeAllowed": false,
+      "backgroundRefreshAllowed": false,
+      "nonClaimBoundary": "server query cache is an in-memory local mapping only, not cache readiness or query-library readiness"
+    },
+    {
+      "stateId": "state-ui-developer-profile-view-state",
+      "stateClass": "ui-ephemeral-state",
+      "stateScope": "ui-only-view-state",
+      "queryRef": "query.developerProfile",
+      "queryViewRefs": [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail"
+      ],
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "privacyClassificationRefs": [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "cachePolicyRefs": [
+        "query-cache-freshness-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping"
+      ],
+      "storageLocationRef": "in-memory-only",
+      "retentionPolicyRef": "docs/architecture/client-state-storage-sync-semantics.json#client-device-browser-retention",
+      "purgeTriggerRefs": [
+        "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture"
+      ],
+      "logoutPurgeRef": "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      "sharedDevicePostureRef": "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      "failClosedRefs": [
+        "missing-state-classification",
+        "missing-privacy-classification",
+        "missing-purge-policy",
+        "ui-only-behaviour-not-authorised",
+        "persistent-sensitive-storage-not-authorised",
+        "query-library-setup-not-authorised"
+      ],
+      "persistentSensitiveStorageAllowed": false,
+      "queryLibraryRequired": false,
+      "syncAllowed": false,
+      "offlineAllowed": false,
+      "realtimeAllowed": false,
+      "backgroundRefreshAllowed": false,
+      "nonClaimBoundary": "UI state is ephemeral presentation state and does not define product behaviour"
+    },
+    {
+      "stateId": "state-session-developer-profile-purge-signal",
+      "stateClass": "session-purge-signal",
+      "stateScope": "session-purge-boundary",
+      "queryRef": "query.developerProfile",
+      "queryViewRefs": [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail"
+      ],
+      "capabilityId": "graphql-federation-generated-client-disposition",
+      "permissionRefs": [
+        "developer:read"
+      ],
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "privacyClassificationRefs": [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json"
+      ],
+      "cachePolicyRefs": [
+        "query-cache-freshness-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics"
+      ],
+      "storageLocationRef": "in-memory-only",
+      "retentionPolicyRef": "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      "purgeTriggerRefs": [
+        "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture"
+      ],
+      "logoutPurgeRef": "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      "sharedDevicePostureRef": "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      "failClosedRefs": [
+        "missing-state-classification",
+        "missing-purge-policy",
+        "partial-purge-fail-closed",
+        "persistent-sensitive-storage-not-authorised",
+        "query-library-setup-not-authorised"
+      ],
+      "persistentSensitiveStorageAllowed": false,
+      "queryLibraryRequired": false,
+      "syncAllowed": false,
+      "offlineAllowed": false,
+      "realtimeAllowed": false,
+      "backgroundRefreshAllowed": false,
+      "nonClaimBoundary": "Logout and session expiry purge signalling is local and does not claim auth readiness"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "stateClassesMustMapToSemantics": true,
+    "serverStateAndUiOnlyBoundaryMustBeExplicit": true,
+    "privacyClassificationMustExist": true,
+    "logoutAndPurgeBehaviourMustExist": true,
+    "tenantBoundaryMustExist": true,
+    "missingStateClassificationMustFailClosed": true,
+    "missingPrivacyClassificationMustFailClosed": true,
+    "missingPurgePolicyMustFailClosed": true,
+    "unknownStateBoundaryMustFailClosed": true,
+    "persistentSensitiveStorageMustRemainForbidden": true,
+    "queryLibrarySetupMustRemainForbidden": true,
+    "syncOfflineRealtimeBackgroundMustRemainForbidden": true,
+    "libraryDecisionGapsMustBlockImplementation": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "outOfScopeSurfaces": [
+    {
+      "surface": "auth-session-dev-identity",
+      "ownerIssueId": "USF-1024",
+      "status": "owned-by-later-issue"
+    },
+    {
+      "surface": "live-server-state-provider",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "persistent-sensitive-storage",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "query-library-package-adoption",
+      "ownerIssueId": "USF-1019",
+      "status": "not-authorised-in-this-issue"
+    },
+    {
+      "surface": "sync-engine",
+      "ownerIssueId": "USF-528",
+      "status": "blocked-by-missing-owner-decision"
+    },
+    {
+      "surface": "offline-first-cache",
+      "ownerIssueId": "USF-528",
+      "status": "blocked-by-missing-owner-decision"
+    },
+    {
+      "surface": "realtime-subscription",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "background-refresh",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "deployment-or-staging-proof",
+      "status": "not-authorised"
+    }
+  ],
+  "proofLadder": {
+    "devLocalRequired": true,
+    "unitTestsRequired": true,
+    "contractTestsRequired": true,
+    "composeRequired": false,
+    "stagingRequired": false,
+    "stagingClassification": "not-required-for-bounded-local-in-memory-state-cache-query-client-boundary"
+  },
+  "nonClaims": {
+    "cacheReadiness": false,
+    "queryClientReadiness": false,
+    "queryLibraryReadiness": false,
+    "syncReadiness": false,
+    "offlineReadiness": false,
+    "authReadiness": false,
+    "serverStateProviderReadiness": false,
+    "persistentStorageReadiness": false,
+    "privacyCompliance": false,
+    "dataRetentionCompliance": false,
+    "providerReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "humanAcceptance": false
+  }
+}

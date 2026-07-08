@@ -551,8 +551,9 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "Bounded local Next.js web and Expo mobile scaffolds, local in-memory app-surface runtime, route capability mapping, command form registry, and query list/detail registry now exist for dev-local proof.",
-      "queryListDetailRegistryFound": true
+      "currentConclusion": "bounded local route, command/form, query/list/detail, and state/cache/query-client runtime mappings now exist; web/mobile scaffolds and later app surfaces remain issue-scoped work",
+      "queryListDetailRegistryFound": true,
+      "stateCacheQueryClientBoundary": "implemented-by-USF-1023"
     },
     "openLinearIssueImpact": {
       "USF-1008": {

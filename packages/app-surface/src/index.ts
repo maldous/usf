@@ -1221,3 +1221,663 @@ export function exerciseLocalQueryView(
     deploymentUsed: false,
   };
 }
+
+export type LocalStateCacheQueryClientProviderMode = "in-memory-only";
+export type LocalStateCacheQueryClientEnvironment = "dev-local";
+export type LocalStateClass = "server-query-cache" | "ui-ephemeral-state" | "session-purge-signal";
+export type LocalStateScope = "server-state-query-result" | "ui-only-view-state" | "session-purge-boundary";
+export type LocalStateStorageLocation = "in-memory-only";
+
+export interface LocalStateCacheQueryBoundaryMapping {
+  readonly stateId: string;
+  readonly stateClass: string;
+  readonly stateScope: string;
+  readonly queryRef: string;
+  readonly queryViewRefs: readonly string[];
+  readonly capabilityId: string;
+  readonly permissionRefs: readonly string[];
+  readonly tenantBoundaryRef: string;
+  readonly privacyClassificationRefs: readonly string[];
+  readonly cachePolicyRefs: readonly string[];
+  readonly storageLocationRef: string;
+  readonly retentionPolicyRef: string;
+  readonly purgeTriggerRefs: readonly string[];
+  readonly logoutPurgeRef: string;
+  readonly sharedDevicePostureRef: string;
+  readonly failClosedRefs: readonly string[];
+  readonly semanticSourceRefs: readonly string[];
+  readonly proofRefs: readonly string[];
+  readonly persistentSensitiveStorageAllowed: boolean;
+  readonly queryLibraryRequired: boolean;
+  readonly syncAllowed: boolean;
+  readonly offlineAllowed: boolean;
+  readonly realtimeAllowed: boolean;
+  readonly backgroundRefreshAllowed: boolean;
+  readonly nonClaimBoundary: string;
+}
+
+export interface LocalStateCacheQueryClientRegistry {
+  readonly artifactId: string;
+  readonly ownerIssueId: string;
+  readonly providerMode: string;
+  readonly environment: string;
+  readonly unknownStatePolicy: string;
+  readonly persistentSensitiveStorageAllowed: boolean;
+  readonly queryLibrarySetupAllowed: boolean;
+  readonly syncEngineAllowed: boolean;
+  readonly offlineReadinessAllowed: boolean;
+  readonly realtimeProviderAllowed: boolean;
+  readonly backgroundRefreshAllowed: boolean;
+  readonly stateBoundaries: readonly LocalStateCacheQueryBoundaryMapping[];
+  readonly nonClaims: Record<string, boolean>;
+}
+
+export interface LocalStateCacheQueryClientAuthority {
+  readonly stateClasses?: ReadonlySet<string> | readonly string[];
+  readonly queryRefs?: ReadonlySet<string> | readonly string[];
+  readonly queryViewRefs?: ReadonlySet<string> | readonly string[];
+  readonly capabilityIds?: ReadonlySet<string> | readonly string[];
+  readonly permissionRefs?: ReadonlySet<string> | readonly string[];
+  readonly tenantBoundaryRefs?: ReadonlySet<string> | readonly string[];
+  readonly privacyClassificationRefs?: ReadonlySet<string> | readonly string[];
+  readonly cachePolicyRefs?: ReadonlySet<string> | readonly string[];
+  readonly storageLocationRefs?: ReadonlySet<string> | readonly string[];
+  readonly retentionPolicyRefs?: ReadonlySet<string> | readonly string[];
+  readonly purgeTriggerRefs?: ReadonlySet<string> | readonly string[];
+  readonly logoutPurgeRefs?: ReadonlySet<string> | readonly string[];
+  readonly sharedDevicePostureRefs?: ReadonlySet<string> | readonly string[];
+  readonly failClosedRefs?: ReadonlySet<string> | readonly string[];
+  readonly semanticSourceRefs?: ReadonlySet<string> | readonly string[];
+  readonly proofRefs?: ReadonlySet<string> | readonly string[];
+}
+
+export interface LocalStateCacheQueryClientExerciseResult {
+  readonly stateId: string;
+  readonly stateClass: string;
+  readonly stateScope: string;
+  readonly queryRef: string;
+  readonly capabilityId: string;
+  readonly tenantBoundaryRef: string;
+  readonly providerMode: LocalStateCacheQueryClientProviderMode;
+  readonly environment: LocalStateCacheQueryClientEnvironment;
+  readonly storageLocationRef: LocalStateStorageLocation;
+  readonly persistentSensitiveStorageUsed: false;
+  readonly queryLibraryUsed: false;
+  readonly syncEngineUsed: false;
+  readonly offlineFirstUsed: false;
+  readonly realtimeProviderUsed: false;
+  readonly backgroundRefreshUsed: false;
+  readonly externalStateServiceUsed: false;
+  readonly stagingUsed: false;
+  readonly deploymentUsed: false;
+  readonly nonClaimBoundary: string;
+}
+
+const LOCAL_STATE_CACHE_QUERY_CLIENT_RULE = "USF-1023";
+const LOCAL_STATE_CACHE_QUERY_CLIENT_ARTIFACT_ID = "usf.app-surface-state-cache-query-client-registry";
+const LOCAL_STATE_CACHE_QUERY_CLIENT_PROVIDER_MODE: LocalStateCacheQueryClientProviderMode = "in-memory-only";
+const LOCAL_STATE_CACHE_QUERY_CLIENT_ENVIRONMENT: LocalStateCacheQueryClientEnvironment = "dev-local";
+const LOCAL_STATE_CACHE_QUERY_CLIENT_UNKNOWN_STATE_POLICY = "fail-closed";
+const LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_STATE_CLASSES = [
+  "server-query-cache",
+  "ui-ephemeral-state",
+  "session-purge-signal",
+] as const;
+const LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_NON_CLAIMS = [
+  "cacheReadiness",
+  "queryClientReadiness",
+  "queryLibraryReadiness",
+  "syncReadiness",
+  "offlineReadiness",
+  "authReadiness",
+  "serverStateProviderReadiness",
+  "persistentStorageReadiness",
+  "privacyCompliance",
+  "dataRetentionCompliance",
+  "providerReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "productionReadiness",
+  "liveProviderReadiness",
+  "humanAcceptance",
+] as const;
+
+const LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_STRING_FIELDS = [
+  "stateId",
+  "stateClass",
+  "stateScope",
+  "queryRef",
+  "capabilityId",
+  "tenantBoundaryRef",
+  "storageLocationRef",
+  "retentionPolicyRef",
+  "logoutPurgeRef",
+  "sharedDevicePostureRef",
+  "nonClaimBoundary",
+] as const;
+
+const LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_ARRAY_FIELDS = [
+  "queryViewRefs",
+  "permissionRefs",
+  "privacyClassificationRefs",
+  "cachePolicyRefs",
+  "purgeTriggerRefs",
+  "failClosedRefs",
+  "semanticSourceRefs",
+  "proofRefs",
+] as const;
+
+const LOCAL_STATE_CACHE_QUERY_CLIENT_FORBIDDEN_FLAGS = [
+  ["persistentSensitiveStorageAllowed", "persistent-sensitive-storage-not-authorised"],
+  ["queryLibraryRequired", "query-library-setup-not-authorised"],
+  ["syncAllowed", "sync-engine-not-authorised"],
+  ["offlineAllowed", "offline-first-not-authorised"],
+  ["realtimeAllowed", "realtime-provider-not-authorised"],
+  ["backgroundRefreshAllowed", "background-refresh-not-authorised"],
+] as const;
+
+const LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY_FORBIDDEN_FLAGS = [
+  ["persistentSensitiveStorageAllowed", "persistent-sensitive-storage-not-authorised"],
+  ["queryLibrarySetupAllowed", "query-library-setup-not-authorised"],
+  ["syncEngineAllowed", "sync-engine-not-authorised"],
+  ["offlineReadinessAllowed", "offline-first-not-authorised"],
+  ["realtimeProviderAllowed", "realtime-provider-not-authorised"],
+  ["backgroundRefreshAllowed", "background-refresh-not-authorised"],
+] as const;
+
+const LOCAL_STATE_CACHE_QUERY_CLIENT_FORBIDDEN_KEYS = [
+  "externalStateService",
+  "persistentStorageProvider",
+  "queryClientProvider",
+  "syncProvider",
+  "realtimeProvider",
+  "backgroundTaskProvider",
+  "credentialRef",
+  "deploymentRef",
+  "stagingRef",
+] as const;
+
+export const LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY = {
+  artifactId: LOCAL_STATE_CACHE_QUERY_CLIENT_ARTIFACT_ID,
+  ownerIssueId: LOCAL_STATE_CACHE_QUERY_CLIENT_RULE,
+  providerMode: LOCAL_STATE_CACHE_QUERY_CLIENT_PROVIDER_MODE,
+  environment: LOCAL_STATE_CACHE_QUERY_CLIENT_ENVIRONMENT,
+  unknownStatePolicy: LOCAL_STATE_CACHE_QUERY_CLIENT_UNKNOWN_STATE_POLICY,
+  persistentSensitiveStorageAllowed: false,
+  queryLibrarySetupAllowed: false,
+  syncEngineAllowed: false,
+  offlineReadinessAllowed: false,
+  realtimeProviderAllowed: false,
+  backgroundRefreshAllowed: false,
+  stateBoundaries: [
+    {
+      stateId: "state-cache-developer-profile-query-result",
+      stateClass: "server-query-cache",
+      stateScope: "server-state-query-result",
+      queryRef: "query.developerProfile",
+      queryViewRefs: [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail",
+      ],
+      capabilityId: "graphql-federation-generated-client-disposition",
+      permissionRefs: ["developer:read"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      privacyClassificationRefs: [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+      ],
+      cachePolicyRefs: [
+        "query-cache-freshness-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping",
+      ],
+      storageLocationRef: "in-memory-only",
+      retentionPolicyRef: "docs/architecture/client-state-storage-sync-semantics.json#client-device-browser-retention",
+      purgeTriggerRefs: [
+        "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      ],
+      logoutPurgeRef: "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      sharedDevicePostureRef: "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      failClosedRefs: [
+        "missing-state-classification",
+        "missing-privacy-classification",
+        "missing-purge-policy",
+        "partial-purge-fail-closed",
+        "persistent-sensitive-storage-not-authorised",
+        "query-library-setup-not-authorised",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/client-state-storage-sync-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+        "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      persistentSensitiveStorageAllowed: false,
+      queryLibraryRequired: false,
+      syncAllowed: false,
+      offlineAllowed: false,
+      realtimeAllowed: false,
+      backgroundRefreshAllowed: false,
+      nonClaimBoundary: "server query cache is an in-memory local mapping only, not cache readiness or query-library readiness",
+    },
+    {
+      stateId: "state-ui-developer-profile-view-state",
+      stateClass: "ui-ephemeral-state",
+      stateScope: "ui-only-view-state",
+      queryRef: "query.developerProfile",
+      queryViewRefs: [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail",
+      ],
+      capabilityId: "graphql-federation-generated-client-disposition",
+      permissionRefs: ["developer:read"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      privacyClassificationRefs: [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+      ],
+      cachePolicyRefs: [
+        "query-cache-freshness-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#queryViewModelMapping",
+      ],
+      storageLocationRef: "in-memory-only",
+      retentionPolicyRef: "docs/architecture/client-state-storage-sync-semantics.json#client-device-browser-retention",
+      purgeTriggerRefs: [
+        "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      ],
+      logoutPurgeRef: "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      sharedDevicePostureRef: "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      failClosedRefs: [
+        "missing-state-classification",
+        "missing-privacy-classification",
+        "missing-purge-policy",
+        "ui-only-behaviour-not-authorised",
+        "persistent-sensitive-storage-not-authorised",
+        "query-library-setup-not-authorised",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/client-state-storage-sync-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+        "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      persistentSensitiveStorageAllowed: false,
+      queryLibraryRequired: false,
+      syncAllowed: false,
+      offlineAllowed: false,
+      realtimeAllowed: false,
+      backgroundRefreshAllowed: false,
+      nonClaimBoundary: "UI state is ephemeral presentation state and does not define product behaviour",
+    },
+    {
+      stateId: "state-session-developer-profile-purge-signal",
+      stateClass: "session-purge-signal",
+      stateScope: "session-purge-boundary",
+      queryRef: "query.developerProfile",
+      queryViewRefs: [
+        "query-view-developer-profile-list",
+        "query-view-developer-profile-detail",
+      ],
+      capabilityId: "graphql-federation-generated-client-disposition",
+      permissionRefs: ["developer:read"],
+      tenantBoundaryRef: "tenant.dev-local-fixture",
+      privacyClassificationRefs: [
+        "privacy-classification-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-observability-privacy-semantics.json",
+      ],
+      cachePolicyRefs: [
+        "query-cache-freshness-required",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json#cacheInvalidationSemantics",
+      ],
+      storageLocationRef: "in-memory-only",
+      retentionPolicyRef: "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      purgeTriggerRefs: [
+        "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+        "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      ],
+      logoutPurgeRef: "docs/architecture/client-state-storage-sync-semantics.json#logout-session-expiry-purge",
+      sharedDevicePostureRef: "docs/architecture/client-state-storage-sync-semantics.json#privacy-mode-shared-device-posture",
+      failClosedRefs: [
+        "missing-state-classification",
+        "missing-purge-policy",
+        "partial-purge-fail-closed",
+        "persistent-sensitive-storage-not-authorised",
+        "query-library-setup-not-authorised",
+      ],
+      semanticSourceRefs: [
+        "docs/architecture/client-state-storage-sync-semantics.json",
+        "docs/architecture/client-query-cache-privacy-semantics.json",
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+        "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py",
+      ],
+      persistentSensitiveStorageAllowed: false,
+      queryLibraryRequired: false,
+      syncAllowed: false,
+      offlineAllowed: false,
+      realtimeAllowed: false,
+      backgroundRefreshAllowed: false,
+      nonClaimBoundary: "Logout and session expiry purge signalling is local and does not claim auth readiness",
+    },
+  ],
+  nonClaims: {
+    cacheReadiness: false,
+    queryClientReadiness: false,
+    queryLibraryReadiness: false,
+    syncReadiness: false,
+    offlineReadiness: false,
+    authReadiness: false,
+    serverStateProviderReadiness: false,
+    persistentStorageReadiness: false,
+    privacyCompliance: false,
+    dataRetentionCompliance: false,
+    providerReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    productionReadiness: false,
+    liveProviderReadiness: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalStateCacheQueryClientRegistry;
+
+const asStateCacheAuthorityValues = (values: ReadonlySet<string> | readonly string[] | undefined): readonly string[] | undefined => {
+  if (values === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(values)) {
+    return values;
+  }
+  return Array.from(values);
+};
+
+const stateCacheAuthorityHas = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+  value: string,
+): boolean => {
+  if (values === undefined) {
+    return true;
+  }
+  return asStateCacheAuthorityValues(values)?.includes(value) ?? false;
+};
+
+const hasStateCacheString = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0;
+
+const hasStateCacheStringArray = (value: unknown): value is readonly string[] =>
+  Array.isArray(value) && value.length > 0 && value.every((item) => hasStateCacheString(item));
+
+const stateCacheSubject = (mapping: Pick<LocalStateCacheQueryBoundaryMapping, "stateId"> | { readonly stateId?: unknown }): string =>
+  hasStateCacheString(mapping.stateId) ? mapping.stateId : "state-cache-boundary";
+
+const validateStateCacheAuthorityValue = (
+  findings: string[],
+  subject: string,
+  authority: LocalStateCacheQueryClientAuthority | undefined,
+  authorityKey: keyof LocalStateCacheQueryClientAuthority,
+  value: string,
+  code: string,
+): void => {
+  if (!stateCacheAuthorityHas(authority?.[authorityKey], value)) {
+    findings.push(`${subject}:${code}:${value}`);
+  }
+};
+
+const validateStateCacheAuthorityArray = (
+  findings: string[],
+  subject: string,
+  authority: LocalStateCacheQueryClientAuthority | undefined,
+  authorityKey: keyof LocalStateCacheQueryClientAuthority,
+  values: readonly string[],
+  code: string,
+): void => {
+  for (const value of values) {
+    validateStateCacheAuthorityValue(findings, subject, authority, authorityKey, value, code);
+  }
+};
+
+export const validateLocalStateCacheBoundaryMapping = (
+  mapping: LocalStateCacheQueryBoundaryMapping,
+  authority?: LocalStateCacheQueryClientAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const subject = stateCacheSubject(mapping);
+  const record = mapping as unknown as Record<string, unknown>;
+
+  for (const field of LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_STRING_FIELDS) {
+    if (!hasStateCacheString(record[field])) {
+      findings.push(`${subject}:missing-${field}`);
+    }
+  }
+  for (const field of LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_ARRAY_FIELDS) {
+    if (!hasStateCacheStringArray(record[field])) {
+      findings.push(`${subject}:missing-${field}`);
+    }
+  }
+  if (hasStateCacheString(mapping.stateClass)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "stateClasses", mapping.stateClass, "state-class-authority-missing");
+    if (!LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_STATE_CLASSES.includes(mapping.stateClass as LocalStateClass)) {
+      findings.push(`${subject}:state-class-unsupported:${mapping.stateClass}`);
+    }
+  }
+  if (hasStateCacheString(mapping.queryRef)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "queryRefs", mapping.queryRef, "query-authority-missing");
+  }
+  if (hasStateCacheString(mapping.capabilityId)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "capabilityIds", mapping.capabilityId, "capability-authority-missing");
+  }
+  if (hasStateCacheString(mapping.tenantBoundaryRef)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "tenantBoundaryRefs", mapping.tenantBoundaryRef, "tenant-authority-missing");
+  }
+  if (hasStateCacheString(mapping.storageLocationRef)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "storageLocationRefs", mapping.storageLocationRef, "storage-authority-missing");
+  }
+  if (hasStateCacheString(mapping.retentionPolicyRef)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "retentionPolicyRefs", mapping.retentionPolicyRef, "retention-authority-missing");
+  }
+  if (hasStateCacheString(mapping.logoutPurgeRef)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "logoutPurgeRefs", mapping.logoutPurgeRef, "logout-purge-authority-missing");
+  }
+  if (hasStateCacheString(mapping.sharedDevicePostureRef)) {
+    validateStateCacheAuthorityValue(findings, subject, authority, "sharedDevicePostureRefs", mapping.sharedDevicePostureRef, "shared-device-authority-missing");
+  }
+  for (const [field, code] of LOCAL_STATE_CACHE_QUERY_CLIENT_FORBIDDEN_FLAGS) {
+    if (record[field] !== false) {
+      findings.push(`${subject}:${code}`);
+    }
+  }
+  for (const key of LOCAL_STATE_CACHE_QUERY_CLIENT_FORBIDDEN_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      findings.push(`${subject}:forbidden-${key}`);
+    }
+  }
+  if (hasStateCacheStringArray(mapping.queryViewRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "queryViewRefs", mapping.queryViewRefs, "query-view-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.permissionRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "permissionRefs", mapping.permissionRefs, "permission-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.privacyClassificationRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "privacyClassificationRefs", mapping.privacyClassificationRefs, "privacy-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.cachePolicyRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "cachePolicyRefs", mapping.cachePolicyRefs, "cache-policy-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.purgeTriggerRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "purgeTriggerRefs", mapping.purgeTriggerRefs, "purge-trigger-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.failClosedRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "failClosedRefs", mapping.failClosedRefs, "fail-closed-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.semanticSourceRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "semanticSourceRefs", mapping.semanticSourceRefs, "semantic-source-authority-missing");
+  }
+  if (hasStateCacheStringArray(mapping.proofRefs)) {
+    validateStateCacheAuthorityArray(findings, subject, authority, "proofRefs", mapping.proofRefs, "proof-authority-missing");
+  }
+  return findings;
+};
+
+export const validateLocalStateCacheQueryClientRegistry = (
+  registry: LocalStateCacheQueryClientRegistry = LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY,
+  authority?: LocalStateCacheQueryClientAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const record = registry as unknown as Record<string, unknown>;
+  const registrySubject = "state-cache-query-client-registry";
+
+  if (registry.artifactId !== LOCAL_STATE_CACHE_QUERY_CLIENT_ARTIFACT_ID) {
+    findings.push(`${registrySubject}:artifactId-mismatch`);
+  }
+  if (registry.ownerIssueId !== LOCAL_STATE_CACHE_QUERY_CLIENT_RULE) {
+    findings.push(`${registrySubject}:ownerIssueId-mismatch`);
+  }
+  if (registry.providerMode !== LOCAL_STATE_CACHE_QUERY_CLIENT_PROVIDER_MODE) {
+    findings.push(`${registrySubject}:providerMode-mismatch`);
+  }
+  if (registry.environment !== LOCAL_STATE_CACHE_QUERY_CLIENT_ENVIRONMENT) {
+    findings.push(`${registrySubject}:environment-mismatch`);
+  }
+  if (registry.unknownStatePolicy !== LOCAL_STATE_CACHE_QUERY_CLIENT_UNKNOWN_STATE_POLICY) {
+    findings.push(`${registrySubject}:unknown-state-policy-must-fail-closed`);
+  }
+  for (const [field, code] of LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY_FORBIDDEN_FLAGS) {
+    if (record[field] !== false) {
+      findings.push(`${registrySubject}:${code}`);
+    }
+  }
+  for (const claim of LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_NON_CLAIMS) {
+    if (registry.nonClaims?.[claim] !== false) {
+      findings.push(`${registrySubject}:nonclaim-${claim}-must-be-false`);
+    }
+  }
+  if (!Array.isArray(registry.stateBoundaries) || registry.stateBoundaries.length === 0) {
+    findings.push(`${registrySubject}:missing-stateBoundaries`);
+    return findings;
+  }
+  const seenStateIds = new Set<string>();
+  const seenStateClasses = new Set<string>();
+  for (const mapping of registry.stateBoundaries) {
+    const subject = stateCacheSubject(mapping);
+    if (seenStateIds.has(mapping.stateId)) {
+      findings.push(`${subject}:duplicate-stateId`);
+    }
+    seenStateIds.add(mapping.stateId);
+    if (hasStateCacheString(mapping.stateClass)) {
+      seenStateClasses.add(mapping.stateClass);
+    }
+    findings.push(...validateLocalStateCacheBoundaryMapping(mapping, authority));
+  }
+  for (const requiredClass of LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_STATE_CLASSES) {
+    if (!seenStateClasses.has(requiredClass)) {
+      findings.push(`${registrySubject}:missing-stateClass-${requiredClass}`);
+    }
+  }
+  return findings;
+};
+
+const stateCacheArraysEqual = (left: readonly string[], right: readonly string[]): boolean =>
+  left.length === right.length && left.every((value, index) => value === right[index]);
+
+const localStateCacheBoundaryMatchesRegistry = (
+  candidate: LocalStateCacheQueryBoundaryMapping,
+  registered: LocalStateCacheQueryBoundaryMapping,
+): boolean => {
+  const stringFields: (keyof LocalStateCacheQueryBoundaryMapping)[] = [
+    "stateClass",
+    "stateScope",
+    "queryRef",
+    "capabilityId",
+    "tenantBoundaryRef",
+    "storageLocationRef",
+    "retentionPolicyRef",
+    "logoutPurgeRef",
+    "sharedDevicePostureRef",
+    "nonClaimBoundary",
+  ];
+  for (const field of stringFields) {
+    if (candidate[field] !== registered[field]) {
+      return false;
+    }
+  }
+  for (const field of LOCAL_STATE_CACHE_QUERY_CLIENT_REQUIRED_ARRAY_FIELDS) {
+    if (!stateCacheArraysEqual(candidate[field], registered[field])) {
+      return false;
+    }
+  }
+  for (const [field] of LOCAL_STATE_CACHE_QUERY_CLIENT_FORBIDDEN_FLAGS) {
+    if (candidate[field] !== registered[field]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export const getLocalStateCacheBoundaryById = (stateId: string): LocalStateCacheQueryBoundaryMapping => {
+  const mapping = LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY.stateBoundaries.find((candidate) => candidate.stateId === stateId);
+  if (mapping === undefined) {
+    throw new Error(`state-cache-boundary-unknown:${stateId}`);
+  }
+  return mapping;
+};
+
+export const exerciseLocalStateCacheBoundary = (
+  mapping: LocalStateCacheQueryBoundaryMapping,
+  authority?: LocalStateCacheQueryClientAuthority,
+): LocalStateCacheQueryClientExerciseResult => {
+  const findings = validateLocalStateCacheBoundaryMapping(mapping, authority);
+  if (findings.length > 0) {
+    throw new Error(`local-state-cache-boundary-invalid:${findings.join(",")}`);
+  }
+  const registered = LOCAL_STATE_CACHE_QUERY_CLIENT_REGISTRY.stateBoundaries.find((candidate) => candidate.stateId === mapping.stateId);
+  if (registered === undefined) {
+    throw new Error(`state-cache-boundary-unregistered:${mapping.stateId}`);
+  }
+  if (!localStateCacheBoundaryMatchesRegistry(mapping, registered)) {
+    throw new Error(`state-cache-boundary-registry-mismatch:${mapping.stateId}`);
+  }
+  return {
+    stateId: mapping.stateId,
+    stateClass: mapping.stateClass,
+    stateScope: mapping.stateScope,
+    queryRef: mapping.queryRef,
+    capabilityId: mapping.capabilityId,
+    tenantBoundaryRef: mapping.tenantBoundaryRef,
+    providerMode: LOCAL_STATE_CACHE_QUERY_CLIENT_PROVIDER_MODE,
+    environment: LOCAL_STATE_CACHE_QUERY_CLIENT_ENVIRONMENT,
+    storageLocationRef: "in-memory-only",
+    persistentSensitiveStorageUsed: false,
+    queryLibraryUsed: false,
+    syncEngineUsed: false,
+    offlineFirstUsed: false,
+    realtimeProviderUsed: false,
+    backgroundRefreshUsed: false,
+    externalStateServiceUsed: false,
+    stagingUsed: false,
+    deploymentUsed: false,
+    nonClaimBoundary: mapping.nonClaimBoundary,
+  };
+};
