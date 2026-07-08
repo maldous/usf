@@ -3139,3 +3139,484 @@ export const translateLocalAppSurfaceText = (
     humanAcceptanceClaimed: false,
   };
 };
+
+export type LocalAccessibilityProviderMode = "in-memory-only";
+export type LocalAccessibilityEnvironment = "dev-local";
+export type LocalAccessibilityPlatform = "web" | "mobile" | "shared-local";
+
+export interface LocalAccessibilitySurfaceMapping {
+  readonly surfaceId: string;
+  readonly surfaceKind: string;
+  readonly platform: LocalAccessibilityPlatform;
+  readonly implementationPath: string;
+  readonly capabilityRef: string;
+  readonly labelRefs: readonly string[];
+  readonly roleRefs: readonly string[];
+  readonly stateRefs: readonly string[];
+  readonly screenReaderRef: string;
+  readonly focusOrderRef: string;
+  readonly keyboardNavigationRef: string;
+  readonly touchTargetRef: string;
+  readonly dynamicTypeRef: string;
+  readonly contrastRef: string;
+  readonly reducedMotionRef: string;
+  readonly errorAnnouncementRef: string;
+  readonly interactiveSurface: boolean;
+  readonly keyboardReachable: boolean;
+  readonly focusOrderDefined: boolean;
+  readonly screenReaderLabelled: boolean;
+  readonly errorAnnouncementDefined: boolean;
+  readonly semanticSourceRefs: readonly string[];
+  readonly proofRefs: readonly string[];
+  readonly nonClaimBoundary: string;
+}
+
+export interface LocalAccessibilityRegistry {
+  readonly artifactId: string;
+  readonly ownerIssueId: string;
+  readonly providerMode: LocalAccessibilityProviderMode;
+  readonly environment: LocalAccessibilityEnvironment;
+  readonly surfaces: readonly LocalAccessibilitySurfaceMapping[];
+  readonly missingSemanticsPolicy: "fail-closed";
+  readonly externalAuditAllowed: boolean;
+  readonly complianceClaimAllowed: boolean;
+  readonly certificationClaimAllowed: boolean;
+  readonly humanAcceptanceAllowed: boolean;
+  readonly deviceLabClaimAllowed: boolean;
+  readonly nonClaims: Record<string, boolean>;
+}
+
+export interface LocalAccessibilityAuthority {
+  readonly surfaceRefs?: ReadonlySet<string> | readonly string[];
+  readonly capabilityRefs?: ReadonlySet<string> | readonly string[];
+  readonly semanticSourceRefs?: ReadonlySet<string> | readonly string[];
+  readonly proofRefs?: ReadonlySet<string> | readonly string[];
+}
+
+export interface LocalAccessibilitySurfaceDescription {
+  readonly surfaceId: string;
+  readonly platform: LocalAccessibilityPlatform;
+  readonly capabilityRef: string;
+  readonly screenReaderRef: string;
+  readonly focusOrderRef: string;
+  readonly keyboardNavigationRef: string;
+  readonly touchTargetRef: string;
+  readonly dynamicTypeRef: string;
+  readonly contrastRef: string;
+  readonly reducedMotionRef: string;
+  readonly errorAnnouncementRef: string;
+  readonly accessibilityComplianceClaimed: false;
+  readonly accessibilityCertificationClaimed: false;
+  readonly productUiReadinessClaimed: false;
+  readonly humanAcceptanceClaimed: false;
+}
+
+const LOCAL_ACCESSIBILITY_RULE = "USF-1026";
+const LOCAL_ACCESSIBILITY_ARTIFACT_ID = "usf.app-surface-accessibility-baseline-registry";
+const LOCAL_ACCESSIBILITY_PROVIDER_MODE: LocalAccessibilityProviderMode = "in-memory-only";
+const LOCAL_ACCESSIBILITY_ENVIRONMENT: LocalAccessibilityEnvironment = "dev-local";
+const LOCAL_ACCESSIBILITY_REQUIRED_NON_CLAIMS = [
+  "accessibilityCompliance",
+  "accessibilityCertification",
+  "productUiReadiness",
+  "routeReadiness",
+  "webReadiness",
+  "mobileReadiness",
+  "auditExecutionReadiness",
+  "productionReadiness",
+  "deploymentReadiness",
+  "stagingReadiness",
+  "liveProviderReadiness",
+  "humanAcceptance",
+] as const;
+
+const LOCAL_ACCESSIBILITY_REQUIRED_SEMANTIC_FIELDS = [
+  "screenReaderRef",
+  "focusOrderRef",
+  "keyboardNavigationRef",
+  "touchTargetRef",
+  "dynamicTypeRef",
+  "contrastRef",
+  "reducedMotionRef",
+  "errorAnnouncementRef",
+] as const;
+
+const LOCAL_ACCESSIBILITY_FORBIDDEN_REGISTRY_FLAGS = [
+  ["externalAuditAllowed", "external-audit-not-authorised"],
+  ["complianceClaimAllowed", "compliance-claim-not-authorised"],
+  ["certificationClaimAllowed", "certification-claim-not-authorised"],
+  ["humanAcceptanceAllowed", "human-acceptance-not-authorised"],
+  ["deviceLabClaimAllowed", "device-lab-claim-not-authorised"],
+] as const;
+
+const LOCAL_ACCESSIBILITY_FORBIDDEN_KEYS = [
+  "wcagCertification",
+  "auditProvider",
+  "deviceLabProvider",
+  "storeAccessibilityReview",
+  "accessibilityComplianceReport",
+  "humanAcceptanceRef",
+  "deploymentRef",
+  "stagingRef",
+] as const;
+
+export const LOCAL_ACCESSIBILITY_REGISTRY = {
+  artifactId: LOCAL_ACCESSIBILITY_ARTIFACT_ID,
+  ownerIssueId: LOCAL_ACCESSIBILITY_RULE,
+  providerMode: LOCAL_ACCESSIBILITY_PROVIDER_MODE,
+  environment: LOCAL_ACCESSIBILITY_ENVIRONMENT,
+  missingSemanticsPolicy: "fail-closed",
+  surfaces: [
+    {
+      surfaceId: "web-route-developer-home",
+      surfaceKind: "web-route-component",
+      platform: "web",
+      implementationPath: "apps/web/app/page.tsx",
+      capabilityRef: "graphql-federation-generated-client-disposition",
+      labelRefs: ["web.developerHome.heading", "web.developerHome.description"],
+      roleRefs: ["main-landmark", "heading-level-1", "paragraph-description"],
+      stateRefs: ["route-loaded", "permission-gated-private-route"],
+      screenReaderRef: "screen-reader-semantics-required",
+      focusOrderRef: "focus-order-required",
+      keyboardNavigationRef: "keyboard-navigation-required",
+      touchTargetRef: "touch-target-and-gesture-alternative-required",
+      dynamicTypeRef: "dynamic-type-required",
+      contrastRef: "contrast-boundary-required",
+      reducedMotionRef: "reduced-motion-boundary-required",
+      errorAnnouncementRef: "error-announcement-required",
+      interactiveSurface: false,
+      keyboardReachable: true,
+      focusOrderDefined: true,
+      screenReaderLabelled: true,
+      errorAnnouncementDefined: true,
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+      ],
+      nonClaimBoundary: "local accessibility metadata for the bounded web route only; no compliance, audit, product UI, deployment, staging, production, or human-acceptance readiness claim",
+    },
+    {
+      surfaceId: "mobile-screen-developer-home",
+      surfaceKind: "mobile-screen-component",
+      platform: "mobile",
+      implementationPath: "apps/mobile/App.tsx",
+      capabilityRef: "graphql-federation-generated-client-disposition",
+      labelRefs: [
+        "mobile.developerHome.kicker",
+        "mobile.developerHome.title",
+        "mobile.developerHome.body",
+        "mobile.developerHome.capabilityLabel",
+        "mobile.developerHome.permissionLabel",
+        "mobile.developerHome.unknownScreenPolicyLabel",
+      ],
+      roleRefs: ["screen", "header", "summary-card", "text"],
+      stateRefs: ["screen-loaded", "permission-gated-private-screen"],
+      screenReaderRef: "screen-reader-semantics-required",
+      focusOrderRef: "focus-order-required",
+      keyboardNavigationRef: "keyboard-navigation-required",
+      touchTargetRef: "touch-target-and-gesture-alternative-required",
+      dynamicTypeRef: "dynamic-type-required",
+      contrastRef: "contrast-boundary-required",
+      reducedMotionRef: "reduced-motion-boundary-required",
+      errorAnnouncementRef: "error-announcement-required",
+      interactiveSurface: false,
+      keyboardReachable: true,
+      focusOrderDefined: true,
+      screenReaderLabelled: true,
+      errorAnnouncementDefined: true,
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+      ],
+      nonClaimBoundary: "local accessibility metadata for the bounded mobile screen only; no compliance, audit, mobile readiness, store readiness, deployment, staging, production, or human-acceptance readiness claim",
+    },
+    {
+      surfaceId: "query-view-developer-profile-list",
+      surfaceKind: "query-list-view-state",
+      platform: "shared-local",
+      implementationPath: "packages/app-surface/src/index.ts",
+      capabilityRef: "graphql-federation-generated-client-disposition",
+      labelRefs: ["query.developerProfile.emptyState", "query.developerProfile.errorState"],
+      roleRefs: ["list-region", "empty-state", "error-state"],
+      stateRefs: ["empty", "error", "loaded"],
+      screenReaderRef: "screen-reader-semantics-required",
+      focusOrderRef: "focus-order-required",
+      keyboardNavigationRef: "keyboard-navigation-required",
+      touchTargetRef: "touch-target-and-gesture-alternative-required",
+      dynamicTypeRef: "dynamic-type-required",
+      contrastRef: "contrast-boundary-required",
+      reducedMotionRef: "reduced-motion-boundary-required",
+      errorAnnouncementRef: "error-announcement-required",
+      interactiveSurface: false,
+      keyboardReachable: true,
+      focusOrderDefined: true,
+      screenReaderLabelled: true,
+      errorAnnouncementDefined: true,
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+      ],
+      nonClaimBoundary: "local accessibility metadata for a query list view-state only; no product UI, compliance, audit, deployment, staging, production, or human-acceptance readiness claim",
+    },
+    {
+      surfaceId: "query-view-developer-profile-detail",
+      surfaceKind: "query-detail-view-state",
+      platform: "shared-local",
+      implementationPath: "packages/app-surface/src/index.ts",
+      capabilityRef: "graphql-federation-generated-client-disposition",
+      labelRefs: ["query.developerProfile.notFoundState", "query.developerProfile.errorState"],
+      roleRefs: ["detail-region", "not-found-state", "error-state"],
+      stateRefs: ["not-found", "error", "loaded"],
+      screenReaderRef: "screen-reader-semantics-required",
+      focusOrderRef: "focus-order-required",
+      keyboardNavigationRef: "keyboard-navigation-required",
+      touchTargetRef: "touch-target-and-gesture-alternative-required",
+      dynamicTypeRef: "dynamic-type-required",
+      contrastRef: "contrast-boundary-required",
+      reducedMotionRef: "reduced-motion-boundary-required",
+      errorAnnouncementRef: "error-announcement-required",
+      interactiveSurface: false,
+      keyboardReachable: true,
+      focusOrderDefined: true,
+      screenReaderLabelled: true,
+      errorAnnouncementDefined: true,
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+      ],
+      nonClaimBoundary: "local accessibility metadata for a query detail view-state only; no product UI, compliance, audit, deployment, staging, production, or human-acceptance readiness claim",
+    },
+    {
+      surfaceId: "command-form-api-key-onboarding",
+      surfaceKind: "command-form-view-state",
+      platform: "shared-local",
+      implementationPath: "packages/app-surface/src/index.ts",
+      capabilityRef: "graphql-federation-generated-client-disposition",
+      labelRefs: [
+        "command.apiKeyOnboarding.title",
+        "command.apiKeyOnboarding.submitLabel",
+        "command.apiKeyOnboarding.invalidLabelError",
+      ],
+      roleRefs: ["form", "submit-control", "validation-error"],
+      stateRefs: ["idle", "validation-error", "submitted"],
+      screenReaderRef: "screen-reader-semantics-required",
+      focusOrderRef: "focus-order-required",
+      keyboardNavigationRef: "keyboard-navigation-required",
+      touchTargetRef: "touch-target-and-gesture-alternative-required",
+      dynamicTypeRef: "dynamic-type-required",
+      contrastRef: "contrast-boundary-required",
+      reducedMotionRef: "reduced-motion-boundary-required",
+      errorAnnouncementRef: "error-announcement-required",
+      interactiveSurface: true,
+      keyboardReachable: true,
+      focusOrderDefined: true,
+      screenReaderLabelled: true,
+      errorAnnouncementDefined: true,
+      semanticSourceRefs: [
+        "docs/architecture/app-surface-accessibility-semantics.json",
+        "docs/architecture/app-surface-command-form-implementation.json",
+        "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json",
+      ],
+      proofRefs: [
+        "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+        "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+      ],
+      nonClaimBoundary: "local accessibility metadata for a command form view-state only; no product UI, compliance, audit, deployment, staging, production, or human-acceptance readiness claim",
+    },
+  ],
+  externalAuditAllowed: false,
+  complianceClaimAllowed: false,
+  certificationClaimAllowed: false,
+  humanAcceptanceAllowed: false,
+  deviceLabClaimAllowed: false,
+  nonClaims: {
+    accessibilityCompliance: false,
+    accessibilityCertification: false,
+    productUiReadiness: false,
+    routeReadiness: false,
+    webReadiness: false,
+    mobileReadiness: false,
+    auditExecutionReadiness: false,
+    productionReadiness: false,
+    deploymentReadiness: false,
+    stagingReadiness: false,
+    liveProviderReadiness: false,
+    humanAcceptance: false,
+  },
+} as const satisfies LocalAccessibilityRegistry;
+
+const asLocalAccessibilityAuthorityValues = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+): readonly string[] | undefined => {
+  if (values === undefined) {
+    return undefined;
+  }
+  if (Array.isArray(values)) {
+    return values;
+  }
+  return Array.from(values);
+};
+
+const localAccessibilityAuthorityHas = (
+  values: ReadonlySet<string> | readonly string[] | undefined,
+  value: string,
+): boolean => asLocalAccessibilityAuthorityValues(values)?.includes(value) ?? false;
+
+export const validateLocalAccessibilityRegistry = (
+  registry: LocalAccessibilityRegistry = LOCAL_ACCESSIBILITY_REGISTRY,
+  authority?: LocalAccessibilityAuthority,
+): string[] => {
+  const findings: string[] = [];
+  const registryRecord = registry as unknown as Record<string, unknown>;
+  const registrySubject = "local-accessibility-registry";
+
+  if (registry.artifactId !== LOCAL_ACCESSIBILITY_ARTIFACT_ID) {
+    findings.push(`${registrySubject}:artifactId-mismatch`);
+  }
+  if (registry.ownerIssueId !== LOCAL_ACCESSIBILITY_RULE) {
+    findings.push(`${registrySubject}:ownerIssueId-mismatch`);
+  }
+  if (registry.providerMode !== LOCAL_ACCESSIBILITY_PROVIDER_MODE) {
+    findings.push(`${registrySubject}:providerMode-mismatch`);
+  }
+  if (registry.environment !== LOCAL_ACCESSIBILITY_ENVIRONMENT) {
+    findings.push(`${registrySubject}:environment-mismatch`);
+  }
+  if (registry.missingSemanticsPolicy !== "fail-closed") {
+    findings.push(`${registrySubject}:missing-semantics-policy-must-fail-closed`);
+  }
+  for (const [field, code] of LOCAL_ACCESSIBILITY_FORBIDDEN_REGISTRY_FLAGS) {
+    if (registryRecord[field] !== false) {
+      findings.push(`${registrySubject}:${code}`);
+    }
+  }
+  for (const key of LOCAL_ACCESSIBILITY_FORBIDDEN_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(registryRecord, key)) {
+      findings.push(`${registrySubject}:forbidden-${key}`);
+    }
+  }
+  for (const claim of LOCAL_ACCESSIBILITY_REQUIRED_NON_CLAIMS) {
+    if (registry.nonClaims?.[claim] !== false) {
+      findings.push(`${registrySubject}:nonclaim-${claim}-must-be-false`);
+    }
+  }
+
+  if (!Array.isArray(registry.surfaces) || registry.surfaces.length === 0) {
+    findings.push(`${registrySubject}:missing-surfaces`);
+    return findings;
+  }
+
+  const seenSurfaces = new Set<string>();
+  for (const surface of registry.surfaces) {
+    const subject = `local-accessibility-surface:${surface.surfaceId || "missing"}`;
+    if (!isNonEmptyString(surface.surfaceId)) {
+      findings.push(`${subject}:missing-surfaceId`);
+    }
+    if (seenSurfaces.has(surface.surfaceId)) {
+      findings.push(`${subject}:duplicate-surfaceId`);
+    }
+    seenSurfaces.add(surface.surfaceId);
+    for (const field of ["surfaceKind", "platform", "implementationPath", "capabilityRef", "nonClaimBoundary"] as const) {
+      if (!isNonEmptyString(surface[field])) {
+        findings.push(`${subject}:missing-${field}`);
+      }
+    }
+    for (const field of ["labelRefs", "roleRefs", "stateRefs", "semanticSourceRefs", "proofRefs"] as const) {
+      if (!hasNonEmptyStringArray(surface[field])) {
+        findings.push(`${subject}:missing-${field}`);
+      }
+    }
+    for (const field of LOCAL_ACCESSIBILITY_REQUIRED_SEMANTIC_FIELDS) {
+      if (!isNonEmptyString(surface[field])) {
+        findings.push(`${subject}:missing-${field}`);
+      }
+    }
+    for (const field of ["keyboardReachable", "focusOrderDefined", "screenReaderLabelled", "errorAnnouncementDefined"] as const) {
+      if (surface[field] !== true) {
+        findings.push(`${subject}:${field}-must-be-true`);
+      }
+    }
+    if (surface.interactiveSurface === true && surface.touchTargetRef !== "touch-target-and-gesture-alternative-required") {
+      findings.push(`${subject}:interactive-surface-touch-target-mismatch`);
+    }
+    if (authority) {
+      if (!localAccessibilityAuthorityHas(authority.surfaceRefs, surface.surfaceId)) {
+        findings.push(`${subject}:surface-authority-missing:${surface.surfaceId}`);
+      }
+      if (!localAccessibilityAuthorityHas(authority.capabilityRefs, surface.capabilityRef)) {
+        findings.push(`${subject}:capability-authority-missing:${surface.capabilityRef}`);
+      }
+      for (const sourceRef of surface.semanticSourceRefs) {
+        if (!localAccessibilityAuthorityHas(authority.semanticSourceRefs, sourceRef)) {
+          findings.push(`${subject}:semantic-source-authority-missing:${sourceRef}`);
+        }
+      }
+      for (const proofRef of surface.proofRefs) {
+        if (!localAccessibilityAuthorityHas(authority.proofRefs, proofRef)) {
+          findings.push(`${subject}:proof-authority-missing:${proofRef}`);
+        }
+      }
+    }
+  }
+
+  return findings;
+};
+
+export const getLocalAccessibilitySurfaceById = (
+  surfaceId: string,
+  registry: LocalAccessibilityRegistry = LOCAL_ACCESSIBILITY_REGISTRY,
+): LocalAccessibilitySurfaceMapping => {
+  const findings = validateLocalAccessibilityRegistry(registry);
+  if (findings.length > 0) {
+    throw new Error(`local-accessibility-registry-invalid:${findings.join(",")}`);
+  }
+  const surface = registry.surfaces.find((candidate) => candidate.surfaceId === surfaceId);
+  if (surface === undefined) {
+    throw new Error(`local-accessibility-surface-missing-fail-closed:${surfaceId}`);
+  }
+  return surface;
+};
+
+export const describeLocalAccessibilitySurface = (
+  surfaceId: string,
+  registry: LocalAccessibilityRegistry = LOCAL_ACCESSIBILITY_REGISTRY,
+): LocalAccessibilitySurfaceDescription => {
+  const surface = getLocalAccessibilitySurfaceById(surfaceId, registry);
+  return {
+    surfaceId: surface.surfaceId,
+    platform: surface.platform,
+    capabilityRef: surface.capabilityRef,
+    screenReaderRef: surface.screenReaderRef,
+    focusOrderRef: surface.focusOrderRef,
+    keyboardNavigationRef: surface.keyboardNavigationRef,
+    touchTargetRef: surface.touchTargetRef,
+    dynamicTypeRef: surface.dynamicTypeRef,
+    contrastRef: surface.contrastRef,
+    reducedMotionRef: surface.reducedMotionRef,
+    errorAnnouncementRef: surface.errorAnnouncementRef,
+    accessibilityComplianceClaimed: false,
+    accessibilityCertificationClaimed: false,
+    productUiReadinessClaimed: false,
+    humanAcceptanceClaimed: false,
+  };
+};

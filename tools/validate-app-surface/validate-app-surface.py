@@ -33,6 +33,9 @@ QUERY_LIST_DETAIL_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-query-l
 STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-state-cache-query-client-implementation.json"
 AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-auth-session-dev-identity-implementation.json"
 I18N_BASELINE_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-i18n-baseline-implementation.json"
+ACCESSIBILITY_BASELINE_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-accessibility-baseline-implementation.json"
+ACCESSIBILITY_USF938_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/010-accessibility-semantics-complete.json"
+ACCESSIBILITY_USF938_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/010-missing-accessibility-semantics.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -1905,6 +1908,214 @@ def validate_i18n_baseline_implementation() -> list[dict[str, str]]:
     return failures
 
 
+
+def validate_accessibility_baseline_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-007"
+    issue_id = "USF-1026"
+    subject = rel(ACCESSIBILITY_BASELINE_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+
+    if not ACCESSIBILITY_BASELINE_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "accessibility baseline implementation artefact is missing", issue_id)]
+
+    data = load_json(ACCESSIBILITY_BASELINE_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "accessibility baseline implementation artefact must be an object", issue_id)]
+
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "accessibility baseline implementation must be owned by USF-1026", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "accessibility baseline lifecycleState must be bounded-local-implemented", issue_id))
+
+    authority_inputs = data.get("authorityInputs", [])
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        failures.append(finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty list", issue_id))
+    else:
+        for index, entry in enumerate(authority_inputs):
+            entry_subject = f"{subject}.authorityInputs[{index}]"
+            if not isinstance(entry, dict):
+                failures.append(finding(rule_id, entry_subject, "authority input must be an object", issue_id))
+                continue
+            path_ref = entry.get("path")
+            if not isinstance(path_ref, str) or not path_ref.strip():
+                failures.append(finding(rule_id, f"{entry_subject}.path", "authority input must name a repository path", issue_id))
+            elif not path_exists(path_ref):
+                failures.append(finding(rule_id, f"{entry_subject}.path", "authority input path must exist", issue_id))
+
+    implementation_scope = data.get("implementationScope", {})
+    if not isinstance(implementation_scope, dict):
+        failures.append(finding(rule_id, f"{subject}.implementationScope", "implementationScope must be an object", issue_id))
+        implementation_scope = {}
+
+    expected_scope_values = {
+        "runtimePackage": "packages/app-surface/src/index.ts",
+        "runtimeRegistryExport": "LOCAL_ACCESSIBILITY_REGISTRY",
+        "runtimeLookupExport": "getLocalAccessibilitySurfaceById",
+        "webConsumerPath": "apps/web/app/page.tsx",
+        "mobileConsumerPath": "apps/mobile/App.tsx",
+        "unitTestArtefact": "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+        "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+        "providerMode": "in-memory-only",
+        "environment": "dev-local",
+    }
+    for field, expected in expected_scope_values.items():
+        if implementation_scope.get(field) != expected:
+            failures.append(finding(rule_id, f"{subject}.implementationScope.{field}", f"implementationScope.{field} must be {expected}", issue_id))
+
+    expected_scope_false = [
+        "packageInstallationAllowed",
+        "dependencyInstallRequired",
+        "externalServicesAllowed",
+        "credentialsAllowed",
+        "deploymentAllowed",
+        "stagingAllowed",
+    ]
+    for field in expected_scope_false:
+        if implementation_scope.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.implementationScope.{field}", "implementation scope flag must remain false", issue_id))
+    if implementation_scope.get("runtimeCodeCreatedByIssue") is not True:
+        failures.append(finding(rule_id, f"{subject}.implementationScope.runtimeCodeCreatedByIssue", "runtimeCodeCreatedByIssue must be true for USF-1026", issue_id))
+
+    for field in ["runtimePackage", "webConsumerPath", "mobileConsumerPath", "unitTestArtefact", "validatorGuard"]:
+        path_ref = implementation_scope.get(field)
+        if isinstance(path_ref, str) and path_ref.strip() and not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.implementationScope.{field}", "implementation scope path must exist", issue_id))
+
+    validation_guard = data.get("validationGuard", {})
+    if not isinstance(validation_guard, dict):
+        failures.append(finding(rule_id, f"{subject}.validationGuard", "validationGuard must be an object", issue_id))
+        validation_guard = {}
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "implementedSurfacesMustHaveAccessibilityMappings",
+        "missingAccessibilitySemanticsMustFailClosed",
+        "keyboardFocusScreenReaderAndLabelExpectationsMustBeRepresented",
+        "touchTargetDynamicTypeContrastReducedMotionAndErrorAnnouncementRefsMustExist",
+        "surfaceCoverageMustMapToImplementationPaths",
+        "usf938StyleFixtureMustRemainPresent",
+        "nonClaimsMustAllBeFalse",
+        "externalAuditMustRemainForbidden",
+        "complianceAndCertificationClaimsMustRemainForbidden",
+    ]
+    for field in required_guard_flags:
+        if validation_guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+
+    required_surfaces = {
+        "web-route-developer-home": "apps/web/app/page.tsx",
+        "mobile-screen-developer-home": "apps/mobile/App.tsx",
+        "query-view-developer-profile-list": "packages/app-surface/src/index.ts",
+        "query-view-developer-profile-detail": "packages/app-surface/src/index.ts",
+        "command-form-api-key-onboarding": "packages/app-surface/src/index.ts",
+    }
+    mappings = data.get("surfaceAccessibilityMappings", [])
+    observed_surfaces: set[str] = set()
+    if not isinstance(mappings, list) or not mappings:
+        failures.append(finding(rule_id, f"{subject}.surfaceAccessibilityMappings", "surfaceAccessibilityMappings must be a non-empty list", issue_id))
+    else:
+        required_string_fields = [
+            "surfaceId",
+            "surfaceKind",
+            "platform",
+            "implementationPath",
+            "capabilityRef",
+            "screenReaderRef",
+            "focusOrderRef",
+            "keyboardNavigationRef",
+            "touchTargetRef",
+            "dynamicTypeRef",
+            "contrastRef",
+            "reducedMotionRef",
+            "errorAnnouncementRef",
+        ]
+        required_array_fields = ["labelRefs", "roleRefs", "stateRefs", "semanticSourceRefs", "proofRefs"]
+        required_true_fields = ["keyboardReachable", "focusOrderDefined", "screenReaderLabelled", "errorAnnouncementDefined"]
+        for index, entry in enumerate(mappings):
+            entry_subject = f"{subject}.surfaceAccessibilityMappings[{index}]"
+            if not isinstance(entry, dict):
+                failures.append(finding(rule_id, entry_subject, "accessibility surface mapping must be an object", issue_id))
+                continue
+            surface_id = entry.get("surfaceId")
+            if isinstance(surface_id, str):
+                observed_surfaces.add(surface_id)
+                expected_path = required_surfaces.get(surface_id)
+                if expected_path and entry.get("implementationPath") != expected_path:
+                    failures.append(finding(rule_id, f"{entry_subject}.implementationPath", "surface implementation path does not match required app-surface path", issue_id))
+            for field in required_string_fields:
+                if not isinstance(entry.get(field), str) or not entry.get(field, "").strip():
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "accessibility mapping field must be a non-empty string", issue_id))
+            for field in required_array_fields:
+                if not has_nonempty_string_array(entry.get(field)):
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "accessibility mapping field must be a non-empty string array", issue_id))
+            for field in required_true_fields:
+                if entry.get(field) is not True:
+                    failures.append(finding(rule_id, f"{entry_subject}.{field}", "accessibility mapping field must be true", issue_id))
+            implementation_path = entry.get("implementationPath")
+            if isinstance(implementation_path, str) and implementation_path.strip() and not path_exists(implementation_path):
+                failures.append(finding(rule_id, f"{entry_subject}.implementationPath", "accessibility implementation path must exist", issue_id))
+            proof_refs = entry.get("proofRefs", [])
+            if isinstance(proof_refs, list):
+                for proof_index, proof_ref in enumerate(proof_refs):
+                    if not path_ref_exists(proof_ref):
+                        failures.append(finding(rule_id, f"{entry_subject}.proofRefs[{proof_index}]", "accessibility proof reference path must exist", issue_id))
+
+    missing_surfaces = set(required_surfaces) - observed_surfaces
+    for surface_id in sorted(missing_surfaces):
+        failures.append(finding(rule_id, f"{subject}.surfaceAccessibilityMappings.{surface_id}", "implemented surface must have accessibility mapping", issue_id))
+
+    if not ACCESSIBILITY_USF938_CONFORMING.exists():
+        failures.append(finding(rule_id, rel(ACCESSIBILITY_USF938_CONFORMING), "USF-938-style conforming accessibility fixture is missing", issue_id))
+    else:
+        conforming = load_json(ACCESSIBILITY_USF938_CONFORMING)
+        if not isinstance(conforming, dict) or conforming.get("targetRuleId") != "USF-APP-SURFACE-VALIDATOR-010":
+            failures.append(finding(rule_id, rel(ACCESSIBILITY_USF938_CONFORMING), "USF-938-style conforming fixture must target accessibility validator rule 010", issue_id))
+
+    if not ACCESSIBILITY_USF938_PLANTED.exists():
+        failures.append(finding(rule_id, rel(ACCESSIBILITY_USF938_PLANTED), "USF-938-style planted accessibility defect fixture is missing", issue_id))
+    else:
+        planted = load_json(ACCESSIBILITY_USF938_PLANTED)
+        if not isinstance(planted, dict) or planted.get("expectedFailureRuleId") != "USF-APP-SURFACE-VALIDATOR-010":
+            failures.append(finding(rule_id, rel(ACCESSIBILITY_USF938_PLANTED), "USF-938-style planted fixture must fail accessibility validator rule 010", issue_id))
+
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    required_out_of_scope = {
+        "accessibility-compliance",
+        "accessibility-certification",
+        "external-accessibility-audit",
+        "device-lab-proof",
+        "human-acceptance",
+    }
+    observed_out_of_scope: set[str] = set()
+    if not isinstance(out_of_scope, list) or not out_of_scope:
+        failures.append(finding(rule_id, f"{subject}.outOfScopeSurfaces", "outOfScopeSurfaces must be a non-empty list", issue_id))
+    else:
+        for index, entry in enumerate(out_of_scope):
+            entry_subject = f"{subject}.outOfScopeSurfaces[{index}]"
+            if not isinstance(entry, dict):
+                failures.append(finding(rule_id, entry_subject, "out-of-scope surface must be an object", issue_id))
+                continue
+            surface_id = entry.get("surfaceId")
+            if isinstance(surface_id, str):
+                observed_out_of_scope.add(surface_id)
+            if entry.get("status") != "not-authorised":
+                failures.append(finding(rule_id, f"{entry_subject}.status", "out-of-scope accessibility surface must remain not-authorised", issue_id))
+    for surface_id in sorted(required_out_of_scope - observed_out_of_scope):
+        failures.append(finding(rule_id, f"{subject}.outOfScopeSurfaces.{surface_id}", "required out-of-scope accessibility surface is missing", issue_id))
+
+    proof_ladder = data.get("proofLadder", {})
+    if not isinstance(proof_ladder, dict):
+        failures.append(finding(rule_id, f"{subject}.proofLadder", "proofLadder must be an object", issue_id))
+        proof_ladder = {}
+    for field in ["devLocalRequired", "unitTestsRequired", "contractTestsRequired"]:
+        if proof_ladder.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must be true", issue_id))
+    for field in ["composeRequired", "stagingRequired"]:
+        if proof_ladder.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.proofLadder.{field}", "proof ladder field must remain false", issue_id))
+
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -1927,6 +2138,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_state_cache_query_client_implementation())
     failures.extend(validate_auth_session_dev_identity_implementation())
     failures.extend(validate_i18n_baseline_implementation())
+    failures.extend(validate_accessibility_baseline_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -1972,6 +2184,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION,
         AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION,
         I18N_BASELINE_IMPLEMENTATION,
+        ACCESSIBILITY_BASELINE_IMPLEMENTATION,
     ]
     return {
         "mode": mode,
