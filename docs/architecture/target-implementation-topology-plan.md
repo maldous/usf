@@ -282,3 +282,14 @@ The bounded local state/cache/query-client implementation is authorised only for
 - `tools/validate-app-surface/validate-app-surface.py`
 
 The implementation may create in-memory local state/cache/query-client registry code and tests over existing generated-client and query-view semantics. It must not install packages, adopt a query library, create persistent sensitive storage, create external state services, add credentials, configure deployment, run staging, or claim cache/query-library/sync/offline/provider/staging/production/live-provider/compliance/human-acceptance readiness.
+
+## USF-1024 app-surface auth session dev identity implementation
+
+The bounded local auth/session/dev identity implementation is authorised only for these repository paths:
+
+- `packages/app-surface/src/index.ts`
+- `docs/architecture/app-surface-auth-session-dev-identity-implementation.json`
+- `tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+The implementation may create local in-memory dev identity, tenant, role, permission, and session-context registry code and tests over existing semantic app-surface mappings. It must not install packages, configure production identity providers, create live OAuth or OIDC credentials, configure Keycloak, create secure-storage claims, add external auth services, configure deployment, run staging, or claim auth/provider/credential/staging/production/live-provider/compliance/human-acceptance readiness.

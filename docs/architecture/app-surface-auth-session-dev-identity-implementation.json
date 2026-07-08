@@ -1,0 +1,263 @@
+{
+  "artifactId": "usf.app-surface-auth-session-dev-identity-implementation",
+  "title": "App-surface auth session dev identity implementation",
+  "ownerIssueId": "USF-1024",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "bounded-local-implemented",
+  "createdDate": "2026-07-09",
+  "providerMode": "in-memory-dev-stub",
+  "environment": "dev-local",
+  "authorityInputs": [
+    "docs/architecture/app-surface-local-in-memory-runtime.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+    "docs/architecture/app-surface-command-form-implementation.json",
+    "docs/architecture/app-surface-query-list-detail-implementation.json",
+    "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+    "docs/architecture/app-surface-auth-session-security-semantics.json",
+    "docs/architecture/shared-client-interaction-contract-semantics.json",
+    "docs/architecture/auth-and-identity-standard.md",
+    "docs/adr/0010-authorization-policy-decision-point.md",
+    "docs/adr/0012-keycloak-sole-idp-and-token-validation.md"
+  ],
+  "implementationScope": {
+    "runtimeBoundary": "bounded local in-memory development identity and session context stub only",
+    "runtimePackage": "packages/app-surface/src/index.ts",
+    "runtimeRegistryExport": "LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY",
+    "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+    "unitTestArtefact": "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+    "runtimeCodeCreatedByIssue": true,
+    "packageInstallationAllowed": false,
+    "dependencyInstallRequired": false,
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false
+  },
+  "implementedIdentities": [
+    {
+      "identityId": "identity.dev-local-developer",
+      "userRef": "user.dev-local-fixture",
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "sessionContextRef": "session.dev-local-in-memory",
+      "roleRefs": [
+        "role.dev-local-developer"
+      ],
+      "permissionRefs": [
+        "developer:read",
+        "developer:key:onboard"
+      ],
+      "capabilityRefs": [
+        "graphql-federation-generated-client-disposition"
+      ],
+      "commandRefs": [
+        "command.onboardApiKey"
+      ],
+      "queryRefs": [
+        "query.developerProfile"
+      ],
+      "providerMode": "in-memory-dev-stub",
+      "productionIdentityProviderAllowed": false,
+      "liveOAuthOidcAllowed": false,
+      "credentialsAllowed": false,
+      "secureStorageClaimAllowed": false,
+      "externalProviderAllowed": false,
+      "nonClaimBoundary": "local dev identity implementation only; not authentication or identity-provider readiness",
+      "semanticSourceRefs": [
+        "docs/architecture/app-surface-local-in-memory-runtime.json",
+        "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "docs/architecture/app-surface-command-form-implementation.json",
+        "docs/architecture/app-surface-query-list-detail-implementation.json",
+        "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+        "docs/architecture/app-surface-auth-session-security-semantics.json",
+        "docs/architecture/shared-client-interaction-contract-semantics.json",
+        "docs/architecture/auth-and-identity-standard.md",
+        "docs/adr/0010-authorization-policy-decision-point.md",
+        "docs/adr/0012-keycloak-sole-idp-and-token-validation.md"
+      ],
+      "proofRefs": [
+        "docs/architecture/app-surface-auth-session-dev-identity-implementation.json",
+        "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+        "tools/validate-app-surface/validate-app-surface.py"
+      ]
+    }
+  ],
+  "permissionCheckCases": [
+    {
+      "checkId": "auth-check-developer-profile-query-allowed",
+      "identityRef": "identity.dev-local-developer",
+      "requestContextKind": "query",
+      "permissionRef": "developer:read",
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "targetRef": "query.developerProfile",
+      "expectedDecision": "allow",
+      "reasonCode": "permission-authorised-by-local-semantic-stub",
+      "auditEventRef": "client-audit-event-emission"
+    },
+    {
+      "checkId": "auth-check-api-key-command-allowed",
+      "identityRef": "identity.dev-local-developer",
+      "requestContextKind": "command",
+      "permissionRef": "developer:key:onboard",
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "targetRef": "command.onboardApiKey",
+      "expectedDecision": "allow",
+      "reasonCode": "permission-authorised-by-local-semantic-stub",
+      "auditEventRef": "client-audit-event-emission"
+    },
+    {
+      "checkId": "auth-check-missing-permission-denied",
+      "identityRef": "identity.dev-local-developer",
+      "requestContextKind": "query",
+      "permissionRef": "developer:admin",
+      "tenantBoundaryRef": "tenant.dev-local-fixture",
+      "targetRef": "query.developerProfile",
+      "expectedDecision": "deny",
+      "reasonCode": "permission-semantics-missing-fail-closed",
+      "auditEventRef": "client-audit-event-emission"
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "tenantUserRoleAndPermissionSemanticsMustBeMapped": true,
+    "permissionChecksMustMapToUSFSemantics": true,
+    "missingPermissionSemanticsMustFailClosed": true,
+    "missingTenantOrUserContextMustFailClosed": true,
+    "unknownIdentityMustFailClosed": true,
+    "allowedAndDeniedCasesMustBeTested": true,
+    "productionIdentityProviderMustRemainForbidden": true,
+    "liveOAuthOidcMustRemainForbidden": true,
+    "keycloakProviderSetupMustRemainForbidden": true,
+    "credentialsMustRemainForbidden": true,
+    "secureStorageClaimMustRemainForbidden": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "outOfScopeSurfaces": [
+    {
+      "surface": "i18n-baseline",
+      "ownerIssueId": "USF-1025",
+      "status": "owned-by-later-issue"
+    },
+    {
+      "surface": "production-identity-provider",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "live-oauth-oidc",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "keycloak-provider-setup",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "credentials",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "secure-storage",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "deployment-or-staging-proof",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "live-oauth-oidc-flow",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "browser-login-callback-flow",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "token-storage",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "pkce-provider-flow",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "csrf-cookie-session-runtime",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "refresh-token-rotation-runtime",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "mfa-passkey-biometric-flow",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "native-secure-storage",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "staging-proof",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "deployment",
+      "status": "not-authorised"
+    },
+    {
+      "surface": "store-submission",
+      "status": "not-authorised"
+    }
+  ],
+  "proofLadder": {
+    "devLocalRequired": true,
+    "unitTestsRequired": true,
+    "contractTestsRequired": true,
+    "composeRequired": false,
+    "stagingRequired": false,
+    "stagingClassification": "not-required-for-bounded-local-in-memory-dev-identity-stub"
+  },
+  "nonClaims": {
+    "authReadiness": false,
+    "providerReadiness": false,
+    "identityProviderReadiness": false,
+    "credentialReadiness": false,
+    "secureStorageReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "privacyCompliance": false,
+    "humanAcceptance": false
+  },
+  "id": "usf.app-surface-auth-session-dev-identity-implementation",
+  "issue": "USF-1024",
+  "implementedAuthSessionBoundaries": [
+    "auth-session-dev-local-identity-context",
+    "auth-session-dev-local-session-context",
+    "auth-session-dev-local-logout-purge"
+  ],
+  "providerModeMapping": {
+    "appSurfaceRuntimeProviderMode": "in-memory-only",
+    "authStubProviderMode": "in-memory-dev-stub",
+    "environment": "dev-local",
+    "coreProviderModeNotClaimed": "hermetic-mock",
+    "reason": "The app-surface local auth/session stub is a bounded dev-local implementation and does not upgrade hermetic core auth proof, live-provider proof, or production identity readiness."
+  },
+  "securityAuthorityBoundary": {
+    "pdpAuthority": "docs/adr/0010-authorization-policy-decision-point.md",
+    "identityProviderAuthority": "docs/adr/0012-keycloak-sole-idp-and-token-validation.md",
+    "appSurfaceSecuritySemantics": "docs/architecture/app-surface-auth-session-security-semantics.json",
+    "authIdentityStandard": "docs/architecture/auth-and-identity-standard.md",
+    "implementationAuthorization": "USF-1024 authorizes only bounded local app-surface auth/session dev identity stub runtime code."
+  },
+  "nonClaimsPreserved": [
+    "auth-readiness",
+    "identity-provider-readiness",
+    "live-provider-readiness",
+    "production-readiness",
+    "credential-readiness",
+    "human-acceptance",
+    "browser-login-readiness",
+    "oidc-flow-readiness",
+    "secure-storage-readiness",
+    "security-compliance-readiness"
+  ]
+}

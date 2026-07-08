@@ -31,6 +31,7 @@ SHARED_CLIENT_CONSUMPTION_PATH = ROOT / "docs/architecture/app-surface-shared-cl
 COMMAND_FORM_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-command-form-implementation.json"
 QUERY_LIST_DETAIL_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-query-list-detail-implementation.json"
 STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-state-cache-query-client-implementation.json"
+AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-auth-session-dev-identity-implementation.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -1430,6 +1431,271 @@ def validate_state_cache_query_client_implementation() -> list[dict[str, str]]:
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 
+
+def validate_auth_session_dev_identity_implementation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-005"
+    issue_id = "USF-1024"
+    subject = rel(AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION)
+    failures: list[dict[str, str]] = []
+    if not AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION.exists():
+        return [finding(rule_id, subject, "auth session dev identity implementation artefact is missing", issue_id)]
+    data = load_json(AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "auth session dev identity implementation artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, subject, "artefact ownerIssueId must be USF-1024", issue_id))
+    if data.get("lifecycleState") != "bounded-local-implemented":
+        failures.append(finding(rule_id, subject, "artefact lifecycleState must be bounded-local-implemented", issue_id))
+    if data.get("providerMode") != "in-memory-dev-stub":
+        failures.append(finding(rule_id, subject, "providerMode must remain in-memory-dev-stub", issue_id))
+    if data.get("environment") != "dev-local":
+        failures.append(finding(rule_id, subject, "environment must remain dev-local", issue_id))
+    for path in data.get("authorityInputs", []):
+        if not isinstance(path, str) or not path_exists(path):
+            failures.append(finding(rule_id, subject, f"authority input does not exist: {path}", issue_id))
+    guard = data.get("validationGuard", {})
+    required_guard_flags = [
+        "existingAuthorityPathsMustExist",
+        "tenantUserRoleAndPermissionSemanticsMustBeMapped",
+        "permissionChecksMustMapToUSFSemantics",
+        "missingPermissionSemanticsMustFailClosed",
+        "missingTenantOrUserContextMustFailClosed",
+        "unknownIdentityMustFailClosed",
+        "allowedAndDeniedCasesMustBeTested",
+        "productionIdentityProviderMustRemainForbidden",
+        "liveOAuthOidcMustRemainForbidden",
+        "keycloakProviderSetupMustRemainForbidden",
+        "credentialsMustRemainForbidden",
+        "secureStorageClaimMustRemainForbidden",
+        "nonClaimsMustAllBeFalse",
+    ]
+    if not isinstance(guard, dict):
+        failures.append(finding(rule_id, subject, "validationGuard must be an object", issue_id))
+    else:
+        for flag in required_guard_flags:
+            if guard.get(flag) is not True:
+                failures.append(finding(rule_id, f"{subject}.validationGuard.{flag}", "validation guard flag must be true", issue_id))
+
+    runtime = load_json(LOCAL_IN_MEMORY_RUNTIME) if LOCAL_IN_MEMORY_RUNTIME.exists() else {}
+    shared_client = load_json(SHARED_CLIENT_CONSUMPTION_PATH) if SHARED_CLIENT_CONSUMPTION_PATH.exists() else {}
+    command_impl = load_json(COMMAND_FORM_IMPLEMENTATION) if COMMAND_FORM_IMPLEMENTATION.exists() else {}
+    query_impl = load_json(QUERY_LIST_DETAIL_IMPLEMENTATION) if QUERY_LIST_DETAIL_IMPLEMENTATION.exists() else {}
+    if not isinstance(runtime, dict):
+        runtime = {}
+    if not isinstance(shared_client, dict):
+        shared_client = {}
+    if not isinstance(command_impl, dict):
+        command_impl = {}
+    if not isinstance(query_impl, dict):
+        query_impl = {}
+
+    authority: dict[str, set[str]] = {
+        "identityRefs": {"identity.dev-local-developer"},
+        "userRefs": {"user.dev-local-fixture"},
+        "tenantBoundaryRefs": ids_from_semantic_inputs(runtime, "tenantContexts"),
+        "sessionContextRefs": {"session.dev-local-in-memory"},
+        "roleRefs": {"role.dev-local-developer"},
+        "permissionRefs": ids_from_semantic_inputs(runtime, "permissions"),
+        "capabilityRefs": ids_from_semantic_inputs(runtime, "capabilities"),
+        "commandRefs": ids_from_semantic_inputs(runtime, "commands"),
+        "queryRefs": ids_from_semantic_inputs(runtime, "queries"),
+        "targetRefs": set(),
+        "auditEventRefs": ids_from_semantic_inputs(runtime, "auditEvents"),
+        "semanticSourceRefs": set(data.get("authorityInputs", [])) if isinstance(data.get("authorityInputs", []), list) else set(),
+        "proofRefs": {
+            "docs/architecture/app-surface-auth-session-dev-identity-implementation.json",
+            "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+            "tools/validate-app-surface/validate-app-surface.py",
+        },
+    }
+    authority["tenantBoundaryRefs"].add("tenant.dev-local-fixture")
+    shared_mappings = [item for item in shared_client.get("mappings", []) if isinstance(item, dict)]
+    for mapping in shared_mappings:
+        event_id = mapping.get("commandOrQueryOrWorkflowOrEventId")
+        if isinstance(event_id, str):
+            if mapping.get("behaviourClass") == "commands":
+                authority["commandRefs"].add(event_id)
+            if mapping.get("behaviourClass") == "queries":
+                authority["queryRefs"].add(event_id)
+            authority["targetRefs"].add(event_id)
+        if isinstance(mapping.get("capabilityId"), str):
+            authority["capabilityRefs"].add(mapping["capabilityId"])
+        for value in mapping.get("permissionRefs", []) if isinstance(mapping.get("permissionRefs", []), list) else []:
+            if isinstance(value, str) and value.strip():
+                authority["permissionRefs"].add(value)
+        for value in mapping.get("auditEventRefs", []) if isinstance(mapping.get("auditEventRefs", []), list) else []:
+            if isinstance(value, str) and value.strip():
+                authority["auditEventRefs"].add(value)
+    for command in command_impl.get("implementedCommands", []) if isinstance(command_impl.get("implementedCommands", []), list) else []:
+        if not isinstance(command, dict):
+            continue
+        if isinstance(command.get("commandRef"), str):
+            authority["commandRefs"].add(command["commandRef"])
+            authority["targetRefs"].add(command["commandRef"])
+        if isinstance(command.get("capabilityId"), str):
+            authority["capabilityRefs"].add(command["capabilityId"])
+        if isinstance(command.get("tenantBoundaryRef"), str):
+            authority["tenantBoundaryRefs"].add(command["tenantBoundaryRef"])
+        for field, key in [("permissionRefs", "permissionRefs"), ("auditEventRefs", "auditEventRefs")]:
+            values = command.get(field, [])
+            if isinstance(values, list):
+                authority[key].update(item for item in values if isinstance(item, str) and item.strip())
+    for view in query_impl.get("implementedQueryViews", []) if isinstance(query_impl.get("implementedQueryViews", []), list) else []:
+        if not isinstance(view, dict):
+            continue
+        if isinstance(view.get("queryRef"), str):
+            authority["queryRefs"].add(view["queryRef"])
+            authority["targetRefs"].add(view["queryRef"])
+        if isinstance(view.get("capabilityId"), str):
+            authority["capabilityRefs"].add(view["capabilityId"])
+        if isinstance(view.get("tenantBoundaryRef"), str):
+            authority["tenantBoundaryRefs"].add(view["tenantBoundaryRef"])
+        for field, key in [("permissionRefs", "permissionRefs"), ("auditEventRefs", "auditEventRefs")]:
+            values = view.get(field, [])
+            if isinstance(values, list):
+                authority[key].update(item for item in values if isinstance(item, str) and item.strip())
+
+    scope = data.get("implementationScope", {})
+    if not isinstance(scope, dict):
+        failures.append(finding(rule_id, subject, "implementationScope must be an object", issue_id))
+    else:
+        expected_scope = {
+            "runtimePackage": "packages/app-surface/src/index.ts",
+            "runtimeRegistryExport": "LOCAL_AUTH_SESSION_DEV_IDENTITY_REGISTRY",
+            "validatorGuard": "tools/validate-app-surface/validate-app-surface.py",
+            "unitTestArtefact": "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+        }
+        for field, value in expected_scope.items():
+            if scope.get(field) != value:
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} is incorrect", issue_id))
+        for field in ["packageInstallationAllowed", "dependencyInstallRequired", "externalServicesAllowed", "credentialsAllowed", "deploymentAllowed", "stagingAllowed"]:
+            if scope.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"implementationScope.{field} must remain false", issue_id))
+        if scope.get("runtimeCodeCreatedByIssue") is not True:
+            failures.append(finding(rule_id, subject, "implementationScope.runtimeCodeCreatedByIssue must be true", issue_id))
+
+    required_identity_strings = ["identityId", "userRef", "tenantBoundaryRef", "sessionContextRef", "providerMode", "nonClaimBoundary"]
+    required_identity_arrays = ["roleRefs", "permissionRefs", "capabilityRefs", "commandRefs", "queryRefs"]
+    identity_forbidden_flags = {
+        "productionIdentityProviderAllowed": "production identity provider must remain forbidden",
+        "liveOAuthOidcAllowed": "live OAuth/OIDC must remain forbidden",
+        "credentialsAllowed": "credentials must remain forbidden",
+        "secureStorageClaimAllowed": "secure storage claim must remain forbidden",
+        "externalProviderAllowed": "external provider must remain forbidden",
+    }
+    identities = data.get("implementedIdentities", [])
+    if not isinstance(identities, list) or not identities:
+        failures.append(finding(rule_id, subject, "implementedIdentities must be a non-empty array", issue_id))
+        identities = []
+    seen_identities: set[str] = set()
+    for index, identity in enumerate(identities):
+        if not isinstance(identity, dict):
+            failures.append(finding(rule_id, f"{subject}.implementedIdentities.{index}", "identity must be an object", issue_id))
+            continue
+        identity_id = identity.get("identityId") if isinstance(identity.get("identityId"), str) and identity["identityId"].strip() else f"implementedIdentities.{index}"
+        identity_subject = f"{subject}.implementedIdentities.{identity_id}"
+        if identity_id in seen_identities:
+            failures.append(finding(rule_id, identity_subject, "duplicate identityId", issue_id))
+        seen_identities.add(str(identity_id))
+        for field in required_identity_strings:
+            if not isinstance(identity.get(field), str) or not identity[field].strip():
+                failures.append(finding(rule_id, identity_subject, f"missing {field}", issue_id))
+        for field in required_identity_arrays:
+            if not has_nonempty_string_array(identity.get(field)):
+                failures.append(finding(rule_id, identity_subject, f"missing {field}", issue_id))
+        for field, message in identity_forbidden_flags.items():
+            if identity.get(field) is not False:
+                failures.append(finding(rule_id, identity_subject, message, issue_id))
+        for field, authority_key in [
+            ("identityId", "identityRefs"),
+            ("userRef", "userRefs"),
+            ("tenantBoundaryRef", "tenantBoundaryRefs"),
+            ("sessionContextRef", "sessionContextRefs"),
+        ]:
+            value = identity.get(field)
+            if not isinstance(value, str) or value not in authority[authority_key]:
+                failures.append(finding(rule_id, identity_subject, f"{field} lacks repository authority", issue_id))
+        for field, authority_key in [
+            ("roleRefs", "roleRefs"),
+            ("permissionRefs", "permissionRefs"),
+            ("capabilityRefs", "capabilityRefs"),
+            ("commandRefs", "commandRefs"),
+            ("queryRefs", "queryRefs"),
+        ]:
+            values = identity.get(field, [])
+            if isinstance(values, list):
+                for value in values:
+                    if not isinstance(value, str) or value not in authority[authority_key]:
+                        failures.append(finding(rule_id, identity_subject, f"{field} lacks repository authority: {value}", issue_id))
+
+    checks = data.get("permissionCheckCases", [])
+    if not isinstance(checks, list) or not checks:
+        failures.append(finding(rule_id, subject, "permissionCheckCases must be a non-empty array", issue_id))
+        checks = []
+    has_allow_case = False
+    has_deny_case = False
+    for index, check in enumerate(checks):
+        if not isinstance(check, dict):
+            failures.append(finding(rule_id, f"{subject}.permissionCheckCases.{index}", "permission check must be an object", issue_id))
+            continue
+        check_id = check.get("checkId") if isinstance(check.get("checkId"), str) and check["checkId"].strip() else f"permissionCheckCases.{index}"
+        check_subject = f"{subject}.permissionCheckCases.{check_id}"
+        for field in ["checkId", "identityRef", "requestContextKind", "permissionRef", "tenantBoundaryRef", "targetRef", "expectedDecision", "reasonCode", "auditEventRef"]:
+            if not isinstance(check.get(field), str) or not check[field].strip():
+                failures.append(finding(rule_id, check_subject, f"missing {field}", issue_id))
+        if check.get("expectedDecision") == "allow":
+            has_allow_case = True
+        elif check.get("expectedDecision") == "deny":
+            has_deny_case = True
+        else:
+            failures.append(finding(rule_id, check_subject, "expectedDecision must be allow or deny", issue_id))
+        if check.get("requestContextKind") not in {"query", "command"}:
+            failures.append(finding(rule_id, check_subject, "requestContextKind must be query or command", issue_id))
+        for field, authority_key in [
+            ("identityRef", "identityRefs"),
+            ("permissionRef", "permissionRefs"),
+            ("tenantBoundaryRef", "tenantBoundaryRefs"),
+            ("targetRef", "targetRefs"),
+            ("auditEventRef", "auditEventRefs"),
+        ]:
+            value = check.get(field)
+            if check.get("expectedDecision") == "deny" and field == "permissionRef":
+                continue
+            if not isinstance(value, str) or value not in authority[authority_key]:
+                failures.append(finding(rule_id, check_subject, f"{field} lacks repository authority", issue_id))
+    if not has_allow_case:
+        failures.append(finding(rule_id, subject, "permissionCheckCases must include an allow case", issue_id))
+    if not has_deny_case:
+        failures.append(finding(rule_id, subject, "permissionCheckCases must include a deny case", issue_id))
+
+    out_of_scope = data.get("outOfScopeSurfaces", [])
+    observed_out_of_scope = {item.get("surface"): item for item in out_of_scope if isinstance(item, dict)} if isinstance(out_of_scope, list) else {}
+    required_out_of_scope = {
+        "i18n-baseline": {"ownerIssueId": "USF-1025", "status": "owned-by-later-issue"},
+        "production-identity-provider": {"status": "not-authorised"},
+        "live-oauth-oidc": {"status": "not-authorised"},
+        "keycloak-provider-setup": {"status": "not-authorised"},
+        "credentials": {"status": "not-authorised"},
+        "secure-storage": {"status": "not-authorised"},
+        "deployment-or-staging-proof": {"status": "not-authorised"},
+    }
+    for surface, expected in required_out_of_scope.items():
+        item = observed_out_of_scope.get(surface)
+        if not isinstance(item, dict) or any(item.get(key) != value for key, value in expected.items()):
+            failures.append(finding(rule_id, subject, f"{surface} out-of-scope boundary is missing or incorrect", issue_id))
+    proof_ladder = data.get("proofLadder", {})
+    if not isinstance(proof_ladder, dict):
+        failures.append(finding(rule_id, subject, "proofLadder must be an object", issue_id))
+    else:
+        for field in ["devLocalRequired", "unitTestsRequired", "contractTestsRequired"]:
+            if proof_ladder.get(field) is not True:
+                failures.append(finding(rule_id, subject, f"proofLadder.{field} must be true", issue_id))
+        for field in ["composeRequired", "stagingRequired"]:
+            if proof_ladder.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"proofLadder.{field} must be false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -1450,6 +1716,7 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_command_form_implementation())
     failures.extend(validate_query_list_detail_implementation())
     failures.extend(validate_state_cache_query_client_implementation())
+    failures.extend(validate_auth_session_dev_identity_implementation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -1493,6 +1760,7 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         COMMAND_FORM_IMPLEMENTATION,
         QUERY_LIST_DETAIL_IMPLEMENTATION,
         STATE_CACHE_QUERY_CLIENT_IMPLEMENTATION,
+        AUTH_SESSION_DEV_IDENTITY_IMPLEMENTATION,
     ]
     return {
         "mode": mode,
