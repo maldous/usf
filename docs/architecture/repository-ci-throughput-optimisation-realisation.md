@@ -41,7 +41,7 @@ Trusted cache writes are limited to `refs/heads/main` through main pushes and ma
 
 ## Checkout Scope
 
-The PR validator requires `HEAD` and `origin/<base>` for the `origin/<base>...HEAD` diff and changed JSON reads at `HEAD`. Bootstrap validation also requires the single recorded `v2-bootstrap` marker tag plus enough ancestry for the recorded-start check. The workflow therefore uses a shallow checkout, explicitly fetches only `v2-bootstrap` at depth 2, and explicitly fetches the PR base ref; it does not fetch all branches or all tags. If the shallow refs cannot support the PR diff, the workflow unshallows and fails if the diff still cannot be computed.
+The PR validator requires `HEAD` and `origin/<base>` for the `origin/<base>...HEAD` diff and changed JSON reads at `HEAD`. Bootstrap validation also requires `HEAD` to descend from the recorded bootstrap start commit and requires the single recorded `v2-bootstrap` marker tag. The workflow therefore uses a bounded shallow checkout depth of 512 for current-ref ancestry, explicitly fetches only `v2-bootstrap` at depth 2, and explicitly fetches the PR base ref; it does not fetch all branches or all tags. If the bounded checkout no longer contains the bootstrap start ancestry, the workflow deepens and then unshallows the current ref only. If the shallow refs cannot support the PR diff, the workflow unshallows and fails if the diff still cannot be computed.
 
 ## Parallelism Plan
 

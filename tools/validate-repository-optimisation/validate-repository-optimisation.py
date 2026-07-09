@@ -584,8 +584,16 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must use read-only PR cache restore and writable main cache actions"))
     if "workflow_dispatch" not in workflow_source or "github.ref == 'refs/heads/main'" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "manual cache warm path must be limited to trusted main cache writes"))
-    if "fetch-depth: 0" in workflow_source or "fetch-depth: 2" not in workflow_source or "refs/remotes/origin/$BASE_REF" not in workflow_source:
-        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must avoid full-history checkout and explicitly fetch the PR base ref"))
+    if "fetch-depth: 0" in workflow_source or "fetch-depth: 512" not in workflow_source or "refs/remotes/origin/$BASE_REF" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must avoid full-history checkout and explicitly fetch bounded PR refs"))
+    for ancestry_snippet in [
+        "BOOTSTRAP_START_COMMIT: f80da3919bfeb4e5596ccac95a67d707bae0d3ae",
+        "git merge-base --is-ancestor \"$BOOTSTRAP_START_COMMIT\" HEAD",
+        "git fetch --no-tags --deepen=512 origin",
+        "git fetch --no-tags --unshallow origin",
+    ]:
+        if ancestry_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must verify bootstrap ancestry with bounded deepen and current-ref unshallow fallback"))
     if "git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fetch the minimum bootstrap marker tag depth required by bootstrap validation"))
     if "git fetch --tags" in workflow_source or "fetch-tags: true" in workflow_source or "refs/tags/*:refs/tags/*" in workflow_source:
@@ -733,8 +741,11 @@ def selftest() -> list[dict[str, str]]:
     mutated_workflow = workflow_text.replace('pnpm_cache_hit_main="not-applicable"', 'pnpm_cache_hit_main=""')
     tests.append(("ci-workflow-pr-main-cache-hit-diagnostic", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
-    mutated_workflow = workflow_text.replace("fetch-depth: 2", "fetch-depth: 0")
+    mutated_workflow = workflow_text.replace("fetch-depth: 512", "fetch-depth: 0")
     tests.append(("ci-workflow-full-history-checkout", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("git fetch --no-tags --deepen=512 origin", "# missing bounded bootstrap ancestry deepen")
+    tests.append(("ci-workflow-bootstrap-ancestry-deepen", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
     mutated_workflow = workflow_text.replace("refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "refs/tags/*:refs/tags/*")
     tests.append(("ci-workflow-all-tags-fetch", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
