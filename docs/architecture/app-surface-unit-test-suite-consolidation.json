@@ -1,0 +1,256 @@
+{
+  "artifactId": "usf.app-surface-unit-test-suite-consolidation",
+  "title": "App-surface unit test suite consolidation",
+  "ownerIssueId": "USF-1031",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "test-unit-consolidated",
+  "createdDate": "2026-07-09",
+  "purpose": "Record the bounded local app-surface unit test suite without duplicating already-effective per-slice tests.",
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "This artefact records unit-test evidence over repository-owned app-surface implementation artefacts.",
+    "generatedReportsAuthority": "Generated reports remain lower authority than semantic artefacts, validator rules, proof evidence, and source implementation.",
+    "sourceImplementationAuthority": "Source implementation does not invent app semantics."
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "role": "tranche-plan"
+    },
+    {
+      "path": "docs/architecture/app-surface-route-capability-implementation.json",
+      "role": "route-capability-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-command-form-implementation.json",
+      "role": "command-form-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-query-list-detail-implementation.json",
+      "role": "query-list-detail-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+      "role": "state-cache-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-auth-session-dev-identity-implementation.json",
+      "role": "auth-session-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-i18n-baseline-implementation.json",
+      "role": "i18n-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+      "role": "accessibility-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-notification-consent-permission-surface.json",
+      "role": "notification-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json",
+      "role": "negative-ads-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-store-metadata-semantic-surface.json",
+      "role": "store-metadata-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-deployment-evidence-pinning-surface.json",
+      "role": "deployment-evidence-authority"
+    },
+    {
+      "path": "package.json",
+      "role": "package-managed-test-entry-point"
+    }
+  ],
+  "packageManagedEntryPoint": {
+    "scriptName": "test",
+    "command": "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
+    "packageManager": "pnpm@11.9.0",
+    "newDependencyRequired": false,
+    "lockfileChangeRequired": false
+  },
+  "unitCoverage": [
+    {
+      "coverageId": "unit-test-entry-point",
+      "ownerIssueId": "USF-1031",
+      "testPath": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "evidenceDisposition": "consolidation-test-entry-point",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "unit-test-entry-point-exists-and-is-package-managed"
+      ]
+    },
+    {
+      "coverageId": "route-mapping",
+      "ownerIssueId": "USF-1020",
+      "testPath": "tests/apps/app-surface-route-capability-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "known-route-success",
+        "unknown-route-failure",
+        "known-screen-success",
+        "unknown-screen-failure"
+      ]
+    },
+    {
+      "coverageId": "command-form",
+      "ownerIssueId": "USF-1021",
+      "testPath": "tests/packages/app-surface-command-form-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "validation-mapping",
+        "permission-mapping",
+        "error-mapping",
+        "audit-mapping",
+        "ui-only-business-rule-rejection"
+      ]
+    },
+    {
+      "coverageId": "query-list-detail",
+      "ownerIssueId": "USF-1022",
+      "testPath": "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "cache-classification",
+        "privacy-classification",
+        "unknown-query-view-failure",
+        "missing-cache-privacy-failure"
+      ]
+    },
+    {
+      "coverageId": "state-cache-query-client",
+      "ownerIssueId": "USF-1023",
+      "testPath": "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "logout-purge-semantics",
+        "privacy-classification",
+        "persistent-storage-rejection",
+        "query-library-rejection"
+      ]
+    },
+    {
+      "coverageId": "i18n",
+      "ownerIssueId": "USF-1025",
+      "testPath": "tests/packages/app-surface-i18n-baseline-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "missing-translation-fails-closed",
+        "unsupported-locale-fails-closed",
+        "route-component-string-coverage"
+      ]
+    },
+    {
+      "coverageId": "accessibility",
+      "ownerIssueId": "USF-1026",
+      "testPath": "tests/packages/app-surface-accessibility-baseline-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "missing-accessibility-semantics-caught",
+        "required-label-focus-screen-reader-coverage"
+      ]
+    },
+    {
+      "coverageId": "auth-session",
+      "ownerIssueId": "USF-1024",
+      "testPath": "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "missing-permission-semantics-fail-closed",
+        "missing-tenant-or-user-context-fail-closed",
+        "allowed-and-denied-permission-cases"
+      ]
+    },
+    {
+      "coverageId": "notification-consent",
+      "ownerIssueId": "USF-1027",
+      "testPath": "tests/packages/app-surface-notification-consent-permission-surface.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "consent-permission-preference-mapping",
+        "push-provider-drift-rejection",
+        "in-app-only-channel-boundary"
+      ]
+    },
+    {
+      "coverageId": "local-negative-surfaces",
+      "ownerIssueId": "USF-1028-USF-1030",
+      "testPath": "tests/packages/app-surface-local-negative-surfaces.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "ads-consent-privacy-negative-proof",
+        "store-metadata-mismatch-negative-proof",
+        "deployment-evidence-wrong-commit-negative-proof"
+      ]
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "existingTestPathsMustExist": true,
+    "perSliceUnitTestsMayBeReusedAsEvidence": true,
+    "routeKnownAndUnknownCoverageRequired": true,
+    "commandValidationPermissionErrorAuditCoverageRequired": true,
+    "queryCachePrivacyCoverageRequired": true,
+    "stateCacheLogoutPurgeCoverageRequired": true,
+    "i18nMissingTranslationCoverageRequired": true,
+    "accessibilityMissingSemanticsCoverageRequired": true,
+    "authMissingPermissionCoverageRequired": true,
+    "notificationConsentPermissionCoverageRequired": true,
+    "localNegativeSurfaceCoverageRequired": true,
+    "testsMustRunLocallyWithoutExternalServices": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "externalBoundary": {
+    "externalProvidersAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "composeRequired": false,
+    "testcontainersAllowed": false,
+    "remoteCacheAllowed": false,
+    "taskGraphToolingAllowed": false
+  },
+  "proofLevel": {
+    "devLocalUnitProof": true,
+    "contractProof": false,
+    "composeProof": false,
+    "stagingProof": false
+  },
+  "nonClaims": {
+    "productUiReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "providerReadiness": false,
+    "complianceReadiness": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

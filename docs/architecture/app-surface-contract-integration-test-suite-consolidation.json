@@ -1,0 +1,226 @@
+{
+  "artifactId": "usf.app-surface-contract-integration-test-suite-consolidation",
+  "title": "App-surface contract and local integration test suite consolidation",
+  "ownerIssueId": "USF-1032",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "test-contract-local-integration-consolidated",
+  "createdDate": "2026-07-09",
+  "purpose": "Record contract and bounded local integration proof for implemented app-surface artefacts without duplicating per-slice tests or escalating to Compose, staging, providers, stores, deployment, or credentials.",
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "This artefact records contract and local integration evidence over repository-owned app-surface artefacts and validator output shape.",
+    "validatorAuthority": "Validators enforce repository-defined rules and planted-defect expectations but do not define product meaning.",
+    "generatedReportsAuthority": "Generated reports remain lower authority than semantic artefacts, validator rules, proof evidence, and source implementation."
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "role": "tranche-plan"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "role": "shared-client-semantic-authority"
+    },
+    {
+      "path": "docs/architecture/shared-client-interaction-contract-semantics.json",
+      "role": "shared-client-contract-authority"
+    },
+    {
+      "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+      "role": "generated-client-contract-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-implementation-tranche.json",
+      "role": "validator-output-shape-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-validator-planted-defect-matrix.json",
+      "role": "planted-defect-authority"
+    },
+    {
+      "path": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+      "role": "unit-test-suite-evidence"
+    },
+    {
+      "path": "package.json",
+      "role": "package-managed-test-entry-point"
+    }
+  ],
+  "packageManagedEntryPoint": {
+    "scriptName": "test",
+    "command": "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
+    "packageManager": "pnpm@11.9.0",
+    "newDependencyRequired": false,
+    "lockfileChangeRequired": false
+  },
+  "contractCoverage": [
+    {
+      "coverageId": "contract-test-entry-point",
+      "ownerIssueId": "USF-1032",
+      "testPath": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "evidenceDisposition": "consolidation-test-entry-point",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "contract-test-entry-point-exists-and-is-package-managed"
+      ]
+    },
+    {
+      "coverageId": "generated-client-consumption",
+      "ownerIssueId": "USF-1015",
+      "testPath": "tests/packages/app-surface-shared-client-consumption.test.ts",
+      "evidenceDisposition": "existing-per-slice-contract-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "stale-generated-client-inputs-fail-closed",
+        "missing-semantic-inputs-fail-closed",
+        "ui-only-behaviour-rejected"
+      ]
+    },
+    {
+      "coverageId": "validator-output-shape",
+      "ownerIssueId": "USF-1011",
+      "testPath": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "supportingTestPaths": [
+        "tools/validate-app-surface/validate-app-surface.py"
+      ],
+      "evidenceDisposition": "consolidation-test-entry-point",
+      "successMode": "all",
+      "failureCoverageMode": "selftest-planted-defect-expectations",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "validator-output-shape-success-case",
+        "validator-output-shape-planted-defect-failure-coverage"
+      ]
+    },
+    {
+      "coverageId": "route-capability-mapping",
+      "ownerIssueId": "USF-1020",
+      "testPath": "tests/apps/app-surface-route-capability-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-contract-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "route-ownership",
+        "unknown-route-failure",
+        "screen-ownership",
+        "unknown-screen-failure"
+      ]
+    },
+    {
+      "coverageId": "command-form-semantic-contract",
+      "ownerIssueId": "USF-1021",
+      "testPath": "tests/packages/app-surface-command-form-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-contract-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "command-semantic-mismatch-failure",
+        "validation-audit-permission-mismatch-failure"
+      ]
+    },
+    {
+      "coverageId": "query-list-detail-semantic-contract",
+      "ownerIssueId": "USF-1022",
+      "testPath": "tests/packages/app-surface-query-list-detail-implementation.test.ts",
+      "evidenceDisposition": "existing-per-slice-contract-test",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false,
+      "acceptanceCriteriaCovered": [
+        "query-semantic-mismatch-failure",
+        "cache-privacy-mismatch-failure"
+      ]
+    }
+  ],
+  "integrationCoverage": [
+    {
+      "coverageId": "local-in-memory-runtime-integration",
+      "ownerIssueId": "USF-1016",
+      "testPath": "tests/packages/app-surface-local-in-memory-runtime.test.ts",
+      "supportingTestPaths": [
+        "tests/packages/app-surface-state-cache-query-client-implementation.test.ts",
+        "tests/packages/app-surface-auth-session-dev-identity-implementation.test.ts",
+        "tests/packages/app-surface-notification-consent-permission-surface.test.ts"
+      ],
+      "providerMode": "in-memory-only",
+      "environment": "dev-local",
+      "externalProvidersRequired": false,
+      "credentialsRequired": false,
+      "composeRequired": false,
+      "stagingRequired": false,
+      "deploymentRequired": false,
+      "acceptanceCriteriaCovered": [
+        "local-integration-tests-use-in-memory-adapters",
+        "no-external-provider-credential-deployment-or-staging"
+      ]
+    }
+  ],
+  "crossSurfaceCoverage": [
+    {
+      "coverageId": "bounded-local-app-surface-flow",
+      "testPath": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "flow": [
+        "auth-session-dev-identity",
+        "route-capability",
+        "shared-client-consumption",
+        "command-form",
+        "query-list-detail",
+        "state-cache-query-client",
+        "i18n",
+        "accessibility",
+        "notification-consent",
+        "negative-ads-store-deployment-fixtures"
+      ],
+      "providerMode": "in-memory-and-local-fixture-only",
+      "failClosedCoverage": true,
+      "externalServicesRequired": false
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "existingTestPathsMustExist": true,
+    "contractTestsMayReusePerSliceTestsAsEvidence": true,
+    "generatedClientStaleAndMissingInputsMustFailClosed": true,
+    "validatorOutputShapeSuccessAndFailureCovered": true,
+    "routeCapabilityOwnershipAndUnknownRouteCovered": true,
+    "commandAndQuerySemanticMismatchFailureCovered": true,
+    "localIntegrationMustUseInMemoryAdapters": true,
+    "composeMustRemainConditionalAndNotRequired": true,
+    "stagingMustRemainForbidden": true,
+    "noExternalProvidersCredentialsDeploymentOrStaging": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "externalBoundary": {
+    "externalProvidersAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "composeRequired": false,
+    "testcontainersAllowed": false,
+    "remoteCacheAllowed": false,
+    "taskGraphToolingAllowed": false
+  },
+  "proofLevel": {
+    "contractProof": true,
+    "localInMemoryIntegrationProof": true,
+    "composeProof": false,
+    "stagingProof": false
+  },
+  "nonClaims": {
+    "productUiReadiness": false,
+    "publicApiReadiness": false,
+    "webReadiness": false,
+    "mobileReadiness": false,
+    "storeReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "providerReadiness": false,
+    "complianceReadiness": false,
+    "monetisationReadiness": false,
+    "humanAcceptance": false
+  }
+}

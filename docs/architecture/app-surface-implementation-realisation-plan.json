@@ -455,6 +455,18 @@
       {
         "path": "tests/packages/app-surface-local-negative-surfaces.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -607,7 +619,7 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, and deployment evidence pinning fixture surfaces now exist; later test consolidation, conditional Compose, staging classification, timing, and closure surfaces remain issue-scoped work",
+      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, deployment evidence pinning fixture surfaces, and unit plus contract/local-integration test consolidation now exist; conditional Compose, staging classification, timing, and closure surfaces remain issue-scoped work",
       "queryListDetailRegistryFound": true,
       "stateCacheQueryClientBoundary": "implemented-by-USF-1023",
       "authSessionDevIdentityImplementation": "implemented-by-USF-1024",
@@ -619,7 +631,11 @@
       "storeMetadataSemanticSurfaceFound": true,
       "storeMetadataSemanticSurface": "implemented-by-USF-1029",
       "deploymentEvidencePinningSurfaceFound": true,
-      "deploymentEvidencePinningSurface": "implemented-by-USF-1030"
+      "deploymentEvidencePinningSurface": "implemented-by-USF-1030",
+      "unitTestSuiteConsolidationFound": true,
+      "unitTestSuiteConsolidation": "implemented-by-USF-1031",
+      "contractIntegrationTestSuiteConsolidationFound": true,
+      "contractIntegrationTestSuiteConsolidation": "implemented-by-USF-1032"
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -1078,7 +1094,18 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "test-unit",
       "mayInstallPackages": "only-through-USF-1019",
-      "mayCreateRuntimeCode": "test-code-only"
+      "mayCreateRuntimeCode": "test-code-only",
+      "currentRepositoryStatus": "unit-test-suite-consolidated-by-USF-1031",
+      "repositoryArtefact": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+      "consolidationTestArtefact": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "evidenceDisposition": "existing-per-slice-unit-tests-plus-consolidation-entry-point",
+      "validatorGuardAdded": "USF-APP-SURFACE-IMPLEMENTATION-012",
+      "packageInstallationAllowed": false,
+      "dependencyInstallRequired": false,
+      "runtimeCodeCreatedByIssue": false,
+      "testCodeCreatedByIssue": true,
+      "composeRequired": false,
+      "stagingRequired": false
     },
     {
       "id": "USF-1032",
@@ -1086,7 +1113,21 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "test-contract-local-integration",
       "mayInstallPackages": "only-through-USF-1019",
-      "mayCreateRuntimeCode": "test-code-only"
+      "mayCreateRuntimeCode": "test-code-only",
+      "currentRepositoryStatus": "contract-and-local-integration-test-suite-consolidated-by-USF-1032",
+      "repositoryArtefact": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+      "consolidationTestArtefact": "tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "evidenceDisposition": "existing-per-slice-contract-tests-plus-local-in-memory-integration-index",
+      "validatorGuardAdded": "USF-APP-SURFACE-IMPLEMENTATION-013",
+      "packageInstallationAllowed": false,
+      "dependencyInstallRequired": false,
+      "runtimeCodeCreatedByIssue": false,
+      "testCodeCreatedByIssue": true,
+      "composeRequired": false,
+      "stagingRequired": false,
+      "externalProvidersRequired": false,
+      "credentialsRequired": false,
+      "deploymentRequired": false
     },
     {
       "id": "USF-1033",
@@ -1269,6 +1310,12 @@
         "validator output-shape tests",
         "route capability mapping tests",
         "local integration tests when in-memory semantics are sufficient"
+      ],
+      "currentRepositoryStatus": "unit-contract-and-local-integration-consolidated-by-USF-1031-USF-1032",
+      "consolidationArtefacts": [
+        "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+        "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+        "tests/packages/app-surface-test-suite-consolidation.test.ts"
       ]
     },
     "compose": {
@@ -1340,13 +1387,17 @@
     ],
     "commandsForLaterImplementationIssues": [
       "frozen package install after dependency changes",
-      "app-surface unit tests after app packages exist",
-      "app-surface contract tests after client and mapping packages exist",
       "generated-client validation after consumption wiring exists",
-      "local integration tests after in-memory runtime exists",
       "Compose proof only if USF-1033 classifies it as required",
       "evidence validation after evidence artefacts change",
       "proof-cockpit re-pin only if stale evidence blocks validation"
+    ],
+    "commandsForCurrentTestConsolidationIssues": [
+      "corepack pnpm test -- tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "make app-surface-validate",
+      "make app-surface-selftest",
+      "corepack pnpm validate-spec",
+      "make validate-evidence after evidence artefacts change"
     ]
   },
   "nonClaimsPreserved": [
@@ -1367,11 +1418,11 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Unit, contract, local integration, conditional Compose, staging classification, timing evidence, and closure report are not yet complete."
+    "Conditional Compose classification, staging classification, timing evidence, and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, and deployment evidence pinning surface are now repository-owned, but unit, contract, integration, conditional Compose, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, deployment evidence pinning surface, and unit plus contract/local-integration test consolidation are now repository-owned, but conditional Compose classification, staging classification, timing, and closure proof child issues remain incomplete."
   }
 }

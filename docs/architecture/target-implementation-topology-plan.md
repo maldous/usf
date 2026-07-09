@@ -341,3 +341,18 @@ USF-1028 through USF-1030 authorise the following bounded local negative/fixture
 USF-1028 records a no-live ads and monetisation placeholder boundary over existing USF-934 fixture semantics. USF-1029 records local store metadata mismatch detection over existing USF-935 fixture semantics. USF-1030 records local deployment evidence pinning over existing USF-940 fixture semantics.
 
 This batch must not install packages, create runtime provider code, create credentials, integrate ad SDKs, configure CMP or UMP, configure App Store or Play Store records, submit store metadata, deploy anything, create staging proof, configure CDN or provider setup, create production evidence, or claim ads, monetisation, store, deployment, staging, production, provider, compliance, or human-acceptance readiness.
+
+## USF-1031 and USF-1032 app-surface test suite consolidation
+
+USF-1031 and USF-1032 authorise the following bounded local test consolidation paths only:
+
+- `docs/architecture/app-surface-unit-test-suite-consolidation.json`
+- `docs/architecture/app-surface-contract-integration-test-suite-consolidation.json`
+- `tests/packages/app-surface-test-suite-consolidation.test.ts`
+- `tools/validate-app-surface/validate-app-surface.py`
+
+The unit test suite consolidation records the existing per-slice route, command, query, state/cache, auth/session, i18n, accessibility, notification, and local negative-surface unit tests as evidence and adds one package-managed consolidation test entry point.
+
+The contract and local integration consolidation records existing generated-client, validator output-shape, route-capability, command, query, and in-memory runtime proof as evidence. It may use local in-memory integration evidence only. It must not escalate to Compose, staging, deployment, provider setup, credentials, Testcontainers, remote cache, task graph tooling, store testing, browser-cloud testing, mobile device-farm testing, or live-provider testing.
+
+USF-1031 and USF-1032 do not authorise package installation, lockfile changes, production runtime code, external services, credentials, deployment, staging, live providers, store setup, ad providers, push providers, production readiness, compliance readiness, monetisation readiness, or human acceptance.
