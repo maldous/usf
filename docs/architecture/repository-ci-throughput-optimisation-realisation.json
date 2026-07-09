@@ -375,6 +375,8 @@
       "classification": "decision-required",
       "adopted": false,
       "followUpIssueId": "USF-1038",
+      "decisionArtifact": "docs/architecture/github-runner-capacity-enablement.json",
+      "currentState": "blocked-pending-dedicated-runner-host-and-registration",
       "requiredBeforeAdoption": [
         "owner approval",
         "runner trust boundary",
