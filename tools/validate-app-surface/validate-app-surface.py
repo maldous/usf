@@ -60,8 +60,14 @@ DEPLOYMENT_USF940_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/confo
 DEPLOYMENT_USF940_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json"
 UNIT_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-unit-test-suite-consolidation.json"
 CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json"
-COMPOSE_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-compose-proof-classification.json"
-STAGING_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-staging-proof-classification.json"
+COMPOSE_PROOF_CLASSIFICATION = configured_path(
+    "USF_APP_SURFACE_COMPOSE_CLASSIFICATION_PATH",
+    ROOT / "docs/architecture/app-surface-compose-proof-classification.json",
+)
+STAGING_PROOF_CLASSIFICATION = configured_path(
+    "USF_APP_SURFACE_STAGING_CLASSIFICATION_PATH",
+    ROOT / "docs/architecture/app-surface-staging-proof-classification.json",
+)
 TIMING_AND_OPTIMISATION_EVIDENCE = configured_path(
     "USF_APP_SURFACE_TIMING_EVIDENCE_PATH",
     ROOT / "docs/architecture/app-surface-timing-and-optimisation-evidence.json",

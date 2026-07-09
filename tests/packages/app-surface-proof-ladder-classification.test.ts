@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -54,15 +55,33 @@ function expectAuthorityInputsToExist(inputs: AuthorityInput[]): void {
   }
 }
 
+function runValidatorWithFixturePayloads(compose: unknown, staging: unknown) {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), "usf-app-surface-proof-ladder-"));
+  try {
+    const fixtureComposePath = join(fixtureRoot, "compose.json");
+    const fixtureStagingPath = join(fixtureRoot, "staging.json");
+    writeFileSync(fixtureComposePath, JSON.stringify(compose, null, 2) + "\n");
+    writeFileSync(fixtureStagingPath, JSON.stringify(staging, null, 2) + "\n");
+    return spawnSync("python3", ["tools/validate-app-surface/validate-app-surface.py", "all", "--json"], {
+      cwd: repoRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        USF_APP_SURFACE_COMPOSE_CLASSIFICATION_PATH: fixtureComposePath,
+        USF_APP_SURFACE_STAGING_CLASSIFICATION_PATH: fixtureStagingPath,
+      },
+    });
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+}
+
 const composeClassification = readJson<ComposeClassification>(
   "docs/architecture/app-surface-compose-proof-classification.json",
 );
 const stagingClassification = readJson<StagingClassification>(
   "docs/architecture/app-surface-staging-proof-classification.json",
 );
-const composeClassificationPath = join(repoRoot, "docs/architecture/app-surface-compose-proof-classification.json");
-const stagingClassificationPath = join(repoRoot, "docs/architecture/app-surface-staging-proof-classification.json");
-
 describe("app-surface proof ladder classification", () => {
   it("classifies Compose proof as not required for the bounded local app surface", () => {
     expect(composeClassification.ownerIssueId).toBe("USF-1033");
@@ -132,38 +151,29 @@ describe("app-surface proof ladder classification", () => {
   });
 
   it("fails closed when proof-ladder classification authority inputs are empty", () => {
-    const originalCompose = readFileSync(composeClassificationPath, "utf8");
-    const originalStaging = readFileSync(stagingClassificationPath, "utf8");
-    try {
-      writeFileSync(
-        composeClassificationPath,
-        JSON.stringify({ ...JSON.parse(originalCompose), authorityInputs: [] }, null, 2) + "\n",
-      );
-      writeFileSync(
-        stagingClassificationPath,
-        JSON.stringify({ ...JSON.parse(originalStaging), authorityInputs: [] }, null, 2) + "\n",
-      );
-      const result = spawnSync("python3", ["tools/validate-app-surface/validate-app-surface.py", "all", "--json"], {
-        cwd: repoRoot,
-        encoding: "utf8",
-      });
-      expect(result.status).not.toBe(0);
-      const validation = JSON.parse(result.stdout) as {
-        status: string;
-        findings: Array<{ ruleId: string; message: string }>;
-      };
-      expect(validation.status).toBe("fail");
-      expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-014")).toBe(
-        true,
-      );
-      expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-015")).toBe(
-        true,
-      );
-      expect(validation.findings.every((finding) => finding.message === "authorityInputs must be a non-empty array"))
-        .toBe(true);
-    } finally {
-      writeFileSync(composeClassificationPath, originalCompose);
-      writeFileSync(stagingClassificationPath, originalStaging);
-    }
+    const result = runValidatorWithFixturePayloads(
+      { ...composeClassification, authorityInputs: [] },
+      { ...stagingClassification, authorityInputs: [] },
+    );
+    expect(result.status).not.toBe(0);
+    const validation = JSON.parse(result.stdout) as {
+      status: string;
+      findings: Array<{ ruleId: string; message: string }>;
+    };
+    expect(validation.status).toBe("fail");
+    expect(
+      validation.findings.some(
+        (finding) =>
+          finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-014" &&
+          finding.message === "authorityInputs must be a non-empty array",
+      ),
+    ).toBe(true);
+    expect(
+      validation.findings.some(
+        (finding) =>
+          finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-015" &&
+          finding.message === "authorityInputs must be a non-empty array",
+      ),
+    ).toBe(true);
   });
 });
