@@ -10,7 +10,7 @@ The previous blocker, no authorised Linux x64 runner host/controller, is removed
 
 The runner uses the required labels `self-hosted`, `linux`, `x64`, `usf`, `usf-ci`, and `usf-trusted`. It runs as the dedicated `usf-runner` user, not as root. The user is not in `sudo` or `docker`. Docker is present on the host, but the runner user is not granted Docker socket access and the workflow does not mount the Docker socket.
 
-USF-1038 is not closure-ready yet. The remaining blocker is operational and exact: a trusted self-hosted `validate` run must complete after this routing change is pushed, with queue, duration, cleanup, cache, and secret-availability evidence captured.
+USF-1038 is not closure-ready yet. The remaining blocker is operational and exact: a trusted self-hosted `validate` run must complete after the runner temp boundary fix is pushed, with queue, duration, cleanup, cache, and secret-availability evidence captured.
 
 ## Host Inspection
 
@@ -38,6 +38,8 @@ Repository-owned runner scripts live under `tools/github-runner/`, and the opera
 
 Machine-checkable cleanup and secret-safety checks are implemented. The installed job hooks clean runner work/temp paths and check for live secret-value leakage without printing secret values. Safe tool caches may persist, but cache hits do not prove correctness.
 
+Generated validator, hygiene, toolchain, and timing helper reports use the GitHub runner-scoped `RUNNER_TEMP` boundary. Fixed persistent `/tmp/usf-*` report paths are rejected by the repository optimisation validator because they can collide across users or prior runs on a persistent host.
+
 ## Timing Evidence
 
 Before evidence remains the GitHub-hosted `validate` run `28999636766`: queue 4 seconds, validate job 391 seconds, checkout 32 seconds, pnpm install 12 seconds, pip install 4 seconds, validate-spec 45 seconds.
@@ -45,6 +47,8 @@ Before evidence remains the GitHub-hosted `validate` run `28999636766`: queue 4 
 After evidence is pending until the pushed workflow completes on `usf-linux-x64-controller-01`. Exact latest run IDs and per-step durations are operational evidence and should be recorded in the PR body and generated step summary. They are not semantic authority.
 
 The first self-hosted attempt, run `29003193370`, selected `usf-linux-x64-controller-01` and queued in 4 seconds, but failed at `actions/checkout` before validators ran. The failure was an implementation defect in the job-start cleanup hook: it removed the active GitHub workspace directory before checkout could start Node. The cleanup script now always preserves the active `GITHUB_WORKSPACE` path, and the fixed script was reinstalled into the host hook directory.
+
+The second self-hosted attempt, run `29003495086`, selected `usf-linux-x64-controller-01` and queued in 3 seconds. Checkout, toolchain setup, pnpm install, and pip install completed, but `validate-spec` failed while writing `/tmp/usf-validator-report.json` because that fixed persistent temp path was not writable by the runner user. This was a workflow report-boundary defect, not a semantic validation failure. The workflow now writes generated reports under `RUNNER_TEMP`, verifies that boundary before preflight hygiene, and validator coverage rejects fixed `/tmp/usf-*` report paths.
 
 ## Caddy And Callback Decision
 

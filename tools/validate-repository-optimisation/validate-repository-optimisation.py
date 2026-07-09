@@ -630,6 +630,27 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not broaden validate-spec checkout to all tags"))
     if "--unshallow" not in workflow_source or "git diff --name-status" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fail closed to fuller checkout when PR diff refs are missing"))
+    for forbidden_tmp_path in [
+        "/tmp/usf-validator-report.json",
+        "/tmp/usf-pr-validator-report.json",
+        "/tmp/usf-runner-cleanup-pre.json",
+        "/tmp/usf-runner-toolchain.json",
+        "/tmp/usf-runner-secret-safety-post.json",
+        "/tmp/usf-runner-cleanup-post.json",
+    ]:
+        if forbidden_tmp_path in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow must not use fixed persistent temp path: {forbidden_tmp_path}"))
+    for runner_temp_snippet in [
+        "Verify runner temp boundary",
+        'test -w "$RUNNER_TEMP"',
+        '"$RUNNER_TEMP/usf-validator-report.json"',
+        '"$RUNNER_TEMP/usf-pr-validator-report.json"',
+        '"$RUNNER_TEMP/usf-runner-cleanup-post.json"',
+        '"$RUNNER_TEMP/usf-runner-secret-safety-post.json"',
+        '"$RUNNER_TEMP/usf-runner-toolchain.json"',
+    ]:
+        if runner_temp_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow generated reports must use the runner-scoped temp boundary"))
     if "cache_hit_value()" not in workflow_source or "*) printf false ;;" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must normalise empty cache-hit outputs to false"))
     if 'pnpm_cache_hit_main="not-applicable"' not in workflow_source or 'pip_cache_hit_main="not-applicable"' not in workflow_source:
@@ -1102,6 +1123,9 @@ def selftest() -> list[dict[str, str]]:
 
     mutated_workflow = workflow_text.replace("git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "git fetch --no-tags --depth=1 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap")
     tests.append(("ci-workflow-bootstrap-tag-depth", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace('"$RUNNER_TEMP/usf-validator-report.json"', "/tmp/usf-validator-report.json")
+    tests.append(("ci-workflow-fixed-persistent-temp-report", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["affectedDomainMap"]["hardCiBlock"] = True

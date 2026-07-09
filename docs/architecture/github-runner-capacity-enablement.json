@@ -127,7 +127,7 @@
         ]
       }
     ],
-    "runnerBackedAfterRunStatus": "pending-workflow-run-after-routing-push",
+    "runnerBackedAfterRunStatus": "pending-workflow-run-after-runner-temp-boundary-fix",
     "runnerBackedAfterRunCaptured": false,
     "queueTimeImprovementClaimMade": false,
     "exactAfterEvidenceRequiredBeforeClosure": true,
@@ -179,6 +179,36 @@
         "failureClass": "implementation-defect-runner-cleanup",
         "failureSummary": "The job-start cleanup hook removed the active GitHub workspace directory before actions/checkout could start Node. No semantic validators ran.",
         "fix": "cleanup-workspace now always preserves the active GITHUB_WORKSPACE path; the fixed script was reinstalled into /opt/usf-github-runner/hooks/cleanup-workspace.sh and the workspace directory was recreated."
+      },
+      {
+        "runId": "29003495086",
+        "jobId": "86069423745",
+        "event": "pull_request",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "createdAt": "2026-07-09T08:03:51Z",
+        "jobStartedAt": "2026-07-09T08:03:54Z",
+        "jobCompletedAt": "2026-07-09T08:06:09Z",
+        "updatedAt": "2026-07-09T08:06:10Z",
+        "queueSeconds": 3,
+        "jobDurationSeconds": 135,
+        "checkoutSeconds": 60,
+        "setupSeconds": 12,
+        "pnpmInstallSeconds": 7,
+        "pipInstallSeconds": 1,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "failure",
+        "failureClass": "implementation-defect-fixed-persistent-temp-path",
+        "failureSummary": "The workflow used a fixed /tmp/usf-validator-report.json path on a persistent runner and failed report emission with a permission error before semantic validation completed.",
+        "fix": "Generated validator, hygiene, toolchain, and timing helper reports now use the GitHub runner-scoped RUNNER_TEMP boundary, and the repository optimisation validator rejects fixed /tmp/usf-* report paths."
       }
     ]
   },
@@ -326,7 +356,7 @@
     "workflowRoutingImplemented": true,
     "closureAllowed": false,
     "exactRemainingBlockers": [
-      "A trusted self-hosted validate run must complete successfully after the cleanup hook fix is pushed.",
+      "A trusted self-hosted validate run must complete successfully after the runner temp boundary fix is pushed.",
       "After-run timing fields must be recorded before Linear closure.",
       "GitHub-hosted fallback must be verified or explicitly recorded as manual fallback-ready.",
       "PR body and Linear must be updated with run evidence and acceptance criteria after CI completes."
@@ -486,6 +516,8 @@
     "runnerLocalStateMayDefineAuthority": false,
     "checkoutFailureCleanupDefectFixed": true,
     "activeGithubWorkspacePreservedByCleanup": true,
-    "hostPostCheckoutFixCleanupResult": "pass"
+    "hostPostCheckoutFixCleanupResult": "pass",
+    "persistentTempReportPathDefectFixed": true,
+    "workflowGeneratedReportsUseRunnerTemp": true
   }
 }

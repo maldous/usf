@@ -31,8 +31,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 512
+      - name: Verify runner temp boundary
+        run: |
+          test -n "$RUNNER_TEMP"
+          mkdir -p "$RUNNER_TEMP"
+          test -w "$RUNNER_TEMP"
       - name: Runner hygiene preflight
-        run: tools/github-runner/cleanup-workspace.sh --scope workflow-pre --json | tee /tmp/usf-runner-cleanup-pre.json
+        run: tools/github-runner/cleanup-workspace.sh --scope workflow-pre --json | tee "$RUNNER_TEMP/usf-runner-cleanup-pre.json"
       - name: Fetch bootstrap marker tag for validators
         run: git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap
       - name: Prepare PR base ref for governance gate
@@ -74,7 +79,7 @@ jobs:
           node-version: "24"
       - run: corepack enable
       - name: Verify runner toolchain
-        run: tools/github-runner/verify-toolchain.sh --json | tee /tmp/usf-runner-toolchain.json
+        run: tools/github-runner/verify-toolchain.sh --json | tee "$RUNNER_TEMP/usf-runner-toolchain.json"
       - name: Record generated timing start
         id: generated-timing
         run: |
@@ -118,7 +123,7 @@ jobs:
       - run: corepack pnpm install --prefer-offline --frozen-lockfile
       - run: python -m pip install -r tools/validate-spec/requirements.txt
       - name: Validate spec corpus (also exercises report emission + self-validation)
-        run: python tools/validate-spec/validate-spec.py all --report /tmp/usf-validator-report.json
+        run: python tools/validate-spec/validate-spec.py all --report "$RUNNER_TEMP/usf-validator-report.json"
       - name: Repository validation aggregate
         run: corepack pnpm repo:validate
       - name: Parity validation suite
@@ -135,19 +140,19 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        run: python tools/validate-spec/validate-spec.py pr --base "origin/$BASE_REF" --head HEAD --report /tmp/usf-pr-validator-report.json
+        run: python tools/validate-spec/validate-spec.py pr --base "origin/$BASE_REF" --head HEAD --report "$RUNNER_TEMP/usf-pr-validator-report.json"
       - name: Runner hygiene postflight
         if: always()
         run: |
           if [ -x tools/github-runner/verify-secret-safety.sh ]; then
-            tools/github-runner/verify-secret-safety.sh --json | tee /tmp/usf-runner-secret-safety-post.json
+            tools/github-runner/verify-secret-safety.sh --json | tee "$RUNNER_TEMP/usf-runner-secret-safety-post.json"
           else
-            printf '{"result":"skipped","reason":"runner scripts unavailable"}\n' | tee /tmp/usf-runner-secret-safety-post.json
+            printf '{"result":"skipped","reason":"runner scripts unavailable"}\n' | tee "$RUNNER_TEMP/usf-runner-secret-safety-post.json"
           fi
           if [ -x tools/github-runner/cleanup-workspace.sh ]; then
-            tools/github-runner/cleanup-workspace.sh --scope workflow-post --json | tee /tmp/usf-runner-cleanup-post.json
+            tools/github-runner/cleanup-workspace.sh --scope workflow-post --json | tee "$RUNNER_TEMP/usf-runner-cleanup-post.json"
           else
-            printf '{"result":"skipped","reason":"runner scripts unavailable"}\n' | tee /tmp/usf-runner-cleanup-post.json
+            printf '{"result":"skipped","reason":"runner scripts unavailable"}\n' | tee "$RUNNER_TEMP/usf-runner-cleanup-post.json"
           fi
       - name: Report generated CI timing boundary
         if: always()
@@ -179,9 +184,9 @@ jobs:
             untrusted_fork_pull_request=false
             secrets_available_by_policy=true
           fi
-          runner_cleanup_result="$(jq -r '.result // "unknown"' /tmp/usf-runner-cleanup-post.json 2>/dev/null || printf unknown)"
-          runner_secret_safety_result="$(jq -r '.result // "unknown"' /tmp/usf-runner-secret-safety-post.json 2>/dev/null || printf unknown)"
-          runner_toolchain_ready="$(jq -r '.toolchainReady // "unknown"' /tmp/usf-runner-toolchain.json 2>/dev/null || printf unknown)"
+          runner_cleanup_result="$(jq -r '.result // "unknown"' "$RUNNER_TEMP/usf-runner-cleanup-post.json" 2>/dev/null || printf unknown)"
+          runner_secret_safety_result="$(jq -r '.result // "unknown"' "$RUNNER_TEMP/usf-runner-secret-safety-post.json" 2>/dev/null || printf unknown)"
+          runner_toolchain_ready="$(jq -r '.toolchainReady // "unknown"' "$RUNNER_TEMP/usf-runner-toolchain.json" 2>/dev/null || printf unknown)"
           cache_hit_value() {
             case "$1" in
               true) printf true ;;
