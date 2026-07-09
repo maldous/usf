@@ -48,6 +48,16 @@ cleaned=0
 skipped_current=0
 failed=0
 
+# Live-job guard: a manual or operator invocation carries no GITHUB_WORKSPACE,
+# so the current-workspace skip below cannot protect an in-flight job. If a
+# runner Worker process is live in that situation, cleaning would destroy the
+# active job's workspace and temp (observed on run 29014581639). Fail safe:
+# skip all cleaning and report the guard instead.
+live_job_guard=false
+if [ -z "${GITHUB_WORKSPACE:-}" ] && pgrep -f 'bin/Runner\.Worker' >/dev/null 2>&1; then
+  live_job_guard=true
+fi
+
 clean_contents() {
   target="$(realpath -m "$1")"
   if ! safe_path "$target"; then
@@ -71,25 +81,27 @@ clean_contents() {
 }
 
 mkdir -p "$USF_RUNNER_TEMP" "${USF_RUNNER_WORK}/_temp" 2>/dev/null || true
-clean_contents "$USF_RUNNER_TEMP"
-clean_contents "${USF_RUNNER_WORK}/_temp"
+if [ "$live_job_guard" = false ]; then
+  clean_contents "$USF_RUNNER_TEMP"
+  clean_contents "${USF_RUNNER_WORK}/_temp"
 
-if [ -d "$USF_RUNNER_WORK" ]; then
-  for child in "$USF_RUNNER_WORK"/*; do
-    [ -e "$child" ] || continue
-    case "$(basename "$child")" in
-      _actions|_tool|_temp)
-        continue
-        ;;
-    esac
-    clean_contents "$child"
-  done
+  if [ -d "$USF_RUNNER_WORK" ]; then
+    for child in "$USF_RUNNER_WORK"/*; do
+      [ -e "$child" ] || continue
+      case "$(basename "$child")" in
+        _actions|_tool|_temp|_PipelineMapping)
+          continue
+          ;;
+      esac
+      clean_contents "$child"
+    done
+  fi
 fi
 
 result="pass"
 [ "$failed" -eq 0 ] || result="fail"
-payload="$(printf '{"scope":"%s","timestamp":"%s","result":"%s","runningAsRoot":%s,"cleanedTargets":%s,"skippedCurrentWorkspace":%s,"failedTargets":%s,"cachePreserved":true,"runnerLocalStateAuthority":false}\n' \
-  "$scope" "$(iso_now)" "$result" "$([ "$(id -u)" -eq 0 ] && printf true || printf false)" "$cleaned" "$skipped_current" "$failed")"
+payload="$(printf '{"scope":"%s","timestamp":"%s","result":"%s","runningAsRoot":%s,"cleanedTargets":%s,"skippedCurrentWorkspace":%s,"failedTargets":%s,"liveJobGuardActive":%s,"cachePreserved":true,"runnerLocalStateAuthority":false}\n' \
+  "$scope" "$(iso_now)" "$result" "$([ "$(id -u)" -eq 0 ] && printf true || printf false)" "$cleaned" "$skipped_current" "$failed" "$live_job_guard")"
 
 if [ "$json" = true ]; then
   printf '%s' "$payload"

@@ -38,6 +38,8 @@ Repository-owned runner scripts live under `tools/github-runner/`, and the opera
 
 Machine-checkable cleanup and secret-safety checks are implemented. The installed job hooks clean runner work/temp paths and check for live secret-value leakage without printing secret values. Safe tool caches may persist, but cache hits do not prove correctness.
 
+The cleanup script carries a live-job guard: when it is invoked without a GITHUB_WORKSPACE environment (a manual or operator invocation) while a runner Worker process is live, it skips all cleaning and records liveJobGuardActive true, because the current-workspace skip cannot protect an in-flight job in that situation. The runner-owned `_PipelineMapping` tracking directory is preserved across cleanups. This guard was added after run `29014581639` failed when a concurrent host session manually invoked the cleanup script as the runner user mid-job and deleted the live workspace.
+
 Generated validator, hygiene, toolchain, and timing helper reports use the GitHub runner-scoped `RUNNER_TEMP` boundary. Fixed persistent `/tmp/usf-*` report paths are rejected by the repository optimisation validator because they can collide across users or prior runs on a persistent host.
 
 ## Timing Evidence
@@ -47,6 +49,8 @@ Baseline evidence remains the GitHub-hosted `validate` run `28999636766`: queue 
 Primary after evidence is the trusted self-hosted `validate` run `29012452458`, job `86099130372`, on `usf-linux-x64-controller-01`: queue 4 seconds, validate job 359 seconds, total run 363 seconds, checkout 61 seconds, setup 0 seconds, pnpm install 2 seconds, pip install 0 seconds, validate-spec 37 seconds, repository validation 139 seconds, parity validation 74 seconds, proof-cockpit validation 3 seconds, proof-cockpit selftest 23 seconds. The run is trusted runner-backed and passes.
 
 The earlier trusted self-hosted PR warm run `29006497453`, job `86079216941`, on `usf-linux-x64-controller-01` is also recorded: queue 3 seconds, validate job 304 seconds, total run 308 seconds, checkout 4 seconds, setup 0 seconds, pnpm install 2 seconds, pip install 0 seconds, validate-spec 37 seconds, repository validation 138 seconds, parity validation 74 seconds, proof-cockpit validation 3 seconds, proof-cockpit selftest 23 seconds, and PR governance gate 2 seconds.
+
+The latest trusted self-hosted PR-branch run `29014541366`, job `86106133145`, is also recorded: queue 5 seconds, validate job 362 seconds, total run 367 seconds, checkout 60 seconds, setup 0 seconds, pnpm install 1 second, pip install 1 second, validate-spec 37 seconds, repository validation 139 seconds, parity validation 75 seconds, proof-cockpit validation 3 seconds, proof-cockpit selftest 26 seconds. Runner preflight/postflight cleanup and secret-safety checks passed. As this run is `workflow_dispatch` on a non-main ref, cache lookups were not attempted and cache writes remained non-applicable.
 
 Fallback probe evidence is on GitHub-hosted `run 29011736599`, job `86096784983`: queue 3 seconds, validate job 386 seconds, total run 389 seconds, checkout 30 seconds, setup 0 seconds, pnpm install 14 seconds, pip install 2 seconds, validate-spec 45 seconds, repository validation 125 seconds, parity validation 57 seconds, proof-cockpit validation 3 seconds, proof-cockpit selftest 20 seconds, and PR governance gate 2 seconds. The run completed successfully.
 
