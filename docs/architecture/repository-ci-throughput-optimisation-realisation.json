@@ -2,7 +2,7 @@
   "artifactId": "usf.repository-ci-throughput-optimisation-realisation",
   "title": "Repository CI throughput optimisation realisation",
   "ownerIssueId": "USF-1037",
-  "lifecycleState": "implemented-with-pr-ci-timing-observed",
+  "lifecycleState": "implemented-with-external-pr-timing-boundary",
   "createdDate": "2026-07-09",
   "purpose": "Realise the fastest safe GitHub CI throughput improvements that preserve USF semantic authority, validator discipline, proof evidence integrity, planted-defect coverage, proof-cockpit freshness, branch-protection clarity, and non-claims.",
   "authorityBoundary": {
@@ -48,7 +48,8 @@
       "https://github.com/maldous/usf/pull/277"
     ],
     "relatedIssueIdsInspected": [
-      "USF-1037"
+      "USF-1037",
+      "USF-1038"
     ]
   },
   "candidateMatrix": [
@@ -111,7 +112,7 @@
       "id": "I",
       "candidate": "self-hosted GitHub runners",
       "classification": "decision-required",
-      "reason": "Self-hosted runners require owner decisions for trust boundary, cache isolation, local state, secret handling, maintenance, evidence collection, and GitHub branch-protection posture."
+      "reason": "Self-hosted runners require owner decisions for trust boundary, cache isolation, local state, secret handling, maintenance, evidence collection, and GitHub branch-protection posture. USF-1038 is the dedicated runner-capacity implementation track."
     },
     {
       "id": "J",
@@ -189,10 +190,75 @@
     "restoreKeysUsed": false,
     "pullRequestCacheWritesAllowed": false,
     "mainCacheWritesAllowed": true,
+    "manualCacheWarmAllowedOnMain": true,
+    "nonMainWorkflowDispatchCacheWritesAllowed": false,
+    "emptyCacheHitOutputNormalisedToFalse": true,
     "cacheHitSatisfiesValidation": false,
     "artifactReuseIntroduced": false,
     "artifactUploadIntroduced": false,
     "generatedReportsPromotedToAuthority": false
+  },
+  "cacheWarmPath": {
+    "trustedTriggers": [
+      "push on refs/heads/main",
+      "workflow_dispatch on refs/heads/main"
+    ],
+    "trustedRef": "refs/heads/main",
+    "workflowDispatchAvailable": true,
+    "pullRequestCacheWritesAllowed": false,
+    "nonMainWorkflowDispatchCacheWritesAllowed": false,
+    "cacheWritePossibleOnTrustedRun": true,
+    "cacheWriteProofStatus": "pending-post-merge-or-main-dispatch",
+    "cacheWriteFailureHidesValidatorFailures": false,
+    "cacheWarmIsAuthority": false,
+    "pendingEvidenceRequired": [
+      "GitHub validate-spec run on refs/heads/main using this workflow version",
+      "Generated timing summary showing cache lookup attempted, hit boolean, write allowed true, write attempted true or skipped because hit, and skipped reason",
+      "Subsequent pull-request validate-spec run showing lookup attempted true and hit true or false with PR write allowed false and write attempted false"
+    ]
+  },
+  "cacheObservationBoundary": {
+    "blankCacheHitAllowed": false,
+    "cacheHitSatisfiesValidation": false,
+    "requiredRuntimeFields": [
+      "lookupAttempted",
+      "cacheHit",
+      "cacheWriteAllowed",
+      "cacheWriteAttempted",
+      "cacheWriteSkippedReason"
+    ],
+    "pullRequestExecutedLookupTemplate": {
+      "lookupAttempted": true,
+      "cacheHit": false,
+      "cacheWriteAllowed": false,
+      "cacheWriteAttempted": false,
+      "cacheWriteSkippedReason": "pull-request-read-only"
+    },
+    "trustedMainCacheMissTemplate": {
+      "lookupAttempted": true,
+      "cacheHit": false,
+      "cacheWriteAllowed": true,
+      "cacheWriteAttempted": true,
+      "cacheWriteSkippedReason": "not-skipped-cache-miss"
+    },
+    "trustedMainCacheHitTemplate": {
+      "lookupAttempted": true,
+      "cacheHit": true,
+      "cacheWriteAllowed": true,
+      "cacheWriteAttempted": false,
+      "cacheWriteSkippedReason": "cache-hit"
+    },
+    "untrustedManualRunTemplate": {
+      "lookupAttempted": false,
+      "cacheHit": false,
+      "cacheWriteAllowed": false,
+      "cacheWriteAttempted": false,
+      "cacheWriteSkippedReason": "non-main-untrusted-ref"
+    },
+    "appliesToPackageManagers": [
+      "pnpm",
+      "pip"
+    ]
   },
   "affectedDomainMap": {
     "enforcementMode": "warn-only",
@@ -286,6 +352,7 @@
     "selfHostedRunner": {
       "classification": "decision-required",
       "adopted": false,
+      "followUpIssueId": "USF-1038",
       "requiredBeforeAdoption": [
         "owner approval",
         "runner trust boundary",
@@ -325,21 +392,135 @@
     "requiredCheckWeakened": false,
     "proofAnchorRequiredForPullRequest": false,
     "branchProtectionMutationMade": false,
-    "downgradeRequiresOwnerDecision": true
+    "downgradeRequiresOwnerDecision": true,
+    "checkoutFetchScope": {
+      "fullHistoryFetch": false,
+      "checkoutFetchDepth": 2,
+      "pullRequestBaseFetchDepth": 1,
+      "pullRequestBaseRefFetched": "origin/${{ github.base_ref }}",
+      "pullRequestValidatorBaseRefPreserved": true,
+      "tagsFetchedByValidateSpec": false,
+      "allBranchesFetchedByValidateSpec": false,
+      "fullCheckoutFallbackOnMissingDiffRefs": true,
+      "requiredRefsForPrMode": [
+        "HEAD",
+        "origin/${{ github.base_ref }}"
+      ],
+      "tagRequirementReason": "validate-spec PR mode diffs origin/base...HEAD and reads changed JSON at HEAD. Proof-anchor tag publication is owned by proof-anchor workflow, not validate-spec PR mode."
+    }
   },
   "timingEvidence": {
     "generatedReport": "evidence/generated-reports/repository-ci-throughput-timing-evidence.json",
     "baselineSource": "GitHub Actions validate-spec workflow runs observed on 2026-07-09",
     "baselineRepresentativeDurationSeconds": 378,
-    "afterStatus": "observed",
-    "afterRunId": "28994186922",
-    "afterJobId": "86040238310",
-    "afterHead": "ea9622e2fbb766c1617540430728e3807ce822b8",
-    "afterJobDurationSeconds": 377,
-    "afterGeneratedBoundaryDurationSeconds": 344,
-    "afterCacheHitObserved": false,
+    "afterStatus": "external-operational-record-required",
+    "latestExactRunCommittedToSource": false,
+    "latestExactTimingRecordLocation": "pull-request-or-linear-comment",
+    "sourceHashChurnAvoidance": true,
     "timingClaimMade": false,
     "performanceBudgetEnforced": false
+  },
+  "checkoutTimingEvidence": {
+    "beforeRunId": "28994186922",
+    "beforeJobId": "86040238310",
+    "beforeCheckoutDurationSeconds": 28,
+    "beforeCheckoutObservation": "GitHub Actions step timestamps for actions/checkout@v4 on the successful cold-cache PR run before checkout narrowing.",
+    "afterCheckoutStatus": "external-operational-record-required",
+    "afterCheckoutRecordLocation": "pull-request-body-or-comment",
+    "allBranchesRequired": false,
+    "allTagsRequired": false,
+    "fullHistoryRequiredByPrMode": false,
+    "fallbackToFullHistoryIfDiffRefsMissing": true
+  },
+  "timingFixedPointPolicy": {
+    "exactLatestRunValuesCommittedToSource": false,
+    "exactLatestRunValuesAuthority": false,
+    "exactLatestRunValuesRecordLocation": [
+      "GitHub step summary",
+      "pull request body or comment",
+      "Linear comment when Linear update is explicitly authorised"
+    ],
+    "generatedTimingEvidenceDefinesSemantics": false,
+    "excludedFromProofCockpitFreshnessSourceHash": false,
+    "proofCockpitFreshnessWeakened": false,
+    "reason": "Committing every latest run id and duration changes the source tree, requires proof-cockpit re-pinning, and triggers another CI run. Source records the evidence boundary and required fields; operational systems record the latest mutable observation."
+  },
+  "validatorParallelismPlan": {
+    "implementationStatus": "planned-not-implemented-this-pr",
+    "followUpIssueId": "USF-656",
+    "requiredStatusContext": "validate",
+    "aggregatorJobRequired": true,
+    "aggregatorFailurePolicy": "fail-if-any-required-shard-fails-or-is-skipped-unexpectedly",
+    "fullValidationFallbackOnAmbiguity": true,
+    "equivalenceProofRequiredBeforeActivation": true,
+    "plantedDefectCoveragePreserved": true,
+    "independentValidatorFamilies": [
+      {
+        "id": "spec-and-pr-governance",
+        "commands": [
+          "python tools/validate-spec/validate-spec.py all --report /tmp/usf-validator-report.json",
+          "python tools/validate-spec/validate-spec.py pr --base origin/main --head HEAD --report /tmp/usf-pr-validator-report.json"
+        ],
+        "readOnly": true,
+        "orderingDependencies": [
+          "checkout",
+          "dependency install"
+        ],
+        "generatedEvidenceWriteConflicts": []
+      },
+      {
+        "id": "repository-aggregate",
+        "commands": [
+          "corepack pnpm repo:validate"
+        ],
+        "readOnly": true,
+        "orderingDependencies": [
+          "checkout",
+          "dependency install"
+        ],
+        "generatedEvidenceWriteConflicts": []
+      },
+      {
+        "id": "parity",
+        "commands": [
+          "corepack pnpm parity"
+        ],
+        "readOnly": true,
+        "orderingDependencies": [
+          "checkout",
+          "dependency install"
+        ],
+        "generatedEvidenceWriteConflicts": []
+      },
+      {
+        "id": "foundation-substrate-closure",
+        "commands": [
+          "corepack pnpm foundation-substrate-closure:validate",
+          "corepack pnpm foundation-substrate-closure:selftest"
+        ],
+        "readOnly": true,
+        "orderingDependencies": [
+          "checkout",
+          "dependency install"
+        ],
+        "generatedEvidenceWriteConflicts": []
+      },
+      {
+        "id": "proof-cockpit-acceptance",
+        "commands": [
+          "corepack pnpm proof-cockpit:validate",
+          "corepack pnpm proof-cockpit:selftest"
+        ],
+        "readOnly": true,
+        "orderingDependencies": [
+          "checkout",
+          "dependency install"
+        ],
+        "generatedEvidenceWriteConflicts": []
+      }
+    ],
+    "firstSafeSlice": "Introduce read-only shard jobs plus a final validate aggregator after an equivalence validator proves the sharded command set covers the current monolithic command set and planted-defect selftests still fail closed.",
+    "deferredReason": "Activating sharding changes the branch-protection status topology and needs equivalence proof, skip semantics, and timing aggregation before it is safe."
   },
   "validationPlan": [
     "Strict JSON parse for created and modified JSON files.",
@@ -348,7 +529,7 @@
     "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py selftest --json.",
     "python3 tools/validate-spec/validate-spec.py all --json.",
     "python3 tools/validate-spec/validate-spec.py selftest --json.",
-    "GitHub pull-request validate-spec run records after timing and cache hit or miss evidence."
+    "GitHub pull-request validate-spec run records after timing and cache hit or miss evidence in PR or Linear operational records without requiring source-tree churn for each exact run id."
   ],
   "nonClaims": [
     "No staging, deployment, provider, credential, store, production, live-provider, compliance, monetisation, or human-acceptance claim is made.",
@@ -369,9 +550,11 @@
     "proofEvidenceChurnAddressed": true,
     "branchProtectionCompatibilityRecorded": true,
     "timingBeforeRecorded": true,
-    "timingAfterRecorded": true,
+    "sourceTimingBoundaryRecorded": true,
+    "timingAfterRecorded": false,
+    "externalTimingRecordRequiredBeforeLinearClosure": true,
     "validationComplete": true,
     "linearCompletionReady": false,
-    "finalReadinessVerdict": "repo-evidence-complete-pr-open-linear-not-mutated"
+    "finalReadinessVerdict": "repo-evidence-complete-external-pr-timing-required-before-linear-closure"
   }
 }

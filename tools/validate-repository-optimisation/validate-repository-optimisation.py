@@ -426,6 +426,69 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timing evidence must reference generated timing report"))
     if timing_ref.get("baselineRepresentativeDurationSeconds", 0) <= 0 or timing_ref.get("timingClaimMade") is not False:
         findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timing baseline must be positive and timing claims must remain false"))
+    cache_boundary = ci.get("cacheObservationBoundary", {})
+    if not isinstance(cache_boundary, dict):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cacheObservationBoundary must be an object"))
+        cache_boundary = {}
+    if cache_boundary.get("blankCacheHitAllowed") is not False:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "blank cache-hit values must be rejected"))
+    if cache_boundary.get("cacheHitSatisfiesValidation") is not False:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cache hits must not satisfy validation"))
+    required_runtime_fields = {
+        "lookupAttempted",
+        "cacheHit",
+        "cacheWriteAllowed",
+        "cacheWriteAttempted",
+        "cacheWriteSkippedReason",
+    }
+    if not required_runtime_fields.issubset(set(cache_boundary.get("requiredRuntimeFields", []))):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cache observation boundary lacks required runtime fields"))
+    if set(cache_boundary.get("appliesToPackageManagers", [])) != {"pnpm", "pip"}:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cache observation boundary must cover pnpm and pip"))
+    cache_templates = {
+        "pullRequestExecutedLookupTemplate": {
+            "lookupAttempted": True,
+            "cacheHit": False,
+            "cacheWriteAllowed": False,
+            "cacheWriteAttempted": False,
+            "cacheWriteSkippedReason": "pull-request-read-only",
+        },
+        "trustedMainCacheMissTemplate": {
+            "lookupAttempted": True,
+            "cacheHit": False,
+            "cacheWriteAllowed": True,
+            "cacheWriteAttempted": True,
+            "cacheWriteSkippedReason": "not-skipped-cache-miss",
+        },
+        "trustedMainCacheHitTemplate": {
+            "lookupAttempted": True,
+            "cacheHit": True,
+            "cacheWriteAllowed": True,
+            "cacheWriteAttempted": False,
+            "cacheWriteSkippedReason": "cache-hit",
+        },
+        "untrustedManualRunTemplate": {
+            "lookupAttempted": False,
+            "cacheHit": False,
+            "cacheWriteAllowed": False,
+            "cacheWriteAttempted": False,
+            "cacheWriteSkippedReason": "non-main-untrusted-ref",
+        },
+    }
+    for template_name, expected_values in cache_templates.items():
+        template = cache_boundary.get(template_name)
+        if not isinstance(template, dict):
+            findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache observation template missing: {template_name}"))
+            continue
+        for bool_key in ["lookupAttempted", "cacheHit", "cacheWriteAllowed", "cacheWriteAttempted"]:
+            if not isinstance(template.get(bool_key), bool):
+                findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache observation field must be boolean: {template_name}.{bool_key}"))
+        reason = template.get("cacheWriteSkippedReason")
+        if not isinstance(reason, str) or not reason:
+            findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache skipped reason must be non-empty: {template_name}"))
+        for key, expected in expected_values.items():
+            if template.get(key) != expected:
+                findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache observation template mismatch: {template_name}.{key}"))
     timing_refs = refs(timing)
     baseline_seconds = None
     after_status = None
@@ -470,10 +533,12 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing evidence authorityLevel must be generated-report"))
     if baseline_seconds is None or baseline_seconds <= 0:
         findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing baseline must include a positive representative duration evidence ref"))
-    if after_status not in {"pending-github-pr-run", "observed"}:
-        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing after-status ref must be pending-github-pr-run or observed"))
+    if after_status not in {"pending-github-pr-run", "observed", "external-operational-record-required"}:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing after-status ref must be pending-github-pr-run, observed, or external-operational-record-required"))
     if after_status == "observed" and (not after_run or after_run == "pending" or after_seconds is None or after_seconds <= 0):
         findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "observed CI after timing requires after-run and positive after-duration-seconds refs"))
+    if after_status == "external-operational-record-required" and "fixed-point-source-churn-avoided:true" not in timing_refs:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "external CI timing records must preserve fixed-point churn avoidance evidence"))
     if "hard-ci-block:false" not in timing_refs or "speedup-claim-made:false" not in timing_refs:
         findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing comparison must remain warn-only with no speedup claim"))
     for required in [
@@ -517,6 +582,34 @@ def check_ci_throughput_artifacts(
             findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow must not cache forbidden scope: {forbidden}"))
     if "actions/cache/restore@v4" not in workflow_source or "actions/cache@v4" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must use read-only PR cache restore and writable main cache actions"))
+    if "workflow_dispatch" not in workflow_source or "github.ref == 'refs/heads/main'" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "manual cache warm path must be limited to trusted main cache writes"))
+    if "fetch-depth: 0" in workflow_source or "fetch-depth: 2" not in workflow_source or "refs/remotes/origin/$BASE_REF" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must avoid full-history checkout and explicitly fetch the PR base ref"))
+    if "--unshallow" not in workflow_source or "git diff --name-status" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fail closed to fuller checkout when PR diff refs are missing"))
+    if "cache_hit_value()" not in workflow_source or "*) printf false ;;" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must normalise empty cache-hit outputs to false"))
+    if 'pnpm_cache_hit_main="not-applicable"' not in workflow_source or 'pip_cache_hit_main="not-applicable"' not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "PR cache diagnostics must explicitly mark non-executed main cache hits as not-applicable"))
+    for summary_field in [
+        "pnpmCacheLookupAttempted",
+        "pnpmCacheHit",
+        "pnpmCacheHitPr",
+        "pnpmCacheHitMain",
+        "pnpmCacheWriteAllowed",
+        "pnpmCacheWriteAttempted",
+        "pnpmCacheWriteSkippedReason",
+        "pipCacheLookupAttempted",
+        "pipCacheHit",
+        "pipCacheHitPr",
+        "pipCacheHitMain",
+        "pipCacheWriteAllowed",
+        "pipCacheWriteAttempted",
+        "pipCacheWriteSkippedReason",
+    ]:
+        if summary_field not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow summary missing cache field: {summary_field}"))
     if "corepack pnpm install --prefer-offline --frozen-lockfile" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must keep frozen pnpm install with prefer-offline cache use"))
     return findings
@@ -622,9 +715,22 @@ def selftest() -> list[dict[str, str]]:
     mutated_timing["authorityLevel"] = "semantic-definition"
     tests.append(("ci-timing-authority-overclaim", check_ci_throughput_artifacts(timing_data=mutated_timing), "USF-OPT-CI-004"))
 
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["cacheObservationBoundary"]["pullRequestExecutedLookupTemplate"]["cacheHit"] = ""
+    tests.append(("ci-timing-blank-cache-hit", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-004"))
+
     workflow_text = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
     mutated_workflow = workflow_text + "\n# planted unsafe cache widening\nrestore-keys: unsafe\n"
     tests.append(("ci-workflow-restore-keys", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("cache_hit_value()", "cache_hit_value_missing()")
+    tests.append(("ci-workflow-cache-hit-normalisation", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace('pnpm_cache_hit_main="not-applicable"', 'pnpm_cache_hit_main=""')
+    tests.append(("ci-workflow-pr-main-cache-hit-diagnostic", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("fetch-depth: 2", "fetch-depth: 0")
+    tests.append(("ci-workflow-full-history-checkout", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["affectedDomainMap"]["hardCiBlock"] = True

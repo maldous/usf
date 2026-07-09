@@ -4,13 +4,13 @@
   "parentIssueId": "USF-1003",
   "sourceAuditArtifact": "docs/architecture/linear-repository-delivery-audit.json",
   "sourcePolicyArtifact": "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json",
-  "recordedAtUtc": "2026-07-08T06:43:23Z",
+  "recordedAtUtc": "2026-07-09T05:03:39Z",
   "dispositionPurpose": "Provide repository-owned disposition for the USF-1003 repository-unreferenced issue-key audit set without treating Linear as semantic authority.",
   "repositoryReferenceScan": {
     "scope": "Current exact repository issue-key text search excluding the original delivery audit artifact, this disposition artifact, .git, and local AI-agent runtime directories such as .claude and .codex.",
     "auditSetIssueCount": 138,
-    "repositoryReferencePresentCount": 4,
-    "requiresSafeFullContentDispositionCount": 134,
+    "repositoryReferencePresentCount": 5,
+    "requiresSafeFullContentDispositionCount": 133,
     "requiresSafeFullContentDispositionFollowUpIssueId": "USF-1008",
     "doesNotInspectRawLinearDescriptionsOrComments": true,
     "doesNotClaimRepositoryReferenceEqualsCompletion": true
@@ -898,13 +898,16 @@
     },
     {
       "issueId": "USF-656",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/repository-ci-throughput-optimisation-realisation.json",
+        "docs/architecture/repository-ci-throughput-optimisation-realisation.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
     },
     {
       "issueId": "USF-657",

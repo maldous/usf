@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: validate-spec-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
@@ -16,7 +17,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2
+      - name: Fetch PR base ref for governance gate
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: git fetch --no-tags --depth=1 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"
+      - name: Verify PR governance diff refs
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if ! git diff --name-status "origin/$BASE_REF...HEAD" >/dev/null; then
+            git fetch --no-tags --unshallow origin "$BASE_REF:refs/remotes/origin/$BASE_REF"
+            git diff --name-status "origin/$BASE_REF...HEAD" >/dev/null
+          fi
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -42,7 +57,7 @@ jobs:
           enableCrossOsArchive: false
       - name: Restore pnpm store cache (main writable)
         id: pnpm-cache-main
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
@@ -58,7 +73,7 @@ jobs:
           enableCrossOsArchive: false
       - name: Restore pip download cache (main writable)
         id: pip-cache-main
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
@@ -94,6 +109,8 @@ jobs:
           PNPM_CACHE_HIT_MAIN: ${{ steps.pnpm-cache-main.outputs.cache-hit }}
           PIP_CACHE_HIT_PR: ${{ steps.pip-cache-pr.outputs.cache-hit }}
           PIP_CACHE_HIT_MAIN: ${{ steps.pip-cache-main.outputs.cache-hit }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
         run: |
           ended_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           ended_epoch="$(date +%s)"
@@ -102,14 +119,87 @@ jobs:
           else
             duration_seconds="unknown"
           fi
+          cache_hit_value() {
+            case "$1" in
+              true) printf true ;;
+              false) printf false ;;
+              *) printf false ;;
+            esac
+          }
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            pnpm_cache_lookup_attempted=true
+            pnpm_cache_hit_pr="$(cache_hit_value "$PNPM_CACHE_HIT_PR")"
+            pnpm_cache_hit_main="not-applicable"
+            pnpm_cache_hit="$pnpm_cache_hit_pr"
+            pnpm_cache_write_allowed=false
+            pnpm_cache_write_attempted=false
+            pnpm_cache_write_skipped_reason="pull-request-read-only"
+            pip_cache_lookup_attempted=true
+            pip_cache_hit_pr="$(cache_hit_value "$PIP_CACHE_HIT_PR")"
+            pip_cache_hit_main="not-applicable"
+            pip_cache_hit="$pip_cache_hit_pr"
+            pip_cache_write_allowed=false
+            pip_cache_write_attempted=false
+            pip_cache_write_skipped_reason="pull-request-read-only"
+          elif [ "$REF_NAME" = "refs/heads/main" ]; then
+            pnpm_cache_lookup_attempted=true
+            pnpm_cache_hit_pr="not-applicable"
+            pnpm_cache_hit_main="$(cache_hit_value "$PNPM_CACHE_HIT_MAIN")"
+            pnpm_cache_hit="$pnpm_cache_hit_main"
+            pnpm_cache_write_allowed=true
+            if [ "$pnpm_cache_hit" = "true" ]; then
+              pnpm_cache_write_attempted=false
+              pnpm_cache_write_skipped_reason="cache-hit"
+            else
+              pnpm_cache_write_attempted=true
+              pnpm_cache_write_skipped_reason="not-skipped-cache-miss"
+            fi
+            pip_cache_lookup_attempted=true
+            pip_cache_hit_pr="not-applicable"
+            pip_cache_hit_main="$(cache_hit_value "$PIP_CACHE_HIT_MAIN")"
+            pip_cache_hit="$pip_cache_hit_main"
+            pip_cache_write_allowed=true
+            if [ "$pip_cache_hit" = "true" ]; then
+              pip_cache_write_attempted=false
+              pip_cache_write_skipped_reason="cache-hit"
+            else
+              pip_cache_write_attempted=true
+              pip_cache_write_skipped_reason="not-skipped-cache-miss"
+            fi
+          else
+            pnpm_cache_lookup_attempted=false
+            pnpm_cache_hit=false
+            pnpm_cache_hit_pr="not-applicable"
+            pnpm_cache_hit_main="not-applicable"
+            pnpm_cache_write_allowed=false
+            pnpm_cache_write_attempted=false
+            pnpm_cache_write_skipped_reason="non-main-untrusted-ref"
+            pip_cache_lookup_attempted=false
+            pip_cache_hit=false
+            pip_cache_hit_pr="not-applicable"
+            pip_cache_hit_main="not-applicable"
+            pip_cache_write_allowed=false
+            pip_cache_write_attempted=false
+            pip_cache_write_skipped_reason="non-main-untrusted-ref"
+          fi
           {
             printf '## USF validate-spec generated timing report\n\n'
             printf '%s\n' '- authority: generated report only; not semantic authority and not proof readiness'
             printf '%s %s\n' '- started:' "$STARTED_AT"
             printf '%s %s\n' '- ended:' "$ended_at"
             printf '%s %s\n' '- durationSeconds:' "$duration_seconds"
-            printf '%s %s\n' '- pnpmCacheHitPr:' "${PNPM_CACHE_HIT_PR:-not-applicable}"
-            printf '%s %s\n' '- pnpmCacheHitMain:' "${PNPM_CACHE_HIT_MAIN:-not-applicable}"
-            printf '%s %s\n' '- pipCacheHitPr:' "${PIP_CACHE_HIT_PR:-not-applicable}"
-            printf '%s %s\n' '- pipCacheHitMain:' "${PIP_CACHE_HIT_MAIN:-not-applicable}"
+            printf '%s %s\n' '- pnpmCacheLookupAttempted:' "$pnpm_cache_lookup_attempted"
+            printf '%s %s\n' '- pnpmCacheHit:' "$pnpm_cache_hit"
+            printf '%s %s\n' '- pnpmCacheHitPr:' "$pnpm_cache_hit_pr"
+            printf '%s %s\n' '- pnpmCacheHitMain:' "$pnpm_cache_hit_main"
+            printf '%s %s\n' '- pnpmCacheWriteAllowed:' "$pnpm_cache_write_allowed"
+            printf '%s %s\n' '- pnpmCacheWriteAttempted:' "$pnpm_cache_write_attempted"
+            printf '%s %s\n' '- pnpmCacheWriteSkippedReason:' "$pnpm_cache_write_skipped_reason"
+            printf '%s %s\n' '- pipCacheLookupAttempted:' "$pip_cache_lookup_attempted"
+            printf '%s %s\n' '- pipCacheHit:' "$pip_cache_hit"
+            printf '%s %s\n' '- pipCacheHitPr:' "$pip_cache_hit_pr"
+            printf '%s %s\n' '- pipCacheHitMain:' "$pip_cache_hit_main"
+            printf '%s %s\n' '- pipCacheWriteAllowed:' "$pip_cache_write_allowed"
+            printf '%s %s\n' '- pipCacheWriteAttempted:' "$pip_cache_write_attempted"
+            printf '%s %s\n' '- pipCacheWriteSkippedReason:' "$pip_cache_write_skipped_reason"
           } >> "$GITHUB_STEP_SUMMARY"

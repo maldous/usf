@@ -27,36 +27,28 @@
     },
     {
       "evidenceRefs": [
-        "after-status:observed",
-        "after-run:28994186922",
-        "after-job:86040238310",
-        "after-head:ea9622e2fbb766c1617540430728e3807ce822b8",
-        "after-conclusion:success",
-        "after-duration-seconds:377",
-        "after-generated-duration-seconds:344",
-        "after-run-created-at:2026-07-09T04:31:06Z",
-        "after-job-started-at:2026-07-09T04:31:08Z",
-        "after-job-completed-at:2026-07-09T04:37:25Z",
-        "after-generated-started-at:2026-07-09T04:31:40Z",
-        "after-generated-ended-at:2026-07-09T04:37:24Z",
-        "queue-delay-seconds:2",
-        "pnpm-cache-hit:false",
-        "pip-cache-hit:false",
+        "after-status:external-operational-record-required",
+        "after-run:external-pr-or-linear-record",
+        "after-duration-seconds:external-pr-or-linear-record",
+        "exact-run-id-in-repository:false",
+        "exact-duration-in-repository:false",
+        "latest-timing-record-location:pull-request-or-linear-comment",
+        "fixed-point-source-churn-avoided:true",
+        "cache-hit-output-normalised:true",
         "pull-request-cache-write:false",
-        "required-before-closure:true"
+        "required-before-linear-closure:true"
       ],
-      "message": "Observed successful pull-request validate-spec run after the workflow update. GitHub job wall time was 377 seconds; the generated timing boundary recorded 344 seconds from post-setup timing start to the timing report step. PR cache restore attempts were misses and PR cache writes remained disabled.",
+      "message": "The repository records the validate-spec timing evidence boundary and requires exact latest run details to be reported in PR or Linear operational records. Exact run ids and durations are not committed to source because doing so creates proof-cockpit source-hash churn and another CI run for every timing observation.",
       "ruleId": "USF-CI-THROUGHPUT-TIMING-AFTER",
       "severity": "info",
       "subject": "validate-spec-after"
     },
     {
       "evidenceRefs": [
-        "comparison-status:observed",
+        "comparison-status:external-operational-record-required",
         "baseline-duration-seconds:378",
-        "after-duration-seconds:377",
-        "after-generated-duration-seconds:344",
-        "delta-seconds:-1",
+        "after-duration-seconds:external-pr-or-linear-record",
+        "delta-seconds:external-pr-or-linear-record",
         "enforcement-mode:warn-only",
         "hard-ci-block:false",
         "performance-budget-enforced:false",
@@ -66,7 +58,7 @@
         "generated-report-authority:false",
         "branch-protection-required-context-preserved:true"
       ],
-      "message": "Observed after-run wall time was one second below the representative baseline. This is recorded as advisory timing evidence only, not as a material speedup claim or performance budget proof. Cache-hit acceleration was not observed on this PR run because both restored caches missed.",
+      "message": "Timing comparison remains advisory and warn-only. Exact after-run duration and delta must be reported outside source-tracked freshness inputs before Linear closure, without treating cache hits or generated reports as validation proof.",
       "ruleId": "USF-CI-THROUGHPUT-TIMING-COMPARE",
       "severity": "info",
       "subject": "validate-spec-comparison"
