@@ -152,7 +152,35 @@
         "secretsAvailableByPolicy"
       ],
       "recordingLocation": "PR body and generated GitHub step summary; repository artefact records schema and boundary until after-run evidence is captured."
-    }
+    },
+    "failedSelfHostedRuns": [
+      {
+        "runId": "29003193370",
+        "jobId": "86068405239",
+        "event": "pull_request",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "createdAt": "2026-07-09T07:58:13Z",
+        "jobStartedAt": "2026-07-09T07:58:17Z",
+        "jobCompletedAt": "2026-07-09T07:58:22Z",
+        "updatedAt": "2026-07-09T07:58:33Z",
+        "queueSeconds": 4,
+        "jobDurationSeconds": 5,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "failure",
+        "failureClass": "implementation-defect-runner-cleanup",
+        "failureSummary": "The job-start cleanup hook removed the active GitHub workspace directory before actions/checkout could start Node. No semantic validators ran.",
+        "fix": "cleanup-workspace now always preserves the active GITHUB_WORKSPACE path; the fixed script was reinstalled into /opt/usf-github-runner/hooks/cleanup-workspace.sh and the workspace directory was recreated."
+      }
+    ]
   },
   "trustZones": {
     "trusted-main": {
@@ -298,7 +326,7 @@
     "workflowRoutingImplemented": true,
     "closureAllowed": false,
     "exactRemainingBlockers": [
-      "A trusted self-hosted validate run must complete after this workflow routing change is pushed.",
+      "A trusted self-hosted validate run must complete successfully after the cleanup hook fix is pushed.",
       "After-run timing fields must be recorded before Linear closure.",
       "GitHub-hosted fallback must be verified or explicitly recorded as manual fallback-ready.",
       "PR body and Linear must be updated with run evidence and acceptance criteria after CI completes."
@@ -455,6 +483,9 @@
     "secretValuesPrinted": false,
     "cachePreserved": true,
     "workspaceMayBecomeAuthority": false,
-    "runnerLocalStateMayDefineAuthority": false
+    "runnerLocalStateMayDefineAuthority": false,
+    "checkoutFailureCleanupDefectFixed": true,
+    "activeGithubWorkspacePreservedByCleanup": true,
+    "hostPostCheckoutFixCleanupResult": "pass"
   }
 }

@@ -61,13 +61,8 @@ clean_contents() {
       ;;
   esac
   if [ -n "${GITHUB_WORKSPACE:-}" ] && { [ "$target" = "$current_workspace" ] || [[ "$current_workspace" == "$target"/* ]] || [[ "$target" == "$current_workspace"/* ]]; }; then
-    case "$scope" in
-      hook-job-start|hook-job-completed) ;;
-      *)
-        skipped_current=$((skipped_current + 1))
-        return
-        ;;
-    esac
+    skipped_current=$((skipped_current + 1))
+    return
   fi
   if [ -d "$target" ]; then
     find "$target" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +

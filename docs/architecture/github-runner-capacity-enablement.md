@@ -44,6 +44,8 @@ Before evidence remains the GitHub-hosted `validate` run `28999636766`: queue 4 
 
 After evidence is pending until the pushed workflow completes on `usf-linux-x64-controller-01`. Exact latest run IDs and per-step durations are operational evidence and should be recorded in the PR body and generated step summary. They are not semantic authority.
 
+The first self-hosted attempt, run `29003193370`, selected `usf-linux-x64-controller-01` and queued in 4 seconds, but failed at `actions/checkout` before validators ran. The failure was an implementation defect in the job-start cleanup hook: it removed the active GitHub workspace directory before checkout could start Node. The cleanup script now always preserves the active `GITHUB_WORKSPACE` path, and the fixed script was reinstalled into the host hook directory.
+
 ## Caddy And Callback Decision
 
 Caddy and callback routes remain rejected for basic runner enablement. The authorised host now provides direct runner capacity, and GitHub Actions API plus systemd/runner health checks provide the queue, timing, online-status, and cleanup evidence needed for this slice.
