@@ -189,11 +189,10 @@ proof-cockpit acceptance validation. Fresh machine QA remains terminal to
 USF-966 unless the rollback itself explicitly requires earlier proof and records
 that proof.
 
-Current retained proof-cockpit context includes
-`artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z`, whose retained
-machine-run source SHA is `837fbef0bd6fc6dd077d01aa00f3eef71389d965`. Branch
-HEAD changes after that retained run must not be described as fresh machine QA
-evidence.
+Current retained proof-cockpit context is identified by
+evidence/proof-evidence/proof-cockpit/staging-evidence-store.json. Branch HEAD
+changes after a retained run must not be described as fresh machine QA evidence
+unless proof-cockpit evidence is re-pinned for the changed source tree.
 
 Operational proof-review commands can mutate ledger or evidence state. Treat
 proof-review-down and proof-review-repin as operational recovery actions, not

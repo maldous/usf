@@ -1431,7 +1431,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -1540,7 +1540,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -1582,7 +1582,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -1705,7 +1705,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -1817,7 +1817,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -1860,7 +1860,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -1927,7 +1927,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -2616,7 +2616,7 @@
         ],
         "rationale": "Reviewed against current origin/main and re-landed as a documentation/design artefact with current proof-cockpit baseline references where applicable. No workflow, runtime, or validator behaviour is changed by this Batch 1 decision.",
         "validatorCoverage": "Batch 1 validation passed on the review branch: strict per-file JSON parse, repository aggregate validation, validate-spec, validate-spec selftest, proof-cockpit retained-evidence validation, proof-cockpit selftest, Linear boundary validation, Linear boundary selftest, and git diff whitespace check.",
-        "proofEvidenceStatus": "No fresh proof-cockpit machine QA is claimed by this documentation batch. Current retained proof-cockpit context remains retained evidence only.",
+        "proofEvidenceStatus": "Batch 1 changes alter the proof-cockpit source tree hash, so proof-cockpit machine evidence is re-pinned for the final branch source tree before merge. This is a validator freshness claim only and does not upgrade readiness, staging, production, live-provider, deployment, compliance, store, release, or human-acceptance posture.",
         "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
@@ -3008,10 +3008,10 @@
   },
   "usf1044DispositionSummary": {
     "issueId": "USF-1044",
-    "recordedAtUtc": "2026-07-09T23:14:02Z",
+    "recordedAtUtc": "2026-07-09T23:40:34Z",
     "currentOriginMainAtBatchStart": "11b5129e5242e5409a35ba64f44220d7263b8b2c",
     "recoveryEvidenceBranch": "origin/preserve/1044-final-gate-reland",
-    "batchStatus": "batch-1-validated-for-review-branch",
+    "batchStatus": "batch-1-validated-with-proof-cockpit-repin-for-review-branch",
     "decisions": {
       "reLanded": [
         "USF-618",
@@ -3051,7 +3051,7 @@
       "Generated reports remain lower authority than retained source evidence and validator results."
     ],
     "validationEvidence": {
-      "recordedAtUtc": "2026-07-09T23:24:05Z",
+      "recordedAtUtc": "2026-07-09T23:40:34Z",
       "literalJsonToolWildcardCommand": "failed because Python json.tool accepts one input file plus an optional output file after shell wildcard expansion; equivalent per-file strict parse passed",
       "commandsPassed": [
         "for f in docs/architecture/*.json; do python3 -m json.tool \"$f\" >/dev/null || exit 1; done",
@@ -3062,8 +3062,10 @@
         "corepack pnpm proof-cockpit:selftest",
         "corepack pnpm linear-boundary:validate",
         "corepack pnpm linear-boundary:selftest",
-        "git diff --check"
-      ]
+        "git diff --check",
+        "make proof-review-repin"
+      ],
+      "proofCockpitFreshness": "proof-cockpit machine QA regenerated and promoted because Batch 1 source changes moved the validator source tree hash; generated reports remain lower authority and no readiness claim is made"
     }
   }
 }

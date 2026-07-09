@@ -30,26 +30,26 @@ This design does not make generated reports authoritative. Generated reports
 remain lower authority than semantic definitions, accepted ADRs, validator
 rules, runtime proof evidence, and retained source artifacts.
 
-Fresh proof-cockpit machine evidence remains deferred to USF-966 unless a
-future issue explicitly requires earlier proof and records that proof.
+Fresh proof-cockpit machine evidence remains deferred to USF-966 unless an issue
+explicitly requires earlier proof or source-tree freshness re-pin and records
+that proof.
 
 ## Current Artifact Baseline
 
 The current retained proof-cockpit machine-run artifact root is
 artifacts/proof-cockpit/machine-runs. It is approximately 106 MB and contains
-two full machine-QA run payloads:
+two full machine-QA run payloads: the latest retained machine run and one prior
+full run. The exact retained run IDs are recorded in
+evidence/proof-evidence/proof-cockpit/staging-evidence-store.json, not repeated
+here as authority.
 
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z at
-  approximately 53 MB.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-28-38-262Z at
-  approximately 53 MB.
+- latest retained full run at approximately 53 MB;
+- prior retained full run at approximately 53 MB.
 
 The promoted evidence projection root evidence/proof-evidence/proof-cockpit is
 approximately 1.9 MB.
 
-The current retained run
-artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z is retained
-context, not fresh current evidence for HEAD. It includes:
+The current retained run identified by the staging evidence store includes:
 
 - 223 files, including 118 JSON files, 94 PNG files, 10 Markdown files, and
   one HTML file.

@@ -31,19 +31,17 @@ machine-run JSON, route manifests, screenshot manifests, service-evidence
 manifests, evidence indexes, chain-of-custody records, accepted ADRs,
 validator results, or USF semantic definitions.
 
-Fresh proof-cockpit machine evidence remains deferred to USF-966 unless a
-future implementation issue changes runtime proof collection behavior enough to
-require earlier proof and records that proof.
+Fresh proof-cockpit machine evidence remains deferred to USF-966 unless an issue
+changes runtime proof collection behavior enough to require earlier proof, or
+source-tree freshness rules require a re-pin and that proof is recorded.
 
 ## Inputs Inspected
 
 - apps/staging-proof-cockpit/src/machine-qa.mjs.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/proof-cockpit-machine-qa-run.json.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/route-manifest.json.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/proof-cockpit-screenshot-manifest.json.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/service-evidence-manifest.json.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/chain-of-custody.json.
+- The latest retained full machine-run artifact directory recorded in
+  evidence/proof-evidence/proof-cockpit/staging-evidence-store.json.
+- The latest retained proof-cockpit machine-run JSON, route manifest,
+  screenshot manifest, service evidence manifest, and chain-of-custody record.
 - docs/architecture/proof-cockpit-machine-qa-route-coverage-profile.md.
 - docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md.
 - docs/architecture/proof-cockpit-screenshot-retention-and-pruning-policy.md.
@@ -55,14 +53,11 @@ require earlier proof and records that proof.
 
 ## Current State
 
-The retained full machine-QA run at
-artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z records:
+The retained full machine-QA run recorded in the staging evidence store records:
 
-- run ID qa-run-2026-07-09T13-40-24-549Z;
-- source SHA 837fbef0bd6fc6dd077d01aa00f3eef71389d965;
+- run ID, source SHA, and source tree hash in the retained machine-run JSON;
 - environment local-machine-qa;
-- startedAt 2026-07-09T13:40:24.549Z;
-- completedAt 2026-07-09T13:43:05.162Z;
+- startedAt and completedAt timestamps in the retained machine-run JSON;
 - 830 route results;
 - 71 declared routes;
 - 94 screenshot records;
@@ -173,7 +168,7 @@ Future implementation should proceed in stages:
 
 | Stage | Expected proof |
 | --- | --- |
-| Design | This document defines the contract. No fresh machine QA is required. |
+| Design | This document defines the contract. Fresh machine QA is not required for timing semantics alone, but repository source changes still require proof-cockpit freshness re-pin when validator rules demand it. |
 | Additive implementation | Instrumentation is added without changing route selection, screenshot selection, evidence generation, pass/fail semantics, or non-claims. |
 | Validator implementation | Validator and planted-defect coverage prove timing records are complete, linked, and lower authority. |
 | Full versus instrumented comparison | Same source inputs compare route count, route IDs, screenshot count, service count, evidence count, chain-of-custody count, warning count, gap count, human-decision-required state, non-claim text, and hash linkages. |
@@ -225,9 +220,10 @@ validators exist, projection checks when generated reviewer outputs change, and
 a full-versus-instrumented comparison showing no route, screenshot, evidence,
 service, chain-of-custody, warning, gap, or non-claim regression.
 
-Fresh proof-cockpit machine QA is not required for this design artifact.
+Fresh proof-cockpit machine QA is not required for timing semantics alone.
 Terminal fresh machine evidence remains deferred to USF-966 unless a later
-implementation issue records a stricter proof requirement.
+implementation issue records a stricter proof requirement, or validator
+freshness rules require a source-tree re-pin before merge.
 
 ## Acceptance Mapping For USF-987
 

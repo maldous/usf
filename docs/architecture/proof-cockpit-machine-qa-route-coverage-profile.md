@@ -25,15 +25,14 @@ This profile does not claim staging readiness, product readiness, production
 readiness, deployment readiness, live-provider readiness, store readiness,
 release readiness, compliance certification, or human acceptance.
 
-The latest retained machine run is retained historical context, not fresh
-current evidence for HEAD. This Batch 1 re-land is against origin/main commit
-11b5129e5242e5409a35ba64f44220d7263b8b2c, while the retained latest machine
-run is pinned to source SHA 837fbef0bd6fc6dd077d01aa00f3eef71389d965.
-Generated reports remain lower authority than semantic definitions, accepted
-ADRs, validator rules, runtime proof evidence, and retained source artifacts.
+This profile does not make generated reports authoritative. Generated reports
+remain lower authority than semantic definitions, accepted ADRs, validator
+rules, runtime proof evidence, and retained source artifacts.
 
-Fresh proof-cockpit machine evidence remains deferred to USF-966 unless a
-future issue explicitly requires earlier proof and records that proof.
+This Batch 1 branch re-pins proof-cockpit machine evidence only because the
+proof-cockpit validator requires source-tree freshness after repository source
+changes. That re-pin is a validation freshness claim only; it is not a staging,
+readiness, live-provider, production, or human-acceptance claim.
 
 ## Inputs Inspected
 
@@ -42,8 +41,8 @@ future issue explicitly requires earlier proof and records that proof.
 - docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md.
 - docs/architecture/proof-cockpit-screenshot-retention-and-pruning-policy.md.
 - docs/architecture/proof-cockpit-machine-qa-evidence-model.md.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z.
-- artifacts/proof-cockpit/machine-runs/2026-07-09T13-28-38-262Z.
+- The latest and prior retained full machine-run artifact directories recorded
+  in evidence/proof-evidence/proof-cockpit/staging-evidence-store.json.
 - route-manifest.json, route-port-adapter-manifest.json,
   proof-cockpit-machine-qa-run.json, qa-run.json,
   proof-cockpit-screenshot-manifest.json,
@@ -60,15 +59,14 @@ timed out at 120 seconds in that measurement and recorded a browser-context
 closure failure as USF-961. That baseline is a failure observation, not a
 coverage reduction justification.
 
-The latest retained full run
-artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z records:
+The latest retained full run recorded in the staging evidence store records:
 
-- Run ID qa-run-2026-07-09T13-40-24-549Z.
+- Run ID in the retained machine-run JSON.
 - Full rerun mode.
-- Started at 2026-07-09T13:40:24.549Z.
-- Completed at 2026-07-09T13:43:05.162Z.
-- Approximate retained-run wall time of 161 seconds.
-- Source SHA 837fbef0bd6fc6dd077d01aa00f3eef71389d965.
+- Start and completion timestamps in the retained machine-run JSON.
+- Approximate retained-run wall time of 160 to 165 seconds for the reviewed
+  full-run class.
+- Source SHA and source tree hash in the retained machine-run JSON.
 - Environment local-machine-qa.
 - Repository state clean.
 - 71 declared routes.
@@ -287,5 +285,5 @@ purpose, and safe incremental opportunities. This profile satisfies that by:
 - Recording the missing per-route timing instrumentation gap required before
   route-level performance claims or coverage reductions.
 
-No fresh proof-cockpit machine QA was run. No route coverage was reduced. No
-artifact was deleted or pruned by this issue.
+Fresh proof-cockpit machine QA is run for this Batch 1 branch only to re-pin
+source-tree freshness. No route coverage was reduced by this issue.

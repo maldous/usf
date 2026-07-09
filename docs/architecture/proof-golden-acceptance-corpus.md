@@ -21,8 +21,10 @@ changes, evidence reuse, cache or affected-only execution, and CI reshaping.
 
 ## Non-Claims
 
-This design does not create a corpus, copy artifacts, delete artifacts, prune
-screenshots, regenerate proof-cockpit machine QA, or assert fresh runtime proof.
+This design does not by itself create a corpus, copy artifacts, delete artifacts,
+prune screenshots, regenerate proof-cockpit machine QA, or assert fresh runtime
+proof. A PR carrying this design can still require a proof-cockpit freshness
+re-pin when validator rules require current source-tree evidence.
 
 This design does not claim staging readiness, product readiness, production
 readiness, deployment readiness, live-provider readiness, store readiness,
@@ -32,8 +34,9 @@ This design does not treat generated reports as authority. Corpus entries are
 comparison inputs only. They do not replace raw evidence, semantic authority,
 accepted ADRs, validator rules, or future proof runs.
 
-Fresh proof-cockpit machine evidence remains deferred to USF-966 unless a
-future issue explicitly requires earlier proof and records that proof.
+Fresh proof-cockpit machine evidence remains deferred to USF-966 unless an issue
+explicitly requires earlier proof or source-tree freshness re-pin and records
+that proof.
 
 ## Relationship To Existing Risk Controls
 
@@ -81,15 +84,15 @@ comparison policy. USF-825 does not create that manifest.
 
 | Candidate ID | Source reference | Selection rationale | Retention expectation | Validation use |
 | --- | --- | --- | --- | --- |
-| proof-cockpit-current-run | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/proof-cockpit-machine-qa-run.json | Current retained machine QA run metadata and run-level counts | Keep while referenced by staging evidence store latestMachineRun | Compare run metadata, non-claims, counts, source SHA, deployment SHA, environment, and supported rerun modes |
-| proof-cockpit-prior-run | artifacts/proof-cockpit/machine-runs/2026-07-09T13-28-38-262Z/proof-cockpit-machine-qa-run.json | Prior retained machine QA run for before and after review context | Keep while retention policy keeps one prior full run | Compare normalized proof-cockpit outputs without treating drift as a pass by default |
-| route-manifest-current | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/route-manifest.json | Covers 830 route records with route, auth requirement, role, evidence status, and screenshot or artifact link | Retain with current machine run | Detect route count, route identity, evidence status, auth, and artifact-link drift |
-| route-manifest-prior | artifacts/proof-cockpit/machine-runs/2026-07-09T13-28-38-262Z/route-manifest.json | Provides the paired before-run route manifest | Retain with prior machine run | Support route-level before and after comparison |
-| capability-manifest-current | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/semantic-capability-manifest.json | Covers 75 semantic capabilities and machine or human-review state | Retain with current machine run | Detect capability identity, result, evidence status, and human-review-status drift |
-| service-evidence-current | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/service-evidence-manifest.json | Covers 40 services, service kinds, capability mappings, scenario mappings, service auth posture, and service evidence artifacts | Retain with current machine run | Detect service coverage, service auth, scenario, artifact hash, and target-observation drift |
-| screenshot-manifest-current | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/proof-cockpit-screenshot-manifest.json | Covers 94 screenshot or screenshot-equivalent records without requiring image byte comparison as the first check | Retain manifest with current machine run; screenshot bytes require stricter review before pruning | Detect screenshot identity, hash, route, service, auth posture, and screenshot-equivalent drift |
-| evidence-index-current | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/evidence-index.json | Covers normalized evidence records and claim-supported mapping | Retain with current machine run | Detect evidence record shape, freshness, limitations, content hash, metadata hash, human-review status, and retained status drift |
-| chain-of-custody-current | artifacts/proof-cockpit/machine-runs/2026-07-09T13-40-24-507Z/chain-of-custody.json | Covers claim-to-evidence traceability for audit review | Retain with current machine run | Detect claim, semantic source, actor, artifact hash, environment, source SHA, validation result, and human-import status drift |
+| proof-cockpit-current-run | latestMachineRun.reportJson in evidence/proof-evidence/proof-cockpit/staging-evidence-store.json | Current retained machine QA run metadata and run-level counts | Keep while referenced by staging evidence store latestMachineRun | Compare run metadata, non-claims, counts, source SHA, source tree hash, deployment SHA, environment, and supported rerun modes |
+| proof-cockpit-prior-run | Prior retained run from machineRunHistory in evidence/proof-evidence/proof-cockpit/staging-evidence-store.json | Prior retained machine QA run for before and after review context | Keep while retention policy keeps one prior full run | Compare normalized proof-cockpit outputs without treating drift as a pass by default |
+| route-manifest-current | route-manifest.json under the latest retained machine-run artifact directory | Covers 830 route records with route, auth requirement, role, evidence status, and screenshot or artifact link | Retain with current machine run | Detect route count, route identity, evidence status, auth, and artifact-link drift |
+| route-manifest-prior | route-manifest.json under the prior retained machine-run artifact directory | Provides the paired before-run route manifest | Retain with prior machine run | Support route-level before and after comparison |
+| capability-manifest-current | semantic-capability-manifest.json under the latest retained machine-run artifact directory | Covers 75 semantic capabilities and machine or human-review state | Retain with current machine run | Detect capability identity, result, evidence status, and human-review-status drift |
+| service-evidence-current | service-evidence-manifest.json under the latest retained machine-run artifact directory | Covers 40 services, service kinds, capability mappings, scenario mappings, service auth posture, and service evidence artifacts | Retain with current machine run | Detect service coverage, service auth, scenario, artifact hash, and target-observation drift |
+| screenshot-manifest-current | proof-cockpit-screenshot-manifest.json under the latest retained machine-run artifact directory | Covers 94 screenshot or screenshot-equivalent records without requiring image byte comparison as the first check | Retain manifest with current machine run; screenshot bytes require stricter review before pruning | Detect screenshot identity, hash, route, service, auth posture, and screenshot-equivalent drift |
+| evidence-index-current | evidence-index.json under the latest retained machine-run artifact directory | Covers normalized evidence records and claim-supported mapping | Retain with current machine run | Detect evidence record shape, freshness, limitations, content hash, metadata hash, human-review status, and retained status drift |
+| chain-of-custody-current | chain-of-custody.json under the latest retained machine-run artifact directory | Covers claim-to-evidence traceability for audit review | Retain with current machine run | Detect claim, semantic source, actor, artifact hash, environment, source SHA, validation result, and human-import status drift |
 | external-review-bundle-current | evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json | Current promoted external-review bundle projection from retained machine evidence | Retain as generated projection with lower authority than retained source artifacts | Check projection metadata, required inputs, output paths, non-claims, and retained source linkage |
 | final-external-review-report-current | evidence/proof-evidence/proof-cockpit/final-external-review-report.md | Human-readable projection used by reviewers | Retain as generated report, never as authority by itself | Compare report metadata and non-claim language while requiring underlying evidence references |
 | staging-evidence-store-current | evidence/proof-evidence/proof-cockpit/staging-evidence-store.json | Durable evidence store with latest run, run history, storage model, supersession history, and non-claims | Retain as proof-cockpit evidence store | Check latestMachineRun linkage, machineRunHistory, payloadPruned markers, storage model, and non-claim preservation |
@@ -228,7 +231,9 @@ After USF-983 and USF-984 land, future changes to the corpus should also run
 the evidence reuse and evidence invalidation validators and selftests.
 - Repository aggregate validation on ambiguity or before merge.
 
-No fresh proof-cockpit machine QA is required for this design.
+This design does not by itself require fresh proof-cockpit machine QA, but a
+repository source change that moves the proof-cockpit source tree hash must
+re-pin proof-cockpit evidence before merge.
 
 ## Acceptance Mapping
 
