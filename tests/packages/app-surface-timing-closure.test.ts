@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -77,6 +78,27 @@ function expectAuthorityInputsToExist(inputs: AuthorityInput[]): void {
   }
 }
 
+function runValidatorWithFixturePayloads(timing: unknown, closure: unknown) {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), "usf-app-surface-"));
+  try {
+    const fixtureTimingPath = join(fixtureRoot, "timing.json");
+    const fixtureClosurePath = join(fixtureRoot, "closure.json");
+    writeFileSync(fixtureTimingPath, JSON.stringify(timing, null, 2) + "\n");
+    writeFileSync(fixtureClosurePath, JSON.stringify(closure, null, 2) + "\n");
+    return spawnSync("python3", ["tools/validate-app-surface/validate-app-surface.py", "all", "--json"], {
+      cwd: repoRoot,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        USF_APP_SURFACE_TIMING_EVIDENCE_PATH: fixtureTimingPath,
+        USF_APP_SURFACE_CLOSURE_GATE_PATH: fixtureClosurePath,
+      },
+    });
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+}
+
 describe("app-surface timing and closure gate", () => {
   it("records fastest-safe timing evidence without non-local tooling adoption", () => {
     const timing = readJson<TimingEvidence>(timingPath);
@@ -147,56 +169,41 @@ describe("app-surface timing and closure gate", () => {
   });
 
   it("fails closed when timing and closure authority are corrupted", () => {
-    const originalTiming = readFileSync(timingPath, "utf8");
-    const originalClosure = readFileSync(closurePath, "utf8");
-    try {
-      const timing = JSON.parse(originalTiming) as TimingEvidence;
-      const closure = JSON.parse(originalClosure) as ClosureGate;
-      writeFileSync(
-        timingPath,
-        JSON.stringify(
-          {
-            ...timing,
-            authorityInputs: [],
-            optionEvaluations: timing.optionEvaluations.map((option) =>
-              option.optionId === "testcontainers" ? { ...option, adopted: true } : option,
-            ),
-          },
-          null,
-          2,
-        ) + "\n",
-      );
-      writeFileSync(
-        closurePath,
-        JSON.stringify(
-          {
-            ...closure,
-            implementedSurfaces: [],
-            closureDecision: { ...closure.closureDecision, unsupportedReadinessClaimsMade: true },
-          },
-          null,
-          2,
-        ) + "\n",
-      );
-      const result = spawnSync("python3", ["tools/validate-app-surface/validate-app-surface.py", "all", "--json"], {
-        cwd: repoRoot,
-        encoding: "utf8",
-      });
-      expect(result.status).not.toBe(0);
-      const validation = JSON.parse(result.stdout) as {
-        status: string;
-        findings: Array<{ ruleId: string }>;
-      };
-      expect(validation.status).toBe("fail");
-      expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-016")).toBe(
-        true,
-      );
-      expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-017")).toBe(
-        true,
-      );
-    } finally {
-      writeFileSync(timingPath, originalTiming);
-      writeFileSync(closurePath, originalClosure);
-    }
+    const timing = readJson<TimingEvidence>(timingPath);
+    const closure = readJson<ClosureGate>(closurePath);
+    const result = runValidatorWithFixturePayloads(
+      {
+        ...timing,
+        authorityInputs: [],
+        externalBoundary: { deploymentAllowed: false },
+        optionEvaluations: timing.optionEvaluations.map((option) =>
+          option.optionId === "testcontainers" ? { ...option, adopted: true } : option,
+        ),
+      },
+      {
+        ...closure,
+        externalBoundary: {},
+        implementedSurfaces: [],
+        closureDecision: { ...closure.closureDecision, unsupportedReadinessClaimsMade: true },
+      },
+    );
+    expect(result.status).not.toBe(0);
+    const validation = JSON.parse(result.stdout) as {
+      status: string;
+      findings: Array<{ ruleId: string; subject: string }>;
+    };
+    expect(validation.status).toBe("fail");
+    expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-016")).toBe(true);
+    expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-017")).toBe(true);
+    expect(
+      validation.findings.some(
+        (finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-016" && finding.subject.includes(".externalBoundary."),
+      ),
+    ).toBe(true);
+    expect(
+      validation.findings.some(
+        (finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-017" && finding.subject.includes(".externalBoundary."),
+      ),
+    ).toBe(true);
   });
 });

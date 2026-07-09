@@ -12,11 +12,21 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def configured_path(env_var: str, default: Path) -> Path:
+    configured = os.environ.get(env_var)
+    if configured:
+        return Path(configured).expanduser().resolve()
+    return default
+
+
 MATRIX = ROOT / "docs/architecture/app-surface-validator-planted-defect-matrix.json"
 TRANCHE = ROOT / "docs/architecture/app-surface-validator-implementation-tranche.json"
 CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming"
@@ -52,8 +62,14 @@ UNIT_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-unit-test-
 CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json"
 COMPOSE_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-compose-proof-classification.json"
 STAGING_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-staging-proof-classification.json"
-TIMING_AND_OPTIMISATION_EVIDENCE = ROOT / "docs/architecture/app-surface-timing-and-optimisation-evidence.json"
-PROOF_REPORT_AND_CLOSURE_GATE = ROOT / "docs/architecture/app-surface-proof-report-and-closure-gate.json"
+TIMING_AND_OPTIMISATION_EVIDENCE = configured_path(
+    "USF_APP_SURFACE_TIMING_EVIDENCE_PATH",
+    ROOT / "docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+)
+PROOF_REPORT_AND_CLOSURE_GATE = configured_path(
+    "USF_APP_SURFACE_CLOSURE_GATE_PATH",
+    ROOT / "docs/architecture/app-surface-proof-report-and-closure-gate.json",
+)
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -235,6 +251,33 @@ COMMON_NONCLAIMS = {
     "humanAcceptance": False,
 }
 
+TIMING_EXTERNAL_BOUNDARY_FIELDS = {
+    "caddyPublicProofRoutingChangeAllowed",
+    "credentialsAllowed",
+    "deploymentAllowed",
+    "externalServicesAllowed",
+    "providerSetupAllowed",
+    "remoteCacheAllowed",
+    "stagingAllowed",
+    "storeWorkflowAllowed",
+    "taskGraphToolingAllowed",
+    "testcontainersAllowed",
+}
+
+CLOSURE_EXTERNAL_BOUNDARY_FIELDS = {
+    "adsProviderAllowed",
+    "caddyPublicProofRoutingChangeAllowed",
+    "credentialsAllowed",
+    "deploymentAllowed",
+    "externalServicesAllowed",
+    "humanAcceptanceClaimAllowed",
+    "paymentProviderAllowed",
+    "providerSetupAllowed",
+    "pushProviderAllowed",
+    "stagingAllowed",
+    "storeWorkflowAllowed",
+}
+
 REQUIRED_REALISATION_CRITERIA = {
     "semantic-artifacts-are-authority-not-linear-done-issues",
     "validator-logic-covers-required-suite",
@@ -257,7 +300,10 @@ def load_json(path: Path) -> Any:
 
 
 def rel(path: Path) -> str:
-    return str(path.relative_to(ROOT))
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def finding(rule_id: str, subject: str, message: str, issue_id: str | None = None) -> dict[str, str]:
@@ -462,6 +508,29 @@ def validate_makefile_wiring() -> list[dict[str, str]]:
 
 def path_exists(path: str) -> bool:
     return (ROOT / path).exists()
+
+
+def validate_required_false_flags(
+    record: dict[str, Any],
+    field_name: str,
+    required_fields: set[str],
+    subject: str,
+    rule_id: str,
+    issue_id: str,
+) -> list[dict[str, str]]:
+    value = record.get(field_name)
+    failures: list[dict[str, str]] = []
+    if not isinstance(value, dict):
+        return [finding(rule_id, f"{subject}.{field_name}", f"{field_name} must be an object", issue_id)]
+    for field in sorted(required_fields):
+        if field not in value:
+            failures.append(finding(rule_id, f"{subject}.{field_name}.{field}", f"{field_name} flag is required and must remain false", issue_id))
+        elif value.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.{field_name}.{field}", f"{field_name} flag must remain false", issue_id))
+    for field, flag in value.items():
+        if flag is not False:
+            failures.append(finding(rule_id, f"{subject}.{field_name}.{field}", f"{field_name} flag must remain false", issue_id))
+    return failures
 
 
 def has_nonempty_string_array(value: Any) -> bool:
@@ -3171,10 +3240,16 @@ def validate_timing_and_optimisation_evidence() -> list[dict[str, str]]:
     ]:
         if not isinstance(guard, dict) or guard.get(field) is not True:
             failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
-    boundary = data.get("externalBoundary", {})
-    for field, value in boundary.items() if isinstance(boundary, dict) else []:
-        if value is not False:
-            failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(
+        validate_required_false_flags(
+            data,
+            "externalBoundary",
+            TIMING_EXTERNAL_BOUNDARY_FIELDS,
+            subject,
+            rule_id,
+            issue_id,
+        )
+    )
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 
@@ -3330,10 +3405,16 @@ def validate_proof_report_and_closure_gate() -> list[dict[str, str]]:
     ]:
         if not isinstance(guard, dict) or guard.get(field) is not True:
             failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
-    boundary = data.get("externalBoundary", {})
-    for field, value in boundary.items() if isinstance(boundary, dict) else []:
-        if value is not False:
-            failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(
+        validate_required_false_flags(
+            data,
+            "externalBoundary",
+            CLOSURE_EXTERNAL_BOUNDARY_FIELDS,
+            subject,
+            rule_id,
+            issue_id,
+        )
+    )
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 

@@ -1503,7 +1503,8 @@
       "make validate-evidence after evidence artefacts change"
     ],
     "commandsForCurrentTimingClosureIssues": [
-      "python3 -m json.tool docs/architecture/app-surface-timing-and-optimisation-evidence.json docs/architecture/app-surface-proof-report-and-closure-gate.json",
+      "python3 -m json.tool docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+      "python3 -m json.tool docs/architecture/app-surface-proof-report-and-closure-gate.json",
       "corepack pnpm typecheck",
       "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
       "corepack pnpm test tests/packages/app-surface-timing-closure.test.ts",
