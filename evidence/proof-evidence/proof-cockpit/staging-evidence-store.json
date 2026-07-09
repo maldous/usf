@@ -4,18 +4,24 @@
   "linearIssue": "USF-293",
   "acceptanceIssue": "USF-290",
   "purpose": "Durable staging proof cockpit evidence store for machine QA history, screenshot-equivalent manifests, human review decisions, final reports, exported bundles, supersession history, and non-claim preservation.",
-  "sourceSha": "a8debcae1522f3f261d1fcca81a18ae6f556d472",
-  "deploymentSha": "a8debcae1522f3f261d1fcca81a18ae6f556d472",
+  "sourceSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
+  "deploymentSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
   "latestMachineRun": {
-    "runId": "qa-run-2026-07-09T00-29-03-903Z",
-    "sourceSha": "a8debcae1522f3f261d1fcca81a18ae6f556d472",
-    "deploymentSha": "a8debcae1522f3f261d1fcca81a18ae6f556d472",
+    "runId": "qa-run-2026-07-09T01-02-55-344Z",
+    "sourceSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
+    "sourceTreeHash": "5bb79145707b97c3a7161a1057b4461115447fa07b449ceaa267a3b800d19502",
+    "sourceTreeHashAlgorithm": "sha256-git-ls-tree-non-proof-evidence-v1",
+    "sourceTreeHashExcludedPrefixes": [
+      "artifacts/proof-cockpit/",
+      "evidence/proof-evidence/proof-cockpit/"
+    ],
+    "deploymentSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
     "environment": "local-machine-qa",
-    "generatedAt": "2026-07-09T00:31:47.879Z",
-    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z",
-    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z/proof-cockpit-machine-qa-run.json",
-    "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z/proof-cockpit-screenshot-manifest.json",
-    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z/external-review-bundle",
+    "generatedAt": "2026-07-09T01:05:37.084Z",
+    "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z",
+    "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z/proof-cockpit-machine-qa-run.json",
+    "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z/proof-cockpit-screenshot-manifest.json",
+    "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z/external-review-bundle",
     "routeCount": 830,
     "capabilityCount": 75,
     "serviceCount": 40,
@@ -2258,7 +2264,7 @@
       "humanDecisionRequired": 1,
       "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
       "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
-      "payloadPruned": false
+      "payloadPruned": true
     },
     {
       "runId": "qa-run-2026-07-09T00-29-03-903Z",
@@ -2270,6 +2276,36 @@
       "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z/proof-cockpit-machine-qa-run.json",
       "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z/proof-cockpit-screenshot-manifest.json",
       "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z/external-review-bundle",
+      "routeCount": 830,
+      "capabilityCount": 75,
+      "serviceCount": 40,
+      "screenshotCount": 94,
+      "serviceEvidenceCount": 40,
+      "passCount": 1282,
+      "warnCount": 0,
+      "gapCount": 0,
+      "failCount": 0,
+      "humanDecisionRequired": 1,
+      "warningInventory": "evidence/proof-evidence/proof-cockpit/warning-inventory.json",
+      "warningInventoryMarkdown": "evidence/proof-evidence/proof-cockpit/warning-inventory.md",
+      "payloadPruned": false
+    },
+    {
+      "runId": "qa-run-2026-07-09T01-02-55-344Z",
+      "sourceSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
+      "sourceTreeHash": "5bb79145707b97c3a7161a1057b4461115447fa07b449ceaa267a3b800d19502",
+      "sourceTreeHashAlgorithm": "sha256-git-ls-tree-non-proof-evidence-v1",
+      "sourceTreeHashExcludedPrefixes": [
+        "artifacts/proof-cockpit/",
+        "evidence/proof-evidence/proof-cockpit/"
+      ],
+      "deploymentSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
+      "environment": "local-machine-qa",
+      "generatedAt": "2026-07-09T01:05:37.084Z",
+      "artifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z",
+      "reportJson": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z/proof-cockpit-machine-qa-run.json",
+      "screenshotManifest": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z/proof-cockpit-screenshot-manifest.json",
+      "externalReviewBundle": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z/external-review-bundle",
       "routeCount": 830,
       "capabilityCount": 75,
       "serviceCount": 40,
@@ -3286,6 +3322,18 @@
       "toSourceSha": "a8debcae1522f3f261d1fcca81a18ae6f556d472",
       "supersededAt": "2026-07-09T00:31:47.879Z",
       "reason": "Automated promotion of a newer current-source machine QA run via promote.mjs."
+    },
+    {
+      "fromRunId": "qa-run-2026-07-09T00-29-03-903Z",
+      "fromArtifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-09T00-29-03-861Z",
+      "fromSourceSha": "a8debcae1522f3f261d1fcca81a18ae6f556d472",
+      "fromSourceTreeHash": "",
+      "toRunId": "qa-run-2026-07-09T01-02-55-344Z",
+      "toArtifactDir": "artifacts/proof-cockpit/machine-runs/2026-07-09T01-02-55-304Z",
+      "toSourceSha": "6d4d2cacc4fe76cd6f6e281cfa284da461ea3471",
+      "toSourceTreeHash": "5bb79145707b97c3a7161a1057b4461115447fa07b449ceaa267a3b800d19502",
+      "supersededAt": "2026-07-09T01:05:37.084Z",
+      "reason": "Automated promotion of a newer current-source machine QA run via promote.mjs."
     }
   ],
   "relatedIssueReview": [
@@ -3345,5 +3393,11 @@
     "resolutionMethod": "Regenerated current-main machine QA after audit-gap hardening; service evidence now includes run context, source SHA, capturedAt, screenshot linkage, auth posture comparison, target-system observation, leaf JSON parity, and validator planted-defect coverage.",
     "validationCommand": "corepack pnpm proof-cockpit:machine-qa -- --output-dir artifacts/proof-cockpit/machine-runs",
     "finalMachineRunPath": "artifacts/proof-cockpit/machine-runs/2026-07-05T16-28-26-320Z/proof-cockpit-machine-qa-run.json"
-  }
+  },
+  "sourceTreeHash": "5bb79145707b97c3a7161a1057b4461115447fa07b449ceaa267a3b800d19502",
+  "sourceTreeHashAlgorithm": "sha256-git-ls-tree-non-proof-evidence-v1",
+  "sourceTreeHashExcludedPrefixes": [
+    "artifacts/proof-cockpit/",
+    "evidence/proof-evidence/proof-cockpit/"
+  ]
 }
