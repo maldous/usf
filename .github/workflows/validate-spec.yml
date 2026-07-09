@@ -104,12 +104,12 @@ jobs:
           fi
           {
             printf '## USF validate-spec generated timing report\n\n'
-            printf '- authority: generated report only; not semantic authority and not proof readiness\n'
-            printf '- started: %s\n' "$STARTED_AT"
-            printf '- ended: %s\n' "$ended_at"
-            printf '- durationSeconds: %s\n' "$duration_seconds"
-            printf '- pnpmCacheHitPr: %s\n' "${PNPM_CACHE_HIT_PR:-not-applicable}"
-            printf '- pnpmCacheHitMain: %s\n' "${PNPM_CACHE_HIT_MAIN:-not-applicable}"
-            printf '- pipCacheHitPr: %s\n' "${PIP_CACHE_HIT_PR:-not-applicable}"
-            printf '- pipCacheHitMain: %s\n' "${PIP_CACHE_HIT_MAIN:-not-applicable}"
+            printf '%s\n' '- authority: generated report only; not semantic authority and not proof readiness'
+            printf '%s %s\n' '- started:' "$STARTED_AT"
+            printf '%s %s\n' '- ended:' "$ended_at"
+            printf '%s %s\n' '- durationSeconds:' "$duration_seconds"
+            printf '%s %s\n' '- pnpmCacheHitPr:' "${PNPM_CACHE_HIT_PR:-not-applicable}"
+            printf '%s %s\n' '- pnpmCacheHitMain:' "${PNPM_CACHE_HIT_MAIN:-not-applicable}"
+            printf '%s %s\n' '- pipCacheHitPr:' "${PIP_CACHE_HIT_PR:-not-applicable}"
+            printf '%s %s\n' '- pipCacheHitMain:' "${PIP_CACHE_HIT_MAIN:-not-applicable}"
           } >> "$GITHUB_STEP_SUMMARY"
