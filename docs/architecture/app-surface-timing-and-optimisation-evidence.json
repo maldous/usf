@@ -1,0 +1,337 @@
+{
+  "artifactId": "usf.app-surface-timing-and-optimisation-evidence",
+  "title": "App-surface timing and optimisation evidence",
+  "ownerIssueId": "USF-1035",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "timing-and-optimisation-evidence-recorded",
+  "createdDate": "2026-07-09",
+  "purpose": "Record bounded local app-surface timing and fastest-safe optimisation decisions without adopting non-local tooling or weakening proof/evidence validation.",
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "This artefact records timing evidence and optimisation decisions for the bounded local app-surface tranche.",
+    "validatorAuthority": "Validators enforce this artefact but do not create product, provider, staging, deployment, or readiness semantics.",
+    "generatedReportsAuthority": "Generated reports remain lower authority than repository semantic artefacts, validator rules, proof evidence, and source implementation.",
+    "sourceImplementationAuthority": "Source implementation does not define semantics and is not used to infer new app-surface behaviour."
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "role": "tranche-plan"
+    },
+    {
+      "path": "docs/architecture/repository-optimisation-local-realisation-tranche.json",
+      "role": "local-optimisation-model"
+    },
+    {
+      "path": "docs/architecture/repository-non-local-optimisation-option-evaluation.json",
+      "role": "non-local-option-evaluation"
+    },
+    {
+      "path": "docs/architecture/foundation-optimisation-evidence.json",
+      "role": "existing-optimisation-evidence"
+    },
+    {
+      "path": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+      "role": "unit-test-evidence"
+    },
+    {
+      "path": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+      "role": "contract-local-integration-evidence"
+    },
+    {
+      "path": "docs/architecture/app-surface-compose-proof-classification.json",
+      "role": "compose-not-required-classification"
+    },
+    {
+      "path": "docs/architecture/app-surface-staging-proof-classification.json",
+      "role": "staging-not-required-classification"
+    },
+    {
+      "path": "package.json",
+      "role": "package-managed-command-entry-points"
+    },
+    {
+      "path": "Makefile",
+      "role": "make-entry-points"
+    }
+  ],
+  "fastestSafeExecutionNote": {
+    "currentIssue": "USF-1035",
+    "remainingIssuesAtBatchStart": [
+      "USF-1035",
+      "USF-1036"
+    ],
+    "proposedBatchingPlan": "Batch USF-1035 timing and optimisation evidence with USF-1036 closure gate because both are non-runtime, non-package, local proof/reporting work over the same completed implementation tranche.",
+    "collapseRationale": "USF-1027 through USF-1030 remain local/negative fixture surfaces, USF-1031 and USF-1032 are satisfied by per-slice tests plus consolidation, USF-1033 and USF-1034 classify Compose and staging as not required, leaving only timing and closure evidence.",
+    "proofEvidenceOptimisationOpportunity": "USF-PROOF-COCKPIT-009 now uses a squash-stable non-proof source tree hash from PR 331, so branch commits are no longer load-bearing after squash merges when the non-proof tree is equivalent.",
+    "risks": [
+      "Full proof-cockpit re-pin still costs about 163 seconds when a proof-domain source change genuinely affects evidence.",
+      "validate-spec and validate-evidence remain broad repository gates and are intentionally not bypassed for closure.",
+      "Generated reports and implementation source remain lower authority and cannot define semantics."
+    ],
+    "willNotDo": [
+      "No deployment or staging proof is created.",
+      "No provider, credential, store, push, ad, payment, production, compliance, or human-acceptance setup is introduced.",
+      "No Caddy port 443 or public proof routing change is made.",
+      "No remote cache, task graph tooling, or Testcontainers adoption is made."
+    ]
+  },
+  "remainingIssueClassification": {
+    "mustImplementNowForAppSurfaceClosure": [
+      "USF-1035",
+      "USF-1036"
+    ],
+    "localNegativePlaceholderOnlyAlreadyImplemented": [
+      "USF-1027",
+      "USF-1028",
+      "USF-1029",
+      "USF-1030"
+    ],
+    "satisfiedByExistingPerSliceTestsPlusConsolidation": [
+      "USF-1031",
+      "USF-1032"
+    ],
+    "explicitlyClassifiedAsNotRequired": [
+      "USF-1033",
+      "USF-1034"
+    ],
+    "mustBeDeferredToLaterWork": [],
+    "outsideCurrentTrancheFutureAuthorisationRequired": [
+      "live push provider integration",
+      "ad SDK or consent management platform integration",
+      "store record creation or submission",
+      "deployment or staging proof",
+      "production identity/provider setup",
+      "remote cache, task graph tooling, or Testcontainers adoption"
+    ]
+  },
+  "timingEvidence": {
+    "environment": "local-development-workstation",
+    "measurementPolicy": "Measure only commands relevant to the bounded app-surface closure tranche; mark non-relevant or unchanged install/Compose timing explicitly rather than manufacturing work.",
+    "commands": [
+      {
+        "commandId": "package-install",
+        "command": "corepack pnpm install --frozen-lockfile",
+        "acceptanceCriterion": "Local install timing captured or explicitly marked not rerun with reason.",
+        "status": "not-rerun-no-dependency-change",
+        "durationMs": null,
+        "reason": "USF-1035/USF-1036 add no package dependencies and make no lockfile changes; frozen install was validated by earlier package proof and PR validation, so rerunning install is not relevant to this closure batch."
+      },
+      {
+        "commandId": "typecheck",
+        "command": "corepack pnpm typecheck",
+        "acceptanceCriterion": "Typecheck timing captured because a typecheck entry point exists.",
+        "status": "pass",
+        "durationMs": 9991,
+        "startedAt": "2026-07-09T01:42:43Z",
+        "endedAt": "2026-07-09T01:42:53Z"
+      },
+      {
+        "commandId": "unit-test-consolidation",
+        "command": "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
+        "acceptanceCriterion": "Unit test timing captured.",
+        "status": "pass",
+        "durationMs": 879,
+        "startedAt": "2026-07-09T01:42:53Z",
+        "endedAt": "2026-07-09T01:42:54Z"
+      },
+      {
+        "commandId": "contract-local-integration-test-consolidation",
+        "command": "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
+        "acceptanceCriterion": "Contract and local integration timing captured where tests exist.",
+        "status": "pass",
+        "durationMs": 879,
+        "startedAt": "2026-07-09T01:42:53Z",
+        "endedAt": "2026-07-09T01:42:54Z",
+        "reason": "USF-1031 and USF-1032 deliberately share the consolidation entry point to avoid duplicate equivalent test runs."
+      },
+      {
+        "commandId": "generated-client-validation",
+        "command": "corepack pnpm proof:api:graphql-generated-client",
+        "acceptanceCriterion": "Generated-client validation timing captured because the proof entry point exists.",
+        "status": "pass",
+        "durationMs": 1454,
+        "startedAt": "2026-07-09T01:42:54Z",
+        "endedAt": "2026-07-09T01:42:55Z"
+      },
+      {
+        "commandId": "app-surface-validate",
+        "command": "make app-surface-validate",
+        "acceptanceCriterion": "App-surface validator timing captured.",
+        "status": "pass",
+        "durationMs": 492,
+        "startedAt": "2026-07-09T01:49:18Z",
+        "endedAt": "2026-07-09T01:49:18Z"
+      },
+      {
+        "commandId": "app-surface-selftest",
+        "command": "make app-surface-selftest",
+        "acceptanceCriterion": "App-surface selftest timing captured.",
+        "status": "pass",
+        "durationMs": 497,
+        "startedAt": "2026-07-09T01:49:18Z",
+        "endedAt": "2026-07-09T01:49:19Z"
+      },
+      {
+        "commandId": "evidence-validation",
+        "command": "make validate-evidence",
+        "acceptanceCriterion": "Repository evidence validation timing captured because closure changes evidence-relevant artefacts.",
+        "status": "pass",
+        "durationMs": 110028,
+        "startedAt": "2026-07-09T01:52:16Z",
+        "endedAt": "2026-07-09T01:54:06Z"
+      },
+      {
+        "commandId": "compose-timing",
+        "command": "compose-backed app-surface proof timing",
+        "acceptanceCriterion": "Compose timing captured only if Compose proof is required.",
+        "status": "not-required-compose-classified-not-required",
+        "durationMs": null,
+        "reason": "USF-1033 classifies Compose as not required because implemented surfaces remain local, in-memory, static metadata, or negative fixtures and do not cross provider semantics requiring Compose."
+      },
+      {
+        "commandId": "closure-gate-test",
+        "command": "corepack pnpm test tests/packages/app-surface-timing-closure.test.ts",
+        "acceptanceCriterion": "Closure gate planted-defect and positive regression timing captured.",
+        "status": "pass",
+        "durationMs": 885,
+        "startedAt": "2026-07-09T01:49:17Z",
+        "endedAt": "2026-07-09T01:49:18Z"
+      }
+    ]
+  },
+  "optionEvaluations": [
+    {
+      "optionId": "affected-run-routing",
+      "considered": true,
+      "adopted": false,
+      "currentDisposition": "warn-only recommendations remain available through existing optimisation infrastructure",
+      "reason": "Affected-run can reduce local operator time, but closure still uses explicit relevant validators and tests; it is not promoted to a hard gate here."
+    },
+    {
+      "optionId": "compose-proof-cost",
+      "considered": true,
+      "adopted": false,
+      "currentDisposition": "not measured for app-surface closure because Compose proof is classified not required",
+      "reason": "No implemented app-surface provider semantics require Compose-backed proof."
+    },
+    {
+      "optionId": "testcontainers",
+      "considered": true,
+      "adopted": false,
+      "currentDisposition": "not adopted",
+      "reason": "Testcontainers would be non-local provider/tooling adoption and is not required for local/in-memory or negative fixture app-surface closure."
+    },
+    {
+      "optionId": "task-graph-tooling",
+      "considered": true,
+      "adopted": false,
+      "currentDisposition": "not adopted",
+      "reason": "Task graph tooling requires separate repository authority and is unnecessary for closing the bounded local tranche."
+    },
+    {
+      "optionId": "remote-cache",
+      "considered": true,
+      "adopted": false,
+      "currentDisposition": "not adopted",
+      "reason": "Remote cache would introduce non-local service semantics and is outside this authorised local closure work."
+    }
+  ],
+  "proofEvidenceChurnOptimisation": {
+    "ruleId": "USF-PROOF-COCKPIT-009",
+    "implementedByPullRequest": "https://github.com/maldous/usf/pull/331",
+    "mergedCommit": "ef17c8a4d4ceac1c61380c6e789c5f02eb8ba8b5",
+    "sourceTreeHashAnchorImplemented": true,
+    "sourceTreeHashExcludesProofCockpitEvidencePayloads": true,
+    "branchCommitShaNoLongerLoadBearingAfterSquashMerge": true,
+    "legacySourceShaRetainedAsProvenance": true,
+    "staleEvidenceAcceptedWithoutSourceEquivalence": false,
+    "evidenceValidationBypassed": false,
+    "observedCost": [
+      {
+        "operation": "proof-cockpit re-pin in PR 331",
+        "duration": "2:43.21"
+      },
+      {
+        "operation": "proof-cockpit re-pin after app-surface proof-ladder merge",
+        "duration": "2:42.04"
+      }
+    ],
+    "latestCiDispositionBeforeRepin": "GitHub validate correctly failed when non-proof source tree changed; proof-cockpit evidence is re-pinned once after all source edits."
+  },
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "timingCommandsMustHaveStatusAndReason": true,
+    "passingTimingCommandsMustHavePositiveDuration": true,
+    "nonRelevantTimingMustBeExplicitlyClassified": true,
+    "allOptimisationOptionsMustBeConsidered": true,
+    "nonLocalOptimisationMustNotBeAdopted": true,
+    "proofCockpitChurnFixMustNotBypassEvidenceValidation": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "externalBoundary": {
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "providerSetupAllowed": false,
+    "storeWorkflowAllowed": false,
+    "remoteCacheAllowed": false,
+    "taskGraphToolingAllowed": false,
+    "testcontainersAllowed": false,
+    "caddyPublicProofRoutingChangeAllowed": false
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "storeReadiness": false,
+    "appStoreSubmissionReadiness": false,
+    "playStoreSubmissionReadiness": false,
+    "providerSetupReadiness": false,
+    "pushProviderReadiness": false,
+    "adsProviderReadiness": false,
+    "monetisationReadiness": false,
+    "privacyComplianceReadiness": false,
+    "humanAcceptanceReadiness": false,
+    "remoteCacheAdopted": false,
+    "taskGraphToolingAdopted": false,
+    "testcontainersAdopted": false,
+    "caddyPublicProofRoutingChanged": false
+  },
+  "correctedValidationFindings": [
+    {
+      "commandId": "validate-spec",
+      "status": "failed-before-source-use-disposition-fix",
+      "durationMs": 31391,
+      "startedAt": "2026-07-09T01:49:19Z",
+      "endedAt": "2026-07-09T01:49:50Z",
+      "ruleId": "USF-IMPL-002",
+      "subject": "tests/packages/app-surface-timing-closure.test.ts",
+      "correction": "Added target-file source disposition coverage in docs/architecture/app-surface-source-use-disposition-matrix.md."
+    },
+    {
+      "commandId": "validate-evidence",
+      "status": "failed-before-source-use-disposition-fix",
+      "durationMs": 30791,
+      "startedAt": "2026-07-09T01:50:04Z",
+      "endedAt": "2026-07-09T01:50:35Z",
+      "ruleId": "USF-IMPL-002",
+      "subject": "tests/packages/app-surface-timing-closure.test.ts",
+      "correction": "Same underlying validate-spec source disposition finding; resolved before final evidence validation pass."
+    },
+    {
+      "commandId": "github-validate",
+      "status": "failed-before-proof-cockpit-repin",
+      "duration": "4m1s",
+      "runUrl": "https://github.com/maldous/usf/actions/runs/28988723932/job/86023576450",
+      "ruleId": "USF-PROOF-COCKPIT-009",
+      "subject": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+      "message": "Latest machine evidence is stale for source tree hash 3d01cb6627c208acca7320fb0cdea816a8d1d220355265d2469af17638886ca8",
+      "correction": "This is a legitimate source-tree change, not source-equivalent rebase churn. Proof-cockpit evidence is re-pinned after this source evidence update."
+    }
+  ]
+}
