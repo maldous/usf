@@ -2,7 +2,7 @@
   "artifactId": "usf.repository-ci-throughput-optimisation-realisation",
   "title": "Repository CI throughput optimisation realisation",
   "ownerIssueId": "USF-1037",
-  "lifecycleState": "implemented-with-pr-ci-timing-pending",
+  "lifecycleState": "implemented-with-pr-ci-timing-observed",
   "createdDate": "2026-07-09",
   "purpose": "Realise the fastest safe GitHub CI throughput improvements that preserve USF semantic authority, validator discipline, proof evidence integrity, planted-defect coverage, proof-cockpit freshness, branch-protection clarity, and non-claims.",
   "authorityBoundary": {
@@ -331,7 +331,13 @@
     "generatedReport": "evidence/generated-reports/repository-ci-throughput-timing-evidence.json",
     "baselineSource": "GitHub Actions validate-spec workflow runs observed on 2026-07-09",
     "baselineRepresentativeDurationSeconds": 378,
-    "afterStatus": "pending-github-pr-run",
+    "afterStatus": "observed",
+    "afterRunId": "28994186922",
+    "afterJobId": "86040238310",
+    "afterHead": "ea9622e2fbb766c1617540430728e3807ce822b8",
+    "afterJobDurationSeconds": 377,
+    "afterGeneratedBoundaryDurationSeconds": 344,
+    "afterCacheHitObserved": false,
     "timingClaimMade": false,
     "performanceBudgetEnforced": false
   },
@@ -363,9 +369,9 @@
     "proofEvidenceChurnAddressed": true,
     "branchProtectionCompatibilityRecorded": true,
     "timingBeforeRecorded": true,
-    "timingAfterRecorded": false,
-    "validationComplete": false,
+    "timingAfterRecorded": true,
+    "validationComplete": true,
     "linearCompletionReady": false,
-    "finalReadinessVerdict": "not-ready-until-validation-and-pr-ci-after-timing-complete"
+    "finalReadinessVerdict": "repo-evidence-complete-pr-open-linear-not-mutated"
   }
 }

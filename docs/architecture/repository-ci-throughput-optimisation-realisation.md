@@ -28,7 +28,9 @@ This note records the repository-owned execution plan for fastest-safe GitHub CI
 
 The baseline comes from recent GitHub `validate-spec` runs observed on 2026-07-09. The representative pre-change duration is about 378 seconds, with recent successful runs clustered around 6 minutes 8 seconds to 6 minutes 20 seconds.
 
-After timing is intentionally pending until this branch has a GitHub pull-request run with the updated workflow. The machine-readable closure state must not be marked ready until that after timing is added to `evidence/generated-reports/repository-ci-throughput-timing-evidence.json` and validations pass.
+After timing is recorded from pull-request run 28994186922 on 2026-07-09. The required `validate` job passed in 377 seconds by GitHub job timestamps, and the generated timing boundary recorded 344 seconds from post-setup timing start to the timing report step. Both PR cache restore attempts were misses, so this run does not demonstrate cache-hit acceleration. The comparison remains advisory and warn-only: it records a one-second wall-time reduction from the representative baseline without making a material speedup claim or performance-budget claim.
+
+The repository-owned evidence is complete for this tranche after local validation and the successful PR `validate` run. Linear has not been mutated by this record and remains outside USF semantic authority.
 
 ## Non-Claims
 
