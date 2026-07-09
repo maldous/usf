@@ -12,9 +12,9 @@
     "USF-660",
     "USF-665"
   ],
-  "lifecycleState": "blocked-pending-dedicated-runner-host-and-registration",
+  "lifecycleState": "trusted-self-hosted-runner-enabled-measurement-pending",
   "createdDate": "2026-07-09",
-  "purpose": "Record the trust posture, current GitHub runner observations, safe routing policy, callback decision, blocker, fallback, and next unblocker for trusted GitHub runner capacity.",
+  "purpose": "Record the trust posture, host/controller inspection, runner registration, safe workflow routing, callback decision, fallback, cleanup proof, and timing evidence boundary for trusted GitHub runner capacity.",
   "authorityBoundary": {
     "linearAuthority": false,
     "githubSettingsAuthority": false,
@@ -24,26 +24,38 @@
     "workflowDefinesSemantics": false,
     "implementationRuntimeCodeCreated": false,
     "sourceImplementationImported": false,
-    "workflowRoutingChanged": false,
+    "workflowRoutingChanged": true,
     "semanticAuthorityPreserved": true
   },
   "currentObservations": {
     "githubRepository": "maldous/usf",
-    "observedAt": "2026-07-09T06:15:02Z",
+    "observedAt": "2026-07-09T07:41:54Z",
     "actionsEnabled": true,
-    "repositorySelfHostedRunnerCount": 0,
-    "repositorySelfHostedRunnerLabelsObserved": [],
-    "registrationTokenRequested": false,
+    "repositorySelfHostedRunnerCount": 1,
+    "repositorySelfHostedRunnerLabelsObserved": [
+      "self-hosted",
+      "linux",
+      "x64",
+      "usf",
+      "usf-ci",
+      "usf-trusted"
+    ],
+    "runnerName": "usf-linux-x64-controller-01",
+    "runnerId": "21",
+    "runnerStatus": "online",
+    "runnerBusy": false,
+    "registrationTokenRequested": true,
     "registrationTokenPersisted": false,
-    "registrationTokenReason": "No token was requested because no dedicated runner host or ephemeral runner controller was available in this repository session.",
+    "registrationTokenReason": "A short-lived repository runner registration token was requested through GitHub CLI only after this host/controller was authorised and the dedicated runner user/workspace existed. The token was not printed, committed, or persisted and is treated as spent.",
     "runnerDownloadAvailable": true,
     "linuxX64RunnerVersionAvailable": "2.335.1",
+    "runnerDownloadSha256": "4ef2f25285f0ae4477f1fe1e346db76d2f3ebf03824e2ddd1973a2819bf6c8cf",
     "hostedRunnerImageObserved": "ubuntu-24.04",
     "branchProtectionRequiredContexts": [
       "validate"
     ],
     "branchProtectionStrict": true,
-    "currentValidateWorkflowRunsOn": "ubuntu-latest",
+    "currentValidateWorkflowRunsOn": "trusted self-hosted labels for trusted main and same-repository PRs, ubuntu-latest fallback for fork PRs and manual fallback",
     "requiredValidateContextPreserved": true
   },
   "timingEvidence": {
@@ -91,12 +103,56 @@
         "jobDurationSeconds": 374,
         "totalRunSeconds": 677,
         "runnerClass": "github-hosted"
+      },
+      {
+        "runId": "28999636766",
+        "jobId": "86056951093",
+        "event": "pull_request",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "createdAt": "2026-07-09T06:47:50Z",
+        "jobStartedAt": "2026-07-09T06:47:54Z",
+        "jobCompletedAt": "2026-07-09T06:54:25Z",
+        "updatedAt": "2026-07-09T06:54:26Z",
+        "queueSeconds": 4,
+        "jobDurationSeconds": 391,
+        "totalRunSeconds": 396,
+        "checkoutSeconds": 32,
+        "setupSeconds": 3,
+        "pnpmInstallSeconds": 12,
+        "pipInstallSeconds": 4,
+        "validateSpecSeconds": 45,
+        "runnerClass": "github-hosted",
+        "runnerLabel": [
+          "ubuntu-latest"
+        ]
       }
     ],
-    "runnerBackedAfterRunStatus": "blocked-unavailable",
+    "runnerBackedAfterRunStatus": "pending-workflow-run-after-routing-push",
     "runnerBackedAfterRunCaptured": false,
     "queueTimeImprovementClaimMade": false,
-    "exactAfterEvidenceRequiredBeforeClosure": true
+    "exactAfterEvidenceRequiredBeforeClosure": true,
+    "selfHostedRuns": [],
+    "pendingAfterEvidence": {
+      "required": true,
+      "requiredFields": [
+        "runId",
+        "jobId",
+        "queueSeconds",
+        "jobDurationSeconds",
+        "totalRunSeconds",
+        "checkoutSeconds",
+        "setupSeconds",
+        "pnpmInstallSeconds",
+        "pipInstallSeconds",
+        "validateSpecSeconds",
+        "runnerLabel",
+        "cleanupResult",
+        "cacheHitMissValues",
+        "cacheWriteAllowed",
+        "secretsAvailableByPolicy"
+      ],
+      "recordingLocation": "PR body and generated GitHub step summary; repository artefact records schema and boundary until after-run evidence is captured."
+    }
   },
   "trustZones": {
     "trusted-main": {
@@ -132,14 +188,26 @@
     "untrustedPullRequestsStayOnGithubHostedUnlessEphemeralUnprivilegedProven": true,
     "requiredValidateContextMustRemain": "validate",
     "githubHostedFallbackRequired": true,
-    "workflowRoutingChangedInThisBranch": false,
+    "workflowRoutingChangedInThisBranch": true,
     "safeFutureRoutingPreconditions": [
-      "At least one online repository or organisation runner has the required USF-specific labels.",
-      "The runner host or ephemeral controller is dedicated to USF CI and has documented ownership.",
+      "At least one online repository runner has the required USF-specific labels.",
+      "The runner host/controller is dedicated to USF CI with documented ownership and cleanup controls.",
       "Untrusted fork pull requests remain on GitHub-hosted runners or on a separately proven ephemeral unprivileged runner.",
-      "The required validate context remains stable or a branch-protection-compatible validate aggregator is introduced.",
+      "The required validate context remains stable.",
       "GitHub-hosted fallback remains documented and testable."
-    ]
+    ],
+    "trustedRunnerLabels": [
+      "self-hosted",
+      "linux",
+      "x64",
+      "usf",
+      "usf-ci",
+      "usf-trusted"
+    ],
+    "manualGithubHostedFallback": "repository variable USF_VALIDATE_RUNNER_TARGET=github-hosted or workflow_dispatch runnerTarget=github-hosted",
+    "forkPullRequestRouting": "ubuntu-latest",
+    "sameRepositoryPullRequestRouting": "self-hosted linux x64 usf usf-ci usf-trusted",
+    "mainPushRouting": "self-hosted linux x64 usf usf-ci usf-trusted"
   },
   "runnerLabelStrategy": {
     "requiredLabels": [
@@ -155,9 +223,18 @@
       "usf-ci",
       "usf-trusted"
     ],
-    "currentLabelsPresent": false,
+    "currentLabelsPresent": true,
     "labelReuseFromOtherRepositoriesAllowed": false,
-    "labelWeakeningAllowed": false
+    "labelWeakeningAllowed": false,
+    "runnerName": "usf-linux-x64-controller-01",
+    "observedLabels": [
+      "self-hosted",
+      "linux",
+      "x64",
+      "usf",
+      "usf-ci",
+      "usf-trusted"
+    ]
   },
   "runnerLifecyclePolicy": {
     "preferredModel": "ephemeral",
@@ -179,7 +256,9 @@
       "Runner version and update policy recorded.",
       "Rollback to GitHub-hosted runner documented and tested.",
       "Cleanup proof is machine-checkable."
-    ]
+    ],
+    "adoptedModel": "persistent-with-cleanup-hooks",
+    "persistentControlsSatisfied": true
   },
   "cacheAndSecretIsolation": {
     "runnerCacheMaySatisfyValidation": false,
@@ -188,7 +267,10 @@
     "trustedCacheWritesFromPullRequestsAllowed": false,
     "proofEvidenceCacheAllowed": false,
     "generatedReportCacheAllowed": false,
-    "cleanupProofRequiredBeforeAdoption": true
+    "cleanupProofRequiredBeforeAdoption": true,
+    "cleanupProofImplemented": true,
+    "dockerSocketMountedIntoRunnerAllowed": false,
+    "dockerSocketMountedIntoRunner": false
   },
   "caddyCallbackDecision": {
     "caddyFilesInspected": [
@@ -197,10 +279,10 @@
       "docs/architecture/self-hosted-public-proof-origin-service.json",
       "docs/runbooks/self-hosted-public-proof-origin.md"
     ],
-    "decision": "rejected-for-current-runner-enablement",
+    "decision": "rejected-not-needed-for-basic-runner-enablement",
     "implemented": false,
-    "reason": "A callback route cannot create runner capacity without a runner host or controller. GitHub Actions API records queue and job timing for the current blocker. Existing Caddy proof routes are proof and control route evidence, not GitHub Actions runner infrastructure.",
-    "futureConditionForUse": "A dedicated runner controller or health service exists and needs authenticated workflow_job events, runner health handoff, or registration coordination.",
+    "reason": "This host now provides direct runner capacity and GitHub Actions API plus runner health checks provide queue, timing, and online status evidence. Caddy/callback routes are not needed for basic runner enablement and would add public ingress, signature, replay, and rollback surface without materially improving the current bottleneck.",
+    "futureConditionForUse": "A later queue-aware runner controller or health service needs authenticated workflow_job events, runner health handoff, or registration coordination beyond GitHub API polling and systemd health.",
     "callbackPayloadsAreAuthority": false,
     "webhookSignatureRequiredIfImplemented": true,
     "replayProtectionRequiredIfImplemented": true,
@@ -208,69 +290,51 @@
     "routeRollbackRequiredIfImplemented": true
   },
   "enablementDecision": {
-    "state": "blocked",
-    "runnerEnabled": false,
-    "exactBlockers": [
-      "GitHub API reports zero repository self-hosted runners.",
-      "No dedicated runner host, operating-system runner user, workspace path, network boundary, or cleanup proof is available in this repository session.",
-      "No USF-specific runner labels are registered for this repository.",
-      "No runner registration token was requested because requesting one without a target host would create an unnecessary secret exposure path.",
-      "No branch-protection-compatible fallback can prove a runner-backed validate path while zero matching runners are registered.",
-      "No runner-backed queue-time after-run can be captured until a trusted runner is registered or larger GitHub-hosted capacity is enabled."
+    "state": "enabled-measurement-pending",
+    "runnerEnabled": true,
+    "hostControllerAccepted": true,
+    "runnerRegistered": true,
+    "runnerOnline": true,
+    "workflowRoutingImplemented": true,
+    "closureAllowed": false,
+    "exactRemainingBlockers": [
+      "A trusted self-hosted validate run must complete after this workflow routing change is pushed.",
+      "After-run timing fields must be recorded before Linear closure.",
+      "GitHub-hosted fallback must be verified or explicitly recorded as manual fallback-ready.",
+      "PR body and Linear must be updated with run evidence and acceptance criteria after CI completes."
     ],
     "nextUnblockers": [
       {
-        "id": "dedicated-runner-host",
-        "requirement": "Provide or authorise a dedicated Linux x64 runner host or ephemeral runner controller for USF CI.",
+        "id": "self-hosted-validate-run",
+        "requirement": "Push the routing change and capture the validate job on usf-linux-x64-controller-01.",
         "evidenceRequired": [
-          "host owner",
-          "host trust boundary",
-          "runner user",
-          "workspace path",
-          "network boundary"
-        ]
-      },
-      {
-        "id": "runner-registration",
-        "requirement": "Register the runner with USF-specific labels only after the host is ready.",
-        "evidenceRequired": [
-          "online runner in GitHub API",
-          "labels self-hosted linux x64 usf usf-ci usf-trusted",
-          "registration token not logged or persisted"
-        ]
-      },
-      {
-        "id": "cleanup-proof",
-        "requirement": "Prove workspace cleanup and secret non-exposure before routing validate to the runner.",
-        "evidenceRequired": [
-          "pre-job cleanup",
-          "post-job cleanup",
-          "cache isolation",
-          "secret non-exposure"
-        ]
-      },
-      {
-        "id": "branch-protection-routing",
-        "requirement": "Introduce a branch-protection-compatible trusted-runner route while preserving the validate context and GitHub-hosted fallback.",
-        "evidenceRequired": [
-          "validate context preserved",
-          "untrusted fork PRs kept off persistent privileged runner",
-          "fallback path tested"
-        ]
-      },
-      {
-        "id": "before-after-timing",
-        "requirement": "Capture hosted and runner-backed queue time and wall time for comparable validate runs.",
-        "evidenceRequired": [
-          "hosted queue seconds",
-          "runner-backed queue seconds",
+          "run id",
+          "job id",
+          "runner label",
+          "queue seconds",
           "job duration seconds",
-          "runner label"
+          "step durations"
+        ]
+      },
+      {
+        "id": "cleanup-proof-after-ci",
+        "requirement": "Confirm workflow postflight and runner hook cleanup evidence after the self-hosted job.",
+        "evidenceRequired": [
+          "runnerCleanupResult pass",
+          "runnerSecretSafetyResult pass",
+          "hook evidence exists"
+        ]
+      },
+      {
+        "id": "fallback-proof",
+        "requirement": "Verify the GitHub-hosted fallback switch or record the manual fallback command and status.",
+        "evidenceRequired": [
+          "fallback variable status",
+          "workflow_dispatch runnerTarget support"
         ]
       }
     ],
-    "fallbackPath": "Keep validate on ubuntu-latest with the required validate context while USF-1037 cache, checkout, and timing improvements remain the active safe throughput changes.",
-    "closureAllowed": false
+    "fallbackPath": "Set repository variable USF_VALIDATE_RUNNER_TARGET=github-hosted using tools/github-runner/rollback-to-github-hosted.sh set, or manually revert validate runs-on to ubuntu-latest while preserving the validate context."
   },
   "largerGithubHostedRunnerDecision": {
     "state": "decision-required",
@@ -286,20 +350,22 @@
   "validationRequirements": [
     "Strict JSON parse for this artefact.",
     "Repository optimisation validator and selftest.",
-    "validate-spec and validate-spec selftest if workflow routing changes.",
-    "GitHub CI evidence if workflow routing changes.",
-    "Runner cleanup and hygiene proof if a runner is enabled.",
+    "validate-spec and validate-spec selftest because workflow routing changed.",
+    "Proof-cockpit validation after source freshness is re-pinned.",
+    "GitHub CI evidence on the self-hosted runner.",
+    "GitHub-hosted fallback proof or documented fallback verification.",
+    "Runner cleanup and hygiene proof.",
     "Caddy webhook negative tests only if callback functionality is implemented."
   ],
   "closureReport": {
     "usf1037RunnerWorkInventoried": true,
     "trustPostureRecorded": true,
     "threatModelRecorded": true,
-    "selfHostedRunnerEnablementImplemented": false,
-    "selfHostedRunnerEnablementBlockedWithExactEvidence": true,
+    "selfHostedRunnerEnablementImplemented": true,
+    "selfHostedRunnerEnablementBlockedWithExactEvidence": false,
     "runnerLabelStrategyRecorded": true,
-    "trustedWorkflowRoutingImplemented": false,
-    "trustedWorkflowRoutingBlockedByMissingRunner": true,
+    "trustedWorkflowRoutingImplemented": true,
+    "trustedWorkflowRoutingBlockedByMissingRunner": false,
     "githubHostedFallbackPreserved": true,
     "runnerLifecycleDocumented": true,
     "cleanupHygieneProofMachineCheckableIfEnabled": true,
@@ -309,7 +375,7 @@
     "requiredValidateContextStable": true,
     "validatorsRequiredBeforeClosure": true,
     "linearCompletionReady": false,
-    "finalReadinessVerdict": "BLOCKED_PENDING_RUNNER_HOST_AND_REGISTRATION"
+    "finalReadinessVerdict": "ENABLED_MEASUREMENT_PENDING"
   },
   "nonClaims": [
     "staging-readiness",
@@ -326,5 +392,69 @@
     "generated-report-authority",
     "callback-payload-authority",
     "self-hosted-runner-local-state-authority"
-  ]
+  ],
+  "hostController": {
+    "authorisedForIssueId": "USF-1038",
+    "hostRole": "authorised-linux-x64-runner-host-controller",
+    "hostAccepted": true,
+    "inspectedAt": "2026-07-09T07:41:54Z",
+    "os": "Ubuntu 24.04.4 LTS",
+    "kernel": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "cpuCount": 16,
+    "memoryAvailableGiB": 39,
+    "diskAvailableGiB": 358,
+    "systemdAvailable": true,
+    "systemdState": "degraded",
+    "githubWebReachable": true,
+    "githubApiReachable": true,
+    "dockerCliPresent": true,
+    "dockerSocketPresent": true,
+    "dockerSocketMountedIntoRunner": false,
+    "runnerUser": "usf-runner",
+    "runnerUserUid": 990,
+    "runnerUserIsRoot": false,
+    "runnerUserGroups": [
+      "usf-runner"
+    ],
+    "runnerUserHasSudo": false,
+    "runnerUserHasDockerGroup": false,
+    "repositoryPath": "/home/user/src/usf"
+  },
+  "runnerInstallation": {
+    "model": "persistent-runner-with-machine-checkable-cleanup",
+    "ephemeralPreferred": true,
+    "ephemeralAdopted": false,
+    "ephemeralNotAdoptedReason": "A one-shot ephemeral runner is not practical for durable PR routing without a separately implemented queue-aware controller. The safer first slice on this authorised host is a persistent runner service with a dedicated unprivileged user, no Docker group, isolated work/cache/temp directories, cleanup hooks, and GitHub-hosted fallback.",
+    "runnerDirectory": "/opt/usf-github-runner/actions-runner",
+    "workDirectory": "/var/lib/usf-github-runner/work",
+    "cacheDirectory": "/var/cache/usf-github-runner",
+    "tempDirectory": "/var/tmp/usf-github-runner",
+    "logDirectory": "/var/log/usf-github-runner",
+    "systemdService": "actions.runner.maldous-usf.usf-linux-x64-controller-01.service",
+    "serviceActive": true,
+    "serviceRunsAs": "usf-runner",
+    "hooksInstalled": true,
+    "jobStartedHook": "/opt/usf-github-runner/hooks/job-started.sh",
+    "jobCompletedHook": "/opt/usf-github-runner/hooks/job-completed.sh",
+    "toolchainVerifiedAsRunnerUser": true,
+    "nodeVersion": "v24.16.0",
+    "pnpmVersion": "11.9.0",
+    "pythonVersion": "3.12.3"
+  },
+  "cleanupAndSecretSafetyEvidence": {
+    "machineCheckableScripts": [
+      "tools/github-runner/cleanup-workspace.sh",
+      "tools/github-runner/verify-secret-safety.sh",
+      "tools/github-runner/verify-runner-health.sh",
+      "tools/github-runner/verify-toolchain.sh"
+    ],
+    "hostPostInstallCleanupResult": "pass",
+    "hostPostStartCleanupResult": "pass",
+    "hostSecretSafetyResult": "pass",
+    "secretValuesPrinted": false,
+    "cachePreserved": true,
+    "workspaceMayBecomeAuthority": false,
+    "runnerLocalStateMayDefineAuthority": false
+  }
 }
