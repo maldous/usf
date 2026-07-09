@@ -154,6 +154,7 @@ AUTHORIZED_TOOLING = {
     "tools/github-runner/stop-runner.sh",
     "tools/github-runner/verify-runner-health.sh",
     "tools/github-runner/verify-secret-safety.sh",
+    "tools/github-runner/watchdog-runner.sh",
     "tools/github-runner/verify-toolchain.sh",
     "tools/validate-linear-boundary/validate-linear-boundary.py",
     "tools/validate-repository-optimisation/validate-repository-optimisation.py",
