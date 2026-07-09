@@ -399,14 +399,20 @@
       "pullRequestBaseFetchDepth": 1,
       "pullRequestBaseRefFetched": "origin/${{ github.base_ref }}",
       "pullRequestValidatorBaseRefPreserved": true,
-      "tagsFetchedByValidateSpec": false,
+      "tagsFetchedByValidateSpec": true,
+      "tagsFetchedByValidateSpecScope": "single-bootstrap-marker-tag",
+      "minimumTagsFetchedByValidateSpec": [
+        "v2-bootstrap"
+      ],
+      "minimumBootstrapMarkerTagFetchDepth": 2,
       "allBranchesFetchedByValidateSpec": false,
+      "allTagsFetchedByValidateSpec": false,
       "fullCheckoutFallbackOnMissingDiffRefs": true,
       "requiredRefsForPrMode": [
         "HEAD",
         "origin/${{ github.base_ref }}"
       ],
-      "tagRequirementReason": "validate-spec PR mode diffs origin/base...HEAD and reads changed JSON at HEAD. Proof-anchor tag publication is owned by proof-anchor workflow, not validate-spec PR mode."
+      "tagRequirementReason": "validate-spec PR mode diffs origin/base...HEAD and reads changed JSON at HEAD. Bootstrap validation also resolves the recorded v2-bootstrap marker tag. The workflow fetches only that marker tag; proof-anchor tag publication remains owned by proof-anchor workflow and current-main proof-anchor visibility is checked through remote tag lookup, not all local tags."
     }
   },
   "timingEvidence": {

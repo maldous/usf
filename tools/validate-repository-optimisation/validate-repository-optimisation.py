@@ -586,6 +586,10 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "manual cache warm path must be limited to trusted main cache writes"))
     if "fetch-depth: 0" in workflow_source or "fetch-depth: 2" not in workflow_source or "refs/remotes/origin/$BASE_REF" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must avoid full-history checkout and explicitly fetch the PR base ref"))
+    if "git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fetch the minimum bootstrap marker tag depth required by bootstrap validation"))
+    if "git fetch --tags" in workflow_source or "fetch-tags: true" in workflow_source or "refs/tags/*:refs/tags/*" in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not broaden validate-spec checkout to all tags"))
     if "--unshallow" not in workflow_source or "git diff --name-status" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fail closed to fuller checkout when PR diff refs are missing"))
     if "cache_hit_value()" not in workflow_source or "*) printf false ;;" not in workflow_source:
@@ -731,6 +735,12 @@ def selftest() -> list[dict[str, str]]:
 
     mutated_workflow = workflow_text.replace("fetch-depth: 2", "fetch-depth: 0")
     tests.append(("ci-workflow-full-history-checkout", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "refs/tags/*:refs/tags/*")
+    tests.append(("ci-workflow-all-tags-fetch", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "git fetch --no-tags --depth=1 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap")
+    tests.append(("ci-workflow-bootstrap-tag-depth", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["affectedDomainMap"]["hardCiBlock"] = True
