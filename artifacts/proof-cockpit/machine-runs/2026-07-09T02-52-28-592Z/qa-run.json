@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-09T02-52-28-635Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "82300f5f73017b0b95cedb14f99263882d2c89e9",
+  "deploymentSha": "82300f5f73017b0b95cedb14f99263882d2c89e9",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:2521",
+  "startedAt": "2026-07-09T02:52:28.635Z",
+  "completedAt": "2026-07-09T02:55:10.404Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "clean",
+  "branch": "app-surface-proof-ladder-test-isolation",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}
