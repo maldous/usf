@@ -50,6 +50,8 @@ DEPLOYMENT_USF940_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/confo
 DEPLOYMENT_USF940_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json"
 UNIT_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-unit-test-suite-consolidation.json"
 CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json"
+COMPOSE_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-compose-proof-classification.json"
+STAGING_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-staging-proof-classification.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -2827,6 +2829,203 @@ def validate_contract_integration_test_suite_consolidation() -> list[dict[str, s
                 failures.append(finding(rule_id, subject, f"integrationCoverage.{field} must remain false", issue_id))
     return failures
 
+def validate_compose_proof_classification() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-014"
+    issue_id = "USF-1033"
+    subject = rel(COMPOSE_PROOF_CLASSIFICATION)
+    failures: list[dict[str, str]] = []
+    if not COMPOSE_PROOF_CLASSIFICATION.exists():
+        return [finding(rule_id, subject, "Compose proof classification artefact is missing", issue_id)]
+    data = load_json(COMPOSE_PROOF_CLASSIFICATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "Compose proof classification artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "Compose classification artefact must be owned by USF-1033", issue_id))
+    if data.get("lifecycleState") != "compose-proof-not-required-classified":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "Compose classification lifecycleState must be compose-proof-not-required-classified", issue_id))
+    authority_inputs = data.get("authorityInputs")
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        failures.append(finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty array", issue_id))
+        authority_inputs = []
+    for index, authority_input in enumerate(authority_inputs):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+    classification = data.get("composeClassification", {})
+    if not isinstance(classification, dict):
+        failures.append(finding(rule_id, f"{subject}.composeClassification", "composeClassification must be an object", issue_id))
+        classification = {}
+    expected_false_fields = [
+        "composeRequired",
+        "providerSemanticsCrossed",
+        "providerSemanticsRequireCompose",
+        "composeProofRun",
+        "existingComposeProfilesChanged",
+        "composeTimingEvidenceRequired",
+        "composeEvidenceCaptured",
+        "stagingImplicationCreated",
+        "caddyPublicProofRoutingChanged",
+        "caddyPort443Altered",
+        "testcontainersAdopted",
+        "remoteCacheAdopted",
+        "taskGraphToolingAdopted",
+    ]
+    for field in expected_false_fields:
+        if classification.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.composeClassification.{field}", "Compose classification field must remain false", issue_id))
+    if classification.get("classification") != "not-required":
+        failures.append(finding(rule_id, f"{subject}.composeClassification.classification", "Compose classification must be not-required", issue_id))
+    if classification.get("inMemoryProofSufficient") is not True:
+        failures.append(finding(rule_id, f"{subject}.composeClassification.inMemoryProofSufficient", "inMemoryProofSufficient must be true", issue_id))
+    if not isinstance(classification.get("repositoryOwnedReason"), str) or not classification["repositoryOwnedReason"].strip():
+        failures.append(finding(rule_id, f"{subject}.composeClassification.repositoryOwnedReason", "repository-owned not-required reason is required", issue_id))
+    surfaces = data.get("implementedSurfaceClassifications", [])
+    if not isinstance(surfaces, list) or not surfaces:
+        failures.append(finding(rule_id, f"{subject}.implementedSurfaceClassifications", "implemented surface classifications must be non-empty", issue_id))
+        surfaces = []
+    for index, surface in enumerate(surfaces):
+        if not isinstance(surface, dict):
+            failures.append(finding(rule_id, f"{subject}.implementedSurfaceClassifications[{index}]", "surface classification must be an object", issue_id))
+            continue
+        if surface.get("providerSemanticsCrossed") is not False:
+            failures.append(finding(rule_id, f"{subject}.implementedSurfaceClassifications[{index}].providerSemanticsCrossed", "implemented app-surface provider semantics must remain false", issue_id))
+        for field in ["surfaceId", "ownerIssueId", "proofDisposition"]:
+            if not isinstance(surface.get(field), str) or not surface[field].strip():
+                failures.append(finding(rule_id, f"{subject}.implementedSurfaceClassifications[{index}].{field}", "surface classification field must be non-empty", issue_id))
+    criteria = data.get("conditionalCriteriaDisposition", {})
+    if not isinstance(criteria, dict):
+        failures.append(finding(rule_id, f"{subject}.conditionalCriteriaDisposition", "conditionalCriteriaDisposition must be an object", issue_id))
+    else:
+        for field in ["composeProofDoesNotImplyStagingProof", "caddyPublicProofRoutingOnPort443NotAltered"]:
+            if criteria.get(field) is not True:
+                failures.append(finding(rule_id, f"{subject}.conditionalCriteriaDisposition.{field}", "conditional criterion must be true", issue_id))
+        for field in ["ifComposeIsRequiredExistingProfilesAreUsedOrUpdatedWithAuthority", "ifComposeIsRequiredTimingAndEvidenceAreCaptured"]:
+            if criteria.get(field) != "not-applicable-compose-not-required":
+                failures.append(finding(rule_id, f"{subject}.conditionalCriteriaDisposition.{field}", "conditional criterion must be not-applicable when Compose is not required", issue_id))
+    guard = data.get("validationGuard", {})
+    for field in [
+        "existingAuthorityPathsMustExist",
+        "providerSemanticsNeedForComposeMustBeClassified",
+        "inMemoryProofSufficientWhenNoProviderSemanticsCrossed",
+        "composeProfilesMustNotChangeWhenNotRequired",
+        "composeProofMustNotRunWhenNotRequired",
+        "composeProofMustNotImplyStaging",
+        "caddyPort443MustNotBeAltered",
+        "testcontainersRemoteCacheAndTaskGraphMustRemainUnadopted",
+        "nonClaimsMustAllBeFalse",
+    ]:
+        if not isinstance(guard, dict) or guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    boundary = data.get("externalBoundary", {})
+    for field in [
+        "externalProvidersAllowed",
+        "credentialsAllowed",
+        "deploymentAllowed",
+        "stagingAllowed",
+        "composeRequired",
+        "testcontainersAllowed",
+        "remoteCacheAllowed",
+        "taskGraphToolingAllowed",
+        "caddyPublicProofRoutingChangeAllowed",
+    ]:
+        if not isinstance(boundary, dict) or boundary.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
+def validate_staging_proof_classification() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-015"
+    issue_id = "USF-1034"
+    subject = rel(STAGING_PROOF_CLASSIFICATION)
+    failures: list[dict[str, str]] = []
+    if not STAGING_PROOF_CLASSIFICATION.exists():
+        return [finding(rule_id, subject, "staging proof classification artefact is missing", issue_id)]
+    data = load_json(STAGING_PROOF_CLASSIFICATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "staging proof classification artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "staging classification artefact must be owned by USF-1034", issue_id))
+    if data.get("lifecycleState") != "staging-proof-not-required-classified":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "staging classification lifecycleState must be staging-proof-not-required-classified", issue_id))
+    authority_inputs = data.get("authorityInputs")
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        failures.append(finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty array", issue_id))
+        authority_inputs = []
+    for index, authority_input in enumerate(authority_inputs):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+    classification = data.get("stagingClassification", {})
+    if not isinstance(classification, dict):
+        failures.append(finding(rule_id, f"{subject}.stagingClassification", "stagingClassification must be an object", issue_id))
+        classification = {}
+    if classification.get("classification") != "not-required":
+        failures.append(finding(rule_id, f"{subject}.stagingClassification.classification", "staging classification must be not-required", issue_id))
+    for field in [
+        "stagingRequired",
+        "stagingProofRun",
+        "separateStagingProofIssueRequired",
+        "separateStagingProofIssueCreated",
+        "publicExposureImplemented",
+        "deploymentAdjacentSurfaceImplemented",
+        "providerStagingRelevantSurfaceImplemented",
+        "humanAcceptanceRelevantSurfaceImplemented",
+        "deploymentPerformed",
+        "providerSetupCreated",
+        "publicProofRoutingChanged",
+        "productionReadinessClaimed",
+    ]:
+        if classification.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.stagingClassification.{field}", "staging classification field must remain false", issue_id))
+    if not isinstance(classification.get("repositoryOwnedReason"), str) or not classification["repositoryOwnedReason"].strip():
+        failures.append(finding(rule_id, f"{subject}.stagingClassification.repositoryOwnedReason", "repository-owned not-required reason is required", issue_id))
+    evaluations = data.get("classificationEvaluations", [])
+    required_criteria = {"public-exposure", "deployment-adjacency", "provider-staging-relevance", "human-acceptance-relevance"}
+    observed_criteria = {item.get("criterion") for item in evaluations if isinstance(item, dict)}
+    missing_criteria = sorted(required_criteria - observed_criteria)
+    if missing_criteria:
+        failures.append(finding(rule_id, f"{subject}.classificationEvaluations", f"staging classification missing criteria: {', '.join(missing_criteria)}", issue_id))
+    for index, evaluation in enumerate(evaluations if isinstance(evaluations, list) else []):
+        if not isinstance(evaluation, dict):
+            failures.append(finding(rule_id, f"{subject}.classificationEvaluations[{index}]", "classification evaluation must be an object", issue_id))
+            continue
+        if evaluation.get("requiresStaging") is not False:
+            failures.append(finding(rule_id, f"{subject}.classificationEvaluations[{index}].requiresStaging", "classification evaluation must not require staging", issue_id))
+        if not isinstance(evaluation.get("reason"), str) or not evaluation["reason"].strip():
+            failures.append(finding(rule_id, f"{subject}.classificationEvaluations[{index}].reason", "classification evaluation reason is required", issue_id))
+    guard = data.get("validationGuard", {})
+    for field in [
+        "existingAuthorityPathsMustExist",
+        "stagingRequirementMustBeExplicit",
+        "publicExposureMustBeEvaluated",
+        "deploymentAdjacencyMustBeEvaluated",
+        "providerStagingRelevanceMustBeEvaluated",
+        "humanAcceptanceRelevanceMustBeEvaluated",
+        "notRequiredReasonMustBeRepositoryOwned",
+        "stagingProofIssueMustNotBeRequiredWhenClassificationIsNotRequired",
+        "deploymentAndProductionClaimsMustRemainFalse",
+        "nonClaimsMustAllBeFalse",
+    ]:
+        if not isinstance(guard, dict) or guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    boundary = data.get("externalBoundary", {})
+    for field in [
+        "externalServicesAllowed",
+        "credentialsAllowed",
+        "deploymentAllowed",
+        "stagingEnvironmentAllowed",
+        "providerAccountSetupAllowed",
+        "publicProofRoutingChangeAllowed",
+        "storeWorkflowAllowed",
+        "humanAcceptanceClaimAllowed",
+    ]:
+        if not isinstance(boundary, dict) or boundary.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -2856,6 +3055,8 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_deployment_evidence_pinning_implementation())
     failures.extend(validate_unit_test_suite_consolidation())
     failures.extend(validate_contract_integration_test_suite_consolidation())
+    failures.extend(validate_compose_proof_classification())
+    failures.extend(validate_staging_proof_classification())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -2908,6 +3109,8 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION,
         UNIT_TEST_SUITE_CONSOLIDATION,
         CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION,
+        COMPOSE_PROOF_CLASSIFICATION,
+        STAGING_PROOF_CLASSIFICATION,
     ]
     return {
         "mode": mode,

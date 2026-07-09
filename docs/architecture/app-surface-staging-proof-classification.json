@@ -1,0 +1,124 @@
+{
+  "artifactId": "usf.app-surface-staging-proof-classification",
+  "title": "App-surface staging proof classification",
+  "ownerIssueId": "USF-1034",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "staging-proof-not-required-classified",
+  "createdDate": "2026-07-09",
+  "purpose": "Classify whether staging proof is required for the implemented bounded local app surface.",
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "This artefact records the staging proof classification for the implemented app-surface tranche.",
+    "validatorAuthority": "Validators enforce the classification but do not create deployment, staging, provider, or product semantics.",
+    "generatedReportsAuthority": "Generated reports remain lower authority than semantic artefacts, validator rules, proof evidence, and source implementation."
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "role": "tranche-plan"
+    },
+    {
+      "path": "docs/architecture/app-surface-compose-proof-classification.json",
+      "role": "compose-classification"
+    },
+    {
+      "path": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+      "role": "contract-local-integration-proof"
+    },
+    {
+      "path": "docs/architecture/app-surface-route-capability-implementation.json",
+      "role": "route-capability-implementation"
+    },
+    {
+      "path": "docs/architecture/app-surface-release-and-readiness-realisation.json",
+      "role": "release-readiness-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-release-provisioning-semantics.json",
+      "role": "release-provisioning-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-web-cdn-release-semantics.json",
+      "role": "web-cdn-release-boundary"
+    },
+    {
+      "path": "docs/architecture/repository-app-surface-proof-integration-readiness-governance.json",
+      "role": "proof-integration-governance"
+    }
+  ],
+  "stagingClassification": {
+    "classification": "not-required",
+    "stagingRequired": false,
+    "stagingProofRun": false,
+    "separateStagingProofIssueRequired": false,
+    "separateStagingProofIssueCreated": false,
+    "publicExposureImplemented": false,
+    "deploymentAdjacentSurfaceImplemented": false,
+    "providerStagingRelevantSurfaceImplemented": false,
+    "humanAcceptanceRelevantSurfaceImplemented": false,
+    "deploymentPerformed": false,
+    "providerSetupCreated": false,
+    "publicProofRoutingChanged": false,
+    "productionReadinessClaimed": false,
+    "repositoryOwnedReason": "The implemented app surface is bounded to local scaffolds, in-memory runtime, local semantic mappings, package-managed tests, and negative/local fixtures. It is not public, not deployment-adjacent, not provider-staging relevant, and not human-acceptance relevant."
+  },
+  "classificationEvaluations": [
+    {
+      "criterion": "public-exposure",
+      "requiresStaging": false,
+      "observedSurface": "bounded-local-web-and-mobile-scaffolds-only",
+      "reason": "No public route exposure, CDN, DNS, public proof routing, or hosted app surface is implemented."
+    },
+    {
+      "criterion": "deployment-adjacency",
+      "requiresStaging": false,
+      "observedSurface": "local-deployment-evidence-pinning-fixture-only",
+      "reason": "The deployment evidence surface is a local fixture and explicitly performs no deployment."
+    },
+    {
+      "criterion": "provider-staging-relevance",
+      "requiresStaging": false,
+      "observedSurface": "in-memory-and-local-fixture-only",
+      "reason": "No provider account, credential, push provider, ad provider, identity provider, store provider, or live provider setup is implemented."
+    },
+    {
+      "criterion": "human-acceptance-relevance",
+      "requiresStaging": false,
+      "observedSurface": "validator-and-test-proven-local-surface",
+      "reason": "No human acceptance workflow, store submission, public UX acceptance gate, or staging review surface is implemented."
+    }
+  ],
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "stagingRequirementMustBeExplicit": true,
+    "publicExposureMustBeEvaluated": true,
+    "deploymentAdjacencyMustBeEvaluated": true,
+    "providerStagingRelevanceMustBeEvaluated": true,
+    "humanAcceptanceRelevanceMustBeEvaluated": true,
+    "notRequiredReasonMustBeRepositoryOwned": true,
+    "stagingProofIssueMustNotBeRequiredWhenClassificationIsNotRequired": true,
+    "deploymentAndProductionClaimsMustRemainFalse": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "externalBoundary": {
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingEnvironmentAllowed": false,
+    "providerAccountSetupAllowed": false,
+    "publicProofRoutingChangeAllowed": false,
+    "storeWorkflowAllowed": false,
+    "humanAcceptanceClaimAllowed": false
+  },
+  "nonClaims": {
+    "stagingReadiness": false,
+    "deploymentReadiness": false,
+    "productionReadiness": false,
+    "providerReadiness": false,
+    "liveProviderReadiness": false,
+    "storeReadiness": false,
+    "publicRouteReadiness": false,
+    "humanAcceptance": false,
+    "complianceReadiness": false
+  }
+}

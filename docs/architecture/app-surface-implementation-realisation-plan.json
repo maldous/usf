@@ -467,6 +467,18 @@
       {
         "path": "tests/packages/app-surface-test-suite-consolidation.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-compose-proof-classification.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-staging-proof-classification.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-proof-ladder-classification.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -619,7 +631,7 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, deployment evidence pinning fixture surfaces, and unit plus contract/local-integration test consolidation now exist; conditional Compose, staging classification, timing, and closure surfaces remain issue-scoped work",
+      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, deployment evidence pinning fixture surfaces, unit plus contract/local-integration test consolidation, and Compose plus staging not-required classifications now exist; timing and closure surfaces remain issue-scoped work",
       "queryListDetailRegistryFound": true,
       "stateCacheQueryClientBoundary": "implemented-by-USF-1023",
       "authSessionDevIdentityImplementation": "implemented-by-USF-1024",
@@ -635,7 +647,11 @@
       "unitTestSuiteConsolidationFound": true,
       "unitTestSuiteConsolidation": "implemented-by-USF-1031",
       "contractIntegrationTestSuiteConsolidationFound": true,
-      "contractIntegrationTestSuiteConsolidation": "implemented-by-USF-1032"
+      "contractIntegrationTestSuiteConsolidation": "implemented-by-USF-1032",
+      "composeProofClassificationFound": true,
+      "composeProofClassification": "not-required-classified-by-USF-1033",
+      "stagingProofClassificationFound": true,
+      "stagingProofClassification": "not-required-classified-by-USF-1034"
     },
     "openLinearIssueImpact": {
       "USF-1008": {
@@ -1135,7 +1151,21 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "compose-conditional",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "currentRepositoryStatus": "compose-proof-not-required-classified-by-USF-1033",
+      "repositoryArtefact": "docs/architecture/app-surface-compose-proof-classification.json",
+      "classificationTestArtefact": "tests/packages/app-surface-proof-ladder-classification.test.ts",
+      "validatorGuardAdded": "USF-APP-SURFACE-IMPLEMENTATION-014",
+      "classification": "not-required",
+      "reason": "implemented app-surface surfaces are local, in-memory, static metadata, or negative fixtures and do not cross provider semantics requiring Compose",
+      "packageInstallationAllowed": false,
+      "dependencyInstallRequired": false,
+      "runtimeCodeCreatedByIssue": false,
+      "composeRequired": false,
+      "composeProofRun": false,
+      "stagingRequired": false,
+      "caddyPort443Altered": false,
+      "testcontainersAdopted": false
     },
     {
       "id": "USF-1034",
@@ -1143,7 +1173,22 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "staging-classification-only",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "currentRepositoryStatus": "staging-proof-not-required-classified-by-USF-1034",
+      "repositoryArtefact": "docs/architecture/app-surface-staging-proof-classification.json",
+      "classificationTestArtefact": "tests/packages/app-surface-proof-ladder-classification.test.ts",
+      "validatorGuardAdded": "USF-APP-SURFACE-IMPLEMENTATION-015",
+      "classification": "not-required",
+      "reason": "implemented app-surface surfaces are not public, not deployment-adjacent, not provider-staging relevant, and not human-acceptance relevant",
+      "packageInstallationAllowed": false,
+      "dependencyInstallRequired": false,
+      "runtimeCodeCreatedByIssue": false,
+      "stagingRequired": false,
+      "stagingProofRun": false,
+      "separateStagingProofIssueRequired": false,
+      "deploymentRequired": false,
+      "providerSetupRequired": false,
+      "publicProofRoutingChanged": false
     },
     {
       "id": "USF-1035",
@@ -1322,13 +1367,21 @@
       "requiredByDefault": false,
       "classificationIssueId": "USF-1033",
       "rule": "Compose is used only if implemented provider semantics cannot be proven in memory.",
-      "nonImplication": "Compose proof does not imply staging proof."
+      "nonImplication": "Compose proof does not imply staging proof.",
+      "currentRepositoryClassification": "not-required",
+      "classificationArtefact": "docs/architecture/app-surface-compose-proof-classification.json",
+      "classificationIssueStatus": "implemented-by-USF-1033",
+      "reason": "No implemented app-surface provider semantics require Compose-backed proof."
     },
     "staging": {
       "requiredByDefault": false,
       "classificationIssueId": "USF-1034",
       "rule": "Staging is required only when the implemented surface is public, staging-relevant, deployment-adjacent, provider-staging, or human-acceptance relevant.",
-      "preliminaryClassificationForThisInventoryStep": "not-required-for-planning-only-because-no-public-or-provider-backed-app-surface-has-been-implemented-in-this-step"
+      "preliminaryClassificationForThisInventoryStep": "not-required-for-planning-only-because-no-public-or-provider-backed-app-surface-has-been-implemented-in-this-step",
+      "currentRepositoryClassification": "not-required",
+      "classificationArtefact": "docs/architecture/app-surface-staging-proof-classification.json",
+      "classificationIssueStatus": "implemented-by-USF-1034",
+      "reason": "No public, deployment-adjacent, provider-staging, or human-acceptance app-surface trigger is implemented."
     }
   },
   "optimisationHandling": {
@@ -1398,6 +1451,13 @@
       "make app-surface-selftest",
       "corepack pnpm validate-spec",
       "make validate-evidence after evidence artefacts change"
+    ],
+    "commandsForCurrentProofLadderClassificationIssues": [
+      "corepack pnpm test tests/packages/app-surface-proof-ladder-classification.test.ts",
+      "make app-surface-validate",
+      "make app-surface-selftest",
+      "corepack pnpm validate-spec",
+      "make validate-evidence after evidence artefacts change"
     ]
   },
   "nonClaimsPreserved": [
@@ -1418,11 +1478,11 @@
     "No provider credential or account setup."
   ],
   "initialImplementationGaps": [
-    "Conditional Compose classification, staging classification, timing evidence, and closure report are not yet complete."
+    "Timing evidence and closure report are not yet complete."
   ],
   "readinessVerdict": {
     "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
     "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, deployment evidence pinning surface, and unit plus contract/local-integration test consolidation are now repository-owned, but conditional Compose classification, staging classification, timing, and closure proof child issues remain incomplete."
+    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, deployment evidence pinning surface, unit plus contract/local-integration test consolidation, and Compose plus staging not-required classifications are now repository-owned, but timing and closure proof child issues remain incomplete."
   }
 }

@@ -191,3 +191,15 @@ USF-1028 through USF-1030 implement bounded local negative/fixture-only surfaces
 | `tools/validate-app-surface/validate-app-surface.py` | Extended with `USF-APP-SURFACE-IMPLEMENTATION-012` and `USF-APP-SURFACE-IMPLEMENTATION-013`. | Enforces the two consolidation artefacts, existing referenced test paths, package-managed commands, local-only boundaries, and false non-claims. | Validator pass does not imply provider, Compose, staging, deployment, production, store, compliance, monetisation, or human-acceptance readiness. |
 
 USF-1031 and USF-1032 consolidate local test evidence only. They do not add package dependencies, modify lockfiles, create runtime provider code, add external services, create credentials, run Compose, run staging, deploy anything, or claim parent closure.
+
+## USF-1033 and USF-1034 proof-ladder classification disposition
+
+Status: USF-1033 and USF-1034 add repository-owned proof-ladder classifications for the bounded app-surface tranche.
+
+The Compose-backed app-surface proof classification is owned by `docs/architecture/app-surface-compose-proof-classification.json`. It records that the implemented app-surface surfaces remain local, in-memory, static metadata, or negative fixtures and do not cross provider semantics requiring Compose-backed proof. Existing Compose profiles are referenced as known repository inputs only; this issue does not modify Compose profiles, run Compose proof, adopt Testcontainers, change Caddy public proof routing, or alter port 443 behaviour.
+
+The staging proof classification is owned by `docs/architecture/app-surface-staging-proof-classification.json`. It records that the implemented app-surface surfaces are not public, deployment-adjacent, provider-staging relevant, or human-acceptance relevant. This issue does not run staging proof, create deployment configuration, set up providers, create credentials, modify public proof routing, or claim production/store/provider/human-acceptance readiness.
+
+The cross-surface regression coverage is owned by `tests/packages/app-surface-proof-ladder-classification.test.ts`. Validator guards `USF-APP-SURFACE-IMPLEMENTATION-014` and `USF-APP-SURFACE-IMPLEMENTATION-015` require the classification artefacts to exist, reference existing authority inputs, fail closed on missing rationale, and preserve the non-claims.
+
+No package installation, lockfile change, runtime provider integration, deployment setup, staging setup, store setup, push provider setup, ad provider setup, payment setup, remote cache, task graph tooling, or Testcontainers adoption is introduced by this disposition.
