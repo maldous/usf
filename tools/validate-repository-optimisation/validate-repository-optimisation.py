@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[2]
 TRANCHE = ROOT / "docs/architecture/repository-optimisation-local-realisation-tranche.json"
 NON_LOCAL_EVALUATION = ROOT / "docs/architecture/repository-non-local-optimisation-option-evaluation.json"
@@ -16,6 +18,9 @@ SEMANTICS = ROOT / "docs/architecture/repository-optimisation-realisation-semant
 LINEAR_POLICY = ROOT / "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json"
 LINEAR_AUDIT = ROOT / "docs/architecture/linear-repository-delivery-audit.json"
 PACKAGE = ROOT / "package.json"
+CI_THROUGHPUT = ROOT / "docs/architecture/repository-ci-throughput-optimisation-realisation.json"
+CI_TIMING = ROOT / "evidence/generated-reports/repository-ci-throughput-timing-evidence.json"
+VALIDATE_WORKFLOW = ROOT / ".github/workflows/validate-spec.yml"
 
 REPORTS = {
     "USF-997": ROOT / "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
@@ -29,6 +34,8 @@ REPORTS = {
 
 REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001", "USF-1007"}
 REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006", "USF-1008"}
+REQUIRED_CI_CANDIDATES = set("ABCDEFGHIJKLM")
+REQUIRED_CI_IMPLEMENTED = {"A", "B", "E", "G", "K", "M"}
 REQUIRED_REPORT_REFS = {
     "USF-997": {
         "cache-boundary:per-process",
@@ -109,6 +116,13 @@ REQUIRED_REPORT_REFS = {
         "non-local-options-adopted:false",
     },
 }
+
+
+def workflow_data(text: str) -> dict[str, Any]:
+    value = yaml.safe_load(text)
+    if not isinstance(value, dict):
+        raise ValueError("workflow must parse to a YAML object")
+    return value
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -273,10 +287,231 @@ def check_repository_artifacts(
     return findings
 
 
+def check_ci_throughput_artifacts(
+    ci_data: dict[str, Any] | None = None,
+    timing_data: dict[str, Any] | None = None,
+    workflow_text: str | None = None,
+) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    ci = ci_data or load_json(CI_THROUGHPUT)
+    timing = timing_data or load_json(CI_TIMING)
+    workflow_source = workflow_text if workflow_text is not None else VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+
+    candidates = ci.get("candidateMatrix", [])
+    if not isinstance(candidates, list):
+        findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), "candidateMatrix must be a list"))
+        candidates = []
+    by_id = {item.get("id"): item for item in candidates if isinstance(item, dict)}
+    missing_candidates = REQUIRED_CI_CANDIDATES - set(by_id)
+    extra_candidates = set(by_id) - REQUIRED_CI_CANDIDATES
+    if missing_candidates or extra_candidates:
+        findings.append(
+            finding(
+                "USF-OPT-CI-001",
+                rel(CI_THROUGHPUT),
+                f"CI throughput candidate matrix mismatch missing={','.join(sorted(missing_candidates))} extra={','.join(sorted(extra_candidates))}",
+            )
+        )
+    implemented = set(ci.get("implementedNowCandidateIds", []))
+    missing_implemented = REQUIRED_CI_IMPLEMENTED - implemented
+    if missing_implemented:
+        findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"missing implemented-now candidates: {', '.join(sorted(missing_implemented))}"))
+    for candidate_id in sorted(REQUIRED_CI_IMPLEMENTED):
+        classification = str(by_id.get(candidate_id, {}).get("classification", ""))
+        if not classification.startswith("implemented-now"):
+            findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} must be implemented now"))
+    for candidate_id, candidate in by_id.items():
+        classification = str(candidate.get("classification", ""))
+        if not classification.startswith("implemented-now") and not candidate.get("reason"):
+            findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} needs defer/reject/decision rationale"))
+
+    cache = ci.get("cacheAndArtifactSafety", {})
+    if not isinstance(cache, dict):
+        findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), "cacheAndArtifactSafety must be an object"))
+        cache = {}
+    required_false = [
+        "restoreKeysUsed",
+        "pullRequestCacheWritesAllowed",
+        "cacheHitSatisfiesValidation",
+        "artifactReuseIntroduced",
+        "artifactUploadIntroduced",
+        "generatedReportsPromotedToAuthority",
+    ]
+    for key in required_false:
+        if cache.get(key) is not False:
+            findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), f"unsafe cache or artifact field must be false: {key}"))
+    if cache.get("mainCacheWritesAllowed") is not True:
+        findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), "main cache writes must be explicit"))
+    forbidden_scopes = set(cache.get("forbiddenCacheScopes", []))
+    for required in ["node_modules", "evidence", "generated reports", "artifacts", "secrets", "proof payloads"]:
+        if required not in forbidden_scopes:
+            findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), f"forbidden cache scope missing: {required}"))
+
+    affected = ci.get("affectedDomainMap", {})
+    if not isinstance(affected, dict):
+        findings.append(finding("USF-OPT-CI-006", rel(CI_THROUGHPUT), "affectedDomainMap must be an object"))
+        affected = {}
+    if affected.get("enforcementMode") != "warn-only" or affected.get("hardCiBlock") is not False:
+        findings.append(finding("USF-OPT-CI-006", rel(CI_THROUGHPUT), "affected-domain map must remain warn-only with hardCiBlock false"))
+    fallbacks = set(affected.get("mandatoryFallbackClasses", []))
+    for required in ["unknown path", "workflow file change", "package manager or lockfile change", "proof-cockpit machine evidence change", "provider mode ambiguity", "environment ambiguity"]:
+        if required not in fallbacks:
+            findings.append(finding("USF-OPT-CI-006", rel(CI_THROUGHPUT), f"affected-domain mandatory fallback missing: {required}"))
+
+    proof = ci.get("proofCockpitFreshnessBoundary", {})
+    if not isinstance(proof, dict):
+        findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), "proofCockpitFreshnessBoundary must be an object"))
+        proof = {}
+    proof_expectations = {
+        "rePinRequiredByThisChange": False,
+        "freshnessWeakened": False,
+        "generatedReportMaySatisfyFreshness": False,
+        "missingCollectedEvidenceFailsClosed": True,
+        "staleEvidenceSatisfiesPass": False,
+        "unknownEvidenceSatisfiesPass": False,
+    }
+    for key, expected in proof_expectations.items():
+        if proof.get(key) is not expected:
+            findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), f"proof-cockpit freshness field must be {expected}: {key}"))
+
+    callback = ci.get("callbackAndCaddyDecision", {})
+    if not isinstance(callback, dict):
+        findings.append(finding("USF-OPT-CI-008", rel(CI_THROUGHPUT), "callbackAndCaddyDecision must be an object"))
+        callback = {}
+    if callback.get("decision") != "no-change" or callback.get("callbackPayloadsAreAuthority") is not False:
+        findings.append(finding("USF-OPT-CI-008", rel(CI_THROUGHPUT), "callback and Caddy decision must remain no-change and non-authoritative"))
+
+    runners = ci.get("runnerDecisions", {})
+    if not isinstance(runners, dict):
+        findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), "runnerDecisions must be an object"))
+        runners = {}
+    for key in ["selfHostedRunner", "largerGithubHostedRunner"]:
+        decision = runners.get(key, {})
+        if not isinstance(decision, dict) or decision.get("classification") != "decision-required" or decision.get("adopted") is not False:
+            findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), f"runner option must require a decision and remain unadopted: {key}"))
+
+    branch = ci.get("branchProtectionMap", {})
+    if not isinstance(branch, dict):
+        findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), "branchProtectionMap must be an object"))
+        branch = {}
+    if "validate" not in branch.get("observedRequiredContexts", []):
+        findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), "branch protection map must preserve validate required context"))
+    branch_false = ["requiredCheckWeakened", "proofAnchorRequiredForPullRequest", "branchProtectionMutationMade"]
+    for key in branch_false:
+        if branch.get(key) is not False:
+            findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), f"branch protection field must be false: {key}"))
+    if branch.get("workflowJobIdPreserved") != "validate" or branch.get("workflowJobContextPreserved") is not True:
+        findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), "workflow validate job context must be preserved"))
+
+    timing_ref = ci.get("timingEvidence", {})
+    if not isinstance(timing_ref, dict):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timingEvidence must be an object"))
+        timing_ref = {}
+    if timing_ref.get("generatedReport") != rel(CI_TIMING):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timing evidence must reference generated timing report"))
+    if timing_ref.get("baselineRepresentativeDurationSeconds", 0) <= 0 or timing_ref.get("timingClaimMade") is not False:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timing baseline must be positive and timing claims must remain false"))
+    timing_refs = refs(timing)
+    baseline_seconds = None
+    after_status = None
+    after_seconds = None
+    after_run = None
+    for ref in timing_refs:
+        if ref.startswith("baseline-duration-seconds:"):
+            value = ref.split(":", 1)[1]
+            if value.isdigit():
+                baseline_seconds = int(value)
+        elif ref.startswith("after-status:"):
+            after_status = ref.split(":", 1)[1]
+        elif ref.startswith("after-duration-seconds:"):
+            value = ref.split(":", 1)[1]
+            if value.isdigit():
+                after_seconds = int(value)
+        elif ref.startswith("after-run:"):
+            after_run = ref.split(":", 1)[1]
+
+    closure = ci.get("closureReport", {})
+    if not isinstance(closure, dict):
+        findings.append(finding("USF-OPT-CI-010", rel(CI_THROUGHPUT), "closureReport must be an object"))
+        closure = {}
+    for key in [
+        "candidateClassificationComplete",
+        "implementedNowCandidatesImplemented",
+        "deferredOrRejectedCandidatesHaveRationale",
+        "caddyAndCallbackDecisionRecorded",
+        "selfHostedAndLargerRunnerDecisionRecorded",
+        "proofEvidenceChurnAddressed",
+        "branchProtectionCompatibilityRecorded",
+        "timingBeforeRecorded",
+    ]:
+        if closure.get(key) is not True:
+            findings.append(finding("USF-OPT-CI-010", rel(CI_THROUGHPUT), f"closure field must be true: {key}"))
+    if closure.get("timingAfterRecorded") is True and after_status != "observed":
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "timingAfterRecorded cannot be true until after timing is observed"))
+    if closure.get("linearCompletionReady") is True and closure.get("validationComplete") is not True:
+        findings.append(finding("USF-OPT-CI-010", rel(CI_THROUGHPUT), "linear completion cannot be ready before validation is complete"))
+
+    if timing.get("authorityLevel") != "generated-report":
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing evidence authorityLevel must be generated-report"))
+    if baseline_seconds is None or baseline_seconds <= 0:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing baseline must include a positive representative duration evidence ref"))
+    if after_status not in {"pending-github-pr-run", "observed"}:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing after-status ref must be pending-github-pr-run or observed"))
+    if after_status == "observed" and (not after_run or after_run == "pending" or after_seconds is None or after_seconds <= 0):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "observed CI after timing requires after-run and positive after-duration-seconds refs"))
+    if "hard-ci-block:false" not in timing_refs or "speedup-claim-made:false" not in timing_refs:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing comparison must remain warn-only with no speedup claim"))
+    for required in [
+        "issue:USF-1037",
+        "required-check:validate",
+        "cache-hit-satisfies-validation:false",
+        "generated-report-authority:false",
+        "branch-protection-required-context-preserved:true",
+        "hard-ci-block:false",
+    ]:
+        if required not in timing_refs:
+            findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), f"CI timing evidence ref missing: {required}"))
+
+    try:
+        workflow = workflow_data(workflow_source)
+    except (yaml.YAMLError, ValueError) as exc:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"validate-spec workflow must parse as YAML: {exc}"))
+        workflow = {}
+    jobs = workflow.get("jobs", {}) if isinstance(workflow, dict) else {}
+    validate_job = jobs.get("validate", {}) if isinstance(jobs, dict) else {}
+    if not validate_job:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "validate job must exist to preserve required status context"))
+    concurrency = workflow.get("concurrency", {}) if isinstance(workflow, dict) else {}
+    if "pull_request" not in str(concurrency.get("cancel-in-progress", "")):
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "concurrency cancellation must be pull-request scoped"))
+    steps = validate_job.get("steps", []) if isinstance(validate_job, dict) else []
+    step_names = {str(step.get("name", "")) for step in steps if isinstance(step, dict)}
+    for required_step in [
+        "Restore pnpm store cache (PR read-only)",
+        "Restore pnpm store cache (main writable)",
+        "Restore pip download cache (PR read-only)",
+        "Restore pip download cache (main writable)",
+        "Report generated CI timing boundary",
+    ]:
+        if required_step not in step_names:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow missing CI throughput step: {required_step}"))
+    if "restore-keys" in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not use broad cache restore-keys"))
+    for forbidden in ["node_modules", "site-packages", "virtualenv", "evidence/generated-reports", "artifacts/proof-cockpit"]:
+        if forbidden in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow must not cache forbidden scope: {forbidden}"))
+    if "actions/cache/restore@v4" not in workflow_source or "actions/cache@v4" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must use read-only PR cache restore and writable main cache actions"))
+    if "corepack pnpm install --prefer-offline --frozen-lockfile" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must keep frozen pnpm install with prefer-offline cache use"))
+    return findings
+
+
 def validate() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     findings.extend(check_reports())
     findings.extend(check_repository_artifacts())
+    findings.extend(check_ci_throughput_artifacts())
     return findings
 
 
@@ -353,6 +588,36 @@ def selftest() -> list[dict[str, str]]:
         if isinstance(item, dict):
             item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "testcontainers-comparison-criteria:defined"]
     tests.append(("non-local-report-comparison-missing", check_reports({"USF-1007": mutated_nonlocal_report}), "USF-OPT-008"))
+
+    ci = load_json(CI_THROUGHPUT)
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["candidateMatrix"] = [item for item in mutated_ci["candidateMatrix"] if item.get("id") != "M"]
+    tests.append(("ci-candidate-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-001"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["cacheAndArtifactSafety"]["cacheHitSatisfiesValidation"] = True
+    tests.append(("ci-cache-hit-authoritative", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-002"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["branchProtectionMap"]["requiredCheckWeakened"] = True
+    tests.append(("ci-required-check-weakened", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-003"))
+
+    timing = load_json(CI_TIMING)
+    mutated_timing = copy.deepcopy(timing)
+    mutated_timing["authorityLevel"] = "semantic-definition"
+    tests.append(("ci-timing-authority-overclaim", check_ci_throughput_artifacts(timing_data=mutated_timing), "USF-OPT-CI-004"))
+
+    workflow_text = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+    mutated_workflow = workflow_text + "\n# planted unsafe cache widening\nrestore-keys: unsafe\n"
+    tests.append(("ci-workflow-restore-keys", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["affectedDomainMap"]["hardCiBlock"] = True
+    tests.append(("ci-affected-hard-block", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-006"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["proofCockpitFreshnessBoundary"]["generatedReportMaySatisfyFreshness"] = True
+    tests.append(("ci-proof-cockpit-generated-report-authority", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-007"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

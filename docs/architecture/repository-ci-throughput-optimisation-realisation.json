@@ -1,0 +1,371 @@
+{
+  "artifactId": "usf.repository-ci-throughput-optimisation-realisation",
+  "title": "Repository CI throughput optimisation realisation",
+  "ownerIssueId": "USF-1037",
+  "lifecycleState": "implemented-with-pr-ci-timing-pending",
+  "createdDate": "2026-07-09",
+  "purpose": "Realise the fastest safe GitHub CI throughput improvements that preserve USF semantic authority, validator discipline, proof evidence integrity, planted-defect coverage, proof-cockpit freshness, branch-protection clarity, and non-claims.",
+  "authorityBoundary": {
+    "linearAuthority": false,
+    "githubSettingsAuthority": false,
+    "generatedReportsAuthority": false,
+    "workflowDefinesSemantics": false,
+    "implementationRuntimeCodeCreated": false,
+    "sourceImplementationImported": false,
+    "semanticAuthorityPreserved": true
+  },
+  "authorityInputs": [
+    "AGENTS.md",
+    "CODEX.md",
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/standards-profile.md",
+    "docs/architecture/ontology.md",
+    "docs/architecture/directory-and-file-naming-standard.md",
+    "docs/architecture/schema-authoring-standard.md",
+    "docs/architecture/git-practices-standard.md",
+    "spec/taxonomies/taxonomy-catalog.json",
+    "spec/vocabularies/vocabulary-catalog.json",
+    "spec/registries/schema-registry.json",
+    "docs/architecture/repository-ci-optimisation-governance.json",
+    "docs/architecture/repository-performance-profiling-governance.json",
+    "docs/architecture/repository-optimisation-realisation-semantics.json",
+    "docs/architecture/repository-optimisation-local-realisation-tranche.json",
+    "docs/architecture/repository-artifact-storage-and-naming-governance.json",
+    "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+    ".github/workflows/validate-spec.yml",
+    ".github/workflows/proof-anchor.yml",
+    "package.json",
+    "Makefile"
+  ],
+  "inspectedOperationalInputs": {
+    "canonicalLinearTeam": "https://linear.app/maldous/team/USF",
+    "githubRepository": "maldous/usf",
+    "startingBranch": "main",
+    "startingHead": "8b657c6594db6f94d791f3fe30209d29ce378217",
+    "openPullRequestsObserved": [
+      "https://github.com/maldous/usf/pull/276",
+      "https://github.com/maldous/usf/pull/277"
+    ],
+    "relatedIssueIdsInspected": [
+      "USF-640",
+      "USF-651",
+      "USF-653",
+      "USF-656",
+      "USF-658",
+      "USF-659",
+      "USF-660",
+      "USF-665",
+      "USF-996",
+      "USF-1037"
+    ]
+  },
+  "candidateMatrix": [
+    {
+      "id": "A",
+      "candidate": "dependency caching for pnpm store and pip downloads",
+      "classification": "implemented-now",
+      "implementedBy": ".github/workflows/validate-spec.yml",
+      "safetyBoundary": "Caches only package-manager stores and download wheels. It does not cache node_modules, site-packages, virtualenvs, proof evidence, generated reports, Compose state, secrets, or proof payloads. Pull-request runs restore caches read-only; main runs may write caches."
+    },
+    {
+      "id": "B",
+      "candidate": "affected-domain CI selection",
+      "classification": "implemented-now-advisory",
+      "implementedBy": [
+        "docs/architecture/repository-ci-throughput-optimisation-realisation.json",
+        "tools/repository-optimisation/realise-bounded-optimisation.py"
+      ],
+      "safetyBoundary": "Affected-domain output remains warn-only. Unknown, workflow, package, lockfile, validator, evidence, proof-cockpit, provider-mode, or environment ambiguity falls back to full validation."
+    },
+    {
+      "id": "C",
+      "candidate": "PR versus full validation split",
+      "classification": "deferred",
+      "reason": "Branch protection currently requires the single validate status check. Replacing broad PR validation with an affected-only or split gate needs equivalent fallback proof and a separate owner decision."
+    },
+    {
+      "id": "D",
+      "candidate": "validator and test sharding or parallelisation",
+      "classification": "deferred",
+      "reason": "Existing governance requires serial-versus-parallel equivalence, deterministic output paths, resource locks, and shared-resource analysis before parallel execution becomes default."
+    },
+    {
+      "id": "E",
+      "candidate": "workflow concurrency cancellation",
+      "classification": "implemented-now",
+      "implementedBy": ".github/workflows/validate-spec.yml",
+      "safetyBoundary": "Only superseded pull-request validate-spec runs are cancellable. Main validate-spec runs and proof-anchor publication are not cancelled by this change."
+    },
+    {
+      "id": "F",
+      "candidate": "reusable workflow extraction",
+      "classification": "deferred",
+      "reason": "A new workflow surface is not needed for the measured bottleneck and would require additional authorised workflow naming and status-context analysis."
+    },
+    {
+      "id": "G",
+      "candidate": "proof-cockpit evidence churn control",
+      "classification": "implemented-now",
+      "implementedBy": "existing proof-cockpit squash-stable source-tree hash posture from PR 331 and this artefact's freshness boundary",
+      "safetyBoundary": "This change does not re-pin proof-cockpit machine evidence, does not treat generated reports as authority, and does not make branch commits load-bearing where the non-proof tree is equivalent."
+    },
+    {
+      "id": "H",
+      "candidate": "Caddy or callback CI throughput changes",
+      "classification": "rejected-for-this-issue",
+      "reason": "No CI throughput bottleneck requires changing Caddy, public proof routes, callback payload handling, webhook payload handling, or proof cockpit access surfaces. Callback payloads are not authority."
+    },
+    {
+      "id": "I",
+      "candidate": "self-hosted GitHub runners",
+      "classification": "decision-required",
+      "reason": "Self-hosted runners require owner decisions for trust boundary, cache isolation, local state, secret handling, maintenance, evidence collection, and GitHub branch-protection posture."
+    },
+    {
+      "id": "J",
+      "candidate": "larger GitHub-hosted runners",
+      "classification": "decision-required",
+      "reason": "Larger runners may reduce wall time but introduce cost and repository policy decisions. No correctness or evidence claim can be derived from larger runner capacity alone."
+    },
+    {
+      "id": "K",
+      "candidate": "cache and artifact policy",
+      "classification": "implemented-now",
+      "implementedBy": [
+        ".github/workflows/validate-spec.yml",
+        "docs/architecture/repository-ci-throughput-optimisation-realisation.json"
+      ],
+      "safetyBoundary": "Cache reuse is diagnostic acceleration only. No CI artifact reuse is introduced, no generated report is promoted to authority, and no cache hit can satisfy validation or proof by itself."
+    },
+    {
+      "id": "L",
+      "candidate": "scheduled, nightly, or manual deep jobs",
+      "classification": "deferred",
+      "reason": "Current branch protection requires validate on PR and main. Moving required coverage to schedule or manual dispatch would weaken the gate without a separate owner decision and equivalence proof."
+    },
+    {
+      "id": "M",
+      "candidate": "CI log and timing summaries",
+      "classification": "implemented-now",
+      "implementedBy": ".github/workflows/validate-spec.yml",
+      "safetyBoundary": "The GitHub step summary is generated diagnostic evidence only. It does not define semantics, proof readiness, performance budget compliance, or acceptance."
+    }
+  ],
+  "implementedNowCandidateIds": [
+    "A",
+    "B",
+    "E",
+    "G",
+    "K",
+    "M"
+  ],
+  "cacheAndArtifactSafety": {
+    "cacheNamespaceVersion": "usf-v1",
+    "allowedCacheScopes": [
+      "pnpm store path resolved by corepack pnpm store path --silent",
+      "pip download cache at ~/.cache/pip"
+    ],
+    "forbiddenCacheScopes": [
+      "node_modules",
+      "site-packages",
+      "virtualenvs",
+      "evidence",
+      "generated reports",
+      "artifacts",
+      "Compose runtime state",
+      "secrets",
+      "proof payloads",
+      "provider responses"
+    ],
+    "pnpmKeyInputs": [
+      "runner.os",
+      "runner.arch",
+      "node-24",
+      "pnpm-11.9.0",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "package.json",
+      ".npmrc",
+      "workspace package manifests"
+    ],
+    "pipKeyInputs": [
+      "runner.os",
+      "runner.arch",
+      "python-3.12",
+      "tools/validate-spec/requirements.txt"
+    ],
+    "restoreKeysUsed": false,
+    "pullRequestCacheWritesAllowed": false,
+    "mainCacheWritesAllowed": true,
+    "cacheHitSatisfiesValidation": false,
+    "artifactReuseIntroduced": false,
+    "artifactUploadIntroduced": false,
+    "generatedReportsPromotedToAuthority": false
+  },
+  "affectedDomainMap": {
+    "enforcementMode": "warn-only",
+    "hardCiBlock": false,
+    "fullValidationFallbackCommand": "corepack pnpm repo:validate",
+    "mandatoryFallbackClasses": [
+      "unknown path",
+      "ambiguous selector",
+      "workflow file change",
+      "package manager or lockfile change",
+      "validator source change",
+      "proof evidence or generated report change",
+      "proof-cockpit machine evidence change",
+      "provider mode ambiguity",
+      "environment ambiguity",
+      "runtime or API ambiguity"
+    ],
+    "domainRules": [
+      {
+        "id": "ci-workflow",
+        "prefixes": [
+          ".github/workflows/",
+          "package.json",
+          "pnpm-lock.yaml",
+          "pnpm-workspace.yaml",
+          ".npmrc"
+        ],
+        "commands": [
+          "corepack pnpm repo:validate"
+        ],
+        "fallback": "full-validation"
+      },
+      {
+        "id": "repository-optimisation",
+        "prefixes": [
+          "docs/architecture/repository-ci-throughput-optimisation-",
+          "docs/architecture/repository-optimisation-",
+          "tools/repository-optimisation/",
+          "tools/validate-repository-optimisation/"
+        ],
+        "commands": [
+          "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py all --json",
+          "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py selftest --json"
+        ],
+        "fallback": "full-validation-on-unknown"
+      },
+      {
+        "id": "proof-cockpit",
+        "prefixes": [
+          "apps/staging-proof-cockpit/",
+          "artifacts/proof-cockpit/",
+          "evidence/proof-evidence/proof-cockpit/"
+        ],
+        "commands": [
+          "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json"
+        ],
+        "fallback": "full-validation-on-freshness-ambiguity"
+      }
+    ]
+  },
+  "proofCockpitFreshnessBoundary": {
+    "machineQaEvidenceModel": "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
+    "currentChurnControl": "squash-stable non-proof source-tree hash posture from PR 331",
+    "rePinRequiredByThisChange": false,
+    "reasonNoRePinRequired": "The workflow and repository-optimisation artefact changes do not alter proof-cockpit source, proof-cockpit machine QA semantics, retained machine evidence, or accepted proof payloads.",
+    "freshnessWeakened": false,
+    "generatedReportMaySatisfyFreshness": false,
+    "missingCollectedEvidenceFailsClosed": true,
+    "staleEvidenceSatisfiesPass": false,
+    "unknownEvidenceSatisfiesPass": false
+  },
+  "callbackAndCaddyDecision": {
+    "caddyFilesInspected": true,
+    "composeFilesInspected": true,
+    "decision": "no-change",
+    "reason": "CI throughput optimisation is achieved inside validate-spec workflow setup and reporting. No callback route, Caddy route, webhook payload, public proof route, or Compose service needs to change.",
+    "callbackPayloadsAreAuthority": false,
+    "publicProofRouteClaimMade": false,
+    "stagingOrDeploymentClaimMade": false
+  },
+  "runnerDecisions": {
+    "selfHostedRunner": {
+      "classification": "decision-required",
+      "adopted": false,
+      "requiredBeforeAdoption": [
+        "owner approval",
+        "runner trust boundary",
+        "secret and token isolation",
+        "cache isolation and cleanup policy",
+        "local-state non-authority rule",
+        "evidence collection and auditability",
+        "rollback path to GitHub-hosted runners"
+      ]
+    },
+    "largerGithubHostedRunner": {
+      "classification": "decision-required",
+      "adopted": false,
+      "requiredBeforeAdoption": [
+        "owner cost decision",
+        "before-and-after timing evidence",
+        "required check stability confirmation",
+        "no readiness overclaim",
+        "fallback to ubuntu-latest"
+      ]
+    }
+  },
+  "branchProtectionMap": {
+    "branch": "main",
+    "requiredStatusChecksStrict": true,
+    "observedRequiredContexts": [
+      "validate"
+    ],
+    "observedRequiredChecks": [
+      {
+        "context": "validate",
+        "appId": 15368
+      }
+    ],
+    "workflowJobContextPreserved": true,
+    "workflowJobIdPreserved": "validate",
+    "requiredCheckWeakened": false,
+    "proofAnchorRequiredForPullRequest": false,
+    "branchProtectionMutationMade": false,
+    "downgradeRequiresOwnerDecision": true
+  },
+  "timingEvidence": {
+    "generatedReport": "evidence/generated-reports/repository-ci-throughput-timing-evidence.json",
+    "baselineSource": "GitHub Actions validate-spec workflow runs observed on 2026-07-09",
+    "baselineRepresentativeDurationSeconds": 378,
+    "afterStatus": "pending-github-pr-run",
+    "timingClaimMade": false,
+    "performanceBudgetEnforced": false
+  },
+  "validationPlan": [
+    "Strict JSON parse for created and modified JSON files.",
+    "YAML parse for validate-spec workflow.",
+    "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py all --json.",
+    "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py selftest --json.",
+    "python3 tools/validate-spec/validate-spec.py all --json.",
+    "python3 tools/validate-spec/validate-spec.py selftest --json.",
+    "GitHub pull-request validate-spec run records after timing and cache hit or miss evidence."
+  ],
+  "nonClaims": [
+    "No staging, deployment, provider, credential, store, production, live-provider, compliance, monetisation, or human-acceptance claim is made.",
+    "No cache hit proves correctness.",
+    "No generated report is semantic authority.",
+    "No callback payload is semantic authority.",
+    "No self-hosted runner local state is semantic authority.",
+    "No required check is downgraded.",
+    "No proof-cockpit freshness rule is weakened.",
+    "No implementation/runtime source code is created."
+  ],
+  "closureReport": {
+    "candidateClassificationComplete": true,
+    "implementedNowCandidatesImplemented": true,
+    "deferredOrRejectedCandidatesHaveRationale": true,
+    "caddyAndCallbackDecisionRecorded": true,
+    "selfHostedAndLargerRunnerDecisionRecorded": true,
+    "proofEvidenceChurnAddressed": true,
+    "branchProtectionCompatibilityRecorded": true,
+    "timingBeforeRecorded": true,
+    "timingAfterRecorded": false,
+    "validationComplete": false,
+    "linearCompletionReady": false,
+    "finalReadinessVerdict": "not-ready-until-validation-and-pr-ci-after-timing-complete"
+  }
+}
