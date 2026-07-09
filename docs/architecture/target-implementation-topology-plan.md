@@ -356,3 +356,13 @@ The unit test suite consolidation records the existing per-slice route, command,
 The contract and local integration consolidation records existing generated-client, validator output-shape, route-capability, command, query, and in-memory runtime proof as evidence. It may use local in-memory integration evidence only. It must not escalate to Compose, staging, deployment, provider setup, credentials, Testcontainers, remote cache, task graph tooling, store testing, browser-cloud testing, mobile device-farm testing, or live-provider testing.
 
 USF-1031 and USF-1032 do not authorise package installation, lockfile changes, production runtime code, external services, credentials, deployment, staging, live providers, store setup, ad providers, push providers, production readiness, compliance readiness, monetisation readiness, or human acceptance.
+
+## USF-1033 and USF-1034 proof-ladder classification topology
+
+USF-1033 authorises only a repository-owned Compose proof classification for the current bounded app-surface tranche. The allowed artefacts are `docs/architecture/app-surface-compose-proof-classification.json`, `tests/packages/app-surface-proof-ladder-classification.test.ts`, and validator guard `USF-APP-SURFACE-IMPLEMENTATION-014` in `tools/validate-app-surface/validate-app-surface.py`.
+
+The classification is negative for the current tranche: Compose-backed app-surface proof is not required because the implemented surfaces remain local, in-memory, static metadata, or negative fixtures and do not cross provider semantics. Existing Compose files may be cited as repository inputs, but USF-1033 does not authorise Compose profile edits, Compose execution, provider setup, Testcontainers, Caddy public proof routing changes, port 443 changes, staging, deployment, or live-provider claims.
+
+USF-1034 authorises only a repository-owned staging proof classification for the current bounded app-surface tranche. The allowed artefacts are `docs/architecture/app-surface-staging-proof-classification.json`, `tests/packages/app-surface-proof-ladder-classification.test.ts`, and validator guard `USF-APP-SURFACE-IMPLEMENTATION-015` in `tools/validate-app-surface/validate-app-surface.py`.
+
+The classification is negative for the current tranche: staging proof is not required because the implemented app-surface is not public, deployment-adjacent, provider-staging relevant, or human-acceptance relevant. USF-1034 does not authorise staging runs, deployment, provider setup, credentials, public proof routing changes, store workflows, production readiness, or human-acceptance claims.

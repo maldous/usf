@@ -1,0 +1,164 @@
+{
+  "artifactId": "usf.app-surface-compose-proof-classification",
+  "title": "App-surface Compose proof classification",
+  "ownerIssueId": "USF-1033",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "compose-proof-not-required-classified",
+  "createdDate": "2026-07-09",
+  "purpose": "Classify whether the implemented bounded local app surface requires Compose-backed proof.",
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "This artefact records the Compose proof classification for the implemented app-surface tranche.",
+    "validatorAuthority": "Validators enforce the classification but do not create provider or product semantics.",
+    "generatedReportsAuthority": "Generated reports remain lower authority than semantic artefacts, validator rules, proof evidence, and source implementation."
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "role": "tranche-plan"
+    },
+    {
+      "path": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+      "role": "contract-local-integration-proof"
+    },
+    {
+      "path": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+      "role": "unit-proof"
+    },
+    {
+      "path": "docs/architecture/app-surface-local-in-memory-runtime.json",
+      "role": "local-in-memory-runtime-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-notification-consent-permission-surface.json",
+      "role": "local-notification-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json",
+      "role": "negative-ads-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-store-metadata-semantic-surface.json",
+      "role": "local-store-metadata-boundary"
+    },
+    {
+      "path": "docs/architecture/app-surface-deployment-evidence-pinning-surface.json",
+      "role": "local-deployment-evidence-boundary"
+    },
+    {
+      "path": "compose/compose.yaml",
+      "role": "existing-compose-root-not-modified"
+    },
+    {
+      "path": "compose/compose.dev.generated.yaml",
+      "role": "existing-compose-profile-not-used"
+    },
+    {
+      "path": "compose/compose.test.generated.yaml",
+      "role": "existing-compose-profile-not-used"
+    }
+  ],
+  "composeClassification": {
+    "classification": "not-required",
+    "composeRequired": false,
+    "providerSemanticsCrossed": false,
+    "providerSemanticsRequireCompose": false,
+    "inMemoryProofSufficient": true,
+    "composeProofRun": false,
+    "existingComposeProfilesChanged": false,
+    "composeTimingEvidenceRequired": false,
+    "composeEvidenceCaptured": false,
+    "stagingImplicationCreated": false,
+    "caddyPublicProofRoutingChanged": false,
+    "caddyPort443Altered": false,
+    "testcontainersAdopted": false,
+    "remoteCacheAdopted": false,
+    "taskGraphToolingAdopted": false,
+    "repositoryOwnedReason": "All implemented app-surface surfaces are bounded local, in-memory, static metadata, or negative fixture surfaces. No implemented app-surface behaviour crosses provider semantics that require Compose-backed proof."
+  },
+  "implementedSurfaceClassifications": [
+    {
+      "surfaceId": "shared-client-consumption",
+      "ownerIssueId": "USF-1015",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "contract-test-local"
+    },
+    {
+      "surfaceId": "local-in-memory-runtime",
+      "ownerIssueId": "USF-1016",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "in-memory-runtime-test"
+    },
+    {
+      "surfaceId": "web-and-mobile-route-screen-scaffolds",
+      "ownerIssueId": "USF-1017-USF-1018-USF-1020",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "local-route-screen-tests"
+    },
+    {
+      "surfaceId": "command-query-state-auth-i18n-accessibility",
+      "ownerIssueId": "USF-1021-USF-1026",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "local-unit-and-contract-tests"
+    },
+    {
+      "surfaceId": "notification-consent",
+      "ownerIssueId": "USF-1027",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "local-non-live-notification-fixture"
+    },
+    {
+      "surfaceId": "ads-store-deployment-negative-fixtures",
+      "ownerIssueId": "USF-1028-USF-1030",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "negative-local-fixture-tests"
+    },
+    {
+      "surfaceId": "unit-contract-local-integration-consolidation",
+      "ownerIssueId": "USF-1031-USF-1032",
+      "providerSemanticsCrossed": false,
+      "proofDisposition": "consolidated-local-test-report"
+    }
+  ],
+  "conditionalCriteriaDisposition": {
+    "ifComposeIsRequiredExistingProfilesAreUsedOrUpdatedWithAuthority": "not-applicable-compose-not-required",
+    "ifComposeIsRequiredTimingAndEvidenceAreCaptured": "not-applicable-compose-not-required",
+    "composeProofDoesNotImplyStagingProof": true,
+    "caddyPublicProofRoutingOnPort443NotAltered": true
+  },
+  "validationGuard": {
+    "existingAuthorityPathsMustExist": true,
+    "providerSemanticsNeedForComposeMustBeClassified": true,
+    "inMemoryProofSufficientWhenNoProviderSemanticsCrossed": true,
+    "composeProfilesMustNotChangeWhenNotRequired": true,
+    "composeProofMustNotRunWhenNotRequired": true,
+    "composeProofMustNotImplyStaging": true,
+    "caddyPort443MustNotBeAltered": true,
+    "testcontainersRemoteCacheAndTaskGraphMustRemainUnadopted": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "externalBoundary": {
+    "externalProvidersAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "composeRequired": false,
+    "testcontainersAllowed": false,
+    "remoteCacheAllowed": false,
+    "taskGraphToolingAllowed": false,
+    "caddyPublicProofRoutingChangeAllowed": false
+  },
+  "nonClaims": {
+    "composeReadiness": false,
+    "stagingReadiness": false,
+    "deploymentReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "providerReadiness": false,
+    "testcontainersAdoption": false,
+    "remoteCacheAdoption": false,
+    "taskGraphToolingAdoption": false,
+    "publicProofRoutingReadiness": false,
+    "humanAcceptance": false
+  }
+}
