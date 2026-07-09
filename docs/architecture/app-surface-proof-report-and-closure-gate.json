@@ -336,7 +336,9 @@
     "appSurfaceValidatorsRunAgainstRealImplementationArtefacts": true,
     "syntheticFixturesOnlyClosure": false,
     "parentReadyForLinearClosureAfterMergeAndAcceptanceConfirmation": true,
-    "unsupportedReadinessClaimsMade": false
+    "unsupportedReadinessClaimsMade": false,
+    "proofCockpitEvidenceRepinRequiredAfterSourceChange": true,
+    "proofCockpitEvidenceRepinRequiredBecauseOfRebaseOnly": false
   },
   "validationGuard": {
     "machineReadableClosureReportExists": true,
@@ -405,6 +407,16 @@
       "ruleId": "USF-IMPL-002",
       "subject": "tests/packages/app-surface-timing-closure.test.ts",
       "correction": "Same underlying validate-spec source disposition finding; resolved before final evidence validation pass."
+    },
+    {
+      "commandId": "github-validate",
+      "status": "failed-before-proof-cockpit-repin",
+      "duration": "4m1s",
+      "runUrl": "https://github.com/maldous/usf/actions/runs/28988723932/job/86023576450",
+      "ruleId": "USF-PROOF-COCKPIT-009",
+      "subject": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+      "message": "Latest machine evidence is stale for source tree hash 3d01cb6627c208acca7320fb0cdea816a8d1d220355265d2469af17638886ca8",
+      "correction": "This is a legitimate source-tree change, not source-equivalent rebase churn. Proof-cockpit evidence is re-pinned after this source evidence update."
     }
   ]
 }

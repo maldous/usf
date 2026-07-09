@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-09T02-04-20-923Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "06c387f39ff55ae082f3ecf82e1b40590d04925d",
+  "deploymentSha": "06c387f39ff55ae082f3ecf82e1b40590d04925d",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:13099",
+  "startedAt": "2026-07-09T02:04:20.923Z",
+  "completedAt": "2026-07-09T02:07:03.967Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "M docs/architecture/app-surface-proof-report-and-closure-gate.json\n M docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+  "branch": "app-surface-timing-closure-report",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}
