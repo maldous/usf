@@ -48,6 +48,8 @@ STORE_USF935_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/007-st
 DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION = ROOT / "docs/architecture/app-surface-deployment-evidence-pinning-surface.json"
 DEPLOYMENT_USF940_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/012-deployment-evidence-current-commit.json"
 DEPLOYMENT_USF940_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/012-deployment-evidence-wrong-commit.json"
+UNIT_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-unit-test-suite-consolidation.json"
+CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -2620,6 +2622,211 @@ def validate_deployment_evidence_pinning_implementation() -> list[dict[str, str]
     failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
     return failures
 
+
+def referenced_test_paths(data: dict[str, Any], keys: list[str]) -> list[str]:
+    paths: list[str] = []
+    for key in keys:
+        entries = data.get(key, [])
+        if not isinstance(entries, list):
+            continue
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            value = entry.get("testPath")
+            if isinstance(value, str) and value.strip():
+                paths.append(value)
+            for nested_key in ["testPaths", "supportingTestPaths"]:
+                nested = entry.get(nested_key, [])
+                if isinstance(nested, list):
+                    paths.extend(item for item in nested if isinstance(item, str) and item.strip())
+    return paths
+
+
+def validate_test_suite_common(
+    data: dict[str, Any],
+    subject: str,
+    rule_id: str,
+    issue_id: str,
+    lifecycle_state: str,
+    required_guard_flags: list[str],
+) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", f"test consolidation artefact must be owned by {issue_id}", issue_id))
+    if data.get("lifecycleState") != lifecycle_state:
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", f"lifecycleState must be {lifecycle_state}", issue_id))
+    for index, authority_input in enumerate(data.get("authorityInputs", [])):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+    entry_point = data.get("packageManagedEntryPoint", {})
+    if not isinstance(entry_point, dict):
+        failures.append(finding(rule_id, f"{subject}.packageManagedEntryPoint", "packageManagedEntryPoint must be an object", issue_id))
+    else:
+        if entry_point.get("scriptName") != "test":
+            failures.append(finding(rule_id, f"{subject}.packageManagedEntryPoint.scriptName", "test suite must use the package-managed test script", issue_id))
+        command = entry_point.get("command")
+        if not isinstance(command, str) or not command.startswith("corepack pnpm test"):
+            failures.append(finding(rule_id, f"{subject}.packageManagedEntryPoint.command", "test suite command must be package-managed", issue_id))
+    validation_guard = data.get("validationGuard", {})
+    for field in required_guard_flags:
+        if not isinstance(validation_guard, dict) or validation_guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    for path in referenced_test_paths(data, ["unitCoverage", "contractCoverage", "integrationCoverage", "crossSurfaceCoverage"]):
+        if not path_exists(path):
+            failures.append(finding(rule_id, subject, f"referenced test path does not exist: {path}", issue_id))
+    restrictions = data.get("externalBoundary", {})
+    if not isinstance(restrictions, dict):
+        failures.append(finding(rule_id, f"{subject}.externalBoundary", "externalBoundary must be an object", issue_id))
+    else:
+        for field in [
+            "externalProvidersAllowed",
+            "credentialsAllowed",
+            "deploymentAllowed",
+            "stagingAllowed",
+            "composeRequired",
+            "testcontainersAllowed",
+            "remoteCacheAllowed",
+            "taskGraphToolingAllowed",
+        ]:
+            if restrictions.get(field) is not False:
+                failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
+def validate_unit_test_suite_consolidation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-012"
+    issue_id = "USF-1031"
+    subject = rel(UNIT_TEST_SUITE_CONSOLIDATION)
+    failures: list[dict[str, str]] = []
+    if not UNIT_TEST_SUITE_CONSOLIDATION.exists():
+        return [finding(rule_id, subject, "unit test suite consolidation artefact is missing", issue_id)]
+    data = load_json(UNIT_TEST_SUITE_CONSOLIDATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "unit test suite consolidation artefact must be an object", issue_id)]
+    failures.extend(
+        validate_test_suite_common(
+            data,
+            subject,
+            rule_id,
+            issue_id,
+            "test-unit-consolidated",
+            [
+                "existingAuthorityPathsMustExist",
+                "existingTestPathsMustExist",
+                "perSliceUnitTestsMayBeReusedAsEvidence",
+                "routeKnownAndUnknownCoverageRequired",
+                "commandValidationPermissionErrorAuditCoverageRequired",
+                "queryCachePrivacyCoverageRequired",
+                "stateCacheLogoutPurgeCoverageRequired",
+                "i18nMissingTranslationCoverageRequired",
+                "accessibilityMissingSemanticsCoverageRequired",
+                "authMissingPermissionCoverageRequired",
+                "notificationConsentPermissionCoverageRequired",
+                "localNegativeSurfaceCoverageRequired",
+                "testsMustRunLocallyWithoutExternalServices",
+                "nonClaimsMustAllBeFalse",
+            ],
+        )
+    )
+    required_categories = {
+        "unit-test-entry-point",
+        "route-mapping",
+        "command-form",
+        "query-list-detail",
+        "state-cache-query-client",
+        "i18n",
+        "accessibility",
+        "auth-session",
+        "notification-consent",
+        "local-negative-surfaces",
+    }
+    coverage = data.get("unitCoverage", [])
+    observed = {entry.get("coverageId") for entry in coverage if isinstance(entry, dict)}
+    missing = sorted(required_categories - observed)
+    if missing:
+        failures.append(finding(rule_id, subject, f"unit coverage missing categories: {', '.join(missing)}", issue_id))
+    for entry in coverage if isinstance(coverage, list) else []:
+        if not isinstance(entry, dict):
+            continue
+        evidence = entry.get("evidenceDisposition")
+        if evidence not in {"existing-per-slice-unit-test", "consolidation-test-entry-point"}:
+            failures.append(finding(rule_id, subject, "unit coverage entry has unsupported evidence disposition", issue_id))
+        if entry.get("externalServicesRequired") is not False:
+            failures.append(finding(rule_id, subject, "unit coverage must not require external services", issue_id))
+        if entry.get("failClosedCoverage") is not True:
+            failures.append(finding(rule_id, subject, "unit coverage must record fail-closed coverage", issue_id))
+    return failures
+
+
+def validate_contract_integration_test_suite_consolidation() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-013"
+    issue_id = "USF-1032"
+    subject = rel(CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION)
+    failures: list[dict[str, str]] = []
+    if not CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION.exists():
+        return [finding(rule_id, subject, "contract and integration test suite consolidation artefact is missing", issue_id)]
+    data = load_json(CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "contract and integration test suite consolidation artefact must be an object", issue_id)]
+    failures.extend(
+        validate_test_suite_common(
+            data,
+            subject,
+            rule_id,
+            issue_id,
+            "test-contract-local-integration-consolidated",
+            [
+                "existingAuthorityPathsMustExist",
+                "existingTestPathsMustExist",
+                "contractTestsMayReusePerSliceTestsAsEvidence",
+                "generatedClientStaleAndMissingInputsMustFailClosed",
+                "validatorOutputShapeSuccessAndFailureCovered",
+                "routeCapabilityOwnershipAndUnknownRouteCovered",
+                "commandAndQuerySemanticMismatchFailureCovered",
+                "localIntegrationMustUseInMemoryAdapters",
+                "composeMustRemainConditionalAndNotRequired",
+                "stagingMustRemainForbidden",
+                "noExternalProvidersCredentialsDeploymentOrStaging",
+                "nonClaimsMustAllBeFalse",
+            ],
+        )
+    )
+    required_contract_categories = {
+        "contract-test-entry-point",
+        "generated-client-consumption",
+        "validator-output-shape",
+        "route-capability-mapping",
+        "command-form-semantic-contract",
+        "query-list-detail-semantic-contract",
+    }
+    contract_coverage = data.get("contractCoverage", [])
+    observed_contracts = {entry.get("coverageId") for entry in contract_coverage if isinstance(entry, dict)}
+    missing_contracts = sorted(required_contract_categories - observed_contracts)
+    if missing_contracts:
+        failures.append(finding(rule_id, subject, f"contract coverage missing categories: {', '.join(missing_contracts)}", issue_id))
+    for entry in contract_coverage if isinstance(contract_coverage, list) else []:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("failClosedCoverage") is not True:
+            failures.append(finding(rule_id, subject, "contract coverage must record fail-closed coverage", issue_id))
+        if entry.get("externalServicesRequired") is not False:
+            failures.append(finding(rule_id, subject, "contract coverage must not require external services", issue_id))
+    integration_coverage = data.get("integrationCoverage", [])
+    if not isinstance(integration_coverage, list) or not integration_coverage:
+        failures.append(finding(rule_id, subject, "integrationCoverage must be a non-empty array", issue_id))
+        integration_coverage = []
+    for entry in integration_coverage:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("providerMode") != "in-memory-only":
+            failures.append(finding(rule_id, subject, "local integration coverage must remain in-memory-only", issue_id))
+        for field in ["externalProvidersRequired", "credentialsRequired", "composeRequired", "stagingRequired", "deploymentRequired"]:
+            if entry.get(field) is not False:
+                failures.append(finding(rule_id, subject, f"integrationCoverage.{field} must remain false", issue_id))
+    return failures
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -2647,6 +2854,8 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_ads_monetisation_placeholder_implementation())
     failures.extend(validate_store_metadata_implementation())
     failures.extend(validate_deployment_evidence_pinning_implementation())
+    failures.extend(validate_unit_test_suite_consolidation())
+    failures.extend(validate_contract_integration_test_suite_consolidation())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -2697,6 +2906,8 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         ADS_MONETISATION_PLACEHOLDER_IMPLEMENTATION,
         STORE_METADATA_IMPLEMENTATION,
         DEPLOYMENT_EVIDENCE_PINNING_IMPLEMENTATION,
+        UNIT_TEST_SUITE_CONSOLIDATION,
+        CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION,
     ]
     return {
         "mode": mode,
