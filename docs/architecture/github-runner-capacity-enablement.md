@@ -66,9 +66,11 @@ The second self-hosted attempt, run `29003495086`, selected `usf-linux-x64-contr
 
 The third self-hosted attempt, run `29004454797`, completed core validators and the generated timing boundary, but the PR governance gate correctly failed because the newly added runner control scripts had not yet been explicitly authorised in the validator tooling allowlist. That was fixed by authorising the specific `tools/github-runner/` scripts used by this runner-control slice. The subsequent runs `29005646991`, `29006497453`, and `29010783904` passed end to end. The latest full run `29012452458` also passed with required-path and timing evidence.
 
-### Pending main-path evidence
+### Main-path evidence
 
-Trusted cache-write-capable main-path behaviour is still pending. A direct `workflow_dispatch` attempt for main with self-hosted targeting was blocked by repository workflow policy on the main branch with HTTP 422: workflow does not have `workflow_dispatch` in its branch state at that time. The current main branch route does not yet permit main-event trusted runs until that definition is current.
+Trusted cache-write-capable main-path behaviour is now observed. The push-event run `29016956084`, job `86116639706`, executed on `usf-linux-x64-controller-01` for main commit `faf0ceff` and passed: queue 3 seconds, validate job 423 seconds (second attempt), checkout 52 seconds, pnpm install 2 seconds, pip install 1 second, validate-spec 47 seconds, repository validation 156 seconds, parity validation 76 seconds. Both pnpm and pip cache lookups were attempted and missed (raw blank normalised to explicit false), cache writes were allowed on main, write attempts proceeded on miss, and both post steps recorded cache saves with the expected keys. Secret-safety and cleanup checks passed with zero printed secret values.
+
+The first attempt of that push run, and the manual main `workflow_dispatch` run `29017405885`, failed only at USF-BOOTSTRAP-006 because the concurrently running proof-anchor workflow had not yet published tag `proof-anchor-faf0ceff`; the ordering race is tracked as USF-1043 and is not a runner-capacity defect. The earlier HTTP 422 blocker (main workflow revision without `workflow_dispatch`) is resolved by the merge: the main branch workflow definition now carries the dispatch trigger.
 
 ## Caddy And Callback Decision
 
@@ -78,12 +80,11 @@ Callback work would become relevant only if a later queue-aware runner controlle
 
 ## Remaining Closure Requirements
 
-- PR #335 is updated with measured run evidence, fallback posture, cleanup proof, cache write policy, and non-claims.
-- Linear USF-1038 is updated and remains open until acceptance criteria are checked individually.
-- GitHub-hosted fallback remains documented and manually switchable; a live post-measurement fallback run `29011736599` has been executed and recorded.
-- Trusted write-capable cache behaviour has not yet been observed in a trusted runner-backed main-path execution; PR and manual non-main runs confirm explicit non-main write-skip and read-only cache modes.
-- A direct `workflow_dispatch` attempt for a trusted main-path self-hosted run was blocked by main-branch workflow policy (HTTP 422: workflow does not have `workflow_dispatch` trigger in that main-branch revision), so cache-write-capable main-path evidence is pending.
-- Remaining deferred optimisation work is represented by precise follow-up issue IDs before Linear closure.
+- PR #335 was updated with measured run evidence, fallback posture, cleanup proof, cache write policy, and non-claims, and is merged.
+- Trusted write-capable cache behaviour is observed on main-path push run `29016956084` (cache writes allowed, attempted on miss, saved for pnpm and pip).
+- GitHub-hosted fallback remains documented and manually switchable; live fallback run `29011736599` is recorded.
+- Deferred optimisation follow-ups are mapped to USF-1039, USF-1040, USF-1041, USF-1042; the proof-anchor ordering race is tracked as USF-1043.
+- Linear USF-1038 remains open until its acceptance criteria are confirmed individually on the issue; this record never claims Linear closure.
 
 ## Non-Claims
 

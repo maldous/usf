@@ -29,7 +29,7 @@
   },
   "currentObservations": {
     "githubRepository": "maldous/usf",
-    "observedAt": "2026-07-09T10:48:03Z",
+    "observedAt": "2026-07-09T12:25:06Z",
     "actionsEnabled": true,
     "repositorySelfHostedRunnerCount": 1,
     "repositorySelfHostedRunnerLabelsObserved": [
@@ -74,8 +74,8 @@
     "branchProtectionStrict": true,
     "currentValidateWorkflowRunsOn": "trusted self-hosted labels for trusted main and same-repository PRs, ubuntu-latest fallback for fork PRs and manual fallback",
     "requiredValidateContextPreserved": true,
-    "latestTrustedSelfHostedRunId": "29014541366",
-    "latestTrustedSelfHostedJobId": "86106133145",
+    "latestTrustedSelfHostedRunId": "29016956084",
+    "latestTrustedSelfHostedJobId": "86116639706",
     "latestTrustedSelfHostedRunConclusion": "success"
   },
   "timingEvidence": {
@@ -152,6 +152,75 @@
     "queueTimeImprovementClaimMade": true,
     "exactAfterEvidenceRequiredBeforeClosure": true,
     "selfHostedRuns": [
+      {
+        "runId": "29016956084",
+        "jobId": "86116639706",
+        "event": "push",
+        "headBranch": "main",
+        "headSha": "faf0ceff910d0d7051bbfb54e4e9fbeeb4ff1828",
+        "createdAt": "2026-07-09T12:05:03Z",
+        "jobStartedAt": "2026-07-09T12:18:03Z",
+        "jobCompletedAt": "2026-07-09T12:25:06Z",
+        "updatedAt": "2026-07-09T12:25:06Z",
+        "queueSeconds": 3,
+        "jobDurationSeconds": 423,
+        "totalRunSeconds": 423,
+        "checkoutSeconds": 52,
+        "setupSeconds": 0,
+        "pnpmInstallSeconds": 2,
+        "pipInstallSeconds": 1,
+        "validateSpecSeconds": 47,
+        "repositoryValidationSeconds": 156,
+        "parityValidationSeconds": 76,
+        "proofCockpitValidationSeconds": 5,
+        "proofCockpitSelftestSeconds": 23,
+        "prGovernanceGateSeconds": null,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerId": "21",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "success",
+        "attemptNote": "Second attempt of the push-event run. The first attempt failed only on the proof-anchor tag ordering race (USF-BOOTSTRAP-006) while the proof-anchor workflow was still publishing tag proof-anchor-faf0ceff; the race is tracked as USF-1043. The second attempt ran after tag publication and passed.",
+        "cleanupResult": "pass",
+        "secretSafetyResult": "pass",
+        "toolchainReady": true,
+        "runnerLocalStateAuthority": false,
+        "secretsAvailableByPolicy": true,
+        "secretValuesPrinted": false,
+        "cacheHitMissValues": {
+          "pnpm": {
+            "cacheLookupAttempted": true,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": true,
+            "cacheWriteAttempted": true,
+            "cacheWriteSkippedReason": "not-skipped-cache-miss",
+            "cacheSavedObserved": true,
+            "cacheSavedLogLine": "Cache saved with key: usf-v1-pnpm-store-Linux-X64-node-24-pnpm-11.9.0-4cb9d4526795724bb8c89fc62beda775da0893bb402c64b92783aafa9a46ccd5"
+          },
+          "pip": {
+            "cacheLookupAttempted": true,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": true,
+            "cacheWriteAttempted": true,
+            "cacheWriteSkippedReason": "not-skipped-cache-miss",
+            "cacheSavedObserved": true,
+            "cacheSavedLogLine": "Cache saved with key: usf-v1-pip-download-Linux-X64-python-3.12-19808ba850c8fe723ae17457bee9816613816ff397627e7edf049db8f9e6068e"
+          }
+        },
+        "measurementAuthority": "operational-github-api-record-and-run-logs",
+        "semanticAuthority": false
+      },
       {
         "runId": "29014541366",
         "jobId": "86106133145",
@@ -750,8 +819,8 @@
     "workflowRoutingImplemented": true,
     "closureAllowed": false,
     "exactRemainingBlockers": [
-      "Trusted cache-write-capable behaviour is not yet observed on a trusted main-path execution; PR and manual non-main runs confirm read-only cache modes only. A direct main-branch manual workflow dispatch attempt for self-hosted cache-write verification is blocked by main-branch workflow policy (HTTP 422: workflow does not have 'workflow_dispatch' trigger on the main branch workflow definition at this time).",
-      "Deferred follow-up optimisation tasks must be mapped to precise issue IDs before closure."
+      "Linear USF-1038 acceptance criteria must be confirmed individually on the issue itself before it is marked Done; this repository artefact records evidence only and never claims Linear closure.",
+      "The proof-anchor tag ordering race that failed the first attempt of main-path run 29016956084 and dispatch run 29017405885 is tracked separately as USF-1043 and is not a runner-capacity blocker."
     ],
     "nextUnblockers": [
       {
@@ -767,7 +836,7 @@
       {
         "id": "pr-linear-evidence-update",
         "requirement": "Update PR #335 and Linear USF-1038 with measured self-hosted runner evidence without closing Linear prematurely.",
-        "status": "in-progress",
+        "status": "verified",
         "evidenceRequired": [
           "PR body updated",
           "Linear comment/status updated",
@@ -776,13 +845,13 @@
       },
       {
         "id": "trusted-cache-write-verification",
-        "requirement": "Capture a trusted self-hosted run where cache write logic is allowed by workflow context (main-path or equivalent explicit main context).",
-        "status": "pending",
+        "requirement": "Captured: trusted self-hosted main-path push run 29016956084 with cacheWriteAllowed true, cache writes attempted on miss, and cache saves observed for pnpm and pip; secret safety pass.",
+        "status": "verified",
         "evidenceRequired": [
-          "run id where cacheWriteAllowed is true",
-          "cacheWriteAttempted value and skip reason if not attempted",
-          "runnerEvidence shows no secret leakage on write-capable path",
-          "main branch workflow_dispatch path must permit trusted self-hosted runs"
+          "run 29016956084 cacheWriteAllowed true",
+          "cache saved log lines for pnpm and pip",
+          "secret safety pass on write-capable path",
+          "main-path push event executed on trusted self-hosted runner"
         ]
       }
     ],

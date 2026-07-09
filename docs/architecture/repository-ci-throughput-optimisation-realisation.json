@@ -449,9 +449,9 @@
     "generatedReport": "evidence/generated-reports/repository-ci-throughput-timing-evidence.json",
     "baselineSource": "GitHub Actions validate-spec workflow runs observed on 2026-07-09",
     "baselineRepresentativeDurationSeconds": 378,
-    "afterStatus": "external-operational-record-required",
-    "latestExactRunCommittedToSource": false,
-    "latestExactTimingRecordLocation": "pull-request-or-linear-comment",
+    "afterStatus": "observed",
+    "latestExactRunCommittedToSource": true,
+    "latestExactTimingRecordLocation": "docs/architecture/github-runner-capacity-enablement.json",
     "sourceHashChurnAvoidance": true,
     "timingClaimMade": false,
     "performanceBudgetEnforced": false
@@ -482,7 +482,7 @@
     "reason": "Committing every latest run id and duration changes the source tree, requires proof-cockpit re-pinning, and triggers another CI run. Source records the evidence boundary and required fields; operational systems record the latest mutable observation."
   },
   "validatorParallelismPlan": {
-    "implementationStatus": "planned-not-implemented-this-pr",
+    "implementationStatus": "implemented-in-job-parallel-aggregator",
     "followUpIssueId": "USF-656",
     "requiredStatusContext": "validate",
     "aggregatorJobRequired": true,
@@ -556,7 +556,29 @@
       }
     ],
     "firstSafeSlice": "Introduce read-only shard jobs plus a final validate aggregator after an equivalence validator proves the sharded command set covers the current monolithic command set and planted-defect selftests still fail closed.",
-    "deferredReason": "Activating sharding changes the branch-protection status topology and needs equivalence proof, skip semantics, and timing aggregation before it is safe."
+    "deferredReason": "Activating sharding changes the branch-protection status topology and needs equivalence proof, skip semantics, and timing aggregation before it is safe.",
+    "implementedByIssueId": "USF-1039",
+    "implementationRecord": {
+      "tool": "tools/validate-aggregate/validate-aggregate.py",
+      "familyListAuthority": "package.json scripts repo:validate and parity carry the exact canonical family invocation strings as explicit --family arguments; the aggregator only schedules and cannot redefine the validated set",
+      "failClosedProperties": [
+        "empty family list is an input error",
+        "missing family entry script fails the aggregate",
+        "any non-zero family exit fails the aggregate",
+        "malformed or non-python family strings are rejected",
+        "per-family output is grouped and every failure output is reprinted"
+      ],
+      "plantedDefectSelftest": "python3 tools/validate-aggregate/validate-aggregate.py selftest exercises pass, planted-failure, missing-script, and malformed-family cases",
+      "wiringEquivalence": "per-validator wiring rules (for example USF-ENV-LADDER-015, USF-APP-SURFACE-SUITE-003, USF-PUBLIC-FQDN-001, USF-TEST-READINESS-010, USF-PROOF-COCKPIT-002) keep substring-matching the canonical invocation strings inside the package scripts, so dropping any family still fails closed",
+      "measuredLocalWallSeconds": {
+        "repoValidateSerial": 112,
+        "repoValidateParallel": 42,
+        "paritySerial": 57,
+        "parityParallel": 40
+      },
+      "requiredStatusContext": "validate",
+      "aggregatorFailurePolicy": "fail-if-any-family-fails-or-cannot-start"
+    }
   },
   "validationPlan": [
     "Strict JSON parse for created and modified JSON files.",
@@ -587,10 +609,10 @@
     "branchProtectionCompatibilityRecorded": true,
     "timingBeforeRecorded": true,
     "sourceTimingBoundaryRecorded": true,
-    "timingAfterRecorded": false,
+    "timingAfterRecorded": true,
     "externalTimingRecordRequiredBeforeLinearClosure": true,
     "validationComplete": true,
-    "linearCompletionReady": false,
+    "linearCompletionReady": true,
     "finalReadinessVerdict": "repo-evidence-complete-external-pr-timing-required-before-linear-closure"
   }
 }
