@@ -913,6 +913,8 @@ def check_runner_capacity_artifact(runner_data: dict[str, Any] | None = None) ->
             findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner closure must remain false until after evidence and Linear criteria are confirmed"))
         if enabled_pending_state and len(decision.get("exactRemainingBlockers", [])) < 3:
             findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "measurement-pending runner must record exact remaining blockers"))
+        if enabled_measured_state and len(decision.get("exactRemainingBlockers", [])) < 1:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enabled measured runner must record exact remaining blockers until closure is explicitly allowed"))
     else:
         if decision.get("state") != "blocked" or decision.get("runnerEnabled") is not False or decision.get("closureAllowed") is not False:
             findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "blocked runner enablement must remain blocked and not closure-ready"))

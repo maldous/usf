@@ -10,7 +10,7 @@ The previous blocker, no authorised Linux x64 runner host/controller, is removed
 
 The runner uses the required labels `self-hosted`, `linux`, `x64`, `usf`, `usf-ci`, and `usf-trusted`. It runs as the dedicated `usf-runner` user, not as root. The user is not in `sudo` or `docker`. Docker is present on the host, but the runner user is not granted Docker socket access and the workflow does not mount the Docker socket.
 
-USF-1038 is not closure-ready yet. The remaining blocker is operational and exact: a trusted self-hosted `validate` run must complete after the runner temp boundary fix is pushed, with queue, duration, cleanup, cache, and secret-availability evidence captured.
+The trusted self-hosted `validate` run now completes on this runner. USF-1038 is still not Linear-closure-ready until PR #335 and Linear are updated with the measured evidence and the remaining acceptance criteria are checked individually.
 
 ## Host Inspection
 
@@ -44,11 +44,17 @@ Generated validator, hygiene, toolchain, and timing helper reports use the GitHu
 
 Before evidence remains the GitHub-hosted `validate` run `28999636766`: queue 4 seconds, validate job 391 seconds, checkout 32 seconds, pnpm install 12 seconds, pip install 4 seconds, validate-spec 45 seconds.
 
-After evidence is pending until the pushed workflow completes on `usf-linux-x64-controller-01`. Exact latest run IDs and per-step durations are operational evidence and should be recorded in the PR body and generated step summary. They are not semantic authority.
+After evidence is the trusted self-hosted `validate` run `29005646991`, job `86076474031`, on `usf-linux-x64-controller-01`: queue 3 seconds, validate job 308 seconds, total run 311 seconds, checkout 5 seconds, setup 0 seconds, pnpm install 2 seconds, pip install 0 seconds, validate-spec 37 seconds, repository validation 139 seconds, parity validation 74 seconds, proof-cockpit validation 3 seconds, proof-cockpit selftest 23 seconds, and PR governance gate 2 seconds.
+
+Compared with the USF-1038 GitHub-hosted before run, the measured self-hosted run reduced validate job duration by 83 seconds and total run duration by 85 seconds. Checkout dropped by 27 seconds, pnpm install by 10 seconds, pip install by 4 seconds, and validate-spec by 8 seconds. These timings are operational evidence only. They are not semantic authority, do not prove correctness, and do not let runner local state or cache state satisfy validation.
+
+The PR cache lookups were attempted for pnpm and pip. Both cache restores missed, the raw cache-hit outputs were blank, and the workflow normalized both values to explicit `false`. Cache writes were not allowed or attempted on the pull request run; both were skipped with reason `pull-request-read-only`. Same-repository PR secrets were available by policy, but the postflight secret-safety check found zero printed secret values. Workflow preflight cleanup, postflight cleanup, and secret-safety checks all passed.
 
 The first self-hosted attempt, run `29003193370`, selected `usf-linux-x64-controller-01` and queued in 4 seconds, but failed at `actions/checkout` before validators ran. The failure was an implementation defect in the job-start cleanup hook: it removed the active GitHub workspace directory before checkout could start Node. The cleanup script now always preserves the active `GITHUB_WORKSPACE` path, and the fixed script was reinstalled into the host hook directory.
 
 The second self-hosted attempt, run `29003495086`, selected `usf-linux-x64-controller-01` and queued in 3 seconds. Checkout, toolchain setup, pnpm install, and pip install completed, but `validate-spec` failed while writing `/tmp/usf-validator-report.json` because that fixed persistent temp path was not writable by the runner user. This was a workflow report-boundary defect, not a semantic validation failure. The workflow now writes generated reports under `RUNNER_TEMP`, verifies that boundary before preflight hygiene, and validator coverage rejects fixed `/tmp/usf-*` report paths.
+
+The third self-hosted attempt, run `29004454797`, completed core validators and the generated timing boundary, but the PR governance gate correctly failed because the newly added runner control scripts had not yet been explicitly authorised in the validator tooling allowlist. That was fixed by authorising the specific `tools/github-runner/` scripts used by this runner-control slice. The subsequent run `29005646991` passed end to end.
 
 ## Caddy And Callback Decision
 
@@ -58,13 +64,10 @@ Callback work would become relevant only if a later queue-aware runner controlle
 
 ## Remaining Closure Requirements
 
-- A self-hosted trusted `validate` run completes successfully.
-- Runner label, queue time, job duration, checkout duration, setup duration, pnpm install duration, pip install duration, validate-spec duration, total wall time, cache hit/miss values, cache write policy, secret availability policy, and cleanup result are recorded.
-- Repository optimisation validator and selftest pass.
-- validate-spec and validate-spec selftest pass.
-- Proof-cockpit freshness is re-pinned and validated if source freshness changes.
-- GitHub-hosted fallback is verified or explicitly recorded as manual fallback-ready.
-- PR #335 and Linear USF-1038 are updated without closing the issue prematurely.
+- PR #335 is updated with measured run evidence, fallback posture, cleanup proof, cache write policy, and non-claims.
+- Linear USF-1038 is updated and remains open until acceptance criteria are checked individually.
+- GitHub-hosted fallback remains documented and manually switchable; a live post-measurement fallback run is still deferred unless closure policy requires it.
+- Remaining deferred optimisation work is represented by precise follow-up issue IDs before Linear closure.
 
 ## Non-Claims
 

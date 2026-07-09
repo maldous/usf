@@ -12,7 +12,7 @@
     "USF-660",
     "USF-665"
   ],
-  "lifecycleState": "trusted-self-hosted-runner-enabled-measurement-pending",
+  "lifecycleState": "trusted-self-hosted-runner-enabled-and-measured",
   "createdDate": "2026-07-09",
   "purpose": "Record the trust posture, host/controller inspection, runner registration, safe workflow routing, callback decision, fallback, cleanup proof, and timing evidence boundary for trusted GitHub runner capacity.",
   "authorityBoundary": {
@@ -29,7 +29,7 @@
   },
   "currentObservations": {
     "githubRepository": "maldous/usf",
-    "observedAt": "2026-07-09T07:41:54Z",
+    "observedAt": "2026-07-09T08:47:39Z",
     "actionsEnabled": true,
     "repositorySelfHostedRunnerCount": 1,
     "repositorySelfHostedRunnerLabelsObserved": [
@@ -56,7 +56,10 @@
     ],
     "branchProtectionStrict": true,
     "currentValidateWorkflowRunsOn": "trusted self-hosted labels for trusted main and same-repository PRs, ubuntu-latest fallback for fork PRs and manual fallback",
-    "requiredValidateContextPreserved": true
+    "requiredValidateContextPreserved": true,
+    "latestTrustedSelfHostedRunId": "29005646991",
+    "latestTrustedSelfHostedJobId": "86076474031",
+    "latestTrustedSelfHostedRunConclusion": "success"
   },
   "timingEvidence": {
     "authorityLevel": "operational-github-api-record",
@@ -127,31 +130,88 @@
         ]
       }
     ],
-    "runnerBackedAfterRunStatus": "pending-workflow-run-after-runner-temp-boundary-fix",
-    "runnerBackedAfterRunCaptured": false,
-    "queueTimeImprovementClaimMade": false,
+    "runnerBackedAfterRunStatus": "observed-success",
+    "runnerBackedAfterRunCaptured": true,
+    "queueTimeImprovementClaimMade": true,
     "exactAfterEvidenceRequiredBeforeClosure": true,
-    "selfHostedRuns": [],
+    "selfHostedRuns": [
+      {
+        "runId": "29005646991",
+        "jobId": "86076474031",
+        "event": "pull_request",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "headSha": "161125454a2c35ec7d68eab58de9bc86ec35c450",
+        "createdAt": "2026-07-09T08:42:28Z",
+        "jobStartedAt": "2026-07-09T08:42:31Z",
+        "jobCompletedAt": "2026-07-09T08:47:39Z",
+        "queueSeconds": 3,
+        "jobDurationSeconds": 308,
+        "totalRunSeconds": 311,
+        "checkoutSeconds": 5,
+        "setupSeconds": 0,
+        "pnpmInstallSeconds": 2,
+        "pipInstallSeconds": 0,
+        "validateSpecSeconds": 37,
+        "repositoryValidationSeconds": 139,
+        "parityValidationSeconds": 74,
+        "proofCockpitValidationSeconds": 3,
+        "proofCockpitSelftestSeconds": 23,
+        "prGovernanceGateSeconds": 2,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerId": "21",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "success",
+        "cleanupResult": "pass",
+        "secretSafetyResult": "pass",
+        "toolchainReady": true,
+        "runnerLocalStateAuthority": false,
+        "secretsAvailableByPolicy": true,
+        "secretValuesPrinted": false,
+        "cacheHitMissValues": {
+          "pnpm": {
+            "cacheLookupAttempted": true,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "pull-request-read-only"
+          },
+          "pip": {
+            "cacheLookupAttempted": true,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "pull-request-read-only"
+          }
+        },
+        "comparisonToHostedRunId": "28999636766",
+        "jobDurationDeltaSecondsVsHosted": -83,
+        "totalRunDeltaSecondsVsHosted": -85,
+        "checkoutDeltaSecondsVsHosted": -27,
+        "setupDeltaSecondsVsHosted": -3,
+        "pnpmInstallDeltaSecondsVsHosted": -10,
+        "pipInstallDeltaSecondsVsHosted": -4,
+        "validateSpecDeltaSecondsVsHosted": -8,
+        "measurementAuthority": "operational-github-api-record-and-generated-step-summary",
+        "semanticAuthority": false
+      }
+    ],
     "pendingAfterEvidence": {
-      "required": true,
-      "requiredFields": [
-        "runId",
-        "jobId",
-        "queueSeconds",
-        "jobDurationSeconds",
-        "totalRunSeconds",
-        "checkoutSeconds",
-        "setupSeconds",
-        "pnpmInstallSeconds",
-        "pipInstallSeconds",
-        "validateSpecSeconds",
-        "runnerLabel",
-        "cleanupResult",
-        "cacheHitMissValues",
-        "cacheWriteAllowed",
-        "secretsAvailableByPolicy"
-      ],
-      "recordingLocation": "PR body and generated GitHub step summary; repository artefact records schema and boundary until after-run evidence is captured."
+      "required": false,
+      "satisfiedByRunId": "29005646991",
+      "satisfiedByJobId": "86076474031",
+      "recordingLocation": "This repository artefact records the successful after-run summary; the GitHub step summary and PR body carry the generated operational details. None of these records is semantic authority."
     },
     "failedSelfHostedRuns": [
       {
@@ -348,7 +408,7 @@
     "routeRollbackRequiredIfImplemented": true
   },
   "enablementDecision": {
-    "state": "enabled-measurement-pending",
+    "state": "enabled-and-measured",
     "runnerEnabled": true,
     "hostControllerAccepted": true,
     "runnerRegistered": true,
@@ -356,39 +416,26 @@
     "workflowRoutingImplemented": true,
     "closureAllowed": false,
     "exactRemainingBlockers": [
-      "A trusted self-hosted validate run must complete successfully after the runner temp boundary fix is pushed.",
-      "After-run timing fields must be recorded before Linear closure.",
-      "GitHub-hosted fallback must be verified or explicitly recorded as manual fallback-ready.",
-      "PR body and Linear must be updated with run evidence and acceptance criteria after CI completes."
+      "GitHub-hosted fallback is documented and manually switchable, but no post-measurement fallback run has been dispatched in this branch.",
+      "PR #335 must be updated with the measured self-hosted run evidence and non-claims.",
+      "Linear USF-1038 must be updated and must remain open until acceptance criteria are checked individually."
     ],
     "nextUnblockers": [
       {
-        "id": "self-hosted-validate-run",
-        "requirement": "Push the routing change and capture the validate job on usf-linux-x64-controller-01.",
+        "id": "fallback-verification",
+        "requirement": "Keep the GitHub-hosted fallback path documented and verify manually or by workflow_dispatch if closure policy requires a live fallback run.",
         "evidenceRequired": [
-          "run id",
-          "job id",
-          "runner label",
-          "queue seconds",
-          "job duration seconds",
-          "step durations"
+          "repository variable fallback status",
+          "workflow_dispatch runnerTarget support or fallback run id"
         ]
       },
       {
-        "id": "cleanup-proof-after-ci",
-        "requirement": "Confirm workflow postflight and runner hook cleanup evidence after the self-hosted job.",
+        "id": "pr-linear-evidence-update",
+        "requirement": "Update PR #335 and Linear USF-1038 with measured self-hosted runner evidence without closing Linear prematurely.",
         "evidenceRequired": [
-          "runnerCleanupResult pass",
-          "runnerSecretSafetyResult pass",
-          "hook evidence exists"
-        ]
-      },
-      {
-        "id": "fallback-proof",
-        "requirement": "Verify the GitHub-hosted fallback switch or record the manual fallback command and status.",
-        "evidenceRequired": [
-          "fallback variable status",
-          "workflow_dispatch runnerTarget support"
+          "PR body updated",
+          "Linear comment/status updated",
+          "acceptance criteria not overclaimed"
         ]
       }
     ],
@@ -429,11 +476,11 @@
     "cleanupHygieneProofMachineCheckableIfEnabled": true,
     "caddyCallbackDecisionRecorded": true,
     "queueTimeBeforeEvidenceCaptured": true,
-    "runnerBackedAfterEvidenceCaptured": false,
+    "runnerBackedAfterEvidenceCaptured": true,
     "requiredValidateContextStable": true,
     "validatorsRequiredBeforeClosure": true,
     "linearCompletionReady": false,
-    "finalReadinessVerdict": "ENABLED_MEASUREMENT_PENDING"
+    "finalReadinessVerdict": "ENABLED_AND_MEASURED_PENDING_LINEAR_ACCEPTANCE"
   },
   "nonClaims": [
     "staging-readiness",
@@ -518,6 +565,13 @@
     "activeGithubWorkspacePreservedByCleanup": true,
     "hostPostCheckoutFixCleanupResult": "pass",
     "persistentTempReportPathDefectFixed": true,
-    "workflowGeneratedReportsUseRunnerTemp": true
+    "workflowGeneratedReportsUseRunnerTemp": true,
+    "latestSelfHostedRunId": "29005646991",
+    "latestSelfHostedJobId": "86076474031",
+    "latestSelfHostedWorkflowPreCleanupResult": "pass",
+    "latestSelfHostedWorkflowPostCleanupResult": "pass",
+    "latestSelfHostedSecretSafetyResult": "pass",
+    "latestSelfHostedSecretValuesPrinted": false,
+    "latestSelfHostedCachePreserved": true
   }
 }
