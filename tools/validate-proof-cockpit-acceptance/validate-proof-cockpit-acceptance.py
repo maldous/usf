@@ -162,6 +162,7 @@ EVIDENCE_ONLY_PREFIXES = (
     "artifacts/proof-cockpit/",
     "evidence/proof-evidence/proof-cockpit/",
 )
+SOURCE_TREE_HASH_ALGORITHM = "sha256-git-ls-tree-non-proof-evidence-v1"
 
 DIRTY_STATE_PATHS = [
     "apps/staging-proof-cockpit",
@@ -284,6 +285,33 @@ def git_output(args: list[str]) -> str:
 
 def current_head() -> str:
     return git_output(["rev-parse", "HEAD"])
+
+
+def current_source_tree_hash() -> str:
+    """Hash the tracked source tree while excluding proof-cockpit evidence payloads.
+
+    This anchor is intentionally squash-stable: it does not depend on the branch
+    commit object that produced the evidence, and it ignores the evidence-only
+    payload paths that are expected to change after the source proof run.
+    """
+    output = subprocess.run(
+        ["git", "ls-tree", "-r", "-z", "--full-tree", "HEAD"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
+    entries: list[str] = []
+    for raw_entry in output.split(b"\0"):
+        if not raw_entry:
+            continue
+        entry = raw_entry.decode("utf-8")
+        _, _, path = entry.partition("\t")
+        if not path:
+            continue
+        if any(path.startswith(prefix) for prefix in EVIDENCE_ONLY_PREFIXES):
+            continue
+        entries.append(entry)
+    return hashlib.sha256("\0".join(sorted(entries)).encode("utf-8")).hexdigest()
 
 
 def commit_exists(sha: str) -> bool:
@@ -418,6 +446,7 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "nodeData": node_data(),
         "artifactDir": effective_artifact_dir,
         "currentHead": current_head(),
+        "currentSourceTreeHash": current_source_tree_hash(),
         "dirtyPaths": dirty_paths(),
         "planted": [],
     }
@@ -833,17 +862,79 @@ def rule_009_gaps_corrective_actions(data: dict[str, Any]) -> list[dict[str, str
                 failures.append(finding("USF-PROOF-COCKPIT-009", f"Warning inventory item missing {field}", warning_id))
         if item.get("finalStatus") != "fixed":
             failures.append(finding("USF-PROOF-COCKPIT-009", "Warning inventory item is not fixed", warning_id))
-    source_sha = latest.get("sourceSha", "")
-    if source_sha and source_sha != data.get("currentHead"):
-        evidence_only, non_evidence = evidence_only_since(source_sha)
-        if not evidence_only:
+    source_tree_hash = (
+        latest.get("sourceTreeHash")
+        or store.get("sourceTreeHash")
+        or machine_run.get("sourceTreeHash")
+        or ""
+    )
+    current_tree_hash = data.get("currentSourceTreeHash", "")
+    if source_tree_hash:
+        if not HEX_SHA256_RE.fullmatch(str(source_tree_hash)):
             failures.append(
                 finding(
                     "USF-PROOF-COCKPIT-009",
-                    f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
-                    ",".join(non_evidence[:10]),
+                    "Latest machine evidence sourceTreeHash is not a 64 character SHA-256 hex digest",
+                    str(STORE_PATH.relative_to(ROOT)),
                 )
             )
+        elif current_tree_hash and source_tree_hash != current_tree_hash:
+            failures.append(
+                finding(
+                    "USF-PROOF-COCKPIT-009",
+                    f"Latest machine evidence is stale for source tree hash {source_tree_hash}",
+                    str(STORE_PATH.relative_to(ROOT)),
+                )
+            )
+    else:
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-009",
+                "Latest machine evidence lacks squash-stable sourceTreeHash",
+                str(STORE_PATH.relative_to(ROOT)),
+            )
+        )
+
+    if machine_run.get("sourceTreeHash") and source_tree_hash and machine_run.get("sourceTreeHash") != source_tree_hash:
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-009",
+                "Machine QA artifact sourceTreeHash does not match latest machine run",
+                str(data.get("artifactDir") or ""),
+            )
+        )
+    if (
+        machine_run.get("sourceTreeHashAlgorithm")
+        and machine_run.get("sourceTreeHashAlgorithm") != SOURCE_TREE_HASH_ALGORITHM
+    ):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-009",
+                "Machine QA artifact sourceTreeHashAlgorithm is unknown",
+                str(data.get("artifactDir") or ""),
+            )
+        )
+
+    source_sha = latest.get("sourceSha", "")
+    if not source_tree_hash and source_sha and source_sha != data.get("currentHead"):
+        if not commit_exists(source_sha):
+            failures.append(
+                finding(
+                    "USF-PROOF-COCKPIT-009",
+                    f"Latest machine evidence lacks sourceTreeHash and source SHA is not resolvable: {source_sha}",
+                    str(STORE_PATH.relative_to(ROOT)),
+                )
+            )
+        else:
+            evidence_only, non_evidence = evidence_only_since(source_sha)
+            if not evidence_only:
+                failures.append(
+                    finding(
+                        "USF-PROOF-COCKPIT-009",
+                        f"Latest machine evidence is stale for non-evidence changes after source SHA {source_sha}",
+                        ",".join(non_evidence[:10]),
+                    )
+                )
     gaps = store.get("gaps", [])
     corrective = store.get("correctiveActions", [])
     if gaps and not corrective:
@@ -1158,6 +1249,9 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         mutated["serviceEvidenceManifest"]["services"][0]["humanReenactmentInstruction"] = ""
     elif kind == "stale-evidence-treated-current":
         mutated["store"]["latestMachineRun"]["sourceSha"] = "0000000000000000000000000000000000000000"
+        mutated["store"]["latestMachineRun"]["sourceTreeHash"] = "0" * 64
+        mutated["store"]["sourceTreeHash"] = "0" * 64
+        mutated["machineRunReport"]["sourceTreeHash"] = "0" * 64
     elif kind == "dirty-proof-cockpit-state":
         mutated["dirtyPaths"] = ["apps/staging-proof-cockpit/src/server.mjs"]
     elif kind == "final-signoff-auto-completed":

@@ -57,6 +57,9 @@ export function computePromotion(store, report, artifactDir) {
   const newLatest = {
     runId: report.qaRun,
     sourceSha: report.sourceSha,
+    sourceTreeHash: report.sourceTreeHash ?? "",
+    sourceTreeHashAlgorithm: report.sourceTreeHashAlgorithm ?? "",
+    sourceTreeHashExcludedPrefixes: report.sourceTreeHashExcludedPrefixes ?? [],
     deploymentSha: report.deploymentSha ?? report.sourceSha,
     environment: report.environment ?? "local-machine-qa",
     generatedAt,
@@ -80,6 +83,9 @@ export function computePromotion(store, report, artifactDir) {
   const prior = store.latestMachineRun;
   const next = structuredClone(store);
   next.sourceSha = newLatest.sourceSha;
+  next.sourceTreeHash = newLatest.sourceTreeHash;
+  next.sourceTreeHashAlgorithm = newLatest.sourceTreeHashAlgorithm;
+  next.sourceTreeHashExcludedPrefixes = newLatest.sourceTreeHashExcludedPrefixes;
   next.deploymentSha = newLatest.deploymentSha;
   next.latestMachineRun = newLatest;
   next.machineRunHistory = [...(store.machineRunHistory ?? [])];
@@ -105,9 +111,11 @@ export function computePromotion(store, report, artifactDir) {
         fromRunId: prior.runId,
         fromArtifactDir: prior.artifactDir,
         fromSourceSha: prior.sourceSha,
+        fromSourceTreeHash: prior.sourceTreeHash ?? "",
         toRunId: newLatest.runId,
         toArtifactDir: newLatest.artifactDir,
         toSourceSha: newLatest.sourceSha,
+        toSourceTreeHash: newLatest.sourceTreeHash,
         supersededAt: generatedAt,
         reason: "Automated promotion of a newer current-source machine QA run via promote.mjs.",
       },
@@ -158,6 +166,9 @@ function computeBundleLatestMachineRun(existingLatest, latest, report, serviceEv
     serviceEvidenceCount: serviceEvidenceSummary.serviceEvidenceCount ?? latest.serviceEvidenceCount,
     evidenceRecordCount: evidenceRecordCount ?? 0,
     sourceSha: latest.sourceSha,
+    sourceTreeHash: latest.sourceTreeHash,
+    sourceTreeHashAlgorithm: latest.sourceTreeHashAlgorithm,
+    sourceTreeHashExcludedPrefixes: latest.sourceTreeHashExcludedPrefixes,
     deploymentSha: latest.deploymentSha,
     authenticatedServiceUiCaptureCount:
       serviceEvidenceSummary.authenticatedServiceUiCaptureCount ??
@@ -219,7 +230,14 @@ function main() {
 
   console.log(
     JSON.stringify(
-      { promoted: ts, artifactDir, sourceSha: report.sourceSha, counts: report.counts, prunedPayloads: pruned },
+      {
+        promoted: ts,
+        artifactDir,
+        sourceSha: report.sourceSha,
+        sourceTreeHash: report.sourceTreeHash ?? "",
+        counts: report.counts,
+        prunedPayloads: pruned,
+      },
       null,
       2,
     ),
