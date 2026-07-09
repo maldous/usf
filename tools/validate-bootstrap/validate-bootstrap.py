@@ -570,23 +570,34 @@ def parent_short_head():
     return git_value("rev-parse", "--short", "HEAD^") or ""
 
 
-def missing_anchor_message(short_head, parent_short, has_tag):
+def racing_push_first_attempt():
+    """True only for the first attempt of a push-event CI run, i.e. the one
+    run that legitimately races its own proof-anchor publication."""
+    return (
+        os.environ.get("GITHUB_EVENT_NAME") == "push"
+        and os.environ.get("GITHUB_RUN_ATTEMPT", "1") == "1"
+    )
+
+
+def missing_anchor_message(short_head, parent_short, has_tag, racing):
     """Return a finding message when main anchor coverage is broken, else None.
 
     The newest main commit's anchor is published by the proof-anchor workflow
-    triggered by the same push, so a validate run racing that publication must
-    not fail on its own commit (USF-1043; observed on runs 29016956084 and
-    29018818979 first attempts). Coverage stays fail-closed with a one-push
-    lag: the first-parent main commit's anchor must already be exposed, and
-    the current commit's anchor is checked by every later run on main.
+    triggered by the same push, so only the first attempt of that push-event
+    validate run may fall back to the first parent's anchor (USF-1043;
+    observed on runs 29016956084 and 29018818979 first attempts). Re-runs,
+    manual dispatches, and local runs enforce strictly, so a failed anchor
+    publication cannot be suppressed indefinitely: the fallback never applies
+    outside the racing first attempt, and even there the first-parent anchor
+    must already be exposed.
     """
     if has_tag(f"proof-anchor-{short_head}"):
         return None
-    if parent_short and has_tag(f"proof-anchor-{parent_short}"):
+    if racing and parent_short and has_tag(f"proof-anchor-{parent_short}"):
         return None
     return (
-        f"origin does not expose a proof-anchor tag for current main ({short_head}) "
-        "or its first parent"
+        f"origin does not expose a proof-anchor tag for current main ({short_head})"
+        + (" or its first parent" if racing else "")
     )
 
 
@@ -599,7 +610,9 @@ def check_anchor_for_current_main(F):
     short_head = current_short_head()
     if not short_head:
         return
-    message = missing_anchor_message(short_head, parent_short_head(), remote_has_tag)
+    message = missing_anchor_message(
+        short_head, parent_short_head(), remote_has_tag, racing_push_first_attempt()
+    )
     if message:
         F.add("USF-BOOTSTRAP-006", f"proof-anchor-{short_head}", message)
 
@@ -1274,15 +1287,17 @@ def run_selftest(F):
         if expected not in {item["ruleId"] for item in local.items}:
             F.add("USF-BOOTSTRAP-SELFTEST", path, f"expected {expected}; got {sorted({item['ruleId'] for item in local.items})}")
     anchor_cases = [
-        ("anchor-present-passes", {"proof-anchor-aaaaaaaa"}, None),
-        ("anchor-missing-parent-covered-passes", {"proof-anchor-bbbbbbbb"}, None),
-        ("anchor-and-parent-missing-fails", set(), "finding"),
+        ("anchor-present-passes", "aaaaaaaa", {"proof-anchor-aaaaaaaa"}, True, None),
+        ("racing-first-attempt-parent-covered-passes", "cccccccc", {"proof-anchor-bbbbbbbb"}, True, None),
+        ("non-racing-parent-covered-still-fails", "cccccccc", {"proof-anchor-bbbbbbbb"}, False, "finding"),
+        ("racing-anchor-and-parent-missing-fails", "cccccccc", set(), True, "finding"),
     ]
-    for case_name, tags, expectation in anchor_cases:
+    for case_name, short_head, tags, racing, expectation in anchor_cases:
         message = missing_anchor_message(
-            "aaaaaaaa" if case_name == "anchor-present-passes" else "cccccccc",
+            short_head,
             "bbbbbbbb",
             lambda tag, _tags=tags: tag in _tags,
+            racing,
         )
         if expectation is None and message is not None:
             F.add("USF-BOOTSTRAP-SELFTEST", case_name, f"anchor tolerance produced unexpected finding: {message}")
