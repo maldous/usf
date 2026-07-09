@@ -117,6 +117,11 @@ SCREENSHOT_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
 
 AFFECTED_RULES = [
     {
+        "id": "ci-workflow",
+        "prefixes": [".github/workflows/", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".npmrc"],
+        "commands": ["corepack pnpm repo:validate"],
+    },
+    {
         "id": "semantic-spec",
         "prefixes": ["spec/"],
         "commands": ["python3 tools/validate-spec/validate-spec.py all --json", "corepack pnpm repo:validate"],
@@ -130,12 +135,17 @@ AFFECTED_RULES = [
         "id": "repository-optimisation",
         "prefixes": [
             "docs/architecture/repository-optimisation-",
+            "docs/architecture/repository-ci-throughput-optimisation-",
             "docs/architecture/repository-compose-optimisation-",
             "docs/architecture/repository-performance-profiling-",
+            "evidence/generated-reports/repository-ci-throughput-",
             "tools/repository-optimisation/",
             "tools/validate-repository-optimisation/",
         ],
-        "commands": ["python3 tools/validate-repository-optimisation/validate-repository-optimisation.py all --json"],
+        "commands": [
+            "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py all --json",
+            "python3 tools/validate-repository-optimisation/validate-repository-optimisation.py selftest --json",
+        ],
     },
     {
         "id": "compose",

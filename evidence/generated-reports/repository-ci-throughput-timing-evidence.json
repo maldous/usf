@@ -1,0 +1,82 @@
+{
+  "aiGuidance": "Lowest-authority generated timing report for USF-1037 CI throughput review only. Generated timing output is not USF semantic authority. Generated timing output is not proof readiness. Cache hit or miss evidence does not satisfy validation or proof. No staging, deployment, production, live-provider, compliance, store, monetisation, or human acceptance claim is made.",
+  "authorityLevel": "generated-report",
+  "description": "Generated timing evidence for validate-spec GitHub CI throughput optimisation. It supports review only and does not define USF semantics, validator authority, proof readiness, or acceptance.",
+  "evidenceRefs": [
+    ".github/workflows/validate-spec.yml",
+    "docs/architecture/repository-ci-throughput-optimisation-realisation.json",
+    "tools/validate-repository-optimisation/validate-repository-optimisation.py"
+  ],
+  "findings": [
+    {
+      "evidenceRefs": [
+        "issue:USF-1037",
+        "workflow:validate-spec",
+        "required-check:validate",
+        "baseline-run:28991132832",
+        "baseline-run:28990867661",
+        "baseline-run:28990284212",
+        "baseline-run:28990004359",
+        "baseline-duration-seconds:378",
+        "baseline-source:github-actions-run-list-2026-07-09"
+      ],
+      "message": "Observed pre-change validate-spec GitHub Actions baseline from recent successful push and pull_request runs. Representative baseline duration is 378 seconds.",
+      "ruleId": "USF-CI-THROUGHPUT-TIMING-BASELINE",
+      "severity": "info",
+      "subject": "validate-spec-baseline"
+    },
+    {
+      "evidenceRefs": [
+        "after-status:external-operational-record-required",
+        "after-run:external-pr-or-linear-record",
+        "after-duration-seconds:external-pr-or-linear-record",
+        "exact-run-id-in-repository:false",
+        "exact-duration-in-repository:false",
+        "latest-timing-record-location:pull-request-or-linear-comment",
+        "fixed-point-source-churn-avoided:true",
+        "cache-hit-output-normalised:true",
+        "pull-request-cache-write:false",
+        "required-before-linear-closure:true"
+      ],
+      "message": "The repository records the validate-spec timing evidence boundary and requires exact latest run details to be reported in PR or Linear operational records. Exact run ids and durations are not committed to source because doing so creates proof-cockpit source-hash churn and another CI run for every timing observation.",
+      "ruleId": "USF-CI-THROUGHPUT-TIMING-AFTER",
+      "severity": "info",
+      "subject": "validate-spec-after"
+    },
+    {
+      "evidenceRefs": [
+        "comparison-status:external-operational-record-required",
+        "baseline-duration-seconds:378",
+        "after-duration-seconds:external-pr-or-linear-record",
+        "delta-seconds:external-pr-or-linear-record",
+        "enforcement-mode:warn-only",
+        "hard-ci-block:false",
+        "performance-budget-enforced:false",
+        "speedup-claim-made:false",
+        "material-speedup-claim-made:false",
+        "cache-hit-satisfies-validation:false",
+        "generated-report-authority:false",
+        "branch-protection-required-context-preserved:true"
+      ],
+      "message": "Timing comparison remains advisory and warn-only. Exact after-run duration and delta must be reported outside source-tracked freshness inputs before Linear closure, without treating cache hits or generated reports as validation proof.",
+      "ruleId": "USF-CI-THROUGHPUT-TIMING-COMPARE",
+      "severity": "info",
+      "subject": "validate-spec-comparison"
+    }
+  ],
+  "id": "usf.repository-ci-throughput.timing-evidence",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Command",
+    "Generated Report"
+  ],
+  "status": "advisory",
+  "taxonomyRefs": [
+    "evidence-and-proof"
+  ],
+  "title": "Repository CI throughput timing evidence",
+  "vocabularyRefs": [
+    "report-statuses",
+    "validation-severities"
+  ]
+}

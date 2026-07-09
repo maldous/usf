@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[2]
 TRANCHE = ROOT / "docs/architecture/repository-optimisation-local-realisation-tranche.json"
 NON_LOCAL_EVALUATION = ROOT / "docs/architecture/repository-non-local-optimisation-option-evaluation.json"
@@ -16,6 +18,10 @@ SEMANTICS = ROOT / "docs/architecture/repository-optimisation-realisation-semant
 LINEAR_POLICY = ROOT / "docs/architecture/linear-reference-boundary-and-repository-self-sufficiency.json"
 LINEAR_AUDIT = ROOT / "docs/architecture/linear-repository-delivery-audit.json"
 PACKAGE = ROOT / "package.json"
+CI_THROUGHPUT = ROOT / "docs/architecture/repository-ci-throughput-optimisation-realisation.json"
+CI_TIMING = ROOT / "evidence/generated-reports/repository-ci-throughput-timing-evidence.json"
+RUNNER_CAPACITY = ROOT / "docs/architecture/github-runner-capacity-enablement.json"
+VALIDATE_WORKFLOW = ROOT / ".github/workflows/validate-spec.yml"
 
 REPORTS = {
     "USF-997": ROOT / "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
@@ -29,6 +35,16 @@ REPORTS = {
 
 REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001", "USF-1007"}
 REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006", "USF-1008"}
+REQUIRED_CI_CANDIDATES = set("ABCDEFGHIJKLM")
+REQUIRED_CI_IMPLEMENTED = {"A", "B", "E", "G", "K", "M"}
+REQUIRED_CI_FOLLOW_UPS = {
+    "C": {"USF-1040"},
+    "D": {"USF-1039"},
+    "F": {"USF-1041"},
+    "I": {"USF-1038"},
+    "J": {"USF-1042"},
+    "L": {"USF-1040"},
+}
 REQUIRED_REPORT_REFS = {
     "USF-997": {
         "cache-boundary:per-process",
@@ -109,6 +125,13 @@ REQUIRED_REPORT_REFS = {
         "non-local-options-adopted:false",
     },
 }
+
+
+def workflow_data(text: str) -> dict[str, Any]:
+    value = yaml.safe_load(text)
+    if not isinstance(value, dict):
+        raise ValueError("workflow must parse to a YAML object")
+    return value
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -273,10 +296,706 @@ def check_repository_artifacts(
     return findings
 
 
+def check_ci_throughput_artifacts(
+    ci_data: dict[str, Any] | None = None,
+    timing_data: dict[str, Any] | None = None,
+    workflow_text: str | None = None,
+) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    ci = ci_data or load_json(CI_THROUGHPUT)
+    timing = timing_data or load_json(CI_TIMING)
+    workflow_source = workflow_text if workflow_text is not None else VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+
+    candidates = ci.get("candidateMatrix", [])
+    if not isinstance(candidates, list):
+        findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), "candidateMatrix must be a list"))
+        candidates = []
+    by_id = {item.get("id"): item for item in candidates if isinstance(item, dict)}
+    missing_candidates = REQUIRED_CI_CANDIDATES - set(by_id)
+    extra_candidates = set(by_id) - REQUIRED_CI_CANDIDATES
+    if missing_candidates or extra_candidates:
+        findings.append(
+            finding(
+                "USF-OPT-CI-001",
+                rel(CI_THROUGHPUT),
+                f"CI throughput candidate matrix mismatch missing={','.join(sorted(missing_candidates))} extra={','.join(sorted(extra_candidates))}",
+            )
+        )
+    implemented = set(ci.get("implementedNowCandidateIds", []))
+    missing_implemented = REQUIRED_CI_IMPLEMENTED - implemented
+    if missing_implemented:
+        findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"missing implemented-now candidates: {', '.join(sorted(missing_implemented))}"))
+    for candidate_id in sorted(REQUIRED_CI_IMPLEMENTED):
+        classification = str(by_id.get(candidate_id, {}).get("classification", ""))
+        if not classification.startswith("implemented-now"):
+            findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} must be implemented now"))
+    for candidate_id, candidate in by_id.items():
+        classification = str(candidate.get("classification", ""))
+        if not classification.startswith("implemented-now") and not candidate.get("reason"):
+            findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} needs defer/reject/decision rationale"))
+    for candidate_id, required_issue_ids in REQUIRED_CI_FOLLOW_UPS.items():
+        follow_up_issue_ids = set(by_id.get(candidate_id, {}).get("followUpIssueIds", []))
+        if not required_issue_ids.issubset(follow_up_issue_ids):
+            findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} missing required follow-up issue IDs"))
+
+    cache = ci.get("cacheAndArtifactSafety", {})
+    if not isinstance(cache, dict):
+        findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), "cacheAndArtifactSafety must be an object"))
+        cache = {}
+    required_false = [
+        "restoreKeysUsed",
+        "pullRequestCacheWritesAllowed",
+        "cacheHitSatisfiesValidation",
+        "artifactReuseIntroduced",
+        "artifactUploadIntroduced",
+        "generatedReportsPromotedToAuthority",
+    ]
+    for key in required_false:
+        if cache.get(key) is not False:
+            findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), f"unsafe cache or artifact field must be false: {key}"))
+    if cache.get("mainCacheWritesAllowed") is not True:
+        findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), "main cache writes must be explicit"))
+    forbidden_scopes = set(cache.get("forbiddenCacheScopes", []))
+    for required in ["node_modules", "evidence", "generated reports", "artifacts", "secrets", "proof payloads"]:
+        if required not in forbidden_scopes:
+            findings.append(finding("USF-OPT-CI-002", rel(CI_THROUGHPUT), f"forbidden cache scope missing: {required}"))
+
+    affected = ci.get("affectedDomainMap", {})
+    if not isinstance(affected, dict):
+        findings.append(finding("USF-OPT-CI-006", rel(CI_THROUGHPUT), "affectedDomainMap must be an object"))
+        affected = {}
+    if affected.get("enforcementMode") != "warn-only" or affected.get("hardCiBlock") is not False:
+        findings.append(finding("USF-OPT-CI-006", rel(CI_THROUGHPUT), "affected-domain map must remain warn-only with hardCiBlock false"))
+    fallbacks = set(affected.get("mandatoryFallbackClasses", []))
+    for required in ["unknown path", "workflow file change", "package manager or lockfile change", "proof-cockpit machine evidence change", "provider mode ambiguity", "environment ambiguity"]:
+        if required not in fallbacks:
+            findings.append(finding("USF-OPT-CI-006", rel(CI_THROUGHPUT), f"affected-domain mandatory fallback missing: {required}"))
+
+    proof = ci.get("proofCockpitFreshnessBoundary", {})
+    if not isinstance(proof, dict):
+        findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), "proofCockpitFreshnessBoundary must be an object"))
+        proof = {}
+    proof_expectations = {
+        "rePinRequiredByThisChange": True,
+        "freshnessWeakened": False,
+        "generatedReportMaySatisfyFreshness": False,
+        "missingCollectedEvidenceFailsClosed": True,
+        "staleEvidenceSatisfiesPass": False,
+        "unknownEvidenceSatisfiesPass": False,
+    }
+    for key, expected in proof_expectations.items():
+        if proof.get(key) is not expected:
+            findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), f"proof-cockpit freshness field must be {expected}: {key}"))
+    re_pin = proof.get("rePinEvidence")
+    if not isinstance(re_pin, dict):
+        findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), "proof-cockpit rePinEvidence must be recorded"))
+    else:
+        required_repin_values = {
+            "proofEvidenceStore": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+            "externalReviewBundleManifest": "evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json",
+            "promotionCommand": "make proof-review-repin",
+            "validationCommand": "corepack pnpm proof-cockpit:validate",
+            "exactSourceTreeHashRecordedInProofEvidence": True,
+            "generatedReportsMaySubstitute": False,
+        }
+        for key, expected in required_repin_values.items():
+            if re_pin.get(key) != expected:
+                findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), f"proof-cockpit rePinEvidence mismatch for {key}"))
+
+    callback = ci.get("callbackAndCaddyDecision", {})
+    if not isinstance(callback, dict):
+        findings.append(finding("USF-OPT-CI-008", rel(CI_THROUGHPUT), "callbackAndCaddyDecision must be an object"))
+        callback = {}
+    if callback.get("decision") != "no-change" or callback.get("callbackPayloadsAreAuthority") is not False:
+        findings.append(finding("USF-OPT-CI-008", rel(CI_THROUGHPUT), "callback and Caddy decision must remain no-change and non-authoritative"))
+
+    runners = ci.get("runnerDecisions", {})
+    if not isinstance(runners, dict):
+        findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), "runnerDecisions must be an object"))
+        runners = {}
+    for key in ["selfHostedRunner", "largerGithubHostedRunner"]:
+        decision = runners.get(key, {})
+        if not isinstance(decision, dict) or decision.get("classification") != "decision-required" or decision.get("adopted") is not False:
+            findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), f"runner option must require a decision and remain unadopted: {key}"))
+    expected_runner_followups = {
+        "selfHostedRunner": "USF-1038",
+        "largerGithubHostedRunner": "USF-1042",
+    }
+    for key, expected_issue_id in expected_runner_followups.items():
+        decision = runners.get(key, {})
+        if not isinstance(decision, dict) or decision.get("followUpIssueId") != expected_issue_id:
+            findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), f"runner option must record follow-up issue {expected_issue_id}: {key}"))
+
+    branch = ci.get("branchProtectionMap", {})
+    if not isinstance(branch, dict):
+        findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), "branchProtectionMap must be an object"))
+        branch = {}
+    if "validate" not in branch.get("observedRequiredContexts", []):
+        findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), "branch protection map must preserve validate required context"))
+    branch_false = ["requiredCheckWeakened", "proofAnchorRequiredForPullRequest", "branchProtectionMutationMade"]
+    for key in branch_false:
+        if branch.get(key) is not False:
+            findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), f"branch protection field must be false: {key}"))
+    if branch.get("workflowJobIdPreserved") != "validate" or branch.get("workflowJobContextPreserved") is not True:
+        findings.append(finding("USF-OPT-CI-003", rel(CI_THROUGHPUT), "workflow validate job context must be preserved"))
+
+    timing_ref = ci.get("timingEvidence", {})
+    if not isinstance(timing_ref, dict):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timingEvidence must be an object"))
+        timing_ref = {}
+    if timing_ref.get("generatedReport") != rel(CI_TIMING):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timing evidence must reference generated timing report"))
+    if timing_ref.get("baselineRepresentativeDurationSeconds", 0) <= 0 or timing_ref.get("timingClaimMade") is not False:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "timing baseline must be positive and timing claims must remain false"))
+    cache_boundary = ci.get("cacheObservationBoundary", {})
+    if not isinstance(cache_boundary, dict):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cacheObservationBoundary must be an object"))
+        cache_boundary = {}
+    if cache_boundary.get("blankCacheHitAllowed") is not False:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "blank cache-hit values must be rejected"))
+    if cache_boundary.get("cacheHitSatisfiesValidation") is not False:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cache hits must not satisfy validation"))
+    required_runtime_fields = {
+        "lookupAttempted",
+        "cacheHit",
+        "cacheWriteAllowed",
+        "cacheWriteAttempted",
+        "cacheWriteSkippedReason",
+    }
+    if not required_runtime_fields.issubset(set(cache_boundary.get("requiredRuntimeFields", []))):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cache observation boundary lacks required runtime fields"))
+    if set(cache_boundary.get("appliesToPackageManagers", [])) != {"pnpm", "pip"}:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), "cache observation boundary must cover pnpm and pip"))
+    cache_templates = {
+        "pullRequestExecutedLookupTemplate": {
+            "lookupAttempted": True,
+            "cacheHit": False,
+            "cacheWriteAllowed": False,
+            "cacheWriteAttempted": False,
+            "cacheWriteSkippedReason": "pull-request-read-only",
+        },
+        "trustedMainCacheMissTemplate": {
+            "lookupAttempted": True,
+            "cacheHit": False,
+            "cacheWriteAllowed": True,
+            "cacheWriteAttempted": True,
+            "cacheWriteSkippedReason": "not-skipped-cache-miss",
+        },
+        "trustedMainCacheHitTemplate": {
+            "lookupAttempted": True,
+            "cacheHit": True,
+            "cacheWriteAllowed": True,
+            "cacheWriteAttempted": False,
+            "cacheWriteSkippedReason": "cache-hit",
+        },
+        "untrustedManualRunTemplate": {
+            "lookupAttempted": False,
+            "cacheHit": False,
+            "cacheWriteAllowed": False,
+            "cacheWriteAttempted": False,
+            "cacheWriteSkippedReason": "non-main-untrusted-ref",
+        },
+    }
+    for template_name, expected_values in cache_templates.items():
+        template = cache_boundary.get(template_name)
+        if not isinstance(template, dict):
+            findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache observation template missing: {template_name}"))
+            continue
+        for bool_key in ["lookupAttempted", "cacheHit", "cacheWriteAllowed", "cacheWriteAttempted"]:
+            if not isinstance(template.get(bool_key), bool):
+                findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache observation field must be boolean: {template_name}.{bool_key}"))
+        reason = template.get("cacheWriteSkippedReason")
+        if not isinstance(reason, str) or not reason:
+            findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache skipped reason must be non-empty: {template_name}"))
+        for key, expected in expected_values.items():
+            if template.get(key) != expected:
+                findings.append(finding("USF-OPT-CI-004", rel(CI_THROUGHPUT), f"cache observation template mismatch: {template_name}.{key}"))
+    timing_refs = refs(timing)
+    baseline_seconds = None
+    after_status = None
+    after_seconds = None
+    after_run = None
+    for ref in timing_refs:
+        if ref.startswith("baseline-duration-seconds:"):
+            value = ref.split(":", 1)[1]
+            if value.isdigit():
+                baseline_seconds = int(value)
+        elif ref.startswith("after-status:"):
+            after_status = ref.split(":", 1)[1]
+        elif ref.startswith("after-duration-seconds:"):
+            value = ref.split(":", 1)[1]
+            if value.isdigit():
+                after_seconds = int(value)
+        elif ref.startswith("after-run:"):
+            after_run = ref.split(":", 1)[1]
+
+    closure = ci.get("closureReport", {})
+    if not isinstance(closure, dict):
+        findings.append(finding("USF-OPT-CI-010", rel(CI_THROUGHPUT), "closureReport must be an object"))
+        closure = {}
+    for key in [
+        "candidateClassificationComplete",
+        "implementedNowCandidatesImplemented",
+        "deferredOrRejectedCandidatesHaveRationale",
+        "caddyAndCallbackDecisionRecorded",
+        "selfHostedAndLargerRunnerDecisionRecorded",
+        "proofEvidenceChurnAddressed",
+        "branchProtectionCompatibilityRecorded",
+        "timingBeforeRecorded",
+    ]:
+        if closure.get(key) is not True:
+            findings.append(finding("USF-OPT-CI-010", rel(CI_THROUGHPUT), f"closure field must be true: {key}"))
+    if closure.get("timingAfterRecorded") is True and after_status != "observed":
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "timingAfterRecorded cannot be true until after timing is observed"))
+    if closure.get("linearCompletionReady") is True and closure.get("validationComplete") is not True:
+        findings.append(finding("USF-OPT-CI-010", rel(CI_THROUGHPUT), "linear completion cannot be ready before validation is complete"))
+
+    if timing.get("authorityLevel") != "generated-report":
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing evidence authorityLevel must be generated-report"))
+    if baseline_seconds is None or baseline_seconds <= 0:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing baseline must include a positive representative duration evidence ref"))
+    if after_status not in {"pending-github-pr-run", "observed", "external-operational-record-required"}:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing after-status ref must be pending-github-pr-run, observed, or external-operational-record-required"))
+    if after_status == "observed" and (not after_run or after_run == "pending" or after_seconds is None or after_seconds <= 0):
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "observed CI after timing requires after-run and positive after-duration-seconds refs"))
+    if after_status == "external-operational-record-required" and "fixed-point-source-churn-avoided:true" not in timing_refs:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "external CI timing records must preserve fixed-point churn avoidance evidence"))
+    if "hard-ci-block:false" not in timing_refs or "speedup-claim-made:false" not in timing_refs:
+        findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), "CI timing comparison must remain warn-only with no speedup claim"))
+    for required in [
+        "issue:USF-1037",
+        "required-check:validate",
+        "cache-hit-satisfies-validation:false",
+        "generated-report-authority:false",
+        "branch-protection-required-context-preserved:true",
+        "hard-ci-block:false",
+    ]:
+        if required not in timing_refs:
+            findings.append(finding("USF-OPT-CI-004", rel(CI_TIMING), f"CI timing evidence ref missing: {required}"))
+
+    try:
+        workflow = workflow_data(workflow_source)
+    except (yaml.YAMLError, ValueError) as exc:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"validate-spec workflow must parse as YAML: {exc}"))
+        workflow = {}
+    jobs = workflow.get("jobs", {}) if isinstance(workflow, dict) else {}
+    validate_job = jobs.get("validate", {}) if isinstance(jobs, dict) else {}
+    if not validate_job:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "validate job must exist to preserve required status context"))
+    concurrency = workflow.get("concurrency", {}) if isinstance(workflow, dict) else {}
+    if "pull_request" not in str(concurrency.get("cancel-in-progress", "")):
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "concurrency cancellation must be pull-request scoped"))
+    steps = validate_job.get("steps", []) if isinstance(validate_job, dict) else []
+    step_names = {str(step.get("name", "")) for step in steps if isinstance(step, dict)}
+    for required_step in [
+        "Restore pnpm store cache (PR read-only)",
+        "Restore pnpm store cache (main writable)",
+        "Restore pip download cache (PR read-only)",
+        "Restore pip download cache (main writable)",
+        "Report generated CI timing boundary",
+    ]:
+        if required_step not in step_names:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow missing CI throughput step: {required_step}"))
+    if "restore-keys" in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not use broad cache restore-keys"))
+    for forbidden in ["node_modules", "site-packages", "virtualenv", "evidence/generated-reports", "artifacts/proof-cockpit"]:
+        if forbidden in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow must not cache forbidden scope: {forbidden}"))
+    if "actions/cache/restore@v4" not in workflow_source or "actions/cache@v4" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must use read-only PR cache restore and writable main cache actions"))
+    if "workflow_dispatch" not in workflow_source or "github.ref == 'refs/heads/main'" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "manual cache warm path must be limited to trusted main cache writes"))
+    if "fetch-depth: 0" in workflow_source or "fetch-depth: 512" not in workflow_source or "refs/remotes/origin/$BASE_REF" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must avoid full-history checkout and explicitly fetch bounded PR refs"))
+    for base_ref_snippet in [
+        "BASE_SHA: ${{ github.event.pull_request.base.sha }}",
+        'git update-ref "refs/remotes/origin/$BASE_REF" "$BASE_SHA"',
+        'git fetch --no-tags --depth=512 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"',
+    ]:
+        if base_ref_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must prepare PR base ref from event base SHA with bounded fetch fallback"))
+    if 'git fetch --no-tags --depth=1 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"' in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not reintroduce a depth-1 base fetch that can break bootstrap ancestry"))
+    for ancestry_snippet in [
+        "BOOTSTRAP_START_COMMIT: f80da3919bfeb4e5596ccac95a67d707bae0d3ae",
+        "git merge-base --is-ancestor \"$BOOTSTRAP_START_COMMIT\" HEAD",
+        "git fetch --no-tags --deepen=512 origin",
+        "git fetch --no-tags --unshallow origin",
+    ]:
+        if ancestry_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must verify bootstrap ancestry with bounded deepen and current-ref unshallow fallback"))
+    if "git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fetch the minimum bootstrap marker tag depth required by bootstrap validation"))
+    if "git fetch --tags" in workflow_source or "fetch-tags: true" in workflow_source or "refs/tags/*:refs/tags/*" in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not broaden validate-spec checkout to all tags"))
+    if "--unshallow" not in workflow_source or "git diff --name-status" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fail closed to fuller checkout when PR diff refs are missing"))
+    for forbidden_tmp_path in [
+        "/tmp/usf-validator-report.json",
+        "/tmp/usf-pr-validator-report.json",
+        "/tmp/usf-runner-cleanup-pre.json",
+        "/tmp/usf-runner-toolchain.json",
+        "/tmp/usf-runner-secret-safety-post.json",
+        "/tmp/usf-runner-cleanup-post.json",
+    ]:
+        if forbidden_tmp_path in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow must not use fixed persistent temp path: {forbidden_tmp_path}"))
+    for runner_temp_snippet in [
+        "Verify runner temp boundary",
+        'test -w "$RUNNER_TEMP"',
+        '"$RUNNER_TEMP/usf-validator-report.json"',
+        '"$RUNNER_TEMP/usf-pr-validator-report.json"',
+        '"$RUNNER_TEMP/usf-runner-cleanup-post.json"',
+        '"$RUNNER_TEMP/usf-runner-secret-safety-post.json"',
+        '"$RUNNER_TEMP/usf-runner-toolchain.json"',
+    ]:
+        if runner_temp_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow generated reports must use the runner-scoped temp boundary"))
+    if "cache_hit_value()" not in workflow_source or "*) printf false ;;" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must normalise empty cache-hit outputs to false"))
+    if 'pnpm_cache_hit_main="not-applicable"' not in workflow_source or 'pip_cache_hit_main="not-applicable"' not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "PR cache diagnostics must explicitly mark non-executed main cache hits as not-applicable"))
+    for summary_field in [
+        "pnpmCacheLookupAttempted",
+        "pnpmCacheHit",
+        "pnpmCacheHitPr",
+        "pnpmCacheHitMain",
+        "pnpmCacheWriteAllowed",
+        "pnpmCacheWriteAttempted",
+        "pnpmCacheWriteSkippedReason",
+        "pipCacheLookupAttempted",
+        "pipCacheHit",
+        "pipCacheHitPr",
+        "pipCacheHitMain",
+        "pipCacheWriteAllowed",
+        "pipCacheWriteAttempted",
+        "pipCacheWriteSkippedReason",
+    ]:
+        if summary_field not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow summary missing cache field: {summary_field}"))
+    if "corepack pnpm install --prefer-offline --frozen-lockfile" not in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must keep frozen pnpm install with prefer-offline cache use"))
+    return findings
+
+
+def check_runner_capacity_artifact(runner_data: dict[str, Any] | None = None) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    data = runner_data or load_json(RUNNER_CAPACITY)
+    if data.get("artifactId") != "usf.github-runner-capacity-enablement" or data.get("ownerIssueId") != "USF-1038":
+        findings.append(finding("USF-OPT-RUNNER-001", rel(RUNNER_CAPACITY), "runner capacity artefact must be owned by USF-1038"))
+    lifecycle_state = data.get("lifecycleState")
+    blocked_state = lifecycle_state == "blocked-pending-dedicated-runner-host-and-registration"
+    enabled_pending_state = lifecycle_state == "trusted-self-hosted-runner-enabled-measurement-pending"
+    enabled_measured_state = lifecycle_state == "trusted-self-hosted-runner-enabled-and-measured"
+    operational_blocked_state = lifecycle_state == "accepted-host-controller-blocked-by-operational-issue"
+    if not (blocked_state or enabled_pending_state or enabled_measured_state or operational_blocked_state):
+        findings.append(finding("USF-OPT-RUNNER-001", rel(RUNNER_CAPACITY), "runner capacity lifecycle state must be blocked, enabled-measurement-pending, enabled-and-measured, or exact-operational-blocked"))
+    runner_enabled_state = enabled_pending_state or enabled_measured_state
+
+    authority = data.get("authorityBoundary", {})
+    if not isinstance(authority, dict):
+        findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "authorityBoundary must be an object"))
+        authority = {}
+    for key in [
+        "githubSettingsAuthority",
+        "generatedReportsAuthority",
+        "runnerLocalStateAuthority",
+        "callbackPayloadsAuthority",
+        "workflowDefinesSemantics",
+        "implementationRuntimeCodeCreated",
+        "sourceImplementationImported",
+    ]:
+        if authority.get(key) is not False:
+            findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), f"runner authority boundary field must be false: {key}"))
+    if runner_enabled_state:
+        if authority.get("workflowRoutingChanged") is not True:
+            findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "enabled runner state must record workflow routing changed as an operational fact"))
+    elif authority.get("workflowRoutingChanged") is not False:
+        findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "blocked runner state must not claim workflow routing changed"))
+    if authority.get("semanticAuthorityPreserved") is not True:
+        findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "semantic authority must be preserved"))
+
+    required_labels = {"self-hosted", "linux", "x64", "usf", "usf-ci", "usf-trusted"}
+
+    host = data.get("hostController", {})
+    if runner_enabled_state:
+        if not isinstance(host, dict):
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner state must record hostController"))
+            host = {}
+        if host.get("hostAccepted") is not True or host.get("architecture") != "x86_64":
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner host must be accepted Linux x64 host/controller"))
+        if host.get("runnerUser") != "usf-runner" or host.get("runnerUserIsRoot") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "runner must use dedicated non-root usf-runner user"))
+        if host.get("runnerUserHasSudo") is not False or host.get("runnerUserHasDockerGroup") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "runner user must not have sudo or docker group access"))
+        if host.get("dockerSocketMountedIntoRunner") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "Docker socket must not be mounted into the runner"))
+
+    observations = data.get("currentObservations", {})
+    if not isinstance(observations, dict):
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "currentObservations must be an object"))
+        observations = {}
+    observed_labels = {str(label).lower() for label in observations.get("repositorySelfHostedRunnerLabelsObserved", [])}
+    if runner_enabled_state:
+        if int(observations.get("repositorySelfHostedRunnerCount", 0)) < 1:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner state requires at least one registered repository self-hosted runner"))
+        if observations.get("runnerName") != "usf-linux-x64-controller-01" or observations.get("runnerStatus") != "online":
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner must record the expected online runner name"))
+        missing_observed = required_labels - observed_labels
+        if missing_observed:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), f"enabled runner observation missing labels: {', '.join(sorted(missing_observed))}"))
+        if observations.get("registrationTokenRequested") is not True:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner state must record that a short-lived registration token was requested"))
+        if observations.get("registrationTokenPersisted") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "registration token must not be persisted"))
+        if "self-hosted" not in str(observations.get("currentValidateWorkflowRunsOn", "")) or "fallback" not in str(observations.get("currentValidateWorkflowRunsOn", "")):
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled workflow observation must record trusted self-hosted routing and fallback"))
+    elif blocked_state and observations.get("repositorySelfHostedRunnerCount") != 0:
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "blocked state requires zero registered repository self-hosted runners"))
+    if not runner_enabled_state and observations.get("registrationTokenPersisted") is not False:
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "registration token must not be persisted"))
+    if observations.get("branchProtectionStrict") is not True or "validate" not in observations.get("branchProtectionRequiredContexts", []):
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "branch protection observation must preserve strict validate context"))
+    if observations.get("requiredValidateContextPreserved") is not True:
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "current workflow must preserve validate context"))
+
+    timing = data.get("timingEvidence", {})
+    if not isinstance(timing, dict):
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "timingEvidence must be an object"))
+        timing = {}
+    if timing.get("semanticAuthority") is not False:
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must remain non-authoritative"))
+    hosted_runs = timing.get("baselineHostedRuns", [])
+    if not isinstance(hosted_runs, list) or not hosted_runs:
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must include hosted baseline runs"))
+        hosted_runs = []
+    if not any(isinstance(run, dict) and int(run.get("queueSeconds", 0)) >= 300 for run in hosted_runs):
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must record the observed hosted queue bottleneck"))
+    if not any(isinstance(run, dict) and run.get("headBranch") == "usf-1038-enable-trusted-self-hosted-github-runner-capacity" and run.get("runnerClass") == "github-hosted" for run in hosted_runs):
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must include hosted before evidence for USF-1038"))
+    if enabled_pending_state:
+        if timing.get("runnerBackedAfterRunCaptured") is not False or timing.get("queueTimeImprovementClaimMade") is not False:
+            findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "measurement-pending state must not claim runner-backed after timing"))
+        pending = timing.get("pendingAfterEvidence", {})
+        if not isinstance(pending, dict) or pending.get("required") is not True:
+            findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "measurement-pending state must record exact pending after evidence"))
+    if enabled_measured_state:
+        self_hosted_runs = timing.get("selfHostedRuns", [])
+        if timing.get("runnerBackedAfterRunCaptured") is not True or not isinstance(self_hosted_runs, list) or not self_hosted_runs:
+            findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "enabled measured state requires self-hosted after-run timing evidence"))
+    if timing.get("exactAfterEvidenceRequiredBeforeClosure") is not True:
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "after evidence must remain required before closure"))
+
+    trust = data.get("trustZones", {})
+    if not isinstance(trust, dict):
+        findings.append(finding("USF-OPT-RUNNER-005", rel(RUNNER_CAPACITY), "trustZones must be an object"))
+        trust = {}
+    for zone in ["trusted-main", "trusted-pr", "untrusted-pr", "privileged-ci", "unprivileged-ci"]:
+        if zone not in trust:
+            findings.append(finding("USF-OPT-RUNNER-005", rel(RUNNER_CAPACITY), f"runner trust zone missing: {zone}"))
+    untrusted = trust.get("untrusted-pr", {}) if isinstance(trust.get("untrusted-pr"), dict) else {}
+    if untrusted.get("mayUsePersistentPrivilegedRunner") is not False:
+        findings.append(finding("USF-OPT-RUNNER-005", rel(RUNNER_CAPACITY), "untrusted PRs must not use persistent privileged runners"))
+
+    routing = data.get("runnerRoutingPolicy", {})
+    if not isinstance(routing, dict):
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "runnerRoutingPolicy must be an object"))
+        routing = {}
+    if routing.get("untrustedForkPullRequestsAllowedOnPersistentPrivilegedRunner") is not False:
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "routing must keep untrusted fork PRs off persistent privileged runners"))
+    if routing.get("requiredValidateContextMustRemain") != "validate" or routing.get("githubHostedFallbackRequired") is not True:
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "routing must preserve validate context and GitHub-hosted fallback"))
+    if runner_enabled_state:
+        if routing.get("workflowRoutingChangedInThisBranch") is not True:
+            findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "enabled runner state must implement workflow routing"))
+        if routing.get("forkPullRequestRouting") != "ubuntu-latest":
+            findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "fork pull requests must route to ubuntu-latest"))
+        if "github-hosted" not in str(routing.get("manualGithubHostedFallback", "")):
+            findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "manual GitHub-hosted fallback must be recorded"))
+        workflow_source = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+        for needle in [
+            "USF_VALIDATE_RUNNER_TARGET",
+            "runnerTarget",
+            "github.event.pull_request.head.repo.full_name != github.repository",
+            '["self-hosted","linux","x64","usf","usf-ci","usf-trusted"]',
+            '["ubuntu-latest"]',
+            "Runner hygiene preflight",
+            "Runner hygiene postflight",
+            "runnerLocalStateAuthority: false",
+        ]:
+            if needle not in workflow_source:
+                findings.append(finding("USF-OPT-RUNNER-006", rel(VALIDATE_WORKFLOW), f"trusted runner workflow routing missing guard: {needle}"))
+    elif routing.get("workflowRoutingChangedInThisBranch") is not False:
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "workflow routing must not change while no runner is registered"))
+
+    labels = data.get("runnerLabelStrategy", {})
+    if not isinstance(labels, dict):
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), "runnerLabelStrategy must be an object"))
+        labels = {}
+    observed_labels = set(labels.get("requiredLabels", []))
+    missing_labels = required_labels - observed_labels
+    if missing_labels:
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), f"runner required labels missing: {', '.join(sorted(missing_labels))}"))
+    if runner_enabled_state:
+        actual_labels = {str(label).lower() for label in labels.get("observedLabels", [])}
+        missing_actual = required_labels - actual_labels
+        if labels.get("currentLabelsPresent") is not True or missing_actual:
+            findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), f"enabled runner labels missing: {', '.join(sorted(missing_actual))}"))
+    elif labels.get("currentLabelsPresent") is not False:
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), "blocked runner labels must remain absent"))
+    if labels.get("labelWeakeningAllowed") is not False:
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), "runner labels must not be weakenable"))
+
+    lifecycle = data.get("runnerLifecyclePolicy", {})
+    if not isinstance(lifecycle, dict):
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "runnerLifecyclePolicy must be an object"))
+        lifecycle = {}
+    if lifecycle.get("preferredModel") != "ephemeral" or lifecycle.get("machineCheckableCleanupProofRequired") is not True:
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "runner lifecycle must prefer ephemeral runners and require cleanup proof"))
+    if not lifecycle.get("ephemeralRequirements") or not lifecycle.get("persistentRequirements"):
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "runner lifecycle must record ephemeral and persistent requirements"))
+    if runner_enabled_state and (lifecycle.get("adoptedModel") != "persistent-with-cleanup-hooks" or lifecycle.get("persistentControlsSatisfied") is not True):
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "enabled runner must record persistent cleanup-hook controls"))
+
+    isolation = data.get("cacheAndSecretIsolation", {})
+    if not isinstance(isolation, dict):
+        findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "cacheAndSecretIsolation must be an object"))
+        isolation = {}
+    for key in [
+        "runnerCacheMaySatisfyValidation",
+        "runnerLocalStateMaySatisfyProof",
+        "secretsWrittenToWorkspaceAllowed",
+        "trustedCacheWritesFromPullRequestsAllowed",
+        "proofEvidenceCacheAllowed",
+        "generatedReportCacheAllowed",
+    ]:
+        if isolation.get(key) is not False:
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), f"runner isolation field must be false: {key}"))
+    if isolation.get("cleanupProofRequiredBeforeAdoption") is not True:
+        findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "cleanup proof must be required before runner adoption"))
+    if runner_enabled_state:
+        if isolation.get("cleanupProofImplemented") is not True or isolation.get("dockerSocketMountedIntoRunner") is not False:
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "enabled runner must implement cleanup proof and keep Docker socket out of runner"))
+        cleanup = data.get("cleanupAndSecretSafetyEvidence", {})
+        if not isinstance(cleanup, dict):
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "enabled runner must record cleanup and secret-safety evidence"))
+            cleanup = {}
+        if cleanup.get("hostPostStartCleanupResult") != "pass" or cleanup.get("hostSecretSafetyResult") != "pass":
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "runner cleanup and secret-safety evidence must pass"))
+        if cleanup.get("secretValuesPrinted") is not False or cleanup.get("runnerLocalStateMayDefineAuthority") is not False:
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "runner cleanup evidence must not print secrets or grant local-state authority"))
+        for script_path in cleanup.get("machineCheckableScripts", []):
+            path = ROOT / str(script_path)
+            if not path.exists() or not path.stat().st_mode & 0o111:
+                findings.append(finding("USF-OPT-RUNNER-009", str(script_path), "runner machine-checkable script must exist and be executable"))
+
+    callback = data.get("caddyCallbackDecision", {})
+    if not isinstance(callback, dict):
+        findings.append(finding("USF-OPT-RUNNER-010", rel(RUNNER_CAPACITY), "caddyCallbackDecision must be an object"))
+        callback = {}
+    if callback.get("implemented") is not False or callback.get("callbackPayloadsAreAuthority") is not False:
+        findings.append(finding("USF-OPT-RUNNER-010", rel(RUNNER_CAPACITY), "Caddy callback must remain unimplemented and non-authoritative for current runner blocker"))
+    for key in ["webhookSignatureRequiredIfImplemented", "replayProtectionRequiredIfImplemented", "failClosedRouteRequiredIfImplemented", "routeRollbackRequiredIfImplemented"]:
+        if callback.get(key) is not True:
+            findings.append(finding("USF-OPT-RUNNER-010", rel(RUNNER_CAPACITY), f"future callback control must be required: {key}"))
+
+    decision = data.get("enablementDecision", {})
+    if not isinstance(decision, dict):
+        findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enablementDecision must be an object"))
+        decision = {}
+    if runner_enabled_state:
+        if decision.get("state") not in {"enabled-measurement-pending", "enabled-and-measured"} or decision.get("runnerEnabled") is not True:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enabled runner decision must record enabled state"))
+        for key in ["hostControllerAccepted", "runnerRegistered", "runnerOnline", "workflowRoutingImplemented"]:
+            if decision.get(key) is not True:
+                findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), f"enabled runner decision field must be true: {key}"))
+        if decision.get("closureAllowed") is not False:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner closure must remain false until after evidence and Linear criteria are confirmed"))
+        if enabled_pending_state and len(decision.get("exactRemainingBlockers", [])) < 3:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "measurement-pending runner must record exact remaining blockers"))
+        if enabled_measured_state and len(decision.get("exactRemainingBlockers", [])) < 1:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enabled measured runner must record exact remaining blockers until closure is explicitly allowed"))
+    else:
+        if decision.get("state") != "blocked" or decision.get("runnerEnabled") is not False or decision.get("closureAllowed") is not False:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "blocked runner enablement must remain blocked and not closure-ready"))
+        if len(decision.get("exactBlockers", [])) < 1:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner blocker must record exact blocker evidence"))
+    if len(decision.get("nextUnblockers", [])) < 1:
+        findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner decision must record exact next unblockers"))
+
+    larger = data.get("largerGithubHostedRunnerDecision", {})
+    if not isinstance(larger, dict):
+        findings.append(finding("USF-OPT-RUNNER-012", rel(RUNNER_CAPACITY), "largerGithubHostedRunnerDecision must be an object"))
+        larger = {}
+    if larger.get("state") != "decision-required" or larger.get("adopted") is not False:
+        findings.append(finding("USF-OPT-RUNNER-012", rel(RUNNER_CAPACITY), "larger GitHub-hosted runner must remain decision-required and unadopted"))
+
+    closure = data.get("closureReport", {})
+    if not isinstance(closure, dict):
+        findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), "closureReport must be an object"))
+        closure = {}
+    for key in [
+        "usf1037RunnerWorkInventoried",
+        "trustPostureRecorded",
+        "threatModelRecorded",
+        "runnerLabelStrategyRecorded",
+        "githubHostedFallbackPreserved",
+        "runnerLifecycleDocumented",
+        "cleanupHygieneProofMachineCheckableIfEnabled",
+        "caddyCallbackDecisionRecorded",
+        "queueTimeBeforeEvidenceCaptured",
+        "requiredValidateContextStable",
+        "validatorsRequiredBeforeClosure",
+    ]:
+        if closure.get(key) is not True:
+            findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"runner closure field must be true: {key}"))
+    if runner_enabled_state:
+        for key in ["selfHostedRunnerEnablementImplemented", "trustedWorkflowRoutingImplemented"]:
+            if closure.get(key) is not True:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"enabled runner closure field must be true: {key}"))
+        for key in ["selfHostedRunnerEnablementBlockedWithExactEvidence", "trustedWorkflowRoutingBlockedByMissingRunner"]:
+            if closure.get(key) is not False:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"enabled runner closure field must be false: {key}"))
+        if enabled_pending_state and closure.get("runnerBackedAfterEvidenceCaptured") is not False:
+            findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), "measurement-pending closure must not claim after evidence"))
+    else:
+        for key in ["selfHostedRunnerEnablementBlockedWithExactEvidence", "trustedWorkflowRoutingBlockedByMissingRunner"]:
+            if closure.get(key) is not True:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"blocked runner closure field must be true: {key}"))
+        for key in ["selfHostedRunnerEnablementImplemented", "trustedWorkflowRoutingImplemented", "runnerBackedAfterEvidenceCaptured", "linearCompletionReady"]:
+            if closure.get(key) is not False:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"blocked runner closure field must be false: {key}"))
+    if closure.get("linearCompletionReady") is not False:
+        findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), "Linear completion must remain false until acceptance criteria are individually confirmed"))
+
+    nonclaims = set(data.get("nonClaims", []))
+    for required in [
+        "staging-readiness",
+        "deployment-readiness",
+        "provider-readiness",
+        "credential-readiness",
+        "store-readiness",
+        "production-readiness",
+        "live-provider-readiness",
+        "compliance-readiness",
+        "monetisation-readiness",
+        "human-acceptance",
+        "cache-hit-proves-correctness",
+        "generated-report-authority",
+        "callback-payload-authority",
+        "self-hosted-runner-local-state-authority",
+    ]:
+        if required not in nonclaims:
+            findings.append(finding("USF-OPT-RUNNER-014", rel(RUNNER_CAPACITY), f"runner non-claim missing: {required}"))
+    return findings
+
+
 def validate() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     findings.extend(check_reports())
     findings.extend(check_repository_artifacts())
+    findings.extend(check_ci_throughput_artifacts())
+    findings.extend(check_runner_capacity_artifact())
     return findings
 
 
@@ -353,6 +1072,107 @@ def selftest() -> list[dict[str, str]]:
         if isinstance(item, dict):
             item["evidenceRefs"] = [ref for ref in item.get("evidenceRefs", []) if ref != "testcontainers-comparison-criteria:defined"]
     tests.append(("non-local-report-comparison-missing", check_reports({"USF-1007": mutated_nonlocal_report}), "USF-OPT-008"))
+
+    ci = load_json(CI_THROUGHPUT)
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["candidateMatrix"] = [item for item in mutated_ci["candidateMatrix"] if item.get("id") != "M"]
+    tests.append(("ci-candidate-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-001"))
+
+    mutated_ci = copy.deepcopy(ci)
+    for item in mutated_ci["candidateMatrix"]:
+        if item.get("id") == "D":
+            item["followUpIssueIds"] = []
+    tests.append(("ci-candidate-followup-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-001"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["cacheAndArtifactSafety"]["cacheHitSatisfiesValidation"] = True
+    tests.append(("ci-cache-hit-authoritative", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-002"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["branchProtectionMap"]["requiredCheckWeakened"] = True
+    tests.append(("ci-required-check-weakened", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-003"))
+
+    timing = load_json(CI_TIMING)
+    mutated_timing = copy.deepcopy(timing)
+    mutated_timing["authorityLevel"] = "semantic-definition"
+    tests.append(("ci-timing-authority-overclaim", check_ci_throughput_artifacts(timing_data=mutated_timing), "USF-OPT-CI-004"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["cacheObservationBoundary"]["pullRequestExecutedLookupTemplate"]["cacheHit"] = ""
+    tests.append(("ci-timing-blank-cache-hit", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-004"))
+
+    workflow_text = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+    mutated_workflow = workflow_text + "\n# planted unsafe cache widening\nrestore-keys: unsafe\n"
+    tests.append(("ci-workflow-restore-keys", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("cache_hit_value()", "cache_hit_value_missing()")
+    tests.append(("ci-workflow-cache-hit-normalisation", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace('pnpm_cache_hit_main="not-applicable"', 'pnpm_cache_hit_main=""')
+    tests.append(("ci-workflow-pr-main-cache-hit-diagnostic", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("fetch-depth: 512", "fetch-depth: 0")
+    tests.append(("ci-workflow-full-history-checkout", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("git fetch --no-tags --deepen=512 origin", "# missing bounded bootstrap ancestry deepen")
+    tests.append(("ci-workflow-bootstrap-ancestry-deepen", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace('git update-ref "refs/remotes/origin/$BASE_REF" "$BASE_SHA"', "# missing event base SHA ref preparation")
+    tests.append(("ci-workflow-pr-base-sha-preparation", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "refs/tags/*:refs/tags/*")
+    tests.append(("ci-workflow-all-tags-fetch", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace("git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "git fetch --no-tags --depth=1 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap")
+    tests.append(("ci-workflow-bootstrap-tag-depth", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace('"$RUNNER_TEMP/usf-validator-report.json"', "/tmp/usf-validator-report.json")
+    tests.append(("ci-workflow-fixed-persistent-temp-report", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["affectedDomainMap"]["hardCiBlock"] = True
+    tests.append(("ci-affected-hard-block", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-006"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["proofCockpitFreshnessBoundary"]["generatedReportMaySatisfyFreshness"] = True
+    tests.append(("ci-proof-cockpit-generated-report-authority", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-007"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["proofCockpitFreshnessBoundary"]["rePinEvidence"]["generatedReportsMaySubstitute"] = True
+    tests.append(("ci-proof-cockpit-repin-evidence-weakened", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-007"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["runnerDecisions"]["largerGithubHostedRunner"]["followUpIssueId"] = ""
+    tests.append(("ci-runner-followup-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-009"))
+
+    runner = load_json(RUNNER_CAPACITY)
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["hostController"]["runnerUserIsRoot"] = True
+    tests.append(("runner-root-user", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-003"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["runnerRoutingPolicy"]["untrustedForkPullRequestsAllowedOnPersistentPrivilegedRunner"] = True
+    tests.append(("runner-untrusted-fork-privileged", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-006"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["runnerRoutingPolicy"]["forkPullRequestRouting"] = "self-hosted"
+    tests.append(("runner-fork-route-self-hosted", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-006"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["caddyCallbackDecision"]["callbackPayloadsAreAuthority"] = True
+    tests.append(("runner-callback-authority", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-010"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["currentObservations"]["registrationTokenPersisted"] = True
+    tests.append(("runner-token-persisted", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-003"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["enablementDecision"]["exactRemainingBlockers"] = []
+    tests.append(("runner-remaining-blocker-erased", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-011"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["cleanupAndSecretSafetyEvidence"]["hostSecretSafetyResult"] = "fail"
+    tests.append(("runner-secret-safety-failed", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-009"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:
