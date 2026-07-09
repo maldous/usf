@@ -1,5 +1,6 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
@@ -46,6 +47,7 @@ function readJson<T>(relativePath: string): T {
 }
 
 function expectAuthorityInputsToExist(inputs: AuthorityInput[]): void {
+  expect(inputs.length).toBeGreaterThan(0);
   for (const input of inputs) {
     expect(existsSync(join(repoRoot, input.path)), input.path).toBe(true);
     expect(input.role.length).toBeGreaterThan(0);
@@ -58,6 +60,8 @@ const composeClassification = readJson<ComposeClassification>(
 const stagingClassification = readJson<StagingClassification>(
   "docs/architecture/app-surface-staging-proof-classification.json",
 );
+const composeClassificationPath = join(repoRoot, "docs/architecture/app-surface-compose-proof-classification.json");
+const stagingClassificationPath = join(repoRoot, "docs/architecture/app-surface-staging-proof-classification.json");
 
 describe("app-surface proof ladder classification", () => {
   it("classifies Compose proof as not required for the bounded local app surface", () => {
@@ -124,6 +128,42 @@ describe("app-surface proof ladder classification", () => {
       expect(Object.values(record.validationGuard).every((value) => value === true)).toBe(true);
       expect(Object.values(record.externalBoundary).every((value) => value === false)).toBe(true);
       expect(Object.values(record.nonClaims).every((value) => value === false)).toBe(true);
+    }
+  });
+
+  it("fails closed when proof-ladder classification authority inputs are empty", () => {
+    const originalCompose = readFileSync(composeClassificationPath, "utf8");
+    const originalStaging = readFileSync(stagingClassificationPath, "utf8");
+    try {
+      writeFileSync(
+        composeClassificationPath,
+        JSON.stringify({ ...JSON.parse(originalCompose), authorityInputs: [] }, null, 2) + "\n",
+      );
+      writeFileSync(
+        stagingClassificationPath,
+        JSON.stringify({ ...JSON.parse(originalStaging), authorityInputs: [] }, null, 2) + "\n",
+      );
+      const result = spawnSync("python3", ["tools/validate-app-surface/validate-app-surface.py", "all", "--json"], {
+        cwd: repoRoot,
+        encoding: "utf8",
+      });
+      expect(result.status).not.toBe(0);
+      const validation = JSON.parse(result.stdout) as {
+        status: string;
+        findings: Array<{ ruleId: string; message: string }>;
+      };
+      expect(validation.status).toBe("fail");
+      expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-014")).toBe(
+        true,
+      );
+      expect(validation.findings.some((finding) => finding.ruleId === "USF-APP-SURFACE-IMPLEMENTATION-015")).toBe(
+        true,
+      );
+      expect(validation.findings.every((finding) => finding.message === "authorityInputs must be a non-empty array"))
+        .toBe(true);
+    } finally {
+      writeFileSync(composeClassificationPath, originalCompose);
+      writeFileSync(stagingClassificationPath, originalStaging);
     }
   });
 });

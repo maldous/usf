@@ -2843,7 +2843,11 @@ def validate_compose_proof_classification() -> list[dict[str, str]]:
         failures.append(finding(rule_id, f"{subject}.ownerIssueId", "Compose classification artefact must be owned by USF-1033", issue_id))
     if data.get("lifecycleState") != "compose-proof-not-required-classified":
         failures.append(finding(rule_id, f"{subject}.lifecycleState", "Compose classification lifecycleState must be compose-proof-not-required-classified", issue_id))
-    for index, authority_input in enumerate(data.get("authorityInputs", [])):
+    authority_inputs = data.get("authorityInputs")
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        failures.append(finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty array", issue_id))
+        authority_inputs = []
+    for index, authority_input in enumerate(authority_inputs):
         path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
         if not isinstance(path_ref, str) or not path_exists(path_ref):
             failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
@@ -2944,7 +2948,11 @@ def validate_staging_proof_classification() -> list[dict[str, str]]:
         failures.append(finding(rule_id, f"{subject}.ownerIssueId", "staging classification artefact must be owned by USF-1034", issue_id))
     if data.get("lifecycleState") != "staging-proof-not-required-classified":
         failures.append(finding(rule_id, f"{subject}.lifecycleState", "staging classification lifecycleState must be staging-proof-not-required-classified", issue_id))
-    for index, authority_input in enumerate(data.get("authorityInputs", [])):
+    authority_inputs = data.get("authorityInputs")
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        failures.append(finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty array", issue_id))
+        authority_inputs = []
+    for index, authority_input in enumerate(authority_inputs):
         path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
         if not isinstance(path_ref, str) or not path_exists(path_ref):
             failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
