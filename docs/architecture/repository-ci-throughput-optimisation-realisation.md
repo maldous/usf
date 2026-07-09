@@ -20,7 +20,7 @@ This note records the repository-owned execution plan for fastest-safe GitHub CI
 ## Deferred Or Rejected
 
 - PR/full split is deferred because branch protection currently requires the single `validate` context; implementation follow-up is USF-1040.
-- Validator sharding and parallelism are deferred until serial-versus-parallel equivalence, resource locks, deterministic output paths, and planted-defect coverage are recorded; implementation follow-up is USF-1039.
+- Validator parallelism is realised by USF-1039 as an in-job aggregator (tools/validate-aggregate/validate-aggregate.py): package.json scripts remain the family-list authority via explicit --family invocation strings, per-validator wiring rules keep failing closed if a family is dropped, planted-defect selftests cover pass, planted-failure, missing-script, and malformed-family cases, and the required validate context is unchanged. Matrix sharding across jobs remains unadopted.
 - Reusable workflow extraction is deferred because it adds status-context and naming surface without addressing the current bottleneck; implementation follow-up is USF-1041.
 - Scheduled or manual deep jobs are deferred because required PR coverage must not move off the protected check without an owner decision; implementation follow-up is USF-1040.
 - Caddy, callback, webhook, Compose route, and public proof route changes are rejected for this issue because they do not address the observed CI throughput bottleneck.
