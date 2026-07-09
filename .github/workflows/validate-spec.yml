@@ -3,6 +3,7 @@ name: validate-spec
 # JSON Schema defines shape; this enforces the cross-file governance rules.
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:

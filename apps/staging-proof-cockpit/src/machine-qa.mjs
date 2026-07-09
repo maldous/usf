@@ -15,6 +15,11 @@ const EXECUTOR = "codex-playwright-machine-qa";
 const REPO_ROOT = process.cwd();
 const COMPOSE_TARGET = "compose/compose.test.generated.yaml";
 const MACHINE_QA_ENVIRONMENT_SCOPE = "test";
+const SOURCE_TREE_HASH_ALGORITHM = "sha256-git-ls-tree-non-proof-evidence-v1";
+const SOURCE_TREE_HASH_EXCLUDED_PREFIXES = Object.freeze([
+  "artifacts/proof-cockpit/",
+  "evidence/proof-evidence/proof-cockpit/",
+]);
 const CHROMIUM_UNSAFE_PORTS = new Set([
   1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79, 87, 95, 101,
   102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135, 139, 143, 161, 179, 389, 427,
@@ -465,6 +470,25 @@ function sourceSha() {
   return gitValue(["rev-parse", "HEAD"]);
 }
 
+function sourceTreeHash() {
+  try {
+    const output = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD"], { encoding: "utf8" });
+    const entries = output
+      .split("\0")
+      .filter(Boolean)
+      .filter((entry) => {
+        const tabIndex = entry.indexOf("\t");
+        const path = tabIndex >= 0 ? entry.slice(tabIndex + 1) : "";
+        return path && !SOURCE_TREE_HASH_EXCLUDED_PREFIXES.some((prefix) => path.startsWith(prefix));
+      })
+      .sort()
+      .join("\0");
+    return contentHash(entries);
+  } catch {
+    return "unavailable";
+  }
+}
+
 function branchName() {
   return gitValue(["branch", "--show-current"]);
 }
@@ -516,6 +540,7 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
   const now = new Date().toISOString();
   const runId = args.runId || `qa-run-${timestampSlug()}`;
   const sha = sourceSha();
+  const treeHash = sourceTreeHash();
   return {
     qaRun: runId,
     qaRunVersion: QA_RUN_VERSION,
@@ -523,6 +548,9 @@ function makeReport({ artifactDir, screenshotDir, baseUrl, data, manifest, args 
     prNumber: PR_NUMBER,
     sourceGitSha: sha,
     sourceSha: sha,
+    sourceTreeHash: treeHash,
+    sourceTreeHashAlgorithm: SOURCE_TREE_HASH_ALGORITHM,
+    sourceTreeHashExcludedPrefixes: [...SOURCE_TREE_HASH_EXCLUDED_PREFIXES],
     deploymentSha: process.env.USF_DEPLOYMENT_SHA ?? sha,
     environment: process.env.USF_PROOF_ENVIRONMENT ?? "local-machine-qa",
     baseUrl,

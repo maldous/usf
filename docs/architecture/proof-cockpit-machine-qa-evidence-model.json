@@ -15,6 +15,10 @@
     "qaRun",
     "qaRunVersion",
     "sourceGitSha",
+    "sourceSha",
+    "sourceTreeHash",
+    "sourceTreeHashAlgorithm",
+    "sourceTreeHashExcludedPrefixes",
     "deploymentSha",
     "environment",
     "baseUrl",
@@ -255,6 +259,15 @@
     "single-capability",
     "single-service"
   ],
+  "sourceFreshnessAnchor": {
+    "field": "sourceTreeHash",
+    "algorithm": "sha256-git-ls-tree-non-proof-evidence-v1",
+    "excludedPrefixes": [
+      "artifacts/proof-cockpit/",
+      "evidence/proof-evidence/proof-cockpit/"
+    ],
+    "reason": "Proof-cockpit evidence freshness must survive squash merges and rebases without relying on pre-squash branch commit reachability. sourceSha remains provenance, but sourceTreeHash is the freshness authority for rule USF-PROOF-COCKPIT-009."
+  },
   "redactionRules": [
     "fail closed on private key material",
     "fail closed on bearer tokens",

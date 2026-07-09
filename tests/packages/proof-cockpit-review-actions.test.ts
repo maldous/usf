@@ -186,6 +186,7 @@ describe("automated machine-QA promotion transform", () => {
     latestMachineRun: {
       runId: "qa-run-prior",
       sourceSha: "prior-sha",
+      sourceTreeHash: "prior-tree-hash",
       artifactDir: "artifacts/proof-cockpit/machine-runs/PRIOR",
     },
     machineRunHistory: [
@@ -197,6 +198,9 @@ describe("automated machine-QA promotion transform", () => {
   const report = {
     qaRun: "qa-run-new",
     sourceSha: "new-sha",
+    sourceTreeHash: "new-tree-hash",
+    sourceTreeHashAlgorithm: "sha256-git-ls-tree-non-proof-evidence-v1",
+    sourceTreeHashExcludedPrefixes: ["artifacts/proof-cockpit/", "evidence/proof-evidence/proof-cockpit/"],
     deploymentSha: "new-sha",
     environment: "local-machine-qa",
     completedAt: "2026-07-06T05:00:00.000Z",
@@ -218,10 +222,14 @@ describe("automated machine-QA promotion transform", () => {
     const next = computePromotion(baseStore, report, "artifacts/proof-cockpit/machine-runs/NEW");
     expect(next.latestMachineRun.runId).toBe("qa-run-new");
     expect(next.latestMachineRun.sourceSha).toBe("new-sha");
+    expect(next.latestMachineRun.sourceTreeHash).toBe("new-tree-hash");
+    expect(next.latestMachineRun.sourceTreeHashAlgorithm).toBe("sha256-git-ls-tree-non-proof-evidence-v1");
     expect(next.latestMachineRun.routeCount).toBe(830);
     expect(next.latestMachineRun.passCount).toBe(1300);
     expect(next.sourceSha).toBe("new-sha");
+    expect(next.sourceTreeHash).toBe("new-tree-hash");
     expect(next.supersessionHistory.at(-1)?.toRunId).toBe("qa-run-new");
+    expect(next.supersessionHistory.at(-1)?.toSourceTreeHash).toBe("new-tree-hash");
     expect(next.machineRunHistory.some((r) => r.runId === "qa-run-new")).toBe(true);
   });
 
