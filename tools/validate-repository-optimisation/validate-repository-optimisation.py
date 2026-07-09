@@ -36,6 +36,14 @@ REQUIRED_IMPLEMENTED = {"USF-997", "USF-998", "USF-999", "USF-1000", "USF-1001",
 REQUIRED_FOLLOW_UPS = {"USF-1004", "USF-1005", "USF-1006", "USF-1008"}
 REQUIRED_CI_CANDIDATES = set("ABCDEFGHIJKLM")
 REQUIRED_CI_IMPLEMENTED = {"A", "B", "E", "G", "K", "M"}
+REQUIRED_CI_FOLLOW_UPS = {
+    "C": {"USF-1040"},
+    "D": {"USF-1039"},
+    "F": {"USF-1041"},
+    "I": {"USF-1038"},
+    "J": {"USF-1042"},
+    "L": {"USF-1040"},
+}
 REQUIRED_REPORT_REFS = {
     "USF-997": {
         "cache-boundary:per-process",
@@ -324,6 +332,10 @@ def check_ci_throughput_artifacts(
         classification = str(candidate.get("classification", ""))
         if not classification.startswith("implemented-now") and not candidate.get("reason"):
             findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} needs defer/reject/decision rationale"))
+    for candidate_id, required_issue_ids in REQUIRED_CI_FOLLOW_UPS.items():
+        follow_up_issue_ids = set(by_id.get(candidate_id, {}).get("followUpIssueIds", []))
+        if not required_issue_ids.issubset(follow_up_issue_ids):
+            findings.append(finding("USF-OPT-CI-001", rel(CI_THROUGHPUT), f"candidate {candidate_id} missing required follow-up issue IDs"))
 
     cache = ci.get("cacheAndArtifactSafety", {})
     if not isinstance(cache, dict):
@@ -404,6 +416,14 @@ def check_ci_throughput_artifacts(
         decision = runners.get(key, {})
         if not isinstance(decision, dict) or decision.get("classification") != "decision-required" or decision.get("adopted") is not False:
             findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), f"runner option must require a decision and remain unadopted: {key}"))
+    expected_runner_followups = {
+        "selfHostedRunner": "USF-1038",
+        "largerGithubHostedRunner": "USF-1042",
+    }
+    for key, expected_issue_id in expected_runner_followups.items():
+        decision = runners.get(key, {})
+        if not isinstance(decision, dict) or decision.get("followUpIssueId") != expected_issue_id:
+            findings.append(finding("USF-OPT-CI-009", rel(CI_THROUGHPUT), f"runner option must record follow-up issue {expected_issue_id}: {key}"))
 
     branch = ci.get("branchProtectionMap", {})
     if not isinstance(branch, dict):
@@ -724,6 +744,12 @@ def selftest() -> list[dict[str, str]]:
     tests.append(("ci-candidate-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-001"))
 
     mutated_ci = copy.deepcopy(ci)
+    for item in mutated_ci["candidateMatrix"]:
+        if item.get("id") == "D":
+            item["followUpIssueIds"] = []
+    tests.append(("ci-candidate-followup-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-001"))
+
+    mutated_ci = copy.deepcopy(ci)
     mutated_ci["cacheAndArtifactSafety"]["cacheHitSatisfiesValidation"] = True
     tests.append(("ci-cache-hit-authoritative", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-002"))
 
@@ -776,6 +802,10 @@ def selftest() -> list[dict[str, str]]:
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["proofCockpitFreshnessBoundary"]["rePinEvidence"]["generatedReportsMaySubstitute"] = True
     tests.append(("ci-proof-cockpit-repin-evidence-weakened", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-007"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["runnerDecisions"]["largerGithubHostedRunner"]["followUpIssueId"] = ""
+    tests.append(("ci-runner-followup-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-009"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

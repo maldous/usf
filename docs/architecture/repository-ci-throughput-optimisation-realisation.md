@@ -19,12 +19,12 @@ This note records the repository-owned execution plan for fastest-safe GitHub CI
 
 ## Deferred Or Rejected
 
-- PR/full split is deferred because branch protection currently requires the single `validate` context.
-- Validator sharding and parallelism are deferred until serial-versus-parallel equivalence, resource locks, deterministic output paths, and planted-defect coverage are recorded.
-- Reusable workflow extraction is deferred because it adds status-context and naming surface without addressing the current bottleneck.
-- Scheduled or manual deep jobs are deferred because required PR coverage must not move off the protected check without an owner decision.
+- PR/full split is deferred because branch protection currently requires the single `validate` context; implementation follow-up is USF-1040.
+- Validator sharding and parallelism are deferred until serial-versus-parallel equivalence, resource locks, deterministic output paths, and planted-defect coverage are recorded; implementation follow-up is USF-1039.
+- Reusable workflow extraction is deferred because it adds status-context and naming surface without addressing the current bottleneck; implementation follow-up is USF-1041.
+- Scheduled or manual deep jobs are deferred because required PR coverage must not move off the protected check without an owner decision; implementation follow-up is USF-1040.
 - Caddy, callback, webhook, Compose route, and public proof route changes are rejected for this issue because they do not address the observed CI throughput bottleneck.
-- Self-hosted and larger hosted runners require explicit owner decisions, cost/trust-boundary review, and before-and-after timing evidence before adoption.
+- Self-hosted and larger hosted runners require explicit owner decisions, cost/trust-boundary review, and before-and-after timing evidence before adoption; follow-ups are USF-1038 and USF-1042.
 - Self-hosted runner capacity is now separated into USF-1038 and is not adopted by this PR.
 
 ## Timing Record
@@ -47,7 +47,7 @@ The PR validator requires `HEAD` and `origin/<base>` for the `origin/<base>...HE
 
 The largest likely future gain is validator sharding with a final required `validate` aggregator. Candidate read-only shards are spec/PR governance, repository aggregate validation, parity, foundation substrate closure, and proof-cockpit acceptance. This PR records the plan but does not activate it because sharding needs an equivalence validator, planted-defect preservation proof, skip/failure semantics, and branch-protection-compatible status mapping first.
 
-Runner capacity is tracked separately by USF-1038. Validator sharding remains related to USF-656 until a newer dedicated sharding issue supersedes it.
+Runner capacity is tracked separately by USF-1038 and larger hosted runner evaluation is tracked by USF-1042. Validator sharding implementation is tracked by USF-1039; USF-656 remains the design input.
 
 ## Non-Claims
 

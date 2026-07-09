@@ -49,7 +49,11 @@
     ],
     "relatedIssueIdsInspected": [
       "USF-1037",
-      "USF-1038"
+      "USF-1038",
+      "USF-1039",
+      "USF-1040",
+      "USF-1041",
+      "USF-1042"
     ]
   },
   "candidateMatrix": [
@@ -74,13 +78,19 @@
       "id": "C",
       "candidate": "PR versus full validation split",
       "classification": "deferred",
-      "reason": "Branch protection currently requires the single validate status check. Replacing broad PR validation with an affected-only or split gate needs equivalent fallback proof and a separate owner decision."
+      "reason": "Branch protection currently requires the single validate status check. Replacing broad PR validation with an affected-only or split gate needs equivalent fallback proof and a separate owner decision.",
+      "followUpIssueIds": [
+        "USF-1040"
+      ]
     },
     {
       "id": "D",
       "candidate": "validator and test sharding or parallelisation",
       "classification": "deferred",
-      "reason": "Existing governance requires serial-versus-parallel equivalence, deterministic output paths, resource locks, and shared-resource analysis before parallel execution becomes default."
+      "reason": "Existing governance requires serial-versus-parallel equivalence, deterministic output paths, resource locks, and shared-resource analysis before parallel execution becomes default.",
+      "followUpIssueIds": [
+        "USF-1039"
+      ]
     },
     {
       "id": "E",
@@ -93,7 +103,10 @@
       "id": "F",
       "candidate": "reusable workflow extraction",
       "classification": "deferred",
-      "reason": "A new workflow surface is not needed for the measured bottleneck and would require additional authorised workflow naming and status-context analysis."
+      "reason": "A new workflow surface is not needed for the measured bottleneck and would require additional authorised workflow naming and status-context analysis.",
+      "followUpIssueIds": [
+        "USF-1041"
+      ]
     },
     {
       "id": "G",
@@ -112,13 +125,19 @@
       "id": "I",
       "candidate": "self-hosted GitHub runners",
       "classification": "decision-required",
-      "reason": "Self-hosted runners require owner decisions for trust boundary, cache isolation, local state, secret handling, maintenance, evidence collection, and GitHub branch-protection posture. USF-1038 is the dedicated runner-capacity implementation track."
+      "reason": "Self-hosted runners require owner decisions for trust boundary, cache isolation, local state, secret handling, maintenance, evidence collection, and GitHub branch-protection posture. USF-1038 is the dedicated runner-capacity implementation track.",
+      "followUpIssueIds": [
+        "USF-1038"
+      ]
     },
     {
       "id": "J",
       "candidate": "larger GitHub-hosted runners",
       "classification": "decision-required",
-      "reason": "Larger runners may reduce wall time but introduce cost and repository policy decisions. No correctness or evidence claim can be derived from larger runner capacity alone."
+      "reason": "Larger runners may reduce wall time but introduce cost and repository policy decisions. No correctness or evidence claim can be derived from larger runner capacity alone.",
+      "followUpIssueIds": [
+        "USF-1042"
+      ]
     },
     {
       "id": "K",
@@ -134,7 +153,10 @@
       "id": "L",
       "candidate": "scheduled, nightly, or manual deep jobs",
       "classification": "deferred",
-      "reason": "Current branch protection requires validate on PR and main. Moving required coverage to schedule or manual dispatch would weaken the gate without a separate owner decision and equivalence proof."
+      "reason": "Current branch protection requires validate on PR and main. Moving required coverage to schedule or manual dispatch would weaken the gate without a separate owner decision and equivalence proof.",
+      "followUpIssueIds": [
+        "USF-1040"
+      ]
     },
     {
       "id": "M",
@@ -366,6 +388,7 @@
     "largerGithubHostedRunner": {
       "classification": "decision-required",
       "adopted": false,
+      "followUpIssueId": "USF-1042",
       "requiredBeforeAdoption": [
         "owner cost decision",
         "before-and-after timing evidence",
