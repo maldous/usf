@@ -12,6 +12,7 @@ This note records the repository-owned execution plan for fastest-safe GitHub CI
 - Keep pull-request cache use read-only and allow cache writes only on non-PR runs.
 - Add a generated GitHub step summary for validate-spec timing and cache hit/miss diagnostics.
 - Keep affected-domain selection advisory and fail closed to full validation on unknown, workflow, package, validator, evidence, provider, or environment ambiguity.
+- Record that proof-cockpit freshness requires a proof-review re-pin after the final non-proof source tree is committed.
 - Reaffirm that proof-cockpit generated reports and retained machine evidence freshness are not weakened by this CI setup change.
 
 ## Deferred Or Rejected

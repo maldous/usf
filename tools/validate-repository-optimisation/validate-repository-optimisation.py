@@ -363,7 +363,7 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), "proofCockpitFreshnessBoundary must be an object"))
         proof = {}
     proof_expectations = {
-        "rePinRequiredByThisChange": False,
+        "rePinRequiredByThisChange": True,
         "freshnessWeakened": False,
         "generatedReportMaySatisfyFreshness": False,
         "missingCollectedEvidenceFailsClosed": True,
@@ -373,6 +373,21 @@ def check_ci_throughput_artifacts(
     for key, expected in proof_expectations.items():
         if proof.get(key) is not expected:
             findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), f"proof-cockpit freshness field must be {expected}: {key}"))
+    re_pin = proof.get("rePinEvidence")
+    if not isinstance(re_pin, dict):
+        findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), "proof-cockpit rePinEvidence must be recorded"))
+    else:
+        required_repin_values = {
+            "proofEvidenceStore": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+            "externalReviewBundleManifest": "evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json",
+            "promotionCommand": "make proof-review-repin",
+            "validationCommand": "corepack pnpm proof-cockpit:validate",
+            "exactSourceTreeHashRecordedInProofEvidence": True,
+            "generatedReportsMaySubstitute": False,
+        }
+        for key, expected in required_repin_values.items():
+            if re_pin.get(key) != expected:
+                findings.append(finding("USF-OPT-CI-007", rel(CI_THROUGHPUT), f"proof-cockpit rePinEvidence mismatch for {key}"))
 
     callback = ci.get("callbackAndCaddyDecision", {})
     if not isinstance(callback, dict):
@@ -618,6 +633,10 @@ def selftest() -> list[dict[str, str]]:
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["proofCockpitFreshnessBoundary"]["generatedReportMaySatisfyFreshness"] = True
     tests.append(("ci-proof-cockpit-generated-report-authority", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-007"))
+
+    mutated_ci = copy.deepcopy(ci)
+    mutated_ci["proofCockpitFreshnessBoundary"]["rePinEvidence"]["generatedReportsMaySubstitute"] = True
+    tests.append(("ci-proof-cockpit-repin-evidence-weakened", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-007"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

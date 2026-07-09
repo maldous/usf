@@ -107,8 +107,8 @@
       "id": "G",
       "candidate": "proof-cockpit evidence churn control",
       "classification": "implemented-now",
-      "implementedBy": "existing proof-cockpit squash-stable source-tree hash posture from PR 331 and this artefact's freshness boundary",
-      "safetyBoundary": "This change does not re-pin proof-cockpit machine evidence, does not treat generated reports as authority, and does not make branch commits load-bearing where the non-proof tree is equivalent."
+      "implementedBy": "existing proof-cockpit squash-stable source-tree hash posture from PR 331, this artefact's freshness boundary, and a proof-review re-pin after non-proof source changes",
+      "safetyBoundary": "This change records proof-cockpit re-pin as required for the changed non-proof source tree, does not treat generated reports as authority, and does not make branch commits load-bearing where the non-proof tree is equivalent."
     },
     {
       "id": "H",
@@ -265,8 +265,17 @@
   "proofCockpitFreshnessBoundary": {
     "machineQaEvidenceModel": "docs/architecture/proof-cockpit-machine-qa-evidence-model.json",
     "currentChurnControl": "squash-stable non-proof source-tree hash posture from PR 331",
-    "rePinRequiredByThisChange": false,
-    "reasonNoRePinRequired": "The workflow and repository-optimisation artefact changes do not alter proof-cockpit source, proof-cockpit machine QA semantics, retained machine evidence, or accepted proof payloads.",
+    "rePinRequiredByThisChange": true,
+    "reasonRePinRequired": "The validate-spec workflow and repository-optimisation artefact changes are part of the non-proof source tree used by proof-cockpit freshness checks. A proof-review re-pin is required after the final non-proof source tree is committed.",
+    "rePinEvidence": {
+      "proofEvidenceStore": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+      "externalReviewBundleManifest": "evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json",
+      "machineRunArtifactRoot": "artifacts/proof-cockpit/machine-runs/",
+      "promotionCommand": "make proof-review-repin",
+      "validationCommand": "corepack pnpm proof-cockpit:validate",
+      "exactSourceTreeHashRecordedInProofEvidence": true,
+      "generatedReportsMaySubstitute": false
+    },
     "freshnessWeakened": false,
     "generatedReportMaySatisfyFreshness": false,
     "missingCollectedEvidenceFailsClosed": true,
