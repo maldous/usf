@@ -1,0 +1,7 @@
+{
+  "id": "009-proof-overclaim",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-009",
+  "fixture": {
+    "kind": "proof-overclaim"
+  }
+}

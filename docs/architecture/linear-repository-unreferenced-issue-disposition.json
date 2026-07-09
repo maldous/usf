@@ -9,8 +9,8 @@
   "repositoryReferenceScan": {
     "scope": "Current exact repository issue-key text search excluding the original delivery audit artifact, this disposition artifact, .git, and local AI-agent runtime directories such as .claude and .codex.",
     "auditSetIssueCount": 138,
-    "repositoryReferencePresentCount": 11,
-    "requiresSafeFullContentDispositionCount": 127,
+    "repositoryReferencePresentCount": 34,
+    "requiresSafeFullContentDispositionCount": 104,
     "requiresSafeFullContentDispositionFollowUpIssueId": "USF-1008",
     "doesNotInspectRawLinearDescriptionsOrComments": true,
     "doesNotClaimRepositoryReferenceEqualsCompletion": true
@@ -1300,13 +1300,15 @@
     },
     {
       "issueId": "USF-580",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Discovery/measurement only; Compose file mutation explicitly out of scope; inventory and timing evidence recorded in issue comments and Linear document; no repo deliverable expected.",
@@ -1334,13 +1336,15 @@
     },
     {
       "issueId": "USF-605",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Discovery/design only; freshness model recorded in issue body; comments confirm no repository, validator, artifact, or evidence files changed; consumed by USF-614/615/616/632/970.",
@@ -1368,13 +1372,15 @@
     },
     {
       "issueId": "USF-615",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Read-only discovery; reuse eligibility matrix recorded in issue; no repo files changed; implementation gate created as USF-975.",
@@ -1402,13 +1408,15 @@
     },
     {
       "issueId": "USF-618",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed output absent from main and working tree; exists only on unmerged branch orchestration/usf-952-final-gate (PR 286, commit 0c7704a4). Missing from canonical tree until final-gate merges.",
@@ -1416,6 +1424,22 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -1454,13 +1478,18 @@
     },
     {
       "issueId": "USF-637",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-full-main-check-policy.md",
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
+        "docs/architecture/ci-timeout-and-retry-policy.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Discovery only; full workflow/trigger/check/secret/proof-level inventory recorded in issue comments; workflow changes explicitly out of scope; no repo deliverable expected.",
@@ -1473,23 +1502,27 @@
       "issueId": "USF-640",
       "disposition": "repository-reference-present-current",
       "repositoryReferenceEvidencePathSample": [
-        "docs/architecture/github-runner-capacity-enablement.json"
+        "docs/architecture/github-runner-capacity-enablement.json",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
       ],
-      "repositoryReferenceEvidencePathSampleCount": 1,
-      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
       "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
     },
     {
       "issueId": "USF-643",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-full-main-check-policy.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 293, commit 9b233fad). Missing from canonical tree until final-gate merges.",
@@ -1497,17 +1530,36 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/ci-full-main-check-policy.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-645",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 293, commit 9b233fad). Missing from canonical tree until final-gate merges.",
@@ -1515,17 +1567,35 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/ci-nightly-and-deep-check-policy.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-647",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-nightly-and-deep-check-policy.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Discovery/design only; manual trigger classes recorded in issue body; explicitly no repository file change; implementation delegated to USF-990.",
@@ -1596,13 +1666,18 @@
     },
     {
       "issueId": "USF-657",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-full-main-check-policy.md",
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
+        "docs/architecture/ci-timeout-and-retry-policy.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 292, merge d6884f91). Missing from canonical tree until final-gate merges.",
@@ -1610,16 +1685,35 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/ci-timeout-and-retry-policy.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-658",
       "disposition": "repository-reference-present-current",
       "repositoryReferenceEvidencePathSample": [
-        "docs/architecture/github-runner-capacity-enablement.json"
+        "docs/architecture/ci-full-main-check-policy.md",
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
+        "docs/architecture/github-runner-capacity-enablement.json",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
       ],
-      "repositoryReferenceEvidencePathSampleCount": 1,
-      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
       "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
@@ -1628,10 +1722,11 @@
       "issueId": "USF-659",
       "disposition": "repository-reference-present-current",
       "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
         "docs/architecture/github-runner-capacity-enablement.json"
       ],
-      "repositoryReferenceEvidencePathSampleCount": 1,
-      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
       "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
@@ -1679,13 +1774,17 @@
     },
     {
       "issueId": "USF-769",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md",
+        "docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md",
+        "docs/architecture/proof-cockpit-machine-qa-route-coverage-profile.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed report absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 288, commit 1dcc3dda). Missing from canonical tree until final-gate merges.",
@@ -1693,17 +1792,36 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/proof-cockpit-machine-qa-route-coverage-profile.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-825",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md",
+        "docs/architecture/proof-golden-acceptance-corpus.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 285, merge a399ee6b). Missing from canonical tree until final-gate merges.",
@@ -1711,17 +1829,35 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/proof-golden-acceptance-corpus.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-828",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/rollback-proof-strategy.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Read-only discovery; equivalence plan recorded in issue; comments confirm no repo files changed; comparator implementation moved to follow-up USF-971.",
@@ -1732,13 +1868,21 @@
     },
     {
       "issueId": "USF-829",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-full-main-check-policy.md",
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
+        "docs/architecture/ci-timeout-and-retry-policy.md",
+        "docs/architecture/proof-cockpit-machine-qa-artifact-minimisation.md",
+        "docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md",
+        "docs/architecture/proof-golden-acceptance-corpus.md",
+        "docs/architecture/rollback-proof-strategy.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 7,
+      "repositoryReferenceEvidenceTotalPathCount": 7,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 284, merge b0314da6). Missing from canonical tree until final-gate merges.",
@@ -1746,6 +1890,22 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/rollback-proof-strategy.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -1869,13 +2029,16 @@
     },
     {
       "issueId": "USF-859",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md",
+        "docs/architecture/proof-cockpit-machine-qa-route-coverage-profile.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Decision-only issue (decision: do NOT make QA incremental); explicitly no repository file change required; comment confirms closure without repo change.",
@@ -1973,13 +2136,17 @@
     },
     {
       "issueId": "USF-961",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-timeout-and-retry-policy.md",
+        "docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md",
+        "docs/architecture/proof-cockpit-machine-qa-route-coverage-profile.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "superseded-by-delivered-work",
         "reason": "Fix f03ec91 content is on main: isHostPublishedPortForMachineQa/portAppliesToMachineQaEnvironment host-published-port scoping present in origin/main machine-qa.mjs via PR 299 squash.",
@@ -2093,17 +2260,34 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "rejected-current-main-redraft-required",
+        "repositoryPaths": [],
+        "rationale": "Rejected old branch validator extension for current main: the patch was tied to an older proof-cockpit validator shape and would require replacing current validator state. If still required, the metadata consistency rule must be re-implemented against current main without weakening existing proof-cockpit acceptance rules.",
+        "validationExpectation": "No stale branch patch is accepted as current validation evidence; any future implementation must be authored and validated against current main.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-970",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-golden-acceptance-corpus.md",
+        "docs/architecture/rollback-proof-strategy.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 2,
+      "repositoryReferenceEvidenceTotalPathCount": 2,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "PR 282 merged only to unmerged orchestration branch; main has no projection-only command, no rule USF-PROOF-COCKPIT-013, no planted defects 036-044; main proof-review-repin runs full machine-qa+promote.",
@@ -2111,6 +2295,20 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "rejected-current-main-redraft-required",
+        "repositoryPaths": [],
+        "rationale": "Rejected old projection-only re-pin command for current main: current main keeps proof-review-repin on the full machine-QA plus promote path, and the old projection-only shortcut could overclaim freshness unless redesigned against current evidence and USF-966 boundaries.",
+        "validationExpectation": "No stale branch patch is accepted as current validation evidence; any future implementation must be authored and validated against current main.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -2129,6 +2327,20 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "rejected-current-main-redraft-required",
+        "repositoryPaths": [],
+        "rationale": "Rejected old comparator patch for current main: the comparator was embedded in an older proof-cockpit validator version and would overwrite current validator state. If still required, it needs a fresh current-main implementation with planted-defect coverage.",
+        "validationExpectation": "No stale branch patch is accepted as current validation evidence; any future implementation must be authored and validated against current main.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -2167,13 +2379,15 @@
     },
     {
       "issueId": "USF-974",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Linear-only validator integration design; completion comment confirms no repository files changed; implementation deferred to future artifact manifest validator issue.",
@@ -2184,13 +2398,17 @@
     },
     {
       "issueId": "USF-975",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+        "tools/validate-evidence-reuse/evidence-reuse-decisions.json",
+        "tools/validate-evidence-reuse/validate-evidence-reuse.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Read-only design gate; no repo files changed by design; implementation delegated to USF-983 (which itself never reached main - tracked separately).",
@@ -2201,13 +2419,18 @@
     },
     {
       "issueId": "USF-976",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "full-content-classified-no-further-work",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-golden-acceptance-corpus.md",
+        "docs/architecture/rollback-proof-strategy.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+        "tools/validate-evidence-invalidation/validate-evidence-invalidation.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 4,
+      "repositoryReferenceEvidenceTotalPathCount": 4,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "operational-only",
         "reason": "Read-only design gate; no repo files changed by design; implementation delegated to USF-984 (which itself never reached main - tracked separately).",
@@ -2235,13 +2458,19 @@
     },
     {
       "issueId": "USF-983",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-golden-acceptance-corpus.md",
+        "docs/architecture/rollback-proof-strategy.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+        "tools/validate-evidence-reuse/evidence-reuse-decisions.json",
+        "tools/validate-evidence-reuse/validate-evidence-reuse.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 5,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "tools/validate-evidence-reuse/ (validator, decisions artifact, 14 planted defects, wiring) never existed in origin/main history; PR 281 (7ec2ce3e) merged only to orchestration/usf-952-final-gate, which was never merged; PR 299 squash omitted it.",
@@ -2249,17 +2478,39 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "tools/validate-evidence-reuse/"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-984",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/proof-golden-acceptance-corpus.md",
+        "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+        "tools/validate-evidence-invalidation/validate-evidence-invalidation.py",
+        "tools/validate-evidence-reuse/evidence-reuse-decisions.json",
+        "tools/validate-evidence-reuse/validate-evidence-reuse.py"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 5,
+      "repositoryReferenceEvidenceTotalPathCount": 5,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "tools/validate-evidence-invalidation/ (map, validator with all/selftest/classify modes, 14 planted defects) never existed in origin/main history; PR 280 (a0af48bf) merged only to the unmerged orchestration branch.",
@@ -2267,17 +2518,37 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "tools/validate-evidence-invalidation/"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
       "issueId": "USF-987",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "docs/architecture/ci-nightly-and-deep-check-policy.md",
+        "docs/architecture/ci-timeout-and-retry-policy.md",
+        "docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 3,
+      "repositoryReferenceEvidenceTotalPathCount": 3,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "Named artifact docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md absent from origin/main (no per-route timing content anywhere); PR 289 (9bdbf4b) merged only to the unmerged orchestration branch.",
@@ -2285,6 +2556,22 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -2320,6 +2607,20 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "rejected-current-main-redraft-required",
+        "repositoryPaths": [],
+        "rationale": "Rejected old manual dispatch workflow and tool for current main: adding a workflow and dispatch tool must be redrafted against the current workflow, naming, runner, and guardrail posture rather than re-landed from the stale branch.",
+        "validationExpectation": "No stale branch patch is accepted as current validation evidence; any future implementation must be authored and validated against current main.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -2338,6 +2639,20 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "rejected-current-main-redraft-required",
+        "repositoryPaths": [],
+        "rationale": "Rejected old workflow-guardrails patch for current main: the stale branch patch conflicted with the current validate-spec surface and would remove newer validator coverage. Any workflow guardrail tranche must be re-implemented against current main.",
+        "validationExpectation": "No stale branch patch is accepted as current validation evidence; any future implementation must be authored and validated against current main.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -2360,13 +2675,15 @@
     },
     {
       "issueId": "USF-994",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json absent from origin/main (USF-PR-TOOL rule exists but the planted-defect coverage does not); PR 298 merged only to the unmerged orchestration branch.",
@@ -2374,6 +2691,22 @@
         "recordedAtUtc": "2026-07-09T13:30:00Z",
         "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
         "reLandIssueId": "USF-1044"
+      },
+      "usf1044Disposition": {
+        "issueId": "USF-1044",
+        "recordedAtUtc": "2026-07-09T14:20:15Z",
+        "decision": "re-landed",
+        "repositoryPaths": [
+          "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json"
+        ],
+        "rationale": "Targeted re-land from orchestration/usf-952-final-gate preserved the current main command and validator surface instead of replacing newer main-line work.",
+        "validationExpectation": "Strict JSON parse plus relevant validator selftest and all modes must pass before completion is claimed.",
+        "nonClaims": [
+          "Linear remains work tracking only and does not define USF semantic authority.",
+          "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+          "No readiness claim is upgraded beyond validator and proof evidence.",
+          "No external repository is treated as USF authority."
+        ]
       }
     },
     {
@@ -2387,7 +2720,7 @@
       "repositoryReferenceEvidenceTotalPathCount": 2,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
-      "reason": "The current repository contains at least one exact reference to this issue outside the original audit artifact and disposition artifact. This does not by itself prove the issue is semantically complete."
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
     },
     {
       "issueId": "USF-1003",
@@ -2400,7 +2733,7 @@
       "repositoryReferenceEvidenceTotalPathCount": 2,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
-      "reason": "The current repository contains at least one exact reference to this issue outside the original audit artifact and disposition artifact. This does not by itself prove the issue is semantically complete."
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
     },
     {
       "issueId": "USF-1004",
@@ -2415,7 +2748,7 @@
       "repositoryReferenceEvidenceTotalPathCount": 4,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
-      "reason": "The current repository contains at least one exact reference to this issue outside the original audit artifact and disposition artifact. This does not by itself prove the issue is semantically complete."
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
     },
     {
       "issueId": "USF-1005",
@@ -2430,7 +2763,7 @@
       "repositoryReferenceEvidenceTotalPathCount": 4,
       "followUpIssueId": null,
       "completionClaim": "reference-presence-only",
-      "reason": "The current repository contains at least one exact reference to this issue outside the original audit artifact and disposition artifact. This does not by itself prove the issue is semantically complete."
+      "reason": "A current exact repository reference was found outside the original audit artifact and disposition artifact. This is traceability evidence only and does not prove semantic completion."
     }
   ],
   "unresolvedWorkDelivery": {
@@ -2605,5 +2938,45 @@
     "genuineMissingDeliverableReLandIssueId": "USF-1044",
     "rootCauseNote": "All sixteen genuine-missing-deliverable keys trace to the unmerged branch orchestration/usf-952-final-gate: child PRs merged into that branch, the branch never merged to main, and the PR 299 squash carried only part of its content.",
     "nonClaims": "Classifications are repository-owned operational accounting. They do not make Linear content semantic authority, do not treat Done status as proof, and claim no readiness."
+  },
+  "usf1044DispositionSummary": {
+    "issueId": "USF-1044",
+    "recordedAtUtc": "2026-07-09T14:20:15Z",
+    "sourceBranchReviewed": "orchestration/usf-952-final-gate",
+    "reLandedIssueIds": [
+      "USF-618",
+      "USF-643",
+      "USF-645",
+      "USF-657",
+      "USF-769",
+      "USF-825",
+      "USF-829",
+      "USF-983",
+      "USF-984",
+      "USF-987",
+      "USF-994"
+    ],
+    "rejectedCurrentMainRedraftRequiredIssueIds": [
+      "USF-969",
+      "USF-970",
+      "USF-971",
+      "USF-990",
+      "USF-991"
+    ],
+    "decisionCounts": {
+      "re-landed": 11,
+      "rejected-current-main-redraft-required": 5
+    },
+    "currentRepositoryReferenceScanAfterReland": {
+      "repositoryReferencePresentCount": 34,
+      "requiresSafeFullContentDispositionCount": 104
+    },
+    "rationale": "USF-1044 disposition records which stranded final-gate deliverables were safe to re-land directly and which stale branch patches require current-main redraft rather than blind reapplication.",
+    "nonClaims": [
+      "Linear remains work tracking only and does not define USF semantic authority.",
+      "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
+      "No readiness claim is upgraded beyond validator and proof evidence.",
+      "No external repository is treated as USF authority."
+    ]
   }
 }

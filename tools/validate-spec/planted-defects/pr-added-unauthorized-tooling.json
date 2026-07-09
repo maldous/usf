@@ -1,0 +1,10 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-PR-TOOL",
+  "relatedIssueIds": [
+    "USF-994"
+  ],
+  "nameStatusLines": [
+    "A\ttools/unreviewed-validator.py"
+  ]
+}

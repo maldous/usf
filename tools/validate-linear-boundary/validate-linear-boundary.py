@@ -82,10 +82,11 @@ REFERENCE_SCAN_BINARY_SUFFIXES = {
     ".jpg",
     ".pdf",
     ".png",
+    ".pyc",
     ".webp",
     ".zip",
 }
-REFERENCE_SCAN_EXCLUDED_DIR_NAMES = {".claude", ".codex", ".git"}
+REFERENCE_SCAN_EXCLUDED_DIR_NAMES = {".claude", ".codex", ".git", "__pycache__"}
 
 
 def load_json(path: Path) -> dict[str, Any]:

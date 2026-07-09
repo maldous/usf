@@ -1,0 +1,26 @@
+{
+  "id": "planted-defect.evidence-reuse.environment-mismatch",
+  "expectedRule": "USF-EVIDENCE-REUSE-005",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/environment",
+      "value": "test"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/eligibilityStatus",
+      "value": "pass-current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/freshnessState",
+      "value": "current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "none"
+    }
+  ]
+}

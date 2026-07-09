@@ -1,0 +1,7 @@
+{
+  "id": "001-unknown-changed-path",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-004",
+  "fixture": {
+    "kind": "unknown-changed-path"
+  }
+}

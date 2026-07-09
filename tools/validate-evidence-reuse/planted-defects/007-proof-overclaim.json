@@ -1,0 +1,31 @@
+{
+  "id": "planted-defect.evidence-reuse.proof-overclaim",
+  "expectedRule": "USF-EVIDENCE-REUSE-006",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/claimedProofLevel",
+      "value": "human-acceptance-proof"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/observedProofLevel",
+      "value": "compose-behaviour"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/eligibilityStatus",
+      "value": "pass-current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/freshnessState",
+      "value": "current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "none"
+    }
+  ]
+}

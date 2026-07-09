@@ -1,0 +1,1034 @@
+{
+  "id": "evidence-invalidation-map",
+  "version": 1,
+  "title": "Evidence Invalidation Map",
+  "description": "Validator-owned machine-readable map for evidence invalidation, stale propagation, and full-proof fallback. This artefact supports USF-984 implementation work only and does not define USF semantic authority.",
+  "issueId": "USF-984",
+  "designIssueId": "USF-976",
+  "relatedIssueIds": [
+    "USF-603",
+    "USF-605",
+    "USF-615",
+    "USF-616",
+    "USF-952",
+    "USF-966",
+    "USF-975",
+    "USF-983"
+  ],
+  "nonAuthorityStatement": "This validator-owned machine format tracks invalidation enforcement. It does not define USF semantic authority, readiness, staging, production, compliance, store, release, or provider posture.",
+  "requiredCoverageTags": [
+    "source",
+    "semantic",
+    "adr",
+    "schema",
+    "taxonomy",
+    "vocabulary",
+    "registry",
+    "validator",
+    "proof",
+    "provider",
+    "environment",
+    "command",
+    "dependency",
+    "artifact",
+    "generated-report",
+    "ci-anchor",
+    "git",
+    "human-decision",
+    "configuration"
+  ],
+  "stalePropagationStates": [
+    "current",
+    "stale",
+    "superseded",
+    "historical",
+    "invalidated",
+    "human-review-required",
+    "generated-report-only",
+    "terminal-refresh-deferred"
+  ],
+  "nonPassStates": [
+    "stale",
+    "superseded",
+    "invalidated",
+    "human-review-required",
+    "generated-report-only",
+    "terminal-refresh-deferred"
+  ],
+  "nonClaims": [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-product-readiness",
+    "no-store-readiness",
+    "no-compliance-readiness",
+    "generated-reports-are-not-authority",
+    "linear-is-not-semantic-authority"
+  ],
+  "globalPolicies": {
+    "unknownInputFallback": "full-proof-for-affected-family-or-widen-to-all",
+    "generatedReportsAreAuthority": false,
+    "generatedReportOnlyCanSatisfyProof": false,
+    "automaticHumanSignoffAllowed": false,
+    "terminalFreshMachineQaIssue": "USF-966",
+    "terminalRefreshDeferredCanPass": false,
+    "ambiguousProviderFallback": "full-proof-for-affected-family",
+    "ambiguousEnvironmentFallback": "full-proof-for-affected-family",
+    "proofOverclaimCanPass": false,
+    "staleCanPass": false
+  },
+  "inputClasses": [
+    {
+      "id": "constitutional-governance-authority",
+      "coverageTags": [
+        "semantic",
+        "source"
+      ],
+      "owningAuthorityClass": "constitutional-and-foundational-governance",
+      "selectors": [
+        {
+          "pattern": "docs/architecture/charter.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/authority-model.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/standards-profile.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/ontology.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*-standard.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "AGENTS.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "CODEX.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "CLAUDE.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "foundation-governance",
+        "semantic-spec",
+        "validator-suite",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "governance-evidence",
+        "validator-reports",
+        "proof-anchors"
+      ],
+      "invalidationTriggers": [
+        "authority order change",
+        "non-claim boundary change",
+        "agent execution directive change",
+        "governance standard change"
+      ],
+      "stalePropagationRule": "invalidate dependent validator reports and proof reuse decisions until governance and semantic validators rerun",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "authority-order-preserved",
+        "non-claims-preserved",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and widen to all proof families if the affected authority surface cannot be isolated",
+      "nonClaimBoundary": "No governance change implies staging, product, production, compliance, store, release, provider, or readiness status.",
+      "assurancePreserved": "Authority order and non-claim protections remain stronger than cache or affected-only performance.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "current-state-authority-index",
+      "coverageTags": [
+        "semantic",
+        "registry"
+      ],
+      "owningAuthorityClass": "current-state-router",
+      "selectors": [
+        {
+          "pattern": "docs/architecture/current-state-foundation-authority-index.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/current-state-foundation-authority-index.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "foundation-governance",
+        "semantic-spec",
+        "validator-suite"
+      ],
+      "affectedEvidenceFamilies": [
+        "authority-index",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "router entry change",
+        "authority classification change",
+        "current-state alias change"
+      ],
+      "stalePropagationRule": "invalidate affected current-state reports and rerun foundation validation before reuse",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "authority-router-valid",
+        "generated-report-not-authority"
+      ],
+      "ambiguityBehavior": "fail-closed and run full foundation validation when routing cannot classify an input",
+      "nonClaimBoundary": "The current-state index routes work and does not promote readiness.",
+      "assurancePreserved": "Historical lineage stays retained while current authority routing remains explicit.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "semantic-instances",
+      "coverageTags": [
+        "semantic",
+        "source"
+      ],
+      "owningAuthorityClass": "semantic-definition",
+      "selectors": [
+        {
+          "pattern": "spec/instances/**",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "semantic-spec",
+        "runtime-proof",
+        "test-readiness",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "semantic-instances",
+        "proof-evidence",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "semantic field change",
+        "authority reference change",
+        "proof expectation change",
+        "non-claim change"
+      ],
+      "stalePropagationRule": "invalidate reuse decisions whose semantic references or proof expectations touch the changed instance",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "semantic-reference-resolution",
+        "proof-level-not-overclaimed",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and widen when semantic impact cannot be mapped to a narrower family",
+      "nonClaimBoundary": "Semantic definitions do not by themselves prove runtime, staging, or readiness status.",
+      "assurancePreserved": "Semantics remain higher authority than implementation and generated reports.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "taxonomy-vocabulary-registry",
+      "coverageTags": [
+        "taxonomy",
+        "vocabulary",
+        "registry",
+        "schema"
+      ],
+      "owningAuthorityClass": "catalogue-and-registry",
+      "selectors": [
+        {
+          "pattern": "spec/taxonomies/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "spec/vocabularies/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "spec/registries/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "spec/schemas/**",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "semantic-spec",
+        "validator-suite",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "schema-validation",
+        "validator-reports",
+        "semantic-instances"
+      ],
+      "invalidationTriggers": [
+        "schema shape change",
+        "registry lifecycle change",
+        "taxonomy class change",
+        "vocabulary value change"
+      ],
+      "stalePropagationRule": "invalidate schema-backed validation reports and any evidence using changed controlled values",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "schema-registry-sync",
+        "controlled-value-resolution",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and run full semantic validation when catalogue impact is unclear",
+      "nonClaimBoundary": "Catalogue validity does not prove runtime or readiness.",
+      "assurancePreserved": "Controlled values remain validator-enforced and cannot be guessed.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "adr-authority",
+      "coverageTags": [
+        "adr",
+        "semantic"
+      ],
+      "owningAuthorityClass": "adr",
+      "selectors": [
+        {
+          "pattern": "docs/adr/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*decision*.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*decision*.json",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "semantic-spec",
+        "validator-suite",
+        "runtime-proof"
+      ],
+      "affectedEvidenceFamilies": [
+        "adr-validation",
+        "validator-reports",
+        "proof-evidence"
+      ],
+      "invalidationTriggers": [
+        "decision status change",
+        "permitted drift change",
+        "semantic reference change",
+        "proof expectation change"
+      ],
+      "stalePropagationRule": "invalidate reports and reuse decisions whose authority references include the changed ADR",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "adr-schema-validation",
+        "semantic-reference-resolution",
+        "proof-level-not-overclaimed"
+      ],
+      "ambiguityBehavior": "fail-closed when ADR impact cannot be resolved to a narrower target",
+      "nonClaimBoundary": "ADR acceptance does not equal environment readiness or product readiness.",
+      "assurancePreserved": "Recorded decisions remain linked to semantics and proof expectations.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "validator-code-and-fixtures",
+      "coverageTags": [
+        "validator"
+      ],
+      "owningAuthorityClass": "validator-rule",
+      "selectors": [
+        {
+          "pattern": "tools/validate-*/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "tools/generate-compose/**",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "validator-suite",
+        "semantic-spec",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "validator-reports",
+        "planted-defects",
+        "generated-reports"
+      ],
+      "invalidationTriggers": [
+        "validator rule change",
+        "selftest fixture change",
+        "planted defect change",
+        "report schema interpretation change"
+      ],
+      "stalePropagationRule": "invalidate validator reports produced before the validator code or fixture change",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "validator-selftest",
+        "planted-defect-coverage",
+        "hidden-blocking-finding-fails-closed",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun the affected validator family plus aggregate validation",
+      "nonClaimBoundary": "A validator change must not downgrade blocking findings to advisory to pass.",
+      "assurancePreserved": "Planted defects preserve regression coverage for fail-closed behavior.",
+      "relatedIssueIds": [
+        "USF-505",
+        "USF-952",
+        "USF-974",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "proof-scripts-and-models",
+      "coverageTags": [
+        "proof",
+        "source"
+      ],
+      "owningAuthorityClass": "proof-implementation",
+      "selectors": [
+        {
+          "pattern": "packages/proof/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "tools/proof-review/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*proof*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*proof*.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "runtime-proof",
+        "proof-cockpit",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "proof-evidence",
+        "proof-anchors",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "proof command behavior change",
+        "proof model change",
+        "proof evidence field change",
+        "proof anchor carrier change"
+      ],
+      "stalePropagationRule": "invalidate proof evidence emitted before the changed proof script or proof model",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "proof-level-not-overclaimed",
+        "observed-proof-bound",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun the affected proof family when proof impact is unclear",
+      "nonClaimBoundary": "Proof execution must not claim stronger environment or provider posture than observed.",
+      "assurancePreserved": "Proof scripts remain distinct from generated reports.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "command-surface",
+      "coverageTags": [
+        "command"
+      ],
+      "owningAuthorityClass": "command-surface",
+      "selectors": [
+        {
+          "pattern": "package.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "Makefile",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "pnpm-workspace.yaml",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/regression-budget-and-performance-thresholds.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "validator-suite",
+        "runtime-proof",
+        "test-readiness",
+        "proof-cockpit"
+      ],
+      "affectedEvidenceFamilies": [
+        "command-inventory",
+        "validator-reports",
+        "proof-evidence"
+      ],
+      "invalidationTriggers": [
+        "script wiring change",
+        "Make target change",
+        "workspace command topology change",
+        "proof command alias change"
+      ],
+      "stalePropagationRule": "invalidate command-surface reports and any evidence that depended on changed command invocation",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "command-wiring-current",
+        "target-output-contract",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun aggregate command validation when command impact is unclear",
+      "nonClaimBoundary": "Command aliases do not upgrade readiness claims.",
+      "assurancePreserved": "Compatibility commands remain explicit and validator-visible.",
+      "relatedIssueIds": [
+        "USF-385",
+        "USF-770",
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "dependencies-toolchain",
+      "coverageTags": [
+        "dependency"
+      ],
+      "owningAuthorityClass": "toolchain-and-dependencies",
+      "selectors": [
+        {
+          "pattern": "pnpm-lock.yaml",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": ".npmrc",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "tsconfig*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "vitest.config.ts",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "eslint.config.js",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "tools/**/requirements*.txt",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "validator-suite",
+        "runtime-proof",
+        "test-readiness",
+        "ci-automation"
+      ],
+      "affectedEvidenceFamilies": [
+        "dependency-evidence",
+        "validator-reports",
+        "proof-evidence"
+      ],
+      "invalidationTriggers": [
+        "lockfile change",
+        "toolchain version change",
+        "test runner config change",
+        "lint or typecheck config change"
+      ],
+      "stalePropagationRule": "invalidate validation and proof evidence produced under a different dependency or toolchain identity",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "dependency-lock-current",
+        "toolchain-identity-recorded",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun full affected validation when dependency impact is unclear",
+      "nonClaimBoundary": "Dependency validation is not security, compliance, store, or release readiness by itself.",
+      "assurancePreserved": "Toolchain identity remains part of proof freshness.",
+      "relatedIssueIds": [
+        "USF-558",
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "ci-anchors",
+      "coverageTags": [
+        "ci-anchor"
+      ],
+      "owningAuthorityClass": "ci-automation",
+      "selectors": [
+        {
+          "pattern": ".github/workflows/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/ci-*.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "ci-automation",
+        "validator-suite",
+        "proof-anchor"
+      ],
+      "affectedEvidenceFamilies": [
+        "ci-reports",
+        "proof-anchors",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "required check change",
+        "proof anchor workflow change",
+        "CI cache policy change",
+        "workflow identity change"
+      ],
+      "stalePropagationRule": "invalidate CI-derived evidence and proof anchors whose workflow definition changed",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "ci-anchor-current",
+        "required-status-check-current",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun affected CI-equivalent validation locally where possible",
+      "nonClaimBoundary": "CI pass does not create staging, release, store, compliance, or production readiness.",
+      "assurancePreserved": "CI evidence stays tied to its workflow identity and commit.",
+      "relatedIssueIds": [
+        "USF-637",
+        "USF-639",
+        "USF-640",
+        "USF-643",
+        "USF-645",
+        "USF-657",
+        "USF-658",
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "provider-environment-configuration",
+      "coverageTags": [
+        "provider",
+        "environment",
+        "configuration"
+      ],
+      "owningAuthorityClass": "provider-environment-and-configuration",
+      "selectors": [
+        {
+          "pattern": "compose/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docker/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "spec/instances/environment/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "spec/instances/provider-mode/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "spec/instances/configuration/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*provider*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*environment*.json",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "compose-proof",
+        "runtime-proof",
+        "test-readiness",
+        "proof-cockpit",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "provider-evidence",
+        "environment-evidence",
+        "configuration-evidence",
+        "proof-evidence"
+      ],
+      "invalidationTriggers": [
+        "provider mode change",
+        "environment class change",
+        "configuration secret posture change",
+        "compose service topology change"
+      ],
+      "stalePropagationRule": "invalidate evidence whose provider mode, environment, or configuration posture no longer matches",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "provider-mode-mismatch-fails-closed",
+        "ambiguous-provider-fails-closed",
+        "environment-mismatch-fails-closed",
+        "ambiguous-environment-fails-closed",
+        "secret-boundary-preserved",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and run full proof for the affected family when provider or environment is ambiguous",
+      "nonClaimBoundary": "Provider and environment dimensions remain separate and never upgrade each other by implication.",
+      "assurancePreserved": "Hermetic, local-composed, staging, and live-provider postures remain distinct.",
+      "relatedIssueIds": [
+        "USF-580",
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "runtime-source-implementation",
+      "coverageTags": [
+        "source"
+      ],
+      "owningAuthorityClass": "source-implementation",
+      "selectors": [
+        {
+          "pattern": "apps/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "packages/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "adapters/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "tests/**",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "runtime-proof",
+        "test-readiness",
+        "compose-proof",
+        "proof-cockpit"
+      ],
+      "affectedEvidenceFamilies": [
+        "runtime-proof-evidence",
+        "test-evidence",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "source behavior change",
+        "test expectation change",
+        "adapter boundary change",
+        "runtime proof surface change"
+      ],
+      "stalePropagationRule": "invalidate proof and validation evidence for affected runtime surfaces until rerun at the correct proof level",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "semantic-authority-present",
+        "proof-level-not-overclaimed",
+        "observed-proof-bound",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and widen to full runtime or test proof when source impact cannot be isolated",
+      "nonClaimBoundary": "Source implementation does not invent semantics or readiness claims.",
+      "assurancePreserved": "Implementation remains below semantics, ADRs, validators, and proof evidence.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "generated-clients-and-artifact-inputs",
+      "coverageTags": [
+        "artifact",
+        "source"
+      ],
+      "owningAuthorityClass": "generated-input",
+      "selectors": [
+        {
+          "pattern": "generated/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "**/generated-*",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "**/*generated*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "coverage/**",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "validator-suite",
+        "runtime-proof",
+        "test-readiness"
+      ],
+      "affectedEvidenceFamilies": [
+        "generated-artifact-evidence",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "generated client change",
+        "generated artifact input change",
+        "coverage report change",
+        "artifact provenance change"
+      ],
+      "stalePropagationRule": "invalidate evidence that references generated inputs until source manifest and hashes match",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "artifact-hash",
+        "content-address",
+        "source-manifest-present",
+        "generated-report-not-authority"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun the producing proof or validator when provenance is unclear",
+      "nonClaimBoundary": "Generated artifacts and coverage reports do not outrank source evidence.",
+      "assurancePreserved": "Generated outputs remain traceable to inputs and hashes.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "evidence-records-and-artifacts",
+      "coverageTags": [
+        "artifact",
+        "generated-report"
+      ],
+      "owningAuthorityClass": "evidence-and-artifact",
+      "selectors": [
+        {
+          "pattern": "evidence/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "artifacts/**",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "proof-cockpit",
+        "artifact-promotion",
+        "validator-suite",
+        "runtime-proof"
+      ],
+      "affectedEvidenceFamilies": [
+        "proof-evidence",
+        "artifact-manifests",
+        "generated-reports",
+        "external-review-bundles"
+      ],
+      "invalidationTriggers": [
+        "evidence record change",
+        "artifact manifest change",
+        "artifact byte change",
+        "hash mismatch",
+        "generated report change",
+        "superseded payload reuse",
+        "pruned payload without metadata"
+      ],
+      "stalePropagationRule": "changed evidence becomes historical or invalidated for current-pass use until matching source commit and hashes are verified",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "artifact-hash",
+        "content-address",
+        "pruned-payload-metadata",
+        "generated-report-not-authority",
+        "generated-report-only-not-proof",
+        "stale-generated-report-not-pass",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun full proof for the affected family when evidence or artifact lineage is ambiguous",
+      "nonClaimBoundary": "Historical evidence may be retained as lineage but cannot satisfy current pass after invalidation.",
+      "assurancePreserved": "Accepted evidence is preserved while current eligibility is withdrawn when stale or ambiguous.",
+      "relatedIssueIds": [
+        "USF-598",
+        "USF-603",
+        "USF-605",
+        "USF-616",
+        "USF-966",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "proof-anchors-and-git",
+      "coverageTags": [
+        "git"
+      ],
+      "owningAuthorityClass": "git-and-proof-anchor",
+      "selectors": [
+        {
+          "pattern": ".gitignore",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/git-practices-standard.md",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*proof-anchor*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*proof-anchor*.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "proof-anchor",
+        "validator-suite",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "proof-anchors",
+        "git-anchors",
+        "validator-reports"
+      ],
+      "invalidationTriggers": [
+        "commit pin change",
+        "tag anchor change",
+        "proof anchor payload change",
+        "git practices standard change"
+      ],
+      "stalePropagationRule": "invalidate evidence whose commit or tag anchor no longer resolves to the assessed commit",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "git-anchor-resolves",
+        "tag-anchor-authorized",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and rerun proof-anchor validation when Git anchoring is ambiguous",
+      "nonClaimBoundary": "Git tags and proof anchors record evidence boundaries and do not create readiness claims.",
+      "assurancePreserved": "Proof evidence stays bound to explicit commits and authorized tags.",
+      "relatedIssueIds": [
+        "USF-952",
+        "USF-976",
+        "USF-984"
+      ]
+    },
+    {
+      "id": "human-decision-records",
+      "coverageTags": [
+        "human-decision"
+      ],
+      "owningAuthorityClass": "human-review-and-acceptance",
+      "selectors": [
+        {
+          "pattern": "evidence/**/human-*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/runbooks/**",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*acceptance*.json",
+          "selectorType": "path-glob"
+        },
+        {
+          "pattern": "docs/architecture/*acceptance*.md",
+          "selectorType": "path-glob"
+        }
+      ],
+      "affectedProofFamilies": [
+        "human-acceptance",
+        "proof-cockpit",
+        "artifact-promotion"
+      ],
+      "affectedEvidenceFamilies": [
+        "human-review-actions",
+        "acceptance-records",
+        "proof-evidence"
+      ],
+      "invalidationTriggers": [
+        "human review action change",
+        "acceptance record change",
+        "review runbook change",
+        "evidence changed after signoff"
+      ],
+      "stalePropagationRule": "changed or superseded evidence after review requires human-review-required state before acceptance can be current again",
+      "fallbackRerunMode": "full-proof-for-affected-family",
+      "minimumValidatorChecks": [
+        "commit-pin",
+        "no-automatic-human-signoff",
+        "changed-evidence-requires-human-review",
+        "non-claims-preserved",
+        "stale-evidence-not-pass"
+      ],
+      "ambiguityBehavior": "fail-closed and require human review when decision evidence cannot be tied to the assessed artifact set",
+      "nonClaimBoundary": "Human acceptance cannot be automatic and cannot make readiness claims without explicit proof and owner acceptance.",
+      "assurancePreserved": "Human review remains explicit, auditable, and tied to a current evidence set.",
+      "relatedIssueIds": [
+        "USF-951",
+        "USF-952",
+        "USF-966",
+        "USF-976",
+        "USF-984"
+      ]
+    }
+  ]
+}

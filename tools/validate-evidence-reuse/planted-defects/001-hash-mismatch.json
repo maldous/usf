@@ -1,0 +1,11 @@
+{
+  "id": "planted-defect.evidence-reuse.hash-mismatch",
+  "expectedRule": "USF-EVIDENCE-REUSE-003",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/artifactHashes/0/sha256",
+      "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}
