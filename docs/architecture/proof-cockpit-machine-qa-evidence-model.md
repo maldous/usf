@@ -8,6 +8,8 @@ The model separates discovery, execution, evidence normalization, evaluation, hu
 
 Every evidence record includes a stable ID, evidence type, target object, source method, source URL or command, timestamp, source SHA, environment, actor/executor, role or persona, synthetic tenant or dataset, correlation ID, trace ID, artifact paths, normalized summary, claim supported, proof method, limitations, sensitivity classification, redaction status, content hash, previous evidence reference, retention status, freshness state, and human acceptance status.
 
+Machine QA runs also record `sourceTreeHash` using `sha256-git-ls-tree-non-proof-evidence-v1`, excluding `artifacts/proof-cockpit/` and `evidence/proof-evidence/proof-cockpit/`. This hash is the squash-stable freshness anchor for proof-cockpit rule USF-PROOF-COCKPIT-009; `sourceSha` remains provenance and must not be the sole freshness authority after squash merge or rebase.
+
 ## Chain Of Custody
 
 Each major claim maps to semantic source, scenario, actor/tool, role/persona, service/resource, route/API/port/adapter, artifact hash, timestamp, environment, source SHA, deployment SHA, validation result, limitations, and human import status.
