@@ -20,6 +20,7 @@ LINEAR_AUDIT = ROOT / "docs/architecture/linear-repository-delivery-audit.json"
 PACKAGE = ROOT / "package.json"
 CI_THROUGHPUT = ROOT / "docs/architecture/repository-ci-throughput-optimisation-realisation.json"
 CI_TIMING = ROOT / "evidence/generated-reports/repository-ci-throughput-timing-evidence.json"
+RUNNER_CAPACITY = ROOT / "docs/architecture/github-runner-capacity-enablement.json"
 VALIDATE_WORKFLOW = ROOT / ".github/workflows/validate-spec.yml"
 
 REPORTS = {
@@ -629,6 +630,27 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not broaden validate-spec checkout to all tags"))
     if "--unshallow" not in workflow_source or "git diff --name-status" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must fail closed to fuller checkout when PR diff refs are missing"))
+    for forbidden_tmp_path in [
+        "/tmp/usf-validator-report.json",
+        "/tmp/usf-pr-validator-report.json",
+        "/tmp/usf-runner-cleanup-pre.json",
+        "/tmp/usf-runner-toolchain.json",
+        "/tmp/usf-runner-secret-safety-post.json",
+        "/tmp/usf-runner-cleanup-post.json",
+    ]:
+        if forbidden_tmp_path in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), f"workflow must not use fixed persistent temp path: {forbidden_tmp_path}"))
+    for runner_temp_snippet in [
+        "Verify runner temp boundary",
+        'test -w "$RUNNER_TEMP"',
+        '"$RUNNER_TEMP/usf-validator-report.json"',
+        '"$RUNNER_TEMP/usf-pr-validator-report.json"',
+        '"$RUNNER_TEMP/usf-runner-cleanup-post.json"',
+        '"$RUNNER_TEMP/usf-runner-secret-safety-post.json"',
+        '"$RUNNER_TEMP/usf-runner-toolchain.json"',
+    ]:
+        if runner_temp_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow generated reports must use the runner-scoped temp boundary"))
     if "cache_hit_value()" not in workflow_source or "*) printf false ;;" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must normalise empty cache-hit outputs to false"))
     if 'pnpm_cache_hit_main="not-applicable"' not in workflow_source or 'pip_cache_hit_main="not-applicable"' not in workflow_source:
@@ -656,11 +678,324 @@ def check_ci_throughput_artifacts(
     return findings
 
 
+def check_runner_capacity_artifact(runner_data: dict[str, Any] | None = None) -> list[dict[str, str]]:
+    findings: list[dict[str, str]] = []
+    data = runner_data or load_json(RUNNER_CAPACITY)
+    if data.get("artifactId") != "usf.github-runner-capacity-enablement" or data.get("ownerIssueId") != "USF-1038":
+        findings.append(finding("USF-OPT-RUNNER-001", rel(RUNNER_CAPACITY), "runner capacity artefact must be owned by USF-1038"))
+    lifecycle_state = data.get("lifecycleState")
+    blocked_state = lifecycle_state == "blocked-pending-dedicated-runner-host-and-registration"
+    enabled_pending_state = lifecycle_state == "trusted-self-hosted-runner-enabled-measurement-pending"
+    enabled_measured_state = lifecycle_state == "trusted-self-hosted-runner-enabled-and-measured"
+    operational_blocked_state = lifecycle_state == "accepted-host-controller-blocked-by-operational-issue"
+    if not (blocked_state or enabled_pending_state or enabled_measured_state or operational_blocked_state):
+        findings.append(finding("USF-OPT-RUNNER-001", rel(RUNNER_CAPACITY), "runner capacity lifecycle state must be blocked, enabled-measurement-pending, enabled-and-measured, or exact-operational-blocked"))
+    runner_enabled_state = enabled_pending_state or enabled_measured_state
+
+    authority = data.get("authorityBoundary", {})
+    if not isinstance(authority, dict):
+        findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "authorityBoundary must be an object"))
+        authority = {}
+    for key in [
+        "githubSettingsAuthority",
+        "generatedReportsAuthority",
+        "runnerLocalStateAuthority",
+        "callbackPayloadsAuthority",
+        "workflowDefinesSemantics",
+        "implementationRuntimeCodeCreated",
+        "sourceImplementationImported",
+    ]:
+        if authority.get(key) is not False:
+            findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), f"runner authority boundary field must be false: {key}"))
+    if runner_enabled_state:
+        if authority.get("workflowRoutingChanged") is not True:
+            findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "enabled runner state must record workflow routing changed as an operational fact"))
+    elif authority.get("workflowRoutingChanged") is not False:
+        findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "blocked runner state must not claim workflow routing changed"))
+    if authority.get("semanticAuthorityPreserved") is not True:
+        findings.append(finding("USF-OPT-RUNNER-002", rel(RUNNER_CAPACITY), "semantic authority must be preserved"))
+
+    required_labels = {"self-hosted", "linux", "x64", "usf", "usf-ci", "usf-trusted"}
+
+    host = data.get("hostController", {})
+    if runner_enabled_state:
+        if not isinstance(host, dict):
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner state must record hostController"))
+            host = {}
+        if host.get("hostAccepted") is not True or host.get("architecture") != "x86_64":
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner host must be accepted Linux x64 host/controller"))
+        if host.get("runnerUser") != "usf-runner" or host.get("runnerUserIsRoot") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "runner must use dedicated non-root usf-runner user"))
+        if host.get("runnerUserHasSudo") is not False or host.get("runnerUserHasDockerGroup") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "runner user must not have sudo or docker group access"))
+        if host.get("dockerSocketMountedIntoRunner") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "Docker socket must not be mounted into the runner"))
+
+    observations = data.get("currentObservations", {})
+    if not isinstance(observations, dict):
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "currentObservations must be an object"))
+        observations = {}
+    observed_labels = {str(label).lower() for label in observations.get("repositorySelfHostedRunnerLabelsObserved", [])}
+    if runner_enabled_state:
+        if int(observations.get("repositorySelfHostedRunnerCount", 0)) < 1:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner state requires at least one registered repository self-hosted runner"))
+        if observations.get("runnerName") != "usf-linux-x64-controller-01" or observations.get("runnerStatus") != "online":
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner must record the expected online runner name"))
+        missing_observed = required_labels - observed_labels
+        if missing_observed:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), f"enabled runner observation missing labels: {', '.join(sorted(missing_observed))}"))
+        if observations.get("registrationTokenRequested") is not True:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled runner state must record that a short-lived registration token was requested"))
+        if observations.get("registrationTokenPersisted") is not False:
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "registration token must not be persisted"))
+        if "self-hosted" not in str(observations.get("currentValidateWorkflowRunsOn", "")) or "fallback" not in str(observations.get("currentValidateWorkflowRunsOn", "")):
+            findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "enabled workflow observation must record trusted self-hosted routing and fallback"))
+    elif blocked_state and observations.get("repositorySelfHostedRunnerCount") != 0:
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "blocked state requires zero registered repository self-hosted runners"))
+    if not runner_enabled_state and observations.get("registrationTokenPersisted") is not False:
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "registration token must not be persisted"))
+    if observations.get("branchProtectionStrict") is not True or "validate" not in observations.get("branchProtectionRequiredContexts", []):
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "branch protection observation must preserve strict validate context"))
+    if observations.get("requiredValidateContextPreserved") is not True:
+        findings.append(finding("USF-OPT-RUNNER-003", rel(RUNNER_CAPACITY), "current workflow must preserve validate context"))
+
+    timing = data.get("timingEvidence", {})
+    if not isinstance(timing, dict):
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "timingEvidence must be an object"))
+        timing = {}
+    if timing.get("semanticAuthority") is not False:
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must remain non-authoritative"))
+    hosted_runs = timing.get("baselineHostedRuns", [])
+    if not isinstance(hosted_runs, list) or not hosted_runs:
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must include hosted baseline runs"))
+        hosted_runs = []
+    if not any(isinstance(run, dict) and int(run.get("queueSeconds", 0)) >= 300 for run in hosted_runs):
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must record the observed hosted queue bottleneck"))
+    if not any(isinstance(run, dict) and run.get("headBranch") == "usf-1038-enable-trusted-self-hosted-github-runner-capacity" and run.get("runnerClass") == "github-hosted" for run in hosted_runs):
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "runner timing must include hosted before evidence for USF-1038"))
+    if enabled_pending_state:
+        if timing.get("runnerBackedAfterRunCaptured") is not False or timing.get("queueTimeImprovementClaimMade") is not False:
+            findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "measurement-pending state must not claim runner-backed after timing"))
+        pending = timing.get("pendingAfterEvidence", {})
+        if not isinstance(pending, dict) or pending.get("required") is not True:
+            findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "measurement-pending state must record exact pending after evidence"))
+    if enabled_measured_state:
+        self_hosted_runs = timing.get("selfHostedRuns", [])
+        if timing.get("runnerBackedAfterRunCaptured") is not True or not isinstance(self_hosted_runs, list) or not self_hosted_runs:
+            findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "enabled measured state requires self-hosted after-run timing evidence"))
+    if timing.get("exactAfterEvidenceRequiredBeforeClosure") is not True:
+        findings.append(finding("USF-OPT-RUNNER-004", rel(RUNNER_CAPACITY), "after evidence must remain required before closure"))
+
+    trust = data.get("trustZones", {})
+    if not isinstance(trust, dict):
+        findings.append(finding("USF-OPT-RUNNER-005", rel(RUNNER_CAPACITY), "trustZones must be an object"))
+        trust = {}
+    for zone in ["trusted-main", "trusted-pr", "untrusted-pr", "privileged-ci", "unprivileged-ci"]:
+        if zone not in trust:
+            findings.append(finding("USF-OPT-RUNNER-005", rel(RUNNER_CAPACITY), f"runner trust zone missing: {zone}"))
+    untrusted = trust.get("untrusted-pr", {}) if isinstance(trust.get("untrusted-pr"), dict) else {}
+    if untrusted.get("mayUsePersistentPrivilegedRunner") is not False:
+        findings.append(finding("USF-OPT-RUNNER-005", rel(RUNNER_CAPACITY), "untrusted PRs must not use persistent privileged runners"))
+
+    routing = data.get("runnerRoutingPolicy", {})
+    if not isinstance(routing, dict):
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "runnerRoutingPolicy must be an object"))
+        routing = {}
+    if routing.get("untrustedForkPullRequestsAllowedOnPersistentPrivilegedRunner") is not False:
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "routing must keep untrusted fork PRs off persistent privileged runners"))
+    if routing.get("requiredValidateContextMustRemain") != "validate" or routing.get("githubHostedFallbackRequired") is not True:
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "routing must preserve validate context and GitHub-hosted fallback"))
+    if runner_enabled_state:
+        if routing.get("workflowRoutingChangedInThisBranch") is not True:
+            findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "enabled runner state must implement workflow routing"))
+        if routing.get("forkPullRequestRouting") != "ubuntu-latest":
+            findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "fork pull requests must route to ubuntu-latest"))
+        if "github-hosted" not in str(routing.get("manualGithubHostedFallback", "")):
+            findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "manual GitHub-hosted fallback must be recorded"))
+        workflow_source = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+        for needle in [
+            "USF_VALIDATE_RUNNER_TARGET",
+            "runnerTarget",
+            "github.event.pull_request.head.repo.full_name != github.repository",
+            '["self-hosted","linux","x64","usf","usf-ci","usf-trusted"]',
+            '["ubuntu-latest"]',
+            "Runner hygiene preflight",
+            "Runner hygiene postflight",
+            "runnerLocalStateAuthority: false",
+        ]:
+            if needle not in workflow_source:
+                findings.append(finding("USF-OPT-RUNNER-006", rel(VALIDATE_WORKFLOW), f"trusted runner workflow routing missing guard: {needle}"))
+    elif routing.get("workflowRoutingChangedInThisBranch") is not False:
+        findings.append(finding("USF-OPT-RUNNER-006", rel(RUNNER_CAPACITY), "workflow routing must not change while no runner is registered"))
+
+    labels = data.get("runnerLabelStrategy", {})
+    if not isinstance(labels, dict):
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), "runnerLabelStrategy must be an object"))
+        labels = {}
+    observed_labels = set(labels.get("requiredLabels", []))
+    missing_labels = required_labels - observed_labels
+    if missing_labels:
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), f"runner required labels missing: {', '.join(sorted(missing_labels))}"))
+    if runner_enabled_state:
+        actual_labels = {str(label).lower() for label in labels.get("observedLabels", [])}
+        missing_actual = required_labels - actual_labels
+        if labels.get("currentLabelsPresent") is not True or missing_actual:
+            findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), f"enabled runner labels missing: {', '.join(sorted(missing_actual))}"))
+    elif labels.get("currentLabelsPresent") is not False:
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), "blocked runner labels must remain absent"))
+    if labels.get("labelWeakeningAllowed") is not False:
+        findings.append(finding("USF-OPT-RUNNER-007", rel(RUNNER_CAPACITY), "runner labels must not be weakenable"))
+
+    lifecycle = data.get("runnerLifecyclePolicy", {})
+    if not isinstance(lifecycle, dict):
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "runnerLifecyclePolicy must be an object"))
+        lifecycle = {}
+    if lifecycle.get("preferredModel") != "ephemeral" or lifecycle.get("machineCheckableCleanupProofRequired") is not True:
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "runner lifecycle must prefer ephemeral runners and require cleanup proof"))
+    if not lifecycle.get("ephemeralRequirements") or not lifecycle.get("persistentRequirements"):
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "runner lifecycle must record ephemeral and persistent requirements"))
+    if runner_enabled_state and (lifecycle.get("adoptedModel") != "persistent-with-cleanup-hooks" or lifecycle.get("persistentControlsSatisfied") is not True):
+        findings.append(finding("USF-OPT-RUNNER-008", rel(RUNNER_CAPACITY), "enabled runner must record persistent cleanup-hook controls"))
+
+    isolation = data.get("cacheAndSecretIsolation", {})
+    if not isinstance(isolation, dict):
+        findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "cacheAndSecretIsolation must be an object"))
+        isolation = {}
+    for key in [
+        "runnerCacheMaySatisfyValidation",
+        "runnerLocalStateMaySatisfyProof",
+        "secretsWrittenToWorkspaceAllowed",
+        "trustedCacheWritesFromPullRequestsAllowed",
+        "proofEvidenceCacheAllowed",
+        "generatedReportCacheAllowed",
+    ]:
+        if isolation.get(key) is not False:
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), f"runner isolation field must be false: {key}"))
+    if isolation.get("cleanupProofRequiredBeforeAdoption") is not True:
+        findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "cleanup proof must be required before runner adoption"))
+    if runner_enabled_state:
+        if isolation.get("cleanupProofImplemented") is not True or isolation.get("dockerSocketMountedIntoRunner") is not False:
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "enabled runner must implement cleanup proof and keep Docker socket out of runner"))
+        cleanup = data.get("cleanupAndSecretSafetyEvidence", {})
+        if not isinstance(cleanup, dict):
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "enabled runner must record cleanup and secret-safety evidence"))
+            cleanup = {}
+        if cleanup.get("hostPostStartCleanupResult") != "pass" or cleanup.get("hostSecretSafetyResult") != "pass":
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "runner cleanup and secret-safety evidence must pass"))
+        if cleanup.get("secretValuesPrinted") is not False or cleanup.get("runnerLocalStateMayDefineAuthority") is not False:
+            findings.append(finding("USF-OPT-RUNNER-009", rel(RUNNER_CAPACITY), "runner cleanup evidence must not print secrets or grant local-state authority"))
+        for script_path in cleanup.get("machineCheckableScripts", []):
+            path = ROOT / str(script_path)
+            if not path.exists() or not path.stat().st_mode & 0o111:
+                findings.append(finding("USF-OPT-RUNNER-009", str(script_path), "runner machine-checkable script must exist and be executable"))
+
+    callback = data.get("caddyCallbackDecision", {})
+    if not isinstance(callback, dict):
+        findings.append(finding("USF-OPT-RUNNER-010", rel(RUNNER_CAPACITY), "caddyCallbackDecision must be an object"))
+        callback = {}
+    if callback.get("implemented") is not False or callback.get("callbackPayloadsAreAuthority") is not False:
+        findings.append(finding("USF-OPT-RUNNER-010", rel(RUNNER_CAPACITY), "Caddy callback must remain unimplemented and non-authoritative for current runner blocker"))
+    for key in ["webhookSignatureRequiredIfImplemented", "replayProtectionRequiredIfImplemented", "failClosedRouteRequiredIfImplemented", "routeRollbackRequiredIfImplemented"]:
+        if callback.get(key) is not True:
+            findings.append(finding("USF-OPT-RUNNER-010", rel(RUNNER_CAPACITY), f"future callback control must be required: {key}"))
+
+    decision = data.get("enablementDecision", {})
+    if not isinstance(decision, dict):
+        findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enablementDecision must be an object"))
+        decision = {}
+    if runner_enabled_state:
+        if decision.get("state") not in {"enabled-measurement-pending", "enabled-and-measured"} or decision.get("runnerEnabled") is not True:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enabled runner decision must record enabled state"))
+        for key in ["hostControllerAccepted", "runnerRegistered", "runnerOnline", "workflowRoutingImplemented"]:
+            if decision.get(key) is not True:
+                findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), f"enabled runner decision field must be true: {key}"))
+        if decision.get("closureAllowed") is not False:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner closure must remain false until after evidence and Linear criteria are confirmed"))
+        if enabled_pending_state and len(decision.get("exactRemainingBlockers", [])) < 3:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "measurement-pending runner must record exact remaining blockers"))
+        if enabled_measured_state and len(decision.get("exactRemainingBlockers", [])) < 1:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "enabled measured runner must record exact remaining blockers until closure is explicitly allowed"))
+    else:
+        if decision.get("state") != "blocked" or decision.get("runnerEnabled") is not False or decision.get("closureAllowed") is not False:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "blocked runner enablement must remain blocked and not closure-ready"))
+        if len(decision.get("exactBlockers", [])) < 1:
+            findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner blocker must record exact blocker evidence"))
+    if len(decision.get("nextUnblockers", [])) < 1:
+        findings.append(finding("USF-OPT-RUNNER-011", rel(RUNNER_CAPACITY), "runner decision must record exact next unblockers"))
+
+    larger = data.get("largerGithubHostedRunnerDecision", {})
+    if not isinstance(larger, dict):
+        findings.append(finding("USF-OPT-RUNNER-012", rel(RUNNER_CAPACITY), "largerGithubHostedRunnerDecision must be an object"))
+        larger = {}
+    if larger.get("state") != "decision-required" or larger.get("adopted") is not False:
+        findings.append(finding("USF-OPT-RUNNER-012", rel(RUNNER_CAPACITY), "larger GitHub-hosted runner must remain decision-required and unadopted"))
+
+    closure = data.get("closureReport", {})
+    if not isinstance(closure, dict):
+        findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), "closureReport must be an object"))
+        closure = {}
+    for key in [
+        "usf1037RunnerWorkInventoried",
+        "trustPostureRecorded",
+        "threatModelRecorded",
+        "runnerLabelStrategyRecorded",
+        "githubHostedFallbackPreserved",
+        "runnerLifecycleDocumented",
+        "cleanupHygieneProofMachineCheckableIfEnabled",
+        "caddyCallbackDecisionRecorded",
+        "queueTimeBeforeEvidenceCaptured",
+        "requiredValidateContextStable",
+        "validatorsRequiredBeforeClosure",
+    ]:
+        if closure.get(key) is not True:
+            findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"runner closure field must be true: {key}"))
+    if runner_enabled_state:
+        for key in ["selfHostedRunnerEnablementImplemented", "trustedWorkflowRoutingImplemented"]:
+            if closure.get(key) is not True:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"enabled runner closure field must be true: {key}"))
+        for key in ["selfHostedRunnerEnablementBlockedWithExactEvidence", "trustedWorkflowRoutingBlockedByMissingRunner"]:
+            if closure.get(key) is not False:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"enabled runner closure field must be false: {key}"))
+        if enabled_pending_state and closure.get("runnerBackedAfterEvidenceCaptured") is not False:
+            findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), "measurement-pending closure must not claim after evidence"))
+    else:
+        for key in ["selfHostedRunnerEnablementBlockedWithExactEvidence", "trustedWorkflowRoutingBlockedByMissingRunner"]:
+            if closure.get(key) is not True:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"blocked runner closure field must be true: {key}"))
+        for key in ["selfHostedRunnerEnablementImplemented", "trustedWorkflowRoutingImplemented", "runnerBackedAfterEvidenceCaptured", "linearCompletionReady"]:
+            if closure.get(key) is not False:
+                findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), f"blocked runner closure field must be false: {key}"))
+    if closure.get("linearCompletionReady") is not False:
+        findings.append(finding("USF-OPT-RUNNER-013", rel(RUNNER_CAPACITY), "Linear completion must remain false until acceptance criteria are individually confirmed"))
+
+    nonclaims = set(data.get("nonClaims", []))
+    for required in [
+        "staging-readiness",
+        "deployment-readiness",
+        "provider-readiness",
+        "credential-readiness",
+        "store-readiness",
+        "production-readiness",
+        "live-provider-readiness",
+        "compliance-readiness",
+        "monetisation-readiness",
+        "human-acceptance",
+        "cache-hit-proves-correctness",
+        "generated-report-authority",
+        "callback-payload-authority",
+        "self-hosted-runner-local-state-authority",
+    ]:
+        if required not in nonclaims:
+            findings.append(finding("USF-OPT-RUNNER-014", rel(RUNNER_CAPACITY), f"runner non-claim missing: {required}"))
+    return findings
+
+
 def validate() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     findings.extend(check_reports())
     findings.extend(check_repository_artifacts())
     findings.extend(check_ci_throughput_artifacts())
+    findings.extend(check_runner_capacity_artifact())
     return findings
 
 
@@ -791,6 +1126,9 @@ def selftest() -> list[dict[str, str]]:
     mutated_workflow = workflow_text.replace("git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "git fetch --no-tags --depth=1 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap")
     tests.append(("ci-workflow-bootstrap-tag-depth", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
+    mutated_workflow = workflow_text.replace('"$RUNNER_TEMP/usf-validator-report.json"', "/tmp/usf-validator-report.json")
+    tests.append(("ci-workflow-fixed-persistent-temp-report", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["affectedDomainMap"]["hardCiBlock"] = True
     tests.append(("ci-affected-hard-block", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-006"))
@@ -806,6 +1144,35 @@ def selftest() -> list[dict[str, str]]:
     mutated_ci = copy.deepcopy(ci)
     mutated_ci["runnerDecisions"]["largerGithubHostedRunner"]["followUpIssueId"] = ""
     tests.append(("ci-runner-followup-missing", check_ci_throughput_artifacts(ci_data=mutated_ci), "USF-OPT-CI-009"))
+
+    runner = load_json(RUNNER_CAPACITY)
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["hostController"]["runnerUserIsRoot"] = True
+    tests.append(("runner-root-user", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-003"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["runnerRoutingPolicy"]["untrustedForkPullRequestsAllowedOnPersistentPrivilegedRunner"] = True
+    tests.append(("runner-untrusted-fork-privileged", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-006"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["runnerRoutingPolicy"]["forkPullRequestRouting"] = "self-hosted"
+    tests.append(("runner-fork-route-self-hosted", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-006"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["caddyCallbackDecision"]["callbackPayloadsAreAuthority"] = True
+    tests.append(("runner-callback-authority", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-010"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["currentObservations"]["registrationTokenPersisted"] = True
+    tests.append(("runner-token-persisted", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-003"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["enablementDecision"]["exactRemainingBlockers"] = []
+    tests.append(("runner-remaining-blocker-erased", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-011"))
+
+    mutated_runner = copy.deepcopy(runner)
+    mutated_runner["cleanupAndSecretSafetyEvidence"]["hostSecretSafetyResult"] = "fail"
+    tests.append(("runner-secret-safety-failed", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-009"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:
