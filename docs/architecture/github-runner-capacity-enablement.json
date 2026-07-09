@@ -29,7 +29,7 @@
   },
   "currentObservations": {
     "githubRepository": "maldous/usf",
-    "observedAt": "2026-07-09T08:47:39Z",
+    "observedAt": "2026-07-09T10:48:03Z",
     "actionsEnabled": true,
     "repositorySelfHostedRunnerCount": 1,
     "repositorySelfHostedRunnerLabelsObserved": [
@@ -50,6 +50,23 @@
     "runnerDownloadAvailable": true,
     "linuxX64RunnerVersionAvailable": "2.335.1",
     "runnerDownloadSha256": "4ef2f25285f0ae4477f1fe1e346db76d2f3ebf03824e2ddd1973a2819bf6c8cf",
+    "githubHostedFallbackProbe": {
+      "runId": "29011736599",
+      "jobId": "86096784983",
+      "event": "workflow_dispatch",
+      "runnerClass": "github-hosted",
+      "runnerLabel": [
+        "ubuntu-latest"
+      ],
+      "queueSeconds": 3,
+      "jobDurationSeconds": 386,
+      "totalRunSeconds": 389,
+      "result": "success",
+      "checkoutSeconds": 30,
+      "pnpmInstallSeconds": 14,
+      "pipInstallSeconds": 2,
+      "validateSpecSeconds": 45
+    },
     "hostedRunnerImageObserved": "ubuntu-24.04",
     "branchProtectionRequiredContexts": [
       "validate"
@@ -57,8 +74,8 @@
     "branchProtectionStrict": true,
     "currentValidateWorkflowRunsOn": "trusted self-hosted labels for trusted main and same-repository PRs, ubuntu-latest fallback for fork PRs and manual fallback",
     "requiredValidateContextPreserved": true,
-    "latestTrustedSelfHostedRunId": "29005646991",
-    "latestTrustedSelfHostedJobId": "86076474031",
+    "latestTrustedSelfHostedRunId": "29012452458",
+    "latestTrustedSelfHostedJobId": "86099130372",
     "latestTrustedSelfHostedRunConclusion": "success"
   },
   "timingEvidence": {
@@ -136,6 +153,221 @@
     "exactAfterEvidenceRequiredBeforeClosure": true,
     "selfHostedRuns": [
       {
+        "runId": "29012452458",
+        "jobId": "86099130372",
+        "event": "workflow_dispatch",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "headSha": "96c24ed22749b70801dd4639407858d6c3e45649",
+        "createdAt": "2026-07-09T10:41:59Z",
+        "jobStartedAt": "2026-07-09T10:42:03Z",
+        "jobCompletedAt": "2026-07-09T10:48:02Z",
+        "updatedAt": "2026-07-09T10:48:03Z",
+        "queueSeconds": 4,
+        "jobDurationSeconds": 359,
+        "totalRunSeconds": 363,
+        "checkoutSeconds": 61,
+        "setupSeconds": 0,
+        "pnpmInstallSeconds": 2,
+        "pipInstallSeconds": 0,
+        "validateSpecSeconds": 37,
+        "repositoryValidationSeconds": 139,
+        "parityValidationSeconds": 74,
+        "proofCockpitValidationSeconds": 3,
+        "proofCockpitSelftestSeconds": 23,
+        "prGovernanceGateSeconds": null,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerId": "21",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "success",
+        "cleanupResult": "pass",
+        "secretSafetyResult": "pass",
+        "toolchainReady": true,
+        "runnerLocalStateAuthority": false,
+        "secretsAvailableByPolicy": true,
+        "secretValuesPrinted": false,
+        "cacheHitMissValues": {
+          "pnpm": {
+            "cacheLookupAttempted": false,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "non-main-untrusted-ref"
+          },
+          "pip": {
+            "cacheLookupAttempted": false,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "non-main-untrusted-ref"
+          }
+        },
+        "comparisonToHostedRunId": "28999636766",
+        "jobDurationDeltaSecondsVsHosted": -32,
+        "totalRunDeltaSecondsVsHosted": -33,
+        "checkoutDeltaSecondsVsHosted": 29,
+        "setupDeltaSecondsVsHosted": -3,
+        "pnpmInstallDeltaSecondsVsHosted": -10,
+        "pipInstallDeltaSecondsVsHosted": -4,
+        "validateSpecDeltaSecondsVsHosted": -8,
+        "measurementAuthority": "operational-github-api-record-and-generated-step-summary",
+        "semanticAuthority": false
+      },
+      {
+        "runId": "29010783904",
+        "jobId": "86093610361",
+        "event": "workflow_dispatch",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "headSha": "96c24ed22749b70801dd4639407858d6c3e45649",
+        "createdAt": "2026-07-09T10:11:41Z",
+        "jobStartedAt": "2026-07-09T10:11:45Z",
+        "jobCompletedAt": "2026-07-09T10:17:46Z",
+        "updatedAt": "2026-07-09T10:17:47Z",
+        "queueSeconds": 4,
+        "jobDurationSeconds": 361,
+        "totalRunSeconds": 366,
+        "checkoutSeconds": 62,
+        "setupSeconds": 0,
+        "pnpmInstallSeconds": 2,
+        "pipInstallSeconds": 0,
+        "validateSpecSeconds": 37,
+        "repositoryValidationSeconds": 139,
+        "parityValidationSeconds": 74,
+        "proofCockpitValidationSeconds": 3,
+        "proofCockpitSelftestSeconds": 23,
+        "prGovernanceGateSeconds": null,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerId": "21",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "success",
+        "cleanupResult": "pass",
+        "secretSafetyResult": "pass",
+        "toolchainReady": true,
+        "runnerLocalStateAuthority": false,
+        "secretsAvailableByPolicy": true,
+        "secretValuesPrinted": false,
+        "cacheHitMissValues": {
+          "pnpm": {
+            "cacheLookupAttempted": false,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "non-main-untrusted-ref"
+          },
+          "pip": {
+            "cacheLookupAttempted": false,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "non-main-untrusted-ref"
+          }
+        },
+        "comparisonToHostedRunId": "28999636766",
+        "jobDurationDeltaSecondsVsHosted": -30,
+        "totalRunDeltaSecondsVsHosted": -30,
+        "checkoutDeltaSecondsVsHosted": 30,
+        "setupDeltaSecondsVsHosted": -3,
+        "pnpmInstallDeltaSecondsVsHosted": -10,
+        "pipInstallDeltaSecondsVsHosted": -4,
+        "validateSpecDeltaSecondsVsHosted": -8,
+        "measurementAuthority": "operational-github-api-record-and-generated-step-summary",
+        "semanticAuthority": false
+      },
+      {
+        "runId": "29006497453",
+        "jobId": "86079216941",
+        "event": "pull_request",
+        "headBranch": "usf-1038-enable-trusted-self-hosted-github-runner-capacity",
+        "headSha": "96c24ed22749b70801dd4639407858d6c3e45649",
+        "createdAt": "2026-07-09T08:57:21Z",
+        "jobStartedAt": "2026-07-09T08:57:24Z",
+        "jobCompletedAt": "2026-07-09T09:02:28Z",
+        "queueSeconds": 3,
+        "jobDurationSeconds": 304,
+        "totalRunSeconds": 308,
+        "checkoutSeconds": 4,
+        "setupSeconds": 0,
+        "pnpmInstallSeconds": 2,
+        "pipInstallSeconds": 0,
+        "validateSpecSeconds": 37,
+        "repositoryValidationSeconds": 138,
+        "parityValidationSeconds": 74,
+        "proofCockpitValidationSeconds": 3,
+        "proofCockpitSelftestSeconds": 23,
+        "prGovernanceGateSeconds": 2,
+        "runnerClass": "self-hosted",
+        "runnerName": "usf-linux-x64-controller-01",
+        "runnerId": "21",
+        "runnerLabel": [
+          "self-hosted",
+          "linux",
+          "x64",
+          "usf",
+          "usf-ci",
+          "usf-trusted"
+        ],
+        "outcome": "success",
+        "cleanupResult": "pass",
+        "secretSafetyResult": "pass",
+        "toolchainReady": true,
+        "runnerLocalStateAuthority": false,
+        "secretsAvailableByPolicy": true,
+        "secretValuesPrinted": false,
+        "cacheHitMissValues": {
+          "pnpm": {
+            "cacheLookupAttempted": true,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "pull-request-read-only"
+          },
+          "pip": {
+            "cacheLookupAttempted": true,
+            "cacheHit": false,
+            "cacheHitRawOutputBlank": true,
+            "cacheHitNormalizedFromBlank": true,
+            "cacheWriteAllowed": false,
+            "cacheWriteAttempted": false,
+            "cacheWriteSkippedReason": "pull-request-read-only"
+          }
+        },
+        "comparisonToHostedRunId": "28999636766",
+        "jobDurationDeltaSecondsVsHosted": -87,
+        "totalRunDeltaSecondsVsHosted": -88,
+        "checkoutDeltaSecondsVsHosted": -28,
+        "setupDeltaSecondsVsHosted": -3,
+        "pnpmInstallDeltaSecondsVsHosted": -10,
+        "pipInstallDeltaSecondsVsHosted": -4,
+        "validateSpecDeltaSecondsVsHosted": -8,
+        "measurementAuthority": "operational-github-api-record-and-generated-step-summary",
+        "semanticAuthority": false
+      },
+      {
         "runId": "29005646991",
         "jobId": "86076474031",
         "event": "pull_request",
@@ -208,10 +440,10 @@
       }
     ],
     "pendingAfterEvidence": {
-      "required": false,
-      "satisfiedByRunId": "29005646991",
-      "satisfiedByJobId": "86076474031",
-      "recordingLocation": "This repository artefact records the successful after-run summary; the GitHub step summary and PR body carry the generated operational details. None of these records is semantic authority."
+      "required": true,
+      "satisfiedByRunId": "29012452458",
+      "satisfiedByJobId": "86099130372",
+      "recordingLocation": "This repository artefact records the successful after-run summary and step logs/summary on the run page. Generated reports remain operational-only."
     },
     "failedSelfHostedRuns": [
       {
@@ -416,26 +648,39 @@
     "workflowRoutingImplemented": true,
     "closureAllowed": false,
     "exactRemainingBlockers": [
-      "GitHub-hosted fallback is documented and manually switchable, but no post-measurement fallback run has been dispatched in this branch.",
-      "PR #335 must be updated with the measured self-hosted run evidence and non-claims.",
-      "Linear USF-1038 must be updated and must remain open until acceptance criteria are checked individually."
+      "Trusted cache-write-capable behaviour is not yet observed on a trusted main-path execution; PR and manual non-main runs confirm read-only cache modes only. A direct main-branch manual workflow dispatch attempt for self-hosted cache-write verification is blocked by main-branch workflow policy (HTTP 422: workflow does not have 'workflow_dispatch' trigger on the main branch workflow definition at this time).",
+      "Deferred follow-up optimisation tasks must be mapped to precise issue IDs before closure."
     ],
     "nextUnblockers": [
       {
         "id": "fallback-verification",
-        "requirement": "Keep the GitHub-hosted fallback path documented and verify manually or by workflow_dispatch if closure policy requires a live fallback run.",
+        "requirement": "Keep the GitHub-hosted fallback path documented and verified by workflow_dispatch live fallback run. Fallback run 29011736599 is recorded.",
+        "status": "verified",
         "evidenceRequired": [
           "repository variable fallback status",
-          "workflow_dispatch runnerTarget support or fallback run id"
+          "fallback run 29011736599",
+          "workflow_dispatch runnerTarget support"
         ]
       },
       {
         "id": "pr-linear-evidence-update",
         "requirement": "Update PR #335 and Linear USF-1038 with measured self-hosted runner evidence without closing Linear prematurely.",
+        "status": "in-progress",
         "evidenceRequired": [
           "PR body updated",
           "Linear comment/status updated",
           "acceptance criteria not overclaimed"
+        ]
+      },
+      {
+        "id": "trusted-cache-write-verification",
+        "requirement": "Capture a trusted self-hosted run where cache write logic is allowed by workflow context (main-path or equivalent explicit main context).",
+        "status": "pending",
+        "evidenceRequired": [
+          "run id where cacheWriteAllowed is true",
+          "cacheWriteAttempted value and skip reason if not attempted",
+          "runnerEvidence shows no secret leakage on write-capable path",
+          "main branch workflow_dispatch path must permit trusted self-hosted runs"
         ]
       }
     ],
@@ -502,15 +747,15 @@
     "authorisedForIssueId": "USF-1038",
     "hostRole": "authorised-linux-x64-runner-host-controller",
     "hostAccepted": true,
-    "inspectedAt": "2026-07-09T07:41:54Z",
+    "inspectedAt": "2026-07-09T10:51:11Z",
     "os": "Ubuntu 24.04.4 LTS",
     "kernel": "Linux 6.8.0-124-generic",
     "architecture": "x86_64",
-    "cpuCount": 16,
-    "memoryAvailableGiB": 39,
-    "diskAvailableGiB": 358,
+    "cpuCount": 32,
+    "memoryAvailableGiB": 43.55,
+    "diskAvailableGiB": 359.02,
     "systemdAvailable": true,
-    "systemdState": "degraded",
+    "systemdState": "running",
     "githubWebReachable": true,
     "githubApiReachable": true,
     "dockerCliPresent": true,
@@ -566,8 +811,8 @@
     "hostPostCheckoutFixCleanupResult": "pass",
     "persistentTempReportPathDefectFixed": true,
     "workflowGeneratedReportsUseRunnerTemp": true,
-    "latestSelfHostedRunId": "29005646991",
-    "latestSelfHostedJobId": "86076474031",
+    "latestSelfHostedRunId": "29012452458",
+    "latestSelfHostedJobId": "86099130372",
     "latestSelfHostedWorkflowPreCleanupResult": "pass",
     "latestSelfHostedWorkflowPostCleanupResult": "pass",
     "latestSelfHostedSecretSafetyResult": "pass",
