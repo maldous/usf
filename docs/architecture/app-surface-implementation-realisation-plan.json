@@ -479,6 +479,18 @@
       {
         "path": "tests/packages/app-surface-proof-ladder-classification.test.ts",
         "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "docs/architecture/app-surface-proof-report-and-closure-gate.json",
+        "classification": "exists-now"
+      },
+      {
+        "path": "tests/packages/app-surface-timing-closure.test.ts",
+        "classification": "exists-now"
       }
     ],
     "workspacePatterns": [
@@ -631,7 +643,7 @@
       "expoMobileScaffoldFound": true,
       "localInMemoryAppSurfaceRuntimeFound": true,
       "commandFormRegistryFound": true,
-      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, deployment evidence pinning fixture surfaces, unit plus contract/local-integration test consolidation, and Compose plus staging not-required classifications now exist; timing and closure surfaces remain issue-scoped work",
+      "currentConclusion": "bounded local route, command/form, query/list/detail, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission runtime mappings, negative monetisation placeholder, store metadata semantic, deployment evidence pinning fixture surfaces, unit plus contract/local-integration test consolidation, and Compose plus staging not-required classifications now exist; timing and closure evidence are now recorded by USF-1035 and USF-1036",
       "queryListDetailRegistryFound": true,
       "stateCacheQueryClientBoundary": "implemented-by-USF-1023",
       "authSessionDevIdentityImplementation": "implemented-by-USF-1024",
@@ -1196,7 +1208,20 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "dev-local-timing-evidence",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "currentRepositoryStatus": "timing-and-optimisation-evidence-recorded-by-USF-1035",
+      "repositoryArtefact": "docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+      "validationTestArtefact": "tests/packages/app-surface-timing-closure.test.ts",
+      "validatorGuardAdded": "USF-APP-SURFACE-IMPLEMENTATION-016",
+      "packageInstallationAllowed": false,
+      "dependencyInstallRequired": false,
+      "runtimeCodeCreatedByIssue": false,
+      "composeTimingCaptured": false,
+      "composeTimingDisposition": "not-required-compose-classified-not-required",
+      "testcontainersAdopted": false,
+      "remoteCacheAdopted": false,
+      "taskGraphToolingAdopted": false,
+      "proofCockpitChurnOptimisationRecorded": true
     },
     {
       "id": "USF-1036",
@@ -1204,7 +1229,16 @@
       "statusAtPlanCreation": "Todo",
       "proofLevel": "closure-gate",
       "mayInstallPackages": false,
-      "mayCreateRuntimeCode": false
+      "mayCreateRuntimeCode": false,
+      "currentRepositoryStatus": "proof-report-and-closure-gate-recorded-by-USF-1036",
+      "repositoryArtefact": "docs/architecture/app-surface-proof-report-and-closure-gate.json",
+      "validationTestArtefact": "tests/packages/app-surface-timing-closure.test.ts",
+      "validatorGuardAdded": "USF-APP-SURFACE-IMPLEMENTATION-017",
+      "packageInstallationAllowed": false,
+      "dependencyInstallRequired": false,
+      "runtimeCodeCreatedByIssue": false,
+      "parentReadyForLinearClosureAfterMergeAndAcceptanceConfirmation": true,
+      "remainingRepositoryChildIssues": []
     }
   ],
   "executionOrder": [
@@ -1387,7 +1421,8 @@
   "optimisationHandling": {
     "evidenceModel": [
       "docs/architecture/repository-optimisation-local-realisation-tranche.json",
-      "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json"
+      "evidence/generated-reports/repository-optimisation-bounded-realisation-summary.json",
+      "docs/architecture/app-surface-timing-and-optimisation-evidence.json"
     ],
     "timingIssueId": "USF-1035",
     "candidateOptionsToEvaluate": [
@@ -1403,7 +1438,15 @@
       "validator timing"
     ],
     "adoptionRule": "Every timing option is considered by USF-1035, but adoption of remote cache, task graph tooling, Testcontainers, external services, or provider-backed optimisation requires separate repository authority and an implementation issue.",
-    "currentDefault": "local deterministic execution with affected-run recommendations remaining warn-only unless repository authority promotes them."
+    "currentDefault": "local deterministic execution with affected-run recommendations remaining warn-only unless repository authority promotes them.",
+    "proofCockpitEvidenceChurnOptimisation": {
+      "ruleId": "USF-PROOF-COCKPIT-009",
+      "implementedByPullRequest": "https://github.com/maldous/usf/pull/331",
+      "anchor": "squash-stable non-proof source tree hash",
+      "branchCommitShaNoLongerLoadBearingAfterSquashMerge": true,
+      "evidenceValidationBypassed": false,
+      "staleEvidenceAcceptedWithoutSourceEquivalence": false
+    }
   },
   "validationPlan": {
     "availableCommands": [
@@ -1458,6 +1501,18 @@
       "make app-surface-selftest",
       "corepack pnpm validate-spec",
       "make validate-evidence after evidence artefacts change"
+    ],
+    "commandsForCurrentTimingClosureIssues": [
+      "python3 -m json.tool docs/architecture/app-surface-timing-and-optimisation-evidence.json docs/architecture/app-surface-proof-report-and-closure-gate.json",
+      "corepack pnpm typecheck",
+      "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "corepack pnpm test tests/packages/app-surface-timing-closure.test.ts",
+      "corepack pnpm proof:api:graphql-generated-client",
+      "make app-surface-validate",
+      "make app-surface-selftest",
+      "corepack pnpm validate-spec",
+      "corepack pnpm validate-spec:selftest",
+      "make validate-evidence"
     ]
   },
   "nonClaimsPreserved": [
@@ -1477,12 +1532,10 @@
     "No Caddy public proof routing change.",
     "No provider credential or account setup."
   ],
-  "initialImplementationGaps": [
-    "Timing evidence and closure report are not yet complete."
-  ],
+  "initialImplementationGaps": [],
   "readinessVerdict": {
-    "currentTrancheState": "READY_FOR_BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_START",
-    "parentCompletionState": "NOT_READY_FOR_PARENT_CLOSURE",
-    "reason": "The implementation tranche is not ready for parent closure. Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, deployment evidence pinning surface, unit plus contract/local-integration test consolidation, and Compose plus staging not-required classifications are now repository-owned, but timing and closure proof child issues remain incomplete."
+    "currentTrancheState": "BOUNDED_LOCAL_APP_SURFACE_IMPLEMENTATION_REPOSITORY_CLOSURE_RECORDED",
+    "parentCompletionState": "READY_FOR_PARENT_CLOSURE_AFTER_CHILD_ACCEPTANCE_CONFIRMATION",
+    "reason": "Bounded local web and mobile scaffolds, shared client consumption, local runtime, package proof, route capability mapping, command form mapping, query list/detail mapping, state/cache/query-client, auth/session dev identity, i18n baseline, accessibility baseline, notification consent/permission surface, negative monetisation placeholder, store metadata semantic surface, deployment evidence pinning surface, unit plus contract/local-integration test consolidation, Compose and staging not-required classifications, timing evidence, and closure gate artefacts are now repository-owned. The parent should be marked complete only after this closure PR merges and USF-1035/USF-1036 acceptance criteria are individually confirmed in Linear."
   }
 }

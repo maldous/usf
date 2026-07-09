@@ -52,6 +52,8 @@ UNIT_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-unit-test-
 CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION = ROOT / "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json"
 COMPOSE_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-compose-proof-classification.json"
 STAGING_PROOF_CLASSIFICATION = ROOT / "docs/architecture/app-surface-staging-proof-classification.json"
+TIMING_AND_OPTIMISATION_EVIDENCE = ROOT / "docs/architecture/app-surface-timing-and-optimisation-evidence.json"
+PROOF_REPORT_AND_CLOSURE_GATE = ROOT / "docs/architecture/app-surface-proof-report-and-closure-gate.json"
 USF931_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/003-command-form-with-validation-audit.json"
 USF931_PLANTED = ROOT / "tools/validate-app-surface/planted-defects/003-command-form-missing-validation-audit.json"
 USF932_CONFORMING = ROOT / "tools/validate-app-surface/fixtures/conforming/004-query-with-cache-privacy.json"
@@ -474,6 +476,21 @@ def validate_false_nonclaims(record: dict[str, Any], subject: str, rule_id: str,
     for key, value in nonclaims.items():
         if value is not False:
             failures.append(finding(rule_id, f"{subject}.nonClaims.{key}", "non-claim must be false", issue_id))
+    return failures
+
+
+def validate_authority_inputs(record: dict[str, Any], subject: str, rule_id: str, issue_id: str) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    authority_inputs = record.get("authorityInputs")
+    if not isinstance(authority_inputs, list) or not authority_inputs:
+        return [finding(rule_id, f"{subject}.authorityInputs", "authorityInputs must be a non-empty array", issue_id)]
+    for index, authority_input in enumerate(authority_inputs):
+        path_ref = authority_input.get("path") if isinstance(authority_input, dict) else None
+        role = authority_input.get("role") if isinstance(authority_input, dict) else None
+        if not isinstance(path_ref, str) or not path_exists(path_ref):
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].path", "authority input path must exist", issue_id))
+        if not isinstance(role, str) or not role.strip():
+            failures.append(finding(rule_id, f"{subject}.authorityInputs[{index}].role", "authority input role must be non-empty", issue_id))
     return failures
 
 
@@ -3026,6 +3043,301 @@ def validate_staging_proof_classification() -> list[dict[str, str]]:
     return failures
 
 
+def validate_timing_and_optimisation_evidence() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-016"
+    issue_id = "USF-1035"
+    subject = rel(TIMING_AND_OPTIMISATION_EVIDENCE)
+    failures: list[dict[str, str]] = []
+    if not TIMING_AND_OPTIMISATION_EVIDENCE.exists():
+        return [finding(rule_id, subject, "timing and optimisation evidence artefact is missing", issue_id)]
+    data = load_json(TIMING_AND_OPTIMISATION_EVIDENCE)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "timing and optimisation evidence artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "timing artefact must be owned by USF-1035", issue_id))
+    if data.get("parentIssueId") != "USF-1012":
+        failures.append(finding(rule_id, f"{subject}.parentIssueId", "timing artefact must belong to USF-1012", issue_id))
+    if data.get("lifecycleState") != "timing-and-optimisation-evidence-recorded":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "timing lifecycleState must be timing-and-optimisation-evidence-recorded", issue_id))
+    failures.extend(validate_authority_inputs(data, subject, rule_id, issue_id))
+    note = data.get("fastestSafeExecutionNote", {})
+    if not isinstance(note, dict):
+        failures.append(finding(rule_id, f"{subject}.fastestSafeExecutionNote", "fastest-safe execution note must be an object", issue_id))
+        note = {}
+    for field in ["currentIssue", "proposedBatchingPlan", "proofEvidenceOptimisationOpportunity"]:
+        if not isinstance(note.get(field), str) or not note[field].strip():
+            failures.append(finding(rule_id, f"{subject}.fastestSafeExecutionNote.{field}", "execution note field must be non-empty", issue_id))
+    if note.get("currentIssue") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.fastestSafeExecutionNote.currentIssue", "execution note current issue must be USF-1035", issue_id))
+    for field in ["remainingIssuesAtBatchStart", "risks", "willNotDo"]:
+        if not isinstance(note.get(field), list) or not note[field]:
+            failures.append(finding(rule_id, f"{subject}.fastestSafeExecutionNote.{field}", "execution note list must be non-empty", issue_id))
+
+    classification = data.get("remainingIssueClassification", {})
+    if not isinstance(classification, dict):
+        failures.append(finding(rule_id, f"{subject}.remainingIssueClassification", "remaining issue classification must be an object", issue_id))
+        classification = {}
+    expected_classifications = {
+        "mustImplementNowForAppSurfaceClosure": {"USF-1035", "USF-1036"},
+        "localNegativePlaceholderOnlyAlreadyImplemented": {"USF-1027", "USF-1028", "USF-1029", "USF-1030"},
+        "satisfiedByExistingPerSliceTestsPlusConsolidation": {"USF-1031", "USF-1032"},
+        "explicitlyClassifiedAsNotRequired": {"USF-1033", "USF-1034"},
+    }
+    for field, expected in expected_classifications.items():
+        observed = classification.get(field)
+        if not isinstance(observed, list) or set(observed) != expected:
+            failures.append(finding(rule_id, f"{subject}.remainingIssueClassification.{field}", f"issue classification must be {', '.join(sorted(expected))}", issue_id))
+    if classification.get("mustBeDeferredToLaterWork") != []:
+        failures.append(finding(rule_id, f"{subject}.remainingIssueClassification.mustBeDeferredToLaterWork", "no USF-1012 child issue may remain silently deferred", issue_id))
+
+    timing = data.get("timingEvidence", {})
+    commands = timing.get("commands") if isinstance(timing, dict) else None
+    if not isinstance(commands, list) or not commands:
+        failures.append(finding(rule_id, f"{subject}.timingEvidence.commands", "timing commands must be a non-empty array", issue_id))
+        commands = []
+    required_command_ids = {
+        "package-install",
+        "typecheck",
+        "unit-test-consolidation",
+        "contract-local-integration-test-consolidation",
+        "generated-client-validation",
+        "app-surface-validate",
+        "app-surface-selftest",
+        "evidence-validation",
+        "compose-timing",
+    }
+    observed_command_ids = {item.get("commandId") for item in commands if isinstance(item, dict)}
+    missing_commands = sorted(required_command_ids - observed_command_ids)
+    if missing_commands:
+        failures.append(finding(rule_id, f"{subject}.timingEvidence.commands", f"timing evidence missing commands: {', '.join(missing_commands)}", issue_id))
+    for index, command in enumerate(commands):
+        if not isinstance(command, dict):
+            failures.append(finding(rule_id, f"{subject}.timingEvidence.commands[{index}]", "timing command must be an object", issue_id))
+            continue
+        command_id = command.get("commandId")
+        status = command.get("status")
+        if not isinstance(command_id, str) or not command_id.strip():
+            failures.append(finding(rule_id, f"{subject}.timingEvidence.commands[{index}].commandId", "timing commandId must be non-empty", issue_id))
+        if status not in {"pass", "not-rerun-no-dependency-change", "not-required-compose-classified-not-required"}:
+            failures.append(finding(rule_id, f"{subject}.timingEvidence.commands[{index}].status", "timing command status is unsupported", issue_id))
+        if status == "pass" and (not isinstance(command.get("durationMs"), int) or command["durationMs"] <= 0):
+            failures.append(finding(rule_id, f"{subject}.timingEvidence.commands[{index}].durationMs", "passing timing command must have positive durationMs", issue_id))
+        if status != "pass" and (not isinstance(command.get("reason"), str) or not command["reason"].strip()):
+            failures.append(finding(rule_id, f"{subject}.timingEvidence.commands[{index}].reason", "non-passing timing disposition must include a reason", issue_id))
+
+    option_evaluations = data.get("optionEvaluations", [])
+    required_options = {"affected-run-routing", "compose-proof-cost", "testcontainers", "task-graph-tooling", "remote-cache"}
+    observed_options = {item.get("optionId") for item in option_evaluations if isinstance(item, dict)}
+    missing_options = sorted(required_options - observed_options)
+    if missing_options:
+        failures.append(finding(rule_id, f"{subject}.optionEvaluations", f"optimisation option evaluation missing: {', '.join(missing_options)}", issue_id))
+    for index, option in enumerate(option_evaluations if isinstance(option_evaluations, list) else []):
+        if not isinstance(option, dict):
+            failures.append(finding(rule_id, f"{subject}.optionEvaluations[{index}]", "option evaluation must be an object", issue_id))
+            continue
+        if option.get("considered") is not True:
+            failures.append(finding(rule_id, f"{subject}.optionEvaluations[{index}].considered", "optimisation option must be considered", issue_id))
+        if option.get("optionId") in {"testcontainers", "task-graph-tooling", "remote-cache"} and option.get("adopted") is not False:
+            failures.append(finding(rule_id, f"{subject}.optionEvaluations[{index}].adopted", "non-local optimisation option must not be adopted", issue_id))
+        if not isinstance(option.get("reason"), str) or not option["reason"].strip():
+            failures.append(finding(rule_id, f"{subject}.optionEvaluations[{index}].reason", "option evaluation reason is required", issue_id))
+
+    churn = data.get("proofEvidenceChurnOptimisation", {})
+    required_true_fields = [
+        "sourceTreeHashAnchorImplemented",
+        "sourceTreeHashExcludesProofCockpitEvidencePayloads",
+        "branchCommitShaNoLongerLoadBearingAfterSquashMerge",
+        "legacySourceShaRetainedAsProvenance",
+    ]
+    for field in required_true_fields:
+        if not isinstance(churn, dict) or churn.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.proofEvidenceChurnOptimisation.{field}", "proof-churn optimisation flag must be true", issue_id))
+    for field in ["staleEvidenceAcceptedWithoutSourceEquivalence", "evidenceValidationBypassed"]:
+        if not isinstance(churn, dict) or churn.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.proofEvidenceChurnOptimisation.{field}", "proof-churn safety flag must remain false", issue_id))
+    if churn.get("ruleId") != "USF-PROOF-COCKPIT-009":
+        failures.append(finding(rule_id, f"{subject}.proofEvidenceChurnOptimisation.ruleId", "proof-churn optimisation must reference USF-PROOF-COCKPIT-009", issue_id))
+
+    guard = data.get("validationGuard", {})
+    for field in [
+        "existingAuthorityPathsMustExist",
+        "timingCommandsMustHaveStatusAndReason",
+        "passingTimingCommandsMustHavePositiveDuration",
+        "nonRelevantTimingMustBeExplicitlyClassified",
+        "allOptimisationOptionsMustBeConsidered",
+        "nonLocalOptimisationMustNotBeAdopted",
+        "proofCockpitChurnFixMustNotBypassEvidenceValidation",
+        "nonClaimsMustAllBeFalse",
+    ]:
+        if not isinstance(guard, dict) or guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    boundary = data.get("externalBoundary", {})
+    for field, value in boundary.items() if isinstance(boundary, dict) else []:
+        if value is not False:
+            failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
+def validate_proof_report_and_closure_gate() -> list[dict[str, str]]:
+    rule_id = "USF-APP-SURFACE-IMPLEMENTATION-017"
+    issue_id = "USF-1036"
+    subject = rel(PROOF_REPORT_AND_CLOSURE_GATE)
+    failures: list[dict[str, str]] = []
+    if not PROOF_REPORT_AND_CLOSURE_GATE.exists():
+        return [finding(rule_id, subject, "proof report and closure gate artefact is missing", issue_id)]
+    data = load_json(PROOF_REPORT_AND_CLOSURE_GATE)
+    if not isinstance(data, dict):
+        return [finding(rule_id, subject, "proof report and closure gate artefact must be an object", issue_id)]
+    if data.get("ownerIssueId") != issue_id:
+        failures.append(finding(rule_id, f"{subject}.ownerIssueId", "closure gate must be owned by USF-1036", issue_id))
+    if data.get("parentIssueId") != "USF-1012":
+        failures.append(finding(rule_id, f"{subject}.parentIssueId", "closure gate must belong to USF-1012", issue_id))
+    if data.get("lifecycleState") != "app-surface-tranche-closure-gate-recorded":
+        failures.append(finding(rule_id, f"{subject}.lifecycleState", "closure lifecycleState must be app-surface-tranche-closure-gate-recorded", issue_id))
+    failures.extend(validate_authority_inputs(data, subject, rule_id, issue_id))
+
+    surfaces = data.get("implementedSurfaces", [])
+    required_issue_ids = {f"USF-{number}" for number in range(1013, 1037)}
+    observed_issue_ids = {item.get("ownerIssueId") for item in surfaces if isinstance(item, dict)}
+    missing_issue_ids = sorted(required_issue_ids - observed_issue_ids)
+    if missing_issue_ids:
+        failures.append(finding(rule_id, f"{subject}.implementedSurfaces", f"implemented surfaces missing child issues: {', '.join(missing_issue_ids)}", issue_id))
+    for index, surface in enumerate(surfaces if isinstance(surfaces, list) else []):
+        if not isinstance(surface, dict):
+            failures.append(finding(rule_id, f"{subject}.implementedSurfaces[{index}]", "implemented surface must be an object", issue_id))
+            continue
+        for field in ["ownerIssueId", "surfaceId", "repositoryArtefact", "closureDisposition"]:
+            if not isinstance(surface.get(field), str) or not surface[field].strip():
+                failures.append(finding(rule_id, f"{subject}.implementedSurfaces[{index}].{field}", "implemented surface field must be non-empty", issue_id))
+        artefact = surface.get("repositoryArtefact")
+        if isinstance(artefact, str) and not path_exists(artefact):
+            failures.append(finding(rule_id, f"{subject}.implementedSurfaces[{index}].repositoryArtefact", "implemented surface repository artefact must exist", issue_id))
+
+    package_changes = data.get("packageAndLockfileChanges", {})
+    if not isinstance(package_changes, dict):
+        failures.append(finding(rule_id, f"{subject}.packageAndLockfileChanges", "package and lockfile changes must be an object", issue_id))
+        package_changes = {}
+    if package_changes.get("currentIssueAddedDependencies") != []:
+        failures.append(finding(rule_id, f"{subject}.packageAndLockfileChanges.currentIssueAddedDependencies", "closure issue must not add dependencies", issue_id))
+    if package_changes.get("currentIssueChangedLockfile") is not False:
+        failures.append(finding(rule_id, f"{subject}.packageAndLockfileChanges.currentIssueChangedLockfile", "closure issue must not change lockfile", issue_id))
+    if not isinstance(package_changes.get("tranchePinnedDependencies"), list) or not package_changes["tranchePinnedDependencies"]:
+        failures.append(finding(rule_id, f"{subject}.packageAndLockfileChanges.tranchePinnedDependencies", "tranche pinned dependencies must be listed", issue_id))
+
+    commands = data.get("validationCommands", [])
+    required_commands = {
+        "strict-json-parse",
+        "typecheck",
+        "unit-contract-local-integration-consolidation",
+        "generated-client-validation",
+        "app-surface-validate",
+        "app-surface-selftest",
+        "validate-spec",
+        "validate-spec-selftest",
+        "validate-evidence",
+        "compose-proof",
+        "staging-proof",
+    }
+    observed_commands = {item.get("commandId") for item in commands if isinstance(item, dict)}
+    missing_commands = sorted(required_commands - observed_commands)
+    if missing_commands:
+        failures.append(finding(rule_id, f"{subject}.validationCommands", f"validation commands missing: {', '.join(missing_commands)}", issue_id))
+    for index, command in enumerate(commands if isinstance(commands, list) else []):
+        if not isinstance(command, dict):
+            failures.append(finding(rule_id, f"{subject}.validationCommands[{index}]", "validation command must be an object", issue_id))
+            continue
+        status = command.get("status")
+        if status not in {"pass", "not-required"}:
+            failures.append(finding(rule_id, f"{subject}.validationCommands[{index}].status", "validation command status is unsupported", issue_id))
+        if status == "pass" and "durationMs" in command and (not isinstance(command.get("durationMs"), int) or command["durationMs"] <= 0):
+            failures.append(finding(rule_id, f"{subject}.validationCommands[{index}].durationMs", "passing validation duration must be positive when recorded", issue_id))
+        if status == "not-required" and (not isinstance(command.get("reason"), str) or not command["reason"].strip()):
+            failures.append(finding(rule_id, f"{subject}.validationCommands[{index}].reason", "not-required validation disposition must include a reason", issue_id))
+
+    timing_results = data.get("timingResults", {})
+    if not isinstance(timing_results, dict) or timing_results.get("timingEvidenceArtefact") != rel(TIMING_AND_OPTIMISATION_EVIDENCE):
+        failures.append(finding(rule_id, f"{subject}.timingResults.timingEvidenceArtefact", "closure gate must reference the USF-1035 timing artefact", issue_id))
+    if not isinstance(timing_results.get("timedCommandIds"), list) or not timing_results["timedCommandIds"]:
+        failures.append(finding(rule_id, f"{subject}.timingResults.timedCommandIds", "timing results must list timed command ids", issue_id))
+
+    ladder = data.get("proofLadderReached", {})
+    if not isinstance(ladder, dict):
+        failures.append(finding(rule_id, f"{subject}.proofLadderReached", "proof ladder reached must be an object", issue_id))
+        ladder = {}
+    expected_ladder = {
+        "highestRequiredLevelReached": "test-contract-local-integration",
+        "devLocal": "reached",
+        "unit": "reached",
+        "contract": "reached",
+        "localIntegration": "reached-in-memory-only",
+        "compose": "not-required-by-USF-1033",
+        "staging": "not-required-by-USF-1034",
+        "deployment": "not-performed",
+    }
+    for field, expected in expected_ladder.items():
+        if ladder.get(field) != expected:
+            failures.append(finding(rule_id, f"{subject}.proofLadderReached.{field}", f"proof ladder field must be {expected}", issue_id))
+
+    staging_decision = data.get("stagingDecision", {})
+    if not isinstance(staging_decision, dict) or staging_decision.get("classification") != "not-required":
+        failures.append(finding(rule_id, f"{subject}.stagingDecision.classification", "staging decision must be not-required", issue_id))
+    if staging_decision.get("classificationArtefact") != rel(STAGING_PROOF_CLASSIFICATION):
+        failures.append(finding(rule_id, f"{subject}.stagingDecision.classificationArtefact", "staging decision must reference staging classification artefact", issue_id))
+    compose_decision = data.get("composeDecision", {})
+    if not isinstance(compose_decision, dict) or compose_decision.get("classification") != "not-required":
+        failures.append(finding(rule_id, f"{subject}.composeDecision.classification", "Compose decision must be not-required", issue_id))
+    if compose_decision.get("classificationArtefact") != rel(COMPOSE_PROOF_CLASSIFICATION):
+        failures.append(finding(rule_id, f"{subject}.composeDecision.classificationArtefact", "Compose decision must reference Compose classification artefact", issue_id))
+
+    remaining = data.get("remainingChildIssuesAndBlockers", {})
+    if not isinstance(remaining, dict):
+        failures.append(finding(rule_id, f"{subject}.remainingChildIssuesAndBlockers", "remaining child issues and blockers must be an object", issue_id))
+        remaining = {}
+    if remaining.get("remainingRepositoryChildIssues") != []:
+        failures.append(finding(rule_id, f"{subject}.remainingChildIssuesAndBlockers.remainingRepositoryChildIssues", "remaining repository child issues must be empty at closure", issue_id))
+    if not isinstance(remaining.get("remainingLinearTrackingBeforeParentDone"), list) or set(remaining["remainingLinearTrackingBeforeParentDone"]) != {"USF-1035", "USF-1036"}:
+        failures.append(finding(rule_id, f"{subject}.remainingChildIssuesAndBlockers.remainingLinearTrackingBeforeParentDone", "closure must list USF-1035 and USF-1036 as remaining Linear tracking before parent done", issue_id))
+    if remaining.get("blockers") != []:
+        failures.append(finding(rule_id, f"{subject}.remainingChildIssuesAndBlockers.blockers", "closure gate must not hide blockers", issue_id))
+
+    decision = data.get("closureDecision", {})
+    expected_true = [
+        "repositoryClosureRecorded",
+        "appSurfaceValidatorsRunAgainstRealImplementationArtefacts",
+        "parentReadyForLinearClosureAfterMergeAndAcceptanceConfirmation",
+    ]
+    for field in expected_true:
+        if not isinstance(decision, dict) or decision.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.closureDecision.{field}", "closure decision flag must be true", issue_id))
+    for field in ["syntheticFixturesOnlyClosure", "unsupportedReadinessClaimsMade"]:
+        if not isinstance(decision, dict) or decision.get(field) is not False:
+            failures.append(finding(rule_id, f"{subject}.closureDecision.{field}", "closure decision safety flag must remain false", issue_id))
+
+    guard = data.get("validationGuard", {})
+    for field in [
+        "machineReadableClosureReportExists",
+        "implementedSurfacesMustBeListed",
+        "packageAndLockfileChangesMustBeListed",
+        "validationCommandsAndResultsMustBeListed",
+        "timingResultsMustBeListed",
+        "proofLadderLevelMustBeRecorded",
+        "stagingDecisionMustBeRecorded",
+        "remainingChildIssuesAndBlockersMustBeListed",
+        "appSurfaceValidatorsMustRunAgainstImplementationArtefacts",
+        "parentNotMarkedDoneBeforeChildAcceptanceConfirmation",
+        "nonClaimsMustAllBeFalse",
+    ]:
+        if not isinstance(guard, dict) or guard.get(field) is not True:
+            failures.append(finding(rule_id, f"{subject}.validationGuard.{field}", "validation guard flag must be true", issue_id))
+    boundary = data.get("externalBoundary", {})
+    for field, value in boundary.items() if isinstance(boundary, dict) else []:
+        if value is not False:
+            failures.append(finding(rule_id, f"{subject}.externalBoundary.{field}", "external boundary flag must remain false", issue_id))
+    failures.extend(validate_false_nonclaims(data, subject, rule_id, issue_id))
+    return failures
+
+
 def load_fixture_dir(path: Path) -> list[dict[str, Any]]:
     values = []
     for item in sorted(path.glob("*.json")):
@@ -3057,6 +3369,8 @@ def validate_all() -> list[dict[str, str]]:
     failures.extend(validate_contract_integration_test_suite_consolidation())
     failures.extend(validate_compose_proof_classification())
     failures.extend(validate_staging_proof_classification())
+    failures.extend(validate_timing_and_optimisation_evidence())
+    failures.extend(validate_proof_report_and_closure_gate())
     conforming = load_fixture_dir(CONFORMING)
     by_rule: dict[str, list[dict[str, Any]]] = {rule_id: [] for rule_id in TARGETS}
     for record in conforming:
@@ -3111,6 +3425,8 @@ def build_payload(mode: str, findings: list[dict[str, str]]) -> dict[str, Any]:
         CONTRACT_INTEGRATION_TEST_SUITE_CONSOLIDATION,
         COMPOSE_PROOF_CLASSIFICATION,
         STAGING_PROOF_CLASSIFICATION,
+        TIMING_AND_OPTIMISATION_EVIDENCE,
+        PROOF_REPORT_AND_CLOSURE_GATE,
     ]
     return {
         "mode": mode,

@@ -1,0 +1,410 @@
+{
+  "artifactId": "usf.app-surface-proof-report-and-closure-gate",
+  "title": "App-surface proof report and closure gate",
+  "ownerIssueId": "USF-1036",
+  "parentIssueId": "USF-1012",
+  "lifecycleState": "app-surface-tranche-closure-gate-recorded",
+  "createdDate": "2026-07-09",
+  "purpose": "Summarise bounded local app-surface implementation proof and close the repository side of the USF-1012 tranche without making unsupported readiness claims.",
+  "authorityBoundary": {
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "repositoryAuthority": "This artefact records repository-owned closure evidence for the bounded local app-surface tranche.",
+    "validatorAuthority": "Validators enforce closure guardrails but do not create product, provider, staging, deployment, or readiness semantics.",
+    "generatedReportsAuthority": "Generated reports remain lowest authority and cannot upgrade proof level or readiness claims.",
+    "sourceImplementationAuthority": "Source implementation is evidence of implementation only and does not define semantics."
+  },
+  "authorityInputs": [
+    {
+      "path": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "role": "tranche-plan"
+    },
+    {
+      "path": "docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+      "role": "timing-evidence"
+    },
+    {
+      "path": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+      "role": "unit-proof"
+    },
+    {
+      "path": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+      "role": "contract-local-integration-proof"
+    },
+    {
+      "path": "docs/architecture/app-surface-compose-proof-classification.json",
+      "role": "compose-classification"
+    },
+    {
+      "path": "docs/architecture/app-surface-staging-proof-classification.json",
+      "role": "staging-classification"
+    },
+    {
+      "path": "docs/architecture/app-surface-package-installation-proof.json",
+      "role": "package-lockfile-proof"
+    },
+    {
+      "path": "tools/validate-app-surface/validate-app-surface.py",
+      "role": "validator-guard"
+    }
+  ],
+  "implementedSurfaces": [
+    {
+      "ownerIssueId": "USF-1013",
+      "surfaceId": "implementation-inventory-and-execution-plan",
+      "repositoryArtefact": "docs/architecture/app-surface-implementation-realisation-plan.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1014",
+      "surfaceId": "workspace-and-package-boundary-setup",
+      "repositoryArtefact": "pnpm-workspace.yaml",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1015",
+      "surfaceId": "shared-client-sdk-consumption-path",
+      "repositoryArtefact": "docs/architecture/app-surface-shared-client-consumption-path.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1016",
+      "surfaceId": "local-in-memory-app-surface-runtime",
+      "repositoryArtefact": "docs/architecture/app-surface-local-in-memory-runtime.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1017",
+      "surfaceId": "web-app-bounded-local-scaffold",
+      "repositoryArtefact": "docs/architecture/app-surface-web-bounded-local-scaffold.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1018",
+      "surfaceId": "mobile-app-bounded-local-scaffold",
+      "repositoryArtefact": "docs/architecture/app-surface-mobile-bounded-local-scaffold.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1019",
+      "surfaceId": "package-and-sdk-installation-proof",
+      "repositoryArtefact": "docs/architecture/app-surface-package-installation-proof.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1020",
+      "surfaceId": "route-capability-implementation",
+      "repositoryArtefact": "docs/architecture/app-surface-route-capability-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1021",
+      "surfaceId": "command-form-implementation",
+      "repositoryArtefact": "docs/architecture/app-surface-command-form-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1022",
+      "surfaceId": "query-list-detail-implementation",
+      "repositoryArtefact": "docs/architecture/app-surface-query-list-detail-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1023",
+      "surfaceId": "state-cache-query-client-setup",
+      "repositoryArtefact": "docs/architecture/app-surface-state-cache-query-client-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1024",
+      "surfaceId": "auth-session-dev-identity-stub",
+      "repositoryArtefact": "docs/architecture/app-surface-auth-session-dev-identity-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1025",
+      "surfaceId": "i18n-baseline-implementation",
+      "repositoryArtefact": "docs/architecture/app-surface-i18n-baseline-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1026",
+      "surfaceId": "accessibility-baseline-implementation",
+      "repositoryArtefact": "docs/architecture/app-surface-accessibility-baseline-implementation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1027",
+      "surfaceId": "notification-consent-permission-surface",
+      "repositoryArtefact": "docs/architecture/app-surface-notification-consent-permission-surface.json",
+      "closureDisposition": "completed-local-non-live"
+    },
+    {
+      "ownerIssueId": "USF-1028",
+      "surfaceId": "ads-monetisation-placeholder-semantics",
+      "repositoryArtefact": "docs/architecture/app-surface-ads-monetisation-placeholder-surface.json",
+      "closureDisposition": "completed-negative-placeholder"
+    },
+    {
+      "ownerIssueId": "USF-1029",
+      "surfaceId": "store-metadata-semantic-surface",
+      "repositoryArtefact": "docs/architecture/app-surface-store-metadata-semantic-surface.json",
+      "closureDisposition": "completed-local-fixture"
+    },
+    {
+      "ownerIssueId": "USF-1030",
+      "surfaceId": "deployment-evidence-pinning-surface",
+      "repositoryArtefact": "docs/architecture/app-surface-deployment-evidence-pinning-surface.json",
+      "closureDisposition": "completed-local-provenance-fixture"
+    },
+    {
+      "ownerIssueId": "USF-1031",
+      "surfaceId": "unit-test-suite-consolidation",
+      "repositoryArtefact": "docs/architecture/app-surface-unit-test-suite-consolidation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1032",
+      "surfaceId": "contract-local-integration-test-suite-consolidation",
+      "repositoryArtefact": "docs/architecture/app-surface-contract-integration-test-suite-consolidation.json",
+      "closureDisposition": "completed"
+    },
+    {
+      "ownerIssueId": "USF-1033",
+      "surfaceId": "compose-proof-classification",
+      "repositoryArtefact": "docs/architecture/app-surface-compose-proof-classification.json",
+      "closureDisposition": "not-required-classified"
+    },
+    {
+      "ownerIssueId": "USF-1034",
+      "surfaceId": "staging-proof-classification",
+      "repositoryArtefact": "docs/architecture/app-surface-staging-proof-classification.json",
+      "closureDisposition": "not-required-classified"
+    },
+    {
+      "ownerIssueId": "USF-1035",
+      "surfaceId": "timing-and-optimisation-evidence",
+      "repositoryArtefact": "docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+      "closureDisposition": "completed-by-this-batch"
+    },
+    {
+      "ownerIssueId": "USF-1036",
+      "surfaceId": "proof-report-and-closure-gate",
+      "repositoryArtefact": "docs/architecture/app-surface-proof-report-and-closure-gate.json",
+      "closureDisposition": "completed-by-this-batch"
+    }
+  ],
+  "packageAndLockfileChanges": {
+    "currentIssueAddedDependencies": [],
+    "currentIssueChangedLockfile": false,
+    "tranchePinnedDependencies": [
+      "next@16.2.10",
+      "react@19.2.7",
+      "react-dom@19.2.7",
+      "@types/react@19.2.17",
+      "@types/react-dom@19.2.3",
+      "expo@57.0.4",
+      "react-native@0.86.0"
+    ],
+    "lockfilePath": "pnpm-lock.yaml",
+    "packageProofArtefact": "docs/architecture/app-surface-package-installation-proof.json"
+  },
+  "validationCommands": [
+    {
+      "commandId": "strict-json-parse",
+      "command": "strict JSON parse of app-surface timing evidence, closure gate, implementation plan, and foundational JSON catalogues",
+      "status": "pass"
+    },
+    {
+      "commandId": "typecheck",
+      "command": "corepack pnpm typecheck",
+      "status": "pass",
+      "durationMs": 9991
+    },
+    {
+      "commandId": "unit-contract-local-integration-consolidation",
+      "command": "corepack pnpm test tests/packages/app-surface-test-suite-consolidation.test.ts",
+      "status": "pass",
+      "durationMs": 879
+    },
+    {
+      "commandId": "generated-client-validation",
+      "command": "corepack pnpm proof:api:graphql-generated-client",
+      "status": "pass",
+      "durationMs": 1454
+    },
+    {
+      "commandId": "app-surface-validate",
+      "command": "make app-surface-validate",
+      "status": "pass",
+      "durationMs": 492
+    },
+    {
+      "commandId": "app-surface-selftest",
+      "command": "make app-surface-selftest",
+      "status": "pass",
+      "durationMs": 497
+    },
+    {
+      "commandId": "validate-spec",
+      "command": "corepack pnpm validate-spec",
+      "status": "pass",
+      "durationMs": 27860
+    },
+    {
+      "commandId": "validate-spec-selftest",
+      "command": "corepack pnpm validate-spec:selftest",
+      "status": "pass",
+      "durationMs": 13958
+    },
+    {
+      "commandId": "validate-evidence",
+      "command": "make validate-evidence",
+      "status": "pass",
+      "durationMs": 110028
+    },
+    {
+      "commandId": "compose-proof",
+      "command": "Compose-backed app-surface proof",
+      "status": "not-required",
+      "reason": "USF-1033 classifies Compose proof as not required."
+    },
+    {
+      "commandId": "staging-proof",
+      "command": "staging proof",
+      "status": "not-required",
+      "reason": "USF-1034 classifies staging proof as not required."
+    },
+    {
+      "commandId": "closure-gate-test",
+      "command": "corepack pnpm test tests/packages/app-surface-timing-closure.test.ts",
+      "status": "pass",
+      "durationMs": 885
+    }
+  ],
+  "timingResults": {
+    "timingEvidenceArtefact": "docs/architecture/app-surface-timing-and-optimisation-evidence.json",
+    "timedCommandIds": [
+      "typecheck",
+      "unit-test-consolidation",
+      "contract-local-integration-test-consolidation",
+      "generated-client-validation",
+      "app-surface-validate",
+      "app-surface-selftest",
+      "closure-gate-test",
+      "validate-spec",
+      "validate-spec-selftest",
+      "evidence-validation"
+    ],
+    "proofCockpitEvidenceChurnCost": [
+      "2:43.21 proof-cockpit re-pin in PR 331",
+      "2:42.04 proof-cockpit re-pin after app-surface proof-ladder merge"
+    ],
+    "installTimingDisposition": "not-rerun-no-dependency-change",
+    "composeTimingDisposition": "not-required-compose-classified-not-required"
+  },
+  "proofLadderReached": {
+    "highestRequiredLevelReached": "test-contract-local-integration",
+    "devLocal": "reached",
+    "unit": "reached",
+    "contract": "reached",
+    "localIntegration": "reached-in-memory-only",
+    "compose": "not-required-by-USF-1033",
+    "staging": "not-required-by-USF-1034",
+    "deployment": "not-performed"
+  },
+  "composeDecision": {
+    "classification": "not-required",
+    "classificationArtefact": "docs/architecture/app-surface-compose-proof-classification.json",
+    "reason": "No implemented app-surface surface crosses provider semantics requiring Compose-backed proof."
+  },
+  "stagingDecision": {
+    "classification": "not-required",
+    "classificationArtefact": "docs/architecture/app-surface-staging-proof-classification.json",
+    "reason": "No public, deployment-adjacent, provider-staging, or human-acceptance app-surface trigger is implemented."
+  },
+  "remainingChildIssuesAndBlockers": {
+    "remainingRepositoryChildIssues": [],
+    "remainingLinearTrackingBeforeParentDone": [
+      "USF-1035",
+      "USF-1036"
+    ],
+    "blockers": [],
+    "parentMayBeMarkedDoneOnlyAfter": "USF-1035 and USF-1036 acceptance criteria are individually confirmed in Linear after this repository closure PR merges."
+  },
+  "closureDecision": {
+    "repositoryClosureRecorded": true,
+    "appSurfaceValidatorsRunAgainstRealImplementationArtefacts": true,
+    "syntheticFixturesOnlyClosure": false,
+    "parentReadyForLinearClosureAfterMergeAndAcceptanceConfirmation": true,
+    "unsupportedReadinessClaimsMade": false
+  },
+  "validationGuard": {
+    "machineReadableClosureReportExists": true,
+    "implementedSurfacesMustBeListed": true,
+    "packageAndLockfileChangesMustBeListed": true,
+    "validationCommandsAndResultsMustBeListed": true,
+    "timingResultsMustBeListed": true,
+    "proofLadderLevelMustBeRecorded": true,
+    "stagingDecisionMustBeRecorded": true,
+    "remainingChildIssuesAndBlockersMustBeListed": true,
+    "appSurfaceValidatorsMustRunAgainstImplementationArtefacts": true,
+    "parentNotMarkedDoneBeforeChildAcceptanceConfirmation": true,
+    "nonClaimsMustAllBeFalse": true
+  },
+  "externalBoundary": {
+    "externalServicesAllowed": false,
+    "credentialsAllowed": false,
+    "deploymentAllowed": false,
+    "stagingAllowed": false,
+    "providerSetupAllowed": false,
+    "storeWorkflowAllowed": false,
+    "pushProviderAllowed": false,
+    "adsProviderAllowed": false,
+    "paymentProviderAllowed": false,
+    "humanAcceptanceClaimAllowed": false,
+    "caddyPublicProofRoutingChangeAllowed": false
+  },
+  "nonClaims": {
+    "appImplementationReady": false,
+    "productUiReady": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "storeReadiness": false,
+    "appStoreSubmissionReadiness": false,
+    "playStoreSubmissionReadiness": false,
+    "providerSetupReadiness": false,
+    "pushProviderReadiness": false,
+    "adsProviderReadiness": false,
+    "monetisationReadiness": false,
+    "privacyComplianceReadiness": false,
+    "humanAcceptanceReadiness": false,
+    "remoteCacheAdopted": false,
+    "taskGraphToolingAdopted": false,
+    "testcontainersAdopted": false,
+    "caddyPublicProofRoutingChanged": false
+  },
+  "correctedValidationFindings": [
+    {
+      "commandId": "validate-spec",
+      "status": "failed-before-source-use-disposition-fix",
+      "durationMs": 31391,
+      "startedAt": "2026-07-09T01:49:19Z",
+      "endedAt": "2026-07-09T01:49:50Z",
+      "ruleId": "USF-IMPL-002",
+      "subject": "tests/packages/app-surface-timing-closure.test.ts",
+      "correction": "Added target-file source disposition coverage in docs/architecture/app-surface-source-use-disposition-matrix.md."
+    },
+    {
+      "commandId": "validate-evidence",
+      "status": "failed-before-source-use-disposition-fix",
+      "durationMs": 30791,
+      "startedAt": "2026-07-09T01:50:04Z",
+      "endedAt": "2026-07-09T01:50:35Z",
+      "ruleId": "USF-IMPL-002",
+      "subject": "tests/packages/app-surface-timing-closure.test.ts",
+      "correction": "Same underlying validate-spec source disposition finding; resolved before final evidence validation pass."
+    }
+  ]
+}
