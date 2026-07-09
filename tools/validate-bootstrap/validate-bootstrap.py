@@ -32,7 +32,7 @@ RULES = {
     "USF-BOOTSTRAP-003": ("blocking", "implementation directive is accepted/signed or lacks human-only boundary"),
     "USF-BOOTSTRAP-004": ("blocking", "readiness artefact overclaims implementation or production readiness"),
     "USF-BOOTSTRAP-005": ("blocking", "whole-platform semantic/source-use bootstrap substrate is missing"),
-    "USF-BOOTSTRAP-006": ("blocking", "current main commit lacks a published proof-anchor tag"),
+    "USF-BOOTSTRAP-006": ("blocking", "main proof-anchor tag coverage is broken (neither current main commit nor its first parent has a published anchor tag)"),
     "USF-BOOTSTRAP-007": ("blocking", "bootstrap validator is not wired into validate-spec"),
     "USF-BOOTSTRAP-008": ("blocking", "bootstrap mapping corpus is incomplete or invalid"),
     "USF-BOOTSTRAP-009": ("blocking", "generated bootstrap mapping index or summary is stale"),
@@ -566,6 +566,41 @@ def check_mapping_substrate(F, state):
             F.add("USF-BOOTSTRAP-005", DIRECTIVE_PATH, f"semantic capability domain missing from directive: {domain}")
 
 
+def parent_short_head():
+    return git_value("rev-parse", "--short", "HEAD^") or ""
+
+
+def racing_push_first_attempt():
+    """True only for the first attempt of a push-event CI run, i.e. the one
+    run that legitimately races its own proof-anchor publication."""
+    return (
+        os.environ.get("GITHUB_EVENT_NAME") == "push"
+        and os.environ.get("GITHUB_RUN_ATTEMPT", "1") == "1"
+    )
+
+
+def missing_anchor_message(short_head, parent_short, has_tag, racing):
+    """Return a finding message when main anchor coverage is broken, else None.
+
+    The newest main commit's anchor is published by the proof-anchor workflow
+    triggered by the same push, so only the first attempt of that push-event
+    validate run may fall back to the first parent's anchor (USF-1043;
+    observed on runs 29016956084 and 29018818979 first attempts). Re-runs,
+    manual dispatches, and local runs enforce strictly, so a failed anchor
+    publication cannot be suppressed indefinitely: the fallback never applies
+    outside the racing first attempt, and even there the first-parent anchor
+    must already be exposed.
+    """
+    if has_tag(f"proof-anchor-{short_head}"):
+        return None
+    if racing and parent_short and has_tag(f"proof-anchor-{parent_short}"):
+        return None
+    return (
+        f"origin does not expose a proof-anchor tag for current main ({short_head})"
+        + (" or its first parent" if racing else "")
+    )
+
+
 def check_anchor_for_current_main(F):
     head = current_head()
     if not head:
@@ -575,9 +610,11 @@ def check_anchor_for_current_main(F):
     short_head = current_short_head()
     if not short_head:
         return
-    tag = f"proof-anchor-{short_head}"
-    if not remote_has_tag(tag):
-        F.add("USF-BOOTSTRAP-006", tag, "origin does not expose proof-anchor tag for current main")
+    message = missing_anchor_message(
+        short_head, parent_short_head(), remote_has_tag, racing_push_first_attempt()
+    )
+    if message:
+        F.add("USF-BOOTSTRAP-006", f"proof-anchor-{short_head}", message)
 
 
 def check_validate_spec_wiring(F, state):
@@ -1249,6 +1286,23 @@ def run_selftest(F):
         run_checks(["readiness", "implementation"], local, build_state(overrides))
         if expected not in {item["ruleId"] for item in local.items}:
             F.add("USF-BOOTSTRAP-SELFTEST", path, f"expected {expected}; got {sorted({item['ruleId'] for item in local.items})}")
+    anchor_cases = [
+        ("anchor-present-passes", "aaaaaaaa", {"proof-anchor-aaaaaaaa"}, True, None),
+        ("racing-first-attempt-parent-covered-passes", "cccccccc", {"proof-anchor-bbbbbbbb"}, True, None),
+        ("non-racing-parent-covered-still-fails", "cccccccc", {"proof-anchor-bbbbbbbb"}, False, "finding"),
+        ("racing-anchor-and-parent-missing-fails", "cccccccc", set(), True, "finding"),
+    ]
+    for case_name, short_head, tags, racing, expectation in anchor_cases:
+        message = missing_anchor_message(
+            short_head,
+            "bbbbbbbb",
+            lambda tag, _tags=tags: tag in _tags,
+            racing,
+        )
+        if expectation is None and message is not None:
+            F.add("USF-BOOTSTRAP-SELFTEST", case_name, f"anchor tolerance produced unexpected finding: {message}")
+        if expectation == "finding" and message is None:
+            F.add("USF-BOOTSTRAP-SELFTEST", case_name, "planted missing-anchor case did not raise a finding")
     return "not-run" if not fixtures else "ran"
 
 

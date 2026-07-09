@@ -23,6 +23,31 @@
     {
       "value": "requires-safe-full-content-disposition",
       "meaning": "The current repository has no reference outside the original audit artifact, so a safe full-content Linear description and comment review is required before classifying the issue as duplicate, canceled, obsolete, operational-only, superseded, external, or a genuine missing repository deliverable."
+    },
+    {
+      "value": "superseded-by-delivered-work",
+      "meaning": "Full-content read confirms the described deliverable exists in the repository under a recorded path; the key needs no further repository work.",
+      "layer": "full-content-classification"
+    },
+    {
+      "value": "operational-only",
+      "meaning": "Full-content read confirms the issue tracked operational, decision, or discovery activity with no repository deliverable expected.",
+      "layer": "full-content-classification"
+    },
+    {
+      "value": "intentionally-external",
+      "meaning": "Full-content read confirms the deliverable lives outside the repository by design, for example GitHub settings.",
+      "layer": "full-content-classification"
+    },
+    {
+      "value": "duplicate-of",
+      "meaning": "Full-content read confirms the key duplicates another issue that owns the work; recorded as duplicate-of:KEY.",
+      "layer": "full-content-classification"
+    },
+    {
+      "value": "genuine-missing-deliverable",
+      "meaning": "Full-content read confirms the described repository deliverable does not exist on main; carried to a narrow re-land issue.",
+      "layer": "full-content-classification"
     }
   ],
   "perKeyDispositions": [
@@ -33,8 +58,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Umbrella for the 23 planned schema files; all 23 exist under spec/schemas/ at draft (PR 1/2 merged, comment confirms 23/23 delivered).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/"
+      }
     },
     {
       "issueId": "USF-6",
@@ -43,8 +76,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists at the registry path; comments record commit cdb981a and merge via PR 1.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/schema-registry.schema.json"
+      }
     },
     {
       "issueId": "USF-7",
@@ -53,8 +94,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring, validation, and merge on branch schema/actual-schema-files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/taxonomy.schema.json"
+      }
     },
     {
       "issueId": "USF-8",
@@ -63,8 +112,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/vocabulary.schema.json"
+      }
     },
     {
       "issueId": "USF-9",
@@ -73,8 +130,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/adr.schema.json"
+      }
     },
     {
       "issueId": "USF-10",
@@ -83,8 +148,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/source-reference.schema.json"
+      }
     },
     {
       "issueId": "USF-11",
@@ -93,8 +166,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/source-disposition.schema.json"
+      }
     },
     {
       "issueId": "USF-12",
@@ -103,8 +184,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/evidence-envelope.schema.json"
+      }
     },
     {
       "issueId": "USF-13",
@@ -113,8 +202,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; file exists; USF-194 hygiene comment classifies unchecked boxes as stale metadata, deliverable confirmed in repo.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/proof-evidence.schema.json"
+      }
     },
     {
       "issueId": "USF-14",
@@ -123,8 +220,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/provider-mode.schema.json"
+      }
     },
     {
       "issueId": "USF-15",
@@ -133,8 +238,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/environment.schema.json"
+      }
     },
     {
       "issueId": "USF-16",
@@ -143,8 +256,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/validator-report.schema.json"
+      }
     },
     {
       "issueId": "USF-17",
@@ -153,8 +274,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; capability-domains gap recorded as deferred then closed by USF-35/ADR 0003.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/semantic-contract.schema.json"
+      }
     },
     {
       "issueId": "USF-18",
@@ -163,8 +292,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/command.schema.json"
+      }
     },
     {
       "issueId": "USF-19",
@@ -173,8 +310,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/configuration.schema.json"
+      }
     },
     {
       "issueId": "USF-20",
@@ -183,8 +328,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/interface-contract.schema.json"
+      }
     },
     {
       "issueId": "USF-21",
@@ -193,8 +346,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/event-contract.schema.json"
+      }
     },
     {
       "issueId": "USF-22",
@@ -203,8 +364,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/workflow.schema.json"
+      }
     },
     {
       "issueId": "USF-23",
@@ -213,8 +382,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/data-migration.schema.json"
+      }
     },
     {
       "issueId": "USF-24",
@@ -223,8 +400,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/observability-signal.schema.json"
+      }
     },
     {
       "issueId": "USF-25",
@@ -233,8 +418,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/audit-event.schema.json"
+      }
     },
     {
       "issueId": "USF-26",
@@ -243,8 +436,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/ui-semantic-model.schema.json"
+      }
     },
     {
       "issueId": "USF-27",
@@ -253,8 +454,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/import-manifest.schema.json"
+      }
     },
     {
       "issueId": "USF-28",
@@ -263,8 +472,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; described schema file exists; completion comment confirms authoring and validation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/schemas/ai-governance.schema.json"
+      }
     },
     {
       "issueId": "USF-29",
@@ -273,8 +490,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; the described ADR exists as docs/adr/0001-validator-deferral-lift.md, delivered via PR 6 per issue evidence.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/adr/0001-validator-deferral-lift.md"
+      }
     },
     {
       "issueId": "USF-32",
@@ -283,8 +508,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; docs/adr/template.md exists and the 0001-0023 numbering convention is in active use under docs/adr/ (PR 4).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/adr/template.md"
+      }
     },
     {
       "issueId": "USF-34",
@@ -293,8 +526,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; per-domain semantic instances exist under spec/instances/ (18 domain directories), delivered via PR 7 per issue evidence.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/"
+      }
     },
     {
       "issueId": "USF-35",
@@ -303,8 +544,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; ADR 0003 exists and capability-domains is populated in spec/vocabularies/vocabulary-catalog.json (PR 6).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/adr/0003-capability-domain-values.md"
+      }
     },
     {
       "issueId": "USF-36",
@@ -313,8 +562,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; typed records exist under evidence/evidence-envelope/ and evidence/proof-evidence/ (PR 10); audit comment confirms substance present.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "evidence/"
+      }
     },
     {
       "issueId": "USF-37",
@@ -323,8 +580,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Done; the described decision ADR exists as docs/adr/0002-interface-event-contract-format.md (PR 6, USF-native chosen).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/adr/0002-interface-event-contract-format.md"
+      }
     },
     {
       "issueId": "USF-40",
@@ -333,8 +598,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "duplicate-of:USF-57",
+        "reason": "Linear state Duplicate (canceled 2026-06-25) with duplicateOf relation to USF-57; comments confirm USF-57 carries the fuller pipeline scope.",
+        "linearStateObserved": "Duplicate",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-41",
@@ -343,8 +615,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Gate-only umbrella confirming predecessor completion and clean validate-spec runs; issue states no migration work performed and no repository artefact was expected from it.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-42",
@@ -353,8 +632,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/semantic-contract/authentication-platform.json"
+      }
     },
     {
       "issueId": "USF-43",
@@ -363,8 +650,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/command/validate-spec-all.json"
+      }
     },
     {
       "issueId": "USF-44",
@@ -373,8 +668,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/configuration/provider-mode-selector.json"
+      }
     },
     {
       "issueId": "USF-45",
@@ -383,8 +686,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/interface-contract/authentication-login-api.json"
+      }
     },
     {
       "issueId": "USF-46",
@@ -393,8 +704,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/event-contract/authentication-login-audit.json"
+      }
     },
     {
       "issueId": "USF-48",
@@ -403,8 +722,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/workflow/authentication-login.json"
+      }
     },
     {
       "issueId": "USF-49",
@@ -413,8 +740,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/data-migration/identity-schema.json"
+      }
     },
     {
       "issueId": "USF-50",
@@ -423,8 +758,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/observability-signal/authentication-login-audit.json"
+      }
     },
     {
       "issueId": "USF-51",
@@ -433,8 +776,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/audit-event/authentication-login.json"
+      }
     },
     {
       "issueId": "USF-52",
@@ -443,8 +794,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7. Same artefact also cited by USF-55.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/ui-semantic-model/authentication-login.json"
+      }
     },
     {
       "issueId": "USF-53",
@@ -453,8 +812,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk; delivered via PR 7 without issue-key reference in repo files.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/ai-governance/authority-order-stop-condition.json"
+      }
     },
     {
       "issueId": "USF-54",
@@ -463,8 +830,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Cited artefacts exist: provider-mode/mock-identity-provider.json, environment/hermetic.json, environment/production-shaped.json.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/provider-mode/mock-identity-provider.json"
+      }
     },
     {
       "issueId": "USF-55",
@@ -473,8 +848,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Described deliverable exists on disk (same artefact as USF-52); Done in Linear, not marked duplicate there.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "spec/instances/ui-semantic-model/authentication-login.json"
+      }
     },
     {
       "issueId": "USF-56",
@@ -483,8 +866,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "duplicate-of:USF-53",
+        "reason": "Linear state Duplicate with explicit duplicateOf relation to USF-53 (AI governance instances); acceptance boxes unchecked, work owned by USF-53.",
+        "linearStateObserved": "Duplicate",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-120",
@@ -493,8 +883,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Linear-side reconciliation: created/closed USF-121..132 under USF-39; comment confirms tracking-only closure, no distinct repo deliverable owned by this key.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-121",
@@ -503,8 +900,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; API runtime and dev entrypoint exist at apps/api/src.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "apps/api/src"
+      }
     },
     {
       "issueId": "USF-122",
@@ -513,8 +918,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; worker dev entrypoint exists at apps/work/src (different name: work, not worker).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "apps/work/src"
+      }
     },
     {
       "issueId": "USF-123",
@@ -523,8 +936,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; capabilities/auth and capabilities/tenant exist in repo.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "capabilities/auth"
+      }
     },
     {
       "issueId": "USF-124",
@@ -533,8 +954,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; capabilities/audit exists in repo.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "capabilities/audit"
+      }
     },
     {
       "issueId": "USF-125",
@@ -543,8 +972,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; capabilities/config, capabilities/files, capabilities/jobs, capabilities/notify all exist.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "capabilities/config"
+      }
     },
     {
       "issueId": "USF-126",
@@ -553,8 +990,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; in-memory dev provider adapters exist across adapters/* (idp, db, bus, mail, store, search, etc.).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "adapters/idp/src/index.ts"
+      }
     },
     {
       "issueId": "USF-127",
@@ -563,8 +1008,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; Compose substrate exists (compose/compose.yaml plus generated env variants and compose/adapters).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "compose/compose.yaml"
+      }
     },
     {
       "issueId": "USF-128",
@@ -573,8 +1026,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; DB migrations and RLS posture live under adapters/db/migrations.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "adapters/db/migrations"
+      }
     },
     {
       "issueId": "USF-129",
@@ -583,8 +1044,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; OpenAPI contract exists at packages/openapi/openapi.json with packages/contracts.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "packages/openapi/openapi.json"
+      }
     },
     {
       "issueId": "USF-130",
@@ -593,8 +1062,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; verify and dev-smoke targets exist in Makefile plus packages/proof.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "Makefile"
+      }
     },
     {
       "issueId": "USF-131",
@@ -603,8 +1080,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; source-use disposition package exists (packages/source exports sourceUseTreatments).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "packages/source/src/index.ts"
+      }
     },
     {
       "issueId": "USF-132",
@@ -613,8 +1098,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Tracking child for PR 88/89 extraction; tools/validate-bootstrap/validate-bootstrap.py and planted-defects/ exist.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "tools/validate-bootstrap"
+      }
     },
     {
       "issueId": "USF-194",
@@ -623,8 +1116,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Linear status-integrity audit of 23 Done issues; comments state no repository files were changed in this hygiene pass. No repo deliverable expected.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-297",
@@ -633,8 +1133,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Review index/verdict rollup; findings and fixes tracked in children USF-295..USF-310 with closure evidence at commit 0aa093e. Index itself owns no repo artefact.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-311",
@@ -643,8 +1150,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "All cited programme artefacts exist: both docs/architecture app-surface JSONs and docs/adr/0016..0023 ADRs.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/architecture/app-surface-semantic-definition-backlog-closure.json"
+      }
     },
     {
       "issueId": "USF-321",
@@ -653,8 +1168,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Cited primary artefacts exist, including the owner-decision baseline JSON in docs/architecture.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/architecture/monetisation-ad-placement-telemetry-semantics.json"
+      }
     },
     {
       "issueId": "USF-367",
@@ -663,8 +1186,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Owner-decision rollup; closure comment states no repository file change or implementation code was created; decisions recorded in child issues USF-850..861.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-443",
@@ -673,8 +1203,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Closed explicitly as Linear-only discovery/design; policy text recorded in issue body; issue states no repository file was changed and none was in scope. Future enforcement delegated to USF-989/966.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-444",
@@ -683,8 +1220,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Closed explicitly as Linear-only discovery/design; policy recorded in issue body; no repository deliverable in scope. Future implementation delegated to USF-456/659/660/989.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-446",
@@ -693,8 +1237,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/design only; issue and comments state no repo changes; repo deliverable ownership moved to follow-ups USF-978/USF-980 (handoff manifest and validator gate).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-448",
@@ -703,8 +1254,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/design only; no repo changes made or expected; repo deliverable ownership moved to follow-ups USF-979/USF-980/USF-981.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-450",
@@ -713,8 +1271,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery; freshness states/invalidation triggers recorded in issue body; comments confirm no repository, evidence, or validator files changed; unblocked USF-605.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-463",
@@ -723,8 +1288,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "duplicate-of:USF-461",
+        "reason": "Linear state is Duplicate with an explicit duplicateOf relation to USF-461 (same title); canceled 2026-07-07; no work performed under this key.",
+        "linearStateObserved": "Duplicate",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-580",
@@ -733,8 +1305,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/measurement only; Compose file mutation explicitly out of scope; inventory and timing evidence recorded in issue comments and Linear document; no repo deliverable expected.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-601",
@@ -743,8 +1322,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only review; completion evidence in issue states no repo files changed, no schema created/activated; separate planned-schema and validator issues identified as follow-ups.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-605",
@@ -753,8 +1339,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/design only; freshness model recorded in issue body; comments confirm no repository, validator, artifact, or evidence files changed; consumed by USF-614/615/616/632/970.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-614",
@@ -763,8 +1356,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/design only; promotion policy recorded in issue; comments confirm no repo files changed; implementation moved to follow-ups USF-978..982.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-615",
@@ -773,8 +1373,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery; reuse eligibility matrix recorded in issue; no repo files changed; implementation gate created as USF-975.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-617",
@@ -783,8 +1390,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery; ranked opportunities recorded in issue; no repo files changed; follow-up USF-970 created and informs USF-828/966.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-618",
@@ -794,7 +1408,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed output absent from main and working tree; exists only on unmerged branch orchestration/usf-952-final-gate (PR 286, commit 0c7704a4). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-629",
@@ -803,8 +1425,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery; size/cost findings recorded in issue and comment; no repo files changed; findings feed USF-970/619/633/696.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-630",
@@ -813,8 +1442,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery; proposed custody standard recorded in issue; completion evidence states no repository files changed; validator implementation deferred to follow-up gates.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-637",
@@ -823,8 +1459,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery only; full workflow/trigger/check/secret/proof-level inventory recorded in issue comments; workflow changes explicitly out of scope; no repo deliverable expected.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-640",
@@ -846,7 +1489,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 293, commit 9b233fad). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-645",
@@ -856,7 +1507,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 293, commit 9b233fad). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-647",
@@ -865,8 +1524,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/design only; manual trigger classes recorded in issue body; explicitly no repository file change; implementation delegated to USF-990.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-649",
@@ -875,8 +1541,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Discovery/design only; gate design recorded in issue body; comment confirms read-only closure; enforcement delegated to USF-986/989/990/991.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-651",
@@ -897,8 +1570,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Closed as Linear-only policy design; comment states no repository files changed; closure note says implementation remains separate future work.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-656",
@@ -922,7 +1602,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 292, merge d6884f91). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-658",
@@ -967,8 +1655,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Closed as Linear-only design; CI-to-local mapping recorded in issue body; comment states no repository files changed; implementation remains separate future work.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-665",
@@ -990,7 +1685,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed report absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 288, commit 1dcc3dda). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-825",
@@ -1000,7 +1703,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 285, merge a399ee6b). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-828",
@@ -1009,8 +1720,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery; equivalence plan recorded in issue; comments confirm no repo files changed; comparator implementation moved to follow-up USF-971.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-829",
@@ -1020,7 +1738,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Claimed design artifact absent from main and working tree; exists only on unmerged orchestration/usf-952-final-gate (PR 284, merge b0314da6). Missing from canonical tree until final-gate merges.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-850",
@@ -1029,8 +1755,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Owner decision (do not adopt) recorded in issue with owner approval; issue states no repository file change required; repo honours it: no task-graph tool present, Make/package scripts remain canonical.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-851",
@@ -1039,8 +1772,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Owner decision (do not split) recorded with owner approval; no repository file change required; repo honours it: single Makefile with zero include directives remains canonical.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-854",
@@ -1049,8 +1789,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Conservative-hybrid decision recorded in issue/comments under USF-952 delegation; explicitly no CI workflow or repo file change; replacement of required broad PR checks remains a future gated decision.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-855",
@@ -1059,8 +1806,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Decision (manual/on-demand, classification-triggered staging proof) recorded in issue; closure note states planning/decision only, no repo change; enforcement delegated to USF-986/989/990/991.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-856",
@@ -1069,8 +1823,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Owner decision (do not adopt; Compose stays canonical) recorded with owner approval; no repository file change required; repo honours it: no testcontainers dependency present.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-857",
@@ -1079,8 +1840,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Decision-only owner-approval issue; explicitly states no repository file change is required and none was made. Policy recorded in Linear only.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-858",
@@ -1089,8 +1857,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Decision-only policy closure under USF-952 delegation; no repo deliverable expected. Implementation delegated to USF-979/980/986/989/990 as separate issues.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-859",
@@ -1099,8 +1874,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Decision-only issue (decision: do NOT make QA incremental); explicitly no repository file change required; comment confirms closure without repo change.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-953",
@@ -1109,8 +1891,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only Linear orchestration; graph/wave report posted as USF-952 comments. Completion comment states no repository files were changed.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-955",
@@ -1119,8 +1908,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Backlog-accounting report posted to USF-952 as Linear comment; issue states no repository files were modified. No repo deliverable expected.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-957",
@@ -1129,8 +1925,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Linear-only backlog reconciliation (duplicate/supersede state transitions and comments); scope explicitly excludes repository implementation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-958",
@@ -1139,8 +1942,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Fix (top-level finalAcceptanceClaimed:false in ledger) merged to main via PR 275, merge a5bd33d0 present in origin/main history; validator unchanged.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "evidence/proof-evidence/proof-cockpit/human-review-actions.json"
+      }
     },
     {
       "issueId": "USF-959",
@@ -1149,8 +1960,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "PR 276 is still open (base orchestration/usf-952-final-gate), but the fix content is on main: RELATED_ISSUES and proofLadderFullRows dead code absent from origin/main server.mjs (delivered via PR 299 squash cd5e977a).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "apps/staging-proof-cockpit/src/server.mjs"
+      }
     },
     {
       "issueId": "USF-961",
@@ -1159,8 +1978,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Fix f03ec91 content is on main: isHostPublishedPortForMachineQa/portAppliesToMachineQaEnvironment host-published-port scoping present in origin/main machine-qa.mjs via PR 299 squash.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "apps/staging-proof-cockpit/src/machine-qa.mjs"
+      }
     },
     {
       "issueId": "USF-963",
@@ -1169,8 +1996,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "PR 277 still open, but the 40-service alignment content is on main (staging-proof-cockpit rows in obligation manifest, drift/unit/abuse suites, fixture corpus) via PR 299 squash cd5e977a.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/architecture/semantic-service-test-obligation-manifest.json"
+      }
     },
     {
       "issueId": "USF-964",
@@ -1179,8 +2014,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Main auth test implements requiredInTest/generatedInTestCompose/nonTestDisposition split and auth suite JSON lists staging-proof-cockpit; delivered via PR 299 squash though PR 277 remains open.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "tests/packages/auth/authn-authz-tenant-role-permission-integration.test.ts"
+      }
     },
     {
       "issueId": "USF-965",
@@ -1189,8 +2032,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Main gate JSON records imageServiceCount 36 and blocker usf255-compose-generated-target-missing-staging-proof-cockpit; delivered via PR 299 squash though PR 277 remains open.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "docs/architecture/supply-chain-sbom-licence-test-gate.json"
+      }
     },
     {
       "issueId": "USF-967",
@@ -1199,8 +2050,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Branch/PR administration only (created orchestration/usf-952-final-gate, retargeted PRs 276/277 to draft); no repository file deliverable expected or made.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-968",
@@ -1209,8 +2067,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only discovery verifying bundle metadata mismatch; completion comment confirms no repository files modified; correction handed to USF-969/USF-966.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-969",
@@ -1220,7 +2085,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "PR 278 (61d44a8) merged only to orchestration/usf-952-final-gate, never to main; main rule 011 checks bundle file inclusion only, lacks current-run metadata comparisons, drift planted defect, and terminal current-evidence mode.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-970",
@@ -1230,7 +2103,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "PR 282 merged only to unmerged orchestration branch; main has no projection-only command, no rule USF-PROOF-COCKPIT-013, no planted defects 036-044; main proof-review-repin runs full machine-qa+promote.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-971",
@@ -1240,7 +2121,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "PR 279 merged only to unmerged orchestration/usf-952-final-gate; no comparator tool, command wiring, or fixtures exist anywhere in origin/main.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-972",
@@ -1249,8 +2138,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only design closure; explicitly created no schema file, registry entry, or validator; planned-only posture with handoff to USF-974/977. No repo deliverable expected.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-973",
@@ -1259,8 +2155,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only design/implementation-gate closure; explicitly no repository files changed and no standard/schema/validator implemented; future work gated behind USF-972/974/977.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-974",
@@ -1269,8 +2172,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Linear-only validator integration design; completion comment confirms no repository files changed; implementation deferred to future artifact manifest validator issue.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-975",
@@ -1279,8 +2189,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only design gate; no repo files changed by design; implementation delegated to USF-983 (which itself never reached main - tracked separately).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-976",
@@ -1289,8 +2206,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Read-only design gate; no repo files changed by design; implementation delegated to USF-984 (which itself never reached main - tracked separately).",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-977",
@@ -1299,8 +2223,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "operational-only",
+        "reason": "Linear-only design closure for deterministic bundle projection policy; completion comment confirms no repository files changed; informs USF-980 and future implementation.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-983",
@@ -1310,7 +2241,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "tools/validate-evidence-reuse/ (validator, decisions artifact, 14 planted defects, wiring) never existed in origin/main history; PR 281 (7ec2ce3e) merged only to orchestration/usf-952-final-gate, which was never merged; PR 299 squash omitted it.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-984",
@@ -1320,7 +2259,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "tools/validate-evidence-invalidation/ (map, validator with all/selftest/classify modes, 14 planted defects) never existed in origin/main history; PR 280 (a0af48bf) merged only to the unmerged orchestration branch.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-987",
@@ -1330,7 +2277,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "Named artifact docs/architecture/proof-cockpit-machine-qa-per-route-timing-instrumentation.md absent from origin/main (no per-route timing content anywhere); PR 289 (9bdbf4b) merged only to the unmerged orchestration branch.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-988",
@@ -1339,8 +2294,15 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "intentionally-external",
+        "reason": "Deliverable is GitHub branch-protection configuration on main (required check validate, admin enforcement, linear history) applied and verified via GitHub readback; lives in GitHub settings outside the repository by design.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed"
+      }
     },
     {
       "issueId": "USF-990",
@@ -1350,7 +2312,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": ".github/workflows/dispatch-proof.yml, tools/dispatch-proof/, and USF-CI-GUARD-008 guardrail never existed in origin/main history; PR 297 merged only to the unmerged orchestration branch; main has only proof-anchor.yml and validate-spec.yml.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-991",
@@ -1360,7 +2330,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "validate-spec workflow-guardrails mode (pull_request_target block, persist-credentials, secret/token checks, planted defects) absent from origin/main validate-spec.py; PR 296 merged only to unmerged orchestration branch. Only workflow permissions hardening survives.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-992",
@@ -1369,8 +2347,16 @@
       "repositoryReferenceEvidencePathSampleCount": 0,
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "completionClaim": "full-content-classified-no-further-work",
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "superseded-by-delivered-work",
+        "reason": "Deliverable exists on origin/main: validator, environment-ladder-policy.json, and planted defects 001-013 matching issue scope, delivered via PR 299 squash cd5e977a rather than the original PR 295 merge.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "deliveredEvidencePath": "tools/validate-environment-ladder/validate-environment-ladder.py"
+      }
     },
     {
       "issueId": "USF-994",
@@ -1380,7 +2366,15 @@
       "repositoryReferenceEvidenceTotalPathCount": 0,
       "followUpIssueId": "USF-1008",
       "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008."
+      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "fullContentDisposition": {
+        "classification": "genuine-missing-deliverable",
+        "reason": "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json absent from origin/main (USF-PR-TOOL rule exists but the planted-defect coverage does not); PR 298 merged only to the unmerged orchestration branch.",
+        "linearStateObserved": "Done",
+        "recordedAtUtc": "2026-07-09T13:30:00Z",
+        "method": "credential-safe-connector-full-content-read: Linear connector issue fetch and comment listing per the USF-1005 availability boundary; no credential printed, persisted, or committed",
+        "reLandIssueId": "USF-1044"
+      }
     },
     {
       "issueId": "USF-1002",
@@ -1596,5 +2590,20 @@
     "No provider setup claim.",
     "No deployment claim.",
     "No staging, production, live-provider, store, release, legal, compliance, or human-acceptance claim."
-  ]
+  ],
+  "fullContentDispositionSummary": {
+    "recordedAtUtc": "2026-07-09T13:30:00Z",
+    "route": "Credential-safe connector full-content read (issue fetch plus comment listing), satisfying the USF-1005 availability boundary; raw bulk export was not used and no tracker dump was committed",
+    "classifiedKeyCount": 127,
+    "classificationCounts": {
+      "superseded-by-delivered-work": 64,
+      "duplicate-of": 3,
+      "operational-only": 43,
+      "genuine-missing-deliverable": 16,
+      "intentionally-external": 1
+    },
+    "genuineMissingDeliverableReLandIssueId": "USF-1044",
+    "rootCauseNote": "All sixteen genuine-missing-deliverable keys trace to the unmerged branch orchestration/usf-952-final-gate: child PRs merged into that branch, the branch never merged to main, and the PR 299 squash carried only part of its content.",
+    "nonClaims": "Classifications are repository-owned operational accounting. They do not make Linear content semantic authority, do not treat Done status as proof, and claim no readiness."
+  }
 }

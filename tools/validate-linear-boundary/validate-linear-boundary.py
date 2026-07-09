@@ -200,6 +200,43 @@ def check_audit(audit: dict[str, Any]) -> list[dict[str, str]]:
     return findings
 
 
+FULL_CONTENT_NO_FURTHER_WORK = {
+    "superseded-by-delivered-work",
+    "operational-only",
+    "intentionally-external",
+    "canceled-in-linear",
+}
+FULL_CONTENT_CLASSES = FULL_CONTENT_NO_FURTHER_WORK | {"genuine-missing-deliverable"}
+
+
+def check_full_content_disposition(item: dict[str, Any], issue_id: str, findings: list[dict[str, str]]) -> None:
+    """Validate the optional full-content classification layer (USF-1008).
+
+    Fail closed: unknown classes, missing rationale or timestamp, a superseded
+    claim whose delivered evidence path does not exist on disk, or a genuine
+    missing deliverable without a re-land issue are all findings."""
+    fcd = item.get("fullContentDisposition")
+    if fcd is None:
+        return
+    if not isinstance(fcd, dict):
+        findings.append(finding("USF-LINEAR-007", issue_id, "fullContentDisposition must be an object"))
+        return
+    classification = fcd.get("classification", "")
+    is_duplicate = isinstance(classification, str) and re.fullmatch(r"duplicate-of:USF-\d+", classification)
+    if classification not in FULL_CONTENT_CLASSES and not is_duplicate:
+        findings.append(finding("USF-LINEAR-007", issue_id, f"unknown full-content classification: {classification}"))
+    if not fcd.get("reason") or not fcd.get("recordedAtUtc") or not fcd.get("method"):
+        findings.append(finding("USF-LINEAR-007", issue_id, "full-content classification requires reason, recordedAtUtc, and method"))
+    if classification == "superseded-by-delivered-work":
+        delivered = fcd.get("deliveredEvidencePath", "")
+        if not delivered or not (ROOT / delivered).exists():
+            findings.append(finding("USF-LINEAR-007", issue_id, f"superseded classification requires an existing delivered evidence path, got: {delivered}"))
+    if classification == "genuine-missing-deliverable":
+        reland = fcd.get("reLandIssueId", "")
+        if not isinstance(reland, str) or not re.fullmatch(r"USF-\d+", reland):
+            findings.append(finding("USF-LINEAR-007", issue_id, "genuine-missing-deliverable requires a re-land issue id"))
+
+
 def check_disposition(disposition: dict[str, Any]) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     if disposition.get("issueId") != "USF-1004" or disposition.get("parentIssueId") != "USF-1003":
@@ -278,11 +315,20 @@ def check_disposition(disposition: dict[str, Any]) -> list[dict[str, str]]:
                 findings.append(finding("USF-LINEAR-007", issue_id, "current repository reference exists, so unresolved disposition is stale"))
             if evidence_sample:
                 findings.append(finding("USF-LINEAR-007", issue_id, "unresolved dispositions must not carry repository reference evidence samples"))
+            check_full_content_disposition(item, issue_id, findings)
         else:
             findings.append(finding("USF-LINEAR-007", issue_id, "unknown repository-unreferenced disposition value"))
     for item in required_full:
-        if item.get("followUpIssueId") != "USF-1008" or item.get("completionClaim") != "not-complete":
-            findings.append(finding("USF-LINEAR-007", item.get("issueId", "perKeyDispositions"), "unresolved dispositions must be carried by USF-1008 and marked not complete"))
+        expected_claim = "not-complete"
+        fcd = item.get("fullContentDisposition") if isinstance(item, dict) else None
+        if isinstance(fcd, dict):
+            classification = fcd.get("classification", "")
+            if classification in FULL_CONTENT_NO_FURTHER_WORK or (
+                isinstance(classification, str) and classification.startswith("duplicate-of:USF-")
+            ):
+                expected_claim = "full-content-classified-no-further-work"
+        if item.get("followUpIssueId") != "USF-1008" or item.get("completionClaim") != expected_claim:
+            findings.append(finding("USF-LINEAR-007", item.get("issueId", "perKeyDispositions"), f"unresolved dispositions must be carried by USF-1008 with completion claim {expected_claim}"))
     delivery = disposition.get("unresolvedWorkDelivery")
     if not isinstance(delivery, dict) or delivery.get("followUpIssueId") != "USF-1008":
         findings.append(finding("USF-LINEAR-007", "unresolvedWorkDelivery.followUpIssueId", "must be USF-1008"))
@@ -487,6 +533,24 @@ def selftest() -> list[dict[str, str]]:
     mutated_availability = copy.deepcopy(availability)
     mutated_availability["credentialSafetyBoundary"]["credentialPrinted"] = True
     tests.append(("availability-credential-printed", validate(policy, audit, disposition, mutated_availability, include_runtime_scan=False), "USF-LINEAR-008"))
+
+    mutated_disposition = copy.deepcopy(disposition)
+    superseded_item = next(
+        item for item in mutated_disposition["perKeyDispositions"]
+        if isinstance(item.get("fullContentDisposition"), dict)
+        and item["fullContentDisposition"].get("classification") == "superseded-by-delivered-work"
+    )
+    superseded_item["fullContentDisposition"]["deliveredEvidencePath"] = "docs/architecture/does-not-exist.md"
+    tests.append(("full-content-superseded-missing-evidence", validate(policy, audit, mutated_disposition, availability, include_runtime_scan=False), "USF-LINEAR-007"))
+
+    mutated_disposition = copy.deepcopy(disposition)
+    missing_item = next(
+        item for item in mutated_disposition["perKeyDispositions"]
+        if isinstance(item.get("fullContentDisposition"), dict)
+        and item["fullContentDisposition"].get("classification") == "genuine-missing-deliverable"
+    )
+    missing_item["fullContentDisposition"].pop("reLandIssueId", None)
+    tests.append(("full-content-missing-re-land-issue", validate(policy, audit, mutated_disposition, availability, include_runtime_scan=False), "USF-LINEAR-007"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected_rule in tests:
