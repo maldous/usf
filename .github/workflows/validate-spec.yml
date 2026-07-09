@@ -20,6 +20,26 @@ jobs:
           fetch-depth: 512
       - name: Fetch bootstrap marker tag for validators
         run: git fetch --no-tags --depth=2 origin refs/tags/v2-bootstrap:refs/tags/v2-bootstrap
+      - name: Prepare PR base ref for governance gate
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if git cat-file -e "$BASE_SHA^{commit}"; then
+            git update-ref "refs/remotes/origin/$BASE_REF" "$BASE_SHA"
+          else
+            git fetch --no-tags --depth=512 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"
+          fi
+      - name: Verify PR governance diff refs
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if ! git diff --name-status "origin/$BASE_REF...HEAD" >/dev/null; then
+            git fetch --no-tags --unshallow origin "$BASE_REF:refs/remotes/origin/$BASE_REF"
+            git diff --name-status "origin/$BASE_REF...HEAD" >/dev/null
+          fi
       - name: Verify bootstrap ancestry for validators
         env:
           BOOTSTRAP_START_COMMIT: f80da3919bfeb4e5596ccac95a67d707bae0d3ae
@@ -31,20 +51,6 @@ jobs:
             git fetch --no-tags --unshallow origin
           fi
           git merge-base --is-ancestor "$BOOTSTRAP_START_COMMIT" HEAD
-      - name: Fetch PR base ref for governance gate
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: ${{ github.base_ref }}
-        run: git fetch --no-tags --depth=1 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"
-      - name: Verify PR governance diff refs
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: ${{ github.base_ref }}
-        run: |
-          if ! git diff --name-status "origin/$BASE_REF...HEAD" >/dev/null; then
-            git fetch --no-tags --unshallow origin "$BASE_REF:refs/remotes/origin/$BASE_REF"
-            git diff --name-status "origin/$BASE_REF...HEAD" >/dev/null
-          fi
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

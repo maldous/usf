@@ -586,6 +586,15 @@ def check_ci_throughput_artifacts(
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "manual cache warm path must be limited to trusted main cache writes"))
     if "fetch-depth: 0" in workflow_source or "fetch-depth: 512" not in workflow_source or "refs/remotes/origin/$BASE_REF" not in workflow_source:
         findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must avoid full-history checkout and explicitly fetch bounded PR refs"))
+    for base_ref_snippet in [
+        "BASE_SHA: ${{ github.event.pull_request.base.sha }}",
+        'git update-ref "refs/remotes/origin/$BASE_REF" "$BASE_SHA"',
+        'git fetch --no-tags --depth=512 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"',
+    ]:
+        if base_ref_snippet not in workflow_source:
+            findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must prepare PR base ref from event base SHA with bounded fetch fallback"))
+    if 'git fetch --no-tags --depth=1 origin "$BASE_REF:refs/remotes/origin/$BASE_REF"' in workflow_source:
+        findings.append(finding("USF-OPT-CI-005", rel(VALIDATE_WORKFLOW), "workflow must not reintroduce a depth-1 base fetch that can break bootstrap ancestry"))
     for ancestry_snippet in [
         "BOOTSTRAP_START_COMMIT: f80da3919bfeb4e5596ccac95a67d707bae0d3ae",
         "git merge-base --is-ancestor \"$BOOTSTRAP_START_COMMIT\" HEAD",
@@ -746,6 +755,9 @@ def selftest() -> list[dict[str, str]]:
 
     mutated_workflow = workflow_text.replace("git fetch --no-tags --deepen=512 origin", "# missing bounded bootstrap ancestry deepen")
     tests.append(("ci-workflow-bootstrap-ancestry-deepen", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
+
+    mutated_workflow = workflow_text.replace('git update-ref "refs/remotes/origin/$BASE_REF" "$BASE_SHA"', "# missing event base SHA ref preparation")
+    tests.append(("ci-workflow-pr-base-sha-preparation", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
 
     mutated_workflow = workflow_text.replace("refs/tags/v2-bootstrap:refs/tags/v2-bootstrap", "refs/tags/*:refs/tags/*")
     tests.append(("ci-workflow-all-tags-fetch", check_ci_throughput_artifacts(workflow_text=mutated_workflow), "USF-OPT-CI-005"))
