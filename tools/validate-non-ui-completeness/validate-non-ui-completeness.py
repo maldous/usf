@@ -6,7 +6,7 @@ route/port/adapter/provider, test/proof, UI-derived foundation behaviour, operat
 surface, assurance-case, and gap coverage — against USF's own recorded artefacts. It does not
 depend on or read any external/sibling repository; the source-lineage inventory carries its own
 frozen tracked-file count, and current freshness is bounded by the local Git tracked non-proof
-source tree.
+source tree; generated artifacts and evidence are excluded from that source-tree anchor.
 """
 
 from __future__ import annotations
@@ -55,6 +55,7 @@ MD_DOCS = {
 }
 
 SOURCE_TREE_ANCHOR_EXCLUDED_PREFIXES = (
+    "artifacts/",
     "evidence/",
 )
 

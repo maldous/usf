@@ -9,7 +9,7 @@ USF SHA: 775650cc2387091a89fdf82c5f63eff937c6028c
 
 Current-source-tree freshness rule:
 
-The JSON artefacts in this gate retain their original source SHAs as historical lineage pins only. Current non-UI completeness is instead bounded by `currentSourceTreeAnchor`, a validator-computed digest over repository-tracked non-proof source inputs. The validator excludes the generated/report artefacts that carry the digest, preserves generated reports as lower authority, and fails closed when the current-source-tree anchor is missing, malformed, blank, or stale.
+The JSON artefacts in this gate retain their original source SHAs as historical lineage pins only. Current non-UI completeness is instead bounded by `currentSourceTreeAnchor`, a validator-computed digest over repository-tracked non-proof source inputs. The validator excludes generated artifacts, proof evidence, and the generated/report artefacts that carry the digest, preserves generated reports as lower authority, and fails closed when the current-source-tree anchor is missing, malformed, blank, or stale.
 
 Evidence summary:
 
