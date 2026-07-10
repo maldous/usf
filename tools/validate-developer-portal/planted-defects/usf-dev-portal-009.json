@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-009",
+  "name": "source-authority-missing-openapi",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-009"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Removes packages/openapi/openapi.json from sourceAuthorities so the endpoint authority is no longer cited."
+}

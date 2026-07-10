@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-010",
+  "name": "freshness-not-current-main",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-010"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Sets currentMainFreshness.status to a historical value so the surface is no longer bound to current-main."
+}

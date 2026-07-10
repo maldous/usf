@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-006",
+  "name": "local-serve-model-public-deployment",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-006"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Adds a public deployment/url phrase to localServeModel, breaching the local/dev-only, no-public-FQDN boundary."
+}

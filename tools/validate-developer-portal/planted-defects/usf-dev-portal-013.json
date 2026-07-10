@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-013",
+  "name": "planted-defect-coverage-duplicate",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-013"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Duplicates coverage for one rule id, leaving other rules without exactly one distinct planted defect."
+}

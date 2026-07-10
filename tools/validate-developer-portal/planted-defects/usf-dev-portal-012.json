@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-012",
+  "name": "sdk-example-invalid-kind",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-012"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Sets an sdkExample exampleKind to a value outside the allowed vocabulary."
+}
