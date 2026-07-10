@@ -22,6 +22,7 @@ CI_THROUGHPUT = ROOT / "docs/architecture/repository-ci-throughput-optimisation-
 CI_TIMING = ROOT / "evidence/generated-reports/repository-ci-throughput-timing-evidence.json"
 RUNNER_CAPACITY = ROOT / "docs/architecture/github-runner-capacity-enablement.json"
 VALIDATE_WORKFLOW = ROOT / ".github/workflows/validate-spec.yml"
+GIT_OBJECT_MIRROR_ARTIFACT = ROOT / "docs/architecture/repository-git-object-mirror-transport-optimisation.json"
 
 REPORTS = {
     "USF-997": ROOT / "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
@@ -990,12 +991,114 @@ def check_runner_capacity_artifact(runner_data: dict[str, Any] | None = None) ->
     return findings
 
 
+def check_git_object_mirror(
+    mirror_data: dict[str, Any] | None = None,
+    workflow_text: str | None = None,
+) -> list[dict[str, str]]:
+    """USF-1062 Slice 2: trusted-runner git object mirror transport optimisation.
+
+    The mirror is an opt-in, read-only object alternate consulted during checkout
+    fetch. It is transport acceleration only; runner-local state is not authority,
+    and correctness is guaranteed by fail-closed event-SHA verification, not by the
+    mirror. This validator fails closed on any weakening of those boundaries.
+    """
+    findings: list[dict[str, str]] = []
+    data = mirror_data or load_json(GIT_OBJECT_MIRROR_ARTIFACT)
+    workflow_source = (
+        workflow_text
+        if workflow_text is not None
+        else VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+    )
+
+    # USF-OPT-MIRROR-001: ownership and identity.
+    if data.get("artifactId") != "usf.repository-git-object-mirror-transport-optimisation":
+        findings.append(finding("USF-OPT-MIRROR-001", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must carry the canonical artifactId"))
+    if data.get("ownerIssueId") != "USF-1063" or data.get("parentIssueId") != "USF-1062":
+        findings.append(finding("USF-OPT-MIRROR-001", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must be owned by USF-1063 under USF-1062"))
+
+    # USF-OPT-MIRROR-002: authority boundary (runner-local state is not authority).
+    authority = data.get("authorityBoundary", {})
+    if not isinstance(authority, dict):
+        findings.append(finding("USF-OPT-MIRROR-002", rel(GIT_OBJECT_MIRROR_ARTIFACT), "authorityBoundary must be an object"))
+        authority = {}
+    for key in [
+        "runnerLocalStateAuthority",
+        "generatedReportsAuthority",
+        "workflowDefinesSemantics",
+        "cacheHitSatisfiesValidation",
+        "implementationRuntimeCodeCreated",
+        "sourceImplementationImported",
+    ]:
+        if authority.get(key) is not False:
+            findings.append(finding("USF-OPT-MIRROR-002", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror authority field must be false: {key}"))
+    if authority.get("semanticAuthorityPreserved") is not True:
+        findings.append(finding("USF-OPT-MIRROR-002", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must preserve semantic authority"))
+
+    # USF-OPT-MIRROR-003: transport-only, fail-safe mechanism + event-SHA requirement.
+    mechanism = data.get("mechanism", {})
+    if not isinstance(mechanism, dict):
+        findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mechanism must be an object"))
+        mechanism = {}
+    if mechanism.get("consumedVia") != "GIT_ALTERNATE_OBJECT_DIRECTORIES":
+        findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must be consumed only as a read-only object alternate"))
+    for key in ["inertByDefault", "noOpWhenUnset", "eventShaVerificationRequired", "fallbackToOriginFetch"]:
+        if mechanism.get(key) is not True:
+            findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror mechanism field must be true: {key}"))
+    for key in ["pruneOrGcDuringRun", "tokenPersistedInMirror"]:
+        if mechanism.get(key) is not False:
+            findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror mechanism field must be false: {key}"))
+    event = data.get("eventShaVerification", {})
+    if not isinstance(event, dict) or event.get("required") is not True or event.get("failClosed") is not True:
+        findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must require fail-closed event-SHA verification"))
+
+    # USF-OPT-MIRROR-004: workflow wiring (opt-in mirror step + always-on fail-closed event-SHA gate).
+    for marker in [
+        "Prime local git object mirror",
+        "vars.USF_GIT_OBJECT_MIRROR",
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+        "Verify checkout equals GitHub event SHA",
+        "git rev-parse HEAD",
+        "uses: actions/checkout@v4",
+        "fetch-depth: 512",
+    ]:
+        if marker not in workflow_source:
+            findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), f"workflow missing git object mirror / event-SHA marker: {marker}"))
+    if '!= "$GITHUB_SHA"' not in workflow_source or "exit 1" not in workflow_source:
+        findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), "event-SHA verification must fail closed when HEAD does not equal the event SHA"))
+    if data.get("checkoutBaseline", {}).get("fullHistoryFetch") is not False:
+        findings.append(finding("USF-OPT-MIRROR-004", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must preserve bounded shallow checkout (no full-history fetch)"))
+
+    # USF-OPT-MIRROR-005: timing non-claims and non-claim tokens.
+    timing = data.get("timingEvidence", {})
+    if not isinstance(timing, dict):
+        findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), "timingEvidence must be an object"))
+        timing = {}
+    if timing.get("timingClaimMade") is not False or timing.get("speedupClaimMade") is not False:
+        findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror timing must remain warn-only with no timing or speedup claim"))
+    if timing.get("afterStatus") not in {"external-operational-record-required", "observed"}:
+        findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror timing after-status must be external-operational-record-required or observed"))
+    nonclaims = set(data.get("nonClaims", []))
+    for required in [
+        "runner-local-state-authority",
+        "cache-hit-proves-correctness",
+        "generated-report-authority",
+        "speedup-proves-correctness",
+        "production-readiness",
+        "live-provider-readiness",
+        "human-acceptance",
+    ]:
+        if required not in nonclaims:
+            findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror non-claim missing: {required}"))
+    return findings
+
+
 def validate() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     findings.extend(check_reports())
     findings.extend(check_repository_artifacts())
     findings.extend(check_ci_throughput_artifacts())
     findings.extend(check_runner_capacity_artifact())
+    findings.extend(check_git_object_mirror())
     return findings
 
 
@@ -1173,6 +1276,27 @@ def selftest() -> list[dict[str, str]]:
     mutated_runner = copy.deepcopy(runner)
     mutated_runner["cleanupAndSecretSafetyEvidence"]["hostSecretSafetyResult"] = "fail"
     tests.append(("runner-secret-safety-failed", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-009"))
+
+    mirror = load_json(GIT_OBJECT_MIRROR_ARTIFACT)
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["ownerIssueId"] = ""
+    tests.append(("mirror-owner-missing", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-001"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["authorityBoundary"]["runnerLocalStateAuthority"] = True
+    tests.append(("mirror-runner-local-state-authority", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-002"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["mechanism"]["eventShaVerificationRequired"] = False
+    tests.append(("mirror-event-sha-not-required", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-003"))
+
+    mirror_workflow = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+    mutated_mirror_workflow = mirror_workflow.replace("Verify checkout equals GitHub event SHA", "Verify checkout weakened")
+    tests.append(("mirror-workflow-event-sha-missing", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["timingEvidence"]["speedupClaimMade"] = True
+    tests.append(("mirror-speedup-claim", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-005"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:
