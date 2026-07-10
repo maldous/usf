@@ -1,0 +1,1212 @@
+{
+  "id": "iso27001-aligned-audit-control-map",
+  "title": "ISO 27001-Aligned Audit-Control Semantics and Dev Evidence Map",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "This artefact maps ISO/IEC 27001:2022 Annex A controls onto existing USF repository semantic contracts, audit-event instances, enterprise evidence, and validators for alignment and developer-evidence purposes only. A semantic and audit mapping is NOT control satisfaction. This map is lower authority than the semantic contracts, ADRs, and validators it references and defines no semantics of its own. It makes no ISO certification, compliance-readiness, Statement-of-Applicability completeness, external-auditor acceptance, or legal-conformance claim, and creates no runtime, product-UI, generated-SDK, generated-client, public-API, staging, production, deployment, live-provider, monetisation, or human-acceptance readiness.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1077",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    "spec/instances/semantic-contract/*.json",
+    "spec/instances/audit-event/*.json",
+    "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+    "docs/architecture/enterprise-iso-style-evidence-foundation.json",
+    "docs/architecture/non-ui-completeness-assurance-case.json"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-current-main-semantic-contract-audit-event-and-enterprise-evidence-instances-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-iso-certification-claim",
+    "no-external-auditor-acceptance-claim",
+    "no-statement-of-applicability-completeness-claim",
+    "semantic-map-is-not-control-satisfaction"
+  ],
+  "controlProfile": {
+    "standard": "ISO/IEC 27001:2022",
+    "annex": "Annex A",
+    "alignmentOnly": true,
+    "version": "2022"
+  },
+  "controlCount": 48,
+  "classificationCounts": {
+    "dev-evidenced": 17,
+    "partially-evidenced": 15,
+    "future-rung": 5,
+    "external-auditor-only": 6,
+    "not-applicable": 5
+  },
+  "controls": [
+    {
+      "controlId": "A.5.1",
+      "controlName": "Policies for information security",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.universal-service-foundation-scope-and-principles"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/charter.md",
+        "docs/architecture/authority-model.md"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "gap": "Repository governance standards and authority model are defined as source artefacts, but formal approval, publication, and periodic communication of an information security policy set are operating-management activities not present in the repository.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.2",
+      "controlName": "Information security roles and responsibilities",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/enterprise-iso-style-evidence-foundation.json",
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.7",
+      "controlName": "Threat intelligence",
+      "applicability": "applicable",
+      "classification": "future-rung",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "A threat-model and abuse-case register exists as an input, but an operating threat-intelligence process (feeds, analysis, dissemination) is not evidenced and is deferred to future enterprise-readiness work.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.8",
+      "controlName": "Information security in project management",
+      "applicability": "applicable",
+      "classification": "future-rung",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Security-in-delivery is embedded through the AI work-packet and review contract, but a dedicated project-management security control with operating evidence is deferred to future enterprise-readiness work.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.9",
+      "controlName": "Inventory of information and other associated assets",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/service-completeness-matrix.json",
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "The service catalogue and enterprise evidence register enumerate repository services and assets as source artefacts; a maintained operating asset inventory with owners across live environments is deferred to enterprise-readiness work.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.12",
+      "controlName": "Classification of information",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/persistent-object-classification-registry.json",
+        "docs/architecture/enterprise-persistence-metadata-and-classification-standard.md"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.15",
+      "controlName": "Access control",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.rbac-roles-and-permissions",
+        "semantic-contract.abac-policy-decision-point"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/rbac-roles-and-permissions.json",
+        "spec/instances/semantic-contract/abac-policy-decision-point.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.json"
+      ],
+      "validatorRefs": [
+        "tools/validate-enterprise/validate-enterprise.py"
+      ],
+      "accessControlRefs": [
+        "semantic-contract.rbac-roles-and-permissions",
+        "semantic-contract.abac-policy-decision-point",
+        "semantic-contract.entitlement-engine"
+      ],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.16",
+      "controlName": "Identity management",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.user-identity-and-tenant-membership",
+        "semantic-contract.authentication-platform"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/user-identity-and-tenant-membership.json",
+        "spec/instances/semantic-contract/authentication-platform.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [
+        "semantic-contract.user-identity-and-tenant-membership"
+      ],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.17",
+      "controlName": "Authentication information",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.authentication-platform",
+        "semantic-contract.api-keys-personal-access-tokens",
+        "semantic-contract.runtime-secrets-management"
+      ],
+      "auditEventRefs": [
+        "audit.authentication-login"
+      ],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/authentication-platform.json",
+        "spec/instances/semantic-contract/api-keys-personal-access-tokens.json",
+        "spec/instances/audit-event/authentication-login.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [
+        "semantic-contract.authentication-platform"
+      ],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.18",
+      "controlName": "Access rights",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.rbac-roles-and-permissions",
+        "semantic-contract.delegated-administration-roles",
+        "semantic-contract.entitlement-engine"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/delegated-administration-roles.json",
+        "docs/architecture/operator-access-review-deprovisioning-execution-proof.json"
+      ],
+      "validatorRefs": [
+        "tools/validate-enterprise/validate-enterprise.py"
+      ],
+      "accessControlRefs": [
+        "semantic-contract.rbac-roles-and-permissions",
+        "semantic-contract.delegated-administration-roles"
+      ],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.19",
+      "controlName": "Information security in supplier relationships",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.service-catalog-and-provider-integration-model",
+        "semantic-contract.provider-configuration-plane"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/provider-configuration-plane.json",
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Provider and service dependencies are catalogued with disposition and non-claims, but supplier security assessment, contractual controls, and ongoing supplier monitoring are operating activities not present in the repository.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.23",
+      "controlName": "Information security for use of cloud services",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.provider-configuration-plane",
+        "semantic-contract.provider-environment-classification"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/provider-configuration-plane.json",
+        "spec/instances/semantic-contract/provider-environment-classification.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Cloud and provider configuration and environment classification are defined semantically; live provider onboarding, hardening evidence, and operating monitoring are deferred with no live-provider claim.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.24",
+      "controlName": "Information security incident management planning and preparation",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.observability-built-in-alerting-and-incidents",
+        "semantic-contract.alerting-incident-management-on-call-status-page"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json",
+        "docs/architecture/operational-resilience-failure-mode-suite.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Incident and alerting semantics and failure-mode exercises are defined; a staffed on-call rotation, incident runbook execution, and post-incident review records are operating activities requiring external assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.28",
+      "controlName": "Collection of evidence",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.compliance-reports-access-reviews-evidence-packs"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/enterprise-evidence/repository-enterprise-evidence-model.json",
+        "docs/architecture/non-ui-completeness-assurance-case.json",
+        "docs/architecture/audit-evidence-standard.md"
+      ],
+      "validatorRefs": [
+        "tools/validate-enterprise/validate-enterprise.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.30",
+      "controlName": "ICT readiness for business continuity",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.backup-and-restore",
+        "semantic-contract.pitr-retention-legal-hold-data-residency"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+        "docs/architecture/operational-resilience-failure-mode-suite.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Backup, restore, DR, and RPO/RTO semantics and proof-depth are defined; live DR rehearsal and continuity exercise records across staging and production are deferred with no staging or production claim.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.31",
+      "controlName": "Legal, statutory, regulatory and contractual requirements",
+      "applicability": "applicable",
+      "classification": "external-auditor-only",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Identification of and operating conformance with applicable legal, statutory, regulatory, and contractual obligations is a legal and organizational determination outside the repository's semantic scope and requires external legal and auditor assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.34",
+      "controlName": "Privacy and protection of PII",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/privacy-compliance-consent-proof-semantics.json",
+        "spec/instances/semantic-contract/pitr-retention-legal-hold-data-residency.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "PII governance, DSR, consent, and residency semantics are defined; operating DSR fulfilment, privacy programme governance, and regulator-facing evidence require external assessment and live-environment proof.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.35",
+      "controlName": "Independent review of information security",
+      "applicability": "applicable",
+      "classification": "external-auditor-only",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Independent review of the information security approach is by definition performed by parties external to the delivery repository; the repository provides evidence inputs only, not the independent review itself.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.5.36",
+      "controlName": "Compliance with policies, rules and standards",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "tools/validate-enterprise/validate-enterprise.py",
+        "tools/validate-spec/validate-spec.py",
+        "docs/architecture/enterprise-control-evidence-test-suite.json"
+      ],
+      "validatorRefs": [
+        "tools/validate-enterprise/validate-enterprise.py",
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "gap": "Repository standards are mechanically enforced by validator families in continuous integration; independent management review of conformance and cross-organisational rule coverage are operating activities requiring external assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.6.1",
+      "controlName": "Screening",
+      "applicability": "applicable",
+      "classification": "external-auditor-only",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Personnel screening is a people and HR process performed outside the repository; no repository evidence exists and it requires external organizational assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.6.3",
+      "controlName": "Information security awareness, education and training",
+      "applicability": "applicable",
+      "classification": "external-auditor-only",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Awareness, education, and training delivery to people is an organizational programme; repository machine-actor guidance guardrails do not evidence human training records, which require external assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.6.4",
+      "controlName": "Disciplinary process",
+      "applicability": "applicable",
+      "classification": "external-auditor-only",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "A disciplinary process is an HR and organizational control outside the repository's semantic scope and requires external assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.6.6",
+      "controlName": "Confidentiality or non-disclosure agreements",
+      "applicability": "applicable",
+      "classification": "external-auditor-only",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Confidentiality and non-disclosure agreements are legal and HR instruments outside the repository's semantic scope and require external assessment.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.6.8",
+      "controlName": "Information security event reporting",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.observability-built-in-alerting-and-incidents"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Event and alerting semantics are defined; a staffed reporting channel and human reporting culture require external assessment and live-environment operation.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.7.1",
+      "controlName": "Physical security perimeters",
+      "applicability": "not-applicable",
+      "classification": "not-applicable",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "The repository holds no owned physical estate; physical perimeter controls are inherited from the future hosting or cloud provider and are out of scope of this repository semantic map. This is not a Statement-of-Applicability determination.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.7.2",
+      "controlName": "Physical entry",
+      "applicability": "not-applicable",
+      "classification": "not-applicable",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Physical entry controls apply to the future hosting or cloud provider estate and are out of scope of this repository semantic map. This is not a Statement-of-Applicability determination.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.7.4",
+      "controlName": "Physical security monitoring",
+      "applicability": "not-applicable",
+      "classification": "not-applicable",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Physical security monitoring applies to the future hosting or cloud provider estate and is out of scope of this repository semantic map. This is not a Statement-of-Applicability determination.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.7.10",
+      "controlName": "Storage media",
+      "applicability": "not-applicable",
+      "classification": "not-applicable",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Physical storage media handling applies to the future hosting or cloud provider estate and is out of scope of this repository semantic map. This is not a Statement-of-Applicability determination.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.7.14",
+      "controlName": "Secure disposal or re-use of equipment",
+      "applicability": "not-applicable",
+      "classification": "not-applicable",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Secure disposal or re-use of physical equipment applies to the future hosting or cloud provider estate and is out of scope of this repository semantic map. This is not a Statement-of-Applicability determination.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.2",
+      "controlName": "Privileged access rights",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.audit-of-privileged-access",
+        "semantic-contract.support-mode-break-glass-access"
+      ],
+      "auditEventRefs": [
+        "audit.authentication-login"
+      ],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/audit-of-privileged-access.json",
+        "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+        "docs/architecture/operator-access-review-deprovisioning-execution-proof.json"
+      ],
+      "validatorRefs": [
+        "tools/validate-enterprise/validate-enterprise.py"
+      ],
+      "accessControlRefs": [
+        "semantic-contract.audit-of-privileged-access",
+        "semantic-contract.support-mode-break-glass-access"
+      ],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.5",
+      "controlName": "Secure authentication",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.authentication-platform"
+      ],
+      "auditEventRefs": [
+        "audit.authentication-login"
+      ],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/authentication-platform.json",
+        "spec/instances/audit-event/authentication-login.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [
+        "semantic-contract.authentication-platform"
+      ],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.7",
+      "controlName": "Protection against malware",
+      "applicability": "applicable",
+      "classification": "future-rung",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Malware protection is captured only as a provider disposition matrix input; no live scanning control is evidenced and it is deferred to future provider-integration work.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.8",
+      "controlName": "Management of technical vulnerabilities",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.code-quality-and-secret-and-dependency-scanning"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/code-quality-and-secret-and-dependency-scanning.json",
+        "docs/architecture/supply-chain-sbom-licence-test-gate.json",
+        "docs/architecture/security-abuse-fuzzing-regression-suite.json"
+      ],
+      "validatorRefs": [
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.9",
+      "controlName": "Configuration management",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.configuration-registry-and-history"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/configuration-registry-and-history.json",
+        "docs/architecture/config-and-secrets-standard.md"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Configuration registry and history semantics are defined; operating configuration baselines and drift monitoring across live environments are deferred.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.10",
+      "controlName": "Information deletion",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+        "semantic-contract.pitr-retention-legal-hold-data-residency"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/tenant-lifecycle-provision-suspend-delete-export.json",
+        "spec/instances/semantic-contract/pitr-retention-legal-hold-data-residency.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Deletion, retention, and export semantics are defined; operating deletion execution and verification across live data stores are deferred.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.12",
+      "controlName": "Data leakage prevention",
+      "applicability": "applicable",
+      "classification": "future-rung",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "No dedicated data-leakage-prevention control is evidenced; tenant-isolation and classification semantics partially bound the risk, but a DLP control is deferred to future enterprise-readiness work.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.13",
+      "controlName": "Information backup",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.backup-and-restore"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+        "docs/architecture/data-lifecycle-backup-bulk-migration-test-suite.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Backup semantics and proof-depth are defined; live backup execution, off-site retention, and restore verification are operating activities that are deferred.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.15",
+      "controlName": "Logging",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+        "semantic-contract.audit-of-privileged-access"
+      ],
+      "auditEventRefs": [
+        "audit.authentication-login"
+      ],
+      "evidenceArtefacts": [
+        "spec/instances/audit-event/authentication-login.json",
+        "spec/instances/semantic-contract/logs-aggregation-and-tenant-scoped-search.json",
+        "docs/architecture/audit-evidence-standard.md"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.16",
+      "controlName": "Monitoring activities",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.metrics-and-traces",
+        "semantic-contract.observability-built-in-alerting-and-incidents"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/metrics-and-traces.json",
+        "docs/architecture/observability-alerting-dashboard-incident-execution-proof.json",
+        "docs/architecture/observability-telemetry-and-operational-evidence-standard.md"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.20",
+      "controlName": "Networks security",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.rate-limiting-api"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/compose-port-exposure-and-hardening-standard.md"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "The compose port-exposure and hardening standard defines network posture at the dev-compose boundary; production network segmentation and perimeter controls are operating and provider activities that are deferred.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.24",
+      "controlName": "Use of cryptography",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.runtime-secrets-management"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/runtime-secrets-management.json",
+        "docs/architecture/config-and-secrets-standard.md",
+        "docs/architecture/config-secrets-enterprise-proof-depth-matrix.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Secrets and cryptographic-material lifecycle semantics are defined; operating key management, rotation execution, and cryptographic control validation in live environments are deferred.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.25",
+      "controlName": "Secure development life cycle",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.build-versus-compose-decision-framework"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/ai-agent-work-packet-and-review-contract.md",
+        "docs/architecture/git-practices-standard.md",
+        "docs/architecture/dev-test-staging-artifact-promotion-contract.json"
+      ],
+      "validatorRefs": [
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.26",
+      "controlName": "Application security requirements",
+      "applicability": "applicable",
+      "classification": "partially-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.abac-policy-decision-point",
+        "semantic-contract.tenant-isolation-proof"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/security-abuse-fuzzing-regression-suite.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Application security requirements are semantically defined and exercised in test suites; comprehensive requirement traceability and live-environment security validation are deferred.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.28",
+      "controlName": "Secure coding",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.code-quality-and-secret-and-dependency-scanning"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/code-quality-and-secret-and-dependency-scanning.json",
+        "docs/architecture/sonarqube-zero-issue-quality-gate-assurance.json",
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "validatorRefs": [
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [
+        "docs/architecture/git-practices-standard.md"
+      ],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.29",
+      "controlName": "Security testing in development and acceptance",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/security-abuse-fuzzing-regression-suite.json",
+        "docs/architecture/authn-authz-tenant-role-permission-test-suite.json",
+        "tools/validate-test-readiness/validate-test-readiness.py"
+      ],
+      "validatorRefs": [
+        "tools/validate-test-readiness/validate-test-readiness.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.31",
+      "controlName": "Separation of development, test and production environments",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [
+        "semantic-contract.environment-registry-and-bootstrap",
+        "semantic-contract.environment-specific-vs-shared-service-model",
+        "semantic-contract.provider-environment-classification"
+      ],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "spec/instances/semantic-contract/environment-registry-and-bootstrap.json",
+        "spec/instances/semantic-contract/provider-environment-classification.json",
+        "docs/architecture/dev-test-staging-artifact-promotion-contract.json"
+      ],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [
+        "docs/architecture/dev-test-staging-artifact-promotion-contract.json"
+      ],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.32",
+      "controlName": "Change management",
+      "applicability": "applicable",
+      "classification": "dev-evidenced",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [
+        "docs/architecture/git-practices-standard.md",
+        "docs/architecture/dev-test-staging-artifact-promotion-contract.json",
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "validatorRefs": [
+        "tools/validate-spec/validate-spec.py"
+      ],
+      "accessControlRefs": [],
+      "changeControlRefs": [
+        "docs/architecture/git-practices-standard.md",
+        "docs/architecture/dev-test-staging-artifact-promotion-contract.json"
+      ],
+      "gap": "",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    },
+    {
+      "controlId": "A.8.34",
+      "controlName": "Protection of information systems during audit testing",
+      "applicability": "applicable",
+      "classification": "future-rung",
+      "usfSemanticRefs": [],
+      "auditEventRefs": [],
+      "evidenceArtefacts": [],
+      "validatorRefs": [],
+      "accessControlRefs": [],
+      "changeControlRefs": [],
+      "gap": "Audit-testing safeguards such as read-only, scheduled, and scoped access are recognised but not yet evidenced as a dedicated control; deferred to future enterprise-readiness work.",
+      "nonClaims": [
+        "semantic-map-is-not-control-satisfaction",
+        "no-iso-certification-claim",
+        "no-external-auditor-acceptance-claim",
+        "no-statement-of-applicability-completeness-claim"
+      ]
+    }
+  ]
+}

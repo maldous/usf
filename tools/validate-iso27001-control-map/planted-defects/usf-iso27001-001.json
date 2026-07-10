@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-001",
+  "description": "controlProfile.alignmentOnly flipped to false",
+  "expectedRuleIds": [
+    "USF-ISO27001-001"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "envelope-or-control-profile-invalid"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-012",
+  "description": "planted-defect coverage no longer exactly one distinct defect per rule",
+  "expectedRuleIds": [
+    "USF-ISO27001-012"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "planted-defect-coverage-broken"
+}

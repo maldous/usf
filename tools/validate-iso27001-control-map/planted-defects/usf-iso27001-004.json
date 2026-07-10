@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-004",
+  "description": "dev-evidenced control cites an evidence artefact that does not resolve on disk",
+  "expectedRuleIds": [
+    "USF-ISO27001-004"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "missing-control-evidence"
+}

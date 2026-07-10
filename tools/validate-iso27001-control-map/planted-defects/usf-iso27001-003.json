@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-003",
+  "description": "control classification set to a value outside the allowed vocabulary",
+  "expectedRuleIds": [
+    "USF-ISO27001-003"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "invalid-applicability-or-classification"
+}

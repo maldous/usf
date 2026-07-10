@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-011",
+  "description": "evidence artefact points outside the repository via a stale relative path",
+  "expectedRuleIds": [
+    "USF-ISO27001-011"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "stale-evidence"
+}
