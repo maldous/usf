@@ -1,0 +1,7 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-002"],
+  "mustBeDistinct": true,
+  "failureShape": "missing-negative-paths",
+  "description": "Missing-negative-paths defect: a required negative-path dimension (role-matrix) is dropped from the declared dimensions.",
+  "mutation": "catalogue.dimensions -= role-matrix"
+}

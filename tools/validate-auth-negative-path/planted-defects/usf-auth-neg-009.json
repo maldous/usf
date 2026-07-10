@@ -1,0 +1,7 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-009"],
+  "mustBeDistinct": true,
+  "failureShape": "unsupported-access-claim / public-gateway/live-IdP/browser-session-overclaim",
+  "description": "Overclaim defect: a case scenario is injected with a forbidden readiness overclaim string (\"live idp ready\").",
+  "mutation": "cases[0].scenario += \" live idp ready.\""
+}

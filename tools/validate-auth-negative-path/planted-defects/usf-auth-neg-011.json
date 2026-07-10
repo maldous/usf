@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-011"],
+  "mustBeDistinct": true,
+  "description": "Missing-non-claim defect: the required no-live-idp-readiness-claim is dropped from the envelope non-claims.",
+  "mutation": "catalogue.nonClaims -= no-live-idp-readiness-claim"
+}

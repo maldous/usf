@@ -1,0 +1,7 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-008"],
+  "mustBeDistinct": true,
+  "failureShape": "missing-correlation-evidence",
+  "description": "Missing-correlation-evidence defect: a dev-proven case downgrades its correlationRef to \"gap\" instead of a resolving on-disk correlation signal instance.",
+  "mutation": "dev-proven case.correlationRef := gap"
+}

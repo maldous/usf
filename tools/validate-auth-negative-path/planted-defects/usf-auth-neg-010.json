@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-010"],
+  "mustBeDistinct": true,
+  "description": "Path-escape defect: a case evidenceRef uses a non-repo-relative parent-escape path.",
+  "mutation": "recorded-gap case.evidenceRef := ../secret/leak.json"
+}

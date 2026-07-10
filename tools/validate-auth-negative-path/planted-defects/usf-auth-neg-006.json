@@ -1,0 +1,7 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-006"],
+  "mustBeDistinct": true,
+  "failureShape": "missing-audit-evidence",
+  "description": "Missing-audit-evidence defect: a dev-proven case downgrades its auditRef to \"gap\" instead of a resolving on-disk audit instance.",
+  "mutation": "dev-proven case.auditRef := gap"
+}

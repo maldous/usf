@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-005"],
+  "mustBeDistinct": true,
+  "description": "Missing-next-rung defect: a non-dev-proven (recorded-gap) case has an empty nextRung.",
+  "mutation": "recorded-gap case.nextRung := \"\""
+}
