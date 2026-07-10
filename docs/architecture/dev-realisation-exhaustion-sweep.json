@@ -1,0 +1,3412 @@
+{
+  "id": "dev-realisation-exhaustion-sweep",
+  "title": "Dev-Realisation Exhaustion Sweep (Semantic Contract Classification)",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "Lower authority than semantic contracts, ADRs, validators, and the current-main capability-service realisation map. Classification records dev-realisation intent only and MUST NOT upgrade readiness.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1070",
+  "parentIssueId": "USF-1069",
+  "semanticContractSourceOfTruth": "spec/instances/semantic-contract/*.json",
+  "currentDispositionSourceOfTruth": "docs/architecture/current-main-capability-service-realisation-map.json",
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "sourceAuthorities": [
+    "spec/instances/semantic-contract/*.json",
+    "docs/architecture/current-main-capability-service-realisation-map.json"
+  ],
+  "allowedDevRealisationClassifications": [
+    "dev-realised",
+    "dev-realisable-now",
+    "dev-realisable-later",
+    "test-rung-only",
+    "staging-deployment-only",
+    "live-provider-only",
+    "intentionally-semantic-only",
+    "deprecated",
+    "rejected"
+  ],
+  "devRealisableNowOwners": [
+    "USF-1071",
+    "USF-1072",
+    "USF-1073",
+    "USF-1074",
+    "USF-1075",
+    "USF-1076",
+    "USF-1077"
+  ],
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-current-main-capability-service-realisation-map-and-semantic-contract-instances-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone"
+  ],
+  "rowCount": 67,
+  "classificationCounts": {
+    "deprecated": 1,
+    "dev-realisable-later": 2,
+    "dev-realisable-now": 12,
+    "dev-realised": 12,
+    "intentionally-semantic-only": 6,
+    "live-provider-only": 8,
+    "staging-deployment-only": 1,
+    "test-rung-only": 25
+  },
+  "rows": [
+    {
+      "capability": "authentication-platform",
+      "capabilityDomain": "authentication",
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "semanticContractPath": "spec/instances/semantic-contract/authentication-platform.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Local login route contract implemented and mapped to semantic authority with bounded dev/test evidence; realised and proven in dev only (no product/public/live claim).",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "background-workers-job-runner",
+      "capabilityDomain": "compute-runtime",
+      "semanticContractRef": "semantic-contract.background-workers-job-runner",
+      "semanticContractPath": "spec/instances/semantic-contract/background-workers-job-runner.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "A background worker/job runner needs a runtime worker substrate plus execution/failure negative-path proofs; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.background-workers-job-runner-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "compute-runtime-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "runtime-secrets-management",
+      "capabilityDomain": "compute-runtime",
+      "semanticContractRef": "semantic-contract.runtime-secrets-management",
+      "semanticContractPath": "spec/instances/semantic-contract/runtime-secrets-management.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Runtime secrets management (write-only, redaction, no-read-back) is provable at the test rung with a local store; a live secret provider is a later rung.",
+      "requiredContracts": [
+        "interface.runtime-secrets-management-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "compute-runtime-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "serverless-function-runtime",
+      "capabilityDomain": "compute-runtime",
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "semanticContractPath": "spec/instances/semantic-contract/serverless-function-runtime.json",
+      "currentDisposition": "deferred-with-rationale",
+      "devRealisationClassification": "dev-realisable-later",
+      "reason": "Marked not-applicable-final and excluded from V2 scope (only a healthz route recorded); a later semantic decision is required before dev realisation.",
+      "requiredContracts": [
+        "interface.serverless-function-runtime-service-api (to be authored on reactivation)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence"
+      ],
+      "requiredValidators": [
+        "compute-runtime-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "future-domain",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "future-domain (semantic re-decision required)"
+      }
+    },
+    {
+      "capability": "branding-and-theming",
+      "capabilityDomain": "configuration",
+      "semanticContractRef": "semantic-contract.branding-and-theming",
+      "semanticContractPath": "spec/instances/semantic-contract/branding-and-theming.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Branding/theming is UI-facing configuration; the config CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "requiredContracts": [
+        "interface.branding-and-theming-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "configuration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": true,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "configuration-registry-and-history",
+      "capabilityDomain": "configuration",
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "semanticContractPath": "spec/instances/semantic-contract/configuration-registry-and-history.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Config current/flags local routes implemented and mapped to semantic authority with bounded dev/test evidence; realised and proven in dev only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "custom-domains-dns-ownership-tls-canonical",
+      "capabilityDomain": "configuration",
+      "semanticContractRef": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "semanticContractPath": "spec/instances/semantic-contract/custom-domains-dns-ownership-tls-canonical.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "DNS ownership verification and TLS issuance require live DNS/ACME providers; realisation is live-provider, only canonical-set semantics are locally expressible.",
+      "requiredContracts": [
+        "interface.custom-domains-dns-ownership-tls-canonical-service-api (to be authored)",
+        "provider.custom-domains-dns-ownership-tls-canonical"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "tenant-canonical-domain-set-unset",
+      "capabilityDomain": "configuration",
+      "semanticContractRef": "semantic-contract.tenant-canonical-domain-set-unset",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-canonical-domain-set-unset.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Canonical-domain set/unset is a tenant config operation provable at the test rung (idempotent set/unset, fail-closed conflicts); no owning dev-now child.",
+      "requiredContracts": [
+        "interface.tenant-canonical-domain-set-unset-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "configuration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "tenant-domain-activation-auth-client",
+      "capabilityDomain": "configuration",
+      "semanticContractRef": "semantic-contract.tenant-domain-activation-auth-client",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-domain-activation-auth-client.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "Activating a tenant domain for an auth client requires a live identity-provider/auth-client integration; realisation is live-provider.",
+      "requiredContracts": [
+        "interface.tenant-domain-activation-auth-client-service-api (to be authored)",
+        "provider.tenant-domain-activation-auth-client"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "write-only-secret-settings",
+      "capabilityDomain": "configuration",
+      "semanticContractRef": "semantic-contract.write-only-secret-settings",
+      "semanticContractPath": "spec/instances/semantic-contract/write-only-secret-settings.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Write-only secret settings (no read-back, redaction) is provable at the test rung with negative-path proofs; a live secret provider is a later rung.",
+      "requiredContracts": [
+        "interface.write-only-secret-settings-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "configuration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "backup-and-restore",
+      "capabilityDomain": "data-platform",
+      "semanticContractRef": "semantic-contract.backup-and-restore",
+      "semanticContractPath": "spec/instances/semantic-contract/backup-and-restore.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "A synthetic backup/restore rehearsal over local data is a cheap, safe dev deliverable owned by the migration/backup child.",
+      "requiredContracts": [
+        "interface.backup-and-restore-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "synthetic-rehearsal"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "migration-rehearsal-evidence"
+      ],
+      "requiredValidators": [
+        "backup-migration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "restore-integrity-defect"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1075",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1075"
+      }
+    },
+    {
+      "capability": "data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capabilityDomain": "data-platform",
+      "semanticContractRef": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "semanticContractPath": "spec/instances/semantic-contract/data-governance-catalog-lineage-classification-pii-dsr-gdpr.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Catalog/lineage/PII-classification and DSR/GDPR flows require substantial substrate work with negative-path proofs; realisation sits at the test-proof rung.",
+      "requiredContracts": [
+        "interface.data-governance-catalog-lineage-classification-pii-dsr-gdpr-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "data-platform-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "history-read-model-read-only-projection",
+      "capabilityDomain": "data-platform",
+      "semanticContractRef": "semantic-contract.history-read-model-read-only-projection",
+      "semanticContractPath": "spec/instances/semantic-contract/history-read-model-read-only-projection.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "A read-only history projection needs the event substrate plus a projection-consistency proof; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.history-read-model-read-only-projection-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "data-platform-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "pitr-retention-legal-hold-data-residency",
+      "capabilityDomain": "data-platform",
+      "semanticContractRef": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "semanticContractPath": "spec/instances/semantic-contract/pitr-retention-legal-hold-data-residency.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "PITR, retention, legal hold and data residency depend on real storage-provider capabilities and deployment regions; not realisable with local dev routes.",
+      "requiredContracts": [
+        "interface.pitr-retention-legal-hold-data-residency-service-api (to be authored)",
+        "provider.pitr-retention-legal-hold-data-residency"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "relational-storage-and-migrations-and-rls",
+      "capabilityDomain": "data-platform",
+      "semanticContractRef": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "semanticContractPath": "spec/instances/semantic-contract/relational-storage-and-migrations-and-rls.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Foundational storage with migrations and RLS needs an L4 substrate plus RLS negative-path and migration-rehearsal proofs; ownership spans migration and tenant-boundary concerns so it stays at the test rung.",
+      "requiredContracts": [
+        "interface.relational-storage-and-migrations-and-rls-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "data-platform-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "tenant-data-import-export",
+      "capabilityDomain": "data-platform",
+      "semanticContractRef": "semantic-contract.tenant-data-import-export",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-data-import-export.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Synthetic tenant data import/export rehearsal is realisable in dev now under the migration/backup child.",
+      "requiredContracts": [
+        "interface.tenant-data-import-export-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "synthetic-rehearsal"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "migration-rehearsal-evidence"
+      ],
+      "requiredValidators": [
+        "backup-migration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "restore-integrity-defect"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1075",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1075"
+      }
+    },
+    {
+      "capability": "api-docs-developer-portal-sdks-rate-limits",
+      "capabilityDomain": "developer-platform",
+      "semanticContractRef": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "semanticContractPath": "spec/instances/semantic-contract/api-docs-developer-portal-sdks-rate-limits.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Developer-portal docs/SDK surface is a cheap, safe dev deliverable (generated docs + rate-limit disclosure) owned by the dev-portal/docs child.",
+      "requiredContracts": [
+        "interface.api-docs-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "openapi-snapshot",
+        "docs-surface-snapshot"
+      ],
+      "requiredValidators": [
+        "dev-portal-docs-parity"
+      ],
+      "requiredPlantedDefects": [
+        "undocumented-route-drift",
+        "missing-documented-route"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1071",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1071"
+      }
+    },
+    {
+      "capability": "mock-providers-dev-test",
+      "capabilityDomain": "developer-platform",
+      "semanticContractRef": "semantic-contract.mock-providers-dev-test",
+      "semanticContractPath": "spec/instances/semantic-contract/mock-providers-dev-test.json",
+      "currentDisposition": "deferred-with-rationale",
+      "devRealisationClassification": "dev-realisable-later",
+      "reason": "Marked not-applicable-final and excluded from V2 scope; a later semantic decision is required before any dev realisation, so realisable only later.",
+      "requiredContracts": [
+        "interface.mock-providers-dev-test-service-api (to be authored on reactivation)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence"
+      ],
+      "requiredValidators": [
+        "developer-platform-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "future-domain",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "future-domain (semantic re-decision required)"
+      }
+    },
+    {
+      "capability": "openapi-drift-hard-gate",
+      "capabilityDomain": "developer-platform",
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "semanticContractPath": "spec/instances/semantic-contract/openapi-drift-hard-gate.json",
+      "currentDisposition": "not-claimed",
+      "devRealisationClassification": "intentionally-semantic-only",
+      "reason": "OpenAPI route recorded but explicitly not claimed as a service realisation; it is a build/CI drift gate, deliberately semantic-only rather than a product capability.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (intentionally semantic-only)"
+      }
+    },
+    {
+      "capability": "rate-limiting-api",
+      "capabilityDomain": "developer-platform",
+      "semanticContractRef": "semantic-contract.rate-limiting-api",
+      "semanticContractPath": "spec/instances/semantic-contract/rate-limiting-api.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Rate limiting requires runtime enforcement with a 429 negative-path proof on the substrate; realisation is a test-proof-ladder rung, not just a docs surface.",
+      "requiredContracts": [
+        "interface.rate-limiting-api-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "developer-platform-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "webhooks-developer-facing",
+      "capabilityDomain": "developer-platform",
+      "semanticContractRef": "semantic-contract.webhooks-developer-facing",
+      "semanticContractPath": "spec/instances/semantic-contract/webhooks-developer-facing.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Webhook registration, signing and retry semantics need the event substrate plus a delivery/retry negative-path proof against mock endpoints on the test rung.",
+      "requiredContracts": [
+        "interface.webhooks-developer-facing-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "developer-platform-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "product-catalog-plans-prices",
+      "capabilityDomain": "entitlements-billing",
+      "semanticContractRef": "semantic-contract.product-catalog-plans-prices",
+      "semanticContractPath": "spec/instances/semantic-contract/product-catalog-plans-prices.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Product catalog/plans/prices CRUD is provable in dev/test but has no owning USF-1071..1077 child, so it stays at the test-proof rung pending a billing slice.",
+      "requiredContracts": [
+        "interface.product-catalog-plans-prices-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "entitlements-billing-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "quota-enforcement",
+      "capabilityDomain": "entitlements-billing",
+      "semanticContractRef": "semantic-contract.quota-enforcement",
+      "semanticContractPath": "spec/instances/semantic-contract/quota-enforcement.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Quota enforcement needs a runtime counter plus an over-quota deny negative-path proof on the test rung.",
+      "requiredContracts": [
+        "interface.quota-enforcement-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "entitlements-billing-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "subscriptions-invoices-payment-methods-dunning",
+      "capabilityDomain": "entitlements-billing",
+      "semanticContractRef": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "semanticContractPath": "spec/instances/semantic-contract/subscriptions-invoices-payment-methods-dunning.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "Payment methods, invoices and dunning require a live payment provider (e.g. billing PSP) to realise; local routes cannot prove the semantic.",
+      "requiredContracts": [
+        "interface.subscriptions-invoices-payment-methods-dunning-service-api (to be authored)",
+        "provider.subscriptions-invoices-payment-methods-dunning"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "usage-metering-and-meter-event-ingestion",
+      "capabilityDomain": "entitlements-billing",
+      "semanticContractRef": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "semanticContractPath": "spec/instances/semantic-contract/usage-metering-and-meter-event-ingestion.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Meter-event ingestion and aggregation are provable in dev/test with substrate and idempotency proofs; realisation sits at the test-proof rung.",
+      "requiredContracts": [
+        "interface.usage-metering-and-meter-event-ingestion-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "entitlements-billing-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "event-bus-durable-queues-dlq-redrive",
+      "capabilityDomain": "events-workflow",
+      "semanticContractRef": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "semanticContractPath": "spec/instances/semantic-contract/event-bus-durable-queues-dlq-redrive.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Durable queues with DLQ/redrive need an event substrate plus DLQ/redrive negative-path proofs on the test rung.",
+      "requiredContracts": [
+        "interface.event-bus-durable-queues-dlq-redrive-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "events-workflow-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "notification-delivery-and-preferences-and-channels",
+      "capabilityDomain": "events-workflow",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "semanticContractPath": "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Full notification create/get/list/send/cancel/template local route set implemented with bounded dev/test evidence; realised and proven in dev only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "scheduled-jobs-built-in-on-the-event-substrate",
+      "capabilityDomain": "events-workflow",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "semanticContractPath": "spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Jobs create/get/list/cancel local routes implemented on the event substrate with bounded dev/test evidence; realised and proven in dev only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "workflow-engine-scheduled-jobs-approvals",
+      "capabilityDomain": "events-workflow",
+      "semanticContractRef": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "semanticContractPath": "spec/instances/semantic-contract/workflow-engine-scheduled-jobs-approvals.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "A workflow engine with approvals needs substrate plus workflow-state and approval negative-path proofs; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.workflow-engine-scheduled-jobs-approvals-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "events-workflow-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "accessibility-a11y-gate",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.accessibility-a11y-gate",
+      "semanticContractPath": "spec/instances/semantic-contract/accessibility-a11y-gate.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "A static accessibility gate/check is cheap and safe to realise in dev now and is squarely the accessibility child's deliverable.",
+      "requiredContracts": [],
+      "requiredProof": [
+        "L2 contract",
+        "a11y-static-check"
+      ],
+      "requiredEvidence": [
+        "a11y-scan-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "accessibility-gate-parity"
+      ],
+      "requiredPlantedDefects": [
+        "a11y-violation-planted"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1072",
+      "triage": {
+        "requiresUi": true,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1072"
+      }
+    },
+    {
+      "capability": "build-versus-compose-decision-framework",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.build-versus-compose-decision-framework",
+      "semanticContractPath": "spec/instances/semantic-contract/build-versus-compose-decision-framework.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only",
+      "reason": "A decision-framework/principles capability describing how USF chooses build vs compose; it is a semantic policy, not a runtime service to realise.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (intentionally semantic-only)"
+      }
+    },
+    {
+      "capability": "composed-provider-readiness-spine",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "semanticContractPath": "spec/instances/semantic-contract/composed-provider-readiness-spine.json",
+      "currentDisposition": "not-claimed",
+      "devRealisationClassification": "intentionally-semantic-only",
+      "reason": "Readyz local route recorded for completeness but explicitly not claimed as a client or service realisation; deliberately remains a semantic/support definition.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (intentionally semantic-only)"
+      }
+    },
+    {
+      "capability": "e2e-confidence-ladder-stage-aware",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "semanticContractPath": "spec/instances/semantic-contract/e2e-confidence-ladder-stage-aware.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only",
+      "reason": "A methodology/principles capability defining the stage-aware confidence ladder itself; it is a semantic definition of the proof model, not a realisable runtime service.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (intentionally semantic-only)"
+      }
+    },
+    {
+      "capability": "environment-registry-and-bootstrap",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.environment-registry-and-bootstrap",
+      "semanticContractPath": "spec/instances/semantic-contract/environment-registry-and-bootstrap.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "staging-deployment-only",
+      "reason": "Environment registry and bootstrap is inherently a deployment/staging concern (provisioning and wiring environments), so realisation requires a staged deployment rung, not local dev routes.",
+      "requiredContracts": [
+        "interface.environment-registry-and-bootstrap-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "staging-smoke"
+      ],
+      "requiredEvidence": [
+        "deployment-manifest",
+        "staging-evidence"
+      ],
+      "requiredValidators": [
+        "environment-registry-parity"
+      ],
+      "requiredPlantedDefects": [
+        "env-bootstrap-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "staging",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "staging"
+      }
+    },
+    {
+      "capability": "environment-specific-vs-shared-service-model",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.environment-specific-vs-shared-service-model",
+      "semanticContractPath": "spec/instances/semantic-contract/environment-specific-vs-shared-service-model.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only",
+      "reason": "A modelling/principles capability describing the shared-vs-environment-specific service model; semantic policy, not a runtime service.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (intentionally semantic-only)"
+      }
+    },
+    {
+      "capability": "i18n-runtime-and-validation",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.i18n-runtime-and-validation",
+      "semanticContractPath": "spec/instances/semantic-contract/i18n-runtime-and-validation.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Runtime i18n and translation validation is provable via a dev/test rung (missing-key/validation checks) but has no owning USF-1071..1077 child, so it stays at the test-proof rung.",
+      "requiredContracts": [
+        "interface.i18n-runtime-and-validation-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "foundation-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "provider-configuration-plane",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-configuration-plane.json",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Operator-tooling providers get/list local routes implemented with bounded dev/test evidence; realised in dev as operator tooling only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "provider-environment-classification",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.provider-environment-classification",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-environment-classification.json",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Operator-tooling config-provider-status local route implemented with bounded dev/test evidence; realised in dev as operator tooling only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "service-catalog-and-provider-integration-model",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.service-catalog-and-provider-integration-model",
+      "semanticContractPath": "spec/instances/semantic-contract/service-catalog-and-provider-integration-model.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Service catalog and provider-integration model is provider compose-consolidation metadata realisable in dev now under the providers child.",
+      "requiredContracts": [
+        "interface.service-catalog-and-provider-integration-model-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "provider-catalog-snapshot"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-catalog-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1074",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1074"
+      }
+    },
+    {
+      "capability": "universal-service-foundation-scope-and-principles",
+      "capabilityDomain": "foundation",
+      "semanticContractRef": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "semanticContractPath": "spec/instances/semantic-contract/universal-service-foundation-scope-and-principles.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only",
+      "reason": "The USF scope-and-principles charter; a foundational semantic definition, not a runtime capability to realise.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (intentionally semantic-only)"
+      }
+    },
+    {
+      "capability": "abac-policy-decision-point",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+      "semanticContractPath": "spec/instances/semantic-contract/abac-policy-decision-point.json",
+      "currentDisposition": "internal-support-only",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Internal-support authz-check local route implemented with bounded dev/test evidence; realised in dev as internal support only, not a product/public claim.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "api-keys-personal-access-tokens",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.api-keys-personal-access-tokens",
+      "semanticContractPath": "spec/instances/semantic-contract/api-keys-personal-access-tokens.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "API keys/PATs need real token issuance, hashing, scoping and revocation beyond a negative-path proof; the invalid/expired/revoked-key deny path is provable at the test rung, so realisation sits at the test-proof rung.",
+      "requiredContracts": [
+        "interface.api-keys-personal-access-tokens-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "identity-access-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "audit-of-privileged-access",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "semanticContractPath": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Operator-tooling audit events get/list/verify local routes implemented with bounded dev/test evidence; realised in dev as operator tooling, no product/public readiness.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "delegated-administration-roles",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.delegated-administration-roles",
+      "semanticContractPath": "spec/instances/semantic-contract/delegated-administration-roles.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Delegated administration needs a role/scope model plus a deny-beyond-delegated-scope negative-path proof; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.delegated-administration-roles-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "identity-access-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "end-user-profile-and-preferences-self-service",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "semanticContractPath": "spec/instances/semantic-contract/end-user-profile-and-preferences-self-service.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Self-service profile/preferences is UI-facing; CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "requiredContracts": [
+        "interface.end-user-profile-and-preferences-self-service-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "identity-access-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": true,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "entitlement-engine",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.entitlement-engine",
+      "semanticContractPath": "spec/instances/semantic-contract/entitlement-engine.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "The entitlement engine needs a policy/model plus a not-entitled deny negative-path proof; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.entitlement-engine-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "identity-access-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "rbac-roles-and-permissions",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+      "semanticContractPath": "spec/instances/semantic-contract/rbac-roles-and-permissions.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Authz-permissions local route implemented; contract covers static/dynamic allow-deny, step-up denial and tenant-boundary preservation, proven with bounded dev/test evidence.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "sub-organisations",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.sub-organisations",
+      "semanticContractPath": "spec/instances/semantic-contract/sub-organisations.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Sub-organisations need a hierarchy data model plus cross-sub-org isolation negative-path proofs; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.sub-organisations-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "identity-access-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "support-mode-break-glass-access",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.support-mode-break-glass-access",
+      "semanticContractPath": "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Break-glass access is fundamentally a fail-closed auth boundary (deny unless authorised, audited); its negative-path proof is realisable in dev now.",
+      "requiredContracts": [
+        "interface.support-mode-break-glass-access-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "requiredPlantedDefects": [
+        "fail-open-bypass",
+        "cross-tenant-leak"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1076",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1076"
+      }
+    },
+    {
+      "capability": "tenant-groups",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.tenant-groups",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-groups.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Tenant groups need a grouping model plus membership/isolation proofs; realisation is a test-proof-ladder rung.",
+      "requiredContracts": [
+        "interface.tenant-groups-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "identity-access-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "tenant-host-identity-resolution",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-host-identity-resolution.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Tenant-context local route implemented; contract's fail-closed host->tenant resolution proven with bounded dev/test evidence; realised in dev only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "tenant-identity-record-and-fqdn",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.tenant-identity-record-and-fqdn",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Contract's first slice is fail-closed tenant ownership (unresolved host / inactive domain / cross-tenant); a dev negative-path proof owned by the auth/tenant child.",
+      "requiredContracts": [
+        "interface.tenant-identity-record-and-fqdn-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "requiredPlantedDefects": [
+        "fail-open-bypass",
+        "cross-tenant-leak"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1076",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1076"
+      }
+    },
+    {
+      "capability": "user-identity-and-tenant-membership",
+      "capabilityDomain": "identity-access",
+      "semanticContractRef": "semantic-contract.user-identity-and-tenant-membership",
+      "semanticContractPath": "spec/instances/semantic-contract/user-identity-and-tenant-membership.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Contract's first slice is a fail-closed membership boundary (deny absent/other-tenant); this negative-path proof is cheap and safe to realise in dev now.",
+      "requiredContracts": [
+        "interface.user-identity-and-tenant-membership-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "requiredPlantedDefects": [
+        "fail-open-bypass",
+        "cross-tenant-leak"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1076",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1076"
+      }
+    },
+    {
+      "capability": "alerting-incident-management-on-call-status-page",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "semanticContractPath": "spec/instances/semantic-contract/alerting-incident-management-on-call-status-page.json",
+      "currentDisposition": "deprecated-with-rationale",
+      "devRealisationClassification": "deprecated",
+      "reason": "Contract explicitly deprecated and superseded by observability-built-in-alerting-and-incidents; retained as lineage only, not a current realisation claim.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "deprecated",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (deprecated lineage only)"
+      }
+    },
+    {
+      "capability": "browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "semanticContractPath": "spec/instances/semantic-contract/browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "Grafana Faro RUM and browser-to-BFF tracing require a live external telemetry provider/backend to realise; cannot be proven with local dev routes alone.",
+      "requiredContracts": [
+        "interface.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing-service-api (to be authored)",
+        "provider.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "internal-service-catalog-and-readiness",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.internal-service-catalog-and-readiness",
+      "semanticContractPath": "spec/instances/semantic-contract/internal-service-catalog-and-readiness.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Internal service catalog + readiness is operator metadata that can be surfaced in the operator workbench in dev now.",
+      "requiredContracts": [
+        "interface.internal-service-catalog-and-readiness-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "operator-metadata-snapshot"
+      ],
+      "requiredValidators": [
+        "operator-workbench-parity"
+      ],
+      "requiredPlantedDefects": [
+        "operator-metadata-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1073",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1073"
+      }
+    },
+    {
+      "capability": "logs-aggregation-and-tenant-scoped-search",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "semanticContractPath": "spec/instances/semantic-contract/logs-aggregation-and-tenant-scoped-search.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "Log aggregation and tenant-scoped search require an external log-store/search backend provider to realise meaningfully.",
+      "requiredContracts": [
+        "interface.logs-aggregation-and-tenant-scoped-search-service-api (to be authored)",
+        "provider.logs-aggregation-and-tenant-scoped-search"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "metrics-and-traces",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "semanticContractPath": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Operator-tooling observability readiness/signals local routes implemented with bounded dev/test evidence; realised in dev as operator tooling only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "observability-built-in-alerting-and-incidents",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "semanticContractPath": "spec/instances/semantic-contract/observability-built-in-alerting-and-incidents.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "Alerting/incident/on-call realisation needs a live metrics+notification/on-call provider chain; only rule semantics are local, full realisation is live-provider.",
+      "requiredContracts": [
+        "interface.observability-built-in-alerting-and-incidents-service-api (to be authored)",
+        "provider.observability-built-in-alerting-and-incidents"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "tenant-service-clickthrough-policy",
+      "capabilityDomain": "observability-ops",
+      "semanticContractRef": "semantic-contract.tenant-service-clickthrough-policy",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-service-clickthrough-policy.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Tenant-service clickthrough policy is operator metadata/policy realisable in the operator workbench in dev now.",
+      "requiredContracts": [
+        "interface.tenant-service-clickthrough-policy-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "operator-metadata-snapshot"
+      ],
+      "requiredValidators": [
+        "operator-workbench-parity"
+      ],
+      "requiredPlantedDefects": [
+        "operator-metadata-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1073",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1073"
+      }
+    },
+    {
+      "capability": "search-and-indexing-product-search",
+      "capabilityDomain": "search",
+      "semanticContractRef": "semantic-contract.search-and-indexing-product-search",
+      "semanticContractPath": "spec/instances/semantic-contract/search-and-indexing-product-search.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only",
+      "reason": "Product search/indexing requires an external search-engine provider to realise; local dev routes cannot prove the indexing/query semantic.",
+      "requiredContracts": [
+        "interface.search-and-indexing-product-search-service-api (to be authored)",
+        "provider.search-and-indexing-product-search"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredEvidence": [
+        "provider-conformance-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "requiredPlantedDefects": [
+        "provider-contract-drift"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "live-provider",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": true,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": true,
+        "requiresDeployment": true,
+        "requiresLiveProviders": true,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "live-provider"
+      }
+    },
+    {
+      "capability": "code-quality-and-secret-and-dependency-scanning",
+      "capabilityDomain": "security-governance",
+      "semanticContractRef": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "semanticContractPath": "spec/instances/semantic-contract/code-quality-and-secret-and-dependency-scanning.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "A code-quality/secret/dependency scanning gate is realised and proven at the CI/test rung; there is no runtime product surface.",
+      "requiredContracts": [
+        "interface.code-quality-and-secret-and-dependency-scanning-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "security-governance-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "compliance-reports-access-reviews-evidence-packs",
+      "capabilityDomain": "security-governance",
+      "semanticContractRef": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "semanticContractPath": "spec/instances/semantic-contract/compliance-reports-access-reviews-evidence-packs.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "Evidence packs and access reviews can be generated from local audit data as an ISO audit-control deliverable in dev now.",
+      "requiredContracts": [
+        "interface.compliance-reports-access-reviews-evidence-packs-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "audit-evidence"
+      ],
+      "requiredEvidence": [
+        "evidence-pack",
+        "access-review-report"
+      ],
+      "requiredValidators": [
+        "audit-control-parity"
+      ],
+      "requiredPlantedDefects": [
+        "missing-audit-event",
+        "evidence-pack-tampering"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1077",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1077"
+      }
+    },
+    {
+      "capability": "tenant-isolation-proof",
+      "capabilityDomain": "security-governance",
+      "semanticContractRef": "semantic-contract.tenant-isolation-proof",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-isolation-proof.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now",
+      "reason": "This capability is itself a cross-tenant fail-closed proof; authoring the tenant-isolation negative-path proof is the auth/tenant child's dev deliverable.",
+      "requiredContracts": [
+        "interface.tenant-isolation-proof-service-api"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "requiredPlantedDefects": [
+        "fail-open-bypass",
+        "cross-tenant-leak"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "USF-1076",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "USF-1076"
+      }
+    },
+    {
+      "capability": "object-storage-and-tenant-prefixes-and-signed-urls",
+      "capabilityDomain": "storage",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "semanticContractPath": "spec/instances/semantic-contract/object-storage-and-tenant-prefixes-and-signed-urls.json",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised",
+      "reason": "Files upload/download/get/list/verify local routes implemented with bounded dev/test evidence; realised and proven in dev only.",
+      "requiredContracts": [],
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "requiredPlantedDefects": [],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "none",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": false,
+        "requiresTest": false,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "none (realised and proven in dev)"
+      }
+    },
+    {
+      "capability": "support-tickets-customer-health-announcements",
+      "capabilityDomain": "support-admin",
+      "semanticContractRef": "semantic-contract.support-tickets-customer-health-announcements",
+      "semanticContractPath": "spec/instances/semantic-contract/support-tickets-customer-health-announcements.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Support tickets/customer-health/announcements is a UI-facing product feature; CRUD is provable at the test rung but full realisation needs a UI.",
+      "requiredContracts": [
+        "interface.support-tickets-customer-health-announcements-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "support-admin-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": true,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    },
+    {
+      "capability": "tenant-lifecycle-provision-suspend-delete-export",
+      "capabilityDomain": "support-admin",
+      "semanticContractRef": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-lifecycle-provision-suspend-delete-export.json",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only",
+      "reason": "Tenant lifecycle (provision/suspend/delete/export) needs substrate state transitions plus fail-closed proofs; provisioning against real infra is a later rung, so it stays at the test rung.",
+      "requiredContracts": [
+        "interface.tenant-lifecycle-provision-suspend-delete-export-service-api (to be authored)"
+      ],
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "substrate-evidence",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "support-admin-parity"
+      ],
+      "requiredPlantedDefects": [
+        "contract-drift",
+        "negative-path-bypass"
+      ],
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-runtime-product-readiness-upgrade",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim",
+        "no-compliance-readiness-claim",
+        "no-monetisation-readiness-claim"
+      ],
+      "nextIssueOrRung": "test-proof-ladder",
+      "triage": {
+        "requiresUi": false,
+        "requiresProviderIntegration": false,
+        "requiresComposedDev": true,
+        "requiresTest": true,
+        "requiresStaging": false,
+        "requiresDeployment": false,
+        "requiresLiveProviders": false,
+        "requiresHumanAcceptance": false,
+        "nextBacklogDestination": "test-proof-ladder"
+      }
+    }
+  ]
+}

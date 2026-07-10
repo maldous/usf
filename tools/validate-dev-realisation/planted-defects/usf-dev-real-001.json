@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-real-001-omit-envelope-id",
+  "expectedRuleIds": ["USF-DEV-REAL-001"],
+  "mustBeDistinct": true,
+  "failureShape": "removing the sweep envelope id leaves a required field empty",
+  "note": "Negative control for USF-DEV-REAL-001; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

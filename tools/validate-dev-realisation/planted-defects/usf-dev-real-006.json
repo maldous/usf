@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-real-006-dev-now-without-owning-child",
+  "expectedRuleIds": ["USF-DEV-REAL-006"],
+  "mustBeDistinct": true,
+  "failureShape": "a dev-realisable-now row not routed to USF-1071..1077",
+  "note": "Negative control for USF-DEV-REAL-006; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

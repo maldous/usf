@@ -1,0 +1,992 @@
+{
+  "id": "semantic-only-future-domain-triage",
+  "title": "Semantic-Only Capability Triage and Test-Ready Backlog Bridge",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "Lower authority than semantic contracts, ADRs, validators. A backlog projection of the dev-realisation sweep; defines no semantics and upgrades no readiness.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1078",
+  "parentIssueId": "USF-1069",
+  "sweepSourceOfTruth": "docs/architecture/dev-realisation-exhaustion-sweep.json",
+  "sourceAuthorities": [
+    "docs/architecture/dev-realisation-exhaustion-sweep.json",
+    "spec/instances/semantic-contract/*.json"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-current-main-capability-service-realisation-map-and-semantic-contract-instances-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone"
+  ],
+  "devRealised": [
+    {
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "capability": "authentication-platform",
+      "capabilityDomain": "authentication",
+      "reason": "Local login route contract implemented and mapped to semantic authority with bounded dev/test evidence; realised and proven in dev only (no product/public/live claim).",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "capability": "configuration-registry-and-history",
+      "capabilityDomain": "configuration",
+      "reason": "Config current/flags local routes implemented and mapped to semantic authority with bounded dev/test evidence; realised and proven in dev only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "capability": "notification-delivery-and-preferences-and-channels",
+      "capabilityDomain": "events-workflow",
+      "reason": "Full notification create/get/list/send/cancel/template local route set implemented with bounded dev/test evidence; realised and proven in dev only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "capability": "scheduled-jobs-built-in-on-the-event-substrate",
+      "capabilityDomain": "events-workflow",
+      "reason": "Jobs create/get/list/cancel local routes implemented on the event substrate with bounded dev/test evidence; realised and proven in dev only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "capability": "provider-configuration-plane",
+      "capabilityDomain": "foundation",
+      "reason": "Operator-tooling providers get/list local routes implemented with bounded dev/test evidence; realised in dev as operator tooling only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.provider-environment-classification",
+      "capability": "provider-environment-classification",
+      "capabilityDomain": "foundation",
+      "reason": "Operator-tooling config-provider-status local route implemented with bounded dev/test evidence; realised in dev as operator tooling only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+      "capability": "abac-policy-decision-point",
+      "capabilityDomain": "identity-access",
+      "reason": "Internal-support authz-check local route implemented with bounded dev/test evidence; realised in dev as internal support only, not a product/public claim.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "capability": "audit-of-privileged-access",
+      "capabilityDomain": "identity-access",
+      "reason": "Operator-tooling audit events get/list/verify local routes implemented with bounded dev/test evidence; realised in dev as operator tooling, no product/public readiness.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+      "capability": "rbac-roles-and-permissions",
+      "capabilityDomain": "identity-access",
+      "reason": "Authz-permissions local route implemented; contract covers static/dynamic allow-deny, step-up denial and tenant-boundary preservation, proven with bounded dev/test evidence.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+      "capability": "tenant-host-identity-resolution",
+      "capabilityDomain": "identity-access",
+      "reason": "Tenant-context local route implemented; contract's fail-closed host->tenant resolution proven with bounded dev/test evidence; realised in dev only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "capability": "metrics-and-traces",
+      "capabilityDomain": "observability-ops",
+      "reason": "Operator-tooling observability readiness/signals local routes implemented with bounded dev/test evidence; realised in dev as operator tooling only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "capability": "object-storage-and-tenant-prefixes-and-signed-urls",
+      "capabilityDomain": "storage",
+      "reason": "Files upload/download/get/list/verify local routes implemented with bounded dev/test evidence; realised and proven in dev only.",
+      "nextIssueOrRung": "none",
+      "nextBacklogDestination": "none (realised and proven in dev)",
+      "requiredProof": [],
+      "requiredContracts": []
+    }
+  ],
+  "devRealisableNow": [
+    {
+      "semanticContractRef": "semantic-contract.backup-and-restore",
+      "capability": "backup-and-restore",
+      "capabilityDomain": "data-platform",
+      "reason": "A synthetic backup/restore rehearsal over local data is a cheap, safe dev deliverable owned by the migration/backup child.",
+      "nextIssueOrRung": "USF-1075",
+      "nextBacklogDestination": "USF-1075",
+      "requiredProof": [
+        "L2 contract",
+        "synthetic-rehearsal"
+      ],
+      "requiredContracts": [
+        "interface.backup-and-restore-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-data-import-export",
+      "capability": "tenant-data-import-export",
+      "capabilityDomain": "data-platform",
+      "reason": "Synthetic tenant data import/export rehearsal is realisable in dev now under the migration/backup child.",
+      "nextIssueOrRung": "USF-1075",
+      "nextBacklogDestination": "USF-1075",
+      "requiredProof": [
+        "L2 contract",
+        "synthetic-rehearsal"
+      ],
+      "requiredContracts": [
+        "interface.tenant-data-import-export-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "capability": "api-docs-developer-portal-sdks-rate-limits",
+      "capabilityDomain": "developer-platform",
+      "reason": "Developer-portal docs/SDK surface is a cheap, safe dev deliverable (generated docs + rate-limit disclosure) owned by the dev-portal/docs child.",
+      "nextIssueOrRung": "USF-1071",
+      "nextBacklogDestination": "USF-1071",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredContracts": [
+        "interface.api-docs-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.accessibility-a11y-gate",
+      "capability": "accessibility-a11y-gate",
+      "capabilityDomain": "foundation",
+      "reason": "A static accessibility gate/check is cheap and safe to realise in dev now and is squarely the accessibility child's deliverable.",
+      "nextIssueOrRung": "USF-1072",
+      "nextBacklogDestination": "USF-1072",
+      "requiredProof": [
+        "L2 contract",
+        "a11y-static-check"
+      ],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.service-catalog-and-provider-integration-model",
+      "capability": "service-catalog-and-provider-integration-model",
+      "capabilityDomain": "foundation",
+      "reason": "Service catalog and provider-integration model is provider compose-consolidation metadata realisable in dev now under the providers child.",
+      "nextIssueOrRung": "USF-1074",
+      "nextBacklogDestination": "USF-1074",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredContracts": [
+        "interface.service-catalog-and-provider-integration-model-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-mode-break-glass-access",
+      "capability": "support-mode-break-glass-access",
+      "capabilityDomain": "identity-access",
+      "reason": "Break-glass access is fundamentally a fail-closed auth boundary (deny unless authorised, audited); its negative-path proof is realisable in dev now.",
+      "nextIssueOrRung": "USF-1076",
+      "nextBacklogDestination": "USF-1076",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.support-mode-break-glass-access-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-identity-record-and-fqdn",
+      "capability": "tenant-identity-record-and-fqdn",
+      "capabilityDomain": "identity-access",
+      "reason": "Contract's first slice is fail-closed tenant ownership (unresolved host / inactive domain / cross-tenant); a dev negative-path proof owned by the auth/tenant child.",
+      "nextIssueOrRung": "USF-1076",
+      "nextBacklogDestination": "USF-1076",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.tenant-identity-record-and-fqdn-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.user-identity-and-tenant-membership",
+      "capability": "user-identity-and-tenant-membership",
+      "capabilityDomain": "identity-access",
+      "reason": "Contract's first slice is a fail-closed membership boundary (deny absent/other-tenant); this negative-path proof is cheap and safe to realise in dev now.",
+      "nextIssueOrRung": "USF-1076",
+      "nextBacklogDestination": "USF-1076",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.user-identity-and-tenant-membership-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.internal-service-catalog-and-readiness",
+      "capability": "internal-service-catalog-and-readiness",
+      "capabilityDomain": "observability-ops",
+      "reason": "Internal service catalog + readiness is operator metadata that can be surfaced in the operator workbench in dev now.",
+      "nextIssueOrRung": "USF-1073",
+      "nextBacklogDestination": "USF-1073",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredContracts": [
+        "interface.internal-service-catalog-and-readiness-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-service-clickthrough-policy",
+      "capability": "tenant-service-clickthrough-policy",
+      "capabilityDomain": "observability-ops",
+      "reason": "Tenant-service clickthrough policy is operator metadata/policy realisable in the operator workbench in dev now.",
+      "nextIssueOrRung": "USF-1073",
+      "nextBacklogDestination": "USF-1073",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredContracts": [
+        "interface.tenant-service-clickthrough-policy-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "capability": "compliance-reports-access-reviews-evidence-packs",
+      "capabilityDomain": "security-governance",
+      "reason": "Evidence packs and access reviews can be generated from local audit data as an ISO audit-control deliverable in dev now.",
+      "nextIssueOrRung": "USF-1077",
+      "nextBacklogDestination": "USF-1077",
+      "requiredProof": [
+        "L2 contract",
+        "audit-evidence"
+      ],
+      "requiredContracts": [
+        "interface.compliance-reports-access-reviews-evidence-packs-service-api"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-isolation-proof",
+      "capability": "tenant-isolation-proof",
+      "capabilityDomain": "security-governance",
+      "reason": "This capability is itself a cross-tenant fail-closed proof; authoring the tenant-isolation negative-path proof is the auth/tenant child's dev deliverable.",
+      "nextIssueOrRung": "USF-1076",
+      "nextBacklogDestination": "USF-1076",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.tenant-isolation-proof-service-api"
+      ]
+    }
+  ],
+  "devRealisableLater": [
+    {
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "capability": "serverless-function-runtime",
+      "capabilityDomain": "compute-runtime",
+      "reason": "Marked not-applicable-final and excluded from V2 scope (only a healthz route recorded); a later semantic decision is required before dev realisation.",
+      "nextIssueOrRung": "future-domain",
+      "nextBacklogDestination": "future-domain (semantic re-decision required)",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate"
+      ],
+      "requiredContracts": [
+        "interface.serverless-function-runtime-service-api (to be authored on reactivation)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.mock-providers-dev-test",
+      "capability": "mock-providers-dev-test",
+      "capabilityDomain": "developer-platform",
+      "reason": "Marked not-applicable-final and excluded from V2 scope; a later semantic decision is required before any dev realisation, so realisable only later.",
+      "nextIssueOrRung": "future-domain",
+      "nextBacklogDestination": "future-domain (semantic re-decision required)",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate"
+      ],
+      "requiredContracts": [
+        "interface.mock-providers-dev-test-service-api (to be authored on reactivation)"
+      ]
+    }
+  ],
+  "testReadyBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.background-workers-job-runner",
+      "capability": "background-workers-job-runner",
+      "capabilityDomain": "compute-runtime",
+      "reason": "A background worker/job runner needs a runtime worker substrate plus execution/failure negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.background-workers-job-runner-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.runtime-secrets-management",
+      "capability": "runtime-secrets-management",
+      "capabilityDomain": "compute-runtime",
+      "reason": "Runtime secrets management (write-only, redaction, no-read-back) is provable at the test rung with a local store; a live secret provider is a later rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.runtime-secrets-management-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.branding-and-theming",
+      "capability": "branding-and-theming",
+      "capabilityDomain": "configuration",
+      "reason": "Branding/theming is UI-facing configuration; the config CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.branding-and-theming-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-canonical-domain-set-unset",
+      "capability": "tenant-canonical-domain-set-unset",
+      "capabilityDomain": "configuration",
+      "reason": "Canonical-domain set/unset is a tenant config operation provable at the test rung (idempotent set/unset, fail-closed conflicts); no owning dev-now child.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.tenant-canonical-domain-set-unset-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.write-only-secret-settings",
+      "capability": "write-only-secret-settings",
+      "capabilityDomain": "configuration",
+      "reason": "Write-only secret settings (no read-back, redaction) is provable at the test rung with negative-path proofs; a live secret provider is a later rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.write-only-secret-settings-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capability": "data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capabilityDomain": "data-platform",
+      "reason": "Catalog/lineage/PII-classification and DSR/GDPR flows require substantial substrate work with negative-path proofs; realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.data-governance-catalog-lineage-classification-pii-dsr-gdpr-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.history-read-model-read-only-projection",
+      "capability": "history-read-model-read-only-projection",
+      "capabilityDomain": "data-platform",
+      "reason": "A read-only history projection needs the event substrate plus a projection-consistency proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.history-read-model-read-only-projection-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "capability": "relational-storage-and-migrations-and-rls",
+      "capabilityDomain": "data-platform",
+      "reason": "Foundational storage with migrations and RLS needs an L4 substrate plus RLS negative-path and migration-rehearsal proofs; ownership spans migration and tenant-boundary concerns so it stays at the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.relational-storage-and-migrations-and-rls-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.rate-limiting-api",
+      "capability": "rate-limiting-api",
+      "capabilityDomain": "developer-platform",
+      "reason": "Rate limiting requires runtime enforcement with a 429 negative-path proof on the substrate; realisation is a test-proof-ladder rung, not just a docs surface.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.rate-limiting-api-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.webhooks-developer-facing",
+      "capability": "webhooks-developer-facing",
+      "capabilityDomain": "developer-platform",
+      "reason": "Webhook registration, signing and retry semantics need the event substrate plus a delivery/retry negative-path proof against mock endpoints on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.webhooks-developer-facing-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.product-catalog-plans-prices",
+      "capability": "product-catalog-plans-prices",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Product catalog/plans/prices CRUD is provable in dev/test but has no owning USF-1071..1077 child, so it stays at the test-proof rung pending a billing slice.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.product-catalog-plans-prices-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.quota-enforcement",
+      "capability": "quota-enforcement",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Quota enforcement needs a runtime counter plus an over-quota deny negative-path proof on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.quota-enforcement-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "capability": "usage-metering-and-meter-event-ingestion",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Meter-event ingestion and aggregation are provable in dev/test with substrate and idempotency proofs; realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.usage-metering-and-meter-event-ingestion-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "capability": "event-bus-durable-queues-dlq-redrive",
+      "capabilityDomain": "events-workflow",
+      "reason": "Durable queues with DLQ/redrive need an event substrate plus DLQ/redrive negative-path proofs on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.event-bus-durable-queues-dlq-redrive-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "capability": "workflow-engine-scheduled-jobs-approvals",
+      "capabilityDomain": "events-workflow",
+      "reason": "A workflow engine with approvals needs substrate plus workflow-state and approval negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.workflow-engine-scheduled-jobs-approvals-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.i18n-runtime-and-validation",
+      "capability": "i18n-runtime-and-validation",
+      "capabilityDomain": "foundation",
+      "reason": "Runtime i18n and translation validation is provable via a dev/test rung (missing-key/validation checks) but has no owning USF-1071..1077 child, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.i18n-runtime-and-validation-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-keys-personal-access-tokens",
+      "capability": "api-keys-personal-access-tokens",
+      "capabilityDomain": "identity-access",
+      "reason": "API keys/PATs need real token issuance, hashing, scoping and revocation beyond a negative-path proof; the invalid/expired/revoked-key deny path is provable at the test rung, so realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.api-keys-personal-access-tokens-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.delegated-administration-roles",
+      "capability": "delegated-administration-roles",
+      "capabilityDomain": "identity-access",
+      "reason": "Delegated administration needs a role/scope model plus a deny-beyond-delegated-scope negative-path proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.delegated-administration-roles-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "capability": "end-user-profile-and-preferences-self-service",
+      "capabilityDomain": "identity-access",
+      "reason": "Self-service profile/preferences is UI-facing; CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.end-user-profile-and-preferences-self-service-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.entitlement-engine",
+      "capability": "entitlement-engine",
+      "capabilityDomain": "identity-access",
+      "reason": "The entitlement engine needs a policy/model plus a not-entitled deny negative-path proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.entitlement-engine-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.sub-organisations",
+      "capability": "sub-organisations",
+      "capabilityDomain": "identity-access",
+      "reason": "Sub-organisations need a hierarchy data model plus cross-sub-org isolation negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.sub-organisations-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-groups",
+      "capability": "tenant-groups",
+      "capabilityDomain": "identity-access",
+      "reason": "Tenant groups need a grouping model plus membership/isolation proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.tenant-groups-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "capability": "code-quality-and-secret-and-dependency-scanning",
+      "capabilityDomain": "security-governance",
+      "reason": "A code-quality/secret/dependency scanning gate is realised and proven at the CI/test rung; there is no runtime product surface.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.code-quality-and-secret-and-dependency-scanning-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-tickets-customer-health-announcements",
+      "capability": "support-tickets-customer-health-announcements",
+      "capabilityDomain": "support-admin",
+      "reason": "Support tickets/customer-health/announcements is a UI-facing product feature; CRUD is provable at the test rung but full realisation needs a UI.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.support-tickets-customer-health-announcements-service-api (to be authored)"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "capability": "tenant-lifecycle-provision-suspend-delete-export",
+      "capabilityDomain": "support-admin",
+      "reason": "Tenant lifecycle (provision/suspend/delete/export) needs substrate state transitions plus fail-closed proofs; provisioning against real infra is a later rung, so it stays at the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "requiredProof": [
+        "L2 contract",
+        "L4 substrate",
+        "negative-path"
+      ],
+      "requiredContracts": [
+        "interface.tenant-lifecycle-provision-suspend-delete-export-service-api (to be authored)"
+      ]
+    }
+  ],
+  "stagingDeploymentBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.environment-registry-and-bootstrap",
+      "capability": "environment-registry-and-bootstrap",
+      "capabilityDomain": "foundation",
+      "reason": "Environment registry and bootstrap is inherently a deployment/staging concern (provisioning and wiring environments), so realisation requires a staged deployment rung, not local dev routes.",
+      "nextIssueOrRung": "staging",
+      "nextBacklogDestination": "staging",
+      "requiredProof": [
+        "L2 contract",
+        "staging-smoke"
+      ],
+      "requiredContracts": [
+        "interface.environment-registry-and-bootstrap-service-api (to be authored)"
+      ]
+    }
+  ],
+  "liveProviderBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "capability": "custom-domains-dns-ownership-tls-canonical",
+      "capabilityDomain": "configuration",
+      "reason": "DNS ownership verification and TLS issuance require live DNS/ACME providers; realisation is live-provider, only canonical-set semantics are locally expressible.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.custom-domains-dns-ownership-tls-canonical-service-api (to be authored)",
+        "provider.custom-domains-dns-ownership-tls-canonical"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-domain-activation-auth-client",
+      "capability": "tenant-domain-activation-auth-client",
+      "capabilityDomain": "configuration",
+      "reason": "Activating a tenant domain for an auth client requires a live identity-provider/auth-client integration; realisation is live-provider.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.tenant-domain-activation-auth-client-service-api (to be authored)",
+        "provider.tenant-domain-activation-auth-client"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "capability": "pitr-retention-legal-hold-data-residency",
+      "capabilityDomain": "data-platform",
+      "reason": "PITR, retention, legal hold and data residency depend on real storage-provider capabilities and deployment regions; not realisable with local dev routes.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.pitr-retention-legal-hold-data-residency-service-api (to be authored)",
+        "provider.pitr-retention-legal-hold-data-residency"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "capability": "subscriptions-invoices-payment-methods-dunning",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Payment methods, invoices and dunning require a live payment provider (e.g. billing PSP) to realise; local routes cannot prove the semantic.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.subscriptions-invoices-payment-methods-dunning-service-api (to be authored)",
+        "provider.subscriptions-invoices-payment-methods-dunning"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capability": "browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capabilityDomain": "observability-ops",
+      "reason": "Grafana Faro RUM and browser-to-BFF tracing require a live external telemetry provider/backend to realise; cannot be proven with local dev routes alone.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing-service-api (to be authored)",
+        "provider.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "capability": "logs-aggregation-and-tenant-scoped-search",
+      "capabilityDomain": "observability-ops",
+      "reason": "Log aggregation and tenant-scoped search require an external log-store/search backend provider to realise meaningfully.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.logs-aggregation-and-tenant-scoped-search-service-api (to be authored)",
+        "provider.logs-aggregation-and-tenant-scoped-search"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "capability": "observability-built-in-alerting-and-incidents",
+      "capabilityDomain": "observability-ops",
+      "reason": "Alerting/incident/on-call realisation needs a live metrics+notification/on-call provider chain; only rule semantics are local, full realisation is live-provider.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.observability-built-in-alerting-and-incidents-service-api (to be authored)",
+        "provider.observability-built-in-alerting-and-incidents"
+      ]
+    },
+    {
+      "semanticContractRef": "semantic-contract.search-and-indexing-product-search",
+      "capability": "search-and-indexing-product-search",
+      "capabilityDomain": "search",
+      "reason": "Product search/indexing requires an external search-engine provider to realise; local dev routes cannot prove the indexing/query semantic.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "requiredProof": [
+        "L2 contract",
+        "live-provider-conformance"
+      ],
+      "requiredContracts": [
+        "interface.search-and-indexing-product-search-service-api (to be authored)",
+        "provider.search-and-indexing-product-search"
+      ]
+    }
+  ],
+  "intentionallySemanticOnly": [
+    {
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "capability": "openapi-drift-hard-gate",
+      "capabilityDomain": "developer-platform",
+      "reason": "OpenAPI route recorded but explicitly not claimed as a service realisation; it is a build/CI drift gate, deliberately semantic-only rather than a product capability.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.build-versus-compose-decision-framework",
+      "capability": "build-versus-compose-decision-framework",
+      "capabilityDomain": "foundation",
+      "reason": "A decision-framework/principles capability describing how USF chooses build vs compose; it is a semantic policy, not a runtime service to realise.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "capability": "composed-provider-readiness-spine",
+      "capabilityDomain": "foundation",
+      "reason": "Readyz local route recorded for completeness but explicitly not claimed as a client or service realisation; deliberately remains a semantic/support definition.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "capability": "e2e-confidence-ladder-stage-aware",
+      "capabilityDomain": "foundation",
+      "reason": "A methodology/principles capability defining the stage-aware confidence ladder itself; it is a semantic definition of the proof model, not a realisable runtime service.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.environment-specific-vs-shared-service-model",
+      "capability": "environment-specific-vs-shared-service-model",
+      "capabilityDomain": "foundation",
+      "reason": "A modelling/principles capability describing the shared-vs-environment-specific service model; semantic policy, not a runtime service.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    },
+    {
+      "semanticContractRef": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "capability": "universal-service-foundation-scope-and-principles",
+      "capabilityDomain": "foundation",
+      "reason": "The USF scope-and-principles charter; a foundational semantic definition, not a runtime capability to realise.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    }
+  ],
+  "deprecated": [
+    {
+      "semanticContractRef": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "capability": "alerting-incident-management-on-call-status-page",
+      "capabilityDomain": "observability-ops",
+      "reason": "Contract explicitly deprecated and superseded by observability-built-in-alerting-and-incidents; retained as lineage only, not a current realisation claim.",
+      "nextIssueOrRung": "deprecated",
+      "nextBacklogDestination": "none (deprecated lineage only)",
+      "requiredProof": [],
+      "requiredContracts": []
+    }
+  ],
+  "rejected": []
+}
