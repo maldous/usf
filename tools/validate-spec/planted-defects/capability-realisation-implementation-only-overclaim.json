@@ -1,0 +1,135 @@
+{
+  "target": "capability-realisation-map",
+  "expectedRule": "USF-CAPABILITY-REALISATION-002",
+  "instances": {
+    "spec/instances/semantic-contract/example-capability.json": {
+      "id": "semantic-contract.example-capability",
+      "capability": "example-capability",
+      "capabilityDomain": "foundation",
+      "lifecycleState": "draft"
+    }
+  },
+  "clientContractMap": {
+    "operations": []
+  },
+  "record": {
+    "id": "current-main-capability-service-realisation-map",
+    "generatedReportAuthority": "lower-authority-summary-only",
+    "currentMainFreshness": {
+      "status": "current-main",
+      "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+      "generatedReportAuthority": "lower-authority-summary-only"
+    },
+    "plantedDefectCoverage": [
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-001",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-missing-row.json"
+      },
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-002",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-implementation-only-overclaim.json"
+      },
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-003",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-stale-current-main-binding.json"
+      },
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-004",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-proof-status-overclaim.json"
+      }
+    ],
+    "readinessClaims": {
+      "generatedClientReady": false,
+      "sdkReady": false,
+      "productUiReady": false,
+      "publicApiReady": false,
+      "runtimeProductReady": false,
+      "deploymentReady": false,
+      "stagingReady": false,
+      "productionReady": false,
+      "liveProviderReady": false,
+      "complianceReady": false,
+      "monetisationReady": false,
+      "humanAcceptanceComplete": false
+    },
+    "rows": [
+      {
+        "semanticContractRef": "semantic-contract.example-capability",
+        "semanticContractPath": "spec/instances/semantic-contract/example-capability.json",
+        "capability": "example-capability",
+        "capabilityDomain": "foundation",
+        "semanticLifecycleState": "draft",
+        "realisationDisposition": "semantic-contract-only-current-main",
+        "realisationScope": "semantic-definition-only",
+        "localImplementationOnly": false,
+        "implementationAuthority": "not-applicable:no-current-main-route-implementation",
+        "serviceOrProviderRefs": [],
+        "routeTraceability": [],
+        "commandOrQueryOrWorkflowOrEventRefs": [],
+        "implementationRefs": [
+          "apps/api/src/server.ts"
+        ],
+        "interfaceContractRefs": [],
+        "eventContractRefs": [],
+        "authAndSessionBoundaries": [],
+        "tenantBoundaries": [],
+        "stateAndDataDependencies": [
+          "semanticContract.facets.stateModel"
+        ],
+        "auditEventRefs": [],
+        "telemetryRefs": [],
+        "validationRefs": [],
+        "validatorCoverage": [
+          "validate-spec.current-main-capability-service-realisation-map"
+        ],
+        "plantedDefectCoverageRefs": [],
+        "proofRefs": [
+          "spec/instances/semantic-contract/example-capability.json"
+        ],
+        "proofStatus": "semantic-definition-only-no-current-runtime-proof-claim",
+        "generatedClientInput": {
+          "status": "not-authorised-for-generation",
+          "staleness": "current-main",
+          "generatedClientReady": false,
+          "sdkReady": false
+        },
+        "currentMainFreshness": {
+          "status": "current-main",
+          "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+          "generatedReportAuthority": "lower-authority-summary-only"
+        },
+        "generatedReportAuthority": "lower-authority-summary-only",
+        "sourceAuthorityRefs": [
+          "spec/instances/semantic-contract/example-capability.json"
+        ],
+        "exclusionRationale": "No current-main local service realisation is claimed.",
+        "readinessClaims": {
+          "generatedClientReady": false,
+          "sdkReady": false,
+          "productUiReady": false,
+          "publicApiReady": false,
+          "runtimeProductReady": false,
+          "deploymentReady": false,
+          "stagingReady": false,
+          "productionReady": false,
+          "liveProviderReady": false,
+          "complianceReady": false,
+          "monetisationReady": false,
+          "humanAcceptanceComplete": false
+        },
+        "nonClaims": [
+          "no-generated-sdk-readiness-claim",
+          "no-generated-client-readiness-claim",
+          "no-product-ui-readiness-claim",
+          "no-public-api-readiness-claim",
+          "no-runtime-product-readiness-upgrade",
+          "no-staging-claim",
+          "no-production-claim",
+          "no-deployment-claim",
+          "no-live-provider-claim",
+          "no-human-acceptance-claim"
+        ]
+      }
+    ]
+  }
+}

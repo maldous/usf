@@ -368,6 +368,10 @@ RULES = {
     "USF-CLIENT-CONTRACT-002": ("blocking", "Client-callable non-UI operation metadata is missing or inconsistent"),
     "USF-CLIENT-CONTRACT-003": ("blocking", "Generated-client input status is stale or ambiguous"),
     "USF-CLIENT-CONTRACT-004": ("blocking", "Client-contract map overclaims generated-client, SDK, UI, public API, or readiness authority"),
+    "USF-CAPABILITY-REALISATION-001": ("blocking", "Current-main capability-service realisation map is missing semantic-contract coverage"),
+    "USF-CAPABILITY-REALISATION-002": ("blocking", "Capability-service realisation traceability or implementation authority is invalid"),
+    "USF-CAPABILITY-REALISATION-003": ("blocking", "Capability-service realisation freshness or historical-evidence boundary is invalid"),
+    "USF-CAPABILITY-REALISATION-004": ("blocking", "Capability-service realisation map overclaims proof, generated reports, readiness, or generated-client authority"),
     "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
     "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
     "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
@@ -1459,6 +1463,310 @@ def validate_non_ui_client_contract_map(F, data_by_path, api_route_records=None,
             F.add("USF-CLIENT-CONTRACT-004", subject, f"missing non-claims: {', '.join(missing_non_claims)}")
 
 
+CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH = "docs/architecture/current-main-capability-service-realisation-map.json"
+CAPABILITY_REALISATION_REQUIRED_VALIDATOR = "validate-spec.current-main-capability-service-realisation-map"
+CAPABILITY_REALISATION_CLIENT_VALIDATOR = "validate-spec.non-ui-client-contract-map"
+CAPABILITY_REALISATION_DISPOSITIONS = {
+    "local-route-contract-realised",
+    "operator-tooling-local-contract",
+    "internal-support-only",
+    "not-claimed",
+    "semantic-contract-only-current-main",
+    "deferred-with-rationale",
+    "deprecated-with-rationale",
+}
+CAPABILITY_REALISATION_PROOF_STATUSES = {
+    "bounded-local-dev-test-evidence-only",
+    "semantic-definition-only-no-current-runtime-proof-claim",
+    "not-claimed",
+    "deferred-no-current-proof-claim",
+    "deprecated-lineage-only",
+}
+CAPABILITY_REALISATION_REQUIRED_NONCLAIMS = {
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+}
+CAPABILITY_REALISATION_READINESS_CLAIMS = NON_UI_CLIENT_READINESS_CLAIMS | {
+    "runtimeProductReady",
+    "complianceReady",
+    "monetisationReady",
+}
+CAPABILITY_REALISATION_REQUIRED_PLANTED_RULES = {
+    "USF-CAPABILITY-REALISATION-001",
+    "USF-CAPABILITY-REALISATION-002",
+    "USF-CAPABILITY-REALISATION-003",
+    "USF-CAPABILITY-REALISATION-004",
+}
+
+
+def _load_current_main_capability_realisation_map(F):
+    data = load_json(CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH, F)
+    if data is None:
+        F.add("USF-CAPABILITY-REALISATION-001", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "capability-service realisation map artefact is missing")
+        return None
+    if not isinstance(data, dict):
+        F.add("USF-CAPABILITY-REALISATION-001", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "capability-service realisation map must be an object")
+        return None
+    return data
+
+
+def _semantic_contract_records(data_by_path):
+    records = {}
+    paths = {}
+    for path, data in data_by_path.items():
+        if _schema_for_instance_path(path) != "semantic-contract":
+            continue
+        if isinstance(data, dict) and _as_nonempty_string(data.get("id")):
+            records[data["id"]] = data
+            paths[data["id"]] = path
+    return records, paths
+
+
+def _client_operations_by_semantic(client_map):
+    by_semantic = defaultdict(list)
+    if not isinstance(client_map, dict):
+        return by_semantic
+    operations = client_map.get("operations")
+    if not isinstance(operations, list):
+        return by_semantic
+    for operation in operations:
+        if not isinstance(operation, dict):
+            continue
+        authority = operation.get("authorityMapping")
+        if not isinstance(authority, dict):
+            continue
+        semantic_ref = authority.get("semanticContractRef")
+        if _as_nonempty_string(semantic_ref):
+            by_semantic[semantic_ref].append(operation)
+    return by_semantic
+
+
+def _route_ids(operations):
+    route_ids = []
+    for operation in operations:
+        route_id = operation.get("routeId") if isinstance(operation, dict) else None
+        if _as_nonempty_string(route_id):
+            route_ids.append(route_id)
+    return sorted(route_ids)
+
+
+def _traceability_route_ids(row):
+    values = []
+    traceability = row.get("routeTraceability")
+    if not isinstance(traceability, list):
+        return values
+    for item in traceability:
+        if isinstance(item, dict) and _as_nonempty_string(item.get("routeId")):
+            values.append(item["routeId"])
+    return sorted(values)
+
+
+def _has_generated_report_authority_overclaim(values):
+    if not isinstance(values, list):
+        return False
+    for value in values:
+        if not isinstance(value, str):
+            continue
+        lowered = value.lower()
+        if lowered.startswith("generated-report:") or "generated report authority" in lowered:
+            return True
+    return False
+
+
+def validate_current_main_capability_realisation_map(F, data_by_path, client_contract_map=None,
+                                                     capability_realisation_map=None):
+    semantic_records, semantic_paths = _semantic_contract_records(data_by_path)
+    if not semantic_records:
+        return
+    client_map = client_contract_map if isinstance(client_contract_map, dict) else _load_non_ui_client_contract_map(F)
+    capability_map = (capability_realisation_map if isinstance(capability_realisation_map, dict)
+                      else _load_current_main_capability_realisation_map(F))
+    if not isinstance(capability_map, dict):
+        return
+
+    if capability_map.get("generatedReportAuthority") != "lower-authority-summary-only":
+        F.add("USF-CAPABILITY-REALISATION-004", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "generated reports must remain lower-authority summaries")
+    root_freshness = capability_map.get("currentMainFreshness")
+    if not isinstance(root_freshness, dict) or root_freshness.get("status") != "current-main":
+        F.add("USF-CAPABILITY-REALISATION-003", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "root currentMainFreshness must be current-main")
+    elif (root_freshness.get("historicalEvidenceTreatment") != "lineage-only-not-current-proof"
+          or root_freshness.get("generatedReportAuthority") != "lower-authority-summary-only"):
+        F.add("USF-CAPABILITY-REALISATION-003", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "root currentMainFreshness must separate historical evidence and generated reports from current claims")
+    if _has_true_claim(capability_map.get("readinessClaims")):
+        F.add("USF-CAPABILITY-REALISATION-004", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "root readinessClaims must preserve non-claims")
+
+    planted = capability_map.get("plantedDefectCoverage")
+    if not isinstance(planted, list):
+        F.add("USF-CAPABILITY-REALISATION-002", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "plantedDefectCoverage must be an array")
+    else:
+        covered_rules = {item.get("ruleId") for item in planted if isinstance(item, dict)}
+        missing_rules = sorted(CAPABILITY_REALISATION_REQUIRED_PLANTED_RULES - covered_rules)
+        if missing_rules:
+            F.add("USF-CAPABILITY-REALISATION-002", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+                  f"plantedDefectCoverage lacks rule coverage: {', '.join(missing_rules)}")
+
+    rows = capability_map.get("rows")
+    if not isinstance(rows, list):
+        F.add("USF-CAPABILITY-REALISATION-001", CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH,
+              "rows array is missing")
+        return
+
+    ops_by_semantic = _client_operations_by_semantic(client_map)
+    rows_by_semantic = defaultdict(list)
+    for index, row in enumerate(rows):
+        subject = f"{CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH}:rows[{index}]"
+        if not isinstance(row, dict):
+            F.add("USF-CAPABILITY-REALISATION-002", subject, "row must be an object")
+            continue
+        semantic_ref = row.get("semanticContractRef")
+        if not _as_nonempty_string(semantic_ref):
+            F.add("USF-CAPABILITY-REALISATION-001", subject, "semanticContractRef is missing")
+            continue
+        rows_by_semantic[semantic_ref].append((index, row))
+
+    for semantic_ref, rows_for_ref in sorted(rows_by_semantic.items()):
+        if semantic_ref not in semantic_records:
+            F.add("USF-CAPABILITY-REALISATION-001",
+                  f"{CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH}:rows[{rows_for_ref[0][0]}]",
+                  f"unknown semanticContractRef {semantic_ref}")
+        if len(rows_for_ref) > 1:
+            F.add("USF-CAPABILITY-REALISATION-001", semantic_ref,
+                  "semantic contract has duplicate capability-service rows")
+
+    for semantic_ref, semantic_record in sorted(semantic_records.items()):
+        row_items = rows_by_semantic.get(semantic_ref, [])
+        if len(row_items) != 1:
+            F.add("USF-CAPABILITY-REALISATION-001", semantic_ref,
+                  "semantic contract lacks exactly one capability-service realisation row")
+            continue
+        index, row = row_items[0]
+        subject = f"{CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH}:rows[{index}]"
+
+        if row.get("semanticContractPath") != semantic_paths[semantic_ref]:
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "semanticContractPath does not resolve to the semantic contract instance")
+        if row.get("capability") != semantic_record.get("capability"):
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "capability does not match semantic contract instance")
+        if row.get("capabilityDomain") != semantic_record.get("capabilityDomain"):
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "capabilityDomain does not match semantic contract instance")
+        if row.get("semanticLifecycleState") != semantic_record.get("lifecycleState"):
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "semanticLifecycleState does not match semantic contract instance")
+
+        disposition = row.get("realisationDisposition")
+        if disposition not in CAPABILITY_REALISATION_DISPOSITIONS:
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  f"unsupported realisationDisposition: {disposition}")
+        if semantic_record.get("lifecycleState") == "deprecated" and disposition != "deprecated-with-rationale":
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "deprecated semantic contract requires deprecated-with-rationale disposition")
+        if semantic_record.get("lifecycleState") == "deferred" and disposition != "deferred-with-rationale":
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "deferred semantic contract requires deferred-with-rationale disposition")
+
+        freshness = row.get("currentMainFreshness")
+        if not isinstance(freshness, dict) or freshness.get("status") != "current-main":
+            F.add("USF-CAPABILITY-REALISATION-003", subject,
+                  "row currentMainFreshness must be current-main")
+        elif (freshness.get("historicalEvidenceTreatment") != "lineage-only-not-current-proof"
+              or freshness.get("generatedReportAuthority") != "lower-authority-summary-only"):
+            F.add("USF-CAPABILITY-REALISATION-003", subject,
+                  "row currentMainFreshness must keep historical evidence and generated reports below current claims")
+        if row.get("generatedReportAuthority") != "lower-authority-summary-only":
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  "row generatedReportAuthority must be lower-authority-summary-only")
+        if _has_generated_report_authority_overclaim(row.get("sourceAuthorityRefs")):
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  "generated reports must not appear as semantic authority refs")
+
+        validator_coverage = set(_string_list(row.get("validatorCoverage")))
+        if CAPABILITY_REALISATION_REQUIRED_VALIDATOR not in validator_coverage:
+            F.add("USF-CAPABILITY-REALISATION-002", subject,
+                  "validatorCoverage lacks capability-service realisation validator")
+
+        operations = ops_by_semantic.get(semantic_ref, [])
+        expected_route_ids = _route_ids(operations)
+        observed_route_ids = _traceability_route_ids(row)
+        route_traceability = row.get("routeTraceability")
+        if operations:
+            if observed_route_ids != expected_route_ids:
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "routeTraceability does not match client-contract operations for semantic contract")
+            if CAPABILITY_REALISATION_CLIENT_VALIDATOR not in validator_coverage:
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "realised route capability lacks client-contract validator coverage")
+            for field in ("implementationRefs", "interfaceContractRefs", "serviceOrProviderRefs",
+                          "authAndSessionBoundaries", "tenantBoundaries", "auditEventRefs",
+                          "telemetryRefs", "proofRefs"):
+                if not _string_list(row.get(field)):
+                    F.add("USF-CAPABILITY-REALISATION-002", subject,
+                          f"{field} must be non-empty for realised or partial capabilities")
+            if row.get("implementationAuthority") != "semantic-contract-bound-local-implementation-only":
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "implementation paths must be bound to semantic authority and marked local-only")
+            if row.get("localImplementationOnly") is not True:
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "realised current-main implementation must be marked localImplementationOnly")
+        else:
+            if observed_route_ids or (isinstance(route_traceability, list) and route_traceability):
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "semantic-contract-only rows must not claim route traceability")
+            if _string_list(row.get("implementationRefs")):
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "implementationRefs present without current client-contract route authority")
+            if not _as_nonempty_string(row.get("exclusionRationale")):
+                F.add("USF-CAPABILITY-REALISATION-002", subject,
+                      "semantic-contract-only, deferred, deprecated, not-claimed, or out-of-scope rows require rationale")
+
+        generated = row.get("generatedClientInput")
+        if not isinstance(generated, dict):
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  "generatedClientInput is missing")
+            generated = {}
+        if generated.get("status") in {"stale", "unknown"} or generated.get("stale") is True:
+            F.add("USF-CAPABILITY-REALISATION-003", subject,
+                  "generated-client input freshness is stale or unknown")
+        if generated.get("generatedClientReady") is True or generated.get("sdkReady") is True:
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  "generated client and SDK readiness must remain false")
+
+        readiness = row.get("readinessClaims")
+        if not isinstance(readiness, dict):
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  "readinessClaims is missing")
+            readiness = {}
+        for field in CAPABILITY_REALISATION_READINESS_CLAIMS:
+            if readiness.get(field) is True:
+                F.add("USF-CAPABILITY-REALISATION-004", subject, f"{field} must not be true")
+
+        proof_status = row.get("proofStatus")
+        if proof_status not in CAPABILITY_REALISATION_PROOF_STATUSES:
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  f"unsupported or overclaiming proofStatus: {proof_status}")
+        non_claims = set(_string_list(row.get("nonClaims")))
+        missing_non_claims = sorted(CAPABILITY_REALISATION_REQUIRED_NONCLAIMS - non_claims)
+        if missing_non_claims:
+            F.add("USF-CAPABILITY-REALISATION-004", subject,
+                  f"missing non-claims: {', '.join(missing_non_claims)}")
+
+
 def _load_instance_ids(F):
     instance_ids = set()
     for p in sorted(glob.glob("spec/instances/**/*.json", recursive=True)):
@@ -1487,7 +1795,7 @@ def validate_source_import_submanifest_targets(F, sub_path, entries, instance_id
 
 def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None,
                            evidence_ids=None, api_route_records=None, route_interface_coverage=None,
-                           client_contract_map=None):
+                           client_contract_map=None, capability_realisation_map=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -1558,6 +1866,12 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         api_route_records=api_route_records,
         route_interface_coverage=route_interface_coverage,
         client_contract_map=client_contract_map,
+    )
+    validate_current_main_capability_realisation_map(
+        F,
+        data_by_path,
+        client_contract_map=client_contract_map,
+        capability_realisation_map=capability_realisation_map,
     )
 
 
@@ -2516,7 +2830,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -2704,6 +3018,18 @@ def check_selftest(ctx, F):
                 api_route_records=patch.get("apiRouteRecords"),
                 route_interface_coverage=patch.get("routeInterfaceCoverage"),
                 client_contract_map=record,
+            )
+        elif patch["target"] == "capability-realisation-map":
+            record = patch.get("record")
+            instances = patch.get("instances")
+            if not isinstance(record, dict) or not isinstance(instances, dict):
+                F.add("USF-SELFTEST-001", df, "capability-realisation-map planted-defect needs record and instances objects")
+                continue
+            validate_current_main_capability_realisation_map(
+                f2,
+                instances,
+                client_contract_map=patch.get("clientContractMap"),
+                capability_realisation_map=record,
             )
         else:
             run_all_checks(sandbox, f2)
