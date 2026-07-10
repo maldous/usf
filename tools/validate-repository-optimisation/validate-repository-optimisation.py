@@ -22,6 +22,8 @@ CI_THROUGHPUT = ROOT / "docs/architecture/repository-ci-throughput-optimisation-
 CI_TIMING = ROOT / "evidence/generated-reports/repository-ci-throughput-timing-evidence.json"
 RUNNER_CAPACITY = ROOT / "docs/architecture/github-runner-capacity-enablement.json"
 VALIDATE_WORKFLOW = ROOT / ".github/workflows/validate-spec.yml"
+GIT_OBJECT_MIRROR_ARTIFACT = ROOT / "docs/architecture/repository-git-object-mirror-transport-optimisation.json"
+OPTIMISATION_READINESS_MAP = ROOT / "docs/architecture/repository-optimisation-readiness-map.json"
 
 REPORTS = {
     "USF-997": ROOT / "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
@@ -990,12 +992,205 @@ def check_runner_capacity_artifact(runner_data: dict[str, Any] | None = None) ->
     return findings
 
 
+def check_git_object_mirror(
+    mirror_data: dict[str, Any] | None = None,
+    workflow_text: str | None = None,
+) -> list[dict[str, str]]:
+    """USF-1062 Slice 2: trusted-runner git object mirror transport optimisation.
+
+    The mirror is an opt-in, read-only object alternate consulted during checkout
+    fetch. It is transport acceleration only; runner-local state is not authority,
+    and correctness is guaranteed by fail-closed event-SHA verification, not by the
+    mirror. This validator fails closed on any weakening of those boundaries.
+    """
+    findings: list[dict[str, str]] = []
+    data = mirror_data or load_json(GIT_OBJECT_MIRROR_ARTIFACT)
+    workflow_source = (
+        workflow_text
+        if workflow_text is not None
+        else VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+    )
+
+    # USF-OPT-MIRROR-001: ownership and identity.
+    if data.get("artifactId") != "usf.repository-git-object-mirror-transport-optimisation":
+        findings.append(finding("USF-OPT-MIRROR-001", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must carry the canonical artifactId"))
+    if data.get("ownerIssueId") != "USF-1063" or data.get("parentIssueId") != "USF-1062":
+        findings.append(finding("USF-OPT-MIRROR-001", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must be owned by USF-1063 under USF-1062"))
+
+    # USF-OPT-MIRROR-002: authority boundary (runner-local state is not authority).
+    authority = data.get("authorityBoundary", {})
+    if not isinstance(authority, dict):
+        findings.append(finding("USF-OPT-MIRROR-002", rel(GIT_OBJECT_MIRROR_ARTIFACT), "authorityBoundary must be an object"))
+        authority = {}
+    for key in [
+        "runnerLocalStateAuthority",
+        "generatedReportsAuthority",
+        "workflowDefinesSemantics",
+        "cacheHitSatisfiesValidation",
+        "implementationRuntimeCodeCreated",
+        "sourceImplementationImported",
+    ]:
+        if authority.get(key) is not False:
+            findings.append(finding("USF-OPT-MIRROR-002", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror authority field must be false: {key}"))
+    if authority.get("semanticAuthorityPreserved") is not True:
+        findings.append(finding("USF-OPT-MIRROR-002", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must preserve semantic authority"))
+
+    # USF-OPT-MIRROR-003: transport-only, fail-safe mechanism + event-SHA requirement.
+    mechanism = data.get("mechanism", {})
+    if not isinstance(mechanism, dict):
+        findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mechanism must be an object"))
+        mechanism = {}
+    if mechanism.get("consumedVia") != "GIT_ALTERNATE_OBJECT_DIRECTORIES":
+        findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must be consumed only as a read-only object alternate"))
+    for key in ["inertByDefault", "noOpWhenUnset", "eventShaVerificationRequired", "fallbackToOriginFetch"]:
+        if mechanism.get(key) is not True:
+            findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror mechanism field must be true: {key}"))
+    for key in ["pruneOrGcDuringRun", "tokenPersistedInMirror"]:
+        if mechanism.get(key) is not False:
+            findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror mechanism field must be false: {key}"))
+    event = data.get("eventShaVerification", {})
+    if not isinstance(event, dict) or event.get("required") is not True or event.get("failClosed") is not True:
+        findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must require fail-closed event-SHA verification"))
+
+    # USF-OPT-MIRROR-004: workflow wiring (opt-in mirror step + always-on fail-closed event-SHA gate).
+    for marker in [
+        "Prime local git object mirror",
+        "vars.USF_GIT_OBJECT_MIRROR",
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+        "Verify checkout equals GitHub event SHA",
+        "git rev-parse HEAD",
+        "uses: actions/checkout@v4",
+        "fetch-depth: 512",
+    ]:
+        if marker not in workflow_source:
+            findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), f"workflow missing git object mirror / event-SHA marker: {marker}"))
+    if '!= "$GITHUB_SHA"' not in workflow_source or "exit 1" not in workflow_source:
+        findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), "event-SHA verification must fail closed when HEAD does not equal the event SHA"))
+    if data.get("checkoutBaseline", {}).get("fullHistoryFetch") is not False:
+        findings.append(finding("USF-OPT-MIRROR-004", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must preserve bounded shallow checkout (no full-history fetch)"))
+
+    # USF-OPT-MIRROR-005: timing non-claims and non-claim tokens.
+    timing = data.get("timingEvidence", {})
+    if not isinstance(timing, dict):
+        findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), "timingEvidence must be an object"))
+        timing = {}
+    if timing.get("timingClaimMade") is not False or timing.get("speedupClaimMade") is not False:
+        findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror timing must remain warn-only with no timing or speedup claim"))
+    if timing.get("afterStatus") not in {"external-operational-record-required", "observed"}:
+        findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror timing after-status must be external-operational-record-required or observed"))
+    nonclaims = set(data.get("nonClaims", []))
+    for required in [
+        "runner-local-state-authority",
+        "cache-hit-proves-correctness",
+        "generated-report-authority",
+        "speedup-proves-correctness",
+        "production-readiness",
+        "live-provider-readiness",
+        "human-acceptance",
+    ]:
+        if required not in nonclaims:
+            findings.append(finding("USF-OPT-MIRROR-005", rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror non-claim missing: {required}"))
+    return findings
+
+
+def check_optimisation_readiness_map(map_data: dict[str, Any] | None = None) -> list[dict[str, str]]:
+    """USF-1062 Slice 6: optimisation readiness map with overclaim guardrails.
+
+    Records every USF-1062 optimisation as active, rejected, deferred, or advisory
+    with rationale, and fails closed on any overclaim (a GREEN verdict that depends
+    on local state, stale evidence, skipped validation, unproven equivalence,
+    weakened proof freshness, or an unsupported readiness claim).
+    """
+    findings: list[dict[str, str]] = []
+    data = map_data or load_json(OPTIMISATION_READINESS_MAP)
+
+    # USF-OPT-MAP-001: identity and verdict.
+    if data.get("artifactId") != "usf.repository-optimisation-readiness-map" or data.get("ownerIssueId") != "USF-1062":
+        findings.append(finding("USF-OPT-MAP-001", rel(OPTIMISATION_READINESS_MAP), "readiness map must carry the canonical artifactId owned by USF-1062"))
+    if data.get("verdict") != "GREEN_WITH_EXPLICIT_ASSURANCE_BOUNDARIES":
+        findings.append(finding("USF-OPT-MAP-001", rel(OPTIMISATION_READINESS_MAP), "readiness map verdict must be GREEN_WITH_EXPLICIT_ASSURANCE_BOUNDARIES"))
+
+    # USF-OPT-MAP-002: overclaim guardrails (authority and timing non-claims).
+    authority = data.get("authorityBoundary", {})
+    if not isinstance(authority, dict):
+        findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), "authorityBoundary must be an object"))
+        authority = {}
+    for key in [
+        "generatedReportsAuthority",
+        "runnerLocalStateAuthority",
+        "cacheHitSatisfiesValidation",
+        "validatorsWeakened",
+        "proofCockpitFreshnessWeakened",
+        "branchProtectionWeakened",
+        "implementationRuntimeCodeCreated",
+        "sourceImplementationImported",
+    ]:
+        if authority.get(key) is not False:
+            findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), f"readiness map authority field must be false: {key}"))
+    for key in ["timingReportsAreOperationalOnly", "requiredValidateContextPreserved", "semanticAuthorityPreserved"]:
+        if authority.get(key) is not True:
+            findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), f"readiness map authority field must be true: {key}"))
+    timing = data.get("timingEvidence", {})
+    if not isinstance(timing, dict):
+        findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), "timingEvidence must be an object"))
+        timing = {}
+    for key in ["timingClaimMade", "speedupClaimMade", "exactLatestRunValuesCommittedToSource"]:
+        if timing.get(key) is not False:
+            findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), f"readiness map timing field must be false: {key}"))
+    if not data.get("overclaimGuardrails", {}).get("verdictMustNotBeGreenIf"):
+        findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), "readiness map must record overclaim guardrails"))
+
+    # USF-OPT-MAP-003: optimisation entries, reasons, and non-claim tokens.
+    optimisations = data.get("optimisations", [])
+    if not isinstance(optimisations, list) or not optimisations:
+        findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), "optimisations must be a non-empty list"))
+        optimisations = []
+    allowed_status = {"active", "active-operational", "rejected", "deferred", "advisory-deferred", "already-implemented"}
+    seen_ids: set[str] = set()
+    for opt in optimisations:
+        if not isinstance(opt, dict):
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), "each optimisation must be an object"))
+            continue
+        opt_id = str(opt.get("id"))
+        seen_ids.add(opt_id)
+        status = opt.get("status")
+        if status not in allowed_status:
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"optimisation {opt_id} has invalid status: {status}"))
+        if status == "rejected" and not opt.get("rejectionReason"):
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"rejected optimisation must record rejectionReason: {opt_id}"))
+        if status in {"deferred", "advisory-deferred"} and not opt.get("deferralReason"):
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"deferred optimisation must record deferralReason: {opt_id}"))
+    for required_id in [
+        "current-main-timing-refresh",
+        "git-object-mirror-transport-acceleration",
+        "within-job-validator-dedup",
+        "affected-domain-validation-promotion",
+    ]:
+        if required_id not in seen_ids:
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"readiness map missing required optimisation entry: {required_id}"))
+    nonclaims = set(data.get("nonClaims", []))
+    for required in [
+        "production-readiness",
+        "live-provider-readiness",
+        "human-acceptance",
+        "cache-hit-proves-correctness",
+        "generated-report-authority",
+        "runner-local-state-authority",
+        "speedup-proves-correctness",
+    ]:
+        if required not in nonclaims:
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"readiness map non-claim missing: {required}"))
+    return findings
+
+
 def validate() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     findings.extend(check_reports())
     findings.extend(check_repository_artifacts())
     findings.extend(check_ci_throughput_artifacts())
     findings.extend(check_runner_capacity_artifact())
+    findings.extend(check_git_object_mirror())
+    findings.extend(check_optimisation_readiness_map())
     return findings
 
 
@@ -1173,6 +1368,43 @@ def selftest() -> list[dict[str, str]]:
     mutated_runner = copy.deepcopy(runner)
     mutated_runner["cleanupAndSecretSafetyEvidence"]["hostSecretSafetyResult"] = "fail"
     tests.append(("runner-secret-safety-failed", check_runner_capacity_artifact(runner_data=mutated_runner), "USF-OPT-RUNNER-009"))
+
+    mirror = load_json(GIT_OBJECT_MIRROR_ARTIFACT)
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["ownerIssueId"] = ""
+    tests.append(("mirror-owner-missing", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-001"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["authorityBoundary"]["runnerLocalStateAuthority"] = True
+    tests.append(("mirror-runner-local-state-authority", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-002"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["mechanism"]["eventShaVerificationRequired"] = False
+    tests.append(("mirror-event-sha-not-required", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-003"))
+
+    mirror_workflow = VALIDATE_WORKFLOW.read_text(encoding="utf-8")
+    mutated_mirror_workflow = mirror_workflow.replace("Verify checkout equals GitHub event SHA", "Verify checkout weakened")
+    tests.append(("mirror-workflow-event-sha-missing", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["timingEvidence"]["speedupClaimMade"] = True
+    tests.append(("mirror-speedup-claim", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-005"))
+
+    opt_map = load_json(OPTIMISATION_READINESS_MAP)
+    mutated_map = copy.deepcopy(opt_map)
+    mutated_map["verdict"] = "GREEN"
+    tests.append(("map-verdict-overclaim", check_optimisation_readiness_map(map_data=mutated_map), "USF-OPT-MAP-001"))
+
+    mutated_map = copy.deepcopy(opt_map)
+    mutated_map["authorityBoundary"]["validatorsWeakened"] = True
+    tests.append(("map-validators-weakened", check_optimisation_readiness_map(map_data=mutated_map), "USF-OPT-MAP-002"))
+
+    mutated_map = copy.deepcopy(opt_map)
+    for opt in mutated_map["optimisations"]:
+        if opt.get("status") in {"deferred", "advisory-deferred"}:
+            opt.pop("deferralReason", None)
+            break
+    tests.append(("map-deferred-reason-missing", check_optimisation_readiness_map(map_data=mutated_map), "USF-OPT-MAP-003"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:

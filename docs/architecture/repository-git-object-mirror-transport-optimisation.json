@@ -1,0 +1,72 @@
+{
+  "artifactId": "usf.repository-git-object-mirror-transport-optimisation",
+  "title": "Repository trusted-runner git object mirror transport optimisation",
+  "ownerIssueId": "USF-1063",
+  "parentIssueId": "USF-1062",
+  "createdDate": "2026-07-10",
+  "lifecycleState": "implemented-opt-in-inert-by-default-external-timing-pending",
+  "purpose": "Provide an optional, opt-in local git object mirror on the trusted self-hosted runner as transport acceleration only, consumed as a read-only object alternate during checkout fetch, with fail-closed event-SHA verification so the mirror can never change which commit is validated. This work is part of USF-1062 semantic-preserving optimisation and does not disturb USF-1050.",
+  "authorityBoundary": {
+    "runnerLocalStateAuthority": false,
+    "generatedReportsAuthority": false,
+    "workflowDefinesSemantics": false,
+    "cacheHitSatisfiesValidation": false,
+    "implementationRuntimeCodeCreated": false,
+    "sourceImplementationImported": false,
+    "semanticAuthorityPreserved": true
+  },
+  "mechanism": {
+    "type": "git-object-mirror-as-read-only-alternate",
+    "consumedVia": "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+    "configuredBy": "vars.USF_GIT_OBJECT_MIRROR",
+    "inertByDefault": true,
+    "noOpWhenUnset": true,
+    "pruneOrGcDuringRun": false,
+    "eventShaVerificationRequired": true,
+    "fallbackToOriginFetch": true,
+    "tokenPersistedInMirror": false,
+    "provisioningOwner": "runner-host-operator-out-of-band"
+  },
+  "eventShaVerification": {
+    "required": true,
+    "assertion": "git rev-parse HEAD equals GITHUB_SHA",
+    "failClosed": true,
+    "appliesToEvents": [
+      "push",
+      "pull_request",
+      "workflow_dispatch"
+    ],
+    "reason": "actions/checkout resolves push HEAD, the pull_request auto-merge ref, and the dispatched ref to the GitHub event SHA; verifying HEAD equals GITHUB_SHA fails closed if any mirror or checkout anomaly diverges from the event SHA."
+  },
+  "checkoutBaseline": {
+    "actionsCheckoutPreserved": true,
+    "fetchDepthPreserved": 512,
+    "fullHistoryFetch": false,
+    "boundedShallowFetchPreserved": true
+  },
+  "timingEvidence": {
+    "afterStatus": "external-operational-record-required",
+    "afterRecordLocation": "pull-request-body-or-comment",
+    "timingClaimMade": false,
+    "speedupClaimMade": false,
+    "fixedPointSourceChurnAvoided": true,
+    "reason": "Exact mirror-backed checkout durations are runner-operational observations recorded in the pull request or GitHub step summary, not committed to source, consistent with the timing fixed-point policy."
+  },
+  "relationToUsf1037": "Extends the existing bounded checkout scope (candidate A and branchProtectionMap.checkoutFetchScope) as an additive, opt-in transport accelerator. It does not mutate the USF-1037 A to M candidate matrix and does not weaken any USF-OPT-CI rule.",
+  "isolationFromUsf1050": "Implemented only on the USF-1062 optimisation branch. It does not modify, rebase, push to, close, merge, or supersede any USF-1050 branch, PR, worktree, issue, evidence, or in-progress file set.",
+  "nonClaims": [
+    "staging-readiness",
+    "deployment-readiness",
+    "provider-readiness",
+    "production-readiness",
+    "live-provider-readiness",
+    "compliance-readiness",
+    "monetisation-readiness",
+    "store-readiness",
+    "human-acceptance",
+    "cache-hit-proves-correctness",
+    "generated-report-authority",
+    "runner-local-state-authority",
+    "speedup-proves-correctness"
+  ]
+}

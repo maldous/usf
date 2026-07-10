@@ -1,0 +1,22 @@
+{
+  "qaRun": "qa-run-2026-07-10T11-07-22-934Z",
+  "qaRunVersion": "proof-cockpit-machine-qa-evidence-v1",
+  "sourceGitSha": "8e28cb3b3608b2acf7840372b0dcd65dee3c349c",
+  "deploymentSha": "8e28cb3b3608b2acf7840372b0dcd65dee3c349c",
+  "environment": "local-machine-qa",
+  "baseUrl": "http://127.0.0.1:20111",
+  "startedAt": "2026-07-10T11:07:22.934Z",
+  "completedAt": "2026-07-10T11:10:04.823Z",
+  "actor": "machine-qa",
+  "executor": "codex-playwright-machine-qa",
+  "toolVersions": {
+    "node": "v24.16.0",
+    "playwrightCore": "package-lock-from-pnpm"
+  },
+  "repositoryState": "M docs/architecture/non-ui-completeness-assurance-case.json\n M docs/architecture/non-ui-completeness-closure-gate.json\n M docs/architecture/non-ui-completeness-gap-register.json\n M docs/architecture/non-ui-source-lineage-inventory.json\n M docs/architecture/operator-admin-surface-completeness-matrix.json\n M docs/architecture/route-port-adapter-provider-completeness-matrix.json\n M docs/architecture/service-completeness-matrix.json\n M docs/architecture/test-proof-disposition-ledger.json\n M docs/architecture/ui-derived-foundation-behaviour-rewrite-ledger.json",
+  "branch": "agent/usf-1062-semantic-preserving-optimisation",
+  "pullRequest": "pending-usf-293",
+  "linearIssue": "USF-293",
+  "selectedRerunMode": "full",
+  "schemaMigrationStatus": "current-v1-no-migration-required"
+}

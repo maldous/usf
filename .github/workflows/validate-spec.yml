@@ -28,9 +28,39 @@ jobs:
   validate:
     runs-on: ${{ fromJSON(((vars.USF_VALIDATE_RUNNER_TARGET == 'github-hosted') || (github.event_name == 'workflow_dispatch' && inputs.runnerTarget == 'github-hosted') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository)) && '["ubuntu-latest"]' || (((github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.runnerTarget == 'self-hosted') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.runnerTarget == 'auto')) && '["self-hosted","linux","x64","usf","usf-ci","usf-trusted"]' || '["ubuntu-latest"]')) }}
     steps:
+      - name: Prime local git object mirror (self-hosted transport acceleration only)
+        # Transport acceleration only; runner-local state is not authority (runnerLocalStateAuthority: false).
+        # No-op unless the runner host operator has provisioned vars.USF_GIT_OBJECT_MIRROR. Never fatal.
+        # The mirror is a read-only object alternate consulted during fetch; any missing objects are still
+        # fetched from origin, and correctness is enforced by the event-SHA verification step below.
+        # The workflow never prunes or garbage-collects the mirror.
+        env:
+          USF_GIT_OBJECT_MIRROR: ${{ vars.USF_GIT_OBJECT_MIRROR }}
+        run: |
+          if [ -z "$USF_GIT_OBJECT_MIRROR" ]; then
+            echo "usf-git-object-mirror: not configured; skipping (no-op)"
+            exit 0
+          fi
+          if [ ! -d "$USF_GIT_OBJECT_MIRROR/objects" ]; then
+            echo "usf-git-object-mirror: configured path has no objects directory; skipping (no-op)"
+            exit 0
+          fi
+          printf 'GIT_ALTERNATE_OBJECT_DIRECTORIES=%s\n' "$USF_GIT_OBJECT_MIRROR/objects" >> "$GITHUB_ENV"
+          echo "usf-git-object-mirror: enabled read-only object alternate (transport acceleration only)"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 512
+      - name: Verify checkout equals GitHub event SHA
+        # Fail closed if the working tree is not exactly the event SHA. This correctness guarantee is
+        # what makes the optional local git object mirror safe: the mirror can only accelerate object
+        # transport; it can never change which commit is validated.
+        run: |
+          head_sha="$(git rev-parse HEAD)"
+          if [ "$head_sha" != "$GITHUB_SHA" ]; then
+            echo "checkout HEAD $head_sha does not equal event SHA $GITHUB_SHA" >&2
+            exit 1
+          fi
+          echo "checkout verified: HEAD equals event SHA $GITHUB_SHA"
       - name: Verify runner temp boundary
         run: |
           test -n "$RUNNER_TEMP"
