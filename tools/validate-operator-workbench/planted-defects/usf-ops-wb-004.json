@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-004",
+  "expectedRuleIds": [
+    "USF-OPS-WB-004"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-004",
+  "slug": "caller-partition",
+  "description": "Corrupts summary.operatorOnlyCount so the operator-only / client-callable partition no longer reconciles with the operations or operationCount.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

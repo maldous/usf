@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-012",
+  "expectedRuleIds": [
+    "USF-OPS-WB-012"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-012",
+  "slug": "kind-status",
+  "description": "Uses an out-of-vocabulary kind or status, or a status inconsistent with the operation gap coverage.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

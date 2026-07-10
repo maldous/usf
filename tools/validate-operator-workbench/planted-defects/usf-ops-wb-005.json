@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-005",
+  "expectedRuleIds": [
+    "USF-OPS-WB-005"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-005",
+  "slug": "boundaries",
+  "description": "Blanks an operation tenantBoundary (or authBoundary / sessionBoundary) so a boundary is silently undeclared.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

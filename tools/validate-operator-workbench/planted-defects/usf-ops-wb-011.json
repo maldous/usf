@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-011",
+  "expectedRuleIds": [
+    "USF-OPS-WB-011"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-011",
+  "slug": "no-overclaim",
+  "description": "Introduces a certification / compliance / human-acceptance / monetisation overclaim phrase.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}
