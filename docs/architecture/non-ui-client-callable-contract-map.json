@@ -1,0 +1,3765 @@
+{
+  "id": "non-ui-client-callable-contract-map",
+  "title": "Non-UI Client-Callable Contract Map",
+  "ownerIssueId": "USF-1049",
+  "parentIssueId": "USF-1045",
+  "lifecycleState": "current-main-semantic-definition",
+  "authorityLevel": "semantic-definition",
+  "authorityBoundary": "This artefact maps implemented local non-UI API operations to future client-callable dispositions. It defines no UI implementation, generated SDK readiness, generated client readiness, public API readiness, package publication, staging, production, deployment, live-provider, compliance, monetisation, app store, or human-acceptance claim.",
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+    "docs/architecture/api-route-interface-contract-coverage.json",
+    "packages/contracts/src/api-surface.ts",
+    "packages/openapi/openapi.json"
+  ],
+  "routeSourceOfTruth": {
+    "routeContractSource": "packages/contracts/src/api-surface.ts",
+    "routeProjectionSource": "packages/openapi/openapi.json",
+    "interfaceDispositionSource": "docs/architecture/api-route-interface-contract-coverage.json",
+    "implementedRouteCount": 32,
+    "interfaceContractCount": 32
+  },
+  "generatedClientInputPolicy": {
+    "allowedStatuses": [
+      "not-generated-current-main",
+      "local-semantic-input-current",
+      "not-authorised-for-generation"
+    ],
+    "staleStatusAccepted": false,
+    "generatedClientReadinessClaimAllowed": false,
+    "sdkReadinessClaimAllowed": false,
+    "uiInventedBehaviourAllowed": false
+  },
+  "readinessClaims": {
+    "generatedClientReady": false,
+    "sdkReady": false,
+    "productUiReady": false,
+    "publicApiReady": false,
+    "deploymentReady": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "operations": [
+    {
+      "routeId": "healthz.get",
+      "method": "GET",
+      "openapiPath": "/healthz",
+      "openapiOperationId": "getHealthz",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=healthz.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=healthz.get",
+      "clientCallableDisposition": "not-claimed",
+      "consumerSurfaces": [
+        "none"
+      ],
+      "currentDecisionRationale": "Implemented local route is recorded for completeness but is not claimed as a future UI client operation.",
+      "operationMetadata": {
+        "routeClassification": "health-readiness",
+        "owningDomain": "platform-health",
+        "owningCapability": "runtime-health",
+        "requiredAction": "not-applicable",
+        "authScheme": "none",
+        "tenantScope": "none",
+        "dataClassification": "public",
+        "requestSchema": "not-applicable",
+        "responseSchemas": {
+          "200": "HealthResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.serverless-function-runtime",
+        "interfaceContractRef": "interface.healthz-get-api",
+        "behaviourClass": "not-applicable",
+        "capabilityId": "runtime-health",
+        "commandOrQueryOrWorkflowOrEventId": "operation.healthz.get",
+        "requestSemanticsRef": "not-applicable:no-request-schema",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=HealthResponse",
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "validationRefs": [
+          "not-applicable:no-request-schema",
+          "packages/contracts/src/api-surface.ts#responseSchemas=HealthResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "not-applicable:not audited; no tenant or sensitive data"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "not-authorised-for-generation",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "not-applicable"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "No future UI client operation is claimed for this route.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "readyz.get",
+      "method": "GET",
+      "openapiPath": "/readyz",
+      "openapiOperationId": "getReadyz",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=readyz.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=readyz.get",
+      "clientCallableDisposition": "not-claimed",
+      "consumerSurfaces": [
+        "none"
+      ],
+      "currentDecisionRationale": "Implemented local route is recorded for completeness but is not claimed as a future UI client operation.",
+      "operationMetadata": {
+        "routeClassification": "health-readiness",
+        "owningDomain": "platform-health",
+        "owningCapability": "runtime-readiness",
+        "requiredAction": "not-applicable",
+        "authScheme": "none",
+        "tenantScope": "none",
+        "dataClassification": "public",
+        "requestSchema": "not-applicable",
+        "responseSchemas": {
+          "200": "ReadyResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+        "interfaceContractRef": "interface.readyz-get-api",
+        "behaviourClass": "not-applicable",
+        "capabilityId": "runtime-readiness",
+        "commandOrQueryOrWorkflowOrEventId": "operation.readyz.get",
+        "requestSemanticsRef": "not-applicable:no-request-schema",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ReadyResponse",
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "validationRefs": [
+          "not-applicable:no-request-schema",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ReadyResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "not-applicable:not audited; provider modes only"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "not-authorised-for-generation",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "not-applicable"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "No future UI client operation is claimed for this route.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "openapi.get",
+      "method": "GET",
+      "openapiPath": "/openapi.json",
+      "openapiOperationId": "getOpenApiDocument",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=openapi.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=openapi.get",
+      "clientCallableDisposition": "not-claimed",
+      "consumerSurfaces": [
+        "none"
+      ],
+      "currentDecisionRationale": "Implemented local route is recorded for completeness but is not claimed as a future UI client operation.",
+      "operationMetadata": {
+        "routeClassification": "public",
+        "owningDomain": "api-contracts",
+        "owningCapability": "openapi-document",
+        "requiredAction": "not-applicable",
+        "authScheme": "none",
+        "tenantScope": "none",
+        "dataClassification": "public",
+        "requestSchema": "not-applicable",
+        "responseSchemas": {
+          "200": "OpenApiDocument"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+        "interfaceContractRef": "interface.openapi-get-api",
+        "behaviourClass": "not-applicable",
+        "capabilityId": "openapi-document",
+        "commandOrQueryOrWorkflowOrEventId": "operation.openapi.get",
+        "requestSemanticsRef": "not-applicable:no-request-schema",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=OpenApiDocument",
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "validationRefs": [
+          "not-applicable:no-request-schema",
+          "packages/contracts/src/api-surface.ts#responseSchemas=OpenApiDocument",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "not-applicable:not audited; contains synthetic examples only"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "not-authorised-for-generation",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "not-applicable"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "No future UI client operation is claimed for this route.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "tenant-context.get",
+      "method": "GET",
+      "openapiPath": "/v1/tenant-context",
+      "openapiOperationId": "getTenantContextV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=tenant-context.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=tenant-context.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "tenant-context",
+        "owningCapability": "tenant-context",
+        "requiredAction": "tenant.context.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "TenantContextResponse",
+          "400": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+        "interfaceContractRef": "interface.tenant-context-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "tenant-context",
+        "commandOrQueryOrWorkflowOrEventId": "tenant.context.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=TenantContextResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:tenant.context.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=TenantContextResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:records tenant.context.read when accepted"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "auth-login.post",
+      "method": "POST",
+      "openapiPath": "/auth/login",
+      "openapiOperationId": "postAuthLogin",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=auth-login.post",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=auth-login.post",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "public",
+        "owningDomain": "auth-identity",
+        "owningCapability": "auth-service",
+        "requiredAction": "auth.login",
+        "authScheme": "none",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "LoginRequest",
+        "responseSchemas": {
+          "200": "LoginResponse",
+          "400": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.authentication-platform",
+        "interfaceContractRef": "interface.authentication-login-api",
+        "behaviourClass": "commands",
+        "capabilityId": "auth-service",
+        "commandOrQueryOrWorkflowOrEventId": "auth.login",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=LoginRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=LoginResponse,ApiErrorResponse",
+        "authScheme": "none",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:auth.login"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=LoginRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=LoginResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:auth service records value-free login evidence"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-check.post",
+      "method": "POST",
+      "openapiPath": "/v1/authz/check",
+      "openapiOperationId": "postAuthzCheckV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=authz-check.post",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=authz-check.post",
+      "clientCallableDisposition": "internal-support-only",
+      "consumerSurfaces": [
+        "none"
+      ],
+      "currentDecisionRationale": "Implemented local route supports internal service or authorization behaviour and is not exposed as a future UI client operation.",
+      "operationMetadata": {
+        "routeClassification": "security-sensitive",
+        "owningDomain": "authorization",
+        "owningCapability": "policy-decision-point",
+        "requiredAction": "authorization.check",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "AuthorizeCheckRequest",
+        "responseSchemas": {
+          "200": "AuthorizeDecisionResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+        "interfaceContractRef": "interface.authz-check-post-api",
+        "behaviourClass": "not-applicable",
+        "capabilityId": "policy-decision-point",
+        "commandOrQueryOrWorkflowOrEventId": "authorization.check",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=AuthorizeCheckRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuthorizeDecisionResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:authorization.check"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=AuthorizeCheckRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=AuthorizeDecisionResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:authorization decision is audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "not-authorised-for-generation",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "not-applicable"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "No future UI client operation is claimed for this route.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-permissions.get",
+      "method": "GET",
+      "openapiPath": "/v1/authz/permissions",
+      "openapiOperationId": "getAuthzPermissionsV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=authz-permissions.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=authz-permissions.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "authorization",
+        "owningCapability": "permission-discovery",
+        "requiredAction": "tenant.members.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "PermissionsResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+        "interfaceContractRef": "interface.authz-permissions-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "permission-discovery",
+        "commandOrQueryOrWorkflowOrEventId": "tenant.members.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=PermissionsResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:tenant.members.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=PermissionsResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:permission discovery denial is audited through PDP"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.list",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events",
+      "openapiOperationId": "getAuditEventsV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=audit-events.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-events.list",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "audit-sensitive",
+        "owningDomain": "audit-evidence",
+        "owningCapability": "audit-query",
+        "requiredAction": "audit.search",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "AuditEventsQuery",
+        "responseSchemas": {
+          "200": "AuditEventsResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "cursor",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+        "interfaceContractRef": "interface.audit-events-list-api",
+        "behaviourClass": "queries",
+        "capabilityId": "audit-query",
+        "commandOrQueryOrWorkflowOrEventId": "audit.search",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=AuditEventsQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuditEventsResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:audit.search"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=AuditEventsQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=AuditEventsResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:audit query is itself audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.get",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events/{id}",
+      "openapiOperationId": "getAuditEventByIdV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=audit-events.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-events.get",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "audit-sensitive",
+        "owningDomain": "audit-evidence",
+        "owningCapability": "audit-query",
+        "requiredAction": "audit.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "AuditEventView",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+        "interfaceContractRef": "interface.audit-events-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "audit-query",
+        "commandOrQueryOrWorkflowOrEventId": "audit.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuditEventView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:audit.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=AuditEventView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:audit read is itself audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-verify.post",
+      "method": "POST",
+      "openapiPath": "/v1/audit/verify",
+      "openapiOperationId": "postAuditVerifyV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=audit-verify.post",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-verify.post",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "audit-sensitive",
+        "owningDomain": "audit-evidence",
+        "owningCapability": "audit-integrity-verifier",
+        "requiredAction": "audit.verify",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "AuditVerifyRequest",
+        "responseSchemas": {
+          "200": "AuditVerifyResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+        "interfaceContractRef": "interface.audit-verify-post-api",
+        "behaviourClass": "commands",
+        "capabilityId": "audit-integrity-verifier",
+        "commandOrQueryOrWorkflowOrEventId": "audit.verify",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=AuditVerifyRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuditVerifyResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:audit.verify"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=AuditVerifyRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=AuditVerifyResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:verification request is audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-current.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/current",
+      "openapiOperationId": "getConfigCurrentV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=config-current.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-current.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "config-secrets",
+        "owningCapability": "config-service",
+        "requiredAction": "config.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "ConfigCurrentResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+        "interfaceContractRef": "interface.config-current-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "config-service",
+        "commandOrQueryOrWorkflowOrEventId": "config.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ConfigCurrentResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ConfigCurrentResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:config service records value-free config access"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-flags.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/feature-flags",
+      "openapiOperationId": "getConfigFeatureFlagsV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=config-flags.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-flags.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "config-secrets",
+        "owningCapability": "feature-flag-service",
+        "requiredAction": "config.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "FeatureFlagsResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+        "interfaceContractRef": "interface.config-flags-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "feature-flag-service",
+        "commandOrQueryOrWorkflowOrEventId": "config.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FeatureFlagsResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=FeatureFlagsResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:feature flag access uses config controls"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-provider-status.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/provider-status",
+      "openapiOperationId": "getConfigProviderStatusV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=config-provider-status.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-provider-status.get",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "security-sensitive",
+        "owningDomain": "config-secrets",
+        "owningCapability": "provider-status",
+        "requiredAction": "config.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "ProviderStatusResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.provider-environment-classification",
+        "interfaceContractRef": "interface.config-provider-status-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "provider-status",
+        "commandOrQueryOrWorkflowOrEventId": "config.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ProviderStatusResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ProviderStatusResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:provider mode read is controlled by config read"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.list",
+      "method": "GET",
+      "openapiPath": "/v1/providers",
+      "openapiOperationId": "listProvidersV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=providers.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=providers.list",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "operator-only",
+        "owningDomain": "provider-adapters",
+        "owningCapability": "provider-registry",
+        "requiredAction": "provider.list",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "security-sensitive",
+        "requestSchema": "ProvidersQuery",
+        "responseSchemas": {
+          "200": "ProvidersListResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "cursor",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.provider-configuration-plane",
+        "interfaceContractRef": "interface.providers-list-api",
+        "behaviourClass": "queries",
+        "capabilityId": "provider-registry",
+        "commandOrQueryOrWorkflowOrEventId": "provider.list",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=ProvidersQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ProvidersListResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:provider.list"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=ProvidersQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ProvidersListResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:provider status access is PDP guarded and value-free; audit-of-access posture is represented"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.get",
+      "method": "GET",
+      "openapiPath": "/v1/providers/{id}",
+      "openapiOperationId": "getProviderByIdV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=providers.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=providers.get",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "operator-only",
+        "owningDomain": "provider-adapters",
+        "owningCapability": "provider-registry",
+        "requiredAction": "provider.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "security-sensitive",
+        "requestSchema": "ProvidersQuery",
+        "responseSchemas": {
+          "200": "ProviderDetailResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.provider-configuration-plane",
+        "interfaceContractRef": "interface.providers-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "provider-registry",
+        "commandOrQueryOrWorkflowOrEventId": "provider.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=ProvidersQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ProviderDetailResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:provider.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=ProvidersQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ProviderDetailResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:provider detail access is PDP guarded and value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-readiness.get",
+      "method": "GET",
+      "openapiPath": "/v1/observability/readiness",
+      "openapiOperationId": "getObservabilityReadinessV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=observability-readiness.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=observability-readiness.get",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "operator-only",
+        "owningDomain": "observability-telemetry",
+        "owningCapability": "telemetry-collector",
+        "requiredAction": "observability.readiness.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "security-sensitive",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "ObservabilityReadinessResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.metrics-and-traces",
+        "interfaceContractRef": "interface.observability-readiness-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "telemetry-collector",
+        "commandOrQueryOrWorkflowOrEventId": "observability.readiness.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ObservabilityReadinessResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:observability.readiness.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ObservabilityReadinessResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:observability readiness access is PDP guarded and audit-recorded value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-signals.list",
+      "method": "GET",
+      "openapiPath": "/v1/observability/signals",
+      "openapiOperationId": "listObservabilitySignalsV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=observability-signals.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=observability-signals.list",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "consumerSurfaces": [
+        "operator-tooling-with-explicit-authority"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible only for operator tooling with explicit authority. It is not a product UI, public API, generated-client, SDK, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness claim.",
+      "operationMetadata": {
+        "routeClassification": "operator-only",
+        "owningDomain": "observability-telemetry",
+        "owningCapability": "telemetry-collector",
+        "requiredAction": "observability.signal.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "security-sensitive",
+        "requestSchema": "ObservabilitySignalsQuery",
+        "responseSchemas": {
+          "200": "ObservabilitySignalsResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "cursor",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.metrics-and-traces",
+        "interfaceContractRef": "interface.observability-signals-list-api",
+        "behaviourClass": "queries",
+        "capabilityId": "telemetry-collector",
+        "commandOrQueryOrWorkflowOrEventId": "observability.signal.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=ObservabilitySignalsQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ObservabilitySignalsResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:observability.signal.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=ObservabilitySignalsQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ObservabilitySignalsResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:observability signal access is PDP guarded and audit-recorded value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.list",
+      "method": "GET",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "listFilesV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=files.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.list",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "files-storage",
+        "owningCapability": "file-service",
+        "requiredAction": "file.list",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "FilesQuery",
+        "responseSchemas": {
+          "200": "FilesListResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "cursor",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+        "interfaceContractRef": "interface.files-list-api",
+        "behaviourClass": "queries",
+        "capabilityId": "file-service",
+        "commandOrQueryOrWorkflowOrEventId": "file.list",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=FilesQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FilesListResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:file.list"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=FilesQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=FilesListResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file list audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.upload",
+      "method": "POST",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "uploadFileV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=files.upload",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.upload",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "files-storage",
+        "owningCapability": "file-service",
+        "requiredAction": "file.create",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "FileUploadRequest",
+        "responseSchemas": {
+          "200": "FileView",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+        "interfaceContractRef": "interface.files-upload-api",
+        "behaviourClass": "commands",
+        "capabilityId": "file-service",
+        "commandOrQueryOrWorkflowOrEventId": "file.create",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=FileUploadRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileView,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:file.create"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=FileUploadRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=FileView,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file upload lifecycle audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.get",
+      "method": "GET",
+      "openapiPath": "/v1/files/{id}",
+      "openapiOperationId": "getFileV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=files.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "files-storage",
+        "owningCapability": "file-service",
+        "requiredAction": "file.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "FileView",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+        "interfaceContractRef": "interface.files-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "file-service",
+        "commandOrQueryOrWorkflowOrEventId": "file.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=FileView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file read audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.download",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/download",
+      "openapiOperationId": "downloadFileV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=files.download",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.download",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "security-sensitive",
+        "owningDomain": "files-storage",
+        "owningCapability": "file-service",
+        "requiredAction": "file.download",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "FileDownloadResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+        "interfaceContractRef": "interface.files-download-api",
+        "behaviourClass": "commands",
+        "capabilityId": "file-service",
+        "commandOrQueryOrWorkflowOrEventId": "file.download",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileDownloadResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.download"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=FileDownloadResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:download audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.verify",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/verify",
+      "openapiOperationId": "verifyFileV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=files.verify",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.verify",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "files-storage",
+        "owningCapability": "file-integrity",
+        "requiredAction": "file.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "FileVerifyResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+        "interfaceContractRef": "interface.files-verify-api",
+        "behaviourClass": "commands",
+        "capabilityId": "file-integrity",
+        "commandOrQueryOrWorkflowOrEventId": "file.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileVerifyResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=FileVerifyResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file verification audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.list",
+      "method": "GET",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "listJobsV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=jobs.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.list",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "jobs-workflows",
+        "owningCapability": "job-service",
+        "requiredAction": "job.list",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "JobsListResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "cursor",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+        "interfaceContractRef": "interface.jobs-list-api",
+        "behaviourClass": "queries",
+        "capabilityId": "job-service",
+        "commandOrQueryOrWorkflowOrEventId": "job.list",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=JobsListResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:job.list"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=JobsListResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job service emits lifecycle audit; list is PDP gated"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.create",
+      "method": "POST",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "createJobV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=jobs.create",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.create",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "jobs-workflows",
+        "owningCapability": "job-service",
+        "requiredAction": "job.create",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "JobCreateRequest",
+        "responseSchemas": {
+          "200": "JobCreateResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "409": "ApiErrorResponse",
+          "429": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": true,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+        "interfaceContractRef": "interface.jobs-create-api",
+        "behaviourClass": "commands",
+        "capabilityId": "job-service",
+        "commandOrQueryOrWorkflowOrEventId": "job.create",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=JobCreateRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=JobCreateResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:job.create"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=JobCreateRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=JobCreateResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job.create audited by job service; guardrail denials emit value-free guardrail audit"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.get",
+      "method": "GET",
+      "openapiPath": "/v1/jobs/{id}",
+      "openapiOperationId": "getJobV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=jobs.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "jobs-workflows",
+        "owningCapability": "job-service",
+        "requiredAction": "job.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "JobView",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+        "interfaceContractRef": "interface.jobs-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "job-service",
+        "commandOrQueryOrWorkflowOrEventId": "job.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=JobView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:job.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=JobView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job read is PDP gated and value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/jobs/{id}/cancel",
+      "openapiOperationId": "cancelJobV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=jobs.cancel",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.cancel",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "jobs-workflows",
+        "owningCapability": "job-service",
+        "requiredAction": "job.cancel",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantActionRequest",
+        "responseSchemas": {
+          "200": "ActionResultResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": true,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+        "interfaceContractRef": "interface.jobs-cancel-api",
+        "behaviourClass": "commands",
+        "capabilityId": "job-service",
+        "commandOrQueryOrWorkflowOrEventId": "job.cancel",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ActionResultResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:job.cancel"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ActionResultResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job.cancel audited by job service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notification-templates.create",
+      "method": "POST",
+      "openapiPath": "/v1/notification-templates",
+      "openapiOperationId": "createNotificationTemplateV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=notification-templates.create",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notification-templates.create",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "notifications-messaging",
+        "owningCapability": "notification-template-service",
+        "requiredAction": "notification.template.create",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "NotificationTemplateCreateRequest",
+        "responseSchemas": {
+          "200": "NotificationTemplateResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "interfaceContractRef": "interface.notification-templates-create-api",
+        "behaviourClass": "commands",
+        "capabilityId": "notification-template-service",
+        "commandOrQueryOrWorkflowOrEventId": "notification.template.create",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=NotificationTemplateCreateRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationTemplateResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.template.create"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=NotificationTemplateCreateRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=NotificationTemplateResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:template creation audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.list",
+      "method": "GET",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "listNotificationsV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=notifications.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.list",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "notifications-messaging",
+        "owningCapability": "notification-service",
+        "requiredAction": "notification.list",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "NotificationsListResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "cursor",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "interfaceContractRef": "interface.notifications-list-api",
+        "behaviourClass": "queries",
+        "capabilityId": "notification-service",
+        "commandOrQueryOrWorkflowOrEventId": "notification.list",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationsListResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:notification.list"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=NotificationsListResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification list is PDP gated"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.create",
+      "method": "POST",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "createNotificationV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=notifications.create",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.create",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "notifications-messaging",
+        "owningCapability": "notification-service",
+        "requiredAction": "notification.create",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "NotificationCreateRequest",
+        "responseSchemas": {
+          "200": "NotificationCreateResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "interfaceContractRef": "interface.notifications-create-api",
+        "behaviourClass": "commands",
+        "capabilityId": "notification-service",
+        "commandOrQueryOrWorkflowOrEventId": "notification.create",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=NotificationCreateRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationCreateResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.create"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=NotificationCreateRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=NotificationCreateResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.created audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.get",
+      "method": "GET",
+      "openapiPath": "/v1/notifications/{id}",
+      "openapiOperationId": "getNotificationV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=notifications.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.get",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "notifications-messaging",
+        "owningCapability": "notification-service",
+        "requiredAction": "notification.read",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantContextQuery",
+        "responseSchemas": {
+          "200": "NotificationView",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": false,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "interfaceContractRef": "interface.notifications-get-api",
+        "behaviourClass": "queries",
+        "capabilityId": "notification-service",
+        "commandOrQueryOrWorkflowOrEventId": "notification.read",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:notification.read"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+          "packages/contracts/src/api-surface.ts#responseSchemas=NotificationView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.read audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.send",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/send",
+      "openapiOperationId": "sendNotificationV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=notifications.send",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.send",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "notifications-messaging",
+        "owningCapability": "notification-delivery-job",
+        "requiredAction": "notification.send",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantActionRequest",
+        "responseSchemas": {
+          "200": "NotificationSendResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse",
+          "409": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": true,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "interfaceContractRef": "interface.notifications-send-api",
+        "behaviourClass": "commands",
+        "capabilityId": "notification-delivery-job",
+        "commandOrQueryOrWorkflowOrEventId": "notification.send",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationSendResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.send"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=NotificationSendResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.queued audited and job.create audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/cancel",
+      "openapiOperationId": "cancelNotificationV1",
+      "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=notifications.cancel",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.cancel",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "consumerSurfaces": [
+        "mobile-adapter",
+        "web-adapter"
+      ],
+      "currentDecisionRationale": "Implemented local route is eligible as a future mobile or web adapter input only as a governed local contract. It does not create generated-client, SDK, public API, UI, staging, production, deployment, live-provider, compliance, monetisation, store, or human-acceptance readiness.",
+      "operationMetadata": {
+        "routeClassification": "tenant-scoped",
+        "owningDomain": "notifications-messaging",
+        "owningCapability": "notification-service",
+        "requiredAction": "notification.cancel",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "dataClassification": "confidential",
+        "requestSchema": "TenantActionRequest",
+        "responseSchemas": {
+          "200": "ActionResultResponse",
+          "400": "ApiErrorResponse",
+          "403": "ApiErrorResponse",
+          "404": "ApiErrorResponse"
+        },
+        "errorSchema": "ApiErrorResponse",
+        "idempotencyRequired": true,
+        "paginationType": "none",
+        "implementationRef": "apps/api/src/server.ts"
+      },
+      "authorityMapping": {
+        "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "interfaceContractRef": "interface.notifications-cancel-api",
+        "behaviourClass": "commands",
+        "capabilityId": "notification-service",
+        "commandOrQueryOrWorkflowOrEventId": "notification.cancel",
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ActionResultResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.cancel"
+        ],
+        "validationRefs": [
+          "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+          "packages/contracts/src/api-surface.ts#responseSchemas=ActionResultResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+          "packages/openapi/src/check.ts#openapi-contract",
+          "tools/validate-spec/validate-spec.py#validate_non_ui_client_contract_map"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.cancelled audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "implementationRef": "apps/api/src/server.ts",
+        "proofRefs": [
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "packages/openapi/openapi.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim."
+      },
+      "generatedClientInput": {
+        "status": "local-semantic-input-current",
+        "staleness": "current-main",
+        "generationAuthorized": false,
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "inputAuthorityRefs": [
+          "docs/architecture/shared-client-sdk-semantic-surface.json",
+          "docs/architecture/generated-client-contract-validation-semantics.json",
+          "docs/architecture/app-surface-shared-client-consumption-path.json"
+        ]
+      },
+      "readinessClaims": {
+        "generatedClientReady": false,
+        "sdkReady": false,
+        "productUiReady": false,
+        "publicApiReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "uiDerivedBehaviour": {
+        "uiDerivedBehaviourAllowed": false,
+        "inventedBehaviourAllowed": false,
+        "behaviourOrigin": "route-contract-interface-and-semantic-authority"
+      },
+      "validatorCoverage": [
+        "validate-spec.non-ui-client-contract-map",
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "followUpRequired": "Generated client, SDK publication, UI adapter, public API, and stronger readiness proof remain separate future work.",
+      "nonClaims": [
+        "no-generated-sdk-readiness-claim",
+        "no-generated-client-readiness-claim",
+        "no-product-ui-readiness-claim",
+        "no-public-api-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    }
+  ],
+  "validatorRequirements": [
+    {
+      "ruleId": "USF-CLIENT-CONTRACT-001",
+      "description": "Reject implemented routes without exactly one client-contract operation record or without semantic and interface authority mapping.",
+      "severity": "blocking"
+    },
+    {
+      "ruleId": "USF-CLIENT-CONTRACT-002",
+      "description": "Reject missing or inconsistent operation metadata for auth, tenant, validation, error, audit, telemetry, implementation, and proof fields.",
+      "severity": "blocking"
+    },
+    {
+      "ruleId": "USF-CLIENT-CONTRACT-003",
+      "description": "Reject stale, unknown, or unsupported generated-client input status.",
+      "severity": "blocking"
+    },
+    {
+      "ruleId": "USF-CLIENT-CONTRACT-004",
+      "description": "Reject generated-client, SDK, UI, public API, deployment, staging, production, live-provider, or human-acceptance readiness overclaims and UI-invented behaviour.",
+      "severity": "blocking"
+    }
+  ],
+  "plantedDefectCoverage": [
+    "tools/validate-spec/planted-defects/client-contract-operation-metadata-missing.json",
+    "tools/validate-spec/planted-defects/client-contract-generated-input-stale.json",
+    "tools/validate-spec/planted-defects/client-contract-sdk-readiness-overclaim.json",
+    "tools/validate-spec/planted-defects/client-contract-permission-tenant-missing.json",
+    "tools/validate-spec/planted-defects/client-contract-ui-invented-behaviour.json"
+  ],
+  "nonClaims": {
+    "generatedSdkReadiness": false,
+    "generatedClientReadiness": false,
+    "packagePublicationReadiness": false,
+    "productUiReadiness": false,
+    "publicApiReadiness": false,
+    "deploymentReadiness": false,
+    "stagingReadiness": false,
+    "productionReadiness": false,
+    "liveProviderReadiness": false,
+    "complianceReadiness": false,
+    "monetisationReadiness": false,
+    "appStoreReadiness": false,
+    "humanAcceptance": false
+  }
+}

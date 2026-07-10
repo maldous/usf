@@ -1,0 +1,113 @@
+{
+  "target": "client-contract-map",
+  "expectedRule": "USF-CLIENT-CONTRACT-002",
+  "apiRouteRecords": [
+    {
+      "routeId": "client-test.get",
+      "method": "GET",
+      "openapiPath": "/v1/client-test",
+      "openapiOperationId": "getClientTestV1",
+      "routeClassification": "tenant-scoped",
+      "owningDomain": "client-test",
+      "owningCapability": "client-test",
+      "requiredAction": "client.test.read",
+      "tenantScope": "tenant-header-query",
+      "pdpPolicy": "test PDP policy",
+      "auditPolicy": "test audit policy",
+      "dataClassification": "confidential",
+      "implementation": "apps/api/src/server.ts"
+    }
+  ],
+  "routeInterfaceCoverage": {
+    "records": [
+      {
+        "routeId": "client-test.get",
+        "method": "GET",
+        "openapiPath": "/v1/client-test",
+        "openapiOperationId": "getClientTestV1",
+        "decision": "interface-contract-instance",
+        "interfaceContractRef": "interface.client-test-api",
+        "semanticContractRef": "semantic-contract.client-test",
+        "openapiProjection": "projection-only"
+      }
+    ]
+  },
+  "instances": {
+    "spec/instances/semantic-contract/client-test.json": {
+      "id": "semantic-contract.client-test"
+    },
+    "spec/instances/interface-contract/client-test-api.json": {
+      "id": "interface.client-test-api"
+    }
+  },
+  "record": {
+    "operations": [
+      {
+        "routeId": "client-test.get",
+        "method": "GET",
+        "openapiPath": "/v1/client-test",
+        "openapiOperationId": "getClientTestV1",
+        "sourceRouteRef": "packages/contracts/src/api-surface.ts#routeId=client-test.get",
+        "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=client-test.get",
+        "clientCallableDisposition": "client-callable-local-contract",
+        "consumerSurfaces": [
+          "web-adapter"
+        ],
+        "operationMetadata": {
+          "routeClassification": "tenant-scoped",
+          "owningDomain": "client-test",
+          "owningCapability": "client-test",
+          "authScheme": "dev-header-keycloak-bearer-future",
+          "tenantScope": "tenant-header-query",
+          "dataClassification": "confidential",
+          "implementationRef": "apps/api/src/server.ts"
+        },
+        "authorityMapping": {
+          "semanticContractRef": "semantic-contract.client-test",
+          "interfaceContractRef": "interface.client-test-api",
+          "requestSemanticsRef": "request",
+          "responseSemanticsRef": "response",
+          "authScheme": "dev-header-keycloak-bearer-future",
+          "permissionRefs": [],
+          "validationRefs": [
+            "request"
+          ],
+          "errorRefs": [
+            "errorSchema:ApiErrorResponse"
+          ],
+          "auditEventRefs": [
+            "auditPolicy:test audit policy"
+          ],
+          "telemetryRefs": [
+            "observabilityPolicy:test"
+          ],
+          "implementationRef": "apps/api/src/server.ts",
+          "proofRefs": [
+            "docs/architecture/api-route-interface-contract-coverage.json"
+          ],
+          "proofEvidenceStatus": "local only"
+        },
+        "generatedClientInput": {
+          "status": "local-semantic-input-current",
+          "staleness": "current-main"
+        },
+        "readinessClaims": {
+          "generatedClientReady": false,
+          "sdkReady": false,
+          "productUiReady": false,
+          "publicApiReady": false
+        },
+        "uiDerivedBehaviour": {
+          "uiDerivedBehaviourAllowed": false,
+          "inventedBehaviourAllowed": false
+        },
+        "nonClaims": [
+          "no-generated-sdk-readiness-claim",
+          "no-generated-client-readiness-claim",
+          "no-product-ui-readiness-claim",
+          "no-public-api-readiness-claim"
+        ]
+      }
+    ]
+  }
+}

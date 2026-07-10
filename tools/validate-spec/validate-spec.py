@@ -364,6 +364,10 @@ RULES = {
     "USF-INTERFACE-001": ("blocking", "Implemented API route has no interface-contract coverage or explicit disposition"),
     "USF-INTERFACE-002": ("blocking", "API route interface-contract disposition is invalid or ambiguous"),
     "USF-INTERFACE-003": ("blocking", "OpenAPI projection claims semantic authority without USF-native backing"),
+    "USF-CLIENT-CONTRACT-001": ("blocking", "Client-callable non-UI operation map is missing route coverage or authority mapping"),
+    "USF-CLIENT-CONTRACT-002": ("blocking", "Client-callable non-UI operation metadata is missing or inconsistent"),
+    "USF-CLIENT-CONTRACT-003": ("blocking", "Generated-client input status is stale or ambiguous"),
+    "USF-CLIENT-CONTRACT-004": ("blocking", "Client-contract map overclaims generated-client, SDK, UI, public API, or readiness authority"),
     "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
     "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
     "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
@@ -1020,6 +1024,43 @@ API_ROUTE_INTERFACE_DECISIONS = {"interface-contract-instance", "deferred", "rej
 API_ROUTE_INTERFACE_PROJECTION_ONLY = "projection-only"
 API_ROUTE_INTERFACE_ROUTE_REF_PREFIX = "packages/contracts/src/api-surface.ts#routeId="
 API_ROUTE_INTERFACE_OPENAPI_REF_PREFIX = "packages/openapi/openapi.json#operationId="
+API_ROUTE_INTERFACE_COVERAGE_REF_PREFIX = API_ROUTE_INTERFACE_COVERAGE_PATH + "#routeId="
+NON_UI_CLIENT_CONTRACT_MAP_PATH = "docs/architecture/non-ui-client-callable-contract-map.json"
+NON_UI_CLIENT_CONTRACT_REF_PREFIX = NON_UI_CLIENT_CONTRACT_MAP_PATH + "#routeId="
+NON_UI_CLIENT_CONTRACT_DISPOSITIONS = {
+    "client-callable-local-contract",
+    "operator-tooling-local-contract",
+    "internal-support-only",
+    "not-claimed",
+}
+NON_UI_CLIENT_CONSUMER_SURFACES = {
+    "mobile-adapter",
+    "web-adapter",
+    "operator-tooling-with-explicit-authority",
+    "none",
+}
+NON_UI_CLIENT_GENERATED_STATUSES = {
+    "not-generated-current-main",
+    "local-semantic-input-current",
+    "not-authorised-for-generation",
+}
+NON_UI_CLIENT_REQUIRED_NONCLAIMS = {
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+}
+NON_UI_CLIENT_READINESS_CLAIMS = {
+    "generatedClientReady",
+    "sdkReady",
+    "productUiReady",
+    "publicApiReady",
+    "deploymentReady",
+    "stagingReady",
+    "productionReady",
+    "liveProviderReady",
+    "humanAcceptanceComplete",
+}
 
 
 def _load_api_route_records(F):
@@ -1048,6 +1089,15 @@ def _load_api_route_records(F):
                 "method": method.upper(),
                 "openapiPath": path,
                 "openapiOperationId": operation.get("operationId"),
+                "routeClassification": metadata.get("routeClassification"),
+                "owningDomain": metadata.get("owningDomain"),
+                "owningCapability": metadata.get("owningCapability"),
+                "requiredAction": metadata.get("requiredAction"),
+                "tenantScope": metadata.get("tenantScope"),
+                "pdpPolicy": metadata.get("pdpPolicy"),
+                "auditPolicy": metadata.get("auditPolicy"),
+                "dataClassification": metadata.get("dataClassification"),
+                "implementation": metadata.get("implementation"),
                 "semanticAuthority": metadata.get("semanticAuthority") or operation.get("semanticAuthority"),
                 "authorityLevel": metadata.get("authorityLevel") or operation.get("authorityLevel"),
                 "openapiAuthorityClaim": metadata.get("openapiAuthorityClaim") or operation.get("openapiAuthorityClaim"),
@@ -1215,6 +1265,200 @@ def validate_api_route_interface_coverage(F, data_by_path, api_route_records=Non
                 F.add("USF-INTERFACE-002", subject, "rejected decision requires a non-empty rejectionRationale")
 
 
+def _load_non_ui_client_contract_map(F):
+    data = load_json(NON_UI_CLIENT_CONTRACT_MAP_PATH, F)
+    if data is None:
+        F.add("USF-CLIENT-CONTRACT-001", NON_UI_CLIENT_CONTRACT_MAP_PATH, "client-contract map artefact is missing")
+        return None
+    if not isinstance(data, dict):
+        F.add("USF-CLIENT-CONTRACT-001", NON_UI_CLIENT_CONTRACT_MAP_PATH, "client-contract map must be an object")
+        return None
+    return data
+
+
+def _coverage_records_by_route(coverage):
+    records_by_route = {}
+    if not isinstance(coverage, dict):
+        return records_by_route
+    records = coverage.get("records")
+    if not isinstance(records, list):
+        return records_by_route
+    for record in records:
+        if isinstance(record, dict) and _as_nonempty_string(record.get("routeId")):
+            records_by_route[record["routeId"]] = record
+    return records_by_route
+
+
+def _has_true_claim(value):
+    return isinstance(value, dict) and any(v is True for v in value.values())
+
+
+def _validate_string_field(F, subject, record, field, rule_id="USF-CLIENT-CONTRACT-002"):
+    if not _as_nonempty_string(record.get(field)):
+        F.add(rule_id, subject, f"{field} is missing")
+        return False
+    return True
+
+
+def _validate_string_list_field(F, subject, record, field):
+    values = record.get(field)
+    if not isinstance(values, list) or not values or not all(_as_nonempty_string(value) for value in values):
+        F.add("USF-CLIENT-CONTRACT-002", subject, f"{field} must be a non-empty string array")
+        return False
+    return True
+
+
+def validate_non_ui_client_contract_map(F, data_by_path, api_route_records=None,
+                                        route_interface_coverage=None, client_contract_map=None):
+    routes = api_route_records if isinstance(api_route_records, list) else _load_api_route_records(F)
+    if not routes:
+        return
+    coverage = route_interface_coverage if isinstance(route_interface_coverage, dict) else _load_api_route_interface_coverage(F)
+    if not isinstance(coverage, dict):
+        return
+    client_map = client_contract_map if isinstance(client_contract_map, dict) else _load_non_ui_client_contract_map(F)
+    if not isinstance(client_map, dict):
+        return
+
+    root_claims = client_map.get("readinessClaims")
+    if _has_true_claim(root_claims):
+        F.add("USF-CLIENT-CONTRACT-004", NON_UI_CLIENT_CONTRACT_MAP_PATH, "root readinessClaims must preserve non-claims")
+    if client_map.get("generatedClientReadiness") is True or client_map.get("sdkReadiness") is True:
+        F.add("USF-CLIENT-CONTRACT-004", NON_UI_CLIENT_CONTRACT_MAP_PATH, "generated client or SDK readiness must not be true")
+
+    operations = client_map.get("operations")
+    if not isinstance(operations, list):
+        F.add("USF-CLIENT-CONTRACT-001", NON_UI_CLIENT_CONTRACT_MAP_PATH, "operations array is missing")
+        return
+
+    semantic_contract_ids = set()
+    interface_contract_ids = set()
+    for path, data in data_by_path.items():
+        if not isinstance(data, dict) or not isinstance(data.get("id"), str):
+            continue
+        schema = _schema_for_instance_path(path)
+        if schema == "semantic-contract":
+            semantic_contract_ids.add(data["id"])
+        elif schema == "interface-contract":
+            interface_contract_ids.add(data["id"])
+
+    coverage_by_route = _coverage_records_by_route(coverage)
+    records_by_route = defaultdict(list)
+    for index, record in enumerate(operations):
+        subject = f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}:operations[{index}]"
+        if not isinstance(record, dict):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "operation record must be an object")
+            continue
+        route_id = record.get("routeId")
+        if not _as_nonempty_string(route_id):
+            F.add("USF-CLIENT-CONTRACT-001", subject, "routeId is missing")
+            continue
+        records_by_route[route_id].append((index, record))
+
+    route_ids = {_route_key(route) for route in routes}
+    for route_id, rows in sorted(records_by_route.items()):
+        if route_id not in route_ids:
+            F.add("USF-CLIENT-CONTRACT-001", f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}:operations[{rows[0][0]}]", f"unknown routeId {route_id}")
+        if len(rows) > 1:
+            F.add("USF-CLIENT-CONTRACT-001", route_id, "client-contract operation record is duplicated")
+
+    for route in routes:
+        route_id = _route_key(route)
+        rows = records_by_route.get(route_id, [])
+        if len(rows) != 1:
+            F.add("USF-CLIENT-CONTRACT-001", route_id, "implemented route lacks exactly one client-contract operation record")
+            continue
+        index, record = rows[0]
+        subject = f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}:operations[{index}]"
+        coverage_record = coverage_by_route.get(route_id)
+        if not isinstance(coverage_record, dict):
+            F.add("USF-CLIENT-CONTRACT-001", subject, "route lacks interface disposition authority mapping")
+            continue
+
+        for field in ("method", "openapiPath", "openapiOperationId"):
+            if record.get(field) != route.get(field):
+                F.add("USF-CLIENT-CONTRACT-002", subject, f"{field} does not match implemented route")
+        if record.get("sourceRouteRef") != f"{API_ROUTE_INTERFACE_ROUTE_REF_PREFIX}{route_id}":
+            F.add("USF-CLIENT-CONTRACT-002", subject, "sourceRouteRef does not match implemented route")
+        if record.get("interfaceDispositionRef") != f"{API_ROUTE_INTERFACE_COVERAGE_REF_PREFIX}{route_id}":
+            F.add("USF-CLIENT-CONTRACT-002", subject, "interfaceDispositionRef does not point at the route map record")
+
+        disposition = record.get("clientCallableDisposition")
+        if disposition not in NON_UI_CLIENT_CONTRACT_DISPOSITIONS:
+            F.add("USF-CLIENT-CONTRACT-002", subject, f"unsupported clientCallableDisposition: {disposition}")
+
+        consumer_surfaces = record.get("consumerSurfaces")
+        if (not isinstance(consumer_surfaces, list) or not consumer_surfaces
+                or any(surface not in NON_UI_CLIENT_CONSUMER_SURFACES for surface in consumer_surfaces)):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "consumerSurfaces must use approved values")
+        elif disposition in {"internal-support-only", "not-claimed"} and consumer_surfaces != ["none"]:
+            F.add("USF-CLIENT-CONTRACT-004", subject, "internal or not-claimed operations must not expose client consumer surfaces")
+
+        metadata = record.get("operationMetadata")
+        if not isinstance(metadata, dict):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "operationMetadata is missing")
+            metadata = {}
+        for field in ("routeClassification", "owningDomain", "owningCapability", "authScheme",
+                      "tenantScope", "dataClassification", "implementationRef"):
+            _validate_string_field(F, subject, metadata, field)
+        if metadata.get("routeClassification") != route.get("routeClassification"):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "routeClassification does not match implemented route")
+        if metadata.get("owningCapability") != route.get("owningCapability"):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "owningCapability does not match implemented route")
+        if _as_nonempty_string(route.get("authScheme")) and metadata.get("authScheme") != route.get("authScheme"):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "authScheme does not match implemented route")
+        if metadata.get("tenantScope") != route.get("tenantScope"):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "tenantScope does not match implemented route")
+        if metadata.get("implementationRef") != route.get("implementation"):
+            F.add("USF-CLIENT-CONTRACT-002", subject, "implementationRef does not match implemented route")
+
+        authority = record.get("authorityMapping")
+        if not isinstance(authority, dict):
+            F.add("USF-CLIENT-CONTRACT-001", subject, "authorityMapping is missing")
+            authority = {}
+        semantic_ref = authority.get("semanticContractRef")
+        interface_ref = authority.get("interfaceContractRef")
+        if semantic_ref != coverage_record.get("semanticContractRef") or semantic_ref not in semantic_contract_ids:
+            F.add("USF-CLIENT-CONTRACT-001", subject, "semanticContractRef is missing or does not resolve")
+        if interface_ref != coverage_record.get("interfaceContractRef") or interface_ref not in interface_contract_ids:
+            F.add("USF-CLIENT-CONTRACT-001", subject, "interfaceContractRef is missing or does not resolve")
+        for field in ("requestSemanticsRef", "responseSemanticsRef", "authScheme", "tenantScope",
+                      "implementationRef", "proofEvidenceStatus"):
+            _validate_string_field(F, subject, authority, field)
+        for field in ("permissionRefs", "validationRefs", "errorRefs", "auditEventRefs", "telemetryRefs", "proofRefs"):
+            _validate_string_list_field(F, subject, authority, field)
+
+        generated = record.get("generatedClientInput")
+        if not isinstance(generated, dict):
+            F.add("USF-CLIENT-CONTRACT-003", subject, "generatedClientInput is missing")
+            generated = {}
+        status = generated.get("status")
+        if status not in NON_UI_CLIENT_GENERATED_STATUSES:
+            F.add("USF-CLIENT-CONTRACT-003", subject, f"unsupported generatedClientInput status: {status}")
+        if generated.get("staleness") in {"stale", "unknown"} or generated.get("stale") is True:
+            F.add("USF-CLIENT-CONTRACT-003", subject, "generated-client input is stale or unknown")
+
+        readiness = record.get("readinessClaims")
+        if not isinstance(readiness, dict):
+            F.add("USF-CLIENT-CONTRACT-004", subject, "readinessClaims is missing")
+            readiness = {}
+        for field in NON_UI_CLIENT_READINESS_CLAIMS:
+            if readiness.get(field) is True:
+                F.add("USF-CLIENT-CONTRACT-004", subject, f"{field} must not be true")
+
+        ui_policy = record.get("uiDerivedBehaviour")
+        if not isinstance(ui_policy, dict):
+            F.add("USF-CLIENT-CONTRACT-004", subject, "uiDerivedBehaviour policy is missing")
+            ui_policy = {}
+        if ui_policy.get("inventedBehaviourAllowed") is True or ui_policy.get("uiDerivedBehaviourAllowed") is True:
+            F.add("USF-CLIENT-CONTRACT-004", subject, "UI-derived behaviour must not be allowed to define non-UI semantics")
+
+        non_claims = set(_string_list(record.get("nonClaims")))
+        missing_non_claims = sorted(NON_UI_CLIENT_REQUIRED_NONCLAIMS - non_claims)
+        if missing_non_claims:
+            F.add("USF-CLIENT-CONTRACT-004", subject, f"missing non-claims: {', '.join(missing_non_claims)}")
+
+
 def _load_instance_ids(F):
     instance_ids = set()
     for p in sorted(glob.glob("spec/instances/**/*.json", recursive=True)):
@@ -1242,7 +1486,8 @@ def validate_source_import_submanifest_targets(F, sub_path, entries, instance_id
 
 
 def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None,
-                           evidence_ids=None, api_route_records=None, route_interface_coverage=None):
+                           evidence_ids=None, api_route_records=None, route_interface_coverage=None,
+                           client_contract_map=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -1306,6 +1551,13 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         data_by_path,
         api_route_records=api_route_records,
         route_interface_coverage=route_interface_coverage,
+    )
+    validate_non_ui_client_contract_map(
+        F,
+        data_by_path,
+        api_route_records=api_route_records,
+        route_interface_coverage=route_interface_coverage,
+        client_contract_map=client_contract_map,
     )
 
 
@@ -2264,7 +2516,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -2439,6 +2691,19 @@ def check_selftest(ctx, F):
                 f2,
                 record=record,
                 existing_paths=set(patch.get("existingPaths", [])),
+            )
+        elif patch["target"] == "client-contract-map":
+            record = patch.get("record")
+            instances = patch.get("instances")
+            if not isinstance(record, dict) or not isinstance(instances, dict):
+                F.add("USF-SELFTEST-001", df, "client-contract-map planted-defect needs record and instances objects")
+                continue
+            validate_non_ui_client_contract_map(
+                f2,
+                instances,
+                api_route_records=patch.get("apiRouteRecords"),
+                route_interface_coverage=patch.get("routeInterfaceCoverage"),
+                client_contract_map=record,
             )
         else:
             run_all_checks(sandbox, f2)
