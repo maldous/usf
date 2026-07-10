@@ -1,0 +1,15 @@
+{
+  "expectedRule": "USF-RUNTIME-037",
+  "runtimeProductReadinessMapPatches": [
+    {
+      "op": "replace",
+      "path": "/proofRung/claimedRung",
+      "value": "staging"
+    },
+    {
+      "op": "replace",
+      "path": "/proofRung/stagingReady",
+      "value": true
+    }
+  ]
+}

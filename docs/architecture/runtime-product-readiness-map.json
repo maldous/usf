@@ -1,0 +1,3029 @@
+{
+  "id": "runtime-product-readiness-map",
+  "title": "Runtime Product Readiness Map",
+  "ownerIssueId": "USF-1050",
+  "childIssueIds": [
+    "USF-1057",
+    "USF-1058",
+    "USF-1059",
+    "USF-1060"
+  ],
+  "lifecycleState": "current-main-validator-enforced",
+  "authorityLevel": "validator-enforced-readiness-map",
+  "readinessScope": "bounded-current-main-local-and-compose-runtime-product-readiness",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records bounded current-main runtime product readiness derived from USF semantic definitions, route/interface contracts, executable runtime proof, and validator-enforced source anchors.",
+    "runtimeProofAuthority": "Executable runtime proof demonstrates bounded local in-memory and dev Compose behaviour only. It does not define semantics by itself and cannot upgrade unsupported proof rungs.",
+    "openapiAuthority": "OpenAPI remains a lower-authority projection and cannot satisfy runtime proof on its own.",
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "sourceCodeBoundary": "Source code is used only when bound to semantic/interface contracts, runtime proof, and validator-enforced current-main anchors."
+  },
+  "sourceAuthorities": [
+    "docs/architecture/current-main-capability-service-realisation-map.json",
+    "docs/architecture/non-ui-client-callable-contract-map.json",
+    "docs/architecture/api-route-interface-contract-coverage.json",
+    "docs/architecture/public-api-readiness-map.json",
+    "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+    "packages/proof/src/runtime-application-proof.ts",
+    "apps/api/src/runtime.ts",
+    "apps/work/src/worker.ts",
+    "tools/validate-runtime/validate-runtime.py"
+  ],
+  "sourceTreeAnchors": [
+    {
+      "path": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "blobSha": "de94d7177cd002a2e1d5e0da35160caaad8a2f0e",
+      "authorityRole": "current-main-capability-service-map"
+    },
+    {
+      "path": "docs/architecture/non-ui-client-callable-contract-map.json",
+      "blobSha": "40c8e43124418b4266c321ab599262c910bcc9c7",
+      "authorityRole": "client-callable-contract-map"
+    },
+    {
+      "path": "docs/architecture/api-route-interface-contract-coverage.json",
+      "blobSha": "7071de766385a2bf8ceff300f18ee59c00d1e807",
+      "authorityRole": "interface-contract-coverage"
+    },
+    {
+      "path": "docs/architecture/public-api-readiness-map.json",
+      "blobSha": "c546a239dbe414a0f199c1a7b60d12d4d6f82a21",
+      "authorityRole": "public-api-readiness-boundary"
+    },
+    {
+      "path": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+      "blobSha": "b2a5a39dee4a7252d34632824359b1454b56ff24",
+      "authorityRole": "runtime-proof-manifest"
+    },
+    {
+      "path": "packages/proof/src/runtime-application-proof.ts",
+      "blobSha": "7387788f75cd83ef8d68300917202e72c0f6873b",
+      "authorityRole": "executable-runtime-proof-source"
+    },
+    {
+      "path": "apps/api/src/runtime.ts",
+      "blobSha": "375814dfd6a0c6c4e82a376fb16132bc398b3531",
+      "authorityRole": "api-runtime-provider-binding-source"
+    },
+    {
+      "path": "apps/work/src/worker.ts",
+      "blobSha": "70e42c806efa06b82444b92884fb83870106919a",
+      "authorityRole": "worker-runtime-source"
+    },
+    {
+      "path": "tools/validate-runtime/validate-runtime.py",
+      "blobSha": "21fec2a2272005861e88673eb080982f441c4394",
+      "authorityRole": "runtime-readiness-validator"
+    }
+  ],
+  "readinessClaims": {
+    "runtimeProductReady": true,
+    "localDevRuntimeReady": true,
+    "composeRuntimeReady": true,
+    "routeBackedOperationRuntimeProofReady": true,
+    "runtimeStateBoundaryReady": true,
+    "runtimeNegativePathProofReady": true,
+    "generatedClientReady": true,
+    "sdkReady": true,
+    "publicApiReady": true,
+    "productUiReady": false,
+    "publicDeploymentReady": false,
+    "publicFqdnReady": false,
+    "deploymentReady": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "packagePublicationReady": false,
+    "complianceReady": false,
+    "monetisationReady": false,
+    "appStoreReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "proofRung": {
+    "claimedRung": "local-dev-and-dev-compose-backed",
+    "manifestRef": "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+    "allModesProofCommand": "runtime:proof",
+    "inMemoryProofCommand": "runtime:proof:in-memory",
+    "composeProofCommand": "runtime:proof:compose",
+    "validatorCommand": "runtime:validate",
+    "projectionOnlyMaySatisfyRuntimeProof": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "rationale": "Runtime readiness is bounded to local executable API and worker proof in dev-in-memory and dev-compose-backed modes against the canonical dev Compose target."
+  },
+  "runtimeModes": [
+    {
+      "mode": "dev-in-memory",
+      "providerMode": "dev in-memory",
+      "providerClass": "hermetic-mock",
+      "apiBootProof": true,
+      "workerBootProof": true,
+      "healthProof": true,
+      "readinessProof": true,
+      "livenessProof": true,
+      "projectionOnlyEvidence": false,
+      "apiProofAssertions": [
+        "API binds to loopback on an ephemeral port",
+        "health route reports dev-in-memory runtime mode",
+        "readiness route reports service catalogue authority",
+        "OpenAPI route exposes tenant-context",
+        "tenant mismatch fails closed",
+        "authorization failure fails closed",
+        "tenant-context request captures audit evidence"
+      ],
+      "workerProofAssertions": [
+        "worker run-once proof starts through the worker entry point",
+        "worker submits and executes a synthetic tenant maintenance job",
+        "worker cross-tenant job read fails closed",
+        "worker authorization failure fails closed",
+        "worker job lifecycle produces audit evidence"
+      ],
+      "proofCommandRefs": [
+        "runtime:proof:in-memory",
+        "runtime:proof:in-memory"
+      ]
+    },
+    {
+      "mode": "dev-compose-backed",
+      "providerMode": "local-composed-real-service",
+      "providerClass": "local-composed-real-service",
+      "apiBootProof": true,
+      "workerBootProof": true,
+      "healthProof": true,
+      "readinessProof": true,
+      "livenessProof": true,
+      "projectionOnlyEvidence": false,
+      "apiProofAssertions": [
+        "canonical dev Compose target starts and waits before API proof",
+        "API binds to loopback on an ephemeral port",
+        "health route reports dev-compose-backed runtime mode",
+        "health route reports local-composed-real-service provider mode",
+        "readiness route reports service catalogue authority",
+        "readiness route reports active Postgres, Keycloak, Mailpit, MinIO, NATS, Temporal, and OpenBao provider bindings",
+        "tenant-context route publishes through NatsEventBus using the composed NATS SDK boundary",
+        "auth login route issues synthetic identity through KeycloakComposedIdentityProvider",
+        "file routes write and read synthetic objects through MinioObjectStore",
+        "permission route loads tenant membership through PostgresTenantMembershipRepository before synchronous PDP evaluation",
+        "tenant mismatch fails closed",
+        "authorization failure fails closed",
+        "tenant-context request captures audit evidence",
+        "notification API records providerMode composed-test and Mailpit providerRef without claiming API-side delivery",
+        "no deferred runtime provider binding is hidden behind dev-compose-backed mode"
+      ],
+      "workerProofAssertions": [
+        "canonical dev Compose target starts and waits before worker proof",
+        "worker run-once proof starts through the worker entry point",
+        "worker submits and executes a synthetic tenant maintenance job",
+        "worker cross-tenant job read fails closed",
+        "worker authorization failure fails closed",
+        "worker job lifecycle produces audit evidence",
+        "worker performs a PostgresTenantMembershipRepository SDK-backed write and readback",
+        "worker notification delivery uses MailpitNotificationProvider with SDK-backed readiness, write, readback, and cleanup",
+        "worker performs NATS publish/readback through NatsEventBus",
+        "worker performs MinIO object write/read/delete through MinioObjectStore",
+        "worker performs Keycloak synthetic identity readback through KeycloakComposedIdentityProvider",
+        "worker performs OpenBao secret write/describe/resolve/delete through OpenBaoSecretStore",
+        "worker performs Temporal workflow schedule/worker execution/result readback through TemporalComposedWorkflowEngine",
+        "all composed adapter proofs record readiness retry, metric, trace, audit, redaction, and cleanup evidence"
+      ],
+      "proofCommandRefs": [
+        "runtime:proof:compose",
+        "runtime:proof:compose"
+      ]
+    }
+  ],
+  "bootHealthReadinessLiveness": {
+    "apiBootBounded": true,
+    "workerBootBounded": true,
+    "healthzProof": true,
+    "readyzProof": true,
+    "livenessSemanticsDefined": true,
+    "composeProviderBindingProof": true,
+    "teardownProof": true,
+    "missingProofFailsClosed": true,
+    "healthRouteRef": "healthz.get",
+    "readinessRouteRef": "readyz.get",
+    "livenessBoundary": "process start, loopback bind, worker run-once completion, and teardown are proven locally; no external uptime/SLO claim is made"
+  },
+  "operationRuntimeProofCoverage": {
+    "totalRouteBackedOperations": 32,
+    "directRuntimeProofOperations": 12,
+    "domainExecutableProofOperations": 20,
+    "projectionOnlyRuntimeProofOperations": 0,
+    "runtimeReadyOperations": 32
+  },
+  "stateStorageMigrationBoundary": {
+    "providerModes": [
+      "dev-in-memory",
+      "dev-compose-backed"
+    ],
+    "syntheticDataOnly": true,
+    "tenantBoundaryDefined": true,
+    "stateProviderBindingsDefined": true,
+    "migrationPostureDefined": true,
+    "missingBoundaryFailsClosed": true,
+    "productionDataMigrationReady": false,
+    "stagingDataMigrationReady": false,
+    "liveProviderDataReady": false,
+    "dataBoundary": "Synthetic tenant, actor, file, job, notification, provider, and secret proof data only. No production data, migration execution, retention, backup supplier readiness, or live provider data portability is claimed.",
+    "migrationPosture": "Local schema/runtime proof and provider-bound synthetic read/write evidence only; production migration, rollback, irreversible data-change safety, and live provider migration readiness are non-claims.",
+    "dataBearingServices": [
+      {
+        "serviceOrProviderRef": "runtime-database-provider-binding",
+        "serviceCatalogueServiceIds": [
+          "postgres"
+        ],
+        "providerRegistryIds": [
+          "database-postgres-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "mailpit-notification-provider",
+        "serviceCatalogueServiceIds": [
+          "mailpit"
+        ],
+        "providerRegistryIds": [
+          "notification-delivery-mailpit-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "nats-event-bus-provider",
+        "serviceCatalogueServiceIds": [
+          "nats"
+        ],
+        "providerRegistryIds": [
+          "event-bus-nats-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "minio-object-storage-provider",
+        "serviceCatalogueServiceIds": [
+          "minio"
+        ],
+        "providerRegistryIds": [
+          "object-storage-minio-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "keycloak-identity-provider",
+        "serviceCatalogueServiceIds": [
+          "keycloak",
+          "keycloak-db"
+        ],
+        "providerRegistryIds": [
+          "identity-keycloak-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "openbao-secret-provider",
+        "serviceCatalogueServiceIds": [
+          "openbao"
+        ],
+        "providerRegistryIds": [
+          "secret-store-openbao-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "temporal-workflow-provider",
+        "serviceCatalogueServiceIds": [
+          "temporal"
+        ],
+        "providerRegistryIds": [
+          "workflow-engine-temporal-composed-test"
+        ],
+        "bindingStatus": "active",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "active bounded local composed-test provider proof",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-clickhouse-analytics-provider",
+        "serviceCatalogueServiceIds": [
+          "clickhouse"
+        ],
+        "providerRegistryIds": [
+          "analytics-store-clickhouse-composed-test",
+          "analytics-store-clickhouse-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-redis-cache-provider",
+        "serviceCatalogueServiceIds": [
+          "redis"
+        ],
+        "providerRegistryIds": [
+          "cache-redis-composed-test",
+          "cache-redis-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-meilisearch-search-provider",
+        "serviceCatalogueServiceIds": [
+          "meilisearch"
+        ],
+        "providerRegistryIds": [
+          "full-text-search-meilisearch-composed-test",
+          "full-text-search-meilisearch-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-clamav-scanner-provider",
+        "serviceCatalogueServiceIds": [
+          "clamav"
+        ],
+        "providerRegistryIds": [
+          "file-scan-clamav-composed-test",
+          "file-scan-clamav-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-localstack-cloud-mock-provider",
+        "serviceCatalogueServiceIds": [
+          "localstack"
+        ],
+        "providerRegistryIds": [
+          "provider-emulator-localstack-composed-test",
+          "provider-emulator-localstack-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-209-wiremock-http-mock-provider",
+        "serviceCatalogueServiceIds": [
+          "wiremock"
+        ],
+        "providerRegistryIds": [
+          "provider-mock-wiremock-composed-test",
+          "provider-mock-wiremock-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-webhook-sink-capture-provider",
+        "serviceCatalogueServiceIds": [
+          "webhook-sink"
+        ],
+        "providerRegistryIds": [
+          "notification-delivery-webhook-sink-composed-test",
+          "notification-delivery-webhook-sink-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-pgbackrest-backup-provider",
+        "serviceCatalogueServiceIds": [
+          "pgbackrest"
+        ],
+        "providerRegistryIds": [
+          "backup-restore-pgbackrest-composed-test",
+          "backup-restore-pgbackrest-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      },
+      {
+        "serviceOrProviderRef": "usf-189-windmill-automation-provider",
+        "serviceCatalogueServiceIds": [
+          "windmill",
+          "windmill-worker",
+          "windmill-postgres",
+          "windmill-redis"
+        ],
+        "providerRegistryIds": [
+          "operational-job-engine-windmill-composed-test",
+          "operational-job-engine-windmill-deferred"
+        ],
+        "bindingStatus": "profile-gated-proven",
+        "providerMode": "composed-test",
+        "runtimeDataBoundary": "profile-gated or deferred local provider boundary with explicit non-readiness claims",
+        "migrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are not claimed",
+        "productionDataClaim": false,
+        "liveProviderClaim": false
+      }
+    ]
+  },
+  "authSessionTenantNegativePathAuditTelemetryProof": {
+    "apiTenantMismatchFailClosed": true,
+    "apiAuthorizationFailureFailClosed": true,
+    "workerTenantBoundaryDenied": true,
+    "workerAuthorizationDenied": true,
+    "auditEvidenceCaptured": true,
+    "telemetryEvidenceCaptured": true,
+    "redactionEvidenceCaptured": true,
+    "correlationPolicyDefined": true,
+    "missingSemanticsFailClosed": true,
+    "proofCommandRefs": [
+      "runtime:proof",
+      "runtime:proof:in-memory",
+      "runtime:proof:compose"
+    ],
+    "negativePathEvidenceRefs": [
+      "packages/proof/src/runtime-application-proof.ts#tenantMismatchStatus",
+      "packages/proof/src/runtime-application-proof.ts#authorizationFailureStatus",
+      "packages/proof/src/runtime-application-proof.ts#tenantBoundaryDenied",
+      "packages/proof/src/runtime-application-proof.ts#authorizationDenied"
+    ],
+    "auditTelemetryEvidenceRefs": [
+      "spec/instances/runtime-proof/runtime-application-compose-parity.json#auditEvidenceBoundary",
+      "packages/proof/src/runtime-application-proof.ts#auditEvents",
+      "packages/proof/src/runtime-application-proof.ts#metricEvidenceCaptured",
+      "packages/proof/src/runtime-application-proof.ts#traceEvidenceCaptured",
+      "packages/proof/src/runtime-application-proof.ts#redactionChecked"
+    ],
+    "sessionBoundary": "Current runtime proof covers dev header and synthetic identity/session paths only; browser session, public gateway, live IdP, and production session readiness are not claimed."
+  },
+  "operations": [
+    {
+      "routeId": "healthz.get",
+      "method": "GET",
+      "openapiPath": "/healthz",
+      "openapiOperationId": "getHealthz",
+      "clientCallableDisposition": "not-claimed",
+      "owningCapability": "runtime-health",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=healthz.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=healthz.get",
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "runtime:proof",
+          "runtime:proof:in-memory",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "not-applicable:not audited; no tenant or sensitive data"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "readyz.get",
+      "method": "GET",
+      "openapiPath": "/readyz",
+      "openapiOperationId": "getReadyz",
+      "clientCallableDisposition": "not-claimed",
+      "owningCapability": "runtime-readiness",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=readyz.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=readyz.get",
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "runtime:proof",
+          "runtime:proof:in-memory",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "not-applicable:not audited; provider modes only"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "openapi.get",
+      "method": "GET",
+      "openapiPath": "/openapi.json",
+      "openapiOperationId": "getOpenApiDocument",
+      "clientCallableDisposition": "not-claimed",
+      "owningCapability": "openapi-document",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=openapi.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=openapi.get",
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "runtime:proof",
+          "runtime:proof:in-memory",
+          "runtime:proof:compose",
+          "openapi:check"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "not-applicable:not audited; contains synthetic examples only"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "tenant-context.get",
+      "method": "GET",
+      "openapiPath": "/v1/tenant-context",
+      "openapiOperationId": "getTenantContextV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "tenant-context",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=tenant-context.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=tenant-context.get",
+      "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "runtime:proof",
+          "runtime:proof:in-memory",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:tenant.context.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:records tenant.context.read when accepted"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "direct-fail-closed-runtime-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "auth-login.post",
+      "method": "POST",
+      "openapiPath": "/auth/login",
+      "openapiOperationId": "postAuthLogin",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "auth-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=auth-login.post",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=auth-login.post",
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "runtime:proof",
+          "runtime:proof:compose",
+          "proof:auth"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "none",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:auth.login"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:auth service records value-free login evidence"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-check.post",
+      "method": "POST",
+      "openapiPath": "/v1/authz/check",
+      "openapiOperationId": "postAuthzCheckV1",
+      "clientCallableDisposition": "internal-support-only",
+      "owningCapability": "policy-decision-point",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-check.post",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=authz-check.post",
+      "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:authz",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:authorization.check"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:authorization decision is audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-permissions.get",
+      "method": "GET",
+      "openapiPath": "/v1/authz/permissions",
+      "openapiOperationId": "getAuthzPermissionsV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "permission-discovery",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-permissions.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=authz-permissions.get",
+      "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "runtime:proof",
+          "runtime:proof:compose",
+          "proof:authz"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:tenant.members.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:permission discovery denial is audited through PDP"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.list",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events",
+      "openapiOperationId": "getAuditEventsV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "audit-query",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-events.list",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:audit",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:audit.search"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:audit query is itself audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.get",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events/{id}",
+      "openapiOperationId": "getAuditEventByIdV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "audit-query",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-events.get",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:audit",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:audit.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:audit read is itself audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-verify.post",
+      "method": "POST",
+      "openapiPath": "/v1/audit/verify",
+      "openapiOperationId": "postAuditVerifyV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "audit-integrity-verifier",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-verify.post",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-verify.post",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:audit",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:audit.verify"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:verification request is audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-current.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/current",
+      "openapiOperationId": "getConfigCurrentV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "config-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-current.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-current.get",
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:config",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:config service records value-free config access"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-flags.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/feature-flags",
+      "openapiOperationId": "getConfigFeatureFlagsV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "feature-flag-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-flags.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-flags.get",
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:config",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:feature flag access uses config controls"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-provider-status.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/provider-status",
+      "openapiOperationId": "getConfigProviderStatusV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "provider-status",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-provider-status.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-provider-status.get",
+      "semanticContractRef": "semantic-contract.provider-environment-classification",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:providers",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:provider mode read is controlled by config read"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.list",
+      "method": "GET",
+      "openapiPath": "/v1/providers",
+      "openapiOperationId": "listProvidersV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "provider-registry",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=providers.list",
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:providers",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:provider.list"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:provider status access is PDP guarded and value-free; audit-of-access posture is represented"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.get",
+      "method": "GET",
+      "openapiPath": "/v1/providers/{id}",
+      "openapiOperationId": "getProviderByIdV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "provider-registry",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=providers.get",
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:providers",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:provider.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:provider detail access is PDP guarded and value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-readiness.get",
+      "method": "GET",
+      "openapiPath": "/v1/observability/readiness",
+      "openapiOperationId": "getObservabilityReadinessV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "telemetry-collector",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-readiness.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=observability-readiness.get",
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:observability",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:observability.readiness.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:observability readiness access is PDP guarded and audit-recorded value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-signals.list",
+      "method": "GET",
+      "openapiPath": "/v1/observability/signals",
+      "openapiOperationId": "listObservabilitySignalsV1",
+      "clientCallableDisposition": "operator-tooling-local-contract",
+      "owningCapability": "telemetry-collector",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-signals.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=observability-signals.list",
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:observability",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:observability.signal.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:observability signal access is PDP guarded and audit-recorded value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.list",
+      "method": "GET",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "listFilesV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "file-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.list",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:files",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:file.list"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file list audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.upload",
+      "method": "POST",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "uploadFileV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "file-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.upload",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.upload",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "proof:files",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:file.create"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file upload lifecycle audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.get",
+      "method": "GET",
+      "openapiPath": "/v1/files/{id}",
+      "openapiOperationId": "getFileV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "file-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.get",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:files",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file read audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.download",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/download",
+      "openapiOperationId": "downloadFileV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "file-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.download",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.download",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "proof:files",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.download"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:download audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.verify",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/verify",
+      "openapiOperationId": "verifyFileV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "file-integrity",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.verify",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.verify",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:files",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:file verification audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.list",
+      "method": "GET",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "listJobsV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "job-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.list",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:jobs",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:job.list"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job service emits lifecycle audit; list is PDP gated"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.create",
+      "method": "POST",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "createJobV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "job-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.create",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.create",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "proof:jobs",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:job.create"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job.create audited by job service; guardrail denials emit value-free guardrail audit"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "direct-fail-closed-runtime-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.get",
+      "method": "GET",
+      "openapiPath": "/v1/jobs/{id}",
+      "openapiOperationId": "getJobV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "job-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.get",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:jobs",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:job.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job read is PDP gated and value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/jobs/{id}/cancel",
+      "openapiOperationId": "cancelJobV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "job-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.cancel",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.cancel",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:jobs",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:job.cancel"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:job.cancel audited by job service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notification-templates.create",
+      "method": "POST",
+      "openapiPath": "/v1/notification-templates",
+      "openapiOperationId": "createNotificationTemplateV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "notification-template-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notification-templates.create",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notification-templates.create",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "proof:notify",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.template.create"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:template creation audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.list",
+      "method": "GET",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "listNotificationsV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "notification-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.list",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.list",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:notify",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:notification.list"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification list is PDP gated"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.create",
+      "method": "POST",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "createNotificationV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "notification-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.create",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.create",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "proof:notify",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.create"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.created audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.get",
+      "method": "GET",
+      "openapiPath": "/v1/notifications/{id}",
+      "openapiOperationId": "getNotificationV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "notification-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.get",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.get",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:notify",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:notification.read"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.read audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.send",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/send",
+      "openapiOperationId": "sendNotificationV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "notification-delivery-job",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.send",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.send",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "proofEvidence": {
+        "runtimeProofStatus": "direct-runtime-proof",
+        "runtimeProofCommandRefs": [
+          "proof:notify",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.send"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.queued audited and job.create audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/cancel",
+      "openapiOperationId": "cancelNotificationV1",
+      "clientCallableDisposition": "client-callable-local-contract",
+      "owningCapability": "notification-service",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.cancel",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.cancel",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "proofEvidence": {
+        "runtimeProofStatus": "executable-domain-proof-bound-to-route-contract",
+        "runtimeProofCommandRefs": [
+          "proof:notify",
+          "runtime:proof",
+          "runtime:proof:compose"
+        ],
+        "evidenceRefs": [
+          "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+          "packages/proof/src/runtime-application-proof.ts",
+          "docs/architecture/api-route-interface-contract-coverage.json",
+          "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+        ],
+        "projectionOnlySatisfiesRuntimeProof": false,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "proofBoundary": "executable local runtime proof only; route contract and OpenAPI projections remain lower-authority inputs"
+      },
+      "authSessionTenantAuditTelemetryStatus": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.cancel"
+        ],
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "auditEventRefs": [
+          "auditPolicy:notification.cancelled audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "negativePathProofStatus": "contract-bound-or-domain-proof",
+        "missingSemanticsFailClosed": true
+      },
+      "readiness": {
+        "runtimeRouteBackedOperationReady": true,
+        "runtimeProofRung": "local-dev-and-dev-compose-backed",
+        "productUiReady": false,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false,
+        "deploymentReady": false,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false,
+        "packagePublicationReady": false,
+        "complianceReady": false,
+        "monetisationReady": false,
+        "appStoreReady": false,
+        "humanAcceptanceComplete": false
+      },
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-deployment-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-package-publication-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    }
+  ],
+  "validatorCoverage": [
+    "validate-runtime.runtime-product-readiness-map",
+    "runtime:validate",
+    "runtime:proof",
+    "runtime:proof:compose",
+    "runtime:proof:in-memory",
+    "repo:validate"
+  ],
+  "plantedDefectCoverage": [
+    {
+      "ruleId": "USF-RUNTIME-036",
+      "path": "tools/validate-runtime/planted-defects/runtime-product-source-anchor-stale.json"
+    },
+    {
+      "ruleId": "USF-RUNTIME-037",
+      "path": "tools/validate-runtime/planted-defects/runtime-product-proof-rung-overclaim.json"
+    },
+    {
+      "ruleId": "USF-RUNTIME-038",
+      "path": "tools/validate-runtime/planted-defects/runtime-product-route-projection-only.json"
+    },
+    {
+      "ruleId": "USF-RUNTIME-039",
+      "path": "tools/validate-runtime/planted-defects/runtime-product-data-boundary-missing.json"
+    },
+    {
+      "ruleId": "USF-RUNTIME-040",
+      "path": "tools/validate-runtime/planted-defects/runtime-product-negative-path-missing.json"
+    }
+  ],
+  "proofEvidenceStatus": "Bounded local executable runtime proof in dev-in-memory and dev-compose-backed modes only; no UI, public deployment, public FQDN, staging, production, live-provider, package publication, compliance, monetisation, app-store, or human-acceptance claim.",
+  "nonClaims": [
+    "no-product-ui-readiness-claim",
+    "no-public-deployment-claim",
+    "no-public-fqdn-claim",
+    "no-deployment-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-live-provider-claim",
+    "no-package-publication-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim"
+  ]
+}

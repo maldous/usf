@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import os
 import re
@@ -64,11 +65,17 @@ RULES = {
     "USF-RUNTIME-033": ("blocking", "Windmill configured proof boundary is incomplete or unsafe"),
     "USF-RUNTIME-034": ("blocking", "backup restore DR and RPO/RTO operational depth is incomplete or overclaimed"),
     "USF-RUNTIME-035": ("blocking", "backup restore DR PITR and RPO/RTO execution proof is incomplete or overclaimed"),
+    "USF-RUNTIME-036": ("blocking", "runtime product readiness map is missing, stale, or inconsistent"),
+    "USF-RUNTIME-037": ("blocking", "runtime product proof rung, boot, health, readiness, or liveness boundary is incomplete"),
+    "USF-RUNTIME-038": ("blocking", "route-backed operation runtime proof coverage is incomplete or projection-only"),
+    "USF-RUNTIME-039": ("blocking", "runtime state, storage, migration, or data-boundary semantics are incomplete"),
+    "USF-RUNTIME-040": ("blocking", "runtime auth, session, tenant, audit, or telemetry proof semantics are incomplete"),
     "USF-RUNTIME-SELFTEST": ("blocking", "planted runtime defect did not raise its expected rule"),
 }
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = Path("spec/instances/runtime-proof/runtime-application-compose-parity.json")
+RUNTIME_PRODUCT_READINESS_MAP_PATH = Path("docs/architecture/runtime-product-readiness-map.json")
 SCHEMA_PATH = Path("spec/schemas/runtime-proof.schema.json")
 ANALYTICS_EVENT_STORE_MATRIX_PATH = Path("docs/architecture/analytics-event-store-provider-disposition-matrix.json")
 CLICKHOUSE_PROOF_BOUNDARY_PATH = Path("docs/architecture/clickhouse-service-semantic-proof-boundary.json")
@@ -230,6 +237,81 @@ REQUIRED_PROHIBITED_CLAIMS = {
     "full-dev-readiness",
     "full-product-readiness",
     "test-readiness",
+}
+RUNTIME_PRODUCT_READINESS_SCOPE = "bounded-current-main-local-and-compose-runtime-product-readiness"
+RUNTIME_PRODUCT_READINESS_VALIDATOR = "validate-runtime.runtime-product-readiness-map"
+RUNTIME_PRODUCT_REQUIRED_CHILD_ISSUES = {"USF-1057", "USF-1058", "USF-1059", "USF-1060"}
+RUNTIME_PRODUCT_REQUIRED_TRUE_CLAIMS = {
+    "runtimeProductReady",
+    "localDevRuntimeReady",
+    "composeRuntimeReady",
+    "routeBackedOperationRuntimeProofReady",
+    "runtimeStateBoundaryReady",
+    "runtimeNegativePathProofReady",
+}
+RUNTIME_PRODUCT_FORBIDDEN_TRUE_CLAIMS = {
+    "productUiReady",
+    "publicDeploymentReady",
+    "publicFqdnReady",
+    "deploymentReady",
+    "stagingReady",
+    "productionReady",
+    "liveProviderReady",
+    "packagePublicationReady",
+    "complianceReady",
+    "monetisationReady",
+    "appStoreReady",
+    "humanAcceptanceComplete",
+}
+RUNTIME_PRODUCT_REQUIRED_NONCLAIMS = {
+    "no-product-ui-readiness-claim",
+    "no-public-deployment-claim",
+    "no-public-fqdn-claim",
+    "no-deployment-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-live-provider-claim",
+    "no-package-publication-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim",
+}
+RUNTIME_PRODUCT_SOURCE_ANCHOR_PATHS = {
+    "docs/architecture/current-main-capability-service-realisation-map.json",
+    "docs/architecture/non-ui-client-callable-contract-map.json",
+    "docs/architecture/api-route-interface-contract-coverage.json",
+    "docs/architecture/public-api-readiness-map.json",
+    "spec/instances/runtime-proof/runtime-application-compose-parity.json",
+    "packages/proof/src/runtime-application-proof.ts",
+    "apps/api/src/runtime.ts",
+    "apps/work/src/worker.ts",
+    "tools/validate-runtime/validate-runtime.py",
+}
+RUNTIME_PRODUCT_REQUIRED_PLANTED_RULES = {
+    "USF-RUNTIME-036",
+    "USF-RUNTIME-037",
+    "USF-RUNTIME-038",
+    "USF-RUNTIME-039",
+    "USF-RUNTIME-040",
+}
+RUNTIME_PRODUCT_ALLOWED_OPERATION_PROOF_STATUSES = {
+    "direct-runtime-proof",
+    "executable-domain-proof-bound-to-route-contract",
+}
+RUNTIME_PRODUCT_DIRECT_PROOF_ROUTES = {
+    "healthz.get",
+    "readyz.get",
+    "openapi.get",
+    "tenant-context.get",
+    "auth-login.post",
+    "authz-permissions.get",
+    "files.upload",
+    "files.download",
+    "jobs.create",
+    "notification-templates.create",
+    "notifications.create",
+    "notifications.send",
 }
 ANALYTICS_EVENT_STORE_REQUIRED_ISSUES = {"USF-172", "USF-197", "USF-206", "USF-189", "USF-184", "USF-192", "USF-133"}
 ANALYTICS_EVENT_STORE_REQUIRED_EVIDENCE_REFS = {
@@ -793,6 +875,21 @@ def read_text(path: Path) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
 
 
+def current_blob_sha(path: str | Path) -> str:
+    data = (ROOT / path).read_bytes()
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
+
+
+def as_nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, str)]
+
+
 def state_text(state: dict[str, Any], path: Path) -> str:
     override = state.get("sourceOverrides", {}).get(str(path))
     if isinstance(override, str):
@@ -856,6 +953,14 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
     manifest = read_json(MANIFEST_PATH)
     if defect.get("manifestPatches"):
         manifest = apply_manifest_patches(manifest, defect["manifestPatches"])
+    runtime_product_readiness_map: Any = None
+    if not defect.get("removeRuntimeProductReadinessMap"):
+        runtime_product_readiness_map = read_json(RUNTIME_PRODUCT_READINESS_MAP_PATH)
+        if defect.get("runtimeProductReadinessMapPatches"):
+            runtime_product_readiness_map = apply_manifest_patches(
+                runtime_product_readiness_map,
+                defect["runtimeProductReadinessMapPatches"],
+            )
     analytics_matrix: Any = None
     if not defect.get("removeAnalyticsEventStoreMatrix"):
         analytics_matrix = read_json(ANALYTICS_EVENT_STORE_MATRIX_PATH)
@@ -993,6 +1098,7 @@ def load_state(defect: dict[str, Any] | None = None) -> dict[str, Any]:
         )
     return {
         "manifest": manifest,
+        "runtimeProductReadinessMap": runtime_product_readiness_map,
         "schema": read_json(SCHEMA_PATH),
         "analyticsEventStoreMatrix": analytics_matrix,
         "clickhouseProofBoundary": clickhouse_boundary,
@@ -5290,6 +5396,332 @@ def check_dependency_pinning(F: Findings, state: dict[str, Any]) -> None:
         )
 
 
+def _client_contract_operations_by_route_id() -> dict[str, dict[str, Any]]:
+    data = read_json(Path("docs/architecture/non-ui-client-callable-contract-map.json"))
+    records: dict[str, dict[str, Any]] = {}
+    for record in data.get("operations", []):
+        if isinstance(record, dict) and isinstance(record.get("routeId"), str):
+            records[record["routeId"]] = record
+    return records
+
+
+def _readiness_map_operation_records(readiness_map: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    records: dict[str, list[dict[str, Any]]] = {}
+    operations = readiness_map.get("operations")
+    if not isinstance(operations, list):
+        return records
+    for record in operations:
+        if isinstance(record, dict) and isinstance(record.get("routeId"), str):
+            records.setdefault(record["routeId"], []).append(record)
+    return records
+
+
+def check_runtime_product_readiness_map(F: Findings, state: dict[str, Any]) -> None:
+    readiness_map = state.get("runtimeProductReadinessMap")
+    manifest = state["manifest"]
+    if not isinstance(readiness_map, dict):
+        F.add(
+            "USF-RUNTIME-036",
+            str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+            "runtime product readiness map artefact is missing or not an object",
+        )
+        return
+
+    if readiness_map.get("id") != "runtime-product-readiness-map":
+        F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "unexpected readiness map id")
+    if readiness_map.get("ownerIssueId") != "USF-1050":
+        F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "ownerIssueId must be USF-1050")
+    child_issues = set(string_list(readiness_map.get("childIssueIds")))
+    missing_child_issues = sorted(RUNTIME_PRODUCT_REQUIRED_CHILD_ISSUES - child_issues)
+    if missing_child_issues:
+        F.add(
+            "USF-RUNTIME-036",
+            str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+            f"missing child issues: {', '.join(missing_child_issues)}",
+        )
+    if readiness_map.get("authorityLevel") != "validator-enforced-readiness-map":
+        F.add(
+            "USF-RUNTIME-036",
+            str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+            "authorityLevel must identify a validator-enforced readiness map",
+        )
+    if readiness_map.get("readinessScope") != RUNTIME_PRODUCT_READINESS_SCOPE:
+        F.add(
+            "USF-RUNTIME-037",
+            str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+            "readinessScope is missing or exceeds the bounded local/compose runtime scope",
+        )
+
+    claims = readiness_map.get("readinessClaims")
+    if not isinstance(claims, dict):
+        F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "readinessClaims is missing")
+        claims = {}
+    for field in sorted(RUNTIME_PRODUCT_REQUIRED_TRUE_CLAIMS):
+        if claims.get(field) is not True:
+            F.add(
+                "USF-RUNTIME-036",
+                str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+                f"{field} must be true for bounded current-main runtime readiness",
+            )
+    for field in sorted(RUNTIME_PRODUCT_FORBIDDEN_TRUE_CLAIMS):
+        if claims.get(field) is True:
+            F.add(
+                "USF-RUNTIME-037",
+                str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+                f"{field} must remain false in the runtime readiness map",
+            )
+
+    non_claims = set(string_list(readiness_map.get("nonClaims")))
+    missing_non_claims = sorted(RUNTIME_PRODUCT_REQUIRED_NONCLAIMS - non_claims)
+    if missing_non_claims:
+        F.add(
+            "USF-RUNTIME-037",
+            str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+            f"missing runtime non-claims: {', '.join(missing_non_claims)}",
+        )
+
+    anchors = readiness_map.get("sourceTreeAnchors")
+    if not isinstance(anchors, list):
+        F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "sourceTreeAnchors must be an array")
+        anchors = []
+    anchors_by_path: dict[str, str] = {}
+    for index, anchor in enumerate(anchors):
+        subject = f"{RUNTIME_PRODUCT_READINESS_MAP_PATH}:sourceTreeAnchors[{index}]"
+        if not isinstance(anchor, dict):
+            F.add("USF-RUNTIME-036", subject, "source-tree anchor must be an object")
+            continue
+        path = anchor.get("path")
+        blob_sha = anchor.get("blobSha")
+        if not as_nonempty_string(path) or not as_nonempty_string(blob_sha):
+            F.add("USF-RUNTIME-036", subject, "source-tree anchor path and blobSha are required")
+            continue
+        if path in anchors_by_path:
+            F.add("USF-RUNTIME-036", subject, f"duplicate source-tree anchor for {path}")
+        anchors_by_path[path] = blob_sha
+    for path in sorted(RUNTIME_PRODUCT_SOURCE_ANCHOR_PATHS):
+        observed = anchors_by_path.get(path)
+        if observed is None:
+            F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), f"missing source-tree anchor for {path}")
+            continue
+        if observed != current_blob_sha(path):
+            F.add("USF-RUNTIME-036", path, "source-tree anchor does not match current worktree blob")
+
+    validator_coverage = set(string_list(readiness_map.get("validatorCoverage")))
+    for required in {
+        RUNTIME_PRODUCT_READINESS_VALIDATOR,
+        "runtime:validate",
+        "runtime:proof",
+        "runtime:proof:compose",
+        "runtime:proof:in-memory",
+    }:
+        if required not in validator_coverage:
+            F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), f"validatorCoverage lacks {required}")
+    planted = readiness_map.get("plantedDefectCoverage")
+    if not isinstance(planted, list):
+        F.add("USF-RUNTIME-036", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "plantedDefectCoverage must be an array")
+    else:
+        covered_rules = {item.get("ruleId") for item in planted if isinstance(item, dict)}
+        missing_rules = sorted(RUNTIME_PRODUCT_REQUIRED_PLANTED_RULES - covered_rules)
+        if missing_rules:
+            F.add(
+                "USF-RUNTIME-036",
+                str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+                f"plantedDefectCoverage lacks rule coverage: {', '.join(missing_rules)}",
+            )
+
+    proof_rung = readiness_map.get("proofRung")
+    if not isinstance(proof_rung, dict):
+        F.add("USF-RUNTIME-037", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "proofRung is missing")
+        proof_rung = {}
+    if proof_rung.get("claimedRung") != "local-dev-and-dev-compose-backed":
+        F.add("USF-RUNTIME-037", "proofRung.claimedRung", "runtime readiness must stay bounded to local dev and dev Compose")
+    if proof_rung.get("projectionOnlyMaySatisfyRuntimeProof") is not False:
+        F.add("USF-RUNTIME-038", "proofRung.projectionOnlyMaySatisfyRuntimeProof", "projection-only evidence cannot satisfy runtime proof")
+    for field in ("stagingReady", "productionReady", "liveProviderReady"):
+        if proof_rung.get(field) is True:
+            F.add("USF-RUNTIME-037", f"proofRung.{field}", "stronger runtime proof rung must not be claimed")
+    if proof_rung.get("manifestRef") != str(MANIFEST_PATH):
+        F.add("USF-RUNTIME-037", "proofRung.manifestRef", "proof rung must reference the runtime proof manifest")
+
+    modes = mode_records(manifest)
+    runtime_modes = readiness_map.get("runtimeModes")
+    if not isinstance(runtime_modes, list):
+        F.add("USF-RUNTIME-037", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "runtimeModes must be an array")
+        runtime_modes = []
+    runtime_mode_records = {item.get("mode"): item for item in runtime_modes if isinstance(item, dict)}
+    for mode in sorted(REQUIRED_MODES):
+        source_mode = modes.get(mode)
+        record = runtime_mode_records.get(mode)
+        if not isinstance(source_mode, dict) or not isinstance(record, dict):
+            F.add("USF-RUNTIME-037", mode, "runtime readiness mode record is missing")
+            continue
+        if record.get("providerMode") != source_mode.get("providerMode"):
+            F.add("USF-RUNTIME-037", mode, "providerMode does not match runtime proof manifest")
+        if record.get("providerClass") != source_mode.get("providerClass"):
+            F.add("USF-RUNTIME-037", mode, "providerClass does not match runtime proof manifest")
+        for field in ("apiBootProof", "workerBootProof", "healthProof", "readinessProof", "livenessProof"):
+            if record.get(field) is not True:
+                F.add("USF-RUNTIME-037", f"{mode}.{field}", "runtime mode proof flag must be true")
+        if record.get("projectionOnlyEvidence") is True:
+            F.add("USF-RUNTIME-038", mode, "runtime mode cannot use projection-only evidence as runtime proof")
+
+    boot = readiness_map.get("bootHealthReadinessLiveness")
+    if not isinstance(boot, dict):
+        F.add("USF-RUNTIME-037", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "bootHealthReadinessLiveness is missing")
+        boot = {}
+    for field in (
+        "apiBootBounded",
+        "workerBootBounded",
+        "healthzProof",
+        "readyzProof",
+        "livenessSemanticsDefined",
+        "composeProviderBindingProof",
+        "teardownProof",
+        "missingProofFailsClosed",
+    ):
+        if boot.get(field) is not True:
+            F.add("USF-RUNTIME-037", f"bootHealthReadinessLiveness.{field}", "boot and health proof field must be true")
+
+    client_ops = _client_contract_operations_by_route_id()
+    map_ops = _readiness_map_operation_records(readiness_map)
+    expected_ids = set(client_ops)
+    observed_ids = set(map_ops)
+    for route_id in sorted(expected_ids - observed_ids):
+        F.add("USF-RUNTIME-038", route_id, "runtime readiness operation record is missing")
+    for route_id in sorted(observed_ids - expected_ids):
+        F.add("USF-RUNTIME-038", route_id, "runtime readiness operation record targets unknown routeId")
+    for route_id, rows in sorted(map_ops.items()):
+        if len(rows) != 1:
+            F.add("USF-RUNTIME-038", route_id, "runtime readiness operation record is duplicated")
+
+    expected_counts = {
+        "totalRouteBackedOperations": len(client_ops),
+        "directRuntimeProofOperations": 0,
+        "domainExecutableProofOperations": 0,
+        "projectionOnlyRuntimeProofOperations": 0,
+        "runtimeReadyOperations": len(client_ops),
+    }
+    for route_id, client_op in sorted(client_ops.items()):
+        rows = map_ops.get(route_id, [])
+        if len(rows) != 1:
+            continue
+        operation = rows[0]
+        subject = f"{RUNTIME_PRODUCT_READINESS_MAP_PATH}:operations[{route_id}]"
+        for field in ("method", "openapiPath", "openapiOperationId"):
+            if operation.get(field) != client_op.get(field):
+                F.add("USF-RUNTIME-038", subject, f"{field} does not match client contract map")
+        if operation.get("clientContractRef") != f"docs/architecture/non-ui-client-callable-contract-map.json#routeId={route_id}":
+            F.add("USF-RUNTIME-038", subject, "clientContractRef does not target the route record")
+        if operation.get("interfaceDispositionRef") != f"docs/architecture/api-route-interface-contract-coverage.json#routeId={route_id}":
+            F.add("USF-RUNTIME-038", subject, "interfaceDispositionRef does not target the interface coverage record")
+
+        proof = operation.get("proofEvidence")
+        if not isinstance(proof, dict):
+            F.add("USF-RUNTIME-038", subject, "proofEvidence is missing")
+            proof = {}
+        status = proof.get("runtimeProofStatus")
+        if status not in RUNTIME_PRODUCT_ALLOWED_OPERATION_PROOF_STATUSES:
+            F.add("USF-RUNTIME-038", subject, "runtimeProofStatus is not an approved executable proof status")
+        if route_id in RUNTIME_PRODUCT_DIRECT_PROOF_ROUTES and status != "direct-runtime-proof":
+            F.add("USF-RUNTIME-038", subject, "directly exercised runtime proof route is not marked direct-runtime-proof")
+        if route_id not in RUNTIME_PRODUCT_DIRECT_PROOF_ROUTES and status != "executable-domain-proof-bound-to-route-contract":
+            F.add("USF-RUNTIME-038", subject, "route must cite executable domain proof bound to the route contract")
+        if status == "direct-runtime-proof":
+            expected_counts["directRuntimeProofOperations"] += 1
+        elif status == "executable-domain-proof-bound-to-route-contract":
+            expected_counts["domainExecutableProofOperations"] += 1
+        if proof.get("projectionOnlySatisfiesRuntimeProof") is not False:
+            expected_counts["projectionOnlyRuntimeProofOperations"] += 1
+            F.add("USF-RUNTIME-038", subject, "projection-only evidence must not satisfy runtime proof")
+        command_refs = set(string_list(proof.get("runtimeProofCommandRefs")))
+        if not command_refs:
+            F.add("USF-RUNTIME-038", subject, "runtime proof command refs are missing")
+        if route_id in RUNTIME_PRODUCT_DIRECT_PROOF_ROUTES and "runtime:proof:compose" not in command_refs:
+            F.add("USF-RUNTIME-038", subject, "direct runtime proof route must cite runtime:proof:compose")
+        evidence_refs = set(string_list(proof.get("evidenceRefs")))
+        if str(MANIFEST_PATH) not in evidence_refs:
+            F.add("USF-RUNTIME-038", subject, "runtime proof evidence must cite the runtime proof manifest")
+        readiness = operation.get("readiness")
+        if not isinstance(readiness, dict) or readiness.get("runtimeRouteBackedOperationReady") is not True:
+            F.add("USF-RUNTIME-038", subject, "operation must carry bounded runtime route-backed readiness")
+            readiness = readiness if isinstance(readiness, dict) else {}
+        for field in RUNTIME_PRODUCT_FORBIDDEN_TRUE_CLAIMS:
+            if readiness.get(field) is True:
+                F.add("USF-RUNTIME-038", subject, f"operation must not claim {field}")
+
+    coverage = readiness_map.get("operationRuntimeProofCoverage")
+    if not isinstance(coverage, dict):
+        F.add("USF-RUNTIME-038", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "operationRuntimeProofCoverage is missing")
+    else:
+        for field, expected in expected_counts.items():
+            if coverage.get(field) != expected:
+                F.add("USF-RUNTIME-038", f"operationRuntimeProofCoverage.{field}", f"must be {expected}")
+
+    state_boundary = readiness_map.get("stateStorageMigrationBoundary")
+    if not isinstance(state_boundary, dict):
+        F.add("USF-RUNTIME-039", str(RUNTIME_PRODUCT_READINESS_MAP_PATH), "stateStorageMigrationBoundary is missing")
+        state_boundary = {}
+    if set(string_list(state_boundary.get("providerModes"))) != REQUIRED_MODES:
+        F.add("USF-RUNTIME-039", "stateStorageMigrationBoundary.providerModes", "provider modes must match runtime proof modes")
+    for field in (
+        "syntheticDataOnly",
+        "tenantBoundaryDefined",
+        "stateProviderBindingsDefined",
+        "migrationPostureDefined",
+        "missingBoundaryFailsClosed",
+    ):
+        if state_boundary.get(field) is not True:
+            F.add("USF-RUNTIME-039", f"stateStorageMigrationBoundary.{field}", "state/data boundary field must be true")
+    for field in ("productionDataMigrationReady", "stagingDataMigrationReady", "liveProviderDataReady"):
+        if state_boundary.get(field) is not False:
+            F.add("USF-RUNTIME-039", f"stateStorageMigrationBoundary.{field}", "stronger data readiness must remain false")
+    data_services = state_boundary.get("dataBearingServices")
+    if not isinstance(data_services, list) or len(data_services) < len(manifest.get("providerBindingMatrix", [])):
+        F.add("USF-RUNTIME-039", "stateStorageMigrationBoundary.dataBearingServices", "data-bearing service dispositions are incomplete")
+    else:
+        for index, service in enumerate(data_services):
+            subject = f"stateStorageMigrationBoundary.dataBearingServices[{index}]"
+            if not isinstance(service, dict):
+                F.add("USF-RUNTIME-039", subject, "data-bearing service disposition must be an object")
+                continue
+            if not as_nonempty_string(service.get("serviceOrProviderRef")):
+                F.add("USF-RUNTIME-039", subject, "serviceOrProviderRef is required")
+            if not as_nonempty_string(service.get("runtimeDataBoundary")):
+                F.add("USF-RUNTIME-039", subject, "runtimeDataBoundary is required")
+            if service.get("productionDataClaim") is not False or service.get("liveProviderClaim") is not False:
+                F.add("USF-RUNTIME-039", subject, "data-bearing service must not claim production or live-provider data readiness")
+
+    negative = readiness_map.get("authSessionTenantNegativePathAuditTelemetryProof")
+    if not isinstance(negative, dict):
+        F.add(
+            "USF-RUNTIME-040",
+            str(RUNTIME_PRODUCT_READINESS_MAP_PATH),
+            "authSessionTenantNegativePathAuditTelemetryProof is missing",
+        )
+        negative = {}
+    for field in (
+        "apiTenantMismatchFailClosed",
+        "apiAuthorizationFailureFailClosed",
+        "workerTenantBoundaryDenied",
+        "workerAuthorizationDenied",
+        "auditEvidenceCaptured",
+        "telemetryEvidenceCaptured",
+        "redactionEvidenceCaptured",
+        "correlationPolicyDefined",
+        "missingSemanticsFailClosed",
+    ):
+        if negative.get(field) is not True:
+            F.add("USF-RUNTIME-040", f"authSessionTenantNegativePathAuditTelemetryProof.{field}", "negative-path proof field must be true")
+    proof_commands = set(string_list(negative.get("proofCommandRefs")))
+    for required in ("runtime:proof:in-memory", "runtime:proof:compose"):
+        if required not in proof_commands:
+            F.add("USF-RUNTIME-040", "authSessionTenantNegativePathAuditTelemetryProof.proofCommandRefs", f"missing {required}")
+    if not string_list(negative.get("negativePathEvidenceRefs")):
+        F.add("USF-RUNTIME-040", "authSessionTenantNegativePathAuditTelemetryProof.negativePathEvidenceRefs", "negative path refs are required")
+    if not string_list(negative.get("auditTelemetryEvidenceRefs")):
+        F.add("USF-RUNTIME-040", "authSessionTenantNegativePathAuditTelemetryProof.auditTelemetryEvidenceRefs", "audit/telemetry refs are required")
+
+
 def run_checks(mode: str, state: dict[str, Any]) -> Findings:
     F = Findings()
     selected = {
@@ -5320,6 +5752,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_backup_restore_provider_disposition,
             check_operator_workflow_provider_disposition,
             check_windmill_configured_proof_boundary,
+            check_runtime_product_readiness_map,
             check_provider_safe_metadata,
             check_provider_registry_linkage,
             check_dependency_pinning,
@@ -5355,6 +5788,7 @@ def run_checks(mode: str, state: dict[str, Any]) -> Findings:
             check_backup_restore_provider_disposition,
             check_operator_workflow_provider_disposition,
             check_windmill_configured_proof_boundary,
+            check_runtime_product_readiness_map,
             check_provider_sdk_boundary,
             check_provider_path_collision_safety,
             check_provider_safe_metadata,

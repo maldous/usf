@@ -1,0 +1,9 @@
+{
+  "expectedRule": "USF-RUNTIME-039",
+  "runtimeProductReadinessMapPatches": [
+    {
+      "op": "remove",
+      "path": "/stateStorageMigrationBoundary/migrationPostureDefined"
+    }
+  ]
+}
