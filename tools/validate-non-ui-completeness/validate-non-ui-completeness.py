@@ -14,7 +14,9 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import re
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -26,7 +28,7 @@ DOCS = ROOT / "docs" / "architecture"
 PLANTED = Path(__file__).resolve().parent / "planted-defects"
 
 RULE_IDS = [f"USF-NON-UI-{index:03d}" for index in range(1, 22)]
-SOURCE_TREE_ANCHOR_ALGORITHM = "git-ls-files-sha256-v1"
+SOURCE_TREE_ANCHOR_ALGORITHM = "git-ls-files-stage-sha256-v1"
 SOURCE_TREE_ANCHOR_SCOPE = "repository-tracked-non-proof-source-tree"
 
 JSON_DOCS = {
@@ -156,43 +158,75 @@ def source_tree_anchor_excluded_paths() -> set[str]:
     return paths
 
 
-def source_tree_anchor_paths() -> list[str]:
-    """Return tracked non-proof source paths that determine current non-UI closure freshness."""
+def source_tree_anchor_entries() -> list[tuple[str, str, str, str]]:
+    """Return tracked non-proof source entries for current non-UI closure freshness."""
     result = subprocess.run(
-        ["git", "ls-files", "-z"],
+        ["git", "ls-files", "--stage", "-z"],
         cwd=ROOT,
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
     excluded_paths = source_tree_anchor_excluded_paths()
-    paths: list[str] = []
+    entries: list[tuple[str, str, str, str]] = []
     for raw in result.stdout.split(b"\0"):
         if not raw:
             continue
-        path = raw.decode("utf-8")
+        entry = raw.decode("utf-8")
+        try:
+            metadata, path = entry.split("\t", 1)
+            mode, object_id, stage = metadata.split(" ", 2)
+        except ValueError as exc:
+            raise ValueError(f"malformed git ls-files --stage entry: {entry!r}") from exc
         if path in excluded_paths:
             continue
         if path.startswith(SOURCE_TREE_ANCHOR_EXCLUDED_PREFIXES):
             continue
-        paths.append(path)
-    return sorted(paths)
+        entries.append((path, mode, object_id, stage))
+    return sorted(entries)
+
+
+def source_tree_anchor_paths() -> list[str]:
+    """Return tracked non-proof source paths that determine current non-UI closure freshness."""
+    return [path for path, _mode, _object_id, _stage in source_tree_anchor_entries()]
+
+
+def working_tree_mode(path: Path) -> str:
+    if path.is_symlink():
+        return "120000"
+    mode = path.stat().st_mode
+    return "100755" if mode & stat.S_IXUSR else "100644"
+
+
+def working_tree_content(path: Path) -> bytes:
+    if path.is_symlink():
+        return os.readlink(path).encode("utf-8")
+    return path.read_bytes()
 
 
 def compute_source_tree_anchor() -> tuple[str, int]:
-    """Hash tracked non-proof source content without depending on generated report text."""
+    """Hash tracked non-proof source metadata/content without generated report text."""
     hasher = hashlib.sha256()
-    hasher.update(b"usf-non-ui-current-source-tree-anchor-v1\0")
-    paths = source_tree_anchor_paths()
-    for path in paths:
-        content = (ROOT / path).read_bytes()
+    hasher.update(b"usf-non-ui-current-source-tree-anchor-v2\0")
+    entries = source_tree_anchor_entries()
+    for path, index_mode, object_id, stage in entries:
+        absolute_path = ROOT / path
+        content = working_tree_content(absolute_path)
         hasher.update(path.encode("utf-8"))
+        hasher.update(b"\0")
+        hasher.update(index_mode.encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(object_id.encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(stage.encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(working_tree_mode(absolute_path).encode("ascii"))
         hasher.update(b"\0")
         hasher.update(str(len(content)).encode("ascii"))
         hasher.update(b"\0")
         hasher.update(content)
         hasher.update(b"\0")
-    return f"sha256:{hasher.hexdigest()}", len(paths)
+    return f"sha256:{hasher.hexdigest()}", len(entries)
 
 
 def fail(rule_id: str, message: str, path: str = "") -> dict[str, str]:

@@ -7,9 +7,9 @@
   "sourceLineageRepositoryPath": "usf",
   "sourceLineageGitSha": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
   "currentSourceTreeAnchor": {
-    "algorithm": "git-ls-files-sha256-v1",
+    "algorithm": "git-ls-files-stage-sha256-v1",
     "scope": "repository-tracked-non-proof-source-tree",
-    "digest": "sha256:048e4c16841a5325228d3091b034e50b38d0dcdf04583052f13f4062c312c521",
+    "digest": "sha256:c86f517bdb06a30faf2698ff259894bf1e52f838c902534524df4a2ed64b1586",
     "trackedFileCount": 2359,
     "sourceGitShaTreatment": "historical-lineage-pin",
     "generatedReportAuthority": "lower-authority-summary-only"
