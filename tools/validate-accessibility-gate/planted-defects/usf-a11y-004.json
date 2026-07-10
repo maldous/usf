@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-004-blank-static-evidence",
+  "expectedRuleIds": [
+    "USF-A11Y-004"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "blanking a surface's staticEvidence value leaves an in-scope static rule with no recorded evidence (fail-closed missing rule evidence)",
+  "note": "Negative control for USF-A11Y-004; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

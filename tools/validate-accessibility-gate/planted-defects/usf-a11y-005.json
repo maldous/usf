@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-005-stale-surface-reference",
+  "expectedRuleIds": [
+    "USF-A11Y-005"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "renaming a surface to an id absent from the live ui-semantic-model makes the evidence reference a surface that no longer exists (stale)",
+  "note": "Negative control for USF-A11Y-005; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

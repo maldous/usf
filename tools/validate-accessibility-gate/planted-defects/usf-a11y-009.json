@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-009-test-rung-claimed-dev-proven",
+  "expectedRuleIds": [
+    "USF-A11Y-009"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "recording a deferred axe-core-automated-scan as dev static evidence claims a test-rung item as dev-proven",
+  "note": "Negative control for USF-A11Y-009; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

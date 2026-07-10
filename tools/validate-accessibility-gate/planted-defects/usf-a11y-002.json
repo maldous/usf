@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-002-drop-required-surface-key",
+  "expectedRuleIds": [
+    "USF-A11Y-002"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "dropping a surface's componentRefs key makes the surface row miss a required key",
+  "note": "Negative control for USF-A11Y-002; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}
