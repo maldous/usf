@@ -1,0 +1,7 @@
+{
+  "id": "035-bundle-current-run-metadata-drift",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "bundle-current-run-metadata-drift"
+  }
+}

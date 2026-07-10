@@ -13,12 +13,12 @@ export USF_PROOF_PROD_FQDN
 	help commands setup foundation dev-ready test-ready test test-composed test-coverage test-assurance \
 	test-readiness-validate test-readiness-semantic test-readiness-fixtures test-readiness-integration \
 	test-readiness-coverage test-readiness-selftest \
-	proof-cockpit-validate proof-cockpit-selftest \
+	proof-cockpit-validate proof-cockpit-selftest proof-cockpit-compare-selftest \
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	artifact-promotion-validate artifact-promotion-selftest environment-ladder-validate environment-ladder-selftest \
 	app-surface-validate app-surface-selftest \
-	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin \
+	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin proof-review-projection-repin \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
 	assurance evidence \
 	validate-foundation validate-coverage validate-assurance validate-evidence \
@@ -81,6 +81,7 @@ help:
 		'  make proof-review-up       Open the operator-authenticated /proof gate on the running edge (prompts for credential)' \
 		'  make proof-review-down     Commit the acceptance ledger from the review volume and tear the surface down' \
 		'  make proof-review-repin    Regenerate and re-pin proof-cockpit machine evidence to the current commit (then commit)' \
+		'  make proof-review-projection-repin  Re-pin retained review projections without fresh machine execution' \
 		'  make external-http-behaviour-proof  Validate external HTTP behaviour contract' \
 		'  make external-http-cache-proof  Prove cache policy for public proof routes' \
 		'  make external-http-observability-proof  Prove bounded external HTTP observability evidence' \
@@ -135,6 +136,9 @@ proof-cockpit-validate:
 
 proof-cockpit-selftest:
 	corepack pnpm proof-cockpit:selftest
+
+proof-cockpit-compare-selftest:
+	corepack pnpm proof-cockpit:compare:selftest
 
 foundation-substrate-closure-validate:
 	corepack pnpm foundation-substrate-closure:validate
@@ -208,6 +212,11 @@ proof-review-repin:
 	@printf '%s\n' '[proof-review] Machine evidence regenerated and re-pinned to the current commit.' \
 		'[proof-review] Review git status and commit the regenerated evidence, e.g.:' \
 		'[proof-review]   git add evidence/proof-evidence/proof-cockpit artifacts/proof-cockpit && git commit -m "chore(proof): re-pin machine evidence"'
+
+proof-review-projection-repin:
+	corepack pnpm proof-cockpit:projection-repin
+	@printf '%s\n' '[proof-review] Retained review projections re-pinned without fresh machine execution.' \
+		'[proof-review] Projection-only output remains lower-authority generated evidence and does not replace proof-cockpit:machine-qa.'
 
 external-http-behaviour-proof:
 	corepack pnpm proof:external-http-behaviour

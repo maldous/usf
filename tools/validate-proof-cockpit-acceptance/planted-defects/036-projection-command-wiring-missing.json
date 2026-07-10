@@ -1,0 +1,7 @@
+{
+  "id": "036-projection-command-wiring-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-command-wiring-missing"
+  }
+}

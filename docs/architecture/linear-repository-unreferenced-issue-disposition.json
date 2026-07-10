@@ -2294,15 +2294,23 @@
       "usf1044Disposition": {
         "issueId": "USF-1044",
         "batchId": "batch-2-proof-cockpit-validator-and-comparison",
-        "recordedAtUtc": "2026-07-09T23:14:02Z",
-        "currentDecision": "pending",
-        "decision": "pending",
-        "evidencePath": null,
-        "repositoryFilesLanded": [],
-        "rationale": "Not handled in Batch 1. This key remains pending for the named later USF-1044 batch and must be re-landed, re-implemented, or rejected against current origin/main before USF-1044 can complete.",
-        "validatorCoverage": "Pending; must be recorded when the later batch lands or rejects this key.",
-        "proofEvidenceStatus": "Pending; no proof or readiness claim is made by this pending disposition.",
-        "followUpRequired": true,
+        "recordedAtUtc": "2026-07-10T00:20:00Z",
+        "currentDecision": "re-implemented",
+        "decision": "re-implemented",
+        "evidencePath": "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
+        "repositoryFilesLanded": [
+          "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
+          "tools/validate-proof-cockpit-acceptance/planted-defects/035-bundle-current-run-metadata-drift.json",
+          "apps/staging-proof-cockpit/src/promote.mjs",
+          "apps/staging-proof-cockpit/src/machine-qa.mjs",
+          "evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json",
+          "evidence/proof-evidence/proof-cockpit/external-review-bundle/README.md",
+          "evidence/proof-evidence/proof-cockpit/final-external-review-report.md"
+        ],
+        "rationale": "Re-implemented against current origin/main rather than applying the preserved patch. The current proof-cockpit validator now compares the retained evidence store, bundle manifest, persistent bundle README, final external-review report, and latest machine-run artifact for current run identity, source/deployment SHA, source tree hash, counts, artifact paths, generated-report non-authority, and final-acceptance non-automation.",
+        "validatorCoverage": "USF-PROOF-COCKPIT-013 plus planted defect 035-bundle-current-run-metadata-drift; proof-cockpit validate and selftest cover the current-run projection metadata guardrail.",
+        "proofEvidenceStatus": "Requires and records proof-cockpit re-pin after Batch 2 source changes; generated reports remain lower authority and no readiness claim is made.",
+        "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
           "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
@@ -2336,15 +2344,25 @@
       "usf1044Disposition": {
         "issueId": "USF-1044",
         "batchId": "batch-2-proof-cockpit-validator-and-comparison",
-        "recordedAtUtc": "2026-07-09T23:14:02Z",
-        "currentDecision": "pending",
-        "decision": "pending",
-        "evidencePath": null,
-        "repositoryFilesLanded": [],
-        "rationale": "Not handled in Batch 1. This key remains pending for the named later USF-1044 batch and must be re-landed, re-implemented, or rejected against current origin/main before USF-1044 can complete.",
-        "validatorCoverage": "Pending; must be recorded when the later batch lands or rejects this key.",
-        "proofEvidenceStatus": "Pending; no proof or readiness claim is made by this pending disposition.",
-        "followUpRequired": true,
+        "recordedAtUtc": "2026-07-10T00:20:00Z",
+        "currentDecision": "re-implemented",
+        "decision": "re-implemented",
+        "evidencePath": "apps/staging-proof-cockpit/src/promote.mjs",
+        "repositoryFilesLanded": [
+          "apps/staging-proof-cockpit/src/promote.mjs",
+          "apps/staging-proof-cockpit/src/machine-qa.mjs",
+          "package.json",
+          "Makefile",
+          "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
+          "tools/validate-proof-cockpit-acceptance/planted-defects/036-projection-command-wiring-missing.json",
+          "evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json",
+          "evidence/proof-evidence/proof-cockpit/external-review-bundle/README.md",
+          "evidence/proof-evidence/proof-cockpit/final-external-review-report.md"
+        ],
+        "rationale": "Re-implemented against current origin/main with a bounded projection-only re-pin command. The projection-only path reuses the retained latest accepted machine run, refreshes only lower-authority review projections, records that fresh machine execution is false, and refuses source tree hash drift so it cannot replace full machine QA when source changes.",
+        "validatorCoverage": "USF-PROOF-COCKPIT-013 plus planted defect 036-projection-command-wiring-missing; package and Make command wiring are checked and the full proof-review-repin path remains machine-qa plus promote.",
+        "proofEvidenceStatus": "Requires and records a full proof-cockpit machine QA re-pin for Batch 2 source changes; projection-only is bounded to retained evidence and does not satisfy fresh-source proof.",
+        "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
           "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
@@ -2374,15 +2392,22 @@
       "usf1044Disposition": {
         "issueId": "USF-1044",
         "batchId": "batch-2-proof-cockpit-validator-and-comparison",
-        "recordedAtUtc": "2026-07-09T23:14:02Z",
-        "currentDecision": "pending",
-        "decision": "pending",
-        "evidencePath": null,
-        "repositoryFilesLanded": [],
-        "rationale": "Not handled in Batch 1. This key remains pending for the named later USF-1044 batch and must be re-landed, re-implemented, or rejected against current origin/main before USF-1044 can complete.",
-        "validatorCoverage": "Pending; must be recorded when the later batch lands or rejects this key.",
-        "proofEvidenceStatus": "Pending; no proof or readiness claim is made by this pending disposition.",
-        "followUpRequired": true,
+        "recordedAtUtc": "2026-07-10T00:20:00Z",
+        "currentDecision": "re-implemented",
+        "decision": "re-implemented",
+        "evidencePath": "tools/proof-cockpit-compare/proof-cockpit-compare.py",
+        "repositoryFilesLanded": [
+          "tools/proof-cockpit-compare/proof-cockpit-compare.py",
+          "package.json",
+          "Makefile",
+          "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
+          "tools/validate-proof-cockpit-acceptance/planted-defects/037-comparator-contract-missing.json",
+          "tools/validate-proof-cockpit-acceptance/planted-defects/038-comparator-hidden-regression.json"
+        ],
+        "rationale": "Re-implemented against current origin/main with a read-only normalized equivalence comparator. The comparator normalizes only explicit volatile machine-run fields such as run IDs, timestamps, temp paths, localhost ports, action IDs, and latency while leaving source identity, counts, non-claims, service auth posture, hashes, warnings, gaps, failures, and generated-report authority claims fail-closed.",
+        "validatorCoverage": "USF-PROOF-COCKPIT-014 plus planted defects 037-comparator-contract-missing and 038-comparator-hidden-regression; proof-cockpit comparator selftest covers volatile-only pass and hidden-regression fail.",
+        "proofEvidenceStatus": "Comparator is read-only operational tooling; Batch 2 proof-cockpit re-pin records current generated evidence separately and no generated report is promoted to authority.",
+        "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
           "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
@@ -3003,15 +3028,15 @@
       "intentionally-external": 1
     },
     "genuineMissingDeliverableReLandIssueId": "USF-1044",
-    "rootCauseNote": "The original sixteen genuine-missing-deliverable keys traced to the unmerged branch orchestration/usf-952-final-gate. USF-1044 now records current-main batch dispositions: Batch 1 has re-landed eight documentation deliverables, while the remaining eight keys stay pending until their later batches re-land, re-implement, or reject them with repository evidence.",
+    "rootCauseNote": "The original sixteen genuine-missing-deliverable keys traced to the unmerged branch orchestration/usf-952-final-gate. USF-1044 now records current-main batch dispositions: Batch 1 has re-landed eight documentation deliverables and Batch 2 has re-implemented three proof-cockpit deliverables, while the remaining five keys stay pending until their later batches re-land, re-implement, or reject them with repository evidence.",
     "nonClaims": "Classifications are repository-owned operational accounting. They do not make Linear content semantic authority, do not treat Done status as proof, and claim no readiness."
   },
   "usf1044DispositionSummary": {
     "issueId": "USF-1044",
-    "recordedAtUtc": "2026-07-09T23:40:34Z",
-    "currentOriginMainAtBatchStart": "11b5129e5242e5409a35ba64f44220d7263b8b2c",
+    "recordedAtUtc": "2026-07-10T00:20:00Z",
+    "currentOriginMainAtBatchStart": "79eae8db0e6742244e4d619d6db236f09efde4c9",
     "recoveryEvidenceBranch": "origin/preserve/1044-final-gate-reland",
-    "batchStatus": "batch-1-validated-with-proof-cockpit-repin-for-review-branch",
+    "batchStatus": "batch-2-reimplemented-pending-proof-cockpit-repin-and-pr-merge",
     "decisions": {
       "reLanded": [
         "USF-618",
@@ -3023,12 +3048,13 @@
         "USF-829",
         "USF-987"
       ],
-      "reImplemented": [],
-      "rejected": [],
-      "pending": [
+      "reImplemented": [
         "USF-969",
         "USF-970",
-        "USF-971",
+        "USF-971"
+      ],
+      "rejected": [],
+      "pending": [
         "USF-983",
         "USF-984",
         "USF-990",
@@ -3039,9 +3065,9 @@
     "counts": {
       "total": 16,
       "reLanded": 8,
-      "reImplemented": 0,
+      "reImplemented": 3,
       "rejected": 0,
-      "pending": 8
+      "pending": 5
     },
     "nonClaims": [
       "Linear remains work tracking only and does not define USF semantic authority.",

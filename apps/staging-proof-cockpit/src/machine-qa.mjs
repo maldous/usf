@@ -3348,7 +3348,7 @@ Proof: this generated machine QA run records ${report.counts.warn} warnings, ${r
 
 ## 21. Evidence freshness and historical audit artefact retention
 
-Primary re-test command: corepack pnpm proof-cockpit:machine-qa. Evidence is tied to source SHA ${report.sourceSha}, deployment SHA ${report.deploymentSha}, run ID ${report.qaRun}, and environment ${report.environment}.
+Primary re-test command: corepack pnpm proof-cockpit:machine-qa. Evidence is tied to source SHA ${report.sourceSha}, deployment SHA ${report.deploymentSha}, source tree hash ${report.sourceTreeHash}, run ID ${report.qaRun}, and environment ${report.environment}.
 
 ## 22. Human acceptance result
 
@@ -3363,6 +3363,7 @@ This bundle supports selective human reenactment and evidence acceptance. It doe
 Environment: ${report.environment}
 Source Git SHA: ${report.sourceSha}
 Deployment SHA: ${report.deploymentSha}
+Source tree hash: ${report.sourceTreeHash}
 Base URL: ${report.baseUrl}
 `,
   );
@@ -3391,7 +3392,20 @@ Base URL: ${report.baseUrl}
 `,
   );
   const bundleFiles = [
-    ["README.md", `# USF-293 External Review Bundle\n\nThis bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.\n`],
+    [
+      "README.md",
+      `# USF-293 External Review Bundle
+
+This bundle contains machine QA evidence for human review. It does not claim staging readiness or USF-290 completion.
+
+Source SHA: ${report.sourceSha}
+Deployment SHA: ${report.deploymentSha}
+Source tree hash: ${report.sourceTreeHash}
+Run ID: ${report.qaRun}
+
+Latest machine QA: ${report.counts.pass} pass, ${report.counts.warn} warnings, ${report.counts.fail} failures, ${report.gaps.length} unresolved gaps.
+`,
+    ],
     ["executive-summary.md", `# Executive Summary\n\nMachine QA generated evidence for ${report.counts.capabilities} capabilities, ${report.counts.services} services, and ${report.counts.testedRoutes} routes. Human acceptance remains required.\n`],
     ["detailed-report.md", readFileSync(markdownPath, "utf8")],
     ["external-review-report.md", readFileSync(externalReviewReportPath, "utf8")],
