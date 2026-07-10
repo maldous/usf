@@ -1,0 +1,60 @@
+{
+  "id": "interface.notifications-send-api",
+  "title": "Notifications Send API Contract",
+  "description": "Draft USF-native interface contract for POST /v1/notifications/{id}/send. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent notifications.send as a governed POST API route contract for notification-delivery-job.",
+  "boundary": "Local dev/test inbound HTTP boundary POST /v1/notifications/{id}/send; implementation path apps/api/src/server.ts; route classification tenant-scoped.",
+  "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+  "requestContract": {
+    "description": "Request semantics for notifications.send bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: TenantActionRequest.",
+    "fields": [
+      "routeId:notifications.send",
+      "method:POST",
+      "path:/v1/notifications/{id}/send",
+      "openapiOperationId:sendNotificationV1",
+      "requestSchema:TenantActionRequest",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-body",
+      "requiredAction:notification.send"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for notifications.send expose 200 NotificationSendResponse, 400 ApiErrorResponse, 403 ApiErrorResponse, 404 ApiErrorResponse, 409 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:NotificationSendResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "responseSchema:404:ApiErrorResponse",
+      "responseSchema:409:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:notification.queued audited and job.create audited",
+      "pdpPolicy:notification capability and job service call PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "notification.send"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-body; PDP policy notification capability and job service call PDP; audit policy notification.queued audited and job.create audited; idempotency policy required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=notifications.send",
+    "packages/openapi/openapi.json#operationId=sendNotificationV1",
+    "apps/api/src/server.ts"
+  ]
+}

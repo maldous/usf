@@ -361,6 +361,9 @@ RULES = {
     "USF-IMPORT-014":   ("blocking", "Source import sub-manifest target concept does not resolve to an instance"),
     "USF-SEMANTIC-001": ("blocking", "Semantic complete facet reference does not resolve"),
     "USF-SEMANTIC-002": ("blocking", "Coverage matrix semantic-contract target has no instance"),
+    "USF-INTERFACE-001": ("blocking", "Implemented API route has no interface-contract coverage or explicit disposition"),
+    "USF-INTERFACE-002": ("blocking", "API route interface-contract disposition is invalid or ambiguous"),
+    "USF-INTERFACE-003": ("blocking", "OpenAPI projection claims semantic authority without USF-native backing"),
     "USF-EVIDENCE-001": ("blocking", "Evidence envelope invalid against evidence-envelope schema"),
     "USF-EVIDENCE-002": ("blocking", "Proof evidence invalid against proof-evidence schema"),
     "USF-EVIDENCE-003": ("blocking", "Evidence/proof id is duplicated"),
@@ -1012,6 +1015,206 @@ def validate_semantic_coverage_matrix(F, matrix_text, semantic_contract_ids, mat
         F.add("USF-SEMANTIC-002", matrix_path, f"missing semantic contract instance: {target}")
 
 
+API_ROUTE_INTERFACE_COVERAGE_PATH = "docs/architecture/api-route-interface-contract-coverage.json"
+API_ROUTE_INTERFACE_DECISIONS = {"interface-contract-instance", "deferred", "rejected"}
+API_ROUTE_INTERFACE_PROJECTION_ONLY = "projection-only"
+API_ROUTE_INTERFACE_ROUTE_REF_PREFIX = "packages/contracts/src/api-surface.ts#routeId="
+API_ROUTE_INTERFACE_OPENAPI_REF_PREFIX = "packages/openapi/openapi.json#operationId="
+
+
+def _load_api_route_records(F):
+    data = load_json("packages/openapi/openapi.json", F)
+    if not isinstance(data, dict):
+        return []
+    paths = data.get("paths")
+    if not isinstance(paths, dict):
+        F.add("USF-INTERFACE-001", "packages/openapi/openapi.json:paths", "OpenAPI paths object is missing")
+        return []
+    records = []
+    for path, methods in paths.items():
+        if not isinstance(path, str) or not isinstance(methods, dict):
+            continue
+        for method, operation in methods.items():
+            if method.lower() not in {"get", "post", "put", "patch", "delete"}:
+                continue
+            if not isinstance(operation, dict):
+                continue
+            metadata = operation.get("x-usf-route")
+            if not isinstance(metadata, dict):
+                F.add("USF-INTERFACE-001", f"packages/openapi/openapi.json:{path}:{method}", "operation lacks x-usf-route metadata")
+                continue
+            records.append({
+                "routeId": metadata.get("routeId"),
+                "method": method.upper(),
+                "openapiPath": path,
+                "openapiOperationId": operation.get("operationId"),
+                "semanticAuthority": metadata.get("semanticAuthority") or operation.get("semanticAuthority"),
+                "authorityLevel": metadata.get("authorityLevel") or operation.get("authorityLevel"),
+                "openapiAuthorityClaim": metadata.get("openapiAuthorityClaim") or operation.get("openapiAuthorityClaim"),
+            })
+    return records
+
+
+def _route_openapi_authority_claim(route):
+    for field in ("openapiAuthorityClaim", "semanticAuthority", "authorityLevel"):
+        claim = route.get(field) if isinstance(route, dict) else None
+        if not isinstance(claim, str) or not claim:
+            continue
+        if claim not in {"projection-only", "generated-projection", "lower-authority-projection"}:
+            return field, claim
+    return None
+
+
+def _load_api_route_interface_coverage(F):
+    data = load_json(API_ROUTE_INTERFACE_COVERAGE_PATH, F)
+    if data is None:
+        F.add("USF-INTERFACE-001", API_ROUTE_INTERFACE_COVERAGE_PATH, "coverage artefact is missing")
+        return None
+    if not isinstance(data, dict):
+        F.add("USF-INTERFACE-001", API_ROUTE_INTERFACE_COVERAGE_PATH, "coverage artefact must be an object")
+        return None
+    return data
+
+
+def _as_nonempty_string(value):
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _string_list(value):
+    return value if isinstance(value, list) and all(isinstance(item, str) for item in value) else []
+
+
+def _route_key(route):
+    if not isinstance(route, dict):
+        return "<invalid>"
+    return str(route.get("routeId") or "<missing-route-id>")
+
+
+def _validate_route_interface_contract(F, subject, route, record, instance, semantic_contract_ids):
+    if not isinstance(instance, dict):
+        F.add("USF-INTERFACE-001", subject, f"interfaceContractRef does not resolve: {record.get('interfaceContractRef')}")
+        return
+    if instance.get("interfaceKind") != "api-route":
+        F.add("USF-INTERFACE-002", subject, "interfaceContractRef must point at an api-route interface contract")
+    semantic_ref = record.get("semanticContractRef")
+    if not _as_nonempty_string(semantic_ref) or semantic_ref not in semantic_contract_ids:
+        F.add("USF-INTERFACE-002", subject, f"semanticContractRef does not resolve: {semantic_ref}")
+    if instance.get("semanticContractRef") != semantic_ref:
+        F.add("USF-INTERFACE-002", subject, "interface contract semanticContractRef does not match coverage record")
+    route_id = route.get("routeId")
+    operation_id = route.get("openapiOperationId")
+    source_refs = set(_string_list(instance.get("sourceRefs")))
+    if f"{API_ROUTE_INTERFACE_ROUTE_REF_PREFIX}{route_id}" not in source_refs:
+        F.add("USF-INTERFACE-002", subject, "interface contract lacks api-surface routeId sourceRef")
+    if f"{API_ROUTE_INTERFACE_OPENAPI_REF_PREFIX}{operation_id}" not in source_refs:
+        F.add("USF-INTERFACE-002", subject, "interface contract lacks OpenAPI operation sourceRef")
+    request_contract = instance.get("requestContract")
+    response_contract = instance.get("responseContract")
+    if not isinstance(request_contract, dict) or not isinstance(response_contract, dict):
+        F.add("USF-INTERFACE-002", subject, "api-route interface contracts must carry requestContract and responseContract")
+        return
+    request_fields = set(_string_list(request_contract.get("fields")))
+    response_fields = set(_string_list(response_contract.get("fields")))
+    for required in (
+        f"routeId:{route_id}",
+        f"method:{route.get('method')}",
+        f"path:{route.get('openapiPath')}",
+        f"openapiOperationId:{operation_id}",
+    ):
+        if required not in request_fields:
+            F.add("USF-INTERFACE-002", subject, f"requestContract missing {required}")
+    if not any(field.startswith("responseSchema:") for field in response_fields):
+        F.add("USF-INTERFACE-002", subject, "responseContract missing response schema field")
+    for prefix in ("errorSchema:", "auditPolicy:", "pdpPolicy:", "proofEvidenceStatus:"):
+        if not any(field.startswith(prefix) for field in response_fields):
+            F.add("USF-INTERFACE-002", subject, f"responseContract missing {prefix}")
+
+
+def validate_api_route_interface_coverage(F, data_by_path, api_route_records=None, route_interface_coverage=None):
+    routes = api_route_records if isinstance(api_route_records, list) else _load_api_route_records(F)
+    if not routes:
+        return
+    coverage = route_interface_coverage if isinstance(route_interface_coverage, dict) else _load_api_route_interface_coverage(F)
+    if not isinstance(coverage, dict):
+        return
+    records = coverage.get("records")
+    if not isinstance(records, list):
+        F.add("USF-INTERFACE-001", API_ROUTE_INTERFACE_COVERAGE_PATH, "coverage records array is missing")
+        return
+
+    interface_instances = {}
+    semantic_contract_ids = set()
+    for path, data in data_by_path.items():
+        if not isinstance(data, dict) or not isinstance(data.get("id"), str):
+            continue
+        schema = _schema_for_instance_path(path)
+        if schema == "interface-contract":
+            interface_instances[data["id"]] = data
+        elif schema == "semantic-contract":
+            semantic_contract_ids.add(data["id"])
+
+    records_by_route = defaultdict(list)
+    for index, record in enumerate(records):
+        if not isinstance(record, dict):
+            F.add("USF-INTERFACE-002", f"{API_ROUTE_INTERFACE_COVERAGE_PATH}:records[{index}]", "coverage record must be an object")
+            continue
+        route_id = record.get("routeId")
+        if not _as_nonempty_string(route_id):
+            F.add("USF-INTERFACE-002", f"{API_ROUTE_INTERFACE_COVERAGE_PATH}:records[{index}]", "routeId is missing")
+            continue
+        records_by_route[route_id].append((index, record))
+
+    route_ids = {_route_key(route) for route in routes}
+    for route_id, rows in sorted(records_by_route.items()):
+        if route_id not in route_ids:
+            F.add("USF-INTERFACE-002", f"{API_ROUTE_INTERFACE_COVERAGE_PATH}:records[{rows[0][0]}]", f"coverage record targets unknown routeId {route_id}")
+        if len(rows) > 1:
+            F.add("USF-INTERFACE-002", route_id, "coverage record is duplicated")
+
+    for route in routes:
+        route_id = _route_key(route)
+        claim = _route_openapi_authority_claim(route)
+        if claim is not None:
+            field, value = claim
+            F.add("USF-INTERFACE-003", route_id, f"OpenAPI projection carries {field}={value}")
+        rows = records_by_route.get(route_id, [])
+        if len(rows) != 1:
+            F.add("USF-INTERFACE-001", route_id, "implemented route lacks exactly one coverage disposition")
+            continue
+        index, record = rows[0]
+        subject = f"{API_ROUTE_INTERFACE_COVERAGE_PATH}:records[{index}]"
+        for field in ("method", "openapiPath", "openapiOperationId"):
+            if record.get(field) != route.get(field):
+                F.add("USF-INTERFACE-002", subject, f"{field} does not match implemented route")
+        if record.get("openapiProjection") != API_ROUTE_INTERFACE_PROJECTION_ONLY:
+            F.add("USF-INTERFACE-003", subject, "openapiProjection must remain projection-only")
+        decision = record.get("decision")
+        if decision not in API_ROUTE_INTERFACE_DECISIONS:
+            F.add("USF-INTERFACE-002", subject, f"unsupported decision: {decision}")
+            continue
+        if decision == "interface-contract-instance":
+            ref = record.get("interfaceContractRef")
+            if not _as_nonempty_string(ref):
+                F.add("USF-INTERFACE-001", subject, "interface-contract-instance decision lacks interfaceContractRef")
+                continue
+            _validate_route_interface_contract(
+                F,
+                subject,
+                route,
+                record,
+                interface_instances.get(ref),
+                semantic_contract_ids,
+            )
+        elif decision == "deferred":
+            if not _as_nonempty_string(record.get("deferredRationale")):
+                F.add("USF-INTERFACE-002", subject, "deferred decision requires a non-empty deferredRationale")
+            if not re.fullmatch(r"USF-[0-9]+", str(record.get("followUpIssue") or "")):
+                F.add("USF-INTERFACE-002", subject, "deferred decision requires a followUpIssue")
+        elif decision == "rejected":
+            if not _as_nonempty_string(record.get("rejectionRationale")):
+                F.add("USF-INTERFACE-002", subject, "rejected decision requires a non-empty rejectionRationale")
+
+
 def _load_instance_ids(F):
     instance_ids = set()
     for p in sorted(glob.glob("spec/instances/**/*.json", recursive=True)):
@@ -1038,7 +1241,8 @@ def validate_source_import_submanifest_targets(F, sub_path, entries, instance_id
                 F.add("USF-IMPORT-014", subject, f"unresolved targetUsfConcept token: {token}")
 
 
-def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None, evidence_ids=None):
+def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None,
+                           evidence_ids=None, api_route_records=None, route_interface_coverage=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -1097,6 +1301,12 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         matrix_text = load_text(matrix_path, F)
         if matrix_text is not None:
             validate_semantic_coverage_matrix(F, matrix_text, instance_ids, matrix_path)
+    validate_api_route_interface_coverage(
+        F,
+        data_by_path,
+        api_route_records=api_route_records,
+        route_interface_coverage=route_interface_coverage,
+    )
 
 
 def check_instances(ctx, F):
@@ -2072,6 +2282,8 @@ def check_selftest(ctx, F):
                 source_paths=set(patch.get("sourcePaths", [])),
                 existing_paths=set(patch.get("existingPaths", [])),
                 evidence_ids=set(patch.get("evidenceIds", [])),
+                api_route_records=patch.get("apiRouteRecords"),
+                route_interface_coverage=patch.get("routeInterfaceCoverage"),
             )
         elif patch["target"] == "evidence":
             records = patch.get("records")

@@ -23,6 +23,14 @@
   "requestContract": {
     "description": "Login request semantics cover provider selection, callback state binding, session lookup, logout, custom-domain callback derivation, tenant host context, and redirect origin validation. Field-level request schema remains deferred, but validation semantics are source-backed and must reject missing state, invalid callback origin, provider mismatch, absent session, and unsafe tenant context.",
     "fields": [
+      "routeId:auth-login.post",
+      "method:POST",
+      "path:/auth/login",
+      "openapiOperationId:postAuthLogin",
+      "requestSchema:LoginRequest",
+      "authScheme:none",
+      "tenantScope:tenant-header-body",
+      "requiredAction:auth.login",
       "provider-selection",
       "callback-state-token",
       "session-cookie",
@@ -36,6 +44,12 @@
   "responseContract": {
     "description": "Login response semantics return authenticated, denied, validation-failure, provider-failure, no-session, and logout states without exposing raw identity-provider tokens. A behaviour proof must observe both success and failure outcomes and must link claimed outcomes to audit and workflow semantics.",
     "fields": [
+      "responseSchema:200:LoginResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:auth service records value-free login evidence",
+      "pdpPolicy:login establishes identity; authorization is downstream",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim",
       "authenticated-session",
       "denied-login",
       "validation-failure",
@@ -55,6 +69,9 @@
   "security": "Authentication route boundary must preserve fail-closed authorization defaults, tenant host validation, session-cookie integrity, callback-state validation, audited session creation, explicit denied/error outcomes, permission-gated follow-on access, request and trace correlation, and event emission through event.authentication-login-audit, audit.authentication-login, observability.authentication-login-audit, workflow.authentication-login, and workflow.authentication-identity-context. Historical route evidence remains source evidence only and cannot override the USF-native interface contract.",
   "driftDetectable": true,
   "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=auth-login.post",
+    "packages/openapi/openapi.json#operationId=postAuthLogin",
+    "apps/api/src/server.ts",
     "docs/api/openapi.json",
     "apps/platform-api/scripts/auth-settings-runtime-proof.ts",
     "apps/platform-api/src/server/routes.ts",

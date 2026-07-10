@@ -1,0 +1,60 @@
+{
+  "id": "interface.jobs-create-api",
+  "title": "Jobs Create API Contract",
+  "description": "Draft USF-native interface contract for POST /v1/jobs. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent jobs.create as a governed POST API route contract for job-service.",
+  "boundary": "Local dev/test inbound HTTP boundary POST /v1/jobs; implementation path apps/api/src/server.ts; route classification tenant-scoped.",
+  "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+  "requestContract": {
+    "description": "Request semantics for jobs.create bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: JobCreateRequest.",
+    "fields": [
+      "routeId:jobs.create",
+      "method:POST",
+      "path:/v1/jobs",
+      "openapiOperationId:createJobV1",
+      "requestSchema:JobCreateRequest",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-body",
+      "requiredAction:job.create"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for jobs.create expose 200 JobCreateResponse, 400 ApiErrorResponse, 403 ApiErrorResponse, 409 ApiErrorResponse, 429 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:JobCreateResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "responseSchema:409:ApiErrorResponse",
+      "responseSchema:429:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:job.create audited by job service; guardrail denials emit value-free guardrail audit",
+      "pdpPolicy:job service calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "job.create"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-body; PDP policy job service calls PDP; audit policy job.create audited by job service; guardrail denials emit value-free guardrail audit; idempotency policy required; pagination policy none; rate-limit policy enforced local-dev-test guardrail api.jobs.create.local; single-node in-memory only; live WAF/edge/gateway enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=jobs.create",
+    "packages/openapi/openapi.json#operationId=createJobV1",
+    "apps/api/src/server.ts"
+  ]
+}

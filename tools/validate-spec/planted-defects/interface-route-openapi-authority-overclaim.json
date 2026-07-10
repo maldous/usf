@@ -1,0 +1,28 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INTERFACE-003",
+  "apiRouteRecords": [
+    {
+      "routeId": "demo.get",
+      "method": "GET",
+      "openapiPath": "/demo",
+      "openapiOperationId": "getDemo",
+      "openapiAuthorityClaim": "semantic-authority"
+    }
+  ],
+  "routeInterfaceCoverage": {
+    "records": [
+      {
+        "routeId": "demo.get",
+        "method": "GET",
+        "openapiPath": "/demo",
+        "openapiOperationId": "getDemo",
+        "decision": "deferred",
+        "openapiProjection": "projection-only",
+        "deferredRationale": "Route is deliberately deferred for this planted defect.",
+        "followUpIssue": "USF-1"
+      }
+    ]
+  },
+  "instances": {}
+}

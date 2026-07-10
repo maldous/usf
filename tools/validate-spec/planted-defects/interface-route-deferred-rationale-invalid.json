@@ -1,0 +1,27 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INTERFACE-002",
+  "apiRouteRecords": [
+    {
+      "routeId": "demo.get",
+      "method": "GET",
+      "openapiPath": "/demo",
+      "openapiOperationId": "getDemo"
+    }
+  ],
+  "routeInterfaceCoverage": {
+    "records": [
+      {
+        "routeId": "demo.get",
+        "method": "GET",
+        "openapiPath": "/demo",
+        "openapiOperationId": "getDemo",
+        "decision": "deferred",
+        "openapiProjection": "projection-only",
+        "deferredRationale": "",
+        "followUpIssue": ""
+      }
+    ]
+  },
+  "instances": {}
+}

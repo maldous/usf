@@ -1,0 +1,58 @@
+{
+  "id": "interface.config-current-get-api",
+  "title": "Config Current Get API Contract",
+  "description": "Draft USF-native interface contract for GET /v1/config/current. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent config-current.get as a governed GET API route contract for config-service.",
+  "boundary": "Local dev/test inbound HTTP boundary GET /v1/config/current; implementation path apps/api/src/server.ts; route classification tenant-scoped.",
+  "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+  "requestContract": {
+    "description": "Request semantics for config-current.get bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: TenantContextQuery.",
+    "fields": [
+      "routeId:config-current.get",
+      "method:GET",
+      "path:/v1/config/current",
+      "openapiOperationId:getConfigCurrentV1",
+      "requestSchema:TenantContextQuery",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-query",
+      "requiredAction:config.read"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for config-current.get expose 200 ConfigCurrentResponse, 400 ApiErrorResponse, 403 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:ConfigCurrentResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:config service records value-free config access",
+      "pdpPolicy:config service calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "config.read"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-query; PDP policy config service calls PDP; audit policy config service records value-free config access; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=config-current.get",
+    "packages/openapi/openapi.json#operationId=getConfigCurrentV1",
+    "apps/api/src/server.ts"
+  ]
+}

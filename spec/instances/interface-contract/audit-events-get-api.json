@@ -1,0 +1,59 @@
+{
+  "id": "interface.audit-events-get-api",
+  "title": "Audit Events Get API Contract",
+  "description": "Draft USF-native interface contract for GET /v1/audit/events/{id}. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent audit-events.get as a governed GET API route contract for audit-query.",
+  "boundary": "Local dev/test inbound HTTP boundary GET /v1/audit/events/{id}; implementation path apps/api/src/server.ts; route classification audit-sensitive.",
+  "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+  "requestContract": {
+    "description": "Request semantics for audit-events.get bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: TenantContextQuery.",
+    "fields": [
+      "routeId:audit-events.get",
+      "method:GET",
+      "path:/v1/audit/events/{id}",
+      "openapiOperationId:getAuditEventByIdV1",
+      "requestSchema:TenantContextQuery",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-query-param",
+      "requiredAction:audit.read"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for audit-events.get expose 200 AuditEventView, 400 ApiErrorResponse, 403 ApiErrorResponse, 404 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:AuditEventView",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "responseSchema:404:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:audit read is itself audited",
+      "pdpPolicy:audit query service calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "audit.read"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-query-param; PDP policy audit query service calls PDP; audit policy audit read is itself audited; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=audit-events.get",
+    "packages/openapi/openapi.json#operationId=getAuditEventByIdV1",
+    "apps/api/src/server.ts"
+  ]
+}

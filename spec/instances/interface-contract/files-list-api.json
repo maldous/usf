@@ -1,0 +1,58 @@
+{
+  "id": "interface.files-list-api",
+  "title": "Files List API Contract",
+  "description": "Draft USF-native interface contract for GET /v1/files. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent files.list as a governed GET API route contract for file-service.",
+  "boundary": "Local dev/test inbound HTTP boundary GET /v1/files; implementation path apps/api/src/server.ts; route classification tenant-scoped.",
+  "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+  "requestContract": {
+    "description": "Request semantics for files.list bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: FilesQuery.",
+    "fields": [
+      "routeId:files.list",
+      "method:GET",
+      "path:/v1/files",
+      "openapiOperationId:listFilesV1",
+      "requestSchema:FilesQuery",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-query",
+      "requiredAction:file.list"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for files.list expose 200 FilesListResponse, 400 ApiErrorResponse, 403 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:FilesListResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:file list audited by file service",
+      "pdpPolicy:file service calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "file.list"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-query; PDP policy file service calls PDP; audit policy file list audited by file service; idempotency policy not-required; pagination policy cursor; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=files.list",
+    "packages/openapi/openapi.json#operationId=listFilesV1",
+    "apps/api/src/server.ts"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "interface.providers-list-api",
+  "title": "Providers List API Contract",
+  "description": "Draft USF-native interface contract for GET /v1/providers. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent providers.list as a governed GET API route contract for provider-registry.",
+  "boundary": "Local dev/test inbound HTTP boundary GET /v1/providers; implementation path apps/api/src/server.ts; route classification operator-only.",
+  "semanticContractRef": "semantic-contract.provider-configuration-plane",
+  "requestContract": {
+    "description": "Request semantics for providers.list bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: ProvidersQuery.",
+    "fields": [
+      "routeId:providers.list",
+      "method:GET",
+      "path:/v1/providers",
+      "openapiOperationId:listProvidersV1",
+      "requestSchema:ProvidersQuery",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-query",
+      "requiredAction:provider.list"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for providers.list expose 200 ProvidersListResponse, 400 ApiErrorResponse, 403 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:ProvidersListResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:provider status access is PDP guarded and value-free; audit-of-access posture is represented",
+      "pdpPolicy:operator/security-admin provider.list permission required; provider credentials and endpoints never exposed",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "provider.list"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-query; PDP policy operator/security-admin provider.list permission required; provider credentials and endpoints never exposed; audit policy provider status access is PDP guarded and value-free; audit-of-access posture is represented; idempotency policy not-required; pagination policy cursor; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=providers.list",
+    "packages/openapi/openapi.json#operationId=listProvidersV1",
+    "apps/api/src/server.ts"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "interface.openapi-get-api",
+  "title": "Openapi Get API Contract",
+  "description": "Draft USF-native interface contract for GET /openapi.json. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent openapi.get as a governed GET API route contract for openapi-document.",
+  "boundary": "Local dev/test inbound HTTP boundary GET /openapi.json; implementation path apps/api/src/server.ts; route classification public.",
+  "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+  "requestContract": {
+    "description": "Request semantics for openapi.get bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: none.",
+    "fields": [
+      "routeId:openapi.get",
+      "method:GET",
+      "path:/openapi.json",
+      "openapiOperationId:getOpenApiDocument",
+      "requestSchema:none",
+      "authScheme:none",
+      "tenantScope:none",
+      "requiredAction:none"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for openapi.get expose 200 OpenApiDocument; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:OpenApiDocument",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:not audited; contains synthetic examples only",
+      "pdpPolicy:explicit public local contract document",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "route-access:none"
+  ],
+  "security": "Auth scheme none; tenant scope none; PDP policy explicit public local contract document; audit policy not audited; contains synthetic examples only; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test route; live edge rate limit deferred; field exposure policy contract metadata and synthetic examples only; observability policy request_count error_count latency local counters only; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=openapi.get",
+    "packages/openapi/openapi.json#operationId=getOpenApiDocument",
+    "apps/api/src/server.ts"
+  ]
+}
