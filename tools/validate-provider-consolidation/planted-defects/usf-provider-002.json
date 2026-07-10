@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-002-provider-count-mismatch",
+  "expectedRuleIds": [
+    "USF-PROVIDER-002"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "provider-count-mismatch",
+    "description": "providerCount set to len(providers)+1"
+  }
+}

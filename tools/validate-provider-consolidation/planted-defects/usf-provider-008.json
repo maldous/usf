@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-008-promotion-without-reason",
+  "expectedRuleIds": [
+    "USF-PROVIDER-008"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "promotion-without-reason",
+    "description": "a promotion-recommended profile-gated provider left with no stated reason"
+  }
+}

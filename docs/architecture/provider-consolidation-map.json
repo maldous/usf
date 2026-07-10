@@ -1,0 +1,1978 @@
+{
+  "id": "provider-consolidation-map",
+  "title": "USF-1074 Dev Compose Provider Profile Consolidation Map",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "This map is a lower-authority supporting summary. It is lower authority than the compose manifests (compose/compose.yaml), the compose-service catalogue and semantic contracts, the provider-mode instances, the runtime-proof evidence, and the validators. It records provider classification and dev-compose profile consolidation only. It makes no live-provider, production, staging, or deployment claim, and asserts no runtime product readiness upgrade.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1074",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    "compose/compose.yaml (compose manifests)",
+    "spec/instances/compose-service/service-catalogue.json (compose-service catalogue)",
+    "spec/instances/provider-mode/ (provider-mode instances)",
+    "spec/instances/runtime-proof/runtime-application-compose-parity.json (runtime-proof evidence)"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-compose-and-service-catalogue-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone"
+  ],
+  "providerCount": 41,
+  "requiredMinimum": [
+    "postgres",
+    "keycloak",
+    "mailpit",
+    "minio",
+    "nats",
+    "temporal",
+    "openbao",
+    "clickhouse",
+    "redis",
+    "meilisearch",
+    "clamav",
+    "localstack",
+    "wiremock",
+    "webhook-sink",
+    "webhook-sync",
+    "pgbackrest",
+    "windmill",
+    "sonarqube"
+  ],
+  "classificationCounts": {
+    "canonical-dev-compose": 14,
+    "profile-gated": 17,
+    "test-staging-live-only": 5,
+    "deferred": 2,
+    "rejected": 3
+  },
+  "providers": [
+    {
+      "providerId": "postgres",
+      "displayName": "Postgres",
+      "registryInstances": [
+        "postgres (compose)",
+        "database-postgres-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "postgres"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.relational-storage-and-migrations-and-rls",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose service (no profile), generate-service; active composed-test runtime binding (PostgresTenantMembershipRepository).",
+      "readinessProof": "runtime:proof:compose active binding 'database-postgres-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "keycloak-db",
+      "displayName": "Keycloak Database",
+      "registryInstances": [
+        "keycloak-db (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "keycloak-db"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose backing store for Keycloak (no profile); part of keycloak-identity-provider active binding.",
+      "readinessProof": "runtime:proof:compose active binding 'identity-keycloak-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "keycloak",
+      "displayName": "Keycloak",
+      "registryInstances": [
+        "keycloak (compose)",
+        "identity-keycloak-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "keycloak"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.authentication-platform",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose service; active composed-test identity binding (KeycloakComposedIdentityProvider). Also has hermetic-mock authentication-slice proof.",
+      "readinessProof": "runtime:proof:compose active binding 'identity-keycloak-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "nats",
+      "displayName": "NATS",
+      "registryInstances": [
+        "nats (compose)",
+        "event-bus-nats-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "nats"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.event-bus-durable-queues-dlq-redrive",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose event bus (JetStream); active composed-test binding (NatsEventBus).",
+      "readinessProof": "runtime:proof:compose active binding 'event-bus-nats-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "temporal",
+      "displayName": "Temporal",
+      "registryInstances": [
+        "temporal (compose)",
+        "workflow-engine-temporal-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "temporal"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose workflow runtime (uses foundation postgres); active composed-test binding (TemporalComposedWorkflowEngine). temporal-postgres/temporal-ui are separate workflow-provider-gated entries.",
+      "readinessProof": "runtime:proof:compose active binding 'workflow-engine-temporal-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "minio",
+      "displayName": "MinIO",
+      "registryInstances": [
+        "minio (compose)",
+        "object-storage-minio-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "minio"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose object storage; active composed-test binding (MinioObjectStore).",
+      "readinessProof": "runtime:proof:compose active binding 'object-storage-minio-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "openbao",
+      "displayName": "OpenBao",
+      "registryInstances": [
+        "openbao (compose)",
+        "secret-store-openbao-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "openbao"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.runtime-secrets-management",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose secret store; active composed-test binding (OpenBaoSecretStore).",
+      "readinessProof": "runtime:proof:compose active binding 'secret-store-openbao-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "mailpit",
+      "displayName": "Mailpit",
+      "registryInstances": [
+        "mailpit (compose)",
+        "notification-delivery-mailpit-composed-test"
+      ],
+      "serviceCatalogueIds": [
+        "mailpit"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.notification-delivery-and-preferences-and-channels",
+        "semantic-contract.composed-provider-readiness-spine"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose SMTP sink; active composed-test binding (MailpitNotificationProvider) with readiness/write/readback/cleanup.",
+      "readinessProof": "runtime:proof:compose active binding 'notification-delivery-mailpit-composed-test' — readiness+retry evidence (spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix, packages/proof/src/runtime-application-proof.ts)",
+      "healthProof": "dev-compose-backed healthProof=true; healthz.get/readyz.get (docs/architecture/runtime-product-readiness-map.json#bootHealthReadinessLiveness, #runtimeModes)",
+      "teardownCleanupProof": "bootHealthReadinessLiveness.teardownProof=true; composed adapter cleanup evidence (runtime:proof:compose)",
+      "auditProof": "auditEvidenceCaptured=true (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof; packages/proof/src/runtime-application-proof.ts#auditEvents)",
+      "telemetryProof": "telemetryEvidenceCaptured=true metric+trace (docs/architecture/runtime-product-readiness-map.json#authSessionTenantNegativePathAuditTelemetryProof)",
+      "redactionProof": "redactionEvidenceCaptured=true (runtime:proof:compose; packages/proof/src/runtime-application-proof.ts#redactionChecked)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)",
+        "validate-runtime/validate-runtime.py (runtime-product-readiness-map)",
+        "runtime:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)",
+        "tools/validate-runtime/planted-defects/USF-RUNTIME-036..040"
+      ],
+      "promotionRecommendation": "keep — already in canonical dev compose default",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "otel-collector",
+      "displayName": "OpenTelemetry Collector",
+      "registryInstances": [
+        "otel-collector (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "otel-collector"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.metrics-and-traces"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose shared-control-plane observability service (no profile, no compose healthcheck). Only historical hermetic-mock observability-signals proof exists; no fresh dev-compose provider readiness/health binding recorded.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-fresh-dev-compose-readiness-proof-recorded",
+        "no-health-or-teardown-proof-recorded"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — canonical, but NO fresh runtime readiness/health proof is recorded (observability-signals proof is hermetic-mock/historical)",
+      "recordedReadinessGap": true,
+      "gapNextRung": "USF-1074-followup: add a compose healthcheck and record a fresh dev-compose runtime readiness/health/teardown proof for this always-on observability service (today only a historical hermetic-mock observability-signals proof exists; no fresh provider binding recorded)"
+    },
+    {
+      "providerId": "prometheus",
+      "displayName": "Prometheus",
+      "registryInstances": [
+        "prometheus (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "prometheus"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.metrics-and-traces",
+        "semantic-contract.observability-built-in-alerting-and-incidents"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose shared-control-plane observability service (no profile, no compose healthcheck). Only historical hermetic-mock observability-signals proof exists; no fresh dev-compose provider readiness/health binding recorded.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-fresh-dev-compose-readiness-proof-recorded",
+        "no-health-or-teardown-proof-recorded"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — canonical, but NO fresh runtime readiness/health proof is recorded (observability-signals proof is hermetic-mock/historical)",
+      "recordedReadinessGap": true,
+      "gapNextRung": "USF-1074-followup: add a compose healthcheck and record a fresh dev-compose runtime readiness/health/teardown proof for this always-on observability service (today only a historical hermetic-mock observability-signals proof exists; no fresh provider binding recorded)"
+    },
+    {
+      "providerId": "grafana",
+      "displayName": "Grafana",
+      "registryInstances": [
+        "grafana (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "grafana"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.metrics-and-traces",
+        "semantic-contract.logs-aggregation-and-tenant-scoped-search"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose shared-control-plane observability service (no profile, no compose healthcheck). Only historical hermetic-mock observability-signals proof exists; no fresh dev-compose provider readiness/health binding recorded.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-fresh-dev-compose-readiness-proof-recorded",
+        "no-health-or-teardown-proof-recorded"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — canonical, but NO fresh runtime readiness/health proof is recorded (observability-signals proof is hermetic-mock/historical)",
+      "recordedReadinessGap": true,
+      "gapNextRung": "USF-1074-followup: add a compose healthcheck and record a fresh dev-compose runtime readiness/health/teardown proof for this always-on observability service (today only a historical hermetic-mock observability-signals proof exists; no fresh provider binding recorded)"
+    },
+    {
+      "providerId": "loki",
+      "displayName": "Loki",
+      "registryInstances": [
+        "loki (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "loki"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.logs-aggregation-and-tenant-scoped-search"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose shared-control-plane observability service (no profile, no compose healthcheck). Only historical hermetic-mock observability-signals proof exists; no fresh dev-compose provider readiness/health binding recorded.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-fresh-dev-compose-readiness-proof-recorded",
+        "no-health-or-teardown-proof-recorded"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — canonical, but NO fresh runtime readiness/health proof is recorded (observability-signals proof is hermetic-mock/historical)",
+      "recordedReadinessGap": true,
+      "gapNextRung": "USF-1074-followup: add a compose healthcheck and record a fresh dev-compose runtime readiness/health/teardown proof for this always-on observability service (today only a historical hermetic-mock observability-signals proof exists; no fresh provider binding recorded)"
+    },
+    {
+      "providerId": "tempo",
+      "displayName": "Tempo",
+      "registryInstances": [
+        "tempo (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "tempo"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.metrics-and-traces"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose shared-control-plane observability service (no profile, no compose healthcheck). Only historical hermetic-mock observability-signals proof exists; no fresh dev-compose provider readiness/health binding recorded.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-fresh-dev-compose-readiness-proof-recorded",
+        "no-health-or-teardown-proof-recorded"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — canonical, but NO fresh runtime readiness/health proof is recorded (observability-signals proof is hermetic-mock/historical)",
+      "recordedReadinessGap": true,
+      "gapNextRung": "USF-1074-followup: add a compose healthcheck and record a fresh dev-compose runtime readiness/health/teardown proof for this always-on observability service (today only a historical hermetic-mock observability-signals proof exists; no fresh provider binding recorded)"
+    },
+    {
+      "providerId": "webhook-sink",
+      "displayName": "Webhook Sink",
+      "registryInstances": [
+        "webhook-sink (compose)",
+        "notification-delivery-webhook-sink-composed-test",
+        "notification-delivery-webhook-sink-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "webhook-sink"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.webhooks-developer-facing",
+        "semantic-contract.notification-delivery-and-preferences-and-channels"
+      ],
+      "composedProfileStatus": "canonical-dev-compose",
+      "classification": "canonical-dev-compose",
+      "classificationReason": "Default dev compose HTTP echo sink (no profile). Runtime binding is profile-gated-proven capture-only (USF-201); notification delivery/callback/replay/live compatibility and API/worker runtime binding deferred (USF-153).",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding notification-delivery-webhook-sink",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded (deferred)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-teardown-cleanup-proof-recorded"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — canonical dev service; delivery/replay proof deferred to USF-153",
+      "recordedReadinessGap": true,
+      "gapNextRung": "USF-1074-followup: record a teardown/cleanup proof for the webhook-sink composed binding (readiness and health are bounded-proven; teardownCleanupProof is none-recorded)"
+    },
+    {
+      "providerId": "pgadmin",
+      "displayName": "pgAdmin",
+      "registryInstances": [
+        "pgadmin (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "pgadmin"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.support-mode-break-glass-access"
+      ],
+      "composedProfileStatus": "operator-tools",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under operator-tools profile; operator DB admin surface, metadata-only, admin-only access.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only (no synthetic tenant data)",
+      "dataMigrationBoundary": "not-applicable (operator UI, no owned data store)",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-compose/planted-defects/missing-pgadmin-rationale.json"
+      ],
+      "promotionRecommendation": "keep — operator-only tool; not needed in default dev bootstrap",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "sonar-postgres",
+      "displayName": "SonarQube Postgres",
+      "registryInstances": [
+        "sonar-postgres (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "sonar-postgres"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.code-quality-and-secret-and-dependency-scanning"
+      ],
+      "composedProfileStatus": "assurance",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under assurance profile; backing store for SonarQube (historical-implementation-detail).",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-compose/planted-defects/missing-sonar-rationale.json"
+      ],
+      "promotionRecommendation": "keep — assurance-only backing store",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "sonar-oidc-plugin",
+      "displayName": "SonarQube OIDC Plugin Fetcher",
+      "registryInstances": [
+        "sonar-oidc-plugin (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "sonar-oidc-plugin"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.code-quality-and-secret-and-dependency-scanning"
+      ],
+      "composedProfileStatus": "assurance",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under assurance profile; one-shot plugin fetch helper for SonarQube.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — assurance-only helper",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "sonarqube",
+      "displayName": "SonarQube",
+      "registryInstances": [
+        "sonarqube (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "sonarqube"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.code-quality-and-secret-and-dependency-scanning"
+      ],
+      "composedProfileStatus": "assurance",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under assurance profile; code-quality/scanning control plane. No runtime provider binding; catalogue-level validation only.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-compose/planted-defects/missing-sonar-rationale.json"
+      ],
+      "promotionRecommendation": "keep — heavy assurance service; run on demand under assurance profile",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "localstack",
+      "displayName": "LocalStack",
+      "registryInstances": [
+        "localstack (compose)",
+        "provider-emulator-localstack-composed-test",
+        "provider-emulator-localstack-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "localstack"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.mock-providers-dev-test"
+      ],
+      "composedProfileStatus": "provider-emulation",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under provider-emulation profile; AWS emulator (s3,sqs,sns,secretsmanager). profile-gated-proven bounded local proof (USF-208); live-provider not claimed.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding provider-emulator-localstack",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:mock-substrate)",
+      "auditProof": "bounded proof audit evidence (proof:mock-substrate)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — emulator only needed for cloud-integration proof under its profile",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "wiremock",
+      "displayName": "WireMock",
+      "registryInstances": [
+        "wiremock (compose)",
+        "provider-mock-wiremock-composed-test",
+        "provider-mock-wiremock-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "wiremock"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.mock-providers-dev-test"
+      ],
+      "composedProfileStatus": "provider-mocks",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under provider-mocks profile; HTTP mock provider (USF-209). profile-gated-proven bounded local proof; API/worker runtime binding and live compatibility deferred.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding provider-mock-wiremock",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:mock-substrate)",
+      "auditProof": "bounded proof audit evidence (proof:mock-substrate)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — mock provider used only under provider-mocks profile",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "alertmanager",
+      "displayName": "Alertmanager",
+      "registryInstances": [
+        "alertmanager (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "alertmanager"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.alerting-incident-management-on-call-status-page",
+        "semantic-contract.observability-built-in-alerting-and-incidents"
+      ],
+      "composedProfileStatus": "observability",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under observability profile; alert routing. Only historical hermetic-mock observability-signals proof; no fresh compose readiness binding.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "promote-to-canonical-dev-compose (candidate) — completes the alerting path for the always-on Prometheus/Grafana/Loki/Tempo stack; small footprint, but needs a fresh readiness/health proof first",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "alloy",
+      "displayName": "Grafana Alloy",
+      "registryInstances": [
+        "alloy (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "alloy"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.metrics-and-traces",
+        "semantic-contract.logs-aggregation-and-tenant-scoped-search"
+      ],
+      "composedProfileStatus": "observability",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under observability profile; telemetry collector/agent. Only historical hermetic-mock observability-signals proof.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "historical hermetic-mock audit evidence (evidence/proof-evidence/observability-signals-runtime-proof.json)",
+      "telemetryProof": "historical hermetic-mock behaviour-proven (evidence/proof-evidence/observability-signals-runtime-proof.json); NOT dev-compose provider readiness",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — overlaps otel-collector which is already canonical; promote only if a distinct agent path is proven",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "windmill-postgres",
+      "displayName": "Windmill Postgres",
+      "registryInstances": [
+        "windmill-postgres (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "windmill-postgres"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.background-workers-job-runner"
+      ],
+      "composedProfileStatus": "workflow-provider",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under workflow-provider profile; backing store for Windmill.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding operational-job-engine-windmill",
+      "healthProof": "bounded local readiness/retry proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:workflow:windmill)",
+      "auditProof": "bounded proof audit evidence (proof:workflow:windmill)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:workflow:windmill)",
+      "redactionProof": "bounded proof redaction evidence (proof:workflow:windmill)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — Windmill dependency, profile-gated",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "windmill-redis",
+      "displayName": "Windmill Redis",
+      "registryInstances": [
+        "windmill-redis (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "windmill-redis"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.background-workers-job-runner"
+      ],
+      "composedProfileStatus": "workflow-provider",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under workflow-provider profile; queue/cache backing store for Windmill (distinct from the standalone redis cache entry).",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding operational-job-engine-windmill",
+      "healthProof": "bounded local readiness/retry proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:workflow:windmill)",
+      "auditProof": "bounded proof audit evidence (proof:workflow:windmill)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:workflow:windmill)",
+      "redactionProof": "bounded proof redaction evidence (proof:workflow:windmill)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — Windmill dependency, profile-gated",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "windmill",
+      "displayName": "Windmill",
+      "registryInstances": [
+        "windmill (compose)",
+        "operational-job-engine-windmill-composed-test",
+        "operational-job-engine-windmill-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "windmill"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+        "semantic-contract.workflow-engine-scheduled-jobs-approvals"
+      ],
+      "composedProfileStatus": "workflow-provider",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under workflow-provider profile; operator automation server (USF-212). profile-gated-proven bounded local proof (workspace/script/job, audit, tenant, secret, cleanup, teardown).",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding operational-job-engine-windmill",
+      "healthProof": "bounded local readiness/retry proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:workflow:windmill)",
+      "auditProof": "bounded proof audit evidence (proof:workflow:windmill)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:workflow:windmill)",
+      "redactionProof": "bounded proof redaction evidence (proof:workflow:windmill)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — operator automation gated under workflow-provider",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "windmill-worker",
+      "displayName": "Windmill Worker",
+      "registryInstances": [
+        "windmill-worker (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "windmill-worker"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.background-workers-job-runner"
+      ],
+      "composedProfileStatus": "workflow-provider",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under workflow-provider profile; Windmill job worker.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding operational-job-engine-windmill",
+      "healthProof": "bounded local readiness/retry proof (proof:workflow:windmill); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:workflow:windmill)",
+      "auditProof": "bounded proof audit evidence (proof:workflow:windmill)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:workflow:windmill)",
+      "redactionProof": "bounded proof redaction evidence (proof:workflow:windmill)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — Windmill dependency, profile-gated",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "temporal-postgres",
+      "displayName": "Temporal Postgres",
+      "registryInstances": [
+        "temporal-postgres (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "temporal-postgres"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.workflow-engine-scheduled-jobs-approvals"
+      ],
+      "composedProfileStatus": "workflow-provider",
+      "classification": "profile-gated",
+      "classificationReason": "Generated into compose under workflow-provider profile, BUT catalogue marks it deferred/historical-implementation-detail/requires-human-decision (default temporal uses foundation postgres). deferredDepth=1.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — redundant with foundation postgres for temporal in default; requires-human-decision per catalogue",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "temporal-ui",
+      "displayName": "Temporal UI",
+      "registryInstances": [
+        "temporal-ui (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "temporal-ui"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.workflow-engine-scheduled-jobs-approvals"
+      ],
+      "composedProfileStatus": "workflow-provider",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under workflow-provider profile; operator UI for Temporal.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — operator UI, profile-gated",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "pgbackrest",
+      "displayName": "pgBackRest",
+      "registryInstances": [
+        "pgbackrest (compose)",
+        "backup-restore-pgbackrest-composed-test",
+        "backup-restore-pgbackrest-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "pgbackrest"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.backup-and-restore",
+        "semantic-contract.pitr-retention-legal-hold-data-residency"
+      ],
+      "composedProfileStatus": "backup-restore",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under backup-restore profile; cold backup/restore drill against foundation postgres (USF-211). Online backup, WAL/PITR, DR, RPO/RTO deferred.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding backup-restore-pgbackrest",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:mock-substrate)",
+      "auditProof": "bounded proof audit evidence (proof:mock-substrate)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "synthetic tenant/actor/file/job/notification/provider/secret proof data only (no production data)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "promote-to-canonical-dev-compose (candidate) — depends only on the always-on postgres and proves backup/restore; but backup drill is not needed on every dev boot, so keep profile-gated",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "clamav",
+      "displayName": "ClamAV",
+      "registryInstances": [
+        "clamav (compose)",
+        "file-scan-clamav-composed-test",
+        "file-scan-clamav-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "clamav"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls"
+      ],
+      "composedProfileStatus": "scanning",
+      "classification": "profile-gated",
+      "classificationReason": "In compose under scanning profile; malware scanner (USF-200). Bounded local semantics proven; live malware scanning/DLP/signature-freshness and API/worker binding deferred.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding file-scan-clamav",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:mock-substrate)",
+      "auditProof": "none-recorded (deferred)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — large signature DB image; run under scanning profile only",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "caddy",
+      "displayName": "Caddy Gateway",
+      "registryInstances": [
+        "external-caddy (compose)"
+      ],
+      "serviceCatalogueIds": [
+        "caddy"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+        "semantic-contract.tenant-domain-activation-auth-client"
+      ],
+      "composedProfileStatus": "gateway,proof-cockpit",
+      "classification": "profile-gated",
+      "classificationReason": "Generated into compose as external-caddy under gateway profile (catalogue topProfiles gateway+proof-cockpit); reverse proxy / proof-cockpit edge. No runtime provider binding.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — edge gateway needed only for proof-cockpit/staging routing, not default dev",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "redis",
+      "displayName": "Redis",
+      "registryInstances": [
+        "cache-redis-composed-test",
+        "cache-redis-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "redis"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.rate-limiting-api"
+      ],
+      "composedProfileStatus": "not-composed (dev in-memory substitute; runtime-providers profile in test/staging)",
+      "classification": "test-staging-live-only",
+      "classificationReason": "Dev uses in-memory substitute (do-not-generate-in-memory-substitute); real composed Redis required only for test/staging (runtime-providers profile, not in dev compose.yaml). Bounded profile-gated-proven runtime proof exists (USF-207).",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding cache-redis",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:mock-substrate)",
+      "auditProof": "bounded proof audit evidence (proof:mock-substrate)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "none in dev (in-memory)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-dev-compose-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — dev in-memory substitute is semantically valid; standalone redis not required in dev compose (windmill-redis covers workflow use under its profile)",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "meilisearch",
+      "displayName": "Meilisearch",
+      "registryInstances": [
+        "full-text-search-meilisearch-composed-test",
+        "full-text-search-meilisearch-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "meilisearch"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.search-and-indexing-product-search"
+      ],
+      "composedProfileStatus": "not-composed (dev in-memory substitute; runtime-providers profile in test/staging)",
+      "classification": "test-staging-live-only",
+      "classificationReason": "Dev uses in-memory substitute; real Meilisearch required only for test/staging. USF-199 profile-gated proof; API/worker runtime binding deferred (sync port vs async client).",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding full-text-search-meilisearch",
+      "healthProof": "bounded local readiness/retry proof (proof:mock-substrate); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:mock-substrate)",
+      "auditProof": "bounded proof audit evidence (proof:mock-substrate)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:mock-substrate)",
+      "redactionProof": "bounded proof redaction evidence (proof:mock-substrate)",
+      "syntheticDataBoundary": "none in dev (in-memory)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-dev-compose-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — in-memory search substitute valid for dev; compose only in test/staging",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "clickhouse",
+      "displayName": "ClickHouse",
+      "registryInstances": [
+        "analytics-store-clickhouse-composed-test",
+        "analytics-store-clickhouse-deferred"
+      ],
+      "serviceCatalogueIds": [
+        "clickhouse"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.usage-metering-and-meter-event-ingestion",
+        "semantic-contract.metrics-and-traces"
+      ],
+      "composedProfileStatus": "not-composed (dev in-memory substitute; runtime-providers profile in test/staging)",
+      "classification": "test-staging-live-only",
+      "classificationReason": "Dev uses in-memory substitute; real ClickHouse required only for test/staging. USF-206 profile-gated analytics proof; analytics/event-store/API/worker readiness deferred.",
+      "readinessProof": "profile-gated-proven bounded local proof (proof:analytics:clickhouse); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix binding analytics-store-clickhouse",
+      "healthProof": "bounded local readiness/retry proof (proof:analytics:clickhouse); spec/instances/runtime-proof/runtime-application-compose-parity.json#providerBindingMatrix",
+      "teardownCleanupProof": "bounded proof cleanup/teardown evidence (proof:analytics:clickhouse)",
+      "auditProof": "bounded proof audit evidence (proof:analytics:clickhouse)",
+      "telemetryProof": "bounded proof metric/trace evidence (proof:analytics:clickhouse)",
+      "redactionProof": "bounded proof redaction evidence (proof:analytics:clickhouse)",
+      "syntheticDataBoundary": "none in dev (in-memory)",
+      "dataMigrationBoundary": "local synthetic data only; production migration, retention, rollback, and live data portability are non-claims",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-dev-compose-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate",
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)",
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — in-memory analytics substitute valid for dev; compose only in test/staging",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "mock-oidc",
+      "displayName": "Mock OIDC",
+      "registryInstances": [
+        "provider-mode.mock-identity-provider",
+        "mock-identity-provider-adapter"
+      ],
+      "serviceCatalogueIds": [
+        "mock-oidc"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.mock-providers-dev-test",
+        "semantic-contract.authentication-platform"
+      ],
+      "composedProfileStatus": "not-composed (deferred, requires-human-decision)",
+      "classification": "deferred",
+      "classificationReason": "Catalogue service deferred (deferredDepth=1, do-not-generate-deferred, requires-human-decision). Realised only as hermetic-mock provider-mode for the authentication slice; Keycloak is the composed dev identity provider.",
+      "readinessProof": "hermetic-mock behaviour-proven (evidence/proof-evidence/authentication-slice-proof.json; provider-mode.mock-identity-provider)",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "hermetic-mock audit evidence (authentication-slice-proof.json)",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "synthetic identity only (hermetic)",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-live-external-provider",
+        "no-composed-dev-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-parity/validate-providers.py (USF-PROVIDERS-001..0NN)"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-parity/provider-planted-defects/001-015 (missing-registry, missing-mode, missing-proof-wiring, provider-readiness-overclaim, usf157-*)"
+      ],
+      "promotionRecommendation": "keep — hermetic mock only; composed dev identity is Keycloak",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "sentry",
+      "displayName": "Sentry",
+      "registryInstances": [
+        "(historical) sentry-web, sentry-relay, sentry-snuba-*, sentry-kafka, sentry-clickhouse, sentry-postgres, sentry-redis (19 source services, none generated)"
+      ],
+      "serviceCatalogueIds": [
+        "sentry"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.alerting-incident-management-on-call-status-page"
+      ],
+      "composedProfileStatus": "not-composed (external-reference-only)",
+      "classification": "deferred",
+      "classificationReason": "Catalogue records Sentry as production-external-provider + shared-control-plane + historical-implementation-detail with do-not-generate-external-reference-only; not composed in dev. Disposition in docs/architecture/sentry-error-monitoring-disposition-matrix.json.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "metadata-only",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-composed-dev-realisation",
+        "no-live-provider-readiness"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — error monitoring deferred/external; not composed in dev",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "public-proof-origin",
+      "displayName": "Public Proof Origin",
+      "registryInstances": [
+        "(none generated; public-proof-origin profile)"
+      ],
+      "serviceCatalogueIds": [
+        "public-proof-origin"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.custom-domains-dns-ownership-tls-canonical"
+      ],
+      "composedProfileStatus": "not-composed in dev (prohibited; required-for-staging)",
+      "classification": "test-staging-live-only",
+      "classificationReason": "Dev realisation prohibited (deferredDepth=1); public-proof-origin profile required only for staging. Public origin attachment/Cloudflare routing are operator-controlled evidence (USF-263).",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "none",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-dev-compose-realisation",
+        "no-public-fqdn"
+      ],
+      "validatorCoverage": [
+        "validate-public-fqdn"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-public-fqdn/planted-defects/*"
+      ],
+      "promotionRecommendation": "keep — staging/deployment construct, prohibited in dev",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "staging-proof-cockpit",
+      "displayName": "Staging Proof Cockpit",
+      "registryInstances": [
+        "(none generated; proof-cockpit profile)"
+      ],
+      "serviceCatalogueIds": [
+        "staging-proof-cockpit"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness",
+        "semantic-contract.support-mode-break-glass-access"
+      ],
+      "composedProfileStatus": "not-composed in dev (prohibited; required-for-staging)",
+      "classification": "test-staging-live-only",
+      "classificationReason": "Dev realisation prohibited; proof-cockpit profile required only for staging. External edge Caddy auth reverse-proxy + operator access-review workflow are operator-controlled evidence (ADR 0015). Proof recorded under evidence/proof-evidence/proof-cockpit/.",
+      "readinessProof": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json (staging only, not dev)",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "none",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "no-live-provider-readiness",
+        "no-production-data",
+        "no-staging",
+        "no-production",
+        "no-deployment",
+        "no-soc-readiness",
+        "no-iso27001-certification",
+        "no-dev-compose-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-proof-cockpit-acceptance"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-proof-cockpit-acceptance/planted-defects/*"
+      ],
+      "promotionRecommendation": "keep — staging operator surface, prohibited in dev",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "platform-api",
+      "displayName": "source-lineage Platform API",
+      "registryInstances": [
+        "platform-api (source-lineage; not generated)"
+      ],
+      "serviceCatalogueIds": [
+        "platform-api"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness"
+      ],
+      "composedProfileStatus": "not-composed (out-of-foundation-scope)",
+      "classification": "rejected",
+      "classificationReason": "Runtime application code, out-of-foundation-scope, historical-implementation-detail, requirementState=false, humanDecisionState=not-required.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "none",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "out-of-foundation-scope",
+        "no-compose-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — out of foundation Compose scope (application runtime, not a provider)",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "web-app",
+      "displayName": "source-lineage App",
+      "registryInstances": [
+        "web-app (source-lineage; not generated)"
+      ],
+      "serviceCatalogueIds": [
+        "web-app"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness"
+      ],
+      "composedProfileStatus": "not-composed (out-of-foundation-scope)",
+      "classification": "rejected",
+      "classificationReason": "Runtime UI code, out-of-foundation-scope, historical-implementation-detail, requirementState=false.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "none",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "out-of-foundation-scope",
+        "no-compose-realisation"
+      ],
+      "validatorCoverage": [
+        "validate-compose (USF-COMPOSE-001..0NN)",
+        "compose:validate"
+      ],
+      "plantedDefectCoverage": [
+        "tools/validate-compose/planted-defects/* (unclassified-compose-service, missing-service-owner-metadata, exposed-port-claiming-production-readiness, etc.)"
+      ],
+      "promotionRecommendation": "keep — out of foundation Compose scope (UI, not a provider)",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    },
+    {
+      "providerId": "webhook-sync",
+      "displayName": "Webhook Sync (NOT FOUND)",
+      "registryInstances": [],
+      "serviceCatalogueIds": [
+        "webhook-sync"
+      ],
+      "semanticContractRefs": [
+        "semantic-contract.internal-service-catalog-and-readiness"
+      ],
+      "composedProfileStatus": "not-present-in-any-source",
+      "classification": "rejected",
+      "classificationReason": "No 'Webhook Sync' provider exists in compose, compose-service catalogue, provider-mode, semantic contracts, runtime proof, or readiness map. The only webhook provider is webhook-sink (Webhook Sink). Included solely to close the required-minimum checklist.",
+      "readinessProof": "none-recorded",
+      "healthProof": "none-recorded",
+      "teardownCleanupProof": "none-recorded",
+      "auditProof": "none-recorded",
+      "telemetryProof": "none-recorded",
+      "redactionProof": "none-recorded",
+      "syntheticDataBoundary": "not-applicable",
+      "dataMigrationBoundary": "not-applicable",
+      "nonClaims": [
+        "provider-not-found"
+      ],
+      "validatorCoverage": [],
+      "plantedDefectCoverage": [],
+      "promotionRecommendation": "n/a — provider does not exist; likely a mislabel of Webhook Sink",
+      "recordedReadinessGap": false,
+      "gapNextRung": ""
+    }
+  ]
+}

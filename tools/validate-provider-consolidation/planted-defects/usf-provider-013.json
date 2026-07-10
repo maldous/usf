@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-013-duplicate-planted-coverage",
+  "expectedRuleIds": [
+    "USF-PROVIDER-013"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "duplicate-planted-coverage",
+    "description": "two planted defects target the same rule, leaving other rules uncovered"
+  }
+}

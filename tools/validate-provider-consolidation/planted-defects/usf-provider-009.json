@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-009-rejected-without-reason",
+  "expectedRuleIds": [
+    "USF-PROVIDER-009"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "rejected-without-reason",
+    "description": "a rejected provider classificationReason emptied"
+  }
+}

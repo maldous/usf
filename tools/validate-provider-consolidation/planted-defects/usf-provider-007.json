@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-007-empty-synthetic-boundary",
+  "expectedRuleIds": [
+    "USF-PROVIDER-007"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "empty-synthetic-boundary",
+    "description": "a provider syntheticDataBoundary emptied"
+  }
+}
