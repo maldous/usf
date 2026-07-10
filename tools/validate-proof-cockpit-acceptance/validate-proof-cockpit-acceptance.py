@@ -24,16 +24,19 @@ HUMAN_ACTIONS_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "h
 FINAL_REPORT_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "final-external-review-report.md"
 WARNING_INVENTORY_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "warning-inventory.json"
 BUNDLE_MANIFEST_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "external-review-bundle" / "manifest.json"
+BUNDLE_README_PATH = ROOT / "evidence" / "proof-evidence" / "proof-cockpit" / "external-review-bundle" / "README.md"
 PACKAGE_PATH = ROOT / "package.json"
 MAKEFILE_PATH = ROOT / "Makefile"
 SERVER_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "server.mjs"
 SMOKE_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "smoke.mjs"
 MACHINE_QA_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "machine-qa.mjs"
+PROMOTE_PATH = ROOT / "apps" / "staging-proof-cockpit" / "src" / "promote.mjs"
+COMPARATOR_PATH = ROOT / "tools" / "proof-cockpit-compare" / "proof-cockpit-compare.py"
 VALIDATE_SPEC_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "validate-spec.yml"
 PROOF_ANCHOR_WORKFLOW_PATH = ROOT / ".github" / "workflows" / "proof-anchor.yml"
 README_PATH = ROOT / "README.md"
 
-RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 13)]
+RULE_IDS = [f"USF-PROOF-COCKPIT-{index:03d}" for index in range(1, 15)]
 
 REQUIRED_ROUTES = [
     "/proof",
@@ -201,6 +204,10 @@ REQUIRED_PLANTED_KINDS = [
     "artifact-hash-mismatch",
     "readme-marketing-overclaim",
     "action-source-sha-unresolvable",
+    "bundle-current-run-metadata-drift",
+    "projection-command-wiring-missing",
+    "comparator-contract-missing",
+    "comparator-hidden-regression",
 ]
 
 AUTH_POSTURES = {
@@ -442,6 +449,9 @@ def load_data(artifact_dir: Path | None = None) -> dict[str, Any]:
         "validateSpecWorkflow": VALIDATE_SPEC_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "proofAnchorWorkflow": PROOF_ANCHOR_WORKFLOW_PATH.read_text(encoding="utf-8"),
         "finalReport": FINAL_REPORT_PATH.read_text(encoding="utf-8"),
+        "bundleReadme": BUNDLE_README_PATH.read_text(encoding="utf-8") if BUNDLE_README_PATH.exists() else "",
+        "promote": PROMOTE_PATH.read_text(encoding="utf-8") if PROMOTE_PATH.exists() else "",
+        "comparatorSource": COMPARATOR_PATH.read_text(encoding="utf-8") if COMPARATOR_PATH.exists() else "",
         "readme": README_PATH.read_text(encoding="utf-8") if README_PATH.exists() else "",
         "nodeData": node_data(),
         "artifactDir": effective_artifact_dir,
@@ -507,6 +517,9 @@ def text_blob(data: dict[str, Any]) -> str:
         data["validateSpecWorkflow"],
         data["proofAnchorWorkflow"],
         data["finalReport"],
+        data.get("bundleReadme", ""),
+        data.get("promote", ""),
+        data.get("comparatorSource", ""),
         data.get("readme", ""),
     ]
     strings: list[str] = []
@@ -1147,6 +1160,199 @@ def rule_011_chain_and_report(data: dict[str, Any]) -> list[dict[str, str]]:
     return failures
 
 
+def machine_gap_count(report: dict[str, Any]) -> int:
+    counts = report.get("counts", {})
+    return int(counts.get("gap", counts.get("gaps", len(report.get("gaps", [])))) or 0)
+
+
+def require_equal(
+    failures: list[dict[str, str]],
+    rule_id: str,
+    label: str,
+    values: dict[str, Any],
+) -> None:
+    normalized = {key: value for key, value in values.items() if value not in (None, "")}
+    if not normalized:
+        failures.append(finding(rule_id, f"Current-run metadata missing: {label}"))
+        return
+    observed = {json.dumps(value, sort_keys=True) for value in normalized.values()}
+    if len(observed) > 1:
+        rendered = ", ".join(f"{key}={value}" for key, value in sorted(normalized.items()))
+        failures.append(finding(rule_id, f"Current-run metadata drift for {label}: {rendered}"))
+
+
+def require_text_contains_current_metadata(
+    failures: list[dict[str, str]],
+    rule_id: str,
+    text: str,
+    label: str,
+    latest: dict[str, Any],
+    required_fields: list[str],
+) -> None:
+    for field in required_fields:
+        value = str(latest.get(field, "") or "")
+        if not value or value not in text:
+            failures.append(finding(rule_id, f"{label} missing current {field}", field))
+
+
+def rule_013_current_projection_metadata(data: dict[str, Any]) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    store_latest = data["store"].get("latestMachineRun", {})
+    bundle_latest = data["bundleManifest"].get("latestMachineRun", {})
+    report = data.get("machineRunReport", {})
+    report_counts = report.get("counts", {})
+
+    require_equal(
+        failures,
+        "USF-PROOF-COCKPIT-013",
+        "runId",
+        {"store": store_latest.get("runId"), "bundle": bundle_latest.get("runId"), "machineRunReport": report.get("qaRun")},
+    )
+    for field in ["sourceSha", "deploymentSha", "sourceTreeHash", "sourceTreeHashAlgorithm"]:
+        require_equal(
+            failures,
+            "USF-PROOF-COCKPIT-013",
+            field,
+            {"store": store_latest.get(field), "bundle": bundle_latest.get(field), "machineRunReport": report.get(field)},
+        )
+    require_equal(
+        failures,
+        "USF-PROOF-COCKPIT-013",
+        "artifactDir",
+        {"store": store_latest.get("artifactDir"), "bundle": bundle_latest.get("artifactDir")},
+    )
+    require_equal(
+        failures,
+        "USF-PROOF-COCKPIT-013",
+        "reportJson",
+        {"store": store_latest.get("reportJson"), "bundle": bundle_latest.get("reportJson")},
+    )
+    require_equal(
+        failures,
+        "USF-PROOF-COCKPIT-013",
+        "externalReviewBundle",
+        {"store": store_latest.get("externalReviewBundle"), "bundle": bundle_latest.get("externalReviewBundle")},
+    )
+
+    count_pairs = [
+        ("passCount", store_latest.get("passCount"), bundle_latest.get("passCount"), report_counts.get("pass")),
+        ("warnCount", store_latest.get("warnCount"), bundle_latest.get("warnCount"), report_counts.get("warn")),
+        ("failCount", store_latest.get("failCount"), bundle_latest.get("failCount"), report_counts.get("fail")),
+        ("gapCount", store_latest.get("gapCount"), bundle_latest.get("unresolvedGapCount"), machine_gap_count(report)),
+        ("screenshotCount", store_latest.get("screenshotCount"), bundle_latest.get("screenshotCount"), report_counts.get("screenshots")),
+        (
+            "serviceEvidenceCount",
+            store_latest.get("serviceEvidenceCount"),
+            bundle_latest.get("serviceEvidenceCount"),
+            report_counts.get("serviceEvidenceScreenshots") or report_counts.get("serviceEvidence"),
+        ),
+        ("routeCount", store_latest.get("routeCount"), None, report_counts.get("testedRoutes")),
+        ("capabilityCount", store_latest.get("capabilityCount"), None, report_counts.get("capabilities")),
+        ("serviceCount", store_latest.get("serviceCount"), None, report_counts.get("services")),
+    ]
+    for label, store_value, bundle_value, report_value in count_pairs:
+        values = {"store": store_value, "machineRunReport": report_value}
+        if bundle_value is not None:
+            values["bundle"] = bundle_value
+        require_equal(failures, "USF-PROOF-COCKPIT-013", label, values)
+
+    evidence_record_count = len(report.get("evidenceRecords", report.get("evidence", [])))
+    require_equal(
+        failures,
+        "USF-PROOF-COCKPIT-013",
+        "evidenceRecordCount",
+        {"bundle": bundle_latest.get("evidenceRecordCount"), "machineRunReport": evidence_record_count},
+    )
+
+    for field in ["sourceTreeHash", "sourceTreeHashAlgorithm"]:
+        if store_latest.get(field) and bundle_latest.get(field) != store_latest.get(field):
+            failures.append(finding("USF-PROOF-COCKPIT-013", f"Bundle latest machine run missing current {field}", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+    if data["bundleManifest"].get("generatedReportsAreAuthority") is not False:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Bundle manifest must keep generated reports below authority", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+    if data["bundleManifest"].get("finalAcceptanceAutomatic") is not False:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Bundle manifest must not make final acceptance automatic", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+
+    required_fields = ["runId", "sourceSha", "deploymentSha", "sourceTreeHash"]
+    require_text_contains_current_metadata(failures, "USF-PROOF-COCKPIT-013", data.get("bundleReadme", ""), "External review bundle README", bundle_latest, required_fields)
+    require_text_contains_current_metadata(failures, "USF-PROOF-COCKPIT-013", data.get("finalReport", ""), "Final external-review report", bundle_latest, required_fields)
+
+    artifact_dir = str(store_latest.get("artifactDir", "") or "")
+    report_json = str(store_latest.get("reportJson", "") or "")
+    generated_bundle = str(store_latest.get("externalReviewBundle", "") or "")
+    files = data["bundleManifest"].get("files", [])
+    for required in [artifact_dir, report_json, generated_bundle]:
+        if required and not any(required in str(item) for item in files):
+            failures.append(finding("USF-PROOF-COCKPIT-013", f"Bundle manifest files do not reference current artifact: {required}", str(BUNDLE_MANIFEST_PATH.relative_to(ROOT))))
+
+    scripts = data["package"].get("scripts", {})
+    projection_script = scripts.get("proof-cockpit:projection-repin", "")
+    if "apps/staging-proof-cockpit/src/promote.mjs --projection-only" not in projection_script:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Package projection-only re-pin command is missing or not wired to promote.mjs --projection-only", "package.json"))
+    if "proof-review-projection-repin:" not in data["makefile"]:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Make projection-only proof-review target is missing", "Makefile"))
+    if "proof-review-repin:" not in data["makefile"] or "proof-cockpit:machine-qa" not in data["makefile"] or "proof-cockpit:promote" not in data["makefile"]:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Full proof-review re-pin target must still run machine QA and promotion", "Makefile"))
+    for marker in [
+        "projectionOnly",
+        "freshMachineExecution",
+        "requiresFreshMachineQaWhenSourceChanges",
+        "generatedReportsAreAuthority",
+        "sourceTreeHash",
+    ]:
+        if marker not in data.get("promote", ""):
+            failures.append(finding("USF-PROOF-COCKPIT-013", f"Promotion command lacks projection-only fail-closed marker: {marker}", str(PROMOTE_PATH.relative_to(ROOT))))
+    dirty_scope = re.search(r"function dirtyProjectionSourcePaths\(\) \{(?P<body>.*?)\n\}", data.get("promote", ""), re.S)
+    dirty_body = dirty_scope.group("body") if dirty_scope else ""
+    if not dirty_body:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection-only dirty source check is missing", str(PROMOTE_PATH.relative_to(ROOT))))
+    elif (
+        '"status", "--porcelain=v1", "-z", "--untracked-files=all"' not in dirty_body
+        or '"--",' in dirty_body
+        or "pathParticipatesInSourceTreeHash" not in data.get("promote", "")
+        or "SOURCE_TREE_HASH_EXCLUDED_PREFIXES" not in data.get("promote", "")
+    ):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-013",
+                "Projection-only dirty source check must inspect full repository status and filter by source tree hash exclusions",
+                str(PROMOTE_PATH.relative_to(ROOT)),
+            )
+        )
+    return failures
+
+
+def rule_014_normalized_comparator(data: dict[str, Any]) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    source = data.get("comparatorSource", "")
+    scripts = data["package"].get("scripts", {})
+    if not COMPARATOR_PATH.exists():
+        failures.append(finding("USF-PROOF-COCKPIT-014", "Proof-cockpit normalized comparator tool is missing", str(COMPARATOR_PATH.relative_to(ROOT))))
+    for name in ["proof-cockpit:compare", "proof-cockpit:compare:selftest"]:
+        command = scripts.get(name, "")
+        if "tools/proof-cockpit-compare/proof-cockpit-compare.py" not in command or "echo" in command or command.strip() == "true":
+            failures.append(finding("USF-PROOF-COCKPIT-014", f"Comparator package script missing or no-op: {name}", "package.json"))
+    if "proof-cockpit-compare.py compare" not in scripts.get("proof-cockpit:compare", ""):
+        failures.append(finding("USF-PROOF-COCKPIT-014", "Comparator package compare script must pass the compare subcommand", "package.json"))
+    if "proof-cockpit-compare.py selftest" not in scripts.get("proof-cockpit:compare:selftest", ""):
+        failures.append(finding("USF-PROOF-COCKPIT-014", "Comparator package selftest script must pass the selftest subcommand", "package.json"))
+    if "proof-cockpit-compare-selftest:" not in data["makefile"]:
+        failures.append(finding("USF-PROOF-COCKPIT-014", "Comparator Make selftest target is missing", "Makefile"))
+    for marker in [
+        "NORMALIZED_VOLATILE_KEYS",
+        "FAIL_CLOSED_KEYS",
+        "REQUIRED_NON_CLAIMS",
+        "owner-review-required",
+        "allowed-volatile-difference",
+        "hidden-regression",
+        "generatedReportsAreAuthority",
+        "finalAcceptanceAutomatic",
+        "service auth posture",
+    ]:
+        if marker not in source:
+            failures.append(finding("USF-PROOF-COCKPIT-014", f"Comparator contract marker missing: {marker}", str(COMPARATOR_PATH.relative_to(ROOT))))
+    return failures
+
+
 def rule_012_planted_coverage(data: dict[str, Any]) -> list[dict[str, str]]:
     planted_rules = [fixture.get("expectedRule") for fixture in data["planted"]]
     planted_kinds = [fixture.get("fixture", {}).get("kind") for fixture in data["planted"]]
@@ -1173,6 +1379,8 @@ RULES = {
     "USF-PROOF-COCKPIT-010": rule_010_screenshots_and_redaction,
     "USF-PROOF-COCKPIT-011": rule_011_chain_and_report,
     "USF-PROOF-COCKPIT-012": rule_012_planted_coverage,
+    "USF-PROOF-COCKPIT-013": rule_013_current_projection_metadata,
+    "USF-PROOF-COCKPIT-014": rule_014_normalized_comparator,
 }
 
 
@@ -1299,6 +1507,23 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
         services = mutated.get("serviceEvidenceManifest", {}).get("services", [])
         if services:
             services[0]["artifactHash"] = "0" * 64
+    elif kind == "bundle-current-run-metadata-drift":
+        mutated["bundleManifest"].setdefault("latestMachineRun", {})["runId"] = "qa-run-planted-current-run-drift"
+    elif kind == "projection-command-wiring-missing":
+        mutated["package"].setdefault("scripts", {}).pop("proof-cockpit:projection-repin", None)
+        mutated["makefile"] = mutated["makefile"].replace("proof-review-projection-repin:", "proof-review-projection-repin-disabled:")
+    elif kind == "projection-dirty-scope-limited":
+        mutated["promote"] = mutated.get("promote", "").replace(
+            '"status", "--porcelain=v1", "-z", "--untracked-files=all"',
+            '"status", "--short", "--untracked-files=all", "--", "apps/staging-proof-cockpit"',
+        )
+    elif kind == "comparator-contract-missing":
+        mutated["package"].setdefault("scripts", {}).pop("proof-cockpit:compare", None)
+        mutated["comparatorSource"] = mutated.get("comparatorSource", "").replace("NORMALIZED_VOLATILE_KEYS", "NORMALIZED_KEYS_REMOVED")
+    elif kind == "comparator-subcommand-missing":
+        mutated["package"].setdefault("scripts", {})["proof-cockpit:compare"] = "python3 tools/proof-cockpit-compare/proof-cockpit-compare.py"
+    elif kind == "comparator-hidden-regression":
+        mutated["comparatorSource"] = mutated.get("comparatorSource", "").replace("hidden-regression", "hidden regression marker removed")
     return mutated
 
 

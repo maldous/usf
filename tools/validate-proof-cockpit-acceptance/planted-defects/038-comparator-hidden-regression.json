@@ -1,0 +1,7 @@
+{
+  "id": "038-comparator-hidden-regression",
+  "expectedRule": "USF-PROOF-COCKPIT-014",
+  "fixture": {
+    "kind": "comparator-hidden-regression"
+  }
+}

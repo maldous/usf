@@ -1,0 +1,7 @@
+{
+  "target": "pr-paths",
+  "expectedRule": "USF-PR-TOOL",
+  "nameStatusLines": [
+    "A\ttools/unapproved-helper/unapproved-helper.py"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "id": "037-comparator-contract-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-014",
+  "fixture": {
+    "kind": "comparator-contract-missing"
+  }
+}

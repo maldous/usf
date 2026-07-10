@@ -142,6 +142,7 @@ AUTHORIZED_TOOLING = {
     "tools/validate-environment-ladder/validate-environment-ladder.py",
     "tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py",
     "tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py",
+    "tools/proof-cockpit-compare/proof-cockpit-compare.py",
     "tools/repository-optimisation/measure-command-timing.py",
     "tools/repository-optimisation/realise-bounded-optimisation.py",
     "tools/github-runner/cleanup-workspace.sh",
@@ -2372,6 +2373,14 @@ def _normalise_path(path):
     return path
 
 
+def _is_tooling_path(path):
+    return bool(
+        re.match(r"tools/.*\.(py|mjs|js|sh)$", path)
+        or path.startswith(".github/workflows/")
+        or re.search(r"(^|/)requirements[^/]*\.txt$", path)
+    )
+
+
 def _normalise_repository_path_value(value):
     if not isinstance(value, str):
         return None
@@ -2874,6 +2883,9 @@ def validate_pr_paths(F, name_status_lines, source_paths=None, changed_records=N
     validate_pr_freshness(F, changed_existing_paths, changed_records=changed_records)
     directive_referenced = _implementation_directive_referenced(changed_paths, existing_paths=existing_paths)
     for path in added_paths:
+        path = _normalise_path(path)
+        if _is_tooling_path(path) and path not in AUTHORIZED_TOOLING:
+            F.add("USF-PR-TOOL", path, "tool/CI added but not in AUTHORIZED_TOOLING (explicit authorisation required)")
         if (_is_implementation_path(path) or re.search(r"\.(ts|tsx|jsx)$", path)) and not directive_referenced:
             F.add("USF-PR-RUNTIME", path, "added file looks like implementation/runtime code")
     validate_implementation_paths(
@@ -2932,12 +2944,6 @@ def check_pr(ctx, F, base, head):
     for line in diff.splitlines():
         parts = line.split("\t")
         status, path = parts[0], parts[-1]
-        if status.startswith("A"):
-            is_tooling = (re.match(r"tools/.*\.(py|mjs|js|sh)$", path)
-                          or path.startswith(".github/workflows/")
-                          or re.search(r"(^|/)requirements[^/]*\.txt$", path))
-            if is_tooling and path not in AUTHORIZED_TOOLING:
-                F.add("USF-PR-TOOL", path, "tool/CI added but not in AUTHORIZED_TOOLING (explicit authorisation required)")
         if status.startswith("D") and re.match(r"spec/schemas/.*\.schema\.json$", path) and path in reg_paths:
             F.add("USF-PR-DELETE", path, "deleted schema still in registry")
     for e in ctx["reg"]["schemas"]:
