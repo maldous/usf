@@ -100,7 +100,7 @@
     "proof-cockpit:validate": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py all --json",
     "proof-cockpit:selftest": "python3 tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py selftest --json",
     "proof-cockpit:projection-repin": "node apps/staging-proof-cockpit/src/promote.mjs --projection-only",
-    "proof-cockpit:compare": "python3 tools/proof-cockpit-compare/proof-cockpit-compare.py",
+    "proof-cockpit:compare": "python3 tools/proof-cockpit-compare/proof-cockpit-compare.py compare",
     "proof-cockpit:compare:selftest": "python3 tools/proof-cockpit-compare/proof-cockpit-compare.py selftest --json",
     "foundation-substrate-closure:validate": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py all --json",
     "foundation-substrate-closure:selftest": "python3 tools/validate-foundation-substrate-closure/validate-foundation-substrate-closure.py selftest --json",

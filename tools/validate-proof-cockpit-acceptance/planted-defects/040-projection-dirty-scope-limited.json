@@ -1,0 +1,7 @@
+{
+  "id": "040-projection-dirty-scope-limited",
+  "expectedRule": "USF-PROOF-COCKPIT-013",
+  "fixture": {
+    "kind": "projection-dirty-scope-limited"
+  }
+}

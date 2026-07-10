@@ -82,26 +82,33 @@ function currentSourceTreeHash() {
   return contentHash(entries);
 }
 
+function pathParticipatesInSourceTreeHash(path) {
+  return Boolean(path) && !SOURCE_TREE_HASH_EXCLUDED_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
+
 function dirtyProjectionSourcePaths() {
-  const output = execFileSync(
-    "git",
-    [
-      "status",
-      "--short",
-      "--untracked-files=all",
-      "--",
-      "apps/staging-proof-cockpit",
-      "tools/validate-proof-cockpit-acceptance",
-      "tools/proof-cockpit-compare",
-      "package.json",
-      "Makefile",
-    ],
-    { cwd: ROOT, encoding: "utf8" },
-  );
-  return output
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+  const output = execFileSync("git", ["status", "--porcelain=v1", "-z", "--untracked-files=all"], {
+    cwd: ROOT,
+    encoding: "utf8",
+  });
+  const tokens = output.split("\0").filter(Boolean);
+  const dirty = [];
+  for (let i = 0; i < tokens.length; i += 1) {
+    const token = tokens[i];
+    const status = token.slice(0, 2);
+    const path = token.slice(3);
+    const paths = [path];
+    if (status.includes("R") || status.includes("C")) {
+      paths.push(tokens[i + 1] ?? "");
+      i += 1;
+    }
+    for (const candidate of paths) {
+      if (pathParticipatesInSourceTreeHash(candidate)) {
+        dirty.push(candidate);
+      }
+    }
+  }
+  return [...new Set(dirty)].sort();
 }
 
 function latestRunDirFromStore(store) {

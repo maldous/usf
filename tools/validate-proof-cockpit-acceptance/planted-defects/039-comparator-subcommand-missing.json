@@ -1,0 +1,7 @@
+{
+  "id": "039-comparator-subcommand-missing",
+  "expectedRule": "USF-PROOF-COCKPIT-014",
+  "fixture": {
+    "kind": "comparator-subcommand-missing"
+  }
+}

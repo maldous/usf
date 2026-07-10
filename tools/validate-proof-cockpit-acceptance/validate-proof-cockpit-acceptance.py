@@ -1301,6 +1301,23 @@ def rule_013_current_projection_metadata(data: dict[str, Any]) -> list[dict[str,
     ]:
         if marker not in data.get("promote", ""):
             failures.append(finding("USF-PROOF-COCKPIT-013", f"Promotion command lacks projection-only fail-closed marker: {marker}", str(PROMOTE_PATH.relative_to(ROOT))))
+    dirty_scope = re.search(r"function dirtyProjectionSourcePaths\(\) \{(?P<body>.*?)\n\}", data.get("promote", ""), re.S)
+    dirty_body = dirty_scope.group("body") if dirty_scope else ""
+    if not dirty_body:
+        failures.append(finding("USF-PROOF-COCKPIT-013", "Projection-only dirty source check is missing", str(PROMOTE_PATH.relative_to(ROOT))))
+    elif (
+        '"status", "--porcelain=v1", "-z", "--untracked-files=all"' not in dirty_body
+        or '"--",' in dirty_body
+        or "pathParticipatesInSourceTreeHash" not in data.get("promote", "")
+        or "SOURCE_TREE_HASH_EXCLUDED_PREFIXES" not in data.get("promote", "")
+    ):
+        failures.append(
+            finding(
+                "USF-PROOF-COCKPIT-013",
+                "Projection-only dirty source check must inspect full repository status and filter by source tree hash exclusions",
+                str(PROMOTE_PATH.relative_to(ROOT)),
+            )
+        )
     return failures
 
 
@@ -1314,6 +1331,10 @@ def rule_014_normalized_comparator(data: dict[str, Any]) -> list[dict[str, str]]
         command = scripts.get(name, "")
         if "tools/proof-cockpit-compare/proof-cockpit-compare.py" not in command or "echo" in command or command.strip() == "true":
             failures.append(finding("USF-PROOF-COCKPIT-014", f"Comparator package script missing or no-op: {name}", "package.json"))
+    if "proof-cockpit-compare.py compare" not in scripts.get("proof-cockpit:compare", ""):
+        failures.append(finding("USF-PROOF-COCKPIT-014", "Comparator package compare script must pass the compare subcommand", "package.json"))
+    if "proof-cockpit-compare.py selftest" not in scripts.get("proof-cockpit:compare:selftest", ""):
+        failures.append(finding("USF-PROOF-COCKPIT-014", "Comparator package selftest script must pass the selftest subcommand", "package.json"))
     if "proof-cockpit-compare-selftest:" not in data["makefile"]:
         failures.append(finding("USF-PROOF-COCKPIT-014", "Comparator Make selftest target is missing", "Makefile"))
     for marker in [
@@ -1491,9 +1512,16 @@ def apply_fixture(data: dict[str, Any], fixture: dict[str, Any]) -> dict[str, An
     elif kind == "projection-command-wiring-missing":
         mutated["package"].setdefault("scripts", {}).pop("proof-cockpit:projection-repin", None)
         mutated["makefile"] = mutated["makefile"].replace("proof-review-projection-repin:", "proof-review-projection-repin-disabled:")
+    elif kind == "projection-dirty-scope-limited":
+        mutated["promote"] = mutated.get("promote", "").replace(
+            '"status", "--porcelain=v1", "-z", "--untracked-files=all"',
+            '"status", "--short", "--untracked-files=all", "--", "apps/staging-proof-cockpit"',
+        )
     elif kind == "comparator-contract-missing":
         mutated["package"].setdefault("scripts", {}).pop("proof-cockpit:compare", None)
         mutated["comparatorSource"] = mutated.get("comparatorSource", "").replace("NORMALIZED_VOLATILE_KEYS", "NORMALIZED_KEYS_REMOVED")
+    elif kind == "comparator-subcommand-missing":
+        mutated["package"].setdefault("scripts", {})["proof-cockpit:compare"] = "python3 tools/proof-cockpit-compare/proof-cockpit-compare.py"
     elif kind == "comparator-hidden-regression":
         mutated["comparatorSource"] = mutated.get("comparatorSource", "").replace("hidden-regression", "hidden regression marker removed")
     return mutated
