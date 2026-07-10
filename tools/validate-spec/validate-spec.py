@@ -2349,6 +2349,401 @@ def validate_public_api_readiness_map(F, client_contract_map=None, public_api_re
                   f"versioningCompatibilityAndDocs.{field} must match OpenAPI route metadata")
 
 
+CURRENT_MAIN_READINESS_SUMMARY_PATH = "docs/architecture/current-main-readiness-summary.json"
+CURRENT_MAIN_READINESS_VALIDATOR = "validate-spec.current-main-readiness-summary"
+CURRENT_MAIN_READINESS_SCOPE = "bounded-current-main-generated-sdk-public-api-and-runtime-product-readiness"
+CURRENT_MAIN_READINESS_RUNTIME_MAP_PATH = "docs/architecture/runtime-product-readiness-map.json"
+CURRENT_MAIN_READINESS_REQUIRED_TRUE_CLAIMS = {
+    "generatedClientReady",
+    "sdkReady",
+    "publicApiReady",
+    "runtimeProductReady",
+}
+CURRENT_MAIN_READINESS_FORBIDDEN_TRUE_CLAIMS = {
+    "productUiReady",
+    "publicDeploymentReady",
+    "publicFqdnReady",
+    "deploymentReady",
+    "stagingReady",
+    "productionReady",
+    "liveProviderReady",
+    "packagePublicationReady",
+    "complianceReady",
+    "monetisationReady",
+    "appStoreReady",
+    "humanAcceptanceComplete",
+}
+CURRENT_MAIN_READINESS_REQUIRED_NONCLAIMS = {
+    "no-product-ui-readiness-claim",
+    "no-public-deployment-claim",
+    "no-public-fqdn-claim",
+    "no-deployment-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-live-provider-claim",
+    "no-package-publication-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim",
+    "no-generated-report-authority-claim",
+    "no-linear-authority-claim",
+    "no-projection-only-runtime-proof-claim",
+}
+CURRENT_MAIN_READINESS_REQUIRED_PLANTED_RULES = {
+    "USF-CURRENT-READINESS-001",
+    "USF-CURRENT-READINESS-002",
+    "USF-CURRENT-READINESS-003",
+    "USF-CURRENT-READINESS-004",
+    "USF-CURRENT-READINESS-005",
+    "USF-CURRENT-READINESS-006",
+}
+CURRENT_MAIN_READINESS_REQUIRED_VALIDATORS = {
+    CURRENT_MAIN_READINESS_VALIDATOR,
+    GENERATED_SDK_CLIENT_VALIDATOR,
+    PUBLIC_API_READINESS_VALIDATOR,
+    "validate-runtime.runtime-product-readiness-map",
+    "runtime:validate",
+    "runtime:proof",
+    "runtime:proof:compose",
+    "runtime:proof:in-memory",
+    "non-ui-completeness:validate",
+    "non-ui-completeness:selftest",
+    "proof-cockpit:validate",
+    "proof-cockpit:selftest",
+    "linear-boundary:validate",
+    "linear-boundary:selftest",
+    "app-surface:validate",
+    PUBLIC_API_OPENAPI_CHECK_COMMAND,
+    "repo:validate",
+}
+CURRENT_MAIN_READINESS_REQUIRED_SOURCE_ANCHORS = {
+    GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+    PUBLIC_API_READINESS_MAP_PATH,
+    CURRENT_MAIN_READINESS_RUNTIME_MAP_PATH,
+    "docs/architecture/current-main-capability-service-realisation-map.json",
+    OPENAPI_DOCUMENT_PATH,
+}
+CURRENT_MAIN_READINESS_DOMAIN_REQUIREMENTS = {
+    "generated-sdk-client": {
+        "path": GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+        "proofRung": "current-main-contract-generation-input-and-sdk-operation-projection",
+        "requiredClaims": {"generatedClientReady", "sdkReady"},
+        "forbiddenClaims": {"packagePublicationReady"},
+        "validators": {GENERATED_SDK_CLIENT_VALIDATOR, PUBLIC_API_OPENAPI_CHECK_COMMAND},
+    },
+    "public-api": {
+        "path": PUBLIC_API_READINESS_MAP_PATH,
+        "proofRung": "bounded-current-main-public-api-contract-readiness-no-public-deployment",
+        "requiredClaims": {"publicApiReady", "publicApiContractReady", "publicApiDocumentationReady"},
+        "forbiddenClaims": {"publicDeploymentReady", "publicFqdnReady"},
+        "validators": {PUBLIC_API_READINESS_VALIDATOR, PUBLIC_API_OPENAPI_CHECK_COMMAND},
+    },
+    "runtime-product": {
+        "path": CURRENT_MAIN_READINESS_RUNTIME_MAP_PATH,
+        "proofRung": "local-dev-and-dev-compose-backed",
+        "requiredClaims": {
+            "runtimeProductReady",
+            "localDevRuntimeReady",
+            "composeRuntimeReady",
+            "routeBackedOperationRuntimeProofReady",
+            "runtimeStateBoundaryReady",
+            "runtimeNegativePathProofReady",
+        },
+        "forbiddenClaims": {"stagingReady", "productionReady", "liveProviderReady"},
+        "validators": {
+            "validate-runtime.runtime-product-readiness-map",
+            "runtime:validate",
+            "runtime:proof",
+            "runtime:proof:compose",
+            "runtime:proof:in-memory",
+        },
+    },
+}
+
+
+def _load_current_main_readiness_summary(F):
+    data = load_json(CURRENT_MAIN_READINESS_SUMMARY_PATH, F)
+    if data is None:
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "current-main readiness summary artefact is missing")
+        return None
+    if not isinstance(data, dict):
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "current-main readiness summary must be an object")
+        return None
+    return data
+
+
+def _readiness_map_claims(record):
+    claims = record.get("readinessClaims") if isinstance(record, dict) else None
+    return claims if isinstance(claims, dict) else {}
+
+
+def _summary_domain_rows(summary):
+    rows = summary.get("domainSummaries") if isinstance(summary, dict) else None
+    result = defaultdict(list)
+    if not isinstance(rows, list):
+        return result
+    for index, row in enumerate(rows):
+        if isinstance(row, dict) and _as_nonempty_string(row.get("domainId")):
+            result[row["domainId"]].append((index, row))
+    return result
+
+
+def _load_runtime_product_readiness_map(F, runtime_product_readiness_map=None):
+    if isinstance(runtime_product_readiness_map, dict):
+        return runtime_product_readiness_map
+    data = load_json(CURRENT_MAIN_READINESS_RUNTIME_MAP_PATH, F)
+    return data if isinstance(data, dict) else None
+
+
+def validate_current_main_readiness_summary(F, summary=None, generated_sdk_client_readiness_map=None,
+                                            public_api_readiness_map=None, runtime_product_readiness_map=None,
+                                            current_blob_shas=None):
+    summary = summary if isinstance(summary, dict) else _load_current_main_readiness_summary(F)
+    if not isinstance(summary, dict):
+        return
+    generated_map = (generated_sdk_client_readiness_map if isinstance(generated_sdk_client_readiness_map, dict)
+                     else _load_generated_sdk_client_readiness_map(F))
+    public_map = (public_api_readiness_map if isinstance(public_api_readiness_map, dict)
+                  else _load_public_api_readiness_map(F))
+    runtime_map = _load_runtime_product_readiness_map(F, runtime_product_readiness_map)
+    source_maps = {
+        "generated-sdk-client": generated_map if isinstance(generated_map, dict) else {},
+        "public-api": public_map if isinstance(public_map, dict) else {},
+        "runtime-product": runtime_map if isinstance(runtime_map, dict) else {},
+    }
+
+    if summary.get("id") != "current-main-readiness-summary":
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "unexpected current-main readiness summary id")
+    if summary.get("ownerIssueId") != "USF-1050" or summary.get("childIssueId") != "USF-1061":
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "summary must be mapped to USF-1050 and USF-1061")
+    if summary.get("lifecycleState") != "current-main-validator-enforced":
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "lifecycleState must be current-main-validator-enforced")
+    if summary.get("authorityLevel") != "validator-enforced-current-main-readiness-summary":
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "authorityLevel must identify a validator-enforced current-main readiness summary")
+    if summary.get("readinessScope") != CURRENT_MAIN_READINESS_SCOPE:
+        F.add("USF-CURRENT-READINESS-002", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "readinessScope is missing or exceeds the bounded current-main readiness scope")
+    if summary.get("generatedReportAuthority") != "lower-authority-summary-only":
+        F.add("USF-CURRENT-READINESS-003", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "generated reports must remain lower-authority summaries")
+
+    binding = summary.get("currentMainBinding")
+    if not isinstance(binding, dict) or binding.get("status") != "current-main":
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "currentMainBinding must be current-main")
+    else:
+        if binding.get("generatedReportAuthority") != "lower-authority-summary-only":
+            F.add("USF-CURRENT-READINESS-003", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  "currentMainBinding must keep generated reports lower-authority")
+        if binding.get("linearStatusAuthority") != "tracking-only-not-readiness-authority":
+            F.add("USF-CURRENT-READINESS-006", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  "Linear status must remain tracking-only and outside readiness authority")
+
+    boundary = summary.get("authorityBoundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-CURRENT-READINESS-003", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "authorityBoundary is missing")
+        boundary = {}
+    for field in (
+        "generatedReportsMayDefineReadiness",
+        "openapiMayDefineSemantics",
+        "generatedClientsMayDefineSemantics",
+        "projectionOnlyMaySatisfyRuntimeProof",
+        "sourceCodeAloneMayDefineReadiness",
+    ):
+        if boundary.get(field) is not False:
+            F.add("USF-CURRENT-READINESS-003", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  f"authorityBoundary.{field} must be false")
+    if boundary.get("linearMayDefineReadiness") is not False:
+        F.add("USF-CURRENT-READINESS-006", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "authorityBoundary.linearMayDefineReadiness must be false")
+
+    anchors = summary.get("sourceTreeAnchors")
+    if not isinstance(anchors, list):
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "sourceTreeAnchors must be an array")
+        anchors = []
+    anchors_by_path = {}
+    for index, anchor in enumerate(anchors):
+        subject = f"{CURRENT_MAIN_READINESS_SUMMARY_PATH}:sourceTreeAnchors[{index}]"
+        if not isinstance(anchor, dict):
+            F.add("USF-CURRENT-READINESS-001", subject, "source-tree anchor must be an object")
+            continue
+        path = anchor.get("path")
+        blob_sha = anchor.get("blobSha")
+        if not _as_nonempty_string(path) or not _as_nonempty_string(blob_sha):
+            F.add("USF-CURRENT-READINESS-001", subject, "source-tree anchor path and blobSha are required")
+            continue
+        if path in anchors_by_path:
+            F.add("USF-CURRENT-READINESS-001", subject, f"duplicate source-tree anchor for {path}")
+        anchors_by_path[path] = blob_sha
+    for path in sorted(CURRENT_MAIN_READINESS_REQUIRED_SOURCE_ANCHORS):
+        blob_sha = anchors_by_path.get(path)
+        current_blob = _current_blob_sha(path, current_blob_shas=current_blob_shas)
+        if blob_sha is None:
+            F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  f"missing source-tree anchor for {path}")
+        elif current_blob != blob_sha:
+            F.add("USF-CURRENT-READINESS-001", path,
+                  "source-tree anchor does not match current worktree blob")
+
+    claims = summary.get("readinessClaims")
+    if not isinstance(claims, dict):
+        F.add("USF-CURRENT-READINESS-004", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "readinessClaims is missing")
+        claims = {}
+    for field in sorted(CURRENT_MAIN_READINESS_REQUIRED_TRUE_CLAIMS):
+        if claims.get(field) is not True:
+            F.add("USF-CURRENT-READINESS-002", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  f"{field} must be true in the cross-domain readiness summary")
+    for field in sorted(CURRENT_MAIN_READINESS_FORBIDDEN_TRUE_CLAIMS):
+        if claims.get(field) is True:
+            F.add("USF-CURRENT-READINESS-004", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  f"{field} must not be true in the cross-domain readiness summary")
+
+    domain_rows = _summary_domain_rows(summary)
+    observed_domains = set(domain_rows)
+    expected_domains = set(CURRENT_MAIN_READINESS_DOMAIN_REQUIREMENTS)
+    missing_domains = sorted(expected_domains - observed_domains)
+    extra_domains = sorted(observed_domains - expected_domains)
+    if missing_domains or extra_domains:
+        F.add("USF-CURRENT-READINESS-001", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              f"domain summary mismatch missing={missing_domains} extra={extra_domains}")
+
+    for domain_id, requirement in sorted(CURRENT_MAIN_READINESS_DOMAIN_REQUIREMENTS.items()):
+        rows = domain_rows.get(domain_id, [])
+        if len(rows) != 1:
+            F.add("USF-CURRENT-READINESS-001", domain_id,
+                  "each readiness domain must have exactly one summary row")
+            continue
+        index, row = rows[0]
+        subject = f"{CURRENT_MAIN_READINESS_SUMMARY_PATH}:domainSummaries[{index}]"
+        if row.get("readinessStatus") != "ready":
+            F.add("USF-CURRENT-READINESS-002", subject,
+                  "USF-1050 domains must be ready or the parent cannot close")
+        if row.get("evidencePath") != requirement["path"]:
+            F.add("USF-CURRENT-READINESS-001", subject,
+                  "domain evidencePath does not target the authoritative readiness map")
+        if row.get("proofRung") != requirement["proofRung"]:
+            F.add("USF-CURRENT-READINESS-002", subject,
+                  "domain proofRung is missing or does not match the bounded readiness claim")
+
+        source_claims = _readiness_map_claims(source_maps.get(domain_id, {}))
+        row_claims = row.get("readinessClaims")
+        if not isinstance(row_claims, dict):
+            F.add("USF-CURRENT-READINESS-002", subject, "domain readinessClaims is missing")
+            row_claims = {}
+        for field in sorted(requirement["requiredClaims"]):
+            if source_claims.get(field) is not True or row_claims.get(field) is not True:
+                F.add("USF-CURRENT-READINESS-002", subject,
+                      f"{field} must be true in both the source readiness map and summary row")
+        for field in sorted(requirement["forbiddenClaims"]):
+            if source_claims.get(field) is True or row_claims.get(field) is True:
+                F.add("USF-CURRENT-READINESS-004", subject,
+                      f"{field} must remain false in both the source readiness map and summary row")
+
+        validator_coverage = set(_string_list(row.get("validatorCoverage")))
+        missing_validators = sorted(requirement["validators"] - validator_coverage)
+        if missing_validators:
+            F.add("USF-CURRENT-READINESS-005", subject,
+                  f"domain validatorCoverage lacks: {', '.join(missing_validators)}")
+        if not _string_list(row.get("plantedDefectCoverageRefs")):
+            F.add("USF-CURRENT-READINESS-005", subject,
+                  "domain plantedDefectCoverageRefs must be non-empty")
+        if not _as_nonempty_string(row.get("proofEvidenceStatus")):
+            F.add("USF-CURRENT-READINESS-002", subject,
+                  "domain proofEvidenceStatus is required")
+
+        domain_boundary = row.get("authorityBoundary")
+        if not isinstance(domain_boundary, dict):
+            F.add("USF-CURRENT-READINESS-003", subject, "domain authorityBoundary is missing")
+            domain_boundary = {}
+        for field in ("generatedReportMayDefineReadiness", "projectionOnlyMayUpgradeReadiness"):
+            if domain_boundary.get(field) is not False:
+                F.add("USF-CURRENT-READINESS-003", subject,
+                      f"domain authorityBoundary.{field} must be false")
+        if domain_boundary.get("linearMayDefineReadiness") is not False:
+            F.add("USF-CURRENT-READINESS-006", subject,
+                  "domain authorityBoundary.linearMayDefineReadiness must be false")
+        if domain_id == "runtime-product" and domain_boundary.get("projectionOnlyMaySatisfyRuntimeProof") is not False:
+            F.add("USF-CURRENT-READINESS-003", subject,
+                  "runtime projection-only evidence must not satisfy runtime proof")
+
+    proof = summary.get("proofEvidence")
+    if not isinstance(proof, dict):
+        F.add("USF-CURRENT-READINESS-002", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "proofEvidence is missing")
+    else:
+        if proof.get("proofCockpitEvidenceStorePath") != "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json":
+            F.add("USF-CURRENT-READINESS-002", "proofEvidence.proofCockpitEvidenceStorePath",
+                  "proof evidence must reference the committed proof-cockpit evidence store")
+        if proof.get("freshnessValidator") != "proof-cockpit:validate":
+            F.add("USF-CURRENT-READINESS-002", "proofEvidence.freshnessValidator",
+                  "proof evidence freshness must be delegated to proof-cockpit:validate")
+        if proof.get("sourceTreeHashAuthority") != "validated-by-proof-cockpit-evidence-store-not-embedded-in-summary":
+            F.add("USF-CURRENT-READINESS-002", "proofEvidence.sourceTreeHashAuthority",
+                  "proof source-tree freshness must not be embedded in this self-referential summary")
+        for field in ("proofCockpitEvidenceStorePath", "freshnessValidator", "sourceTreeHashAuthority"):
+            if not _as_nonempty_string(proof.get(field)):
+                F.add("USF-CURRENT-READINESS-002", f"proofEvidence.{field}", "proof evidence field is missing")
+        for field in ("fail", "warn", "reviewRequired", "gaps"):
+            if proof.get(field) != 0:
+                F.add("USF-CURRENT-READINESS-002", f"proofEvidence.{field}",
+                      "proof evidence must not report failures, warnings, reviewRequired, or gaps")
+        if proof.get("generatedReportsRemainLowerAuthority") is not True:
+            F.add("USF-CURRENT-READINESS-003", "proofEvidence.generatedReportsRemainLowerAuthority",
+                  "proof evidence must keep generated reports lower authority")
+
+    closure = summary.get("closureCriteria")
+    if not isinstance(closure, dict):
+        F.add("USF-CURRENT-READINESS-006", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "closureCriteria is missing")
+    else:
+        if closure.get("linearStatusMayDefineReadiness") is not False:
+            F.add("USF-CURRENT-READINESS-006", "closureCriteria.linearStatusMayDefineReadiness",
+                  "Linear status must not define readiness")
+        for field in ("generatedReportsMayDefineReadiness", "projectionOnlyMaySatisfyRuntimeProof"):
+            if closure.get(field) is not False:
+                F.add("USF-CURRENT-READINESS-003", f"closureCriteria.{field}",
+                      f"{field} must be false")
+        if closure.get("parentClosureRequiresRepositoryValidation") is not True:
+            F.add("USF-CURRENT-READINESS-005", "closureCriteria.parentClosureRequiresRepositoryValidation",
+                  "parent closure must require repository validation")
+        if closure.get("parentClosureRequiresOriginMainMerge") is not True:
+            F.add("USF-CURRENT-READINESS-005", "closureCriteria.parentClosureRequiresOriginMainMerge",
+                  "parent closure must require origin/main merge")
+
+    validator_coverage = set(_string_list(summary.get("validatorCoverage")))
+    missing_summary_validators = sorted(CURRENT_MAIN_READINESS_REQUIRED_VALIDATORS - validator_coverage)
+    if missing_summary_validators:
+        F.add("USF-CURRENT-READINESS-005", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              f"validatorCoverage lacks: {', '.join(missing_summary_validators)}")
+
+    planted = summary.get("plantedDefectCoverage")
+    if not isinstance(planted, list):
+        F.add("USF-CURRENT-READINESS-005", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              "plantedDefectCoverage must be an array")
+    else:
+        covered_rules = {item.get("ruleId") for item in planted if isinstance(item, dict)}
+        missing_rules = sorted(CURRENT_MAIN_READINESS_REQUIRED_PLANTED_RULES - covered_rules)
+        if missing_rules:
+            F.add("USF-CURRENT-READINESS-005", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+                  f"plantedDefectCoverage lacks rule coverage: {', '.join(missing_rules)}")
+
+    non_claims = set(_string_list(summary.get("nonClaims")))
+    missing_non_claims = sorted(CURRENT_MAIN_READINESS_REQUIRED_NONCLAIMS - non_claims)
+    if missing_non_claims:
+        F.add("USF-CURRENT-READINESS-004", CURRENT_MAIN_READINESS_SUMMARY_PATH,
+              f"missing non-claims: {', '.join(missing_non_claims)}")
+
+
 CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH = "docs/architecture/current-main-capability-service-realisation-map.json"
 CAPABILITY_REALISATION_REQUIRED_VALIDATOR = "validate-spec.current-main-capability-service-realisation-map"
 CAPABILITY_REALISATION_CLIENT_VALIDATOR = "validate-spec.non-ui-client-contract-map"
@@ -2775,6 +3170,12 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         public_api_readiness_map=public_api_readiness_map,
         current_blob_shas=current_blob_shas,
         openapi_document=openapi_document,
+    )
+    validate_current_main_readiness_summary(
+        F,
+        generated_sdk_client_readiness_map=generated_sdk_client_readiness_map,
+        public_api_readiness_map=public_api_readiness_map,
+        current_blob_shas=current_blob_shas,
     )
 
 
@@ -3733,7 +4134,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map", "generated-sdk-client-readiness-map", "public-api-readiness-map"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map", "generated-sdk-client-readiness-map", "public-api-readiness-map", "current-main-readiness-summary"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -3960,6 +4361,19 @@ def check_selftest(ctx, F):
                 public_api_readiness_map=record,
                 current_blob_shas=patch.get("currentBlobShas"),
                 openapi_document=openapi_document,
+            )
+        elif patch["target"] == "current-main-readiness-summary":
+            record = patch.get("record")
+            if not isinstance(record, dict):
+                F.add("USF-SELFTEST-001", df, "current-main-readiness-summary planted-defect needs a record object")
+                continue
+            validate_current_main_readiness_summary(
+                f2,
+                summary=record,
+                generated_sdk_client_readiness_map=patch.get("generatedSdkClientReadinessMap"),
+                public_api_readiness_map=patch.get("publicApiReadinessMap"),
+                runtime_product_readiness_map=patch.get("runtimeProductReadinessMap"),
+                current_blob_shas=patch.get("currentBlobShas"),
             )
         else:
             run_all_checks(sandbox, f2)

@@ -1,0 +1,7 @@
+{
+  "target": "current-main-readiness-summary",
+  "expectedRule": "USF-CURRENT-READINESS-005",
+  "record": {
+    "validatorCoverage": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "target": "current-main-readiness-summary",
+  "expectedRule": "USF-CURRENT-READINESS-006",
+  "record": {
+    "authorityBoundary": {
+      "linearMayDefineReadiness": true
+    },
+    "currentMainBinding": {
+      "status": "current-main",
+      "linearStatusAuthority": "semantic-authority"
+    }
+  }
+}
