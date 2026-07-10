@@ -57,7 +57,7 @@
       "class": "validation-topology",
       "status": "deferred",
       "summary": "validate-runtime and validate-enterprise execute in both repo:validate and parity within the validate job.",
-      "deferralReason": "Deferred by design. validatorParallelismPlan.equivalenceProofRequiredBeforeActivation is true (candidate D, USF-1039/USF-656); reshaping the aggregate command sets requires equivalence proof and a branch-protection topology decision not owned by USF-1062."
+      "deferralReason": "Deferred by design. validatorParallelismPlan.equivalenceProofRequiredBeforeActivation is true (candidate D, tracked by USF-1039); reshaping the aggregate command sets requires equivalence proof and a branch-protection topology decision not owned by USF-1062."
     },
     {
       "id": "proof-cockpit-evidence-churn-reduction",
