@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-038",
+  "runtimeProductReadinessMapPatches": [
+    {
+      "op": "replace",
+      "path": "/operations/0/proofEvidence/projectionOnlySatisfiesRuntimeProof",
+      "value": true
+    }
+  ]
+}

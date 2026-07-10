@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-036",
+  "runtimeProductReadinessMapPatches": [
+    {
+      "op": "replace",
+      "path": "/sourceTreeAnchors/0/blobSha",
+      "value": "0000000000000000000000000000000000000000"
+    }
+  ]
+}

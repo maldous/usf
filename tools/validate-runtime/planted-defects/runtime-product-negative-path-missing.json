@@ -1,0 +1,10 @@
+{
+  "expectedRule": "USF-RUNTIME-040",
+  "runtimeProductReadinessMapPatches": [
+    {
+      "op": "replace",
+      "path": "/authSessionTenantNegativePathAuditTelemetryProof/missingSemanticsFailClosed",
+      "value": false
+    }
+  ]
+}
