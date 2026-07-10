@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-013-planted-defect-coverage-broken",
+  "expectedRuleIds": ["USF-DEV-EXH-013"],
+  "mustBeDistinct": true,
+  "failureShape": "duplicate/inconsistent planted-defect coverage",
+  "note": "Negative control for USF-DEV-EXH-013; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

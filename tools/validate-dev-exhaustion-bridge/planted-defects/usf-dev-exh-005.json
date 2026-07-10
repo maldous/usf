@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-005-partition-incomplete",
+  "expectedRuleIds": ["USF-DEV-EXH-005"],
+  "mustBeDistinct": true,
+  "failureShape": "realised+non-realised no longer partition the full contract set",
+  "note": "Negative control for USF-DEV-EXH-005; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

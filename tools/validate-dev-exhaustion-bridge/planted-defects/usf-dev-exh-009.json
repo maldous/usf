@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-009-realised-item-validator-ref-missing",
+  "expectedRuleIds": ["USF-DEV-EXH-009"],
+  "mustBeDistinct": true,
+  "failureShape": "a realised item validatorRef that does not resolve",
+  "note": "Negative control for USF-DEV-EXH-009; selftest injects this mutation in-memory and asserts the rule fails closed."
+}
