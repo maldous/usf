@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-003-invalid-classification",
+  "expectedRuleIds": [
+    "USF-PROVIDER-003"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "invalid-classification",
+    "description": "a provider classification set to an out-of-vocabulary value"
+  }
+}

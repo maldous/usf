@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-011-overclaim-string",
+  "expectedRuleIds": [
+    "USF-PROVIDER-011"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "overclaim-string",
+    "description": "an overclaim phrase (production-ready) present in the document"
+  }
+}

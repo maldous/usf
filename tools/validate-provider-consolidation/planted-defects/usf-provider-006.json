@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-006-canonical-live-upgrade",
+  "expectedRuleIds": [
+    "USF-PROVIDER-006"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "canonical-live-upgrade",
+    "description": "a canonical provider proof field carries a live/production readiness token"
+  }
+}

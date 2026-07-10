@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-005-canonical-readiness-gap-unflagged",
+  "expectedRuleIds": [
+    "USF-PROVIDER-005"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "canonical-readiness-gap-unflagged",
+    "description": "a canonical provider with none-recorded proof has recordedReadinessGap cleared to false"
+  }
+}
