@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-013-readiness-claim-upgrade",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-013"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "the map asserts a non-empty readinessClaims and upgrades readiness",
+  "note": "Negative control for USF-DATA-REHEARSAL-013; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}
