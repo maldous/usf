@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-010-orphan-static-evidence-key",
+  "expectedRuleIds": [
+    "USF-A11Y-010"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "adding a staticEvidence key absent from checksApplied breaks evidence/checks key consistency and references an undeclared rule",
+  "note": "Negative control for USF-A11Y-010; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

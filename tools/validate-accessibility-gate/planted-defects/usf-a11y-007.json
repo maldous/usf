@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-007-ui-readiness-overclaim",
+  "expectedRuleIds": [
+    "USF-A11Y-007"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "injecting a 'product ui readiness proven' claim overclaims product-UI readiness",
+  "note": "Negative control for USF-A11Y-007; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

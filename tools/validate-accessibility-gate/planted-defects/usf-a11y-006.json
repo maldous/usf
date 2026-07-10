@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-006-unsupported-human-acceptance",
+  "expectedRuleIds": [
+    "USF-A11Y-006"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "injecting a 'human verified' claim asserts unsupported human accessibility acceptance",
+  "note": "Negative control for USF-A11Y-006; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-012-summary-count-drift",
+  "expectedRuleIds": [
+    "USF-A11Y-012"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "inflating summary.surfaceCount makes the summary contradict the derived surface count",
+  "note": "Negative control for USF-A11Y-012; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

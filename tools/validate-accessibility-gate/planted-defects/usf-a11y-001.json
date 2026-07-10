@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-001-omit-envelope-id",
+  "expectedRuleIds": [
+    "USF-A11Y-001"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "removing the envelope id leaves a required envelope field empty and breaks the id==accessibility-gate-evidence check",
+  "note": "Negative control for USF-A11Y-001; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}
