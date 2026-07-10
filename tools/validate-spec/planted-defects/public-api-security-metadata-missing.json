@@ -1,0 +1,170 @@
+{
+  "target": "public-api-readiness-map",
+  "expectedRule": "USF-PUBLIC-API-003",
+  "clientContractMap": {
+    "operations": [
+      {
+        "routeId": "example.get",
+        "clientCallableDisposition": "client-callable-local-contract",
+        "operationMetadata": {
+          "authScheme": "bearer-user-session-or-service-token",
+          "tenantScope": "tenant-required"
+        },
+        "authorityMapping": {
+          "authScheme": "bearer-user-session-or-service-token",
+          "tenantScope": "tenant-required",
+          "permissionRefs": [
+            "semantic-contract.example"
+          ],
+          "requestSemanticsRef": "request.example",
+          "responseSemanticsRef": "response.example",
+          "errorRefs": [
+            "error.example"
+          ],
+          "auditEventRefs": [
+            "audit.example"
+          ],
+          "telemetryRefs": [
+            "telemetry.example"
+          ]
+        }
+      }
+    ]
+  },
+  "openapiDocument": {
+    "x-usf-boundary": {
+      "routeContractSource": "packages/contracts/src/api-surface.ts",
+      "publicApiReadinessClaim": false,
+      "productionReadinessClaim": false,
+      "externalSdkReadinessClaim": false
+    },
+    "paths": {
+      "/example": {
+        "get": {
+          "operationId": "getExample",
+          "x-usf-route": {
+            "routeId": "example.get",
+            "apiVersion": "v1",
+            "contractVersion": "api-contracts-1",
+            "operationVersion": "1",
+            "lifecycle": "experimental",
+            "routeClassification": "public",
+            "compatibilityPolicy": "breaking changes require version change",
+            "rateLimitPolicy": "local rate limit",
+            "corsPolicy": "local cors",
+            "csrfPolicy": "local csrf",
+            "securityHeadersPolicy": "local headers",
+            "fieldExposurePolicy": "bounded fields",
+            "correlationPolicy": "correlation required",
+            "observabilityPolicy": "local telemetry",
+            "gatewayPolicy": "local gateway"
+          }
+        }
+      }
+    }
+  },
+  "record": {
+    "authorityLevel": "validator-enforced-readiness-map",
+    "readinessScope": "bounded-current-main-public-api-contract-readiness",
+    "readinessClaims": {
+      "publicApiReady": true,
+      "publicApiContractReady": true,
+      "publicApiDocumentationReady": true,
+      "publicDeploymentReady": false,
+      "publicFqdnReady": false,
+      "deploymentReady": false,
+      "stagingReady": false,
+      "productionReady": false,
+      "liveProviderReady": false,
+      "productUiReady": false,
+      "packagePublicationReady": false,
+      "complianceReady": false,
+      "monetisationReady": false,
+      "appStoreReady": false,
+      "humanAcceptanceComplete": false
+    },
+    "consumerSecurityAndTelemetry": {
+      "requiredFields": [
+        "authScheme",
+        "tenantScope",
+        "permissionRefs",
+        "requestSemanticsRef",
+        "responseSemanticsRef",
+        "errorRefs",
+        "rateLimitPolicy",
+        "corsPolicy",
+        "csrfPolicy",
+        "securityHeadersPolicy",
+        "fieldExposurePolicy",
+        "auditEventRefs",
+        "telemetryRefs",
+        "correlationPolicy",
+        "observabilityPolicy",
+        "gatewayPolicy"
+      ],
+      "missingSemanticsFailClosed": true
+    },
+    "operations": [
+      {
+        "routeId": "example.get",
+        "method": "GET",
+        "openapiPath": "/example",
+        "openapiOperationId": "getExample",
+        "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=example.get",
+        "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=example.get",
+        "openapiOperationRef": "packages/openapi/openapi.json#operationId=getExample",
+        "publicApiExposureDisposition": "public-consumer-contract-ready",
+        "readiness": {
+          "publicConsumerOperationReady": true,
+          "publicApiContractReady": true,
+          "publicDeploymentReady": false,
+          "liveProviderReady": false
+        },
+        "versioning": {
+          "apiVersion": "v1",
+          "contractVersion": "api-contracts-1",
+          "operationVersion": "1",
+          "lifecycle": "experimental",
+          "deprecationStatus": "active",
+          "compatibilityPolicy": "breaking changes require version change"
+        },
+        "consumerSecurity": {
+          "tenantScope": "tenant-required"
+        },
+        "openapiProjection": {
+          "projectionOnly": true,
+          "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+          "operationMetadataSource": "x-usf-route",
+          "operationFreshnessCommand": "openapi:check"
+        },
+        "nonClaims": [
+          "no-public-deployment-claim",
+          "no-public-fqdn-claim",
+          "no-staging-claim",
+          "no-production-claim",
+          "no-live-provider-claim",
+          "no-compliance-claim",
+          "no-monetisation-claim",
+          "no-app-store-claim",
+          "no-human-acceptance-claim"
+        ]
+      }
+    ],
+    "validatorCoverage": [
+      "validate-spec.public-api-readiness-map",
+      "openapi:check"
+    ],
+    "nonClaims": [
+      "no-public-deployment-claim",
+      "no-public-fqdn-claim",
+      "no-staging-claim",
+      "no-production-claim",
+      "no-live-provider-claim",
+      "no-compliance-claim",
+      "no-monetisation-claim",
+      "no-app-store-claim",
+      "no-human-acceptance-claim",
+      "no-generated-report-authority-claim"
+    ]
+  }
+}

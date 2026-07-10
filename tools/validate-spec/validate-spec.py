@@ -372,6 +372,10 @@ RULES = {
     "USF-GENERATED-SDK-002": ("blocking", "Generated SDK/client readiness operation coverage is incomplete or inconsistent"),
     "USF-GENERATED-SDK-003": ("blocking", "Generated SDK/client readiness metadata, package, or fixture projection is incomplete"),
     "USF-GENERATED-SDK-004": ("blocking", "Generated SDK/client readiness overclaims publication, UI, public API, deployment, provider, compliance, monetisation, or human acceptance"),
+    "USF-PUBLIC-API-001": ("blocking", "Public API readiness source, OpenAPI projection, or source-tree binding is stale or incomplete"),
+    "USF-PUBLIC-API-002": ("blocking", "Public API readiness operation coverage or exposure disposition is incomplete or inconsistent"),
+    "USF-PUBLIC-API-003": ("blocking", "Public API readiness versioning, documentation, security, audit, or telemetry semantics are incomplete"),
+    "USF-PUBLIC-API-004": ("blocking", "Public API readiness overclaims deployment, provider, UI, publication, compliance, monetisation, app-store, or human acceptance"),
     "USF-CAPABILITY-REALISATION-001": ("blocking", "Current-main capability-service realisation map is missing semantic-contract coverage"),
     "USF-CAPABILITY-REALISATION-002": ("blocking", "Capability-service realisation traceability or implementation authority is invalid"),
     "USF-CAPABILITY-REALISATION-003": ("blocking", "Capability-service realisation freshness or historical-evidence boundary is invalid"),
@@ -1839,6 +1843,512 @@ def validate_generated_sdk_client_readiness_map(F, client_contract_map=None, gen
                       f"operationCoverage.{field} must be {expected}")
 
 
+OPENAPI_DOCUMENT_PATH = "packages/openapi/openapi.json"
+PUBLIC_API_READINESS_MAP_PATH = "docs/architecture/public-api-readiness-map.json"
+PUBLIC_API_READINESS_VALIDATOR = "validate-spec.public-api-readiness-map"
+PUBLIC_API_OPENAPI_CHECK_COMMAND = "openapi:check"
+PUBLIC_API_READINESS_SCOPE = "bounded-current-main-public-api-contract-readiness"
+PUBLIC_API_SOURCE_ANCHOR_PATHS = {
+    API_ROUTE_INTERFACE_COVERAGE_PATH,
+    NON_UI_CLIENT_CONTRACT_MAP_PATH,
+    "packages/contracts/src/api-surface.ts",
+    OPENAPI_DOCUMENT_PATH,
+    "packages/openapi/src/check.ts",
+}
+PUBLIC_API_EXPECTED_EXPOSURE = {
+    "client-callable-local-contract": "public-consumer-contract-ready",
+    "operator-tooling-local-contract": "operator-tooling-contract-not-public-consumer",
+    "internal-support-only": "internal-support-only-not-public-consumer",
+    "not-claimed": "support-route-not-public-api-consumer",
+}
+PUBLIC_API_PUBLIC_READY_DISPOSITIONS = {"client-callable-local-contract"}
+PUBLIC_API_REQUIRED_TRUE_CLAIMS = {
+    "publicApiReady",
+    "publicApiContractReady",
+    "publicApiDocumentationReady",
+}
+PUBLIC_API_FORBIDDEN_TRUE_CLAIMS = {
+    "publicDeploymentReady",
+    "publicFqdnReady",
+    "deploymentReady",
+    "stagingReady",
+    "productionReady",
+    "liveProviderReady",
+    "productUiReady",
+    "packagePublicationReady",
+    "complianceReady",
+    "monetisationReady",
+    "appStoreReady",
+    "humanAcceptanceComplete",
+}
+PUBLIC_API_REQUIRED_NONCLAIMS = {
+    "no-public-deployment-claim",
+    "no-public-fqdn-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-live-provider-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim",
+}
+PUBLIC_API_ROOT_REQUIRED_NONCLAIMS = PUBLIC_API_REQUIRED_NONCLAIMS | {
+    "no-generated-report-authority-claim",
+}
+PUBLIC_API_REQUIRED_SECURITY_FIELDS = {
+    "authScheme",
+    "tenantScope",
+    "permissionRefs",
+    "requestSemanticsRef",
+    "responseSemanticsRef",
+    "errorRefs",
+    "rateLimitPolicy",
+    "corsPolicy",
+    "csrfPolicy",
+    "securityHeadersPolicy",
+    "fieldExposurePolicy",
+    "auditEventRefs",
+    "telemetryRefs",
+    "correlationPolicy",
+    "observabilityPolicy",
+    "gatewayPolicy",
+}
+PUBLIC_API_REQUIRED_DOC_REFS = {
+    OPENAPI_DOCUMENT_PATH,
+    "packages/openapi/src/check.ts",
+    "packages/contracts/src/api-surface.ts",
+}
+PUBLIC_API_REQUIRED_PLANTED_RULES = {
+    "USF-PUBLIC-API-001",
+    "USF-PUBLIC-API-002",
+    "USF-PUBLIC-API-003",
+    "USF-PUBLIC-API-004",
+}
+
+
+def _load_openapi_document(F, openapi_document=None):
+    if isinstance(openapi_document, dict):
+        return openapi_document
+    data = load_json(OPENAPI_DOCUMENT_PATH, F)
+    return data if isinstance(data, dict) else None
+
+
+def _load_public_api_readiness_map(F):
+    data = load_json(PUBLIC_API_READINESS_MAP_PATH, F)
+    if data is None:
+        F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+              "public API readiness map artefact is missing")
+        return None
+    if not isinstance(data, dict):
+        F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+              "public API readiness map must be an object")
+        return None
+    return data
+
+
+def _openapi_operations_by_route_id(openapi_document):
+    by_route = {}
+    if not isinstance(openapi_document, dict):
+        return by_route
+    paths = openapi_document.get("paths")
+    if not isinstance(paths, dict):
+        return by_route
+    for path, methods in paths.items():
+        if not isinstance(methods, dict):
+            continue
+        for method, operation in methods.items():
+            if method.lower() not in {"get", "post", "put", "patch", "delete"}:
+                continue
+            if not isinstance(operation, dict):
+                continue
+            metadata = operation.get("x-usf-route")
+            if not isinstance(metadata, dict):
+                continue
+            route_id = metadata.get("routeId")
+            if _as_nonempty_string(route_id):
+                by_route[route_id] = {
+                    "method": method.upper(),
+                    "openapiPath": path,
+                    "openapiOperationId": operation.get("operationId"),
+                    "operation": operation,
+                    "metadata": metadata,
+                }
+    return by_route
+
+
+def _client_authority_value(client_operation, field):
+    metadata = client_operation.get("operationMetadata") if isinstance(client_operation, dict) else {}
+    authority = client_operation.get("authorityMapping") if isinstance(client_operation, dict) else {}
+    if not isinstance(metadata, dict):
+        metadata = {}
+    if not isinstance(authority, dict):
+        authority = {}
+    if field in {"authScheme", "tenantScope"}:
+        return authority.get(field) or metadata.get(field)
+    if field in {"permissionRefs", "requestSemanticsRef", "responseSemanticsRef",
+                 "errorRefs", "auditEventRefs", "telemetryRefs"}:
+        return authority.get(field)
+    return None
+
+
+def _public_api_source_security_value(client_operation, openapi_record, field):
+    client_value = _client_authority_value(client_operation, field)
+    if client_value is not None:
+        return client_value
+    metadata = openapi_record.get("metadata") if isinstance(openapi_record, dict) else {}
+    if not isinstance(metadata, dict):
+        metadata = {}
+    return metadata.get(field)
+
+
+def _values_match(expected, observed):
+    if isinstance(expected, list):
+        return observed == expected
+    return expected == observed
+
+
+def _public_api_count_by_metadata(openapi_ops_by_route, field):
+    counts = Counter()
+    for openapi_record in openapi_ops_by_route.values():
+        metadata = openapi_record.get("metadata")
+        if not isinstance(metadata, dict):
+            continue
+        value = metadata.get(field)
+        if _as_nonempty_string(value):
+            counts[value] += 1
+    return dict(sorted(counts.items()))
+
+
+def _public_api_claims_are_bounded(F, claims):
+    if not isinstance(claims, dict):
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "readinessClaims is missing")
+        return
+    for field in sorted(PUBLIC_API_REQUIRED_TRUE_CLAIMS):
+        if claims.get(field) is not True:
+            F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+                  f"{field} must be true for bounded public API contract readiness")
+    for field in sorted(PUBLIC_API_FORBIDDEN_TRUE_CLAIMS):
+        if claims.get(field) is True:
+            F.add("USF-PUBLIC-API-004", PUBLIC_API_READINESS_MAP_PATH,
+                  f"{field} must not be true in the public API readiness map")
+
+
+def validate_public_api_readiness_map(F, client_contract_map=None, public_api_readiness_map=None,
+                                      current_blob_shas=None, openapi_document=None):
+    client_map = client_contract_map if isinstance(client_contract_map, dict) else _load_non_ui_client_contract_map(F)
+    openapi_doc = _load_openapi_document(F, openapi_document=openapi_document)
+    readiness_map = (public_api_readiness_map if isinstance(public_api_readiness_map, dict)
+                     else _load_public_api_readiness_map(F))
+    if not isinstance(client_map, dict) or not isinstance(openapi_doc, dict) or not isinstance(readiness_map, dict):
+        return
+
+    if readiness_map.get("readinessScope") != PUBLIC_API_READINESS_SCOPE:
+        F.add("USF-PUBLIC-API-004", PUBLIC_API_READINESS_MAP_PATH,
+              "readinessScope is missing or exceeds bounded current-main public API contract readiness")
+    if readiness_map.get("authorityLevel") != "validator-enforced-readiness-map":
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "authorityLevel must identify a validator-enforced readiness map")
+
+    _public_api_claims_are_bounded(F, readiness_map.get("readinessClaims"))
+    non_claims = set(_string_list(readiness_map.get("nonClaims")))
+    missing_non_claims = sorted(PUBLIC_API_ROOT_REQUIRED_NONCLAIMS - non_claims)
+    if missing_non_claims:
+        F.add("USF-PUBLIC-API-004", PUBLIC_API_READINESS_MAP_PATH,
+              f"missing non-claims: {', '.join(missing_non_claims)}")
+
+    anchors = readiness_map.get("sourceTreeAnchors")
+    if not isinstance(anchors, list):
+        F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+              "sourceTreeAnchors must be an array")
+        anchors = []
+    anchors_by_path = {}
+    for index, anchor in enumerate(anchors):
+        subject = f"{PUBLIC_API_READINESS_MAP_PATH}:sourceTreeAnchors[{index}]"
+        if not isinstance(anchor, dict):
+            F.add("USF-PUBLIC-API-001", subject, "source-tree anchor must be an object")
+            continue
+        path = anchor.get("path")
+        blob_sha = anchor.get("blobSha")
+        if not _as_nonempty_string(path) or not _as_nonempty_string(blob_sha):
+            F.add("USF-PUBLIC-API-001", subject, "source-tree anchor path and blobSha are required")
+            continue
+        if path in anchors_by_path:
+            F.add("USF-PUBLIC-API-001", subject, f"duplicate source-tree anchor for {path}")
+        anchors_by_path[path] = blob_sha
+    for path in sorted(PUBLIC_API_SOURCE_ANCHOR_PATHS):
+        blob_sha = anchors_by_path.get(path)
+        current_blob = _current_blob_sha(path, current_blob_shas=current_blob_shas)
+        if blob_sha is None:
+            F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+                  f"missing source-tree anchor for {path}")
+        elif current_blob != blob_sha:
+            F.add("USF-PUBLIC-API-001", path,
+                  "source-tree anchor does not match current worktree blob")
+
+    validator_coverage = set(_string_list(readiness_map.get("validatorCoverage")))
+    if PUBLIC_API_READINESS_VALIDATOR not in validator_coverage:
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "validatorCoverage lacks public API readiness validator")
+    if PUBLIC_API_OPENAPI_CHECK_COMMAND not in validator_coverage:
+        F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+              "validatorCoverage lacks OpenAPI drift hard gate")
+
+    planted = readiness_map.get("plantedDefectCoverage")
+    if not isinstance(planted, list):
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "plantedDefectCoverage must be an array")
+    else:
+        covered_rules = {item.get("ruleId") for item in planted if isinstance(item, dict)}
+        missing_rules = sorted(PUBLIC_API_REQUIRED_PLANTED_RULES - covered_rules)
+        if missing_rules:
+            F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+                  f"plantedDefectCoverage lacks rule coverage: {', '.join(missing_rules)}")
+
+    boundary = openapi_doc.get("x-usf-boundary")
+    if not isinstance(boundary, dict):
+        F.add("USF-PUBLIC-API-001", OPENAPI_DOCUMENT_PATH, "OpenAPI x-usf-boundary is missing")
+        boundary = {}
+    if boundary.get("routeContractSource") != "packages/contracts/src/api-surface.ts":
+        F.add("USF-PUBLIC-API-001", OPENAPI_DOCUMENT_PATH,
+              "OpenAPI boundary must name the canonical route contract source")
+    for field in ("publicApiReadinessClaim", "productionReadinessClaim", "externalSdkReadinessClaim"):
+        if boundary.get(field) is not False:
+            F.add("USF-PUBLIC-API-004", OPENAPI_DOCUMENT_PATH,
+                  f"OpenAPI projection boundary must keep {field} false")
+
+    projection = readiness_map.get("openapiProjectionBoundary")
+    if not isinstance(projection, dict):
+        F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+              "openapiProjectionBoundary is missing")
+        projection = {}
+    expected_projection = {
+        "projectionOnly": True,
+        "openapiCheckCommand": PUBLIC_API_OPENAPI_CHECK_COMMAND,
+        "openapiBoundaryRef": f"{OPENAPI_DOCUMENT_PATH}#x-usf-boundary",
+        "openapiPublicApiReadinessClaim": False,
+        "openapiProductionReadinessClaim": False,
+        "openapiExternalSdkReadinessClaim": False,
+    }
+    for field, expected in expected_projection.items():
+        if projection.get(field) != expected:
+            F.add("USF-PUBLIC-API-001", PUBLIC_API_READINESS_MAP_PATH,
+                  f"openapiProjectionBoundary.{field} must be {expected}")
+
+    versioning = readiness_map.get("versioningCompatibilityAndDocs")
+    if not isinstance(versioning, dict):
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "versioningCompatibilityAndDocs is missing")
+        versioning = {}
+    if versioning.get("publicDocumentationGeneratedFromAuthority") is not True:
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "public documentation must be generated from repository authority")
+    if versioning.get("publicDocumentationPublished") is True:
+        F.add("USF-PUBLIC-API-004", PUBLIC_API_READINESS_MAP_PATH,
+              "public documentation publication must not be claimed")
+    missing_doc_refs = sorted(PUBLIC_API_REQUIRED_DOC_REFS - set(_string_list(versioning.get("documentationSourceRefs"))))
+    if missing_doc_refs:
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              f"documentationSourceRefs lacks: {', '.join(missing_doc_refs)}")
+    if not _as_nonempty_string(versioning.get("deprecationPolicy")):
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "deprecationPolicy is missing")
+    if versioning.get("compatibilityPolicySource") != "packages/contracts/src/api-surface.ts#compatibilityPolicy":
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "compatibilityPolicySource must point at the canonical API surface")
+
+    security = readiness_map.get("consumerSecurityAndTelemetry")
+    if not isinstance(security, dict):
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "consumerSecurityAndTelemetry is missing")
+        security = {}
+    required_fields = set(_string_list(security.get("requiredFields")))
+    missing_security_fields = sorted(PUBLIC_API_REQUIRED_SECURITY_FIELDS - required_fields)
+    if missing_security_fields:
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              f"consumerSecurityAndTelemetry lacks required fields: {', '.join(missing_security_fields)}")
+    if security.get("missingSemanticsFailClosed") is not True:
+        F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+              "missing security and telemetry semantics must fail closed")
+
+    client_ops_by_route = _client_operations_by_route_id(client_map)
+    openapi_ops_by_route = _openapi_operations_by_route_id(openapi_doc)
+    operations = readiness_map.get("operations")
+    if not isinstance(operations, list):
+        F.add("USF-PUBLIC-API-002", PUBLIC_API_READINESS_MAP_PATH,
+              "operations array is missing")
+        return
+    records_by_route = defaultdict(list)
+    for index, operation in enumerate(operations):
+        subject = f"{PUBLIC_API_READINESS_MAP_PATH}:operations[{index}]"
+        if not isinstance(operation, dict):
+            F.add("USF-PUBLIC-API-002", subject, "operation readiness record must be an object")
+            continue
+        route_id = operation.get("routeId")
+        if not _as_nonempty_string(route_id):
+            F.add("USF-PUBLIC-API-002", subject, "routeId is missing")
+            continue
+        records_by_route[route_id].append((index, operation))
+
+    expected_route_ids = set(client_ops_by_route) | set(openapi_ops_by_route)
+    observed_route_ids = set(records_by_route)
+    for route_id in sorted(observed_route_ids - expected_route_ids):
+        F.add("USF-PUBLIC-API-002", route_id, "public API readiness record targets unknown routeId")
+    for route_id in sorted(expected_route_ids - observed_route_ids):
+        F.add("USF-PUBLIC-API-002", route_id, "public API readiness record is missing")
+    for route_id, rows in sorted(records_by_route.items()):
+        if len(rows) > 1:
+            F.add("USF-PUBLIC-API-002", route_id, "public API readiness record is duplicated")
+    if set(client_ops_by_route) != set(openapi_ops_by_route):
+        F.add("USF-PUBLIC-API-002", PUBLIC_API_READINESS_MAP_PATH,
+              "client-contract and OpenAPI route sets must match before public API readiness can be claimed")
+
+    expected_counts = {
+        "totalOperations": len(client_ops_by_route),
+        "publicConsumerReadyOperations": 0,
+        "operatorToolingNotPublicConsumerOperations": 0,
+        "internalSupportOnlyOperations": 0,
+        "supportRouteNotClaimedOperations": 0,
+        "clientCallableLocalContractOperations": 0,
+        "operatorToolingLocalContractOperations": 0,
+        "internalSupportOnlyDispositionOperations": 0,
+        "notClaimedDispositionOperations": 0,
+    }
+
+    for route_id, client_operation in sorted(client_ops_by_route.items()):
+        openapi_record = openapi_ops_by_route.get(route_id)
+        rows = records_by_route.get(route_id, [])
+        if not isinstance(openapi_record, dict) or len(rows) != 1:
+            continue
+        index, operation = rows[0]
+        subject = f"{PUBLIC_API_READINESS_MAP_PATH}:operations[{index}]"
+        openapi_metadata = openapi_record.get("metadata") if isinstance(openapi_record, dict) else {}
+        if not isinstance(openapi_metadata, dict):
+            openapi_metadata = {}
+        client_disposition = client_operation.get("clientCallableDisposition")
+        if client_disposition == "client-callable-local-contract":
+            expected_counts["clientCallableLocalContractOperations"] += 1
+            expected_counts["publicConsumerReadyOperations"] += 1
+        elif client_disposition == "operator-tooling-local-contract":
+            expected_counts["operatorToolingLocalContractOperations"] += 1
+            expected_counts["operatorToolingNotPublicConsumerOperations"] += 1
+        elif client_disposition == "internal-support-only":
+            expected_counts["internalSupportOnlyDispositionOperations"] += 1
+            expected_counts["internalSupportOnlyOperations"] += 1
+        elif client_disposition == "not-claimed":
+            expected_counts["notClaimedDispositionOperations"] += 1
+            expected_counts["supportRouteNotClaimedOperations"] += 1
+
+        expected_exposure = PUBLIC_API_EXPECTED_EXPOSURE.get(client_disposition)
+        if operation.get("publicApiExposureDisposition") != expected_exposure:
+            F.add("USF-PUBLIC-API-002", subject,
+                  f"publicApiExposureDisposition does not match client disposition {client_disposition}")
+        for field, expected in (
+            ("method", openapi_record.get("method")),
+            ("openapiPath", openapi_record.get("openapiPath")),
+            ("openapiOperationId", openapi_record.get("openapiOperationId")),
+        ):
+            if operation.get(field) != expected:
+                F.add("USF-PUBLIC-API-002", subject, f"{field} does not match OpenAPI projection")
+        if operation.get("interfaceDispositionRef") != f"{API_ROUTE_INTERFACE_COVERAGE_REF_PREFIX}{route_id}":
+            F.add("USF-PUBLIC-API-002", subject,
+                  "interfaceDispositionRef does not target the route interface coverage record")
+        if operation.get("clientContractRef") != f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}#routeId={route_id}":
+            F.add("USF-PUBLIC-API-002", subject,
+                  "clientContractRef does not target the client-contract map route record")
+        if operation.get("openapiOperationRef") != f"{OPENAPI_DOCUMENT_PATH}#operationId={openapi_record.get('openapiOperationId')}":
+            F.add("USF-PUBLIC-API-001", subject,
+                  "openapiOperationRef does not target the projected OpenAPI operation")
+
+        readiness = operation.get("readiness")
+        if not isinstance(readiness, dict):
+            F.add("USF-PUBLIC-API-002", subject, "readiness is missing")
+            readiness = {}
+        public_ready = client_disposition in PUBLIC_API_PUBLIC_READY_DISPOSITIONS
+        if public_ready:
+            if (readiness.get("publicConsumerOperationReady") is not True
+                    or readiness.get("publicApiContractReady") is not True):
+                F.add("USF-PUBLIC-API-002", subject,
+                      "public consumer operations must carry bounded contract readiness")
+        else:
+            if (readiness.get("publicConsumerOperationReady") is True
+                    or readiness.get("publicApiContractReady") is True):
+                F.add("USF-PUBLIC-API-004", subject,
+                      "non-public-consumer operations must not claim public API operation readiness")
+        if readiness.get("publicDeploymentReady") is True or readiness.get("liveProviderReady") is True:
+            F.add("USF-PUBLIC-API-004", subject,
+                  "operation readiness must not claim public deployment or live-provider readiness")
+
+        version = operation.get("versioning")
+        if not isinstance(version, dict):
+            F.add("USF-PUBLIC-API-003", subject, "versioning is missing")
+            version = {}
+        expected_deprecation = "deprecated" if openapi_record.get("operation", {}).get("deprecated") is True else "active"
+        for field, expected in (
+            ("apiVersion", openapi_metadata.get("apiVersion")),
+            ("contractVersion", openapi_metadata.get("contractVersion")),
+            ("operationVersion", openapi_metadata.get("operationVersion")),
+            ("lifecycle", openapi_metadata.get("lifecycle")),
+            ("compatibilityPolicy", openapi_metadata.get("compatibilityPolicy")),
+            ("deprecationStatus", expected_deprecation),
+        ):
+            if version.get(field) != expected:
+                F.add("USF-PUBLIC-API-003", subject, f"versioning.{field} does not match canonical route metadata")
+
+        consumer_security = operation.get("consumerSecurity")
+        if not isinstance(consumer_security, dict):
+            F.add("USF-PUBLIC-API-003", subject, "consumerSecurity is missing")
+            consumer_security = {}
+        for field in sorted(PUBLIC_API_REQUIRED_SECURITY_FIELDS):
+            expected = _public_api_source_security_value(client_operation, openapi_record, field)
+            observed = consumer_security.get(field)
+            if isinstance(expected, list):
+                if not _string_list(observed) or not _values_match(expected, observed):
+                    F.add("USF-PUBLIC-API-003", subject,
+                          f"consumerSecurity.{field} is missing or does not match source authority")
+            else:
+                if not _as_nonempty_string(observed) or (_as_nonempty_string(expected) and observed != expected):
+                    F.add("USF-PUBLIC-API-003", subject,
+                          f"consumerSecurity.{field} is missing or does not match source authority")
+
+        operation_projection = operation.get("openapiProjection")
+        if not isinstance(operation_projection, dict):
+            F.add("USF-PUBLIC-API-001", subject, "openapiProjection is missing")
+            operation_projection = {}
+        if operation_projection.get("projectionOnly") is not True:
+            F.add("USF-PUBLIC-API-004", subject, "OpenAPI operation metadata must remain projection-only")
+        if operation_projection.get("sourceOfTruth") != "packages/contracts/src/api-surface.ts":
+            F.add("USF-PUBLIC-API-001", subject, "OpenAPI projection sourceOfTruth must be the canonical API surface")
+        if operation_projection.get("operationMetadataSource") != "x-usf-route":
+            F.add("USF-PUBLIC-API-001", subject, "OpenAPI operation metadata source must be x-usf-route")
+        if operation_projection.get("operationFreshnessCommand") != PUBLIC_API_OPENAPI_CHECK_COMMAND:
+            F.add("USF-PUBLIC-API-001", subject, "OpenAPI operation freshness command must be openapi:check")
+
+        missing_operation_nonclaims = sorted(PUBLIC_API_REQUIRED_NONCLAIMS - set(_string_list(operation.get("nonClaims"))))
+        if missing_operation_nonclaims:
+            F.add("USF-PUBLIC-API-004", subject,
+                  f"operation nonClaims lacks: {', '.join(missing_operation_nonclaims)}")
+
+    coverage = readiness_map.get("operationCoverage")
+    if not isinstance(coverage, dict):
+        F.add("USF-PUBLIC-API-002", PUBLIC_API_READINESS_MAP_PATH,
+              "operationCoverage is missing")
+    else:
+        for field, expected in expected_counts.items():
+            if coverage.get(field) != expected:
+                F.add("USF-PUBLIC-API-002", PUBLIC_API_READINESS_MAP_PATH,
+                      f"operationCoverage.{field} must be {expected}")
+
+    for field, expected in (
+        ("apiVersionCounts", _public_api_count_by_metadata(openapi_ops_by_route, "apiVersion")),
+        ("lifecycleCounts", _public_api_count_by_metadata(openapi_ops_by_route, "lifecycle")),
+        ("routeClassificationCounts", _public_api_count_by_metadata(openapi_ops_by_route, "routeClassification")),
+    ):
+        if versioning.get(field) != expected:
+            F.add("USF-PUBLIC-API-003", PUBLIC_API_READINESS_MAP_PATH,
+                  f"versioningCompatibilityAndDocs.{field} must match OpenAPI route metadata")
+
+
 CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH = "docs/architecture/current-main-capability-service-realisation-map.json"
 CAPABILITY_REALISATION_REQUIRED_VALIDATOR = "validate-spec.current-main-capability-service-realisation-map"
 CAPABILITY_REALISATION_CLIENT_VALIDATOR = "validate-spec.non-ui-client-contract-map"
@@ -2173,7 +2683,8 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
                            evidence_ids=None, api_route_records=None, route_interface_coverage=None,
                            client_contract_map=None, capability_realisation_map=None,
                            generated_sdk_client_readiness_map=None, current_blob_shas=None,
-                           package_manifest=None):
+                           package_manifest=None, public_api_readiness_map=None,
+                           openapi_document=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -2257,6 +2768,13 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         generated_readiness_map=generated_sdk_client_readiness_map,
         current_blob_shas=current_blob_shas,
         package_manifest=package_manifest,
+    )
+    validate_public_api_readiness_map(
+        F,
+        client_contract_map=client_contract_map,
+        public_api_readiness_map=public_api_readiness_map,
+        current_blob_shas=current_blob_shas,
+        openapi_document=openapi_document,
     )
 
 
@@ -3215,7 +3733,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map", "generated-sdk-client-readiness-map"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map", "generated-sdk-client-readiness-map", "public-api-readiness-map"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -3428,6 +3946,20 @@ def check_selftest(ctx, F):
                 generated_readiness_map=record,
                 current_blob_shas=patch.get("currentBlobShas"),
                 package_manifest=patch.get("packageManifest"),
+            )
+        elif patch["target"] == "public-api-readiness-map":
+            record = patch.get("record")
+            client_contract_map = patch.get("clientContractMap")
+            openapi_document = patch.get("openapiDocument")
+            if not isinstance(record, dict) or not isinstance(client_contract_map, dict) or not isinstance(openapi_document, dict):
+                F.add("USF-SELFTEST-001", df, "public-api-readiness-map planted-defect needs record, clientContractMap, and openapiDocument objects")
+                continue
+            validate_public_api_readiness_map(
+                f2,
+                client_contract_map=client_contract_map,
+                public_api_readiness_map=record,
+                current_blob_shas=patch.get("currentBlobShas"),
+                openapi_document=openapi_document,
             )
         else:
             run_all_checks(sandbox, f2)

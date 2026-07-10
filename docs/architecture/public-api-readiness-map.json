@@ -1,0 +1,2383 @@
+{
+  "id": "public-api-readiness-map",
+  "title": "Public API Readiness Map",
+  "ownerIssueId": "USF-1050",
+  "childIssueIds": [
+    "USF-1054",
+    "USF-1055",
+    "USF-1056"
+  ],
+  "lifecycleState": "current-main-validator-enforced",
+  "authorityLevel": "validator-enforced-readiness-map",
+  "readinessScope": "bounded-current-main-public-api-contract-readiness",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records bounded current-main public API contract readiness derived from USF semantic definitions, interface contracts, route contract metadata, the OpenAPI projection, and the client-callable contract map.",
+    "openapiAuthority": "OpenAPI remains a lower-authority projection and does not define USF semantic authority, public deployment readiness, external availability, staging, production, or live-provider readiness.",
+    "linearAuthority": "Linear tracks work only and does not define USF semantic authority.",
+    "sourceCodeBoundary": "Source code and OpenAPI output are used only when bound to semantic/interface contracts and validator-enforced current-main anchors."
+  },
+  "sourceAuthorities": [
+    "docs/architecture/api-route-interface-contract-coverage.json",
+    "docs/architecture/non-ui-client-callable-contract-map.json",
+    "packages/contracts/src/api-surface.ts",
+    "packages/openapi/openapi.json",
+    "packages/openapi/src/check.ts"
+  ],
+  "sourceTreeAnchors": [
+    {
+      "path": "docs/architecture/api-route-interface-contract-coverage.json",
+      "blobSha": "7071de766385a2bf8ceff300f18ee59c00d1e807",
+      "authorityRole": "interface-contract-coverage"
+    },
+    {
+      "path": "docs/architecture/non-ui-client-callable-contract-map.json",
+      "blobSha": "40c8e43124418b4266c321ab599262c910bcc9c7",
+      "authorityRole": "client-callable-contract-map"
+    },
+    {
+      "path": "packages/contracts/src/api-surface.ts",
+      "blobSha": "e734c7c340aea2d814677c16ccb4c90909251cef",
+      "authorityRole": "canonical-route-contract-source"
+    },
+    {
+      "path": "packages/openapi/openapi.json",
+      "blobSha": "5b1f68bc48265c79260ce654dd2042f679b50e37",
+      "authorityRole": "lower-authority-openapi-projection"
+    },
+    {
+      "path": "packages/openapi/src/check.ts",
+      "blobSha": "55461b76965df88755fd943b484c74108a7be75f",
+      "authorityRole": "openapi-freshness-and-safety-check"
+    }
+  ],
+  "readinessClaims": {
+    "publicApiReady": true,
+    "publicApiContractReady": true,
+    "publicApiDocumentationReady": true,
+    "publicDeploymentReady": false,
+    "publicFqdnReady": false,
+    "deploymentReady": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "productUiReady": false,
+    "packagePublicationReady": false,
+    "complianceReady": false,
+    "monetisationReady": false,
+    "appStoreReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "operationCoverage": {
+    "totalOperations": 32,
+    "publicConsumerReadyOperations": 20,
+    "operatorToolingNotPublicConsumerOperations": 8,
+    "internalSupportOnlyOperations": 1,
+    "supportRouteNotClaimedOperations": 3,
+    "clientCallableLocalContractOperations": 20,
+    "operatorToolingLocalContractOperations": 8,
+    "internalSupportOnlyDispositionOperations": 1,
+    "notClaimedDispositionOperations": 3
+  },
+  "versioningCompatibilityAndDocs": {
+    "apiVersionCounts": {
+      "local": 4,
+      "v1": 28
+    },
+    "lifecycleCounts": {
+      "experimental": 29,
+      "stable": 3
+    },
+    "routeClassificationCounts": {
+      "audit-sensitive": 3,
+      "health-readiness": 2,
+      "operator-only": 4,
+      "public": 2,
+      "security-sensitive": 3,
+      "tenant-scoped": 18
+    },
+    "deprecationPolicy": "deprecationStatus and OpenAPI deprecated flag must remain consistent; removed or sunset operations require explicit repository authority before exposure.",
+    "compatibilityPolicySource": "packages/contracts/src/api-surface.ts#compatibilityPolicy",
+    "publicDocumentationGeneratedFromAuthority": true,
+    "publicDocumentationPublished": false,
+    "documentationSourceRefs": [
+      "packages/openapi/openapi.json",
+      "packages/openapi/src/check.ts",
+      "packages/contracts/src/api-surface.ts"
+    ]
+  },
+  "consumerSecurityAndTelemetry": {
+    "requiredFields": [
+      "authScheme",
+      "tenantScope",
+      "permissionRefs",
+      "requestSemanticsRef",
+      "responseSemanticsRef",
+      "errorRefs",
+      "rateLimitPolicy",
+      "corsPolicy",
+      "csrfPolicy",
+      "securityHeadersPolicy",
+      "fieldExposurePolicy",
+      "auditEventRefs",
+      "telemetryRefs",
+      "correlationPolicy",
+      "observabilityPolicy",
+      "gatewayPolicy"
+    ],
+    "securityBoundary": "Consumer security semantics are current-main contract metadata only; live gateway, edge WAF, TLS termination, live IdP, public FQDN, and production enforcement are not claimed.",
+    "missingSemanticsFailClosed": true
+  },
+  "openapiProjectionBoundary": {
+    "projectionOnly": true,
+    "openapiCheckCommand": "openapi:check",
+    "openapiBoundaryRef": "packages/openapi/openapi.json#x-usf-boundary",
+    "openapiPublicApiReadinessClaim": false,
+    "openapiProductionReadinessClaim": false,
+    "openapiExternalSdkReadinessClaim": false
+  },
+  "operations": [
+    {
+      "routeId": "healthz.get",
+      "method": "GET",
+      "openapiPath": "/healthz",
+      "openapiOperationId": "getHealthz",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=healthz.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=healthz.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getHealthz",
+      "publicApiExposureDisposition": "support-route-not-public-api-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "local",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "stable",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "requestSemanticsRef": "not-applicable:no-request-schema",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=HealthResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test health probe; live edge rate limit deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "public runtime posture only; no internals",
+        "auditEventRefs": [
+          "not-applicable:not audited; no tenant or sensitive data"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "request_count error_count latency local counters only",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "readyz.get",
+      "method": "GET",
+      "openapiPath": "/readyz",
+      "openapiOperationId": "getReadyz",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=readyz.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=readyz.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getReadyz",
+      "publicApiExposureDisposition": "support-route-not-public-api-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "local",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "stable",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "requestSemanticsRef": "not-applicable:no-request-schema",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ReadyResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test readiness probe; live edge rate limit deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "provider mode summary only; no credentials",
+        "auditEventRefs": [
+          "not-applicable:not audited; provider modes only"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "request_count error_count latency local counters only",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "openapi.get",
+      "method": "GET",
+      "openapiPath": "/openapi.json",
+      "openapiOperationId": "getOpenApiDocument",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=openapi.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=openapi.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getOpenApiDocument",
+      "publicApiExposureDisposition": "support-route-not-public-api-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "local",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "stable",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "OpenAPI diff must be reviewed before compatibility claim changes"
+      },
+      "consumerSecurity": {
+        "authScheme": "none",
+        "tenantScope": "none",
+        "permissionRefs": [
+          "not-applicable:no-route-action-required"
+        ],
+        "requestSemanticsRef": "not-applicable:no-request-schema",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=OpenApiDocument",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test route; live edge rate limit deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "contract metadata and synthetic examples only",
+        "auditEventRefs": [
+          "not-applicable:not audited; contains synthetic examples only"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:request_count error_count latency local counters only",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "request_count error_count latency local counters only",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "tenant-context.get",
+      "method": "GET",
+      "openapiPath": "/v1/tenant-context",
+      "openapiOperationId": "getTenantContextV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=tenant-context.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=tenant-context.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getTenantContextV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:tenant.context.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=TenantContextResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:records tenant.context.read when accepted"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "auth-login.post",
+      "method": "POST",
+      "openapiPath": "/auth/login",
+      "openapiOperationId": "postAuthLogin",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=auth-login.post",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=auth-login.post",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=postAuthLogin",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "local",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "none",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:auth.login"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=LoginRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=LoginResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:auth service records value-free login evidence"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-check.post",
+      "method": "POST",
+      "openapiPath": "/v1/authz/check",
+      "openapiOperationId": "postAuthzCheckV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=authz-check.post",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-check.post",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=postAuthzCheckV1",
+      "publicApiExposureDisposition": "internal-support-only-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:authorization.check"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=AuthorizeCheckRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuthorizeDecisionResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:authorization decision is audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-permissions.get",
+      "method": "GET",
+      "openapiPath": "/v1/authz/permissions",
+      "openapiOperationId": "getAuthzPermissionsV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=authz-permissions.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-permissions.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getAuthzPermissionsV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:tenant.members.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=PermissionsResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:permission discovery denial is audited through PDP"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.list",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events",
+      "openapiOperationId": "getAuditEventsV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-events.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.list",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getAuditEventsV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:audit.search"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=AuditEventsQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuditEventsResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:audit query is itself audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.get",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events/{id}",
+      "openapiOperationId": "getAuditEventByIdV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-events.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getAuditEventByIdV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:audit.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuditEventView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:audit read is itself audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-verify.post",
+      "method": "POST",
+      "openapiPath": "/v1/audit/verify",
+      "openapiOperationId": "postAuditVerifyV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=audit-verify.post",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-verify.post",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=postAuditVerifyV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:audit.verify"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=AuditVerifyRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=AuditVerifyResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:verification request is audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-current.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/current",
+      "openapiOperationId": "getConfigCurrentV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-current.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-current.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getConfigCurrentV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ConfigCurrentResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:config service records value-free config access"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-flags.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/feature-flags",
+      "openapiOperationId": "getConfigFeatureFlagsV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-flags.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-flags.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getConfigFeatureFlagsV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FeatureFlagsResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:feature flag access uses config controls"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-provider-status.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/provider-status",
+      "openapiOperationId": "getConfigProviderStatusV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=config-provider-status.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-provider-status.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getConfigProviderStatusV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:config.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ProviderStatusResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:provider mode read is controlled by config read"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.list",
+      "method": "GET",
+      "openapiPath": "/v1/providers",
+      "openapiOperationId": "listProvidersV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=providers.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.list",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=listProvidersV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:provider.list"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=ProvidersQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ProvidersListResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:provider status access is PDP guarded and value-free; audit-of-access posture is represented"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.get",
+      "method": "GET",
+      "openapiPath": "/v1/providers/{id}",
+      "openapiOperationId": "getProviderByIdV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=providers.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getProviderByIdV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:provider.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=ProvidersQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ProviderDetailResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:provider detail access is PDP guarded and value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-readiness.get",
+      "method": "GET",
+      "openapiPath": "/v1/observability/readiness",
+      "openapiOperationId": "getObservabilityReadinessV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=observability-readiness.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-readiness.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getObservabilityReadinessV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:observability.readiness.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ObservabilityReadinessResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:observability readiness access is PDP guarded and audit-recorded value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-signals.list",
+      "method": "GET",
+      "openapiPath": "/v1/observability/signals",
+      "openapiOperationId": "listObservabilitySignalsV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=observability-signals.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-signals.list",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=listObservabilitySignalsV1",
+      "publicApiExposureDisposition": "operator-tooling-contract-not-public-consumer",
+      "readiness": {
+        "publicConsumerOperationReady": false,
+        "publicApiContractReady": false,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:observability.signal.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=ObservabilitySignalsQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ObservabilitySignalsResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:observability signal access is PDP guarded and audit-recorded value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.list",
+      "method": "GET",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "listFilesV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.list",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=listFilesV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:file.list"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=FilesQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FilesListResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:file list audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.upload",
+      "method": "POST",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "uploadFileV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.upload",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.upload",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=uploadFileV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:file.create"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=FileUploadRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileView,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:file upload lifecycle audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.get",
+      "method": "GET",
+      "openapiPath": "/v1/files/{id}",
+      "openapiOperationId": "getFileV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getFileV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:file read audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.download",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/download",
+      "openapiOperationId": "downloadFileV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.download",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.download",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=downloadFileV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.download"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileDownloadResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:download audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.verify",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/verify",
+      "openapiOperationId": "verifyFileV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=files.verify",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.verify",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=verifyFileV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:file.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=FileVerifyResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:file verification audited by file service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.list",
+      "method": "GET",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "listJobsV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.list",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=listJobsV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:job.list"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=JobsListResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:job service emits lifecycle audit; list is PDP gated"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.create",
+      "method": "POST",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "createJobV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.create",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.create",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=createJobV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:job.create"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=JobCreateRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=JobCreateResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "enforced local-dev-test guardrail api.jobs.create.local; single-node in-memory only; live WAF/edge/gateway enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:job.create audited by job service; guardrail denials emit value-free guardrail audit"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.get",
+      "method": "GET",
+      "openapiPath": "/v1/jobs/{id}",
+      "openapiOperationId": "getJobV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getJobV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:job.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=JobView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:job read is PDP gated and value-free"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/jobs/{id}/cancel",
+      "openapiOperationId": "cancelJobV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=jobs.cancel",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.cancel",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=cancelJobV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:job.cancel"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ActionResultResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:job.cancel audited by job service"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notification-templates.create",
+      "method": "POST",
+      "openapiPath": "/v1/notification-templates",
+      "openapiOperationId": "createNotificationTemplateV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notification-templates.create",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notification-templates.create",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=createNotificationTemplateV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.template.create"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=NotificationTemplateCreateRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationTemplateResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:template creation audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.list",
+      "method": "GET",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "listNotificationsV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.list",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=listNotificationsV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query",
+        "permissionRefs": [
+          "requiredAction:notification.list"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationsListResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:notification list is PDP gated"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.create",
+      "method": "POST",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "createNotificationV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.create",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.create",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=createNotificationV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.create"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=NotificationCreateRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationCreateResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:notification.created audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.get",
+      "method": "GET",
+      "openapiPath": "/v1/notifications/{id}",
+      "openapiOperationId": "getNotificationV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.get",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=getNotificationV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-query-param",
+        "permissionRefs": [
+          "requiredAction:notification.read"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantContextQuery",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationView,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:notification.read audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.send",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/send",
+      "openapiOperationId": "sendNotificationV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.send",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.send",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=sendNotificationV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.send"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=NotificationSendResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:notification.queued audited and job.create audited"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/cancel",
+      "openapiOperationId": "cancelNotificationV1",
+      "interfaceDispositionRef": "docs/architecture/api-route-interface-contract-coverage.json#routeId=notifications.cancel",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.cancel",
+      "openapiOperationRef": "packages/openapi/openapi.json#operationId=cancelNotificationV1",
+      "publicApiExposureDisposition": "public-consumer-contract-ready",
+      "readiness": {
+        "publicConsumerOperationReady": true,
+        "publicApiContractReady": true,
+        "publicDeploymentReady": false,
+        "liveProviderReady": false
+      },
+      "versioning": {
+        "apiVersion": "v1",
+        "contractVersion": "api-contracts-1",
+        "operationVersion": "1",
+        "lifecycle": "experimental",
+        "deprecationStatus": "active",
+        "compatibilityPolicy": "breaking changes require route or contract version change"
+      },
+      "consumerSecurity": {
+        "authScheme": "dev-header-keycloak-bearer-future",
+        "tenantScope": "tenant-header-body",
+        "permissionRefs": [
+          "requiredAction:notification.cancel"
+        ],
+        "requestSemanticsRef": "packages/contracts/src/api-surface.ts#requestSchema=TenantActionRequest",
+        "responseSemanticsRef": "packages/contracts/src/api-surface.ts#responseSchemas=ActionResultResponse,ApiErrorResponse,ApiErrorResponse,ApiErrorResponse",
+        "errorRefs": [
+          "errorSchema:ApiErrorResponse"
+        ],
+        "rateLimitPolicy": "local-dev-test quotas represented; live enforcement deferred",
+        "corsPolicy": "explicit-local-dev-no-wildcard-credentialed-cors",
+        "csrfPolicy": "browser-session-routes-deferred-no-browser-credential-state-in-this-surface",
+        "securityHeadersPolicy": "no-store-sensitive-responses x-content-type-options-nosniff referrer-policy-no-referrer permissions-policy-minimal",
+        "fieldExposurePolicy": "minimum necessary fields; sensitive internals redacted",
+        "auditEventRefs": [
+          "auditPolicy:notification.cancelled audited by notification capability"
+        ],
+        "telemetryRefs": [
+          "observabilityPolicy:tenant-safe request_count error_count validation_failure_count auth_denial_count",
+          "correlationPolicy:x-request-id and x-correlation-id accepted; generated when missing"
+        ],
+        "correlationPolicy": "x-request-id and x-correlation-id accepted; generated when missing",
+        "observabilityPolicy": "tenant-safe request_count error_count validation_failure_count auth_denial_count",
+        "gatewayPolicy": "local-dev-test-only gateway-edge-waf-tls-production-posture-deferred"
+      },
+      "openapiProjection": {
+        "projectionOnly": true,
+        "sourceOfTruth": "packages/contracts/src/api-surface.ts",
+        "operationMetadataSource": "x-usf-route",
+        "operationFreshnessCommand": "openapi:check"
+      },
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-deployment-claim",
+        "no-public-fqdn-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-live-provider-claim",
+        "no-compliance-claim",
+        "no-monetisation-claim",
+        "no-app-store-claim",
+        "no-human-acceptance-claim"
+      ]
+    }
+  ],
+  "validatorCoverage": [
+    "validate-spec.public-api-readiness-map",
+    "openapi:check"
+  ],
+  "plantedDefectCoverage": [
+    {
+      "ruleId": "USF-PUBLIC-API-001",
+      "path": "tools/validate-spec/planted-defects/public-api-source-anchor-stale.json"
+    },
+    {
+      "ruleId": "USF-PUBLIC-API-002",
+      "path": "tools/validate-spec/planted-defects/public-api-operation-missing.json"
+    },
+    {
+      "ruleId": "USF-PUBLIC-API-003",
+      "path": "tools/validate-spec/planted-defects/public-api-security-metadata-missing.json"
+    },
+    {
+      "ruleId": "USF-PUBLIC-API-004",
+      "path": "tools/validate-spec/planted-defects/public-api-deployment-overclaim.json"
+    }
+  ],
+  "proofEvidenceStatus": "Bounded local-dev-test contract and projection evidence only; no public deployment, public FQDN, staging, production, live-provider, compliance, monetisation, app-store, or human-acceptance claim.",
+  "nonClaims": [
+    "no-public-deployment-claim",
+    "no-public-fqdn-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-live-provider-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim",
+    "no-generated-report-authority-claim"
+  ]
+}
