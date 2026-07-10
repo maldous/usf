@@ -1575,7 +1575,7 @@ def _current_blob_sha(path, current_blob_shas=None):
         value = current_blob_shas[path]
         return value if isinstance(value, str) else None
     try:
-        return git_checked("rev-parse", f"HEAD:{path}")
+        return git_checked("hash-object", path)
     except Exception:
         return None
 
@@ -1668,7 +1668,7 @@ def validate_generated_sdk_client_readiness_map(F, client_contract_map=None, gen
                   f"missing source-tree anchor for {path}")
         elif current_blob != blob_sha:
             F.add("USF-GENERATED-SDK-001", path,
-                  "source-tree anchor does not match current HEAD blob")
+                  "source-tree anchor does not match current worktree blob")
 
     planted = readiness_map.get("plantedDefectCoverage")
     if not isinstance(planted, list):
@@ -1762,6 +1762,7 @@ def validate_generated_sdk_client_readiness_map(F, client_contract_map=None, gen
 
     supported_count = 0
     excluded_count = 0
+    disposition_counts = {disposition: 0 for disposition in GENERATED_SDK_CLIENT_EXPECTED_EXPOSURE}
     for route_id, client_operation in sorted(client_ops_by_route.items()):
         rows = records_by_route.get(route_id, [])
         if len(rows) != 1:
@@ -1775,6 +1776,8 @@ def validate_generated_sdk_client_readiness_map(F, client_contract_map=None, gen
         supported = (client_disposition in GENERATED_SDK_CLIENT_SUPPORTED_DISPOSITIONS
                      and generated.get("status") == "local-semantic-input-current"
                      and generated.get("staleness") == "current-main")
+        if client_disposition in disposition_counts:
+            disposition_counts[client_disposition] += 1
         expected_exposure = GENERATED_SDK_CLIENT_EXPECTED_EXPOSURE.get(client_disposition)
         if operation.get("clientContractRef") != f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}#routeId={route_id}":
             F.add("USF-GENERATED-SDK-002", subject, "clientContractRef does not target the client-contract map route record")
@@ -1825,6 +1828,10 @@ def validate_generated_sdk_client_readiness_map(F, client_contract_map=None, gen
             "totalOperations": len(client_ops_by_route),
             "sdkSupportedOperations": supported_count,
             "sdkExcludedOperations": excluded_count,
+            "clientCallableLocalContractOperations": disposition_counts["client-callable-local-contract"],
+            "operatorToolingLocalContractOperations": disposition_counts["operator-tooling-local-contract"],
+            "internalSupportOnlyOperations": disposition_counts["internal-support-only"],
+            "notClaimedOperations": disposition_counts["not-claimed"],
         }
         for field, expected in expected_counts.items():
             if coverage.get(field) != expected:
