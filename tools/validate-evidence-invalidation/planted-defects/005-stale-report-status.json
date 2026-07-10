@@ -1,0 +1,7 @@
+{
+  "id": "005-stale-report-status",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-006",
+  "fixture": {
+    "kind": "stale-generated-report"
+  }
+}

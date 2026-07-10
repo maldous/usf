@@ -97,8 +97,8 @@ comparison policy. USF-825 does not create that manifest.
 | final-external-review-report-current | evidence/proof-evidence/proof-cockpit/final-external-review-report.md | Human-readable projection used by reviewers | Retain as generated report, never as authority by itself | Compare report metadata and non-claim language while requiring underlying evidence references |
 | staging-evidence-store-current | evidence/proof-evidence/proof-cockpit/staging-evidence-store.json | Durable evidence store with latest run, run history, storage model, supersession history, and non-claims | Retain as proof-cockpit evidence store | Check latestMachineRun linkage, machineRunHistory, payloadPruned markers, storage model, and non-claim preservation |
 | proof-cockpit-validator-planted-defects | tools/validate-proof-cockpit-acceptance/planted-defects | Existing fail-closed negative-control corpus for proof-cockpit acceptance | Retain as validator fixtures | Verify proof-cockpit validator selftest coverage and prevent weakened fail-closed behavior |
-| evidence-invalidation-planted-defects | Planned tools/validate-evidence-invalidation/planted-defects after USF-984 lands | Planned negative controls for stale, generated-report-only, hash, provider, environment, hidden-finding, and human-decision failure states | Pending USF-984; do not claim a current repository fixture before it lands | Verify invalidation map fail-closed behavior after the validator exists |
-| evidence-reuse-planted-defects | Planned tools/validate-evidence-reuse/planted-defects after USF-983 lands | Planned negative controls for unsafe evidence reuse | Pending USF-983; do not claim a current repository fixture before it lands | Verify reuse decisions block stale, mismatched, ambiguous, or overclaimed evidence after the validator exists |
+| evidence-invalidation-planted-defects | tools/validate-evidence-invalidation/planted-defects | Existing negative controls for stale, generated-report-only, hash, provider, environment, hidden-finding, and human-decision failure states | Retain as validator fixtures | Verify invalidation map fail-closed behavior |
+| evidence-reuse-planted-defects | tools/validate-evidence-reuse/planted-defects | Existing negative controls for unsafe evidence reuse | Retain as validator fixtures | Verify reuse decisions block stale, mismatched, ambiguous, or overclaimed evidence |
 | validate-spec-positive-and-negative-fixtures | tools/validate-spec/fixtures | Baseline positive and negative corpus for semantic shape and validator-report behavior | Retain as validator fixtures | Verify schema, semantic, report, provider, environment, proof-evidence, and evidence-envelope validation does not drift |
 | proof-artifact-retention-policy | docs/architecture/proof-artifact-retention-policy.md | Governs latest-plus-prior full payload retention and pruned metadata expectations | Retain as policy reference | Ensure corpus retention does not conflict with artifact-retention policy |
 | no-regression-proof-plan | docs/architecture/no-regression-proof-plan.md | Defines comparison matrix and proof-cockpit evidence boundary | Retain as risk-control reference | Ensure future corpus validation supports no-regression packages |
@@ -227,8 +227,8 @@ This design artifact should be validated on current main with:
 - Proof-cockpit acceptance selftest.
 - Linear boundary validation.
 
-After USF-983 and USF-984 land, future changes to the corpus should also run
-the evidence reuse and evidence invalidation validators and selftests.
+- Evidence reuse validation and selftest.
+- Evidence invalidation validation and selftest.
 - Repository aggregate validation on ambiguity or before merge.
 
 This design does not by itself require fresh proof-cockpit machine QA, but a

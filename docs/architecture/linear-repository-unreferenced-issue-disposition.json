@@ -3028,15 +3028,15 @@
       "intentionally-external": 1
     },
     "genuineMissingDeliverableReLandIssueId": "USF-1044",
-    "rootCauseNote": "The original sixteen genuine-missing-deliverable keys traced to the unmerged branch orchestration/usf-952-final-gate. USF-1044 now records current-main batch dispositions: Batch 1 has re-landed eight documentation deliverables and Batch 2 has re-implemented three proof-cockpit deliverables, while the remaining five keys stay pending until their later batches re-land, re-implement, or reject them with repository evidence.",
+    "rootCauseNote": "The original sixteen genuine-missing-deliverable keys traced to the unmerged branch orchestration/usf-952-final-gate. USF-1044 now records current-main batch dispositions: Batch 1 re-landed eight documentation deliverables, Batch 2 re-implemented three proof-cockpit deliverables, and Batch 3 re-landed two evidence reuse and invalidation validator deliverables. The remaining three keys stay pending until their later batch re-lands, re-implements, or rejects them with repository evidence.",
     "nonClaims": "Classifications are repository-owned operational accounting. They do not make Linear content semantic authority, do not treat Done status as proof, and claim no readiness."
   },
   "usf1044DispositionSummary": {
     "issueId": "USF-1044",
-    "recordedAtUtc": "2026-07-10T00:20:00Z",
-    "currentOriginMainAtBatchStart": "79eae8db0e6742244e4d619d6db236f09efde4c9",
+    "recordedAtUtc": "2026-07-10T01:10:28Z",
+    "currentOriginMainAtBatchStart": "81ea4dc1c33e76757c32d015945cd2fbeeb6a646",
     "recoveryEvidenceBranch": "origin/preserve/1044-final-gate-reland",
-    "batchStatus": "batch-2-reimplemented-pending-proof-cockpit-repin-and-pr-merge",
+    "batchStatus": "batch-3-relanded-evidence-reuse-and-invalidation-tooling",
     "decisions": {
       "reLanded": [
         "USF-618",
@@ -3046,7 +3046,9 @@
         "USF-769",
         "USF-825",
         "USF-829",
-        "USF-987"
+        "USF-987",
+        "USF-983",
+        "USF-984"
       ],
       "reImplemented": [
         "USF-969",
@@ -3055,8 +3057,6 @@
       ],
       "rejected": [],
       "pending": [
-        "USF-983",
-        "USF-984",
         "USF-990",
         "USF-991",
         "USF-994"
@@ -3064,10 +3064,10 @@
     },
     "counts": {
       "total": 16,
-      "reLanded": 8,
+      "reLanded": 10,
       "reImplemented": 3,
       "rejected": 0,
-      "pending": 5
+      "pending": 3
     },
     "nonClaims": [
       "Linear remains work tracking only and does not define USF semantic authority.",

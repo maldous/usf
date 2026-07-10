@@ -1,0 +1,7 @@
+{
+  "id": "006-ambiguous-provider",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-008",
+  "fixture": {
+    "kind": "ambiguous-provider"
+  }
+}

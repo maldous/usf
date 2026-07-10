@@ -94,7 +94,7 @@ minimisation can be accepted.
 | Command and source manifests | command-manifest.json, source-document-manifest.json | Preserves command provenance, source references, and replay context where available. |
 | Promoted evidence store | evidence/proof-evidence/proof-cockpit/staging-evidence-store.json | Preserves latest-machine-run linkage, machine-run history, supersession history, retention model, and pruned-payload metadata. |
 | External review bundle manifest | evidence/proof-evidence/proof-cockpit/external-review-bundle/manifest.json | Preserves generated projection inputs and lower-authority report boundaries for reviewer bundles. |
-| Validator fixtures and planted defects | Current tools/validate-proof-cockpit-acceptance/planted-defects, plus future evidence invalidation and evidence reuse planted-defect directories after USF-983 and USF-984 land | Preserves fail-closed regression coverage for proof-cockpit acceptance now and for evidence invalidation or reuse only after those validators exist. |
+| Validator fixtures and planted defects | tools/validate-proof-cockpit-acceptance/planted-defects, tools/validate-evidence-invalidation/planted-defects, tools/validate-evidence-reuse/planted-defects | Preserves fail-closed regression coverage for proof-cockpit acceptance, evidence invalidation, and evidence reuse. |
 
 Required does not always mean the original bulk bytes must be retained forever.
 It means a future optimisation must retain enough source evidence, metadata,

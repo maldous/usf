@@ -76,10 +76,10 @@ for repository governance.
 | --- | --- | --- |
 | Setup and dependency integrity | Checkout with history, Python setup, Node setup, Corepack enablement, frozen pnpm install, validator Python requirements install | Install logs, lockfile identity, cache state when available |
 | Formal semantic validation | Formal spec validation with report emission | Validator report, strict JSON status, rule summary |
-| Repository aggregate validation | Repository aggregate command covering current validator families and non-ui completeness where wired; evidence invalidation, evidence reuse, and proof-cockpit projection re-pin checks join only after their owning issues land | Aggregate logs and child-command failure visibility |
+| Repository aggregate validation | Repository aggregate command covering current validator families, evidence invalidation, evidence reuse, proof-cockpit projection re-pin, and non-ui completeness where wired | Aggregate logs and child-command failure visibility |
 | Historical-lineage and parity validation | Parity validation suite while retained as current compatibility coverage | Parity report or logs, failure family |
 | Closure and acceptance validators | Foundation-substrate closure validation and selftest, proof-cockpit acceptance validation and selftest | Closure validator output, proof-cockpit acceptance output |
-| Evidence and artifact guardrails | Current retained-evidence validators plus future evidence invalidation, evidence reuse, and projection re-pin checks after those command surfaces exist | Stale propagation, reuse eligibility, projection check output without replacing raw evidence |
+| Evidence and artifact guardrails | Evidence invalidation validation, evidence reuse validation, and projection re-pin checks when not already visible in aggregate logs | Stale propagation, reuse eligibility, projection check output without replacing raw evidence |
 | Main-only anchor publication | Proof-anchor workflow on main push | Anchor payload, attestation verification, tag publication log |
 
 If a later implementation introduces a separate mainline workflow from the
@@ -100,7 +100,7 @@ re-check commands before changing workflow syntax.
 | Repository validation aggregate | `corepack pnpm repo:validate` | Preserves current validator aggregation and child-command visibility. |
 | Historical parity suite | `corepack pnpm parity` | Retained compatibility coverage while parity remains in current workflow. |
 | Bounded test-readiness gate | `make test-ready` or `corepack pnpm test-readiness` | Separate from proof-cockpit machine QA and from staging proof. |
-| Proof-cockpit retained-evidence validation | `corepack pnpm proof-cockpit:validate`; projection-only re-pin is pending USF-970 and is not current command surface yet | Uses retained evidence only and does not claim fresh machine QA. |
+| Proof-cockpit retained-evidence validation | `corepack pnpm proof-cockpit:validate` and `corepack pnpm proof-cockpit:projection-repin` | Uses retained and projection evidence only and does not claim fresh machine QA. |
 | Proof-anchor publication | Existing proof-anchor workflow on main push | Main-only conservative anchor publication; not a PR fast-lane substitute. |
 
 Fresh proof-cockpit machine QA, proof-review repinning, public FQDN proof, and

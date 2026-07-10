@@ -1,0 +1,7 @@
+{
+  "id": "013-hidden-blocking-finding",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-009",
+  "fixture": {
+    "kind": "hidden-blocking-finding"
+  }
+}

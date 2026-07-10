@@ -1,0 +1,7 @@
+{
+  "id": "010-automatic-human-signoff",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-010",
+  "fixture": {
+    "kind": "automatic-human-signoff"
+  }
+}

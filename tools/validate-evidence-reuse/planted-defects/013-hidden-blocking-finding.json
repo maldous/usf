@@ -1,0 +1,45 @@
+{
+  "id": "planted-defect.evidence-reuse.hidden-blocking-finding",
+  "expectedRule": "USF-EVIDENCE-REUSE-004",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/freshnessState",
+      "value": "current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/eligibilityStatus",
+      "value": "pass-current"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/reusableScope",
+      "value": [
+        "proof-cockpit-machine-evidence"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/blockedScope",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/blockingFindings",
+      "value": [
+        "blocking finding intentionally hidden behind pass-current"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/humanDecisionRequired",
+      "value": false
+    }
+  ]
+}

@@ -48,8 +48,8 @@ source-tree freshness rules require a re-pin and that proof is recorded.
 - docs/architecture/proof-command-target-timing-instrumentation.md.
 - docs/architecture/no-regression-proof-before-after-timing-comparison.md.
 - tools/validate-proof-cockpit-acceptance/validate-proof-cockpit-acceptance.py.
-- Pending USF-984 evidence invalidation map design; no current-main
-  evidence-invalidation map file is claimed by this document.
+- USF-984 evidence invalidation map and validator once landed on current main;
+  this document does not itself define the invalidation map.
 
 ## Current State
 
