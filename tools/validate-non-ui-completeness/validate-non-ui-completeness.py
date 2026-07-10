@@ -4,8 +4,9 @@
 Self-contained: this validator asserts completeness of USF's own non-UI surface — service,
 route/port/adapter/provider, test/proof, UI-derived foundation behaviour, operator/admin
 surface, assurance-case, and gap coverage — against USF's own recorded artefacts. It does not
-depend on, shell out to, or read any external/sibling repository; the source-lineage inventory
-carries its own frozen tracked-file count and the gate checks internal self-consistency.
+depend on or read any external/sibling repository; the source-lineage inventory carries its own
+frozen tracked-file count, and current freshness is bounded by the local Git tracked non-proof
+source tree; generated artifacts and evidence are excluded from that source-tree anchor.
 """
 
 from __future__ import annotations
@@ -13,7 +14,10 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import re
+import stat
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Callable
@@ -23,7 +27,9 @@ ROOT = Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs" / "architecture"
 PLANTED = Path(__file__).resolve().parent / "planted-defects"
 
-RULE_IDS = [f"USF-NON-UI-{index:03d}" for index in range(1, 21)]
+RULE_IDS = [f"USF-NON-UI-{index:03d}" for index in range(1, 22)]
+SOURCE_TREE_ANCHOR_ALGORITHM = "git-ls-files-stage-sha256-v1"
+SOURCE_TREE_ANCHOR_SCOPE = "repository-tracked-non-proof-source-tree"
 
 JSON_DOCS = {
     "closure": DOCS / "non-ui-completeness-closure-gate.json",
@@ -49,6 +55,11 @@ MD_DOCS = {
     "gapMd": DOCS / "non-ui-completeness-gap-register.md",
     "externalReport": DOCS / "non-ui-completeness-external-review-report.md",
 }
+
+SOURCE_TREE_ANCHOR_EXCLUDED_PREFIXES = (
+    "artifacts/",
+    "evidence/",
+)
 
 ALLOWED_DISPOSITIONS = {
     "implemented-and-proven",
@@ -139,6 +150,83 @@ def load_data() -> dict[str, Any]:
         planted["_path"] = str(path.relative_to(ROOT))
         data["planted"].append(planted)
     return data
+
+
+def source_tree_anchor_excluded_paths() -> set[str]:
+    paths = {str(path.relative_to(ROOT)) for path in JSON_DOCS.values()}
+    paths.update(str(path.relative_to(ROOT)) for path in MD_DOCS.values())
+    return paths
+
+
+def source_tree_anchor_entries() -> list[tuple[str, str, str, str]]:
+    """Return tracked non-proof source entries for current non-UI closure freshness."""
+    result = subprocess.run(
+        ["git", "ls-files", "--stage", "-z"],
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    excluded_paths = source_tree_anchor_excluded_paths()
+    entries: list[tuple[str, str, str, str]] = []
+    for raw in result.stdout.split(b"\0"):
+        if not raw:
+            continue
+        entry = raw.decode("utf-8")
+        try:
+            metadata, path = entry.split("\t", 1)
+            mode, object_id, stage = metadata.split(" ", 2)
+        except ValueError as exc:
+            raise ValueError(f"malformed git ls-files --stage entry: {entry!r}") from exc
+        if path in excluded_paths:
+            continue
+        if path.startswith(SOURCE_TREE_ANCHOR_EXCLUDED_PREFIXES):
+            continue
+        entries.append((path, mode, object_id, stage))
+    return sorted(entries)
+
+
+def source_tree_anchor_paths() -> list[str]:
+    """Return tracked non-proof source paths that determine current non-UI closure freshness."""
+    return [path for path, _mode, _object_id, _stage in source_tree_anchor_entries()]
+
+
+def working_tree_mode(path: Path) -> str:
+    if path.is_symlink():
+        return "120000"
+    mode = path.stat().st_mode
+    return "100755" if mode & stat.S_IXUSR else "100644"
+
+
+def working_tree_content(path: Path) -> bytes:
+    if path.is_symlink():
+        return os.readlink(path).encode("utf-8")
+    return path.read_bytes()
+
+
+def compute_source_tree_anchor() -> tuple[str, int]:
+    """Hash tracked non-proof source metadata/content without generated report text."""
+    hasher = hashlib.sha256()
+    hasher.update(b"usf-non-ui-current-source-tree-anchor-v2\0")
+    entries = source_tree_anchor_entries()
+    for path, index_mode, object_id, stage in entries:
+        absolute_path = ROOT / path
+        content = working_tree_content(absolute_path)
+        hasher.update(path.encode("utf-8"))
+        hasher.update(b"\0")
+        hasher.update(index_mode.encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(object_id.encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(stage.encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(working_tree_mode(absolute_path).encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(str(len(content)).encode("ascii"))
+        hasher.update(b"\0")
+        hasher.update(content)
+        hasher.update(b"\0")
+    return f"sha256:{hasher.hexdigest()}", len(entries)
 
 
 def fail(rule_id: str, message: str, path: str = "") -> dict[str, str]:
@@ -464,6 +552,40 @@ def rule_020_planted_defect_coverage(data: dict[str, Any]) -> list[dict[str, str
     return failures
 
 
+def rule_021_current_source_tree_anchor(data: dict[str, Any]) -> list[dict[str, str]]:
+    failures: list[dict[str, str]] = []
+    try:
+        expected_digest, expected_count = compute_source_tree_anchor()
+    except Exception as exc:  # noqa: BLE001 - freshness must fail closed if the anchor cannot be computed.
+        return [fail("USF-NON-UI-021", f"failed to compute current source-tree anchor: {exc}", "sourceTreeAnchor")]
+
+    for key, doc in data["json"].items():
+        anchor = doc.get("currentSourceTreeAnchor")
+        path = f"{key}.currentSourceTreeAnchor"
+        if not isinstance(anchor, dict):
+            failures.append(fail("USF-NON-UI-021", f"{key} missing currentSourceTreeAnchor", path))
+            continue
+        if anchor.get("algorithm") != SOURCE_TREE_ANCHOR_ALGORITHM:
+            failures.append(fail("USF-NON-UI-021", f"{key} has unsupported source-tree anchor algorithm", f"{path}.algorithm"))
+        if anchor.get("scope") != SOURCE_TREE_ANCHOR_SCOPE:
+            failures.append(fail("USF-NON-UI-021", f"{key} has unsupported source-tree anchor scope", f"{path}.scope"))
+        digest = anchor.get("digest")
+        if not isinstance(digest, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", digest):
+            failures.append(fail("USF-NON-UI-021", f"{key} has missing or malformed source-tree anchor digest", f"{path}.digest"))
+        elif digest != expected_digest:
+            failures.append(fail("USF-NON-UI-021", f"{key} source-tree anchor is stale", f"{path}.digest"))
+        tracked_count = anchor.get("trackedFileCount")
+        if not isinstance(tracked_count, int) or tracked_count <= 0:
+            failures.append(fail("USF-NON-UI-021", f"{key} has missing or malformed source-tree tracked file count", f"{path}.trackedFileCount"))
+        elif tracked_count != expected_count:
+            failures.append(fail("USF-NON-UI-021", f"{key} source-tree tracked file count is stale", f"{path}.trackedFileCount"))
+        if anchor.get("sourceGitShaTreatment") != "historical-lineage-pin":
+            failures.append(fail("USF-NON-UI-021", f"{key} does not classify sourceGitSha as lineage-only", f"{path}.sourceGitShaTreatment"))
+        if anchor.get("generatedReportAuthority") != "lower-authority-summary-only":
+            failures.append(fail("USF-NON-UI-021", f"{key} does not preserve generated-report lower authority", f"{path}.generatedReportAuthority"))
+    return failures
+
+
 RULES: dict[str, Callable[[dict[str, Any]], list[dict[str, str]]]] = {
     "USF-NON-UI-001": rule_001_required_artefacts,
     "USF-NON-UI-002": rule_002_self_consistent_inventory,
@@ -485,6 +607,7 @@ RULES: dict[str, Callable[[dict[str, Any]], list[dict[str, str]]]] = {
     "USF-NON-UI-018": rule_018_external_report_sections,
     "USF-NON-UI-019": rule_019_no_unsafe_readiness_claims,
     "USF-NON-UI-020": rule_020_planted_defect_coverage,
+    "USF-NON-UI-021": rule_021_current_source_tree_anchor,
 }
 
 
@@ -544,6 +667,8 @@ def mutate(data: dict[str, Any], rule_id: str) -> dict[str, Any]:
             {"expectedRuleIds": ["USF-NON-UI-001"], "mustBeDistinct": True, "_path": "duplicate-a"},
             {"expectedRuleIds": ["USF-NON-UI-001"], "mustBeDistinct": True, "_path": "duplicate-b"},
         ]
+    elif rule_id == "USF-NON-UI-021":
+        mutated["json"]["closure"]["currentSourceTreeAnchor"]["digest"] = f"sha256:{'0' * 64}"
     return mutated
 
 
