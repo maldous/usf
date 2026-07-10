@@ -1,0 +1,142 @@
+{
+  "artifactId": "usf.repository-optimisation-readiness-map",
+  "title": "USF-1062 semantic-preserving optimisation readiness map",
+  "ownerIssueId": "USF-1062",
+  "createdDate": "2026-07-10",
+  "lifecycleState": "implemented-with-explicit-assurance-boundaries",
+  "verdict": "GREEN_WITH_EXPLICIT_ASSURANCE_BOUNDARIES",
+  "purpose": "Record every USF-1062 optimisation as active, rejected, deferred, or advisory, with rationale, assurance boundaries, and operational-only timing pointers, and enforce overclaim guardrails so this map cannot be read as a readiness claim. It consolidates the child issues USF-1063 to USF-1068.",
+  "authorityBoundary": {
+    "generatedReportsAuthority": false,
+    "runnerLocalStateAuthority": false,
+    "cacheHitSatisfiesValidation": false,
+    "timingReportsAreOperationalOnly": true,
+    "validatorsWeakened": false,
+    "proofCockpitFreshnessWeakened": false,
+    "branchProtectionWeakened": false,
+    "requiredValidateContextPreserved": true,
+    "implementationRuntimeCodeCreated": false,
+    "sourceImplementationImported": false,
+    "semanticAuthorityPreserved": true
+  },
+  "optimisations": [
+    {
+      "id": "current-main-timing-refresh",
+      "slice": 1,
+      "childIssueId": "USF-1064",
+      "class": "timing-observability",
+      "status": "active-operational",
+      "summary": "Refreshed current-main validation timing using the existing measure-command-timing and validate-aggregate profilers; per-family timing confirmed.",
+      "assuranceBoundary": "Operational evidence only; exact latest-run values recorded in the pull request, not committed to source, per the timing fixed-point policy."
+    },
+    {
+      "id": "git-object-mirror-transport-acceleration",
+      "slice": 2,
+      "childIssueId": "USF-1063",
+      "class": "transport-acceleration",
+      "status": "active",
+      "summary": "Opt-in local git object mirror consumed as a read-only object alternate, plus always-on fail-closed event-SHA verification of the checkout.",
+      "assuranceBoundary": "Runner-local state is not authority; inert by default (no-op unless vars.USF_GIT_OBJECT_MIRROR is set); correctness guaranteed by HEAD equals GITHUB_SHA, not by the mirror; before/after checkout timing is an external operational record.",
+      "artefact": "docs/architecture/repository-git-object-mirror-transport-optimisation.json",
+      "validatorRules": ["USF-OPT-MIRROR-001", "USF-OPT-MIRROR-002", "USF-OPT-MIRROR-003", "USF-OPT-MIRROR-004", "USF-OPT-MIRROR-005"]
+    },
+    {
+      "id": "within-job-validator-dedup",
+      "slice": 3,
+      "childIssueId": "USF-1065",
+      "class": "validation-topology",
+      "status": "rejected",
+      "summary": "The validate job runs foundation-substrate-closure and proof-cockpit acceptance as explicit steps and again inside repo:validate; the standalone invocations are byte-identical to the aggregate families.",
+      "equivalenceProven": true,
+      "rejectionReason": "USF-PROOF-COCKPIT-002 mandates both the explicit workflow steps and their repo:validate membership as defense-in-depth. Removing the standalone steps would fail that fail-closed wiring rule, so the duplication is intentional and is retained."
+    },
+    {
+      "id": "cross-aggregate-validator-dedup",
+      "slice": 3,
+      "childIssueId": "USF-1065",
+      "class": "validation-topology",
+      "status": "deferred",
+      "summary": "validate-runtime and validate-enterprise execute in both repo:validate and parity within the validate job.",
+      "deferralReason": "Deferred by design. validatorParallelismPlan.equivalenceProofRequiredBeforeActivation is true (candidate D, USF-1039/USF-656); reshaping the aggregate command sets requires equivalence proof and a branch-protection topology decision not owned by USF-1062."
+    },
+    {
+      "id": "proof-cockpit-evidence-churn-reduction",
+      "slice": 4,
+      "childIssueId": "USF-1066",
+      "class": "proof-evidence-execution",
+      "status": "advisory-deferred",
+      "summary": "Proof-cockpit route/phase timing is measurable via proof-cockpit:compare; projection-only re-pin already exists for authority-bounded refresh.",
+      "deferralReason": "Churn reduction is limited to authority-bounded projection-only refresh, which already exists; deeper reduction is not safe without weakening proof-cockpit freshness (USF-PROOF-COCKPIT-009). Timing measured operationally; freshness rule preserved."
+    },
+    {
+      "id": "affected-domain-validation-promotion",
+      "slice": 5,
+      "childIssueId": "USF-1067",
+      "class": "affected-domain",
+      "status": "deferred",
+      "summary": "Promotion of affected-domain routing from warn-only advisory to bounded-active gating.",
+      "deferralReason": "Pinned warn-only by USF-OPT-CI-006. Promotion is candidate C/D deferred by design and requires an owner decision, an equivalence proof, and a branch-protection status-topology change; USF-1062 does not unilaterally weaken the guard.",
+      "equivalenceCriteriaForPromotion": [
+        "The affected-set command family must be proven to cover the full repo:validate family for every changed-path class, with a machine-checkable equivalence proof.",
+        "Full-validation fallback must remain fail-closed on every mandatory fallback class (unknown path, workflow, lockfile, validator source, proof evidence, proof-cockpit, provider mode, environment, runtime/API ambiguity).",
+        "Planted-defect selftests must still fail closed under the affected-only path.",
+        "The required validate status context and branch protection must be preserved.",
+        "An explicit owner decision must authorise the branch-protection topology change."
+      ]
+    },
+    {
+      "id": "dependency-and-toolchain-cache",
+      "slice": null,
+      "childIssueId": null,
+      "class": "dependency-toolchain",
+      "status": "already-implemented",
+      "summary": "Lockfile/toolchain-keyed pnpm store and pip download caches (read-only on PRs, writable on main).",
+      "assuranceBoundary": "Implemented under USF-1037 (candidate A/K). Cache hits never satisfy validation or proof; not re-implemented by USF-1062."
+    }
+  ],
+  "timingEvidence": {
+    "afterStatus": "external-operational-record-required",
+    "afterRecordLocation": "pull-request-body-or-comment",
+    "recordedBaselineRepoValidateParallelSeconds": 42,
+    "currentMainConsistentWithRecordedBaseline": true,
+    "exactLatestRunValuesCommittedToSource": false,
+    "timingClaimMade": false,
+    "speedupClaimMade": false,
+    "measurementNoiseNote": "Current-main measurement was taken while a concurrent agent shared the runner host; treat local timing as indicative only."
+  },
+  "overclaimGuardrails": {
+    "verdictMustNotBeGreenIf": [
+      "an optimisation depends on runner-local or developer-working-tree state as authority",
+      "stale evidence is accepted as pass",
+      "required validation is skipped",
+      "equivalence is asserted without proof",
+      "proof-cockpit freshness is weakened",
+      "a readiness, staging, production, deployment, live-provider, compliance, monetisation, store, UI, or human-acceptance claim is introduced"
+    ],
+    "enforcedByValidatorRule": "USF-OPT-MAP-002"
+  },
+  "assuranceBoundaries": [
+    "Timing reports are operational evidence only and are lowest authority.",
+    "The git object mirror is transport acceleration only; runner-local state is not authority.",
+    "Cache hits never satisfy validation or proof.",
+    "Proof-cockpit freshness, branch protection, and the required validate context are preserved.",
+    "No validator, planted-defect selftest, or fail-closed guard is weakened.",
+    "Deferred and rejected optimisations are recorded with rationale rather than forced."
+  ],
+  "isolationFromUsf1050": "Realised only on the USF-1062 optimisation branch. It does not modify, rebase, push to, close, merge, or supersede any USF-1050 branch, PR, worktree, issue, evidence, or in-progress file set.",
+  "nonClaims": [
+    "staging-readiness",
+    "deployment-readiness",
+    "production-readiness",
+    "live-provider-readiness",
+    "compliance-readiness",
+    "monetisation-readiness",
+    "store-readiness",
+    "ui-readiness",
+    "human-acceptance",
+    "cache-hit-proves-correctness",
+    "generated-report-authority",
+    "runner-local-state-authority",
+    "speedup-proves-correctness"
+  ]
+}

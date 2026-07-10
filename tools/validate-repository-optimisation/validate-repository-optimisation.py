@@ -23,6 +23,7 @@ CI_TIMING = ROOT / "evidence/generated-reports/repository-ci-throughput-timing-e
 RUNNER_CAPACITY = ROOT / "docs/architecture/github-runner-capacity-enablement.json"
 VALIDATE_WORKFLOW = ROOT / ".github/workflows/validate-spec.yml"
 GIT_OBJECT_MIRROR_ARTIFACT = ROOT / "docs/architecture/repository-git-object-mirror-transport-optimisation.json"
+OPTIMISATION_READINESS_MAP = ROOT / "docs/architecture/repository-optimisation-readiness-map.json"
 
 REPORTS = {
     "USF-997": ROOT / "evidence/generated-reports/repository-optimisation-json-parse-reuse-baseline.json",
@@ -1092,6 +1093,96 @@ def check_git_object_mirror(
     return findings
 
 
+def check_optimisation_readiness_map(map_data: dict[str, Any] | None = None) -> list[dict[str, str]]:
+    """USF-1062 Slice 6: optimisation readiness map with overclaim guardrails.
+
+    Records every USF-1062 optimisation as active, rejected, deferred, or advisory
+    with rationale, and fails closed on any overclaim (a GREEN verdict that depends
+    on local state, stale evidence, skipped validation, unproven equivalence,
+    weakened proof freshness, or an unsupported readiness claim).
+    """
+    findings: list[dict[str, str]] = []
+    data = map_data or load_json(OPTIMISATION_READINESS_MAP)
+
+    # USF-OPT-MAP-001: identity and verdict.
+    if data.get("artifactId") != "usf.repository-optimisation-readiness-map" or data.get("ownerIssueId") != "USF-1062":
+        findings.append(finding("USF-OPT-MAP-001", rel(OPTIMISATION_READINESS_MAP), "readiness map must carry the canonical artifactId owned by USF-1062"))
+    if data.get("verdict") != "GREEN_WITH_EXPLICIT_ASSURANCE_BOUNDARIES":
+        findings.append(finding("USF-OPT-MAP-001", rel(OPTIMISATION_READINESS_MAP), "readiness map verdict must be GREEN_WITH_EXPLICIT_ASSURANCE_BOUNDARIES"))
+
+    # USF-OPT-MAP-002: overclaim guardrails (authority and timing non-claims).
+    authority = data.get("authorityBoundary", {})
+    if not isinstance(authority, dict):
+        findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), "authorityBoundary must be an object"))
+        authority = {}
+    for key in [
+        "generatedReportsAuthority",
+        "runnerLocalStateAuthority",
+        "cacheHitSatisfiesValidation",
+        "validatorsWeakened",
+        "proofCockpitFreshnessWeakened",
+        "branchProtectionWeakened",
+        "implementationRuntimeCodeCreated",
+        "sourceImplementationImported",
+    ]:
+        if authority.get(key) is not False:
+            findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), f"readiness map authority field must be false: {key}"))
+    for key in ["timingReportsAreOperationalOnly", "requiredValidateContextPreserved", "semanticAuthorityPreserved"]:
+        if authority.get(key) is not True:
+            findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), f"readiness map authority field must be true: {key}"))
+    timing = data.get("timingEvidence", {})
+    if not isinstance(timing, dict):
+        findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), "timingEvidence must be an object"))
+        timing = {}
+    for key in ["timingClaimMade", "speedupClaimMade", "exactLatestRunValuesCommittedToSource"]:
+        if timing.get(key) is not False:
+            findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), f"readiness map timing field must be false: {key}"))
+    if not data.get("overclaimGuardrails", {}).get("verdictMustNotBeGreenIf"):
+        findings.append(finding("USF-OPT-MAP-002", rel(OPTIMISATION_READINESS_MAP), "readiness map must record overclaim guardrails"))
+
+    # USF-OPT-MAP-003: optimisation entries, reasons, and non-claim tokens.
+    optimisations = data.get("optimisations", [])
+    if not isinstance(optimisations, list) or not optimisations:
+        findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), "optimisations must be a non-empty list"))
+        optimisations = []
+    allowed_status = {"active", "active-operational", "rejected", "deferred", "advisory-deferred", "already-implemented"}
+    seen_ids: set[str] = set()
+    for opt in optimisations:
+        if not isinstance(opt, dict):
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), "each optimisation must be an object"))
+            continue
+        opt_id = str(opt.get("id"))
+        seen_ids.add(opt_id)
+        status = opt.get("status")
+        if status not in allowed_status:
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"optimisation {opt_id} has invalid status: {status}"))
+        if status == "rejected" and not opt.get("rejectionReason"):
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"rejected optimisation must record rejectionReason: {opt_id}"))
+        if status in {"deferred", "advisory-deferred"} and not opt.get("deferralReason"):
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"deferred optimisation must record deferralReason: {opt_id}"))
+    for required_id in [
+        "current-main-timing-refresh",
+        "git-object-mirror-transport-acceleration",
+        "within-job-validator-dedup",
+        "affected-domain-validation-promotion",
+    ]:
+        if required_id not in seen_ids:
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"readiness map missing required optimisation entry: {required_id}"))
+    nonclaims = set(data.get("nonClaims", []))
+    for required in [
+        "production-readiness",
+        "live-provider-readiness",
+        "human-acceptance",
+        "cache-hit-proves-correctness",
+        "generated-report-authority",
+        "runner-local-state-authority",
+        "speedup-proves-correctness",
+    ]:
+        if required not in nonclaims:
+            findings.append(finding("USF-OPT-MAP-003", rel(OPTIMISATION_READINESS_MAP), f"readiness map non-claim missing: {required}"))
+    return findings
+
+
 def validate() -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     findings.extend(check_reports())
@@ -1099,6 +1190,7 @@ def validate() -> list[dict[str, str]]:
     findings.extend(check_ci_throughput_artifacts())
     findings.extend(check_runner_capacity_artifact())
     findings.extend(check_git_object_mirror())
+    findings.extend(check_optimisation_readiness_map())
     return findings
 
 
@@ -1297,6 +1389,22 @@ def selftest() -> list[dict[str, str]]:
     mutated_mirror = copy.deepcopy(mirror)
     mutated_mirror["timingEvidence"]["speedupClaimMade"] = True
     tests.append(("mirror-speedup-claim", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-005"))
+
+    opt_map = load_json(OPTIMISATION_READINESS_MAP)
+    mutated_map = copy.deepcopy(opt_map)
+    mutated_map["verdict"] = "GREEN"
+    tests.append(("map-verdict-overclaim", check_optimisation_readiness_map(map_data=mutated_map), "USF-OPT-MAP-001"))
+
+    mutated_map = copy.deepcopy(opt_map)
+    mutated_map["authorityBoundary"]["validatorsWeakened"] = True
+    tests.append(("map-validators-weakened", check_optimisation_readiness_map(map_data=mutated_map), "USF-OPT-MAP-002"))
+
+    mutated_map = copy.deepcopy(opt_map)
+    for opt in mutated_map["optimisations"]:
+        if opt.get("status") in {"deferred", "advisory-deferred"}:
+            opt.pop("deferralReason", None)
+            break
+    tests.append(("map-deferred-reason-missing", check_optimisation_readiness_map(map_data=mutated_map), "USF-OPT-MAP-003"))
 
     findings: list[dict[str, str]] = []
     for name, observed, expected in tests:
