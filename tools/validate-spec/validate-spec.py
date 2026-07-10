@@ -368,6 +368,10 @@ RULES = {
     "USF-CLIENT-CONTRACT-002": ("blocking", "Client-callable non-UI operation metadata is missing or inconsistent"),
     "USF-CLIENT-CONTRACT-003": ("blocking", "Generated-client input status is stale or ambiguous"),
     "USF-CLIENT-CONTRACT-004": ("blocking", "Client-contract map overclaims generated-client, SDK, UI, public API, or readiness authority"),
+    "USF-GENERATED-SDK-001": ("blocking", "Generated SDK/client readiness freshness or source-tree binding is stale or incomplete"),
+    "USF-GENERATED-SDK-002": ("blocking", "Generated SDK/client readiness operation coverage is incomplete or inconsistent"),
+    "USF-GENERATED-SDK-003": ("blocking", "Generated SDK/client readiness metadata, package, or fixture projection is incomplete"),
+    "USF-GENERATED-SDK-004": ("blocking", "Generated SDK/client readiness overclaims publication, UI, public API, deployment, provider, compliance, monetisation, or human acceptance"),
     "USF-CAPABILITY-REALISATION-001": ("blocking", "Current-main capability-service realisation map is missing semantic-contract coverage"),
     "USF-CAPABILITY-REALISATION-002": ("blocking", "Capability-service realisation traceability or implementation authority is invalid"),
     "USF-CAPABILITY-REALISATION-003": ("blocking", "Capability-service realisation freshness or historical-evidence boundary is invalid"),
@@ -1463,6 +1467,378 @@ def validate_non_ui_client_contract_map(F, data_by_path, api_route_records=None,
             F.add("USF-CLIENT-CONTRACT-004", subject, f"missing non-claims: {', '.join(missing_non_claims)}")
 
 
+GENERATED_SDK_CLIENT_READINESS_MAP_PATH = "docs/architecture/generated-sdk-client-readiness-map.json"
+GENERATED_SDK_CLIENT_PACKAGE_PATH = "packages/client/package.json"
+GENERATED_SDK_CLIENT_VALIDATOR = "validate-spec.generated-sdk-client-readiness-map"
+GENERATED_SDK_CLIENT_SCOPE = "bounded-current-main-contract-generation-input-and-sdk-operation-projection"
+GENERATED_SDK_CLIENT_SOURCE_ANCHOR_PATHS = {
+    "docs/architecture/non-ui-client-callable-contract-map.json",
+    "docs/architecture/api-route-interface-contract-coverage.json",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/app-surface-shared-client-consumption-path.json",
+    "packages/client/package.json",
+    "packages/client/src/index.ts",
+    "packages/contracts/src/api-surface.ts",
+    "packages/openapi/openapi.json",
+}
+GENERATED_SDK_CLIENT_SUPPORTED_DISPOSITIONS = {
+    "client-callable-local-contract",
+    "operator-tooling-local-contract",
+}
+GENERATED_SDK_CLIENT_EXPECTED_EXPOSURE = {
+    "client-callable-local-contract": "generated-sdk-supported-local-contract",
+    "operator-tooling-local-contract": "operator-tooling-sdk-supported-local-contract",
+    "internal-support-only": "excluded-internal-support-only",
+    "not-claimed": "excluded-not-authorised-for-generation",
+}
+GENERATED_SDK_CLIENT_REQUIRED_METADATA_FIELDS = {
+    "authScheme",
+    "tenantScope",
+    "permissionRefs",
+    "validationRefs",
+    "errorRefs",
+    "auditEventRefs",
+    "telemetryRefs",
+    "dataClassification",
+    "requestSemanticsRef",
+    "responseSemanticsRef",
+    "proofRefs",
+}
+GENERATED_SDK_CLIENT_FORBIDDEN_TRUE_CLAIMS = {
+    "packagePublicationReady",
+    "productUiReady",
+    "publicApiReady",
+    "runtimeProductReady",
+    "publicDeploymentReady",
+    "publicFqdnReady",
+    "deploymentReady",
+    "stagingReady",
+    "productionReady",
+    "liveProviderReady",
+    "complianceReady",
+    "monetisationReady",
+    "appStoreReady",
+    "humanAcceptanceComplete",
+}
+GENERATED_SDK_CLIENT_REQUIRED_NONCLAIMS = {
+    "no-package-publication-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-public-fqdn-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim",
+}
+GENERATED_SDK_CLIENT_REQUIRED_PLANTED_RULES = {
+    "USF-GENERATED-SDK-001",
+    "USF-GENERATED-SDK-002",
+    "USF-GENERATED-SDK-003",
+    "USF-GENERATED-SDK-004",
+}
+
+
+def _load_generated_sdk_client_readiness_map(F):
+    data = load_json(GENERATED_SDK_CLIENT_READINESS_MAP_PATH, F)
+    if data is None:
+        F.add("USF-GENERATED-SDK-001", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "generated SDK/client readiness map artefact is missing")
+        return None
+    if not isinstance(data, dict):
+        F.add("USF-GENERATED-SDK-001", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "generated SDK/client readiness map must be an object")
+        return None
+    return data
+
+
+def _client_operations_by_route_id(client_map):
+    by_route = {}
+    if not isinstance(client_map, dict):
+        return by_route
+    operations = client_map.get("operations")
+    if not isinstance(operations, list):
+        return by_route
+    for operation in operations:
+        if isinstance(operation, dict) and _as_nonempty_string(operation.get("routeId")):
+            by_route[operation["routeId"]] = operation
+    return by_route
+
+
+def _current_blob_sha(path, current_blob_shas=None):
+    if isinstance(current_blob_shas, dict) and path in current_blob_shas:
+        value = current_blob_shas[path]
+        return value if isinstance(value, str) else None
+    try:
+        return git_checked("hash-object", path)
+    except Exception:
+        return None
+
+
+def _load_client_package_manifest(F, package_manifest=None):
+    if isinstance(package_manifest, dict):
+        return package_manifest
+    data = load_json(GENERATED_SDK_CLIENT_PACKAGE_PATH, F)
+    return data if isinstance(data, dict) else None
+
+
+def _source_operation_has_projected_metadata(operation, field):
+    metadata = operation.get("operationMetadata") if isinstance(operation, dict) else None
+    authority = operation.get("authorityMapping") if isinstance(operation, dict) else None
+    if not isinstance(metadata, dict):
+        metadata = {}
+    if not isinstance(authority, dict):
+        authority = {}
+    if field in {"authScheme", "tenantScope"}:
+        return _as_nonempty_string(metadata.get(field)) and _as_nonempty_string(authority.get(field))
+    if field == "dataClassification":
+        return _as_nonempty_string(metadata.get("dataClassification"))
+    if field in {"requestSemanticsRef", "responseSemanticsRef"}:
+        return _as_nonempty_string(authority.get(field))
+    if field in {"permissionRefs", "validationRefs", "errorRefs", "auditEventRefs", "telemetryRefs", "proofRefs"}:
+        return bool(_string_list(authority.get(field)))
+    return False
+
+
+def validate_generated_sdk_client_readiness_map(F, client_contract_map=None, generated_readiness_map=None,
+                                                current_blob_shas=None, package_manifest=None):
+    client_map = client_contract_map if isinstance(client_contract_map, dict) else _load_non_ui_client_contract_map(F)
+    if not isinstance(client_map, dict):
+        return
+    readiness_map = (generated_readiness_map if isinstance(generated_readiness_map, dict)
+                     else _load_generated_sdk_client_readiness_map(F))
+    if not isinstance(readiness_map, dict):
+        return
+
+    if readiness_map.get("readinessScope") != GENERATED_SDK_CLIENT_SCOPE:
+        F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "readinessScope is missing or exceeds the bounded current-main SDK/client projection scope")
+    if readiness_map.get("generatedOutputAuthority") != "lower-authority-projection-only":
+        F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "generated outputs must remain lower-authority projections")
+
+    claims = readiness_map.get("readinessClaims")
+    if not isinstance(claims, dict):
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "readinessClaims is missing")
+        claims = {}
+    if claims.get("generatedClientReady") is not True or claims.get("sdkReady") is not True:
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "bounded generated-client and SDK readiness claims must both be explicitly true")
+    for field in GENERATED_SDK_CLIENT_FORBIDDEN_TRUE_CLAIMS:
+        if claims.get(field) is True:
+            F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  f"{field} must not be true in the generated SDK/client readiness map")
+
+    non_claims = set(_string_list(readiness_map.get("nonClaims")))
+    missing_non_claims = sorted(GENERATED_SDK_CLIENT_REQUIRED_NONCLAIMS - non_claims)
+    if missing_non_claims:
+        F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              f"missing non-claims: {', '.join(missing_non_claims)}")
+
+    anchors = readiness_map.get("sourceTreeAnchors")
+    if not isinstance(anchors, list):
+        F.add("USF-GENERATED-SDK-001", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "sourceTreeAnchors must be an array")
+        anchors = []
+    anchors_by_path = {}
+    for index, anchor in enumerate(anchors):
+        subject = f"{GENERATED_SDK_CLIENT_READINESS_MAP_PATH}:sourceTreeAnchors[{index}]"
+        if not isinstance(anchor, dict):
+            F.add("USF-GENERATED-SDK-001", subject, "source-tree anchor must be an object")
+            continue
+        path = anchor.get("path")
+        blob_sha = anchor.get("blobSha")
+        if not _as_nonempty_string(path) or not _as_nonempty_string(blob_sha):
+            F.add("USF-GENERATED-SDK-001", subject, "source-tree anchor path and blobSha are required")
+            continue
+        if path in anchors_by_path:
+            F.add("USF-GENERATED-SDK-001", subject, f"duplicate source-tree anchor for {path}")
+        anchors_by_path[path] = blob_sha
+    for path in sorted(GENERATED_SDK_CLIENT_SOURCE_ANCHOR_PATHS):
+        blob_sha = anchors_by_path.get(path)
+        current_blob = _current_blob_sha(path, current_blob_shas=current_blob_shas)
+        if blob_sha is None:
+            F.add("USF-GENERATED-SDK-001", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  f"missing source-tree anchor for {path}")
+        elif current_blob != blob_sha:
+            F.add("USF-GENERATED-SDK-001", path,
+                  "source-tree anchor does not match current worktree blob")
+
+    planted = readiness_map.get("plantedDefectCoverage")
+    if not isinstance(planted, list):
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "plantedDefectCoverage must be an array")
+    else:
+        covered_rules = {item.get("ruleId") for item in planted if isinstance(item, dict)}
+        missing_rules = sorted(GENERATED_SDK_CLIENT_REQUIRED_PLANTED_RULES - covered_rules)
+        if missing_rules:
+            F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  f"plantedDefectCoverage lacks rule coverage: {', '.join(missing_rules)}")
+
+    validator_coverage = set(_string_list(readiness_map.get("validatorCoverage")))
+    if GENERATED_SDK_CLIENT_VALIDATOR not in validator_coverage:
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "validatorCoverage lacks generated SDK/client readiness validator")
+
+    package = readiness_map.get("packageReadiness")
+    package_data = _load_client_package_manifest(F, package_manifest=package_manifest)
+    if not isinstance(package, dict):
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "packageReadiness is missing")
+        package = {}
+    if isinstance(package_data, dict):
+        if package.get("packageName") != package_data.get("name"):
+            F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  "packageReadiness.packageName does not match packages/client/package.json")
+        if package.get("versionFixture") != package_data.get("version"):
+            F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  "packageReadiness.versionFixture does not match packages/client/package.json")
+        if package.get("packagePrivate") is not True or package_data.get("private") is not True:
+            F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  "client package must remain private while publication readiness is not claimed")
+    if package.get("publicationReady") is True or package.get("npmPublicationClaim") is True:
+        F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "package publication must remain explicitly not claimed")
+    if package.get("publicationStatus") != "not-published-private-package-publication-not-claimed":
+        F.add("USF-GENERATED-SDK-004", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "package publication status must be the explicit private non-claim")
+
+    fixtures = readiness_map.get("fixturesAndExamples")
+    if not isinstance(fixtures, dict):
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "fixturesAndExamples is missing")
+    else:
+        if fixtures.get("authorityDerivedFromCanonicalContracts") is not True:
+            F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  "fixtures and examples must be marked as derived from canonical contracts")
+        if not _string_list(fixtures.get("sourceRefs")):
+            F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                  "fixtures and examples require sourceRefs")
+
+    metadata_projection = readiness_map.get("metadataProjection")
+    if not isinstance(metadata_projection, dict):
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "metadataProjection is missing")
+        metadata_projection = {}
+    required_fields = set(_string_list(metadata_projection.get("requiredFields")))
+    missing_metadata_fields = sorted(GENERATED_SDK_CLIENT_REQUIRED_METADATA_FIELDS - required_fields)
+    if missing_metadata_fields:
+        F.add("USF-GENERATED-SDK-003", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              f"metadataProjection lacks required fields: {', '.join(missing_metadata_fields)}")
+
+    client_ops_by_route = _client_operations_by_route_id(client_map)
+    operations = readiness_map.get("operations")
+    if not isinstance(operations, list):
+        F.add("USF-GENERATED-SDK-002", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "operations array is missing")
+        return
+    records_by_route = defaultdict(list)
+    for index, operation in enumerate(operations):
+        subject = f"{GENERATED_SDK_CLIENT_READINESS_MAP_PATH}:operations[{index}]"
+        if not isinstance(operation, dict):
+            F.add("USF-GENERATED-SDK-002", subject, "operation readiness record must be an object")
+            continue
+        route_id = operation.get("routeId")
+        if not _as_nonempty_string(route_id):
+            F.add("USF-GENERATED-SDK-002", subject, "routeId is missing")
+            continue
+        records_by_route[route_id].append((index, operation))
+
+    expected_route_ids = set(client_ops_by_route)
+    observed_route_ids = set(records_by_route)
+    for route_id in sorted(observed_route_ids - expected_route_ids):
+        F.add("USF-GENERATED-SDK-002", route_id, "generated SDK readiness record targets unknown routeId")
+    for route_id in sorted(expected_route_ids - observed_route_ids):
+        F.add("USF-GENERATED-SDK-002", route_id, "generated SDK readiness record is missing")
+    for route_id, rows in sorted(records_by_route.items()):
+        if len(rows) > 1:
+            F.add("USF-GENERATED-SDK-002", route_id, "generated SDK readiness record is duplicated")
+
+    supported_count = 0
+    excluded_count = 0
+    disposition_counts = {disposition: 0 for disposition in GENERATED_SDK_CLIENT_EXPECTED_EXPOSURE}
+    for route_id, client_operation in sorted(client_ops_by_route.items()):
+        rows = records_by_route.get(route_id, [])
+        if len(rows) != 1:
+            continue
+        index, operation = rows[0]
+        subject = f"{GENERATED_SDK_CLIENT_READINESS_MAP_PATH}:operations[{index}]"
+        client_disposition = client_operation.get("clientCallableDisposition")
+        generated = client_operation.get("generatedClientInput") if isinstance(client_operation, dict) else {}
+        if not isinstance(generated, dict):
+            generated = {}
+        supported = (client_disposition in GENERATED_SDK_CLIENT_SUPPORTED_DISPOSITIONS
+                     and generated.get("status") == "local-semantic-input-current"
+                     and generated.get("staleness") == "current-main")
+        if client_disposition in disposition_counts:
+            disposition_counts[client_disposition] += 1
+        expected_exposure = GENERATED_SDK_CLIENT_EXPECTED_EXPOSURE.get(client_disposition)
+        if operation.get("clientContractRef") != f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}#routeId={route_id}":
+            F.add("USF-GENERATED-SDK-002", subject, "clientContractRef does not target the client-contract map route record")
+        if operation.get("sourceMetadataRef") != f"{NON_UI_CLIENT_CONTRACT_MAP_PATH}#routeId={route_id}":
+            F.add("USF-GENERATED-SDK-003", subject, "sourceMetadataRef does not target the client-contract map route record")
+        if operation.get("sdkExposureDisposition") != expected_exposure:
+            F.add("USF-GENERATED-SDK-002", subject,
+                  f"sdkExposureDisposition does not match client disposition {client_disposition}")
+        readiness = operation.get("readiness")
+        if not isinstance(readiness, dict):
+            F.add("USF-GENERATED-SDK-002", subject, "readiness is missing")
+            readiness = {}
+        projected_fields = set(_string_list(operation.get("projectedMetadataFields")))
+        if not projected_fields and operation.get("metadataProjectionStatus") == "complete-from-client-contract-map":
+            projected_fields = required_fields
+        if supported:
+            supported_count += 1
+            if operation.get("generatedClientInputStatus") != "fresh-current-main":
+                F.add("USF-GENERATED-SDK-001", subject, "supported operation must use fresh-current-main generated-client input")
+            if readiness.get("generatedClientReady") is not True or readiness.get("sdkOperationReady") is not True:
+                F.add("USF-GENERATED-SDK-002", subject, "supported operation must be generated-client and SDK ready")
+            if operation.get("metadataProjectionStatus") != "complete-from-client-contract-map":
+                F.add("USF-GENERATED-SDK-003", subject, "supported operation lacks complete metadata projection status")
+            missing_fields = sorted(required_fields - projected_fields)
+            if missing_fields:
+                F.add("USF-GENERATED-SDK-003", subject,
+                      f"projectedMetadataFields lacks required fields: {', '.join(missing_fields)}")
+            for field in required_fields:
+                if not _source_operation_has_projected_metadata(client_operation, field):
+                    F.add("USF-GENERATED-SDK-003", subject,
+                          f"client-contract source lacks projected metadata field: {field}")
+        else:
+            excluded_count += 1
+            if operation.get("generatedClientInputStatus") != "not-authorised-for-generation":
+                F.add("USF-GENERATED-SDK-002", subject,
+                      "excluded operation must remain not-authorised-for-generation")
+            if readiness.get("generatedClientReady") is True or readiness.get("sdkOperationReady") is True:
+                F.add("USF-GENERATED-SDK-004", subject, "excluded operation must not be SDK or generated-client ready")
+            if not _as_nonempty_string(operation.get("exclusionRationale")):
+                F.add("USF-GENERATED-SDK-002", subject, "excluded operation requires an exclusionRationale")
+
+    coverage = readiness_map.get("operationCoverage")
+    if not isinstance(coverage, dict):
+        F.add("USF-GENERATED-SDK-002", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+              "operationCoverage is missing")
+    else:
+        expected_counts = {
+            "totalOperations": len(client_ops_by_route),
+            "sdkSupportedOperations": supported_count,
+            "sdkExcludedOperations": excluded_count,
+            "clientCallableLocalContractOperations": disposition_counts["client-callable-local-contract"],
+            "operatorToolingLocalContractOperations": disposition_counts["operator-tooling-local-contract"],
+            "internalSupportOnlyOperations": disposition_counts["internal-support-only"],
+            "notClaimedOperations": disposition_counts["not-claimed"],
+        }
+        for field, expected in expected_counts.items():
+            if coverage.get(field) != expected:
+                F.add("USF-GENERATED-SDK-002", GENERATED_SDK_CLIENT_READINESS_MAP_PATH,
+                      f"operationCoverage.{field} must be {expected}")
+
+
 CURRENT_MAIN_CAPABILITY_REALISATION_MAP_PATH = "docs/architecture/current-main-capability-service-realisation-map.json"
 CAPABILITY_REALISATION_REQUIRED_VALIDATOR = "validate-spec.current-main-capability-service-realisation-map"
 CAPABILITY_REALISATION_CLIENT_VALIDATOR = "validate-spec.non-ui-client-contract-map"
@@ -1795,7 +2171,9 @@ def validate_source_import_submanifest_targets(F, sub_path, entries, instance_id
 
 def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_paths=None,
                            evidence_ids=None, api_route_records=None, route_interface_coverage=None,
-                           client_contract_map=None, capability_realisation_map=None):
+                           client_contract_map=None, capability_realisation_map=None,
+                           generated_sdk_client_readiness_map=None, current_blob_shas=None,
+                           package_manifest=None):
     instance_id_to_paths = defaultdict(list)
     for p, data in data_by_path.items():
         if isinstance(data, dict) and isinstance(data.get("id"), str):
@@ -1872,6 +2250,13 @@ def validate_instance_data(ctx, F, data_by_path, source_paths=None, existing_pat
         data_by_path,
         client_contract_map=client_contract_map,
         capability_realisation_map=capability_realisation_map,
+    )
+    validate_generated_sdk_client_readiness_map(
+        F,
+        client_contract_map=client_contract_map,
+        generated_readiness_map=generated_sdk_client_readiness_map,
+        current_blob_shas=current_blob_shas,
+        package_manifest=package_manifest,
     )
 
 
@@ -2830,7 +3215,7 @@ def check_selftest(ctx, F):
             continue
         sandbox = copy.deepcopy(ctx)
         try:
-            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map"}:
+            if patch["target"] not in {"instances", "evidence", "evidence-paths", "real-adrs", "real-inventory", "validator-reports", "report-discovery", "directive-text", "readiness-docs", "pr-paths", "anchor-payloads", "import-manifest-data", "semantic-coverage-matrix", "source-import-submanifest-targets", "authority-index", "app-surface-plan-paths", "client-contract-map", "capability-realisation-map", "generated-sdk-client-readiness-map"}:
                 apply_patch(sandbox, patch)
         except Exception as e:
             F.add("USF-SELFTEST-001", df, f"patch failed to apply: {e}")
@@ -3030,6 +3415,19 @@ def check_selftest(ctx, F):
                 instances,
                 client_contract_map=patch.get("clientContractMap"),
                 capability_realisation_map=record,
+            )
+        elif patch["target"] == "generated-sdk-client-readiness-map":
+            record = patch.get("record")
+            client_contract_map = patch.get("clientContractMap")
+            if not isinstance(record, dict) or not isinstance(client_contract_map, dict):
+                F.add("USF-SELFTEST-001", df, "generated-sdk-client-readiness-map planted-defect needs record and clientContractMap objects")
+                continue
+            validate_generated_sdk_client_readiness_map(
+                f2,
+                client_contract_map=client_contract_map,
+                generated_readiness_map=record,
+                current_blob_shas=patch.get("currentBlobShas"),
+                package_manifest=patch.get("packageManifest"),
             )
         else:
             run_all_checks(sandbox, f2)

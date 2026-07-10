@@ -1,0 +1,201 @@
+{
+  "target": "generated-sdk-client-readiness-map",
+  "expectedRule": "USF-GENERATED-SDK-001",
+  "currentBlobShas": {
+    "docs/architecture/non-ui-client-callable-contract-map.json": "sha-ok",
+    "docs/architecture/api-route-interface-contract-coverage.json": "sha-ok",
+    "docs/architecture/shared-client-sdk-semantic-surface.json": "sha-ok",
+    "docs/architecture/generated-client-contract-validation-semantics.json": "sha-ok",
+    "docs/architecture/app-surface-shared-client-consumption-path.json": "sha-ok",
+    "packages/client/package.json": "sha-ok",
+    "packages/client/src/index.ts": "sha-ok",
+    "packages/contracts/src/api-surface.ts": "sha-ok",
+    "packages/openapi/openapi.json": "sha-ok"
+  },
+  "packageManifest": {
+    "name": "@foundation/client",
+    "version": "0.1.0",
+    "private": true
+  },
+  "clientContractMap": {
+    "operations": [
+      {
+        "routeId": "example.get",
+        "clientCallableDisposition": "client-callable-local-contract",
+        "operationMetadata": {
+          "authScheme": "dev-header-keycloak-bearer-future",
+          "tenantScope": "tenant-header-query",
+          "dataClassification": "confidential"
+        },
+        "authorityMapping": {
+          "authScheme": "dev-header-keycloak-bearer-future",
+          "tenantScope": "tenant-header-query",
+          "permissionRefs": [
+            "example.read"
+          ],
+          "validationRefs": [
+            "request"
+          ],
+          "errorRefs": [
+            "ApiErrorResponse"
+          ],
+          "auditEventRefs": [
+            "example.audit"
+          ],
+          "telemetryRefs": [
+            "example.telemetry"
+          ],
+          "requestSemanticsRef": "request",
+          "responseSemanticsRef": "response",
+          "proofRefs": [
+            "proof"
+          ]
+        },
+        "generatedClientInput": {
+          "status": "local-semantic-input-current",
+          "staleness": "current-main"
+        }
+      }
+    ]
+  },
+  "record": {
+    "readinessScope": "bounded-current-main-contract-generation-input-and-sdk-operation-projection",
+    "generatedOutputAuthority": "lower-authority-projection-only",
+    "sourceTreeAnchors": [
+      {
+        "path": "docs/architecture/non-ui-client-callable-contract-map.json",
+        "blobSha": "sha-stale"
+      },
+      {
+        "path": "docs/architecture/api-route-interface-contract-coverage.json",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "docs/architecture/app-surface-shared-client-consumption-path.json",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "packages/client/package.json",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "packages/client/src/index.ts",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "packages/contracts/src/api-surface.ts",
+        "blobSha": "sha-ok"
+      },
+      {
+        "path": "packages/openapi/openapi.json",
+        "blobSha": "sha-ok"
+      }
+    ],
+    "readinessClaims": {
+      "generatedClientReady": true,
+      "sdkReady": true,
+      "packagePublicationReady": false,
+      "productUiReady": false,
+      "publicApiReady": false,
+      "runtimeProductReady": false,
+      "publicDeploymentReady": false,
+      "publicFqdnReady": false,
+      "deploymentReady": false,
+      "stagingReady": false,
+      "productionReady": false,
+      "liveProviderReady": false,
+      "complianceReady": false,
+      "monetisationReady": false,
+      "appStoreReady": false,
+      "humanAcceptanceComplete": false
+    },
+    "metadataProjection": {
+      "requiredFields": [
+        "authScheme",
+        "tenantScope",
+        "permissionRefs",
+        "validationRefs",
+        "errorRefs",
+        "auditEventRefs",
+        "telemetryRefs",
+        "dataClassification",
+        "requestSemanticsRef",
+        "responseSemanticsRef",
+        "proofRefs"
+      ]
+    },
+    "packageReadiness": {
+      "packageName": "@foundation/client",
+      "versionFixture": "0.1.0",
+      "packagePrivate": true,
+      "publicationReady": false,
+      "npmPublicationClaim": false,
+      "publicationStatus": "not-published-private-package-publication-not-claimed"
+    },
+    "fixturesAndExamples": {
+      "authorityDerivedFromCanonicalContracts": true,
+      "sourceRefs": [
+        "packages/contracts/src/api-surface.ts#examples"
+      ]
+    },
+    "operations": [
+      {
+        "routeId": "example.get",
+        "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=example.get",
+        "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=example.get",
+        "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+        "generatedClientInputStatus": "fresh-current-main",
+        "metadataProjectionStatus": "complete-from-client-contract-map",
+        "readiness": {
+          "generatedClientReady": true,
+          "sdkOperationReady": true
+        }
+      }
+    ],
+    "operationCoverage": {
+      "totalOperations": 1,
+      "sdkSupportedOperations": 1,
+      "sdkExcludedOperations": 0
+    },
+    "validatorCoverage": [
+      "validate-spec.generated-sdk-client-readiness-map"
+    ],
+    "plantedDefectCoverage": [
+      {
+        "ruleId": "USF-GENERATED-SDK-001"
+      },
+      {
+        "ruleId": "USF-GENERATED-SDK-002"
+      },
+      {
+        "ruleId": "USF-GENERATED-SDK-003"
+      },
+      {
+        "ruleId": "USF-GENERATED-SDK-004"
+      }
+    ],
+    "nonClaims": [
+      "no-package-publication-claim",
+      "no-product-ui-readiness-claim",
+      "no-public-api-readiness-claim",
+      "no-runtime-product-readiness-upgrade",
+      "no-public-fqdn-claim",
+      "no-staging-claim",
+      "no-production-claim",
+      "no-deployment-claim",
+      "no-live-provider-claim",
+      "no-compliance-claim",
+      "no-monetisation-claim",
+      "no-app-store-claim",
+      "no-human-acceptance-claim"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "target": "generated-sdk-client-readiness-map",
+  "expectedRule": "USF-GENERATED-SDK-002",
+  "clientContractMap": {
+    "operations": [
+      {
+        "routeId": "example.get",
+        "clientCallableDisposition": "client-callable-local-contract",
+        "generatedClientInput": {
+          "status": "local-semantic-input-current",
+          "staleness": "current-main"
+        }
+      }
+    ]
+  },
+  "record": {
+    "readinessScope": "bounded-current-main-contract-generation-input-and-sdk-operation-projection",
+    "generatedOutputAuthority": "lower-authority-projection-only",
+    "operations": []
+  }
+}
