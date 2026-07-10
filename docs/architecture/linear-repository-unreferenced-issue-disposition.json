@@ -9,8 +9,8 @@
   "repositoryReferenceScan": {
     "scope": "Current exact repository issue-key text search excluding the original delivery audit artifact, this disposition artifact, .git, and local AI-agent runtime directories such as .claude and .codex.",
     "auditSetIssueCount": 138,
-    "repositoryReferencePresentCount": 33,
-    "requiresSafeFullContentDispositionCount": 105,
+    "repositoryReferencePresentCount": 34,
+    "requiresSafeFullContentDispositionCount": 104,
     "requiresSafeFullContentDispositionFollowUpIssueId": "USF-1008",
     "doesNotInspectRawLinearDescriptionsOrComments": true,
     "doesNotClaimRepositoryReferenceEqualsCompletion": true
@@ -2721,15 +2721,15 @@
       "usf1044Disposition": {
         "issueId": "USF-1044",
         "batchId": "batch-4-ci-manual-proof-tooling-guardrails",
-        "recordedAtUtc": "2026-07-09T23:14:02Z",
-        "currentDecision": "pending",
-        "decision": "pending",
-        "evidencePath": null,
+        "recordedAtUtc": "2026-07-10T01:42:46Z",
+        "currentDecision": "rejected",
+        "decision": "rejected-current-main-redraft-required",
+        "evidencePath": "origin/preserve/1044-final-gate-reland",
         "repositoryFilesLanded": [],
-        "rationale": "Not handled in Batch 1. This key remains pending for the named later USF-1044 batch and must be re-landed, re-implemented, or rejected against current origin/main before USF-1044 can complete.",
-        "validatorCoverage": "Pending; must be recorded when the later batch lands or rejects this key.",
-        "proofEvidenceStatus": "Pending; no proof or readiness claim is made by this pending disposition.",
-        "followUpRequired": true,
+        "rationale": "Batch 4 rejects the stale manual proof workflow dispatch deliverable from preserved evidence. The preserved branch no longer carries .github/workflows/dispatch-proof.yml or tools/dispatch-proof/, and adding a new workflow dispatch path against current main would require a fresh current-main design for workflow naming, runner routing, fork safety, credential boundaries, and guardrail coverage. No stale workflow or dispatch tool is accepted into current main.",
+        "validatorCoverage": "Rejected; no new validator claim is made for USF-990. Current validation confirms the repository remains clean without adding manual dispatch workflow files.",
+        "proofEvidenceStatus": "Batch 4 source changes require proof-cockpit evidence to be re-pinned for source-tree freshness before merge; no readiness, deployment, staging, production, live-provider, compliance, store, release, or human-acceptance claim is made.",
+        "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
           "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
@@ -2759,15 +2759,15 @@
       "usf1044Disposition": {
         "issueId": "USF-1044",
         "batchId": "batch-4-ci-manual-proof-tooling-guardrails",
-        "recordedAtUtc": "2026-07-09T23:14:02Z",
-        "currentDecision": "pending",
-        "decision": "pending",
-        "evidencePath": null,
+        "recordedAtUtc": "2026-07-10T01:42:46Z",
+        "currentDecision": "rejected",
+        "decision": "rejected-current-main-redraft-required",
+        "evidencePath": "origin/preserve/1044-final-gate-reland",
         "repositoryFilesLanded": [],
-        "rationale": "Not handled in Batch 1. This key remains pending for the named later USF-1044 batch and must be re-landed, re-implemented, or rejected against current origin/main before USF-1044 can complete.",
-        "validatorCoverage": "Pending; must be recorded when the later batch lands or rejects this key.",
-        "proofEvidenceStatus": "Pending; no proof or readiness claim is made by this pending disposition.",
-        "followUpRequired": true,
+        "rationale": "Batch 4 rejects the stale workflow-guardrails patch from preserved evidence. Current validate-spec already carries the PR tooling guardrail path and the preserved branch diff would remove newer Batch 2 proof-cockpit tooling authorization. Replaying the stale branch would weaken current validator state. Any future workflow guardrail tranche needs a fresh current-main implementation instead of stale patch reapplication.",
+        "validatorCoverage": "Rejected; no new validator claim is made for USF-991. Current validation confirms the existing validate-spec surface remains intact and no workflow guardrail weakening is introduced.",
+        "proofEvidenceStatus": "Batch 4 source changes require proof-cockpit evidence to be re-pinned for source-tree freshness before merge; no readiness, deployment, staging, production, live-provider, compliance, store, release, or human-acceptance claim is made.",
+        "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
           "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
@@ -2797,13 +2797,15 @@
     },
     {
       "issueId": "USF-994",
-      "disposition": "requires-safe-full-content-disposition",
-      "repositoryReferenceEvidencePathSample": [],
-      "repositoryReferenceEvidencePathSampleCount": 0,
-      "repositoryReferenceEvidenceTotalPathCount": 0,
-      "followUpIssueId": "USF-1008",
-      "completionClaim": "not-complete",
-      "reason": "No current exact repository reference was found outside the original audit artifact and disposition artifact. Classification requires safe full Linear description and comment evidence and is carried by USF-1008.",
+      "disposition": "repository-reference-present-current",
+      "repositoryReferenceEvidencePathSample": [
+        "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json"
+      ],
+      "repositoryReferenceEvidencePathSampleCount": 1,
+      "repositoryReferenceEvidenceTotalPathCount": 1,
+      "followUpIssueId": null,
+      "completionClaim": "reference-presence-only",
+      "reason": "Current repository reference exists. This is reference-presence-only traceability and does not by itself prove semantic completion.",
       "fullContentDisposition": {
         "classification": "genuine-missing-deliverable",
         "reason": "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json absent from origin/main (USF-PR-TOOL rule exists but the planted-defect coverage does not); PR 298 merged only to the unmerged orchestration branch.",
@@ -2815,15 +2817,18 @@
       "usf1044Disposition": {
         "issueId": "USF-1044",
         "batchId": "batch-4-ci-manual-proof-tooling-guardrails",
-        "recordedAtUtc": "2026-07-09T23:14:02Z",
-        "currentDecision": "pending",
-        "decision": "pending",
-        "evidencePath": null,
-        "repositoryFilesLanded": [],
-        "rationale": "Not handled in Batch 1. This key remains pending for the named later USF-1044 batch and must be re-landed, re-implemented, or rejected against current origin/main before USF-1044 can complete.",
-        "validatorCoverage": "Pending; must be recorded when the later batch lands or rejects this key.",
-        "proofEvidenceStatus": "Pending; no proof or readiness claim is made by this pending disposition.",
-        "followUpRequired": true,
+        "recordedAtUtc": "2026-07-10T01:42:46Z",
+        "currentDecision": "re-implemented",
+        "decision": "re-implemented",
+        "evidencePath": "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json",
+        "repositoryFilesLanded": [
+          "tools/validate-spec/planted-defects/pr-added-unauthorized-tooling.json",
+          "docs/architecture/linear-repository-unreferenced-issue-disposition.json"
+        ],
+        "rationale": "Batch 4 re-implemented USF-994 against current main by preserving the existing USF-PR-TOOL unauthorized-tooling planted defect and adding explicit USF-994 traceability. The stale preserved validate-spec patch was not replayed because it would remove newer current-main proof-cockpit tooling authorization.",
+        "validatorCoverage": "Covered by validate-spec:selftest, validate-spec, repo:validate, and PR-scope validate-spec against origin/main.",
+        "proofEvidenceStatus": "Batch 4 source changes require proof-cockpit evidence to be re-pinned for source-tree freshness before merge; generated reports remain lower authority and no readiness claim is made.",
+        "followUpRequired": false,
         "nonClaims": [
           "Linear remains work tracking only and does not define USF semantic authority.",
           "Repository references are traceability evidence only and do not by themselves prove semantic completion.",
@@ -3060,15 +3065,15 @@
       "intentionally-external": 1
     },
     "genuineMissingDeliverableReLandIssueId": "USF-1044",
-    "rootCauseNote": "The original sixteen genuine-missing-deliverable keys traced to the unmerged branch orchestration/usf-952-final-gate. USF-1044 now records current-main batch dispositions: Batch 1 re-landed eight documentation deliverables, Batch 2 re-implemented three proof-cockpit deliverables, and Batch 3 re-landed two evidence reuse and invalidation validator deliverables. The remaining three keys stay pending until their later batch re-lands, re-implements, or rejects them with repository evidence.",
+    "rootCauseNote": "The original sixteen genuine-missing-deliverable keys traced to the unmerged branch orchestration/usf-952-final-gate. USF-1044 now records current-main batch dispositions: Batch 1 re-landed eight documentation deliverables, Batch 2 re-implemented three proof-cockpit deliverables, Batch 3 re-landed two evidence reuse and invalidation validator deliverables, and Batch 4 rejected two stale workflow guardrail patches while re-implementing the unauthorized-tooling planted-defect traceability. No USF-1044 key remains pending.",
     "nonClaims": "Classifications are repository-owned operational accounting. They do not make Linear content semantic authority, do not treat Done status as proof, and claim no readiness."
   },
   "usf1044DispositionSummary": {
     "issueId": "USF-1044",
-    "recordedAtUtc": "2026-07-10T01:10:28Z",
-    "currentOriginMainAtBatchStart": "81ea4dc1c33e76757c32d015945cd2fbeeb6a646",
+    "recordedAtUtc": "2026-07-10T01:42:46Z",
+    "currentOriginMainAtBatchStart": "bc16662761939b2c7b2f49a29bc0db8dc5a6da86",
     "recoveryEvidenceBranch": "origin/preserve/1044-final-gate-reland",
-    "batchStatus": "batch-3-relanded-evidence-reuse-and-invalidation-tooling",
+    "batchStatus": "batch-4-complete-all-sixteen-dispositions",
     "decisions": {
       "reLanded": [
         "USF-618",
@@ -3085,21 +3090,21 @@
       "reImplemented": [
         "USF-969",
         "USF-970",
-        "USF-971"
-      ],
-      "rejected": [],
-      "pending": [
-        "USF-990",
-        "USF-991",
+        "USF-971",
         "USF-994"
-      ]
+      ],
+      "rejected": [
+        "USF-990",
+        "USF-991"
+      ],
+      "pending": []
     },
     "counts": {
       "total": 16,
       "reLanded": 10,
-      "reImplemented": 3,
-      "rejected": 0,
-      "pending": 3
+      "reImplemented": 4,
+      "rejected": 2,
+      "pending": 0
     },
     "nonClaims": [
       "Linear remains work tracking only and does not define USF semantic authority.",
@@ -3108,22 +3113,21 @@
       "No external repository is treated as USF authority.",
       "Generated reports remain lower authority than retained source evidence and validator results."
     ],
-    "validationEvidence": {
-      "recordedAtUtc": "2026-07-09T23:40:34Z",
-      "literalJsonToolWildcardCommand": "failed because Python json.tool accepts one input file plus an optional output file after shell wildcard expansion; equivalent per-file strict parse passed",
-      "commandsPassed": [
-        "for f in docs/architecture/*.json; do python3 -m json.tool \"$f\" >/dev/null || exit 1; done",
-        "corepack pnpm repo:validate",
-        "corepack pnpm validate-spec",
-        "corepack pnpm validate-spec:selftest",
-        "corepack pnpm proof-cockpit:validate",
-        "corepack pnpm proof-cockpit:selftest",
-        "corepack pnpm linear-boundary:validate",
-        "corepack pnpm linear-boundary:selftest",
-        "git diff --check",
-        "make proof-review-repin"
-      ],
-      "proofCockpitFreshness": "proof-cockpit machine QA regenerated and promoted because Batch 1 source changes moved the validator source tree hash; generated reports remain lower authority and no readiness claim is made"
-    }
+  "validationEvidence": {
+    "recordedAtUtc": "2026-07-10T01:42:46Z",
+    "status": "batch-4-validation-recorded-in-pr-and-linear-after-proof-repin",
+    "commandsRequired": [
+      "per-file strict JSON parse for architecture JSON and changed JSON fixtures",
+      "repository aggregate validation",
+      "spec validator and selftest",
+      "proof-cockpit validator and selftest",
+      "linear-boundary validator and selftest",
+      "PR-scope spec validator against origin/main",
+      "whitespace diff check",
+      "proof review re-pin"
+    ],
+    "proofCockpitFreshness": "Batch 4 source changes require proof-cockpit machine evidence to be regenerated and promoted before merge. The exact run is recorded in the PR and Linear update after re-pin so this source artifact is not modified after proof freshness is established.",
+    "nonClaim": "This field does not treat generated reports as authority and does not upgrade readiness, deployment, staging, production, live-provider, compliance, store, release, or human-acceptance posture."
   }
+}
 }
