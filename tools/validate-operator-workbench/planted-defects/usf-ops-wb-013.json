@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-013",
+  "expectedRuleIds": [
+    "USF-OPS-WB-013"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-013",
+  "slug": "planted-coverage",
+  "description": "Provides two planted defects for the same rule (or zero for another) so per-rule distinct coverage breaks.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}
