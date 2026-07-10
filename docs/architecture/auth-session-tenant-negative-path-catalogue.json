@@ -1,0 +1,328 @@
+{
+  "id": "auth-session-tenant-negative-path-catalogue",
+  "title": "Auth, Session, Tenant, and Negative-Path Proof Expansion Catalogue",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "This catalogue is a lower-authority supporting map over the higher-authority authentication-slice proof-evidence, semantic contracts, interface/audit/event/observability instances, and source-import manifest. It records the negative-path (denial / fail-closed) coverage posture for the auth, session, and tenant slice. It defines no semantics, upgrades no readiness, and never overrides a contract, proof-evidence record, or validator. A case is only marked dev-proven when it binds to a resolving on-disk proof artefact recording the exercised negative outcome; every other case is an explicit recorded-gap or test-rung-deferred entry carrying its next rung.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1076",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    "evidence/proof-evidence/authentication-slice-proof.json",
+    "evidence/proof-evidence/observability-signals-runtime-proof.json",
+    "spec/instances/semantic-contract/authentication-platform.json",
+    "spec/instances/semantic-contract/user-identity-and-tenant-membership.json",
+    "spec/instances/semantic-contract/tenant-isolation-proof.json",
+    "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+    "spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json",
+    "spec/instances/semantic-contract/api-keys-personal-access-tokens.json",
+    "spec/instances/semantic-contract/delegated-administration-roles.json",
+    "spec/instances/interface-contract/authentication-login-api.json",
+    "spec/instances/audit-event/authentication-login.json",
+    "spec/instances/event-contract/authentication-login-audit.json",
+    "spec/instances/observability-signal/authentication-login-audit.json",
+    "spec/registries/authentication-slice-source-import-manifest.json",
+    "tools/validate-runtime/validate-runtime.py"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "commit": "c5ee008bc5e3845a236703c0c3bc260ed0c38d73",
+    "stale": false,
+    "binding": "revalidated-against-authentication-slice-proof-and-contracts-in-head"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-browser-session-readiness-claim",
+    "no-public-gateway-readiness-claim",
+    "no-live-idp-readiness-claim"
+  ],
+  "dimensions": [
+    "role-matrix",
+    "tenant-role-mismatch",
+    "expired-token",
+    "synthetic-token",
+    "service-actor",
+    "operator-only-route-access",
+    "client-callable-route-access",
+    "cross-tenant-denial",
+    "provider-failure-fail-closed"
+  ],
+  "cases": [
+    {
+      "caseId": "AUTH-NEG-001",
+      "dimension": "role-matrix",
+      "scenario": "A non-admin tenant actor attempts a delegated-administration grant or revoke operation. Per the delegated-administration-roles contract this returns static-permission-denied with no mutation and no success audit. No on-disk proof harness exercises the RBAC role-matrix denial yet, so this is recorded as a gap rather than claimed as proven.",
+      "expectedOutcome": "forbidden",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a USF hermetic RBAC role-matrix negative proof harness that exercises static-permission-denied for every non-admin role/permission pair and emits proof-evidence under evidence/proof-evidence/.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-live-provider-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-002",
+      "dimension": "role-matrix",
+      "scenario": "The manager role, which holds only a legacy member bundle without tenant member-management permissions, attempts a tenant member-management operation. Per the user-identity-and-tenant-membership contract this is denied. Semantic definition is on disk; no exercised proof artefact is, so this is a recorded gap.",
+      "expectedOutcome": "forbidden",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Extend the RBAC role-matrix negative proof harness to assert the manager legacy bundle cannot invoke member-management routes and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-product-ui-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-003",
+      "dimension": "tenant-role-mismatch",
+      "scenario": "A support-mode system-admin whose effective tenant is A requests tenant B's FQDN. Per the support-mode-break-glass-access contract only the matching effective tenant's FQDN is accessible, so the cross-tenant request is denied (wrong-tenant FQDN denial). The contract sourceRefs are historical lineage not present on disk, so this is a recorded gap.",
+      "expectedOutcome": "deny",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic support-mode wrong-tenant proof rung that binds an effective tenant A session and asserts tenant B FQDN access is denied, emitting proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-live-provider-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-004",
+      "dimension": "tenant-role-mismatch",
+      "scenario": "A membership in tenant A is projected onto a session actor for tenant B. Per the user-identity-and-tenant-membership contract, identity is projected only through verified membership and fails closed for other-tenant membership. Semantic definition is on disk; no exercised proof artefact is, so this is a recorded gap.",
+      "expectedOutcome": "deny",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic membership-projection proof rung asserting an other-tenant membership yields no session actor for the requested tenant, emitting proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-product-ui-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-005",
+      "dimension": "expired-token",
+      "scenario": "The authentication login route receives a request that carries no valid authenticated session. The proof-only harness observed the no-session response outcome, minting no authenticated session and failing closed to unauthorized. An expired session token is one form of the non-valid-session refusal path this proof exercised; the explicit TTL-boundary variant is deferred to AUTH-NEG-006.",
+      "expectedOutcome": "unauthorized",
+      "evidenceRef": "evidence/proof-evidence/authentication-slice-proof.json",
+      "status": "dev-proven",
+      "auditRef": "spec/instances/audit-event/authentication-login.json",
+      "telemetryRef": "evidence/proof-evidence/observability-signals-runtime-proof.json",
+      "redactionRef": "spec/instances/interface-contract/authentication-login-api.json",
+      "correlationRef": "spec/instances/observability-signal/authentication-login-audit.json",
+      "nonClaims": [
+        "no-live-idp-readiness-claim",
+        "no-browser-session-readiness-claim",
+        "no-runtime-product-readiness-upgrade"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-006",
+      "dimension": "expired-token",
+      "scenario": "A session token exactly at and just past its time-to-live boundary is rejected. The proof harness exercised the absent/invalid session refusal but not the explicit TTL-expiry boundary, so this rung is deferred rather than claimed proven.",
+      "expectedOutcome": "unauthorized",
+      "evidenceRef": "gap",
+      "status": "test-rung-deferred",
+      "nextRung": "Add a hermetic TTL-boundary expiry proof rung exercising a token at expiry-1, expiry, and expiry+1 and emit proof-evidence under evidence/proof-evidence/.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-live-idp-readiness-claim",
+        "no-browser-session-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-007",
+      "dimension": "synthetic-token",
+      "scenario": "A login attempt whose provider assertion does not authenticate (an unverifiable or forged credential) yields the denied-login response outcome and mints no session. The proof-only harness observed the denied-login outcome at the login route boundary; this binds the synthetic/forged-credential denial to that exercised outcome.",
+      "expectedOutcome": "deny",
+      "evidenceRef": "evidence/proof-evidence/authentication-slice-proof.json",
+      "status": "dev-proven",
+      "auditRef": "spec/instances/audit-event/authentication-login.json",
+      "telemetryRef": "evidence/proof-evidence/observability-signals-runtime-proof.json",
+      "redactionRef": "spec/instances/interface-contract/authentication-login-api.json",
+      "correlationRef": "spec/instances/observability-signal/authentication-login-audit.json",
+      "nonClaims": [
+        "no-live-idp-readiness-claim",
+        "no-browser-session-readiness-claim",
+        "no-runtime-product-readiness-upgrade"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-008",
+      "dimension": "synthetic-token",
+      "scenario": "A structurally valid but forged token (tampered signature, wrong issuer, or wrong audience) is rejected at signature verification. The current proof harness observes denied-login generically but does not isolate signature-verification negatives, so this rung is deferred.",
+      "expectedOutcome": "unauthorized",
+      "evidenceRef": "gap",
+      "status": "test-rung-deferred",
+      "nextRung": "Add a hermetic signature-verification negative proof rung (tampered signature, wrong issuer, wrong audience) and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-live-idp-readiness-claim",
+        "no-browser-session-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-009",
+      "dimension": "service-actor",
+      "scenario": "A service or machine actor authenticating with an API key or personal access token attempts a browser-session-only route. Per the api-keys-personal-access-tokens contract a service actor cannot mint an interactive session, so the request is denied. No on-disk proof harness exercises service-actor route separation yet, so this is a recorded gap.",
+      "expectedOutcome": "forbidden",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic service-actor negative proof rung asserting an API-key/PAT actor is denied browser-session-only routes and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-live-provider-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-010",
+      "dimension": "service-actor",
+      "scenario": "A revoked API key or personal access token is presented for authentication. Per the api-keys-personal-access-tokens contract a revoked secret authenticates as no actor. Semantic definition is on disk; no exercised proof artefact is, so this is a recorded gap.",
+      "expectedOutcome": "unauthorized",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic revoked-credential proof rung asserting a revoked API key/PAT authenticates as no actor and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-live-provider-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-011",
+      "dimension": "operator-only-route-access",
+      "scenario": "A tenant (non-operator) actor calls an operator-only support-mode or delegated-administration route. Per the support-mode and delegated-administration contracts these routes require platform-admin access, so the tenant actor is forbidden. Semantic definition is on disk; no exercised proof artefact is, so this is a recorded gap.",
+      "expectedOutcome": "forbidden",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic operator-only route-guard proof rung asserting a tenant actor is forbidden from platform-admin routes and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-public-gateway-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-012",
+      "dimension": "client-callable-route-access",
+      "scenario": "An anonymous or unauthenticated client calls a permission-gated follow-on route rather than the anonymous login initiation route. Per the authentication-login-api interface contract, fail-closed authorization defaults deny permission-gated follow-on access without an authenticated session. Semantic definition is on disk; no exercised proof artefact isolates this route class, so this is a recorded gap.",
+      "expectedOutcome": "forbidden",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic client-callable route-guard proof rung asserting anonymous access to permission-gated follow-on routes is denied while the anonymous login route remains callable, and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-public-gateway-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-013",
+      "dimension": "cross-tenant-denial",
+      "scenario": "A tenant A actor attempts to read or write tenant B rows. Per the tenant-isolation-proof contract, row-level security yields a cross-tenant count of zero and foreign-key rejection, failing closed to no cross-tenant data. The proof sourceRefs are historical lineage not present on disk, so this is an explicit recorded gap.",
+      "expectedOutcome": "deny",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic cross-tenant RLS negation proof rung asserting a tenant A actor observes zero tenant B rows and is rejected on cross-tenant writes, and emit proof-evidence under evidence/proof-evidence/.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-live-provider-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-014",
+      "dimension": "cross-tenant-denial",
+      "scenario": "An untrusted, unresolved, apex, reserved, or malformed host is presented. Per the tenant-identity-record-and-fqdn contract, host resolution fails closed to a null tenant context rather than a partial or fallback tenant, so no tenant data is served. Semantic definition is on disk; no exercised proof artefact is, so this is a recorded gap.",
+      "expectedOutcome": "deny",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a hermetic host-resolution negative proof rung asserting untrusted/unresolved hosts resolve to a null tenant context and serve no tenant data, and emit proof-evidence.",
+      "auditRef": "gap",
+      "telemetryRef": "gap",
+      "redactionRef": "gap",
+      "correlationRef": "gap",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade",
+        "no-public-gateway-readiness-claim"
+      ]
+    },
+    {
+      "caseId": "AUTH-NEG-015",
+      "dimension": "provider-failure-fail-closed",
+      "scenario": "The identity provider dependency fails during a login attempt. The proof-only harness observed the provider-failure response outcome, minting no session and failing closed rather than degrading open. The harness runs in hermetic-mock provider mode with no live-external-provider claim.",
+      "expectedOutcome": "fail-closed",
+      "evidenceRef": "evidence/proof-evidence/authentication-slice-proof.json",
+      "status": "dev-proven",
+      "auditRef": "spec/instances/audit-event/authentication-login.json",
+      "telemetryRef": "evidence/proof-evidence/observability-signals-runtime-proof.json",
+      "redactionRef": "spec/instances/interface-contract/authentication-login-api.json",
+      "correlationRef": "spec/instances/observability-signal/authentication-login-audit.json",
+      "nonClaims": [
+        "no-live-idp-readiness-claim",
+        "no-live-provider-claim",
+        "no-runtime-product-readiness-upgrade"
+      ]
+    }
+  ],
+  "summary": {
+    "caseCount": 15,
+    "byStatus": {
+      "dev-proven": 3,
+      "recorded-gap": 10,
+      "test-rung-deferred": 2
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-003"],
+  "mustBeDistinct": true,
+  "description": "Outcome-vocabulary defect: a case records a non-denial expectedOutcome (allow) as the negative-path outcome.",
+  "mutation": "cases[0].expectedOutcome := allow"
+}

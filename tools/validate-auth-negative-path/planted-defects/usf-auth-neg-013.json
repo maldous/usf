@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-013"],
+  "mustBeDistinct": true,
+  "description": "Planted-coverage defect: the planted-defect set collapses to two entries both mapped to a single rule, breaking exactly-one-distinct-per-rule coverage.",
+  "mutation": "planted := [two defects both expecting USF-AUTH-NEG-001]"
+}

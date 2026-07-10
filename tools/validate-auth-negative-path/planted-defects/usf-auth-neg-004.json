@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-004"],
+  "mustBeDistinct": true,
+  "description": "Fabricated-proof defect: a dev-proven case points evidenceRef at a non-existent on-disk artefact.",
+  "mutation": "dev-proven case.evidenceRef := evidence/proof-evidence/does-not-exist.json"
+}
