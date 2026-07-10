@@ -1,0 +1,18 @@
+{
+  "target": "current-main-readiness-summary",
+  "expectedRule": "USF-CURRENT-READINESS-002",
+  "record": {
+    "domainSummaries": [
+      {
+        "domainId": "generated-sdk-client",
+        "readinessStatus": "ready",
+        "evidencePath": "docs/architecture/generated-sdk-client-readiness-map.json",
+        "readinessClaims": {
+          "generatedClientReady": true,
+          "sdkReady": true,
+          "packagePublicationReady": false
+        }
+      }
+    ]
+  }
+}

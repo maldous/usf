@@ -1,0 +1,292 @@
+{
+  "id": "current-main-readiness-summary",
+  "title": "Current-Main Readiness Summary",
+  "ownerIssueId": "USF-1050",
+  "childIssueId": "USF-1061",
+  "lifecycleState": "current-main-validator-enforced",
+  "authorityLevel": "validator-enforced-current-main-readiness-summary",
+  "readinessScope": "bounded-current-main-generated-sdk-public-api-and-runtime-product-readiness",
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainBinding": {
+    "status": "current-main",
+    "binding": "repository-file-content-validated-in-current-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only",
+    "linearStatusAuthority": "tracking-only-not-readiness-authority"
+  },
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact summarizes only readiness claims supported by current repository semantic authority, canonical interface contracts, validator rules, planted-defect selftests, and proof evidence.",
+    "generatedReportsMayDefineReadiness": false,
+    "linearMayDefineReadiness": false,
+    "openapiMayDefineSemantics": false,
+    "generatedClientsMayDefineSemantics": false,
+    "projectionOnlyMaySatisfyRuntimeProof": false,
+    "sourceCodeAloneMayDefineReadiness": false
+  },
+  "sourceAuthorities": [
+    "docs/architecture/generated-sdk-client-readiness-map.json",
+    "docs/architecture/public-api-readiness-map.json",
+    "docs/architecture/runtime-product-readiness-map.json",
+    "docs/architecture/current-main-capability-service-realisation-map.json",
+    "packages/openapi/openapi.json",
+    "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+  ],
+  "sourceTreeAnchors": [
+    {
+      "path": "docs/architecture/generated-sdk-client-readiness-map.json",
+      "blobSha": "529d1217a240a6df92c52e6113411b649d6f2906",
+      "authorityRole": "generated-sdk-client-readiness-map"
+    },
+    {
+      "path": "docs/architecture/public-api-readiness-map.json",
+      "blobSha": "c546a239dbe414a0f199c1a7b60d12d4d6f82a21",
+      "authorityRole": "public-api-readiness-map"
+    },
+    {
+      "path": "docs/architecture/runtime-product-readiness-map.json",
+      "blobSha": "b8b8f0cf49cc25cde5caf5b7d915c23615a05c7a",
+      "authorityRole": "runtime-product-readiness-map"
+    },
+    {
+      "path": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "blobSha": "de94d7177cd002a2e1d5e0da35160caaad8a2f0e",
+      "authorityRole": "current-main-capability-service-realisation-map"
+    },
+    {
+      "path": "packages/openapi/openapi.json",
+      "blobSha": "5b1f68bc48265c79260ce654dd2042f679b50e37",
+      "authorityRole": "lower-authority-openapi-projection"
+    },
+    {
+      "path": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+      "blobSha": "4ec95398bc778e6e1737ad70c00075ba779b564a",
+      "authorityRole": "proof-cockpit-freshness-evidence"
+    }
+  ],
+  "readinessClaims": {
+    "generatedClientReady": true,
+    "sdkReady": true,
+    "publicApiReady": true,
+    "runtimeProductReady": true,
+    "productUiReady": false,
+    "publicDeploymentReady": false,
+    "publicFqdnReady": false,
+    "deploymentReady": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "packagePublicationReady": false,
+    "complianceReady": false,
+    "monetisationReady": false,
+    "appStoreReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "domainSummaries": [
+    {
+      "domainId": "generated-sdk-client",
+      "ownerIssueIds": [
+        "USF-1051",
+        "USF-1052",
+        "USF-1053"
+      ],
+      "readinessStatus": "ready",
+      "evidencePath": "docs/architecture/generated-sdk-client-readiness-map.json",
+      "proofRung": "current-main-contract-generation-input-and-sdk-operation-projection",
+      "readinessClaims": {
+        "generatedClientReady": true,
+        "sdkReady": true,
+        "packagePublicationReady": false
+      },
+      "validatorCoverage": [
+        "validate-spec.generated-sdk-client-readiness-map",
+        "openapi:check"
+      ],
+      "plantedDefectCoverageRefs": [
+        "tools/validate-spec/planted-defects/generated-sdk-source-anchor-stale.json",
+        "tools/validate-spec/planted-defects/generated-sdk-operation-missing.json",
+        "tools/validate-spec/planted-defects/generated-sdk-metadata-missing.json",
+        "tools/validate-spec/planted-defects/generated-sdk-publication-overclaim.json"
+      ],
+      "proofEvidenceStatus": "Validator-enforced current-main generated SDK/client contract-input and operation projection readiness. Generated clients, examples, metadata projections, and reports remain lower authority.",
+      "authorityBoundary": {
+        "generatedReportMayDefineReadiness": false,
+        "linearMayDefineReadiness": false,
+        "projectionOnlyMayUpgradeReadiness": false
+      }
+    },
+    {
+      "domainId": "public-api",
+      "ownerIssueIds": [
+        "USF-1054",
+        "USF-1055",
+        "USF-1056"
+      ],
+      "readinessStatus": "ready",
+      "evidencePath": "docs/architecture/public-api-readiness-map.json",
+      "proofRung": "bounded-current-main-public-api-contract-readiness-no-public-deployment",
+      "readinessClaims": {
+        "publicApiReady": true,
+        "publicApiContractReady": true,
+        "publicApiDocumentationReady": true,
+        "publicDeploymentReady": false,
+        "publicFqdnReady": false
+      },
+      "validatorCoverage": [
+        "validate-spec.public-api-readiness-map",
+        "openapi:check"
+      ],
+      "plantedDefectCoverageRefs": [
+        "tools/validate-spec/planted-defects/public-api-source-anchor-stale.json",
+        "tools/validate-spec/planted-defects/public-api-operation-missing.json",
+        "tools/validate-spec/planted-defects/public-api-security-metadata-missing.json",
+        "tools/validate-spec/planted-defects/public-api-deployment-overclaim.json"
+      ],
+      "proofEvidenceStatus": "Validator-enforced current-main public API contract readiness only. OpenAPI is lower-authority projection evidence and no public deployment or public FQDN is claimed.",
+      "authorityBoundary": {
+        "generatedReportMayDefineReadiness": false,
+        "linearMayDefineReadiness": false,
+        "projectionOnlyMayUpgradeReadiness": false
+      }
+    },
+    {
+      "domainId": "runtime-product",
+      "ownerIssueIds": [
+        "USF-1057",
+        "USF-1058",
+        "USF-1059",
+        "USF-1060"
+      ],
+      "readinessStatus": "ready",
+      "evidencePath": "docs/architecture/runtime-product-readiness-map.json",
+      "proofRung": "local-dev-and-dev-compose-backed",
+      "readinessClaims": {
+        "runtimeProductReady": true,
+        "localDevRuntimeReady": true,
+        "composeRuntimeReady": true,
+        "routeBackedOperationRuntimeProofReady": true,
+        "runtimeStateBoundaryReady": true,
+        "runtimeNegativePathProofReady": true,
+        "stagingReady": false,
+        "productionReady": false,
+        "liveProviderReady": false
+      },
+      "validatorCoverage": [
+        "validate-runtime.runtime-product-readiness-map",
+        "runtime:validate",
+        "runtime:proof",
+        "runtime:proof:compose",
+        "runtime:proof:in-memory"
+      ],
+      "plantedDefectCoverageRefs": [
+        "tools/validate-runtime/planted-defects/runtime-product-source-anchor-stale.json",
+        "tools/validate-runtime/planted-defects/runtime-product-proof-rung-overclaim.json",
+        "tools/validate-runtime/planted-defects/runtime-product-route-projection-only.json",
+        "tools/validate-runtime/planted-defects/runtime-product-data-boundary-missing.json",
+        "tools/validate-runtime/planted-defects/runtime-product-negative-path-missing.json"
+      ],
+      "proofEvidenceStatus": "Bounded local executable runtime proof in dev-in-memory and dev-compose-backed modes only. Projection-only evidence cannot satisfy runtime proof.",
+      "authorityBoundary": {
+        "generatedReportMayDefineReadiness": false,
+        "linearMayDefineReadiness": false,
+        "projectionOnlyMayUpgradeReadiness": false,
+        "projectionOnlyMaySatisfyRuntimeProof": false
+      }
+    }
+  ],
+  "proofEvidence": {
+    "proofCockpitRunId": "qa-run-2026-07-10T09-19-57-001Z",
+    "sourceSha": "9a227a25dc32c34234952cca82449203eed8c04c",
+    "sourceTreeHash": "a74204ef5883d5f0e7643622c3b4bf5f1eae2c7921a7fb613a96693e0740915f",
+    "routes": 830,
+    "pass": 1282,
+    "fail": 0,
+    "warn": 0,
+    "reviewRequired": 0,
+    "humanDecisionRequired": 1,
+    "gaps": 0,
+    "generatedReportsRemainLowerAuthority": true
+  },
+  "closureCriteria": {
+    "parentIssueId": "USF-1050",
+    "childIssueIds": [
+      "USF-1051",
+      "USF-1052",
+      "USF-1053",
+      "USF-1054",
+      "USF-1055",
+      "USF-1056",
+      "USF-1057",
+      "USF-1058",
+      "USF-1059",
+      "USF-1060",
+      "USF-1061"
+    ],
+    "parentClosureRequiresRepositoryValidation": true,
+    "parentClosureRequiresOriginMainMerge": true,
+    "linearStatusMayDefineReadiness": false,
+    "generatedReportsMayDefineReadiness": false,
+    "projectionOnlyMaySatisfyRuntimeProof": false
+  },
+  "validatorCoverage": [
+    "validate-spec.current-main-readiness-summary",
+    "validate-spec.generated-sdk-client-readiness-map",
+    "validate-spec.public-api-readiness-map",
+    "validate-runtime.runtime-product-readiness-map",
+    "runtime:validate",
+    "runtime:proof",
+    "runtime:proof:compose",
+    "runtime:proof:in-memory",
+    "non-ui-completeness:validate",
+    "non-ui-completeness:selftest",
+    "proof-cockpit:validate",
+    "proof-cockpit:selftest",
+    "linear-boundary:validate",
+    "linear-boundary:selftest",
+    "app-surface:validate",
+    "openapi:check",
+    "repo:validate"
+  ],
+  "plantedDefectCoverage": [
+    {
+      "ruleId": "USF-CURRENT-READINESS-001",
+      "path": "tools/validate-spec/planted-defects/current-readiness-stale-source-anchor.json"
+    },
+    {
+      "ruleId": "USF-CURRENT-READINESS-002",
+      "path": "tools/validate-spec/planted-defects/current-readiness-missing-proof-rung.json"
+    },
+    {
+      "ruleId": "USF-CURRENT-READINESS-003",
+      "path": "tools/validate-spec/planted-defects/current-readiness-generated-report-authority-overclaim.json"
+    },
+    {
+      "ruleId": "USF-CURRENT-READINESS-004",
+      "path": "tools/validate-spec/planted-defects/current-readiness-readiness-flag-overclaim.json"
+    },
+    {
+      "ruleId": "USF-CURRENT-READINESS-005",
+      "path": "tools/validate-spec/planted-defects/current-readiness-missing-validator-coverage.json"
+    },
+    {
+      "ruleId": "USF-CURRENT-READINESS-006",
+      "path": "tools/validate-spec/planted-defects/current-readiness-linear-authority-overclaim.json"
+    }
+  ],
+  "nonClaims": [
+    "no-product-ui-readiness-claim",
+    "no-public-deployment-claim",
+    "no-public-fqdn-claim",
+    "no-deployment-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-live-provider-claim",
+    "no-package-publication-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim",
+    "no-generated-report-authority-claim",
+    "no-linear-authority-claim",
+    "no-projection-only-runtime-proof-claim"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "target": "current-main-readiness-summary",
+  "expectedRule": "USF-CURRENT-READINESS-001",
+  "currentBlobShas": {
+    "docs/architecture/generated-sdk-client-readiness-map.json": "sha-current"
+  },
+  "record": {
+    "sourceTreeAnchors": [
+      {
+        "path": "docs/architecture/generated-sdk-client-readiness-map.json",
+        "blobSha": "sha-stale"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "target": "current-main-readiness-summary",
+  "expectedRule": "USF-CURRENT-READINESS-004",
+  "record": {
+    "readinessClaims": {
+      "generatedClientReady": true,
+      "sdkReady": true,
+      "publicApiReady": true,
+      "runtimeProductReady": true,
+      "stagingReady": true
+    }
+  }
+}
