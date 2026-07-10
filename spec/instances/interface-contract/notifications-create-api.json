@@ -1,0 +1,58 @@
+{
+  "id": "interface.notifications-create-api",
+  "title": "Notifications Create API Contract",
+  "description": "Draft USF-native interface contract for POST /v1/notifications. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent notifications.create as a governed POST API route contract for notification-service.",
+  "boundary": "Local dev/test inbound HTTP boundary POST /v1/notifications; implementation path apps/api/src/server.ts; route classification tenant-scoped.",
+  "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+  "requestContract": {
+    "description": "Request semantics for notifications.create bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: NotificationCreateRequest.",
+    "fields": [
+      "routeId:notifications.create",
+      "method:POST",
+      "path:/v1/notifications",
+      "openapiOperationId:createNotificationV1",
+      "requestSchema:NotificationCreateRequest",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-body",
+      "requiredAction:notification.create"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for notifications.create expose 200 NotificationCreateResponse, 400 ApiErrorResponse, 403 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:NotificationCreateResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:notification.created audited by notification capability",
+      "pdpPolicy:notification capability calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "notification.create"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-body; PDP policy notification capability calls PDP; audit policy notification.created audited by notification capability; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=notifications.create",
+    "packages/openapi/openapi.json#operationId=createNotificationV1",
+    "apps/api/src/server.ts"
+  ]
+}

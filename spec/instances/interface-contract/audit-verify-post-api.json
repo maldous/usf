@@ -1,0 +1,58 @@
+{
+  "id": "interface.audit-verify-post-api",
+  "title": "Audit Verify Post API Contract",
+  "description": "Draft USF-native interface contract for POST /v1/audit/verify. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent audit-verify.post as a governed POST API route contract for audit-integrity-verifier.",
+  "boundary": "Local dev/test inbound HTTP boundary POST /v1/audit/verify; implementation path apps/api/src/server.ts; route classification audit-sensitive.",
+  "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+  "requestContract": {
+    "description": "Request semantics for audit-verify.post bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: AuditVerifyRequest.",
+    "fields": [
+      "routeId:audit-verify.post",
+      "method:POST",
+      "path:/v1/audit/verify",
+      "openapiOperationId:postAuditVerifyV1",
+      "requestSchema:AuditVerifyRequest",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-body",
+      "requiredAction:audit.verify"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for audit-verify.post expose 200 AuditVerifyResponse, 400 ApiErrorResponse, 403 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:AuditVerifyResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:verification request is audited",
+      "pdpPolicy:audit query service calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "audit.verify"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-body; PDP policy audit query service calls PDP; audit policy verification request is audited; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=audit-verify.post",
+    "packages/openapi/openapi.json#operationId=postAuditVerifyV1",
+    "apps/api/src/server.ts"
+  ]
+}

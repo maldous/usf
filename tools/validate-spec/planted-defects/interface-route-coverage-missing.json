@@ -1,0 +1,16 @@
+{
+  "target": "instances",
+  "expectedRule": "USF-INTERFACE-001",
+  "apiRouteRecords": [
+    {
+      "routeId": "demo.get",
+      "method": "GET",
+      "openapiPath": "/demo",
+      "openapiOperationId": "getDemo"
+    }
+  ],
+  "routeInterfaceCoverage": {
+    "records": []
+  },
+  "instances": {}
+}

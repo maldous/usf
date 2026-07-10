@@ -1,0 +1,59 @@
+{
+  "id": "interface.jobs-get-api",
+  "title": "Jobs Get API Contract",
+  "description": "Draft USF-native interface contract for GET /v1/jobs/{id}. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent jobs.get as a governed GET API route contract for job-service.",
+  "boundary": "Local dev/test inbound HTTP boundary GET /v1/jobs/{id}; implementation path apps/api/src/server.ts; route classification tenant-scoped.",
+  "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+  "requestContract": {
+    "description": "Request semantics for jobs.get bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: TenantContextQuery.",
+    "fields": [
+      "routeId:jobs.get",
+      "method:GET",
+      "path:/v1/jobs/{id}",
+      "openapiOperationId:getJobV1",
+      "requestSchema:TenantContextQuery",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-query-param",
+      "requiredAction:job.read"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for jobs.get expose 200 JobView, 400 ApiErrorResponse, 403 ApiErrorResponse, 404 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:JobView",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "responseSchema:404:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:job read is PDP gated and value-free",
+      "pdpPolicy:job service calls PDP",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "job.read"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-query-param; PDP policy job service calls PDP; audit policy job read is PDP gated and value-free; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=jobs.get",
+    "packages/openapi/openapi.json#operationId=getJobV1",
+    "apps/api/src/server.ts"
+  ]
+}

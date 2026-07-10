@@ -1,0 +1,842 @@
+{
+  "id": "api-route-interface-contract-coverage",
+  "title": "API Route Interface Contract Coverage",
+  "description": "Current authoritative disposition for implemented local non-UI API routes. Each implemented route must either have a USF-native interface-contract instance or an explicit deferred or rejected disposition. OpenAPI remains a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "sourceOfRouteTruth": "packages/contracts/src/api-surface.ts, checked against packages/openapi/openapi.json by openapi:check",
+  "openapiAuthorityBoundary": "OpenAPI is generated projection evidence only and cannot satisfy semantic authority without USF-native interface-contract coverage or explicit disposition.",
+  "records": [
+    {
+      "routeId": "healthz.get",
+      "method": "GET",
+      "openapiPath": "/healthz",
+      "openapiOperationId": "getHealthz",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.healthz-get-api",
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "readyz.get",
+      "method": "GET",
+      "openapiPath": "/readyz",
+      "openapiOperationId": "getReadyz",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.readyz-get-api",
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "openapi.get",
+      "method": "GET",
+      "openapiPath": "/openapi.json",
+      "openapiOperationId": "getOpenApiDocument",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.openapi-get-api",
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "tenant-context.get",
+      "method": "GET",
+      "openapiPath": "/v1/tenant-context",
+      "openapiOperationId": "getTenantContextV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.tenant-context-get-api",
+      "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "auth-login.post",
+      "method": "POST",
+      "openapiPath": "/auth/login",
+      "openapiOperationId": "postAuthLogin",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.authentication-login-api",
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-check.post",
+      "method": "POST",
+      "openapiPath": "/v1/authz/check",
+      "openapiOperationId": "postAuthzCheckV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.authz-check-post-api",
+      "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "authz-permissions.get",
+      "method": "GET",
+      "openapiPath": "/v1/authz/permissions",
+      "openapiOperationId": "getAuthzPermissionsV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.authz-permissions-get-api",
+      "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.list",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events",
+      "openapiOperationId": "getAuditEventsV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.audit-events-list-api",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-events.get",
+      "method": "GET",
+      "openapiPath": "/v1/audit/events/{id}",
+      "openapiOperationId": "getAuditEventByIdV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.audit-events-get-api",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "audit-verify.post",
+      "method": "POST",
+      "openapiPath": "/v1/audit/verify",
+      "openapiOperationId": "postAuditVerifyV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.audit-verify-post-api",
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-current.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/current",
+      "openapiOperationId": "getConfigCurrentV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.config-current-get-api",
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-flags.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/feature-flags",
+      "openapiOperationId": "getConfigFeatureFlagsV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.config-flags-get-api",
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "config-provider-status.get",
+      "method": "GET",
+      "openapiPath": "/v1/config/provider-status",
+      "openapiOperationId": "getConfigProviderStatusV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.config-provider-status-get-api",
+      "semanticContractRef": "semantic-contract.provider-environment-classification",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.list",
+      "method": "GET",
+      "openapiPath": "/v1/providers",
+      "openapiOperationId": "listProvidersV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.providers-list-api",
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "providers.get",
+      "method": "GET",
+      "openapiPath": "/v1/providers/{id}",
+      "openapiOperationId": "getProviderByIdV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.providers-get-api",
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-readiness.get",
+      "method": "GET",
+      "openapiPath": "/v1/observability/readiness",
+      "openapiOperationId": "getObservabilityReadinessV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.observability-readiness-get-api",
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "observability-signals.list",
+      "method": "GET",
+      "openapiPath": "/v1/observability/signals",
+      "openapiOperationId": "listObservabilitySignalsV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.observability-signals-list-api",
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.list",
+      "method": "GET",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "listFilesV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.files-list-api",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.upload",
+      "method": "POST",
+      "openapiPath": "/v1/files",
+      "openapiOperationId": "uploadFileV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.files-upload-api",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.get",
+      "method": "GET",
+      "openapiPath": "/v1/files/{id}",
+      "openapiOperationId": "getFileV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.files-get-api",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.download",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/download",
+      "openapiOperationId": "downloadFileV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.files-download-api",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "files.verify",
+      "method": "POST",
+      "openapiPath": "/v1/files/{id}/verify",
+      "openapiOperationId": "verifyFileV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.files-verify-api",
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.list",
+      "method": "GET",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "listJobsV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.jobs-list-api",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.create",
+      "method": "POST",
+      "openapiPath": "/v1/jobs",
+      "openapiOperationId": "createJobV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.jobs-create-api",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.get",
+      "method": "GET",
+      "openapiPath": "/v1/jobs/{id}",
+      "openapiOperationId": "getJobV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.jobs-get-api",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "jobs.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/jobs/{id}/cancel",
+      "openapiOperationId": "cancelJobV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.jobs-cancel-api",
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notification-templates.create",
+      "method": "POST",
+      "openapiPath": "/v1/notification-templates",
+      "openapiOperationId": "createNotificationTemplateV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.notification-templates-create-api",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.list",
+      "method": "GET",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "listNotificationsV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.notifications-list-api",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.create",
+      "method": "POST",
+      "openapiPath": "/v1/notifications",
+      "openapiOperationId": "createNotificationV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.notifications-create-api",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.get",
+      "method": "GET",
+      "openapiPath": "/v1/notifications/{id}",
+      "openapiOperationId": "getNotificationV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.notifications-get-api",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.send",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/send",
+      "openapiOperationId": "sendNotificationV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.notifications-send-api",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    },
+    {
+      "routeId": "notifications.cancel",
+      "method": "POST",
+      "openapiPath": "/v1/notifications/{id}/cancel",
+      "openapiOperationId": "cancelNotificationV1",
+      "implementationPath": "apps/api/src/server.ts",
+      "decision": "interface-contract-instance",
+      "interfaceContractRef": "interface.notifications-cancel-api",
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "openapiProjection": "projection-only",
+      "currentRationale": "Implemented local route is governed by a USF-native interface-contract instance. OpenAPI remains a lower-authority projection and cannot define semantic authority by itself.",
+      "validatorCoverage": [
+        "validate-spec.api-route-interface-coverage",
+        "openapi:check"
+      ],
+      "proofEvidenceStatus": "Bounded local-dev-test evidence only; no public API, generated SDK, staging, production, deployment, live-provider, compliance, monetisation, or human-acceptance claim.",
+      "nonClaims": [
+        "no-public-api-readiness-claim",
+        "no-generated-sdk-readiness-claim",
+        "no-staging-claim",
+        "no-production-claim",
+        "no-deployment-claim",
+        "no-live-provider-claim",
+        "no-human-acceptance-claim"
+      ]
+    }
+  ]
+}

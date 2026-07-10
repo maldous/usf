@@ -1,0 +1,58 @@
+{
+  "id": "interface.files-download-api",
+  "title": "Files Download API Contract",
+  "description": "Draft USF-native interface contract for POST /v1/files/{id}/download. It promotes the implemented local route metadata into canonical interface-contract coverage while preserving OpenAPI as a lower-authority projection.",
+  "authorityLevel": "semantic-definition",
+  "lifecycleState": "draft",
+  "ontologyConcepts": [
+    "Interface",
+    "Service",
+    "Port"
+  ],
+  "taxonomyRefs": [
+    "interface-classification"
+  ],
+  "vocabularyRefs": [
+    "interface-kinds"
+  ],
+  "aiGuidance": "Treat this interface contract as the route authority. Do not infer semantic authority from OpenAPI, route metadata, examples, generated reports, or handler structure.",
+  "interfaceKind": "api-route",
+  "purpose": "Represent files.download as a governed POST API route contract for file-service.",
+  "boundary": "Local dev/test inbound HTTP boundary POST /v1/files/{id}/download; implementation path apps/api/src/server.ts; route classification security-sensitive.",
+  "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+  "requestContract": {
+    "description": "Request semantics for files.download bind method, path, operation id, request schema, auth scheme, tenant scope, and required action before implementation handling. Request schema: TenantContextQuery.",
+    "fields": [
+      "routeId:files.download",
+      "method:POST",
+      "path:/v1/files/{id}/download",
+      "openapiOperationId:downloadFileV1",
+      "requestSchema:TenantContextQuery",
+      "authScheme:dev-header-keycloak-bearer-future",
+      "tenantScope:tenant-header-query-param",
+      "requiredAction:file.download"
+    ]
+  },
+  "responseContract": {
+    "description": "Response semantics for files.download expose 200 FileDownloadResponse, 400 ApiErrorResponse, 403 ApiErrorResponse; error responses use ApiErrorResponse. Audit, PDP, idempotency, rate-limit, correlation, field exposure, observability, gateway, and proof boundaries remain explicit contract terms.",
+    "fields": [
+      "responseSchema:200:FileDownloadResponse",
+      "responseSchema:400:ApiErrorResponse",
+      "responseSchema:403:ApiErrorResponse",
+      "errorSchema:ApiErrorResponse",
+      "auditPolicy:download audited by file service",
+      "pdpPolicy:file service calls PDP and scan/lifecycle gate",
+      "proofEvidenceStatus:bounded-local-dev-test-no-public-api-claim"
+    ]
+  },
+  "permissions": [
+    "file.download"
+  ],
+  "security": "Auth scheme dev-header-keycloak-bearer-future; tenant scope tenant-header-query-param; PDP policy file service calls PDP and scan/lifecycle gate; audit policy download audited by file service; idempotency policy not-required; pagination policy none; rate-limit policy local-dev-test quotas represented; live enforcement deferred; field exposure policy minimum necessary fields; sensitive internals redacted; observability policy tenant-safe request_count error_count validation_failure_count auth_denial_count; gateway policy local-dev-test-only gateway-edge-waf-tls-production-posture-deferred; error schema ApiErrorResponse; proof status is bounded local-dev-test evidence with no public API or live-provider claim.",
+  "driftDetectable": true,
+  "sourceRefs": [
+    "packages/contracts/src/api-surface.ts#routeId=files.download",
+    "packages/openapi/openapi.json#operationId=downloadFileV1",
+    "apps/api/src/server.ts"
+  ]
+}
