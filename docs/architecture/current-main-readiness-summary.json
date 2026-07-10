@@ -56,11 +56,6 @@
       "path": "packages/openapi/openapi.json",
       "blobSha": "5b1f68bc48265c79260ce654dd2042f679b50e37",
       "authorityRole": "lower-authority-openapi-projection"
-    },
-    {
-      "path": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
-      "blobSha": "4ec95398bc778e6e1737ad70c00075ba779b564a",
-      "authorityRole": "proof-cockpit-freshness-evidence"
     }
   ],
   "readinessClaims": {
@@ -194,9 +189,9 @@
     }
   ],
   "proofEvidence": {
-    "proofCockpitRunId": "qa-run-2026-07-10T09-19-57-001Z",
-    "sourceSha": "9a227a25dc32c34234952cca82449203eed8c04c",
-    "sourceTreeHash": "a74204ef5883d5f0e7643622c3b4bf5f1eae2c7921a7fb613a96693e0740915f",
+    "proofCockpitEvidenceStorePath": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
+    "freshnessValidator": "proof-cockpit:validate",
+    "sourceTreeHashAuthority": "validated-by-proof-cockpit-evidence-store-not-embedded-in-summary",
     "routes": 830,
     "pass": 1282,
     "fail": 0,

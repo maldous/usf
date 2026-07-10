@@ -2423,7 +2423,6 @@ CURRENT_MAIN_READINESS_REQUIRED_SOURCE_ANCHORS = {
     CURRENT_MAIN_READINESS_RUNTIME_MAP_PATH,
     "docs/architecture/current-main-capability-service-realisation-map.json",
     OPENAPI_DOCUMENT_PATH,
-    "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json",
 }
 CURRENT_MAIN_READINESS_DOMAIN_REQUIREMENTS = {
     "generated-sdk-client": {
@@ -2682,7 +2681,16 @@ def validate_current_main_readiness_summary(F, summary=None, generated_sdk_clien
         F.add("USF-CURRENT-READINESS-002", CURRENT_MAIN_READINESS_SUMMARY_PATH,
               "proofEvidence is missing")
     else:
-        for field in ("proofCockpitRunId", "sourceSha", "sourceTreeHash"):
+        if proof.get("proofCockpitEvidenceStorePath") != "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json":
+            F.add("USF-CURRENT-READINESS-002", "proofEvidence.proofCockpitEvidenceStorePath",
+                  "proof evidence must reference the committed proof-cockpit evidence store")
+        if proof.get("freshnessValidator") != "proof-cockpit:validate":
+            F.add("USF-CURRENT-READINESS-002", "proofEvidence.freshnessValidator",
+                  "proof evidence freshness must be delegated to proof-cockpit:validate")
+        if proof.get("sourceTreeHashAuthority") != "validated-by-proof-cockpit-evidence-store-not-embedded-in-summary":
+            F.add("USF-CURRENT-READINESS-002", "proofEvidence.sourceTreeHashAuthority",
+                  "proof source-tree freshness must not be embedded in this self-referential summary")
+        for field in ("proofCockpitEvidenceStorePath", "freshnessValidator", "sourceTreeHashAuthority"):
             if not _as_nonempty_string(proof.get(field)):
                 F.add("USF-CURRENT-READINESS-002", f"proofEvidence.{field}", "proof evidence field is missing")
         for field in ("fail", "warn", "reviewRequired", "gaps"):
