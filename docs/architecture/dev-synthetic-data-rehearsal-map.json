@@ -1,0 +1,209 @@
+{
+  "id": "dev-synthetic-data-rehearsal-map",
+  "title": "Dev-Only Synthetic Data Migration, Backup, Restore, and Rollback Rehearsal Map",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "Lower authority than semantic contracts, ADRs, validators, runtime proof evidence, and the backup/restore and data-migration proof artefacts it binds. This map records dev-only synthetic rehearsal intent and binds existing on-disk proof; it MUST NOT upgrade readiness and MUST NOT be treated as canonical proof.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1075",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+    "docs/architecture/pgbackrest-configured-proof-boundary.json",
+    "docs/architecture/backup-restore-provider-disposition-matrix.json",
+    "spec/instances/data-migration/identity-schema.json",
+    "spec/instances/semantic-contract/backup-and-restore.json",
+    "spec/instances/semantic-contract/relational-storage-and-migrations-and-rls.json",
+    "spec/instances/semantic-contract/tenant-data-import-export.json",
+    "spec/instances/semantic-contract/pitr-retention-legal-hold-data-residency.json",
+    "packages/proof/src/pgbackrest-configured-proof.ts",
+    "packages/proof/src/backup-restore-operations-execution-proof.ts",
+    "packages/proof/src/db-rls-isolation-proof.ts"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-data-migration-and-backup-restore-proof-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-production-migration-claim",
+    "no-live-data-portability-claim",
+    "no-backup-supplier-readiness-claim",
+    "no-production-retention-claim",
+    "no-production-data-claim"
+  ],
+  "syntheticDataBoundary": "Every rehearsal step operates exclusively on synthetic, generated tenant fixtures (deterministic UUID tenants and seeded rows) inside profile-gated local Compose or hermetic proof harnesses. No live, real, customer-originated, or environment-promoted records are read, written, backed up, or restored. All evidence is repository metadata and value-free observation only; this map runs no docker or compose itself and only binds evidence artefacts that already exist on disk.",
+  "steps": [
+    {
+      "stepId": "step-migration-forward-only-chain",
+      "kind": "migration",
+      "description": "Rehearse applying the forward-only numbered migration chain (checksum-immutable, one transaction per file, migrated-state gate) against a synthetic Postgres substrate. No on-disk execution-proof artefact records this migration rehearsal in HEAD: the identity-schema migration contract and the relational-storage-and-migrations-and-rls contract are semantic definitions only, and the referenced migration SQL and migrations unit test are historical source lineage that is not present on disk in this repository.",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a dev migration-runner execution proof that applies the numbered chain to synthetic Postgres, asserts checksum-immutability drift refusal and the migrated-state gate, and emits a collected value-free execution-proof artefact.",
+      "nonClaims": [
+        "no-production-migration-claim",
+        "no-migration-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-synthetic-tenant-dataset",
+      "kind": "synthetic-tenant-dataset",
+      "description": "Seed a synthetic multi-tenant dataset (deterministic UUID tenants and RLS-guarded rows) as the subject of backup and restore rehearsal. The db-rls-isolation composed proof seeds synthetic tenants and RLS boundary tables under the runtime application role, and the pgBackRest and backup-operations proofs run against synthetic single-tenant Postgres. No live or customer-originated records are used.",
+      "evidenceRef": "packages/proof/src/db-rls-isolation-proof.ts",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-production-data-claim",
+        "no-live-data-portability-claim"
+      ]
+    },
+    {
+      "stepId": "step-rollback-rehearsal",
+      "kind": "rollback-rehearsal",
+      "description": "Rehearse rollback as the contracts define it: forward-fix migration or a guarded restore only after migration lineage is verified. No dedicated rollback-rehearsal execution-proof artefact exists on disk in HEAD; rollback semantics are described in the relational-storage-and-migrations-and-rls and backup-and-restore contracts but are not exercised by a collected proof.",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a dev rollback-rehearsal proof that demonstrates forward-fix and guarded-restore-after-lineage-verification against synthetic data and emits a collected value-free artefact.",
+      "nonClaims": [
+        "no-production-migration-claim",
+        "no-rollback-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-backup-rehearsal",
+      "kind": "backup-rehearsal",
+      "description": "Profile-gated local Compose rehearsal that creates a pgBackRest online full backup while synthetic Postgres is running with WAL archiving, and dispatches a deterministic scheduled second (diff) backup. The USF-223 execution-proof records onlineBackupExecuted, walArchiveObserved, and scheduledBackupOperationExecuted as bounded local proof.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-backup-readiness-claim",
+        "no-backup-supplier-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-restore-rehearsal",
+      "kind": "restore-rehearsal",
+      "description": "Profile-gated local point-in-time restore rehearsal: restores the synthetic backup into an isolated volume and replays archived WAL to a restore point. The USF-223 execution-proof records pitrRestoreExecuted as bounded local proof.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-restore-readiness-claim",
+        "no-pitr-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-restored-dataset-usability",
+      "kind": "restored-dataset-usability",
+      "description": "Data-layer usability verification of the restored dataset that is stronger than command exit success: after WAL replay to the restore target the proof performs a read-back and verifies that the post-target mutation is absent, confirming the restored synthetic dataset reflects the expected point-in-time content. This is a content verification, not merely a zero exit code, and it does not claim product or application-level usability.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-product-ui-readiness-claim",
+        "no-restore-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-failed-restore-negative-path",
+      "kind": "failed-restore-negative-path",
+      "description": "Negative-path rehearsal: with the source Postgres stopped and the backup repository made unavailable, the restore fails closed and aborts rather than fabricating success, recording safe reason code pgbackrest-repository-unavailable. The USF-223 execution-proof records sourceFailureScenarioExecuted and failClosedChecked, and the pgBackRest boundary records missing-repository fail-closed behaviour.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-disaster-recovery-readiness-claim",
+        "no-restore-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-backup-artifact-integrity",
+      "kind": "backup-artifact-integrity",
+      "description": "Verify backup-set integrity of the created pgBackRest artefacts. The execution-proof observes backup set count, full and diff backup types, and a successful restore replay, which implicitly exercises artefact usability, but no dedicated backup-artefact integrity or checksum verification is recorded, and the provider disposition matrix explicitly marks backup integrity verification as deferred.",
+      "evidenceRef": "gap",
+      "status": "test-rung-deferred",
+      "nextRung": "Add an explicit pgBackRest backup-set integrity and checksum verification test rung against the synthetic repository and emit a collected value-free artefact.",
+      "nonClaims": [
+        "no-backup-readiness-claim",
+        "no-backup-supplier-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-cleanup",
+      "kind": "cleanup",
+      "description": "Safe teardown of the restore container, Compose project, named volumes, socket and archive directories, and temporary overrides in finally paths. The USF-223 execution-proof records cleanupAttempted and cleanupSucceeded, and the pgBackRest boundary records restore-container, compose-volume, and temp-directory cleanup.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-production-claim"
+      ]
+    },
+    {
+      "stepId": "step-retention-boundary",
+      "kind": "retention-boundary",
+      "description": "Rehearse the retention, legal-hold, and residency boundary: retention tick honouring an active legal hold, and residency rejection of out-of-home-region writes. No collected execution-proof exists on disk in HEAD; the pitr-retention-legal-hold-data-residency contract proof is hermetic lineage only, and the provider disposition matrix records retentionProofPresent false and defers retention execution.",
+      "evidenceRef": "gap",
+      "status": "recorded-gap",
+      "nextRung": "Author a dev retention-boundary proof that exercises the retention tick honouring an active legal hold and residency rejection against synthetic data, emitting a collected value-free artefact.",
+      "nonClaims": [
+        "no-production-retention-claim",
+        "no-compliance-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-redaction",
+      "kind": "redaction",
+      "description": "Redaction and secret-exclusion boundary: proof output prohibits secrets, connection strings, tokens, stack traces, table values, backup artefacts, restore payloads, and WAL file names, emitting value-free structured evidence only. The USF-223 execution-proof records redactionChecked and secretExclusionChecked.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-live-data-portability-claim",
+        "no-production-data-claim"
+      ]
+    },
+    {
+      "stepId": "step-audit",
+      "kind": "audit",
+      "description": "Value-free audit-shaped evidence for the backup and restore operations is captured in the proof result with no product audit-log claim. The USF-223 execution-proof records auditEvidenceCaptured, and the pgBackRest boundary records value-free audit-shaped evidence.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-compliance-readiness-claim"
+      ]
+    },
+    {
+      "stepId": "step-telemetry",
+      "kind": "telemetry",
+      "description": "Telemetry-shaped evidence: structured JSON logging, span-like tracing correlation, and metric buckets (readiness attempts, backup set count, WAL archive count bucket, duration buckets, cleanup state) are recorded as value-free proof metadata with no live tracing or metrics backend claim. The USF-223 execution-proof records structuredLogEvidenceCaptured, tracingEvidenceCaptured, and metricEvidenceCaptured.",
+      "evidenceRef": "docs/architecture/backup-restore-dr-pitr-rpo-rto-execution-proof.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-runtime-product-readiness-upgrade"
+      ]
+    },
+    {
+      "stepId": "step-pgbackrest",
+      "kind": "pgbackrest",
+      "description": "pgBackRest configured local proof boundary: maintained digest-pinned image, configured repository, created stanza, synthetic Postgres linkage, offline cold full backup, restore readback, readiness retry, bounded timeouts, teardown, and missing-repository fail-closed behaviour. Recorded by the USF-211 configured-proof boundary and its proof source.",
+      "evidenceRef": "docs/architecture/pgbackrest-configured-proof-boundary.json",
+      "status": "dev-proven",
+      "nonClaims": [
+        "no-live-provider-claim",
+        "no-backup-supplier-readiness-claim"
+      ]
+    }
+  ]
+}

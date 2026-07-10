@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-001-omit-envelope-id",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-001"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "removing the map envelope id leaves a required envelope field empty",
+  "note": "Negative control for USF-DATA-REHEARSAL-001; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}
