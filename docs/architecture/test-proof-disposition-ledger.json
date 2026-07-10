@@ -5,6 +5,14 @@
   "generatedAt": "2026-07-05T04:50:07Z",
   "sourceGitSha": "775650cc2387091a89fdf82c5f63eff937c6028c",
   "sourceLineageGitSha": "a92d9734cf0f1f7a53f9093ce3bb3d2c02bfd767",
+  "currentSourceTreeAnchor": {
+    "algorithm": "git-ls-files-sha256-v1",
+    "scope": "repository-tracked-non-proof-source-tree",
+    "digest": "sha256:d4880f8ebe3d59ca7b25cfe3bf4997cf6f011642663da1f3b59c767df036c93c",
+    "trackedFileCount": 2805,
+    "sourceGitShaTreatment": "historical-lineage-pin",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
   "rows": [
     {
       "id": "source-lineage-test-proof-9ae929c882fd",

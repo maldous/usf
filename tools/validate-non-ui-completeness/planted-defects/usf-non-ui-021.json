@@ -1,0 +1,10 @@
+{
+  "id": "planted-defect-usf-non-ui-021",
+  "description": "Negative fixture for USF-NON-UI-021; validator selftest must prove stale non-UI source-tree anchor evidence fails closed.",
+  "expectedRuleIds": [
+    "USF-NON-UI-021"
+  ],
+  "fixtureKind": "non-ui-completeness-negative-fixture",
+  "mutationHint": "mutate currentSourceTreeAnchor.digest so USF-NON-UI-021 rejects stale evidence",
+  "mustBeDistinct": true
+}
