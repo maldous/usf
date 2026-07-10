@@ -1,0 +1,57 @@
+{
+  "target": "capability-realisation-map",
+  "expectedRule": "USF-CAPABILITY-REALISATION-001",
+  "instances": {
+    "spec/instances/semantic-contract/example-capability.json": {
+      "id": "semantic-contract.example-capability",
+      "capability": "example-capability",
+      "capabilityDomain": "foundation",
+      "lifecycleState": "draft"
+    }
+  },
+  "clientContractMap": {
+    "operations": []
+  },
+  "record": {
+    "id": "current-main-capability-service-realisation-map",
+    "generatedReportAuthority": "lower-authority-summary-only",
+    "currentMainFreshness": {
+      "status": "current-main",
+      "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+      "generatedReportAuthority": "lower-authority-summary-only"
+    },
+    "plantedDefectCoverage": [
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-001",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-missing-row.json"
+      },
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-002",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-implementation-only-overclaim.json"
+      },
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-003",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-stale-current-main-binding.json"
+      },
+      {
+        "ruleId": "USF-CAPABILITY-REALISATION-004",
+        "path": "tools/validate-spec/planted-defects/capability-realisation-proof-status-overclaim.json"
+      }
+    ],
+    "readinessClaims": {
+      "generatedClientReady": false,
+      "sdkReady": false,
+      "productUiReady": false,
+      "publicApiReady": false,
+      "runtimeProductReady": false,
+      "deploymentReady": false,
+      "stagingReady": false,
+      "productionReady": false,
+      "liveProviderReady": false,
+      "complianceReady": false,
+      "monetisationReady": false,
+      "humanAcceptanceComplete": false
+    },
+    "rows": []
+  }
+}
