@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-007",
+  "description": "required readiness/alignment non-claim removed from the envelope",
+  "expectedRuleIds": [
+    "USF-ISO27001-007"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "missing-required-non-claim"
+}

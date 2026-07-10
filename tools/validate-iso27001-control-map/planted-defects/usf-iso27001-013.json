@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-013",
+  "description": "classificationCounts no longer an exact tally of the control rows",
+  "expectedRuleIds": [
+    "USF-ISO27001-013"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "classification-counts-mismatch"
+}

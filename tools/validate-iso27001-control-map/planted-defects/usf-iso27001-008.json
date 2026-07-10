@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-008",
+  "description": "compliance/certification overclaim phrase injected into the document",
+  "expectedRuleIds": [
+    "USF-ISO27001-008"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "unsupported-compliance-claim"
+}

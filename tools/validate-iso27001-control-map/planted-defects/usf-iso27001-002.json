@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-002",
+  "description": "required control key removed from a control row",
+  "expectedRuleIds": [
+    "USF-ISO27001-002"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "control-missing-required-key-or-count-mismatch"
+}
