@@ -1,0 +1,7 @@
+{
+  "id": "008-generated-report-only-proof",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-006",
+  "fixture": {
+    "kind": "generated-report-only-proof"
+  }
+}

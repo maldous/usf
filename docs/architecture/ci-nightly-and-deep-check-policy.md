@@ -90,9 +90,9 @@ required checks by itself.
 | --- | --- | --- |
 | Full foundation sweep | `make foundation` or `corepack pnpm verify` | Expensive broad gate; failures remain blocking facts, not readiness claims. |
 | Test-readiness sweep | `make test-ready` or `corepack pnpm test-readiness` | Bounded Test-readiness validation; not staging or human acceptance. |
-| Validator selftests | Current selftests such as `corepack pnpm validate-spec:selftest`, `corepack pnpm test-readiness:selftest`, `corepack pnpm foundation-substrate-closure:selftest`, and `corepack pnpm proof-cockpit:selftest`; evidence invalidation and evidence reuse selftests join only after USF-983 and USF-984 land | Selected by implemented nightly scope and budget. |
+| Validator selftests | Current selftests such as `corepack pnpm validate-spec:selftest`, `corepack pnpm test-readiness:selftest`, `corepack pnpm foundation-substrate-closure:selftest`, `corepack pnpm proof-cockpit:selftest`, `corepack pnpm evidence-invalidation:selftest`, and `corepack pnpm evidence-reuse:selftest` | Selected by implemented nightly scope and budget. |
 | Compose and provider sweep | `corepack pnpm compose:validate`, `corepack pnpm test-compose`, and provider proof families selected by classification | Service-backed proof must remain environment and provider-mode honest. |
-| Evidence and artifact sweep | `corepack pnpm repo:validate` plus future evidence invalidation, evidence reuse, and proof-cockpit projection re-pin checks after their command surfaces exist | Generated reports cannot replace raw evidence or validator output. |
+| Evidence and artifact sweep | `corepack pnpm repo:validate`, `corepack pnpm evidence-invalidation:validate`, `corepack pnpm evidence-reuse:validate`, and `corepack pnpm proof-cockpit:projection-repin` | Generated reports cannot replace raw evidence or validator output. |
 | Manual public or staging-adjacent proof | Existing public-proof and proof-review commands only when an owning issue explicitly triggers them | Not default nightly work during orchestration. |
 
 ## What Remains PR-Required

@@ -1,0 +1,169 @@
+{
+  "id": "evidence-reuse-decisions",
+  "version": 1,
+  "title": "Evidence Reuse Decision Artifact",
+  "description": "Validator-owned machine-readable reuse decision artifact for USF-983. This file supports reuse gating only and does not define USF semantic authority.",
+  "issueId": "USF-983",
+  "designIssueId": "USF-975",
+  "invalidationIssueId": "USF-984",
+  "orchestrationIssueId": "USF-952",
+  "terminalFreshMachineQaIssue": "USF-966",
+  "invalidationMapPath": "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+  "nonAuthorityStatement": "This issue tracks work only. It does not define USF semantic authority.",
+  "nonClaims": [
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-deployment-readiness",
+    "no-live-provider-readiness",
+    "no-product-readiness",
+    "no-store-readiness",
+    "no-compliance-readiness",
+    "generated-reports-are-not-authority",
+    "linear-is-not-semantic-authority",
+    "terminal-proof-cockpit-machine-evidence-refresh-deferred-to-USF-966"
+  ],
+  "allowedFreshnessStates": [
+    "current",
+    "stale",
+    "unknown",
+    "partial",
+    "mismatched",
+    "generated-report-only",
+    "superseded",
+    "human-review-required",
+    "terminal-refresh-deferred"
+  ],
+  "allowedEligibilityStatuses": [
+    "pass-current",
+    "fail",
+    "stale",
+    "unknown",
+    "partial",
+    "mismatched",
+    "generated-report-only",
+    "superseded",
+    "human-review-required",
+    "blocked"
+  ],
+  "allowedRerunModes": [
+    "none",
+    "rerun-validator-only",
+    "rerun-dev-proof",
+    "rerun-compose-test-proof",
+    "full-proof-for-affected-family",
+    "full-proof-required",
+    "terminal-usf-966-refresh"
+  ],
+  "requiredDecisionFields": [
+    "decisionId",
+    "evidenceFamily",
+    "assessedCommit",
+    "sourceSha",
+    "targetSha",
+    "providerMode",
+    "targetProviderMode",
+    "environment",
+    "targetEnvironment",
+    "claimedProofLevel",
+    "observedProofLevel",
+    "evidenceRefs",
+    "artifactHashes",
+    "inputManifestDigest",
+    "artifactSetDigest",
+    "chainTipDigest",
+    "freshnessState",
+    "eligibilityStatus",
+    "reusableScope",
+    "blockedScope",
+    "requiredRerunMode",
+    "blockingFindings",
+    "ambiguityReason",
+    "nonClaims",
+    "humanDecisionRequired",
+    "automaticHumanSignoff"
+  ],
+  "globalPolicies": {
+    "unknownFallback": "full-proof-for-affected-family",
+    "ambiguousFallback": "full-proof-for-affected-family",
+    "partialAggregateFallback": "full-proof-for-affected-family",
+    "hashMismatchFallback": "full-proof-for-affected-family",
+    "providerMismatchFallback": "full-proof-for-affected-family",
+    "environmentMismatchFallback": "full-proof-for-affected-family",
+    "proofOverclaimFallback": "full-proof-for-affected-family",
+    "generatedReportOnlyCanSatisfyProof": false,
+    "supersededPayloadCanSatisfyProof": false,
+    "staleCanPass": false,
+    "unknownCanPass": false,
+    "automaticHumanSignoffAllowed": false,
+    "terminalRefreshDeferredCanPass": false
+  },
+  "reuseDecisions": [
+    {
+      "decisionId": "reuse-decision.proof-cockpit-terminal-refresh-deferred",
+      "evidenceFamily": "proof-cockpit",
+      "assessedCommit": "current-head",
+      "sourceSha": "terminal-refresh-deferred",
+      "targetSha": "current-head",
+      "providerMode": "local-composed-real-service",
+      "targetProviderMode": "local-composed-real-service",
+      "environment": "staging",
+      "targetEnvironment": "staging",
+      "claimedProofLevel": "staging-proof",
+      "observedProofLevel": "staging-proof",
+      "evidenceRefs": [
+        {
+          "path": "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+          "type": "validator-owned-policy",
+          "authorityClass": "validator-rule"
+        },
+        {
+          "issueKey": "USF-966",
+          "type": "linear-issue",
+          "authorityClass": "work-tracking"
+        }
+      ],
+      "artifactHashes": [
+        {
+          "path": "tools/validate-evidence-invalidation/evidence-invalidation-map.json",
+          "sha256": "f6855d7b3f71ff87ac2b789f94366318f639e5f01d3cccd9c1cf9255d27b9152",
+          "hashBasis": "validator-owned-policy-file"
+        }
+      ],
+      "inputManifestDigest": "a21edd7c493616edbae9274d50c147c24a2a9ce95dd37ff38eaa17bde8f9cd58",
+      "artifactSetDigest": "16c7fb8cce8053e0d502665782335a7b1aa6935d4055cf2d15a6c7771aa03de2",
+      "chainTipDigest": "ba9aa99b0376da693c84661b3a8775c26e9bf48555a19ff748dfa3c5062a1e00",
+      "freshnessState": "terminal-refresh-deferred",
+      "eligibilityStatus": "blocked",
+      "reusableScope": [],
+      "blockedScope": [
+        "proof-cockpit-machine-evidence"
+      ],
+      "requiredRerunMode": "terminal-usf-966-refresh",
+      "blockingFindings": [
+        "terminal proof-cockpit machine evidence refresh is deferred to USF-966"
+      ],
+      "ambiguityReason": "",
+      "bundleMetadata": {
+        "sourceSha": "terminal-refresh-deferred",
+        "targetSha": "current-head",
+        "inputManifestDigest": "a21edd7c493616edbae9274d50c147c24a2a9ce95dd37ff38eaa17bde8f9cd58",
+        "artifactSetDigest": "16c7fb8cce8053e0d502665782335a7b1aa6935d4055cf2d15a6c7771aa03de2",
+        "metadataState": "terminal-refresh-deferred"
+      },
+      "nonClaims": [
+        "no-staging-readiness",
+        "no-production-readiness",
+        "no-deployment-readiness",
+        "no-live-provider-readiness",
+        "no-product-readiness",
+        "no-store-readiness",
+        "no-compliance-readiness",
+        "generated-reports-are-not-authority",
+        "linear-is-not-semantic-authority",
+        "terminal-proof-cockpit-machine-evidence-refresh-deferred-to-USF-966"
+      ],
+      "humanDecisionRequired": true,
+      "automaticHumanSignoff": false
+    }
+  ]
+}

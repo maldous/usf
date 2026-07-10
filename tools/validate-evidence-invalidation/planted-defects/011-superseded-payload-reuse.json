@@ -1,0 +1,7 @@
+{
+  "id": "011-superseded-payload-reuse",
+  "expectedRule": "USF-EVIDENCE-INVALIDATION-005",
+  "fixture": {
+    "kind": "superseded-payload-reuse"
+  }
+}

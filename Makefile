@@ -17,6 +17,7 @@ export USF_PROOF_PROD_FQDN
 	foundation-substrate-closure-validate foundation-substrate-closure-selftest \
 	public-fqdn-validate public-fqdn-selftest public-proof-origin public-fqdn-proof public-fqdn-proof-staging public-fqdn-proof-production \
 	artifact-promotion-validate artifact-promotion-selftest environment-ladder-validate environment-ladder-selftest \
+	evidence-invalidation-validate evidence-invalidation-selftest evidence-reuse-validate evidence-reuse-selftest \
 	app-surface-validate app-surface-selftest \
 	public-route-proof public-route-proof-staging public-route-proof-production proof-review-public caddy-up caddy-down proof-review-up proof-review-down proof-review-repin proof-review-projection-repin \
 	external-http-behaviour-proof external-http-cache-proof external-http-observability-proof pre-staging-external-smoke-proof \
@@ -60,6 +61,10 @@ help:
 		'  make validate-bootstrap    Bootstrap governance validator (compatibility: corepack pnpm validate-bootstrap)' \
 			'  make artifact-promotion-validate  Validate Dev/Test/Staging artifact handoff contract' \
 			'  make environment-ladder-validate  Validate environment ladder discipline' \
+			'  make evidence-invalidation-validate  Validate evidence invalidation map discipline' \
+			'  make evidence-invalidation-selftest  Run evidence invalidation planted-defect selftest' \
+			'  make evidence-reuse-validate  Validate evidence reuse decision discipline' \
+			'  make evidence-reuse-selftest  Run evidence reuse planted-defect selftest' \
 			'  make app-surface-validate  Validate app-surface semantic validator tranche' \
 			'  make app-surface-selftest  Run app-surface planted-defect selftest' \
 			'' \
@@ -163,6 +168,18 @@ environment-ladder-validate:
 
 environment-ladder-selftest:
 	corepack pnpm environment-ladder:selftest
+
+evidence-invalidation-validate:
+	corepack pnpm evidence-invalidation:validate
+
+evidence-invalidation-selftest:
+	corepack pnpm evidence-invalidation:selftest
+
+evidence-reuse-validate:
+	corepack pnpm evidence-reuse:validate
+
+evidence-reuse-selftest:
+	corepack pnpm evidence-reuse:selftest
 
 app-surface-validate:
 	corepack pnpm app-surface:validate

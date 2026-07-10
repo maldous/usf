@@ -1,0 +1,21 @@
+{
+  "id": "planted-defect.evidence-reuse.human-review-required-without-full-proof",
+  "expectedRule": "USF-EVIDENCE-REUSE-004",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/freshnessState",
+      "value": "human-review-required"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/eligibilityStatus",
+      "value": "human-review-required"
+    },
+    {
+      "op": "replace",
+      "path": "/reuseDecisions/0/requiredRerunMode",
+      "value": "rerun-validator-only"
+    }
+  ]
+}
