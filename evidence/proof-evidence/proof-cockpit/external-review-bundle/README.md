@@ -2,10 +2,10 @@
 
 This bundle is the stable repository entry point for the USF-293 proof cockpit external-review evidence package.
 
-Source SHA: bde7da844ee23731c2cdf18015bb6a8d1d7af4dc
-Deployment SHA: bde7da844ee23731c2cdf18015bb6a8d1d7af4dc
-Source tree hash: 7e5f40e6b4ce171b79ea7585a5db64442d37a038d1eb32d9ebed30447f587b49
-Run ID: qa-run-2026-07-10T00-21-12-446Z
+Source SHA: dbe86d8135593110ec7d3b8ba5ffe395fa26c6f9
+Deployment SHA: dbe86d8135593110ec7d3b8ba5ffe395fa26c6f9
+Source tree hash: afcd5a2f8fca6377ced7559ebecf910e4976b71c75163d19f482978ca98c66be
+Run ID: qa-run-2026-07-10T00-37-14-539Z
 Authenticated service UI captures: 6
 Service evidence records: 40
 Screenshot or equivalent artifacts: 94
@@ -19,12 +19,12 @@ Warning inventory:
 
 Primary generated bundle:
 
-- artifacts/proof-cockpit/machine-runs/2026-07-10T00-21-12-403Z/external-review-bundle
+- artifacts/proof-cockpit/machine-runs/2026-07-10T00-37-14-496Z/external-review-bundle
 
 Primary report paths:
 
 - ../final-external-review-report.md
-- artifacts/proof-cockpit/machine-runs/2026-07-10T00-21-12-403Z/external-review-bundle/external-review-report.md
+- artifacts/proof-cockpit/machine-runs/2026-07-10T00-37-14-496Z/external-review-bundle/external-review-report.md
 - /proof/reports/final
 - /proof/portfolio
 
