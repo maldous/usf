@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-003",
+  "name": "rendered-endpoint-invented",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-003"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Appends a rendered endpoint whose operationId is absent from the OpenAPI projection (invented endpoint / coverage mismatch)."
+}

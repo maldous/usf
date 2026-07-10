@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-005",
+  "name": "sdk-example-ref-unresolvable",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-005"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Points an sdkExample canonicalMetadataRef at a non-existent file so the canonical metadata reference no longer resolves."
+}

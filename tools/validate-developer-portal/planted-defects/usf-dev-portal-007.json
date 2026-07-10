@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-007",
+  "name": "nonclaim-missing-public-fqdn",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-007"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Removes the no-public-fqdn-claim non-claim from the required 16."
+}

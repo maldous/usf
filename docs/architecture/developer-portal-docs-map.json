@@ -1,0 +1,420 @@
+{
+  "id": "developer-portal-docs-map",
+  "title": "Local Developer Portal and API Documentation Surface (Generated, Dev-Only)",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "generated-report-lower-authority",
+  "authorityBoundary": "Lower authority than the OpenAPI projection, the readiness maps, the semantic contracts, ADRs, and validators. This map describes a local/dev-only documentation surface generated from repository authority. It defines no semantics and cannot upgrade readiness.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1071",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    "packages/openapi/openapi.json",
+    "docs/architecture/public-api-readiness-map.json",
+    "docs/architecture/generated-sdk-client-readiness-map.json",
+    "docs/architecture/non-ui-client-callable-contract-map.json"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-openapi-projection-and-readiness-maps-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-public-docs-publication-claim",
+    "no-public-fqdn-claim",
+    "no-package-publication-claim"
+  ],
+  "docsAuthorityBoundary": "Docs are generated from the OpenAPI projection and the readiness maps and are lower-authority summaries only. Docs cannot define semantics and cannot become authority; any conflict is resolved in favour of the semantic contracts, ADRs, validators, and the OpenAPI projection. The rendered surface is a read-only reflection of higher-authority sources and never overrides them.",
+  "renderedEndpoints": [
+    {
+      "operationId": "cancelJobV1",
+      "path": "/v1/jobs/{id}/cancel",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=cancelJobV1"
+    },
+    {
+      "operationId": "cancelNotificationV1",
+      "path": "/v1/notifications/{id}/cancel",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=cancelNotificationV1"
+    },
+    {
+      "operationId": "createJobV1",
+      "path": "/v1/jobs",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=createJobV1"
+    },
+    {
+      "operationId": "createNotificationTemplateV1",
+      "path": "/v1/notification-templates",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=createNotificationTemplateV1"
+    },
+    {
+      "operationId": "createNotificationV1",
+      "path": "/v1/notifications",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=createNotificationV1"
+    },
+    {
+      "operationId": "downloadFileV1",
+      "path": "/v1/files/{id}/download",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=downloadFileV1"
+    },
+    {
+      "operationId": "getAuditEventByIdV1",
+      "path": "/v1/audit/events/{id}",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getAuditEventByIdV1"
+    },
+    {
+      "operationId": "getAuditEventsV1",
+      "path": "/v1/audit/events",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getAuditEventsV1"
+    },
+    {
+      "operationId": "getAuthzPermissionsV1",
+      "path": "/v1/authz/permissions",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getAuthzPermissionsV1"
+    },
+    {
+      "operationId": "getConfigCurrentV1",
+      "path": "/v1/config/current",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getConfigCurrentV1"
+    },
+    {
+      "operationId": "getConfigFeatureFlagsV1",
+      "path": "/v1/config/feature-flags",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getConfigFeatureFlagsV1"
+    },
+    {
+      "operationId": "getConfigProviderStatusV1",
+      "path": "/v1/config/provider-status",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getConfigProviderStatusV1"
+    },
+    {
+      "operationId": "getFileV1",
+      "path": "/v1/files/{id}",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getFileV1"
+    },
+    {
+      "operationId": "getHealthz",
+      "path": "/healthz",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getHealthz"
+    },
+    {
+      "operationId": "getJobV1",
+      "path": "/v1/jobs/{id}",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getJobV1"
+    },
+    {
+      "operationId": "getNotificationV1",
+      "path": "/v1/notifications/{id}",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getNotificationV1"
+    },
+    {
+      "operationId": "getObservabilityReadinessV1",
+      "path": "/v1/observability/readiness",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getObservabilityReadinessV1"
+    },
+    {
+      "operationId": "getOpenApiDocument",
+      "path": "/openapi.json",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getOpenApiDocument"
+    },
+    {
+      "operationId": "getProviderByIdV1",
+      "path": "/v1/providers/{id}",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getProviderByIdV1"
+    },
+    {
+      "operationId": "getReadyz",
+      "path": "/readyz",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getReadyz"
+    },
+    {
+      "operationId": "getTenantContextV1",
+      "path": "/v1/tenant-context",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=getTenantContextV1"
+    },
+    {
+      "operationId": "listFilesV1",
+      "path": "/v1/files",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=listFilesV1"
+    },
+    {
+      "operationId": "listJobsV1",
+      "path": "/v1/jobs",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=listJobsV1"
+    },
+    {
+      "operationId": "listNotificationsV1",
+      "path": "/v1/notifications",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=listNotificationsV1"
+    },
+    {
+      "operationId": "listObservabilitySignalsV1",
+      "path": "/v1/observability/signals",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=listObservabilitySignalsV1"
+    },
+    {
+      "operationId": "listProvidersV1",
+      "path": "/v1/providers",
+      "method": "GET",
+      "sourceRef": "packages/openapi/openapi.json#operationId=listProvidersV1"
+    },
+    {
+      "operationId": "postAuditVerifyV1",
+      "path": "/v1/audit/verify",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=postAuditVerifyV1"
+    },
+    {
+      "operationId": "postAuthLogin",
+      "path": "/auth/login",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=postAuthLogin"
+    },
+    {
+      "operationId": "postAuthzCheckV1",
+      "path": "/v1/authz/check",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=postAuthzCheckV1"
+    },
+    {
+      "operationId": "sendNotificationV1",
+      "path": "/v1/notifications/{id}/send",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=sendNotificationV1"
+    },
+    {
+      "operationId": "uploadFileV1",
+      "path": "/v1/files",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=uploadFileV1"
+    },
+    {
+      "operationId": "verifyFileV1",
+      "path": "/v1/files/{id}/verify",
+      "method": "POST",
+      "sourceRef": "packages/openapi/openapi.json#operationId=verifyFileV1"
+    }
+  ],
+  "metadataCoverage": {
+    "authz": "packages/openapi/openapi.json#/components/securitySchemes/KeycloakBearerFuture",
+    "tenant": "packages/openapi/openapi.json#x-usf-route.tenantScope",
+    "permission": "packages/openapi/openapi.json#x-usf-route.requiredAction",
+    "error": "packages/openapi/openapi.json#/components/schemas/ApiErrorResponse",
+    "rateLimit": "packages/openapi/openapi.json#x-usf-route.rateLimitPolicy",
+    "audit": "packages/openapi/openapi.json#x-usf-route.auditPolicy",
+    "telemetry": "packages/openapi/openapi.json#x-usf-route.observabilityPolicy",
+    "cors": "packages/openapi/openapi.json#x-usf-route.corsPolicy",
+    "csrf": "packages/openapi/openapi.json#x-usf-route.csrfPolicy",
+    "securityHeaders": "packages/openapi/openapi.json#x-usf-route.securityHeadersPolicy"
+  },
+  "sdkExamples": [
+    {
+      "operation": "cancelJobV1",
+      "routeId": "jobs.cancel",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.cancel"
+    },
+    {
+      "operation": "cancelNotificationV1",
+      "routeId": "notifications.cancel",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.cancel"
+    },
+    {
+      "operation": "createJobV1",
+      "routeId": "jobs.create",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.create"
+    },
+    {
+      "operation": "createNotificationTemplateV1",
+      "routeId": "notification-templates.create",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notification-templates.create"
+    },
+    {
+      "operation": "createNotificationV1",
+      "routeId": "notifications.create",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.create"
+    },
+    {
+      "operation": "downloadFileV1",
+      "routeId": "files.download",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.download"
+    },
+    {
+      "operation": "getAuditEventByIdV1",
+      "routeId": "audit-events.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.get"
+    },
+    {
+      "operation": "getAuditEventsV1",
+      "routeId": "audit-events.list",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.list"
+    },
+    {
+      "operation": "getAuthzPermissionsV1",
+      "routeId": "authz-permissions.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-permissions.get"
+    },
+    {
+      "operation": "getConfigCurrentV1",
+      "routeId": "config-current.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-current.get"
+    },
+    {
+      "operation": "getConfigFeatureFlagsV1",
+      "routeId": "config-flags.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-flags.get"
+    },
+    {
+      "operation": "getConfigProviderStatusV1",
+      "routeId": "config-provider-status.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-provider-status.get"
+    },
+    {
+      "operation": "getFileV1",
+      "routeId": "files.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.get"
+    },
+    {
+      "operation": "getJobV1",
+      "routeId": "jobs.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.get"
+    },
+    {
+      "operation": "getNotificationV1",
+      "routeId": "notifications.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.get"
+    },
+    {
+      "operation": "getObservabilityReadinessV1",
+      "routeId": "observability-readiness.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-readiness.get"
+    },
+    {
+      "operation": "getProviderByIdV1",
+      "routeId": "providers.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.get"
+    },
+    {
+      "operation": "getTenantContextV1",
+      "routeId": "tenant-context.get",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=tenant-context.get"
+    },
+    {
+      "operation": "listFilesV1",
+      "routeId": "files.list",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.list"
+    },
+    {
+      "operation": "listJobsV1",
+      "routeId": "jobs.list",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.list"
+    },
+    {
+      "operation": "listNotificationsV1",
+      "routeId": "notifications.list",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.list"
+    },
+    {
+      "operation": "listObservabilitySignalsV1",
+      "routeId": "observability-signals.list",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-signals.list"
+    },
+    {
+      "operation": "listProvidersV1",
+      "routeId": "providers.list",
+      "exampleKind": "response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.list"
+    },
+    {
+      "operation": "postAuditVerifyV1",
+      "routeId": "audit-verify.post",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-verify.post"
+    },
+    {
+      "operation": "postAuthLogin",
+      "routeId": "auth-login.post",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=auth-login.post"
+    },
+    {
+      "operation": "sendNotificationV1",
+      "routeId": "notifications.send",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.send"
+    },
+    {
+      "operation": "uploadFileV1",
+      "routeId": "files.upload",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.upload"
+    },
+    {
+      "operation": "verifyFileV1",
+      "routeId": "files.verify",
+      "exampleKind": "request-response-shape",
+      "canonicalMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.verify"
+    }
+  ],
+  "localServeModel": "The docs surface is generated on demand from repository authority and served only on a local developer loopback interface (for example a localhost dev docs server started from the repository checkout). It is never exposed on a public domain, never assigned a public hostname, and never released to any package registry. Regeneration re-reads the OpenAPI projection and readiness maps in HEAD, so the served surface stays a current-main reflection."
+}
