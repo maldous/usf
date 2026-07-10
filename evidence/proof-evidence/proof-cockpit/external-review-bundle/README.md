@@ -2,13 +2,15 @@
 
 This bundle is the stable repository entry point for the USF-293 proof cockpit external-review evidence package.
 
-Source SHA: bdaf9b3d8a8bdcd93b058d958351867a1f67c8b2
-Run ID: qa-run-2026-07-05T16-28-26-360Z
+Source SHA: bde7da844ee23731c2cdf18015bb6a8d1d7af4dc
+Deployment SHA: bde7da844ee23731c2cdf18015bb6a8d1d7af4dc
+Source tree hash: 7e5f40e6b4ce171b79ea7585a5db64442d37a038d1eb32d9ebed30447f587b49
+Run ID: qa-run-2026-07-10T00-21-12-446Z
 Authenticated service UI captures: 6
-Service evidence records: 39
-Screenshot or equivalent artifacts: 93
+Service evidence records: 40
+Screenshot or equivalent artifacts: 94
 
-Latest machine QA: 1278 pass, 0 warnings, 0 failures, 0 unresolved gaps.
+Latest machine QA: 1282 pass, 0 warnings, 0 failures, 0 unresolved gaps.
 
 Warning inventory:
 
@@ -17,14 +19,22 @@ Warning inventory:
 
 Primary generated bundle:
 
-- artifacts/proof-cockpit/machine-runs/2026-07-05T16-28-26-320Z/external-review-bundle
+- artifacts/proof-cockpit/machine-runs/2026-07-10T00-21-12-403Z/external-review-bundle
 
 Primary report paths:
 
 - ../final-external-review-report.md
-- artifacts/proof-cockpit/machine-runs/2026-07-05T16-28-26-320Z/external-review-bundle/external-review-report.md
+- artifacts/proof-cockpit/machine-runs/2026-07-10T00-21-12-403Z/external-review-bundle/external-review-report.md
 - /proof/reports/final
 - /proof/portfolio
+
+Projection-only re-pin policy:
+
+- Command: corepack pnpm proof-cockpit:projection-repin
+- Fresh machine execution: false
+- Generated reports are authority: false
+- Requires fresh machine QA when source changes: true
+- Full machine QA command: corepack pnpm proof-cockpit:machine-qa
 
 Authenticated Composed Service UI evidence uses only scoped staging/test-safe credentials through logical OpenBao references. Credential values are not printed, persisted in committed artifacts, screenshotted, logged, or bundled.
 
