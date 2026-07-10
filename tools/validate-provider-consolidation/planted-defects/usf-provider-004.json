@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-004-required-minimum-missing",
+  "expectedRuleIds": [
+    "USF-PROVIDER-004"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "required-minimum-missing",
+    "description": "a required-minimum providerId renamed so the eighteen-name checklist is not covered"
+  }
+}

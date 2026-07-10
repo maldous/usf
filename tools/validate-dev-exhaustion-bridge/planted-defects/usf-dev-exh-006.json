@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-006-backlog-not-sweep-projection",
+  "expectedRuleIds": ["USF-DEV-EXH-006"],
+  "mustBeDistinct": true,
+  "failureShape": "a backlog bucket not matching the sweep classification set",
+  "note": "Negative control for USF-DEV-EXH-006; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

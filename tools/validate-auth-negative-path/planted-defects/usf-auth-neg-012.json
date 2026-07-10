@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-012"],
+  "mustBeDistinct": true,
+  "description": "Cross-tenant-coverage defect: every cross-tenant-denial case is downgraded to test-rung-deferred, leaving no dev-proven or explicitly gap-recorded case.",
+  "mutation": "cross-tenant-denial cases.status := test-rung-deferred"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-004",
+  "name": "metadata-coverage-missing-csrf",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-004"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Drops the csrf key from metadataCoverage so a required metadata dimension is not exposed."
+}

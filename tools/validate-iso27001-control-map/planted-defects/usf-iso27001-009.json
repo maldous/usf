@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-009",
+  "description": "control row asserts control satisfaction/certification (map equals certification)",
+  "expectedRuleIds": [
+    "USF-ISO27001-009"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "semantic-map-equals-certification-overclaim"
+}

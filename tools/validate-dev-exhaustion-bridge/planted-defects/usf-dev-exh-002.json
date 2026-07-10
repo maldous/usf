@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-002-child-deliverable-map-missing",
+  "expectedRuleIds": ["USF-DEV-EXH-002"],
+  "mustBeDistinct": true,
+  "failureShape": "a childDeliverables map path that does not resolve on disk",
+  "note": "Negative control for USF-DEV-EXH-002; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

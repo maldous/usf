@@ -1,0 +1,561 @@
+{
+  "id": "operator-workbench-capability-map",
+  "title": "Local Operator Console / Workbench Capability Map",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "This map is a lower-authority metadata projection of a bounded local operator console/workbench surface. The workbench cannot define semantics; it only maps operations onto their existing route, interface, command, and semantic contracts which remain the sole higher authority. It is local/dev only and asserts no product UI, generated SDK, generated client, public API, deployment, staging, production, live-provider, app-store, compliance, monetisation, or human-acceptance readiness.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1073",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    "docs/architecture/non-ui-client-callable-contract-map.json",
+    "docs/architecture/operator-admin-surface-completeness-matrix.json",
+    "spec/instances/semantic-contract/internal-service-catalog-and-readiness.json",
+    "spec/instances/semantic-contract/tenant-service-clickthrough-policy.json",
+    "packages/contracts/src/api-surface.ts",
+    "packages/openapi/openapi.json"
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-operator-surface-matrix-and-contracts-in-head",
+    "revalidationMethod": "re-derived-from-non-ui-client-callable-contract-map-and-interface-contracts-in-head",
+    "sourceGitShaTreatment": "no-historical-pin-claimed"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-product-ui-readiness-claim-for-workbench",
+    "no-app-store-claim",
+    "workbench-cannot-define-semantics"
+  ],
+  "documentedRefs": {
+    "non-ui-client-callable-map": "docs/architecture/non-ui-client-callable-contract-map.json",
+    "operator-admin-surface-matrix": "docs/architecture/operator-admin-surface-completeness-matrix.json",
+    "internal-service-readiness": "spec/instances/semantic-contract/internal-service-catalog-and-readiness.json",
+    "tenant-service-clickthrough-policy": "spec/instances/semantic-contract/tenant-service-clickthrough-policy.json",
+    "proof-evidence-store": "evidence/proof-evidence/proof-cockpit/staging-evidence-store.json"
+  },
+  "operations": [
+    {
+      "operationId": "healthz.get",
+      "kind": "route-backed",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/healthz-get-api.json",
+      "tenantBoundary": "none",
+      "authBoundary": "none",
+      "sessionBoundary": "public-local-no-session",
+      "auditRef": "gap",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/healthz-get-api.json",
+      "status": "recorded-gap"
+    },
+    {
+      "operationId": "readyz.get",
+      "kind": "route-backed",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/readyz-get-api.json",
+      "tenantBoundary": "none",
+      "authBoundary": "none",
+      "sessionBoundary": "public-local-no-session",
+      "auditRef": "gap",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/readyz-get-api.json",
+      "status": "recorded-gap"
+    },
+    {
+      "operationId": "openapi.get",
+      "kind": "route-backed",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/openapi-get-api.json",
+      "tenantBoundary": "none",
+      "authBoundary": "none",
+      "sessionBoundary": "public-local-no-session",
+      "auditRef": "gap",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/openapi-get-api.json",
+      "status": "recorded-gap"
+    },
+    {
+      "operationId": "tenant-context.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/tenant-context-get-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/tenant-context-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "auth-login.post",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/authentication-login-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "none",
+      "sessionBoundary": "public-local-no-session",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/authentication-login-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "authz-check.post",
+      "kind": "route-backed",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/authz-check-post-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/authz-check-post-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "authz-permissions.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/authz-permissions-get-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/authz-permissions-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "audit-events.list",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/audit-events-list-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/audit-events-list-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "audit-events.get",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/audit-events-get-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/audit-events-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "audit-verify.post",
+      "kind": "command",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/audit-verify-post-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/audit-verify-post-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "config-current.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/config-current-get-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/config-current-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "config-flags.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/config-flags-get-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/config-flags-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "config-provider-status.get",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/config-provider-status-get-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/config-provider-status-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "providers.list",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/providers-list-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/providers-list-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "providers.get",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/providers-get-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/providers-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "observability-readiness.get",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/observability-readiness-get-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/observability-readiness-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "observability-signals.list",
+      "kind": "query",
+      "callerClass": "operator-only",
+      "canonicalContractRef": "spec/instances/interface-contract/observability-signals-list-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/observability-signals-list-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "files.list",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/files-list-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/files-list-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "files.upload",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/files-upload-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/files-upload-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "files.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/files-get-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/files-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "files.download",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/files-download-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/files-download-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "files.verify",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/files-verify-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/files-verify-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "jobs.list",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/jobs-list-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/jobs-list-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "jobs.create",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/jobs-create-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/jobs-create-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "jobs.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/jobs-get-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/jobs-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "jobs.cancel",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/jobs-cancel-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/jobs-cancel-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "notification-templates.create",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/notification-templates-create-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/notification-templates-create-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "notifications.list",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/notifications-list-api.json",
+      "tenantBoundary": "tenant-header-query",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/notifications-list-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "notifications.create",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/notifications-create-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/notifications-create-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "notifications.get",
+      "kind": "query",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/notifications-get-api.json",
+      "tenantBoundary": "tenant-header-query-param",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/notifications-get-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "notifications.send",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/notifications-send-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/notifications-send-api.json",
+      "status": "mapped"
+    },
+    {
+      "operationId": "notifications.cancel",
+      "kind": "command",
+      "callerClass": "client-callable",
+      "canonicalContractRef": "spec/instances/interface-contract/notifications-cancel-api.json",
+      "tenantBoundary": "tenant-header-body",
+      "authBoundary": "dev-header-keycloak-bearer-future",
+      "sessionBoundary": "dev-header-session-local-only",
+      "auditRef": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "telemetryRef": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "negativePathRef": "spec/instances/interface-contract/notifications-cancel-api.json",
+      "status": "mapped"
+    }
+  ],
+  "views": [
+    {
+      "viewId": "tenant-context",
+      "operatorOnly": false,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/tenant-context-get-api.json",
+        "spec/instances/semantic-contract/tenant-host-identity-resolution.json"
+      ]
+    },
+    {
+      "viewId": "sdk-operations",
+      "operatorOnly": false,
+      "backingContractRefs": [
+        "non-ui-client-callable-map"
+      ]
+    },
+    {
+      "viewId": "route-backed-operations",
+      "operatorOnly": false,
+      "backingContractRefs": [
+        "non-ui-client-callable-map",
+        "operator-admin-surface-matrix"
+      ]
+    },
+    {
+      "viewId": "jobs",
+      "operatorOnly": false,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/jobs-list-api.json",
+        "spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json"
+      ]
+    },
+    {
+      "viewId": "files",
+      "operatorOnly": false,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/files-list-api.json",
+        "spec/instances/semantic-contract/object-storage-and-tenant-prefixes-and-signed-urls.json"
+      ]
+    },
+    {
+      "viewId": "notifications",
+      "operatorOnly": false,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/notifications-list-api.json",
+        "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json"
+      ]
+    },
+    {
+      "viewId": "audit-events",
+      "operatorOnly": true,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/audit-events-list-api.json",
+        "spec/instances/semantic-contract/audit-of-privileged-access.json"
+      ]
+    },
+    {
+      "viewId": "provider-status",
+      "operatorOnly": true,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/providers-list-api.json",
+        "spec/instances/semantic-contract/provider-configuration-plane.json",
+        "internal-service-readiness",
+        "tenant-service-clickthrough-policy"
+      ]
+    },
+    {
+      "viewId": "readiness",
+      "operatorOnly": true,
+      "backingContractRefs": [
+        "spec/instances/interface-contract/readyz-get-api.json",
+        "spec/instances/interface-contract/observability-readiness-get-api.json",
+        "spec/instances/semantic-contract/composed-provider-readiness-spine.json",
+        "internal-service-readiness"
+      ]
+    },
+    {
+      "viewId": "proof-evidence-state",
+      "operatorOnly": true,
+      "backingContractRefs": [
+        "proof-evidence-store",
+        "spec/instances/command/proof-review-repin.json",
+        "spec/instances/command/proof-review-up.json",
+        "spec/instances/command/proof-review-down.json"
+      ]
+    }
+  ],
+  "summary": {
+    "operationCount": 32,
+    "operatorOnlyCount": 12,
+    "clientCallableCount": 20
+  }
+}

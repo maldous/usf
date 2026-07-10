@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-001"],
+  "mustBeDistinct": true,
+  "description": "Envelope defect: ownerIssueId set to a foreign issue instead of USF-1076 under parent USF-1069.",
+  "mutation": "catalogue.ownerIssueId := USF-9999"
+}

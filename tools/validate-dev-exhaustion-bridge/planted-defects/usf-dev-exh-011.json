@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-011-missing-required-nonclaim",
+  "expectedRuleIds": ["USF-DEV-EXH-011"],
+  "mustBeDistinct": true,
+  "failureShape": "the summary dropping a required non-claim",
+  "note": "Negative control for USF-DEV-EXH-011; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

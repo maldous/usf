@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-008-missing-non-claim",
+  "expectedRuleIds": [
+    "USF-A11Y-008"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "removing no-wcag-conformance-claim drops a required non-claim",
+  "note": "Negative control for USF-A11Y-008; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

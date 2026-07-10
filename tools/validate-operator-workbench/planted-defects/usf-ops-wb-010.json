@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-010",
+  "expectedRuleIds": [
+    "USF-OPS-WB-010"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-010",
+  "slug": "nonclaims",
+  "description": "Removes a required non-claim (e.g. no-app-store-claim) or asserts a readinessClaims entry.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

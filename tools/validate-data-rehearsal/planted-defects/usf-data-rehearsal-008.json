@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-008-restored-usability-command-success-only",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-008"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "the restored-dataset-usability step is reduced to command exit success only",
+  "note": "Negative control for USF-DATA-REHEARSAL-008; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

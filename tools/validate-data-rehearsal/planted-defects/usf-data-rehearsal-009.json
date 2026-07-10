@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-009-failed-restore-negative-path-positive-only",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-009"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "the failed-restore-negative-path step describes only a success path",
+  "note": "Negative control for USF-DATA-REHEARSAL-009; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

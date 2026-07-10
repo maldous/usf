@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-011-phantom-component-ref",
+  "expectedRuleIds": [
+    "USF-A11Y-011"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "adding a componentRef absent from the live ui-semantic-model userActions references a component that no longer exists",
+  "note": "Negative control for USF-A11Y-011; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

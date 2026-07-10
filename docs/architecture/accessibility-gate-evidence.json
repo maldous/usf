@@ -1,0 +1,129 @@
+{
+  "id": "accessibility-gate-evidence",
+  "title": "Accessibility Gate Dev Realisation Evidence",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "Lower-authority supporting map for USF-1072. It records the result of a LOCAL, STATIC-SEMANTICS, fail-closed dev gate that reads the recorded ui-semantic-model and checks that each declared interactive surface and component carries accessible-name, role, and keyboard semantics plus non-visual error and state semantics. It is NOT a human WCAG audit, NOT a browser or axe-core runtime accessibility run, and it does not assert product-surface UI readiness, human accessibility acceptance, or WCAG conformance. Higher authorities are the ui-semantic-model instances, the ui-semantic-model schema, and the accessibility-a11y-gate semantic contract; this map and any generated report over it are lower authority.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1072",
+  "parentIssueId": "USF-1069",
+  "sourceAuthorities": [
+    {
+      "kind": "ui-semantic-model-instance",
+      "path": "spec/instances/ui-semantic-model/authentication-login.json",
+      "authorityLevel": "semantic-definition",
+      "role": "surface-and-component-source-of-truth"
+    },
+    {
+      "kind": "ui-semantic-model-schema",
+      "path": "spec/schemas/ui-semantic-model.schema.json",
+      "authorityLevel": "semantic-definition",
+      "role": "shape-authority-for-ui-semantic-model-instances"
+    },
+    {
+      "kind": "semantic-contract",
+      "path": "spec/instances/semantic-contract/accessibility-a11y-gate.json",
+      "authorityLevel": "semantic-definition",
+      "role": "capability-contract-defining-landmark-role-aria-and-axe-expectations"
+    }
+  ],
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-ui-semantic-model-in-head",
+    "method": "re-derivation-from-spec-instances-ui-semantic-model",
+    "note": "Surfaces and component refs are re-derived from the live ui-semantic-model instances at HEAD by the validator; this document holds no independent surface authority and is re-validated on every run."
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-human-accessibility-acceptance-claim",
+    "no-wcag-conformance-claim",
+    "no-browser-e2e-accessibility-claim"
+  ],
+  "accessibilityRuleSet": [
+    {
+      "ruleId": "a11y-static-accessible-name",
+      "description": "Every interactive control recorded for the surface has a programmatic accessible name in the ui-semantic-model.",
+      "scope": "interactive-component",
+      "evidenceKind": "recorded-ui-semantic-name"
+    },
+    {
+      "ruleId": "a11y-static-role-landmark",
+      "description": "The surface declares a semantic UI role / landmark identity (uiKind, surface, route) rather than a purely visual identity.",
+      "scope": "surface",
+      "evidenceKind": "recorded-ui-semantic-role"
+    },
+    {
+      "ruleId": "a11y-static-keyboard-reachability",
+      "description": "Keyboard interaction is recorded as reaching the surface's interactive actions.",
+      "scope": "surface",
+      "evidenceKind": "recorded-ui-semantic-keyboard"
+    },
+    {
+      "ruleId": "a11y-static-nonvisual-error-announcement",
+      "description": "Error and auth-error states are recorded as announced without relying on visual styling only.",
+      "scope": "surface-state",
+      "evidenceKind": "recorded-ui-semantic-announcement"
+    },
+    {
+      "ruleId": "a11y-static-nonvisual-state-distinction",
+      "description": "Denied / forbidden state is recorded as communicated without relying on colour or layout alone.",
+      "scope": "surface-state",
+      "evidenceKind": "recorded-ui-semantic-state"
+    }
+  ],
+  "surfaces": [
+    {
+      "surfaceId": "ui.authentication-login",
+      "surface": "authentication",
+      "route": "/login",
+      "uiKind": "journey",
+      "componentRefs": [
+        "submit-login",
+        "retry-login",
+        "query-session",
+        "attempt-permission-gated-action"
+      ],
+      "checksApplied": [
+        "a11y-static-accessible-name",
+        "a11y-static-role-landmark",
+        "a11y-static-keyboard-reachability",
+        "a11y-static-nonvisual-error-announcement",
+        "a11y-static-nonvisual-state-distinction"
+      ],
+      "staticEvidence": {
+        "a11y-static-accessible-name": "ui-semantic-model records: login controls have programmatic names; auth-error retry control has an accessible name (covers componentRefs submit-login, retry-login, query-session, attempt-permission-gated-action).",
+        "a11y-static-role-landmark": "ui-semantic-model records uiKind=journey, surface=authentication, route=/login as the surface's semantic identity rather than a visual-only identity.",
+        "a11y-static-keyboard-reachability": "ui-semantic-model records: keyboard interaction reaches login and retry actions.",
+        "a11y-static-nonvisual-error-announcement": "ui-semantic-model records: error state is announced without relying on visual styling only; the auth-error-retry journey announces error without visual-only signalling.",
+        "a11y-static-nonvisual-state-distinction": "ui-semantic-model records: forbidden state communicates denied access without relying on colour or layout only."
+      },
+      "deferredToTestRung": [
+        "axe-core-automated-scan",
+        "browser-focus-order-runtime",
+        "screen-reader-announcement-runtime",
+        "colour-contrast-ratio-measurement"
+      ],
+      "deferralNote": "These are runtime accessibility checks that require a rendered browser surface (axe-core, real focus order, screen-reader announcement, measured contrast ratio). They belong to the test rung per the accessibility-a11y-gate semantic contract and are recorded here as gaps in dev coverage, not as dev-proven."
+    }
+  ],
+  "summary": {
+    "surfaceCount": 1,
+    "rulesChecked": 5,
+    "gapsRecorded": 4,
+    "note": "One ui-semantic-model instance is recorded (ui.authentication-login); the gate applies five static-semantics rules across it and its four interactive component refs, and records four runtime checks as test-rung deferrals."
+  }
+}

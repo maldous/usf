@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-007-verdict-out-of-vocabulary",
+  "expectedRuleIds": ["USF-DEV-EXH-007"],
+  "mustBeDistinct": true,
+  "failureShape": "a verdict value outside the allowed three",
+  "note": "Negative control for USF-DEV-EXH-007; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-014-planted-defect-coverage-broken",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-014"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "duplicate/inconsistent planted-defect coverage",
+  "note": "Negative control for USF-DATA-REHEARSAL-014; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-real-009-triage-inconsistent-with-classification",
+  "expectedRuleIds": ["USF-DEV-REAL-009"],
+  "mustBeDistinct": true,
+  "failureShape": "live-provider-only row not marking requiresLiveProviders",
+  "note": "Negative control for USF-DEV-REAL-009; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

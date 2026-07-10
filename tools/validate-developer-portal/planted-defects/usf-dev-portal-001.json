@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-001",
+  "name": "envelope-missing-id",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-001"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Removes the envelope id field so the generated-report envelope is incomplete."
+}

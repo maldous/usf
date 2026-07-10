@@ -1,0 +1,7 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-007"],
+  "mustBeDistinct": true,
+  "failureShape": "missing-redaction-evidence",
+  "description": "Missing-redaction-evidence defect: a dev-proven case downgrades its redactionRef to \"gap\" instead of a resolving on-disk redaction/value-free instance.",
+  "mutation": "dev-proven case.redactionRef := gap"
+}

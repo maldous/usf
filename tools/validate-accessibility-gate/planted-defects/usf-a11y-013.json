@@ -1,0 +1,9 @@
+{
+  "id": "usf-a11y-013-duplicate-rule-coverage",
+  "expectedRuleIds": [
+    "USF-A11Y-013"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "two planted defects for one rule (and none for others) breaks exactly-one-distinct-per-rule coverage",
+  "note": "Negative control for USF-A11Y-013; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

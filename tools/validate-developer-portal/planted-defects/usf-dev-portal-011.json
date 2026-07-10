@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-011",
+  "name": "rendered-endpoint-bad-sourceref",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-011"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Corrupts a rendered endpoint sourceRef prefix so it no longer cites the OpenAPI projection."
+}

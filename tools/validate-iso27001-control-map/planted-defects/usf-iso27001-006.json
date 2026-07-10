@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-006",
+  "description": "not-applicable control left without a rationale",
+  "expectedRuleIds": [
+    "USF-ISO27001-006"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "not-applicable-control-missing-rationale"
+}

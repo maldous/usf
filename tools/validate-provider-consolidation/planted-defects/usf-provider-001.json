@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-001-envelope-parent-issue-wrong",
+  "expectedRuleIds": [
+    "USF-PROVIDER-001"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "envelope-parent-issue-wrong",
+    "description": "envelope parentIssueId set to USF-9999 (must be USF-1069)"
+  }
+}

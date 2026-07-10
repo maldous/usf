@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-011-readiness-overclaim",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-011"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "an overclaim phrase is introduced into the map",
+  "note": "Negative control for USF-DATA-REHEARSAL-011; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-real-012-overclaim-phrase-present",
+  "expectedRuleIds": ["USF-DEV-REAL-012"],
+  "mustBeDistinct": true,
+  "failureShape": "an overclaim phrase such as production ready appears in the documents",
+  "note": "Negative control for USF-DEV-REAL-012; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

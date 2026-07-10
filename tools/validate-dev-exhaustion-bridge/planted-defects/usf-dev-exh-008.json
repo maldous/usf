@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-008-exhausted-verdict-with-blocking-gap",
+  "expectedRuleIds": ["USF-DEV-EXH-008"],
+  "mustBeDistinct": true,
+  "failureShape": "an exhausted verdict carrying a blocking gap",
+  "note": "Negative control for USF-DEV-EXH-008; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

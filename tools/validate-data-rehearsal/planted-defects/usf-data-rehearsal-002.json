@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-002-drop-required-step-kind",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-002"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "removing the audit step drops a required rehearsal step kind",
+  "note": "Negative control for USF-DATA-REHEARSAL-002; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

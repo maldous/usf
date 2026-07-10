@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-006",
+  "expectedRuleIds": [
+    "USF-OPS-WB-006"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-006",
+  "slug": "audit-telemetry-negative",
+  "description": "Sets auditRef (or telemetryRef / negativePathRef) to a non-resolving, non-'gap' reference so coverage is neither proven nor an explicit gap.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

@@ -185,6 +185,15 @@ AUTHORIZED_TOOLING = {
     "tools/validate-parity/validate-resources.py",
     "tools/validate-parity/validate-domain-depth.py",
     "tools/validate-runtime/validate-runtime.py",
+    "tools/validate-dev-realisation/validate-dev-realisation.py",
+    "tools/validate-provider-consolidation/validate-provider-consolidation.py",
+    "tools/validate-accessibility-gate/validate-accessibility-gate.py",
+    "tools/validate-iso27001-control-map/validate-iso27001-control-map.py",
+    "tools/validate-developer-portal/validate-developer-portal.py",
+    "tools/validate-operator-workbench/validate-operator-workbench.py",
+    "tools/validate-auth-negative-path/validate-auth-negative-path.py",
+    "tools/validate-data-rehearsal/validate-data-rehearsal.py",
+    "tools/validate-dev-exhaustion-bridge/validate-dev-exhaustion-bridge.py",
 }
 # (item 4) Explicit enum -> vocabulary value-set bindings by (schema, JSON pointer). No guessing.
 # Every "/properties/lifecycleState" enum binds to lifecycle-states (handled in resolve below).

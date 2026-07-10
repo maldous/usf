@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-002",
+  "expectedRuleIds": [
+    "USF-OPS-WB-002"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-002",
+  "slug": "operation-keys",
+  "description": "Drops a required operation key (operationId) or desynchronises summary.operationCount from the enumerated operations.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

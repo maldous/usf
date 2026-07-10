@@ -1,0 +1,9 @@
+{
+  "id": "usf-data-rehearsal-004-dev-proven-evidence-unresolved",
+  "expectedRuleIds": [
+    "USF-DATA-REHEARSAL-004"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "a dev-proven step cites an evidenceRef that does not resolve on disk (fabricated proof)",
+  "note": "Negative control for USF-DATA-REHEARSAL-004; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

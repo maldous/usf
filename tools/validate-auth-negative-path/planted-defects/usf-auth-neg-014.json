@@ -1,0 +1,6 @@
+{
+  "expectedRuleIds": ["USF-AUTH-NEG-014"],
+  "mustBeDistinct": true,
+  "description": "Missing-telemetry-evidence defect: a dev-proven case downgrades its telemetryRef to \"gap\" instead of a resolving on-disk telemetry proof artefact.",
+  "mutation": "dev-proven case.telemetryRef := gap"
+}

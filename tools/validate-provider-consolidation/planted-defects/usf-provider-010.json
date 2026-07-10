@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-010-missing-nonclaim",
+  "expectedRuleIds": [
+    "USF-PROVIDER-010"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "missing-nonclaim",
+    "description": "map-level nonClaims missing no-staging-claim"
+  }
+}

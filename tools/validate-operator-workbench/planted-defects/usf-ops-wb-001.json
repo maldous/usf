@@ -1,0 +1,12 @@
+{
+  "id": "planted-defect-usf-ops-wb-001",
+  "expectedRuleIds": [
+    "USF-OPS-WB-001"
+  ],
+  "mustBeDistinct": true,
+  "targetRule": "USF-OPS-WB-001",
+  "slug": "envelope",
+  "description": "Removes the envelope id / breaks a required envelope field or the USF-1073 owner / USF-1069 parent / lower-authority binding.",
+  "appliesTo": "docs/architecture/operator-workbench-capability-map.json",
+  "note": "Metadata-only planted-defect descriptor. The isolated mutation itself is applied by validate-operator-workbench.py mutate() during selftest; this file asserts one distinct defect per rule."
+}

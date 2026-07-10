@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-real-003-contradict-authoritative-disposition",
+  "expectedRuleIds": ["USF-DEV-REAL-003"],
+  "mustBeDistinct": true,
+  "failureShape": "a currentDisposition that differs from the current-main map violates authority order",
+  "note": "Negative control for USF-DEV-REAL-003; the validator selftest injects this mutation in-memory and asserts exactly this rule fails closed."
+}

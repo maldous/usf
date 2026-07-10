@@ -1,0 +1,1693 @@
+{
+  "id": "dev-to-test-readiness-bridge",
+  "title": "Dev-to-Test Readiness Bridge and Final Dev Exhaustion Summary",
+  "schemaVersion": "1.0.0",
+  "authorityLevel": "dev-exhaustion-summary-lower-authority",
+  "authorityBoundary": "Lowest-authority summary. Re-derived from the validator-enforced child maps and the current-main capability-service realisation map at HEAD. Defines no semantics; the verdict is evidence-backed by the referenced validator-enforced artefacts and does not self-assert authority.",
+  "lifecycleState": "active",
+  "ownerIssueId": "USF-1079",
+  "parentIssueId": "USF-1069",
+  "sweepSourceOfTruth": "docs/architecture/dev-realisation-exhaustion-sweep.json",
+  "generatedReportAuthority": "lower-authority-summary-only",
+  "sourceAuthorities": [
+    "docs/architecture/dev-realisation-exhaustion-sweep.json",
+    "docs/architecture/semantic-only-future-domain-triage.json",
+    "docs/architecture/developer-portal-docs-map.json",
+    "docs/architecture/accessibility-gate-evidence.json",
+    "docs/architecture/operator-workbench-capability-map.json",
+    "docs/architecture/provider-consolidation-map.json",
+    "docs/architecture/dev-synthetic-data-rehearsal-map.json",
+    "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+    "docs/architecture/iso27001-aligned-audit-control-map.json",
+    "docs/architecture/current-main-capability-service-realisation-map.json",
+    "spec/instances/semantic-contract/*.json"
+  ],
+  "currentMainFreshness": {
+    "status": "current-main",
+    "binding": "revalidated-against-dev-realisation-sweep-and-child-maps-in-head",
+    "historicalEvidenceTreatment": "lineage-only-not-current-proof",
+    "generatedReportAuthority": "lower-authority-summary-only"
+  },
+  "readinessClaims": [],
+  "nonClaims": [
+    "no-generated-sdk-readiness-claim",
+    "no-generated-client-readiness-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-human-acceptance-claim",
+    "no-compliance-readiness-claim",
+    "no-monetisation-readiness-claim",
+    "no-test-focus-move-claim-from-classification-alone",
+    "no-test-rung-readiness-claim",
+    "no-iso-certification-claim",
+    "verdict-is-evidence-backed-not-self-asserting-authority"
+  ],
+  "childDeliverables": [
+    {
+      "issueId": "USF-1070",
+      "map": "docs/architecture/dev-realisation-exhaustion-sweep.json",
+      "validator": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefects": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "issueId": "USF-1078",
+      "map": "docs/architecture/semantic-only-future-domain-triage.json",
+      "validator": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefects": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "issueId": "USF-1071",
+      "map": "docs/architecture/developer-portal-docs-map.json",
+      "validator": "tools/validate-developer-portal/validate-developer-portal.py",
+      "plantedDefects": "tools/validate-developer-portal/planted-defects"
+    },
+    {
+      "issueId": "USF-1072",
+      "map": "docs/architecture/accessibility-gate-evidence.json",
+      "validator": "tools/validate-accessibility-gate/validate-accessibility-gate.py",
+      "plantedDefects": "tools/validate-accessibility-gate/planted-defects"
+    },
+    {
+      "issueId": "USF-1073",
+      "map": "docs/architecture/operator-workbench-capability-map.json",
+      "validator": "tools/validate-operator-workbench/validate-operator-workbench.py",
+      "plantedDefects": "tools/validate-operator-workbench/planted-defects"
+    },
+    {
+      "issueId": "USF-1074",
+      "map": "docs/architecture/provider-consolidation-map.json",
+      "validator": "tools/validate-provider-consolidation/validate-provider-consolidation.py",
+      "plantedDefects": "tools/validate-provider-consolidation/planted-defects"
+    },
+    {
+      "issueId": "USF-1075",
+      "map": "docs/architecture/dev-synthetic-data-rehearsal-map.json",
+      "validator": "tools/validate-data-rehearsal/validate-data-rehearsal.py",
+      "plantedDefects": "tools/validate-data-rehearsal/planted-defects"
+    },
+    {
+      "issueId": "USF-1076",
+      "map": "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+      "validator": "tools/validate-auth-negative-path/validate-auth-negative-path.py",
+      "plantedDefects": "tools/validate-auth-negative-path/planted-defects"
+    },
+    {
+      "issueId": "USF-1077",
+      "map": "docs/architecture/iso27001-aligned-audit-control-map.json",
+      "validator": "tools/validate-iso27001-control-map/validate-iso27001-control-map.py",
+      "plantedDefects": "tools/validate-iso27001-control-map/planted-defects"
+    }
+  ],
+  "crossReferences": {
+    "semanticSweep": "docs/architecture/dev-realisation-exhaustion-sweep.json",
+    "futureDomainTriage": "docs/architecture/semantic-only-future-domain-triage.json",
+    "iso27001Map": "docs/architecture/iso27001-aligned-audit-control-map.json",
+    "providerConsolidationMap": "docs/architecture/provider-consolidation-map.json",
+    "authNegativePathCatalogue": "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+    "dataRehearsalMap": "docs/architecture/dev-synthetic-data-rehearsal-map.json",
+    "accessibilityGate": "docs/architecture/accessibility-gate-evidence.json",
+    "developerPortalDocs": "docs/architecture/developer-portal-docs-map.json",
+    "operatorWorkbench": "docs/architecture/operator-workbench-capability-map.json"
+  },
+  "semanticContractCount": 67,
+  "classificationCounts": {
+    "deprecated": 1,
+    "dev-realisable-later": 2,
+    "dev-realisable-now": 12,
+    "dev-realised": 12,
+    "intentionally-semantic-only": 6,
+    "live-provider-only": 8,
+    "staging-deployment-only": 1,
+    "test-rung-only": 25
+  },
+  "semanticContractDispositions": [
+    {
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "capabilityDomain": "authentication",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.background-workers-job-runner",
+      "capabilityDomain": "compute-runtime",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.runtime-secrets-management",
+      "capabilityDomain": "compute-runtime",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "capabilityDomain": "compute-runtime",
+      "currentDisposition": "deferred-with-rationale",
+      "devRealisationClassification": "dev-realisable-later"
+    },
+    {
+      "semanticContractRef": "semantic-contract.branding-and-theming",
+      "capabilityDomain": "configuration",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "capabilityDomain": "configuration",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "capabilityDomain": "configuration",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-canonical-domain-set-unset",
+      "capabilityDomain": "configuration",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-domain-activation-auth-client",
+      "capabilityDomain": "configuration",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.write-only-secret-settings",
+      "capabilityDomain": "configuration",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.backup-and-restore",
+      "capabilityDomain": "data-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capabilityDomain": "data-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.history-read-model-read-only-projection",
+      "capabilityDomain": "data-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "capabilityDomain": "data-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "capabilityDomain": "data-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-data-import-export",
+      "capabilityDomain": "data-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "capabilityDomain": "developer-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.mock-providers-dev-test",
+      "capabilityDomain": "developer-platform",
+      "currentDisposition": "deferred-with-rationale",
+      "devRealisationClassification": "dev-realisable-later"
+    },
+    {
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "capabilityDomain": "developer-platform",
+      "currentDisposition": "not-claimed",
+      "devRealisationClassification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.rate-limiting-api",
+      "capabilityDomain": "developer-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.webhooks-developer-facing",
+      "capabilityDomain": "developer-platform",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.product-catalog-plans-prices",
+      "capabilityDomain": "entitlements-billing",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.quota-enforcement",
+      "capabilityDomain": "entitlements-billing",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "capabilityDomain": "entitlements-billing",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "capabilityDomain": "entitlements-billing",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "capabilityDomain": "events-workflow",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "capabilityDomain": "events-workflow",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "capabilityDomain": "events-workflow",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "capabilityDomain": "events-workflow",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.accessibility-a11y-gate",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.build-versus-compose-decision-framework",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "not-claimed",
+      "devRealisationClassification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.environment-registry-and-bootstrap",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "staging-deployment-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.environment-specific-vs-shared-service-model",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.i18n-runtime-and-validation",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.provider-environment-classification",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.service-catalog-and-provider-integration-model",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "capabilityDomain": "foundation",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "internal-support-only",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-keys-personal-access-tokens",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.delegated-administration-roles",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.entitlement-engine",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.sub-organisations",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-mode-break-glass-access",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-groups",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-identity-record-and-fqdn",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.user-identity-and-tenant-membership",
+      "capabilityDomain": "identity-access",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "deprecated-with-rationale",
+      "devRealisationClassification": "deprecated"
+    },
+    {
+      "semanticContractRef": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.internal-service-catalog-and-readiness",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "operator-tooling-local-contract",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-service-clickthrough-policy",
+      "capabilityDomain": "observability-ops",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.search-and-indexing-product-search",
+      "capabilityDomain": "search",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "capabilityDomain": "security-governance",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "capabilityDomain": "security-governance",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-isolation-proof",
+      "capabilityDomain": "security-governance",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "dev-realisable-now"
+    },
+    {
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "capabilityDomain": "storage",
+      "currentDisposition": "local-route-contract-realised",
+      "devRealisationClassification": "dev-realised"
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-tickets-customer-health-announcements",
+      "capabilityDomain": "support-admin",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "capabilityDomain": "support-admin",
+      "currentDisposition": "semantic-contract-only-current-main",
+      "devRealisationClassification": "test-rung-only"
+    }
+  ],
+  "realisedDevItems": [
+    {
+      "semanticContractRef": "semantic-contract.authentication-platform",
+      "capability": "authentication-platform",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/authentication-platform.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.configuration-registry-and-history",
+      "capability": "configuration-registry-and-history",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/configuration-registry-and-history.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.backup-and-restore",
+      "capability": "backup-and-restore",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1075",
+      "semanticContractPath": "spec/instances/semantic-contract/backup-and-restore.json",
+      "requiredProof": [
+        "L2 contract",
+        "synthetic-rehearsal"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "migration-rehearsal-evidence"
+      ],
+      "requiredValidators": [
+        "backup-migration-parity"
+      ],
+      "realisationMap": "docs/architecture/dev-synthetic-data-rehearsal-map.json",
+      "validatorRef": "tools/validate-data-rehearsal/validate-data-rehearsal.py",
+      "plantedDefectsRef": "tools/validate-data-rehearsal/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-data-import-export",
+      "capability": "tenant-data-import-export",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1075",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-data-import-export.json",
+      "requiredProof": [
+        "L2 contract",
+        "synthetic-rehearsal"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "migration-rehearsal-evidence"
+      ],
+      "requiredValidators": [
+        "backup-migration-parity"
+      ],
+      "realisationMap": "docs/architecture/dev-synthetic-data-rehearsal-map.json",
+      "validatorRef": "tools/validate-data-rehearsal/validate-data-rehearsal.py",
+      "plantedDefectsRef": "tools/validate-data-rehearsal/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-docs-developer-portal-sdks-rate-limits",
+      "capability": "api-docs-developer-portal-sdks-rate-limits",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1071",
+      "semanticContractPath": "spec/instances/semantic-contract/api-docs-developer-portal-sdks-rate-limits.json",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "openapi-snapshot",
+        "docs-surface-snapshot"
+      ],
+      "requiredValidators": [
+        "dev-portal-docs-parity"
+      ],
+      "realisationMap": "docs/architecture/developer-portal-docs-map.json",
+      "validatorRef": "tools/validate-developer-portal/validate-developer-portal.py",
+      "plantedDefectsRef": "tools/validate-developer-portal/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.notification-delivery-and-preferences-and-channels",
+      "capability": "notification-delivery-and-preferences-and-channels",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/notification-delivery-and-preferences-and-channels.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.scheduled-jobs-built-in-on-the-event-substrate",
+      "capability": "scheduled-jobs-built-in-on-the-event-substrate",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/scheduled-jobs-built-in-on-the-event-substrate.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.accessibility-a11y-gate",
+      "capability": "accessibility-a11y-gate",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1072",
+      "semanticContractPath": "spec/instances/semantic-contract/accessibility-a11y-gate.json",
+      "requiredProof": [
+        "L2 contract",
+        "a11y-static-check"
+      ],
+      "requiredEvidence": [
+        "a11y-scan-report",
+        "route-trace"
+      ],
+      "requiredValidators": [
+        "accessibility-gate-parity"
+      ],
+      "realisationMap": "docs/architecture/accessibility-gate-evidence.json",
+      "validatorRef": "tools/validate-accessibility-gate/validate-accessibility-gate.py",
+      "plantedDefectsRef": "tools/validate-accessibility-gate/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.provider-configuration-plane",
+      "capability": "provider-configuration-plane",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-configuration-plane.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.provider-environment-classification",
+      "capability": "provider-environment-classification",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/provider-environment-classification.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.service-catalog-and-provider-integration-model",
+      "capability": "service-catalog-and-provider-integration-model",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1074",
+      "semanticContractPath": "spec/instances/semantic-contract/service-catalog-and-provider-integration-model.json",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "provider-catalog-snapshot"
+      ],
+      "requiredValidators": [
+        "provider-integration-parity"
+      ],
+      "realisationMap": "docs/architecture/provider-consolidation-map.json",
+      "validatorRef": "tools/validate-provider-consolidation/validate-provider-consolidation.py",
+      "plantedDefectsRef": "tools/validate-provider-consolidation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.abac-policy-decision-point",
+      "capability": "abac-policy-decision-point",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/abac-policy-decision-point.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.audit-of-privileged-access",
+      "capability": "audit-of-privileged-access",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/audit-of-privileged-access.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.rbac-roles-and-permissions",
+      "capability": "rbac-roles-and-permissions",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/rbac-roles-and-permissions.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-mode-break-glass-access",
+      "capability": "support-mode-break-glass-access",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1076",
+      "semanticContractPath": "spec/instances/semantic-contract/support-mode-break-glass-access.json",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "realisationMap": "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+      "validatorRef": "tools/validate-auth-negative-path/validate-auth-negative-path.py",
+      "plantedDefectsRef": "tools/validate-auth-negative-path/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-host-identity-resolution",
+      "capability": "tenant-host-identity-resolution",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-host-identity-resolution.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-identity-record-and-fqdn",
+      "capability": "tenant-identity-record-and-fqdn",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1076",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-identity-record-and-fqdn.json",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "realisationMap": "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+      "validatorRef": "tools/validate-auth-negative-path/validate-auth-negative-path.py",
+      "plantedDefectsRef": "tools/validate-auth-negative-path/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.user-identity-and-tenant-membership",
+      "capability": "user-identity-and-tenant-membership",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1076",
+      "semanticContractPath": "spec/instances/semantic-contract/user-identity-and-tenant-membership.json",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "realisationMap": "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+      "validatorRef": "tools/validate-auth-negative-path/validate-auth-negative-path.py",
+      "plantedDefectsRef": "tools/validate-auth-negative-path/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.internal-service-catalog-and-readiness",
+      "capability": "internal-service-catalog-and-readiness",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1073",
+      "semanticContractPath": "spec/instances/semantic-contract/internal-service-catalog-and-readiness.json",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "operator-metadata-snapshot"
+      ],
+      "requiredValidators": [
+        "operator-workbench-parity"
+      ],
+      "realisationMap": "docs/architecture/operator-workbench-capability-map.json",
+      "validatorRef": "tools/validate-operator-workbench/validate-operator-workbench.py",
+      "plantedDefectsRef": "tools/validate-operator-workbench/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.metrics-and-traces",
+      "capability": "metrics-and-traces",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/metrics-and-traces.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-service-clickthrough-policy",
+      "capability": "tenant-service-clickthrough-policy",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1073",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-service-clickthrough-policy.json",
+      "requiredProof": [
+        "L2 contract"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "operator-metadata-snapshot"
+      ],
+      "requiredValidators": [
+        "operator-workbench-parity"
+      ],
+      "realisationMap": "docs/architecture/operator-workbench-capability-map.json",
+      "validatorRef": "tools/validate-operator-workbench/validate-operator-workbench.py",
+      "plantedDefectsRef": "tools/validate-operator-workbench/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.compliance-reports-access-reviews-evidence-packs",
+      "capability": "compliance-reports-access-reviews-evidence-packs",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1077",
+      "semanticContractPath": "spec/instances/semantic-contract/compliance-reports-access-reviews-evidence-packs.json",
+      "requiredProof": [
+        "L2 contract",
+        "audit-evidence"
+      ],
+      "requiredEvidence": [
+        "evidence-pack",
+        "access-review-report"
+      ],
+      "requiredValidators": [
+        "audit-control-parity"
+      ],
+      "realisationMap": "docs/architecture/iso27001-aligned-audit-control-map.json",
+      "validatorRef": "tools/validate-iso27001-control-map/validate-iso27001-control-map.py",
+      "plantedDefectsRef": "tools/validate-iso27001-control-map/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-isolation-proof",
+      "capability": "tenant-isolation-proof",
+      "classification": "dev-realisable-now",
+      "owningIssue": "USF-1076",
+      "semanticContractPath": "spec/instances/semantic-contract/tenant-isolation-proof.json",
+      "requiredProof": [
+        "L2 contract",
+        "negative-path"
+      ],
+      "requiredEvidence": [
+        "route-trace",
+        "negative-path-evidence"
+      ],
+      "requiredValidators": [
+        "auth-tenant-boundary-parity"
+      ],
+      "realisationMap": "docs/architecture/auth-session-tenant-negative-path-catalogue.json",
+      "validatorRef": "tools/validate-auth-negative-path/validate-auth-negative-path.py",
+      "plantedDefectsRef": "tools/validate-auth-negative-path/planted-defects"
+    },
+    {
+      "semanticContractRef": "semantic-contract.object-storage-and-tenant-prefixes-and-signed-urls",
+      "capability": "object-storage-and-tenant-prefixes-and-signed-urls",
+      "classification": "dev-realised",
+      "owningIssue": "current-main",
+      "semanticContractPath": "spec/instances/semantic-contract/object-storage-and-tenant-prefixes-and-signed-urls.json",
+      "requiredProof": [],
+      "requiredEvidence": [],
+      "requiredValidators": [],
+      "realisationMap": "docs/architecture/current-main-capability-service-realisation-map.json",
+      "validatorRef": "tools/validate-dev-realisation/validate-dev-realisation.py",
+      "plantedDefectsRef": "tools/validate-dev-realisation/planted-defects"
+    }
+  ],
+  "nonRealisedItems": [
+    {
+      "semanticContractRef": "semantic-contract.background-workers-job-runner",
+      "capability": "background-workers-job-runner",
+      "capabilityDomain": "compute-runtime",
+      "reason": "A background worker/job runner needs a runtime worker substrate plus execution/failure negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.runtime-secrets-management",
+      "capability": "runtime-secrets-management",
+      "capabilityDomain": "compute-runtime",
+      "reason": "Runtime secrets management (write-only, redaction, no-read-back) is provable at the test rung with a local store; a live secret provider is a later rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "capability": "serverless-function-runtime",
+      "capabilityDomain": "compute-runtime",
+      "reason": "Marked not-applicable-final and excluded from V2 scope (only a healthz route recorded); a later semantic decision is required before dev realisation.",
+      "nextIssueOrRung": "future-domain",
+      "nextBacklogDestination": "future-domain (semantic re-decision required)",
+      "classification": "dev-realisable-later"
+    },
+    {
+      "semanticContractRef": "semantic-contract.branding-and-theming",
+      "capability": "branding-and-theming",
+      "capabilityDomain": "configuration",
+      "reason": "Branding/theming is UI-facing configuration; the config CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "capability": "custom-domains-dns-ownership-tls-canonical",
+      "capabilityDomain": "configuration",
+      "reason": "DNS ownership verification and TLS issuance require live DNS/ACME providers; realisation is live-provider, only canonical-set semantics are locally expressible.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-canonical-domain-set-unset",
+      "capability": "tenant-canonical-domain-set-unset",
+      "capabilityDomain": "configuration",
+      "reason": "Canonical-domain set/unset is a tenant config operation provable at the test rung (idempotent set/unset, fail-closed conflicts); no owning dev-now child.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-domain-activation-auth-client",
+      "capability": "tenant-domain-activation-auth-client",
+      "capabilityDomain": "configuration",
+      "reason": "Activating a tenant domain for an auth client requires a live identity-provider/auth-client integration; realisation is live-provider.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.write-only-secret-settings",
+      "capability": "write-only-secret-settings",
+      "capabilityDomain": "configuration",
+      "reason": "Write-only secret settings (no read-back, redaction) is provable at the test rung with negative-path proofs; a live secret provider is a later rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capability": "data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capabilityDomain": "data-platform",
+      "reason": "Catalog/lineage/PII-classification and DSR/GDPR flows require substantial substrate work with negative-path proofs; realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.history-read-model-read-only-projection",
+      "capability": "history-read-model-read-only-projection",
+      "capabilityDomain": "data-platform",
+      "reason": "A read-only history projection needs the event substrate plus a projection-consistency proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "capability": "pitr-retention-legal-hold-data-residency",
+      "capabilityDomain": "data-platform",
+      "reason": "PITR, retention, legal hold and data residency depend on real storage-provider capabilities and deployment regions; not realisable with local dev routes.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "capability": "relational-storage-and-migrations-and-rls",
+      "capabilityDomain": "data-platform",
+      "reason": "Foundational storage with migrations and RLS needs an L4 substrate plus RLS negative-path and migration-rehearsal proofs; ownership spans migration and tenant-boundary concerns so it stays at the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.mock-providers-dev-test",
+      "capability": "mock-providers-dev-test",
+      "capabilityDomain": "developer-platform",
+      "reason": "Marked not-applicable-final and excluded from V2 scope; a later semantic decision is required before any dev realisation, so realisable only later.",
+      "nextIssueOrRung": "future-domain",
+      "nextBacklogDestination": "future-domain (semantic re-decision required)",
+      "classification": "dev-realisable-later"
+    },
+    {
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "capability": "openapi-drift-hard-gate",
+      "capabilityDomain": "developer-platform",
+      "reason": "OpenAPI route recorded but explicitly not claimed as a service realisation; it is a build/CI drift gate, deliberately semantic-only rather than a product capability.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "classification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.rate-limiting-api",
+      "capability": "rate-limiting-api",
+      "capabilityDomain": "developer-platform",
+      "reason": "Rate limiting requires runtime enforcement with a 429 negative-path proof on the substrate; realisation is a test-proof-ladder rung, not just a docs surface.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.webhooks-developer-facing",
+      "capability": "webhooks-developer-facing",
+      "capabilityDomain": "developer-platform",
+      "reason": "Webhook registration, signing and retry semantics need the event substrate plus a delivery/retry negative-path proof against mock endpoints on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.product-catalog-plans-prices",
+      "capability": "product-catalog-plans-prices",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Product catalog/plans/prices CRUD is provable in dev/test but has no owning USF-1071..1077 child, so it stays at the test-proof rung pending a billing slice.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.quota-enforcement",
+      "capability": "quota-enforcement",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Quota enforcement needs a runtime counter plus an over-quota deny negative-path proof on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "capability": "subscriptions-invoices-payment-methods-dunning",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Payment methods, invoices and dunning require a live payment provider (e.g. billing PSP) to realise; local routes cannot prove the semantic.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "capability": "usage-metering-and-meter-event-ingestion",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Meter-event ingestion and aggregation are provable in dev/test with substrate and idempotency proofs; realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "capability": "event-bus-durable-queues-dlq-redrive",
+      "capabilityDomain": "events-workflow",
+      "reason": "Durable queues with DLQ/redrive need an event substrate plus DLQ/redrive negative-path proofs on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "capability": "workflow-engine-scheduled-jobs-approvals",
+      "capabilityDomain": "events-workflow",
+      "reason": "A workflow engine with approvals needs substrate plus workflow-state and approval negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.build-versus-compose-decision-framework",
+      "capability": "build-versus-compose-decision-framework",
+      "capabilityDomain": "foundation",
+      "reason": "A decision-framework/principles capability describing how USF chooses build vs compose; it is a semantic policy, not a runtime service to realise.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "classification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "capability": "composed-provider-readiness-spine",
+      "capabilityDomain": "foundation",
+      "reason": "Readyz local route recorded for completeness but explicitly not claimed as a client or service realisation; deliberately remains a semantic/support definition.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "classification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "capability": "e2e-confidence-ladder-stage-aware",
+      "capabilityDomain": "foundation",
+      "reason": "A methodology/principles capability defining the stage-aware confidence ladder itself; it is a semantic definition of the proof model, not a realisable runtime service.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "classification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.environment-registry-and-bootstrap",
+      "capability": "environment-registry-and-bootstrap",
+      "capabilityDomain": "foundation",
+      "reason": "Environment registry and bootstrap is inherently a deployment/staging concern (provisioning and wiring environments), so realisation requires a staged deployment rung, not local dev routes.",
+      "nextIssueOrRung": "staging",
+      "nextBacklogDestination": "staging",
+      "classification": "staging-deployment-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.environment-specific-vs-shared-service-model",
+      "capability": "environment-specific-vs-shared-service-model",
+      "capabilityDomain": "foundation",
+      "reason": "A modelling/principles capability describing the shared-vs-environment-specific service model; semantic policy, not a runtime service.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "classification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.i18n-runtime-and-validation",
+      "capability": "i18n-runtime-and-validation",
+      "capabilityDomain": "foundation",
+      "reason": "Runtime i18n and translation validation is provable via a dev/test rung (missing-key/validation checks) but has no owning USF-1071..1077 child, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "capability": "universal-service-foundation-scope-and-principles",
+      "capabilityDomain": "foundation",
+      "reason": "The USF scope-and-principles charter; a foundational semantic definition, not a runtime capability to realise.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)",
+      "classification": "intentionally-semantic-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-keys-personal-access-tokens",
+      "capability": "api-keys-personal-access-tokens",
+      "capabilityDomain": "identity-access",
+      "reason": "API keys/PATs need real token issuance, hashing, scoping and revocation beyond a negative-path proof; the invalid/expired/revoked-key deny path is provable at the test rung, so realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.delegated-administration-roles",
+      "capability": "delegated-administration-roles",
+      "capabilityDomain": "identity-access",
+      "reason": "Delegated administration needs a role/scope model plus a deny-beyond-delegated-scope negative-path proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "capability": "end-user-profile-and-preferences-self-service",
+      "capabilityDomain": "identity-access",
+      "reason": "Self-service profile/preferences is UI-facing; CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.entitlement-engine",
+      "capability": "entitlement-engine",
+      "capabilityDomain": "identity-access",
+      "reason": "The entitlement engine needs a policy/model plus a not-entitled deny negative-path proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.sub-organisations",
+      "capability": "sub-organisations",
+      "capabilityDomain": "identity-access",
+      "reason": "Sub-organisations need a hierarchy data model plus cross-sub-org isolation negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-groups",
+      "capability": "tenant-groups",
+      "capabilityDomain": "identity-access",
+      "reason": "Tenant groups need a grouping model plus membership/isolation proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "capability": "alerting-incident-management-on-call-status-page",
+      "capabilityDomain": "observability-ops",
+      "reason": "Contract explicitly deprecated and superseded by observability-built-in-alerting-and-incidents; retained as lineage only, not a current realisation claim.",
+      "nextIssueOrRung": "deprecated",
+      "nextBacklogDestination": "none (deprecated lineage only)",
+      "classification": "deprecated"
+    },
+    {
+      "semanticContractRef": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capability": "browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capabilityDomain": "observability-ops",
+      "reason": "Grafana Faro RUM and browser-to-BFF tracing require a live external telemetry provider/backend to realise; cannot be proven with local dev routes alone.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "capability": "logs-aggregation-and-tenant-scoped-search",
+      "capabilityDomain": "observability-ops",
+      "reason": "Log aggregation and tenant-scoped search require an external log-store/search backend provider to realise meaningfully.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "capability": "observability-built-in-alerting-and-incidents",
+      "capabilityDomain": "observability-ops",
+      "reason": "Alerting/incident/on-call realisation needs a live metrics+notification/on-call provider chain; only rule semantics are local, full realisation is live-provider.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.search-and-indexing-product-search",
+      "capability": "search-and-indexing-product-search",
+      "capabilityDomain": "search",
+      "reason": "Product search/indexing requires an external search-engine provider to realise; local dev routes cannot prove the indexing/query semantic.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider",
+      "classification": "live-provider-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "capability": "code-quality-and-secret-and-dependency-scanning",
+      "capabilityDomain": "security-governance",
+      "reason": "A code-quality/secret/dependency scanning gate is realised and proven at the CI/test rung; there is no runtime product surface.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-tickets-customer-health-announcements",
+      "capability": "support-tickets-customer-health-announcements",
+      "capabilityDomain": "support-admin",
+      "reason": "Support tickets/customer-health/announcements is a UI-facing product feature; CRUD is provable at the test rung but full realisation needs a UI.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "capability": "tenant-lifecycle-provision-suspend-delete-export",
+      "capabilityDomain": "support-admin",
+      "reason": "Tenant lifecycle (provision/suspend/delete/export) needs substrate state transitions plus fail-closed proofs; provisioning against real infra is a later rung, so it stays at the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder",
+      "classification": "test-rung-only"
+    }
+  ],
+  "testReadyBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.background-workers-job-runner",
+      "capability": "background-workers-job-runner",
+      "capabilityDomain": "compute-runtime",
+      "reason": "A background worker/job runner needs a runtime worker substrate plus execution/failure negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.runtime-secrets-management",
+      "capability": "runtime-secrets-management",
+      "capabilityDomain": "compute-runtime",
+      "reason": "Runtime secrets management (write-only, redaction, no-read-back) is provable at the test rung with a local store; a live secret provider is a later rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.branding-and-theming",
+      "capability": "branding-and-theming",
+      "capabilityDomain": "configuration",
+      "reason": "Branding/theming is UI-facing configuration; the config CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-canonical-domain-set-unset",
+      "capability": "tenant-canonical-domain-set-unset",
+      "capabilityDomain": "configuration",
+      "reason": "Canonical-domain set/unset is a tenant config operation provable at the test rung (idempotent set/unset, fail-closed conflicts); no owning dev-now child.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.write-only-secret-settings",
+      "capability": "write-only-secret-settings",
+      "capabilityDomain": "configuration",
+      "reason": "Write-only secret settings (no read-back, redaction) is provable at the test rung with negative-path proofs; a live secret provider is a later rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capability": "data-governance-catalog-lineage-classification-pii-dsr-gdpr",
+      "capabilityDomain": "data-platform",
+      "reason": "Catalog/lineage/PII-classification and DSR/GDPR flows require substantial substrate work with negative-path proofs; realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.history-read-model-read-only-projection",
+      "capability": "history-read-model-read-only-projection",
+      "capabilityDomain": "data-platform",
+      "reason": "A read-only history projection needs the event substrate plus a projection-consistency proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.relational-storage-and-migrations-and-rls",
+      "capability": "relational-storage-and-migrations-and-rls",
+      "capabilityDomain": "data-platform",
+      "reason": "Foundational storage with migrations and RLS needs an L4 substrate plus RLS negative-path and migration-rehearsal proofs; ownership spans migration and tenant-boundary concerns so it stays at the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.rate-limiting-api",
+      "capability": "rate-limiting-api",
+      "capabilityDomain": "developer-platform",
+      "reason": "Rate limiting requires runtime enforcement with a 429 negative-path proof on the substrate; realisation is a test-proof-ladder rung, not just a docs surface.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.webhooks-developer-facing",
+      "capability": "webhooks-developer-facing",
+      "capabilityDomain": "developer-platform",
+      "reason": "Webhook registration, signing and retry semantics need the event substrate plus a delivery/retry negative-path proof against mock endpoints on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.product-catalog-plans-prices",
+      "capability": "product-catalog-plans-prices",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Product catalog/plans/prices CRUD is provable in dev/test but has no owning USF-1071..1077 child, so it stays at the test-proof rung pending a billing slice.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.quota-enforcement",
+      "capability": "quota-enforcement",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Quota enforcement needs a runtime counter plus an over-quota deny negative-path proof on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.usage-metering-and-meter-event-ingestion",
+      "capability": "usage-metering-and-meter-event-ingestion",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Meter-event ingestion and aggregation are provable in dev/test with substrate and idempotency proofs; realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.event-bus-durable-queues-dlq-redrive",
+      "capability": "event-bus-durable-queues-dlq-redrive",
+      "capabilityDomain": "events-workflow",
+      "reason": "Durable queues with DLQ/redrive need an event substrate plus DLQ/redrive negative-path proofs on the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.workflow-engine-scheduled-jobs-approvals",
+      "capability": "workflow-engine-scheduled-jobs-approvals",
+      "capabilityDomain": "events-workflow",
+      "reason": "A workflow engine with approvals needs substrate plus workflow-state and approval negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.i18n-runtime-and-validation",
+      "capability": "i18n-runtime-and-validation",
+      "capabilityDomain": "foundation",
+      "reason": "Runtime i18n and translation validation is provable via a dev/test rung (missing-key/validation checks) but has no owning USF-1071..1077 child, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.api-keys-personal-access-tokens",
+      "capability": "api-keys-personal-access-tokens",
+      "capabilityDomain": "identity-access",
+      "reason": "API keys/PATs need real token issuance, hashing, scoping and revocation beyond a negative-path proof; the invalid/expired/revoked-key deny path is provable at the test rung, so realisation sits at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.delegated-administration-roles",
+      "capability": "delegated-administration-roles",
+      "capabilityDomain": "identity-access",
+      "reason": "Delegated administration needs a role/scope model plus a deny-beyond-delegated-scope negative-path proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.end-user-profile-and-preferences-self-service",
+      "capability": "end-user-profile-and-preferences-self-service",
+      "capabilityDomain": "identity-access",
+      "reason": "Self-service profile/preferences is UI-facing; CRUD is provable at the test rung but full realisation requires a UI, so it stays at the test-proof rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.entitlement-engine",
+      "capability": "entitlement-engine",
+      "capabilityDomain": "identity-access",
+      "reason": "The entitlement engine needs a policy/model plus a not-entitled deny negative-path proof; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.sub-organisations",
+      "capability": "sub-organisations",
+      "capabilityDomain": "identity-access",
+      "reason": "Sub-organisations need a hierarchy data model plus cross-sub-org isolation negative-path proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-groups",
+      "capability": "tenant-groups",
+      "capabilityDomain": "identity-access",
+      "reason": "Tenant groups need a grouping model plus membership/isolation proofs; realisation is a test-proof-ladder rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.code-quality-and-secret-and-dependency-scanning",
+      "capability": "code-quality-and-secret-and-dependency-scanning",
+      "capabilityDomain": "security-governance",
+      "reason": "A code-quality/secret/dependency scanning gate is realised and proven at the CI/test rung; there is no runtime product surface.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.support-tickets-customer-health-announcements",
+      "capability": "support-tickets-customer-health-announcements",
+      "capabilityDomain": "support-admin",
+      "reason": "Support tickets/customer-health/announcements is a UI-facing product feature; CRUD is provable at the test rung but full realisation needs a UI.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-lifecycle-provision-suspend-delete-export",
+      "capability": "tenant-lifecycle-provision-suspend-delete-export",
+      "capabilityDomain": "support-admin",
+      "reason": "Tenant lifecycle (provision/suspend/delete/export) needs substrate state transitions plus fail-closed proofs; provisioning against real infra is a later rung, so it stays at the test rung.",
+      "nextIssueOrRung": "test-proof-ladder",
+      "nextBacklogDestination": "test-proof-ladder"
+    }
+  ],
+  "stagingDeploymentBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.environment-registry-and-bootstrap",
+      "capability": "environment-registry-and-bootstrap",
+      "capabilityDomain": "foundation",
+      "reason": "Environment registry and bootstrap is inherently a deployment/staging concern (provisioning and wiring environments), so realisation requires a staged deployment rung, not local dev routes.",
+      "nextIssueOrRung": "staging",
+      "nextBacklogDestination": "staging"
+    }
+  ],
+  "liveProviderBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.custom-domains-dns-ownership-tls-canonical",
+      "capability": "custom-domains-dns-ownership-tls-canonical",
+      "capabilityDomain": "configuration",
+      "reason": "DNS ownership verification and TLS issuance require live DNS/ACME providers; realisation is live-provider, only canonical-set semantics are locally expressible.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.tenant-domain-activation-auth-client",
+      "capability": "tenant-domain-activation-auth-client",
+      "capabilityDomain": "configuration",
+      "reason": "Activating a tenant domain for an auth client requires a live identity-provider/auth-client integration; realisation is live-provider.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.pitr-retention-legal-hold-data-residency",
+      "capability": "pitr-retention-legal-hold-data-residency",
+      "capabilityDomain": "data-platform",
+      "reason": "PITR, retention, legal hold and data residency depend on real storage-provider capabilities and deployment regions; not realisable with local dev routes.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.subscriptions-invoices-payment-methods-dunning",
+      "capability": "subscriptions-invoices-payment-methods-dunning",
+      "capabilityDomain": "entitlements-billing",
+      "reason": "Payment methods, invoices and dunning require a live payment provider (e.g. billing PSP) to realise; local routes cannot prove the semantic.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capability": "browser-telemetry-grafana-faro-rum-and-browser-to-bff-tracing",
+      "capabilityDomain": "observability-ops",
+      "reason": "Grafana Faro RUM and browser-to-BFF tracing require a live external telemetry provider/backend to realise; cannot be proven with local dev routes alone.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.logs-aggregation-and-tenant-scoped-search",
+      "capability": "logs-aggregation-and-tenant-scoped-search",
+      "capabilityDomain": "observability-ops",
+      "reason": "Log aggregation and tenant-scoped search require an external log-store/search backend provider to realise meaningfully.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.observability-built-in-alerting-and-incidents",
+      "capability": "observability-built-in-alerting-and-incidents",
+      "capabilityDomain": "observability-ops",
+      "reason": "Alerting/incident/on-call realisation needs a live metrics+notification/on-call provider chain; only rule semantics are local, full realisation is live-provider.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    },
+    {
+      "semanticContractRef": "semantic-contract.search-and-indexing-product-search",
+      "capability": "search-and-indexing-product-search",
+      "capabilityDomain": "search",
+      "reason": "Product search/indexing requires an external search-engine provider to realise; local dev routes cannot prove the indexing/query semantic.",
+      "nextIssueOrRung": "live-provider",
+      "nextBacklogDestination": "live-provider"
+    }
+  ],
+  "futureDomainBacklog": [],
+  "intentionallySemanticOnly": [
+    {
+      "semanticContractRef": "semantic-contract.openapi-drift-hard-gate",
+      "capability": "openapi-drift-hard-gate",
+      "capabilityDomain": "developer-platform",
+      "reason": "OpenAPI route recorded but explicitly not claimed as a service realisation; it is a build/CI drift gate, deliberately semantic-only rather than a product capability.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)"
+    },
+    {
+      "semanticContractRef": "semantic-contract.build-versus-compose-decision-framework",
+      "capability": "build-versus-compose-decision-framework",
+      "capabilityDomain": "foundation",
+      "reason": "A decision-framework/principles capability describing how USF chooses build vs compose; it is a semantic policy, not a runtime service to realise.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)"
+    },
+    {
+      "semanticContractRef": "semantic-contract.composed-provider-readiness-spine",
+      "capability": "composed-provider-readiness-spine",
+      "capabilityDomain": "foundation",
+      "reason": "Readyz local route recorded for completeness but explicitly not claimed as a client or service realisation; deliberately remains a semantic/support definition.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)"
+    },
+    {
+      "semanticContractRef": "semantic-contract.e2e-confidence-ladder-stage-aware",
+      "capability": "e2e-confidence-ladder-stage-aware",
+      "capabilityDomain": "foundation",
+      "reason": "A methodology/principles capability defining the stage-aware confidence ladder itself; it is a semantic definition of the proof model, not a realisable runtime service.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)"
+    },
+    {
+      "semanticContractRef": "semantic-contract.environment-specific-vs-shared-service-model",
+      "capability": "environment-specific-vs-shared-service-model",
+      "capabilityDomain": "foundation",
+      "reason": "A modelling/principles capability describing the shared-vs-environment-specific service model; semantic policy, not a runtime service.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)"
+    },
+    {
+      "semanticContractRef": "semantic-contract.universal-service-foundation-scope-and-principles",
+      "capability": "universal-service-foundation-scope-and-principles",
+      "capabilityDomain": "foundation",
+      "reason": "The USF scope-and-principles charter; a foundational semantic definition, not a runtime capability to realise.",
+      "nextIssueOrRung": "intentionally-semantic-only",
+      "nextBacklogDestination": "none (intentionally semantic-only)"
+    }
+  ],
+  "devRealisableLaterBacklog": [
+    {
+      "semanticContractRef": "semantic-contract.serverless-function-runtime",
+      "capability": "serverless-function-runtime",
+      "capabilityDomain": "compute-runtime",
+      "reason": "Marked not-applicable-final and excluded from V2 scope (only a healthz route recorded); a later semantic decision is required before dev realisation.",
+      "nextIssueOrRung": "future-domain",
+      "nextBacklogDestination": "future-domain (semantic re-decision required)"
+    },
+    {
+      "semanticContractRef": "semantic-contract.mock-providers-dev-test",
+      "capability": "mock-providers-dev-test",
+      "capabilityDomain": "developer-platform",
+      "reason": "Marked not-applicable-final and excluded from V2 scope; a later semantic decision is required before any dev realisation, so realisable only later.",
+      "nextIssueOrRung": "future-domain",
+      "nextBacklogDestination": "future-domain (semantic re-decision required)"
+    }
+  ],
+  "deprecatedOrRejected": [
+    {
+      "semanticContractRef": "semantic-contract.alerting-incident-management-on-call-status-page",
+      "capability": "alerting-incident-management-on-call-status-page",
+      "capabilityDomain": "observability-ops",
+      "reason": "Contract explicitly deprecated and superseded by observability-built-in-alerting-and-incidents; retained as lineage only, not a current realisation claim.",
+      "nextIssueOrRung": "deprecated",
+      "nextBacklogDestination": "none (deprecated lineage only)"
+    }
+  ],
+  "verdict": "DEV_EXHAUSTED_WITH_EXPLICIT_NON_DEV_BACKLOG",
+  "verdictRationale": "All bounded dev-realizable work is delivered and validator-enforced: the semantic sweep classifies all 67 semantic contracts; the 12 dev-realisable-now capabilities are each realised by an owning child deliverable (developer portal/docs, accessibility gate, operator workbench, provider consolidation, data rehearsal, auth negative-path catalogue, ISO 27001-aligned control map), each with a fail-closed validator and planted-defect selftest. All remaining work is explicitly classified into non-dev backlogs (test-rung, staging/deployment, live-provider, intentionally-semantic-only, deprecated) with rationale and next-rung. The move to test proof-ladder focus is deliberate, evidence-backed, and guarded by repository validators; it asserts no readiness.",
+  "verdictJustification": {
+    "allSemanticContractsClassified": true,
+    "devRealisableNowAllOwnedByChildDeliverable": true,
+    "nonDevBacklogFullyEnumerated": 43,
+    "blockingGaps": []
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-012-verdict-overclaim-phrase",
+  "expectedRuleIds": ["USF-DEV-EXH-012"],
+  "mustBeDistinct": true,
+  "failureShape": "an overclaim phrase such as production ready in the summary",
+  "note": "Negative control for USF-DEV-EXH-012; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

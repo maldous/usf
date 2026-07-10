@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-002",
+  "name": "docs-boundary-asserts-authority",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-002"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Rewrites docsAuthorityBoundary to claim the docs are the canonical reference, asserting authority the docs cannot hold."
+}

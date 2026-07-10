@@ -1,0 +1,9 @@
+{
+  "id": "planted-iso27001-005",
+  "description": "partially-evidenced / future-rung control left with an empty gap",
+  "expectedRuleIds": [
+    "USF-ISO27001-005"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "non-evidenced-control-missing-gap"
+}

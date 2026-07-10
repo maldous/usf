@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-001-omit-summary-envelope-id",
+  "expectedRuleIds": ["USF-DEV-EXH-001"],
+  "mustBeDistinct": true,
+  "failureShape": "removing summary id leaves a required envelope field empty",
+  "note": "Negative control for USF-DEV-EXH-001; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

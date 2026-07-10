@@ -1,0 +1,7 @@
+{
+  "id": "usf-dev-exh-004-disposition-contradicts-sweep",
+  "expectedRuleIds": ["USF-DEV-EXH-004"],
+  "mustBeDistinct": true,
+  "failureShape": "a final disposition that differs from the authoritative sweep",
+  "note": "Negative control for USF-DEV-EXH-004; selftest injects this mutation in-memory and asserts the rule fails closed."
+}

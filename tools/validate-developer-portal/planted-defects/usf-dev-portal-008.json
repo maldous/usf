@@ -1,0 +1,9 @@
+{
+  "id": "usf-dev-portal-008",
+  "name": "title-production-ready-overclaim",
+  "expectedRuleIds": [
+    "USF-DEV-PORTAL-008"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": "Appends a 'production ready' readiness overclaim to the title."
+}

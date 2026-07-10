@@ -1,0 +1,11 @@
+{
+  "id": "usf-provider-012-gap-flag-mistyped",
+  "expectedRuleIds": [
+    "USF-PROVIDER-012"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "gap-flag-mistyped",
+    "description": "a provider recordedReadinessGap set to a non-boolean value"
+  }
+}
