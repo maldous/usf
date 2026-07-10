@@ -1,0 +1,38 @@
+{
+  "target": "generated-sdk-client-readiness-map",
+  "expectedRule": "USF-GENERATED-SDK-003",
+  "clientContractMap": {
+    "operations": [
+      {
+        "routeId": "example.get",
+        "clientCallableDisposition": "client-callable-local-contract",
+        "generatedClientInput": {
+          "status": "local-semantic-input-current",
+          "staleness": "current-main"
+        }
+      }
+    ]
+  },
+  "record": {
+    "readinessScope": "bounded-current-main-contract-generation-input-and-sdk-operation-projection",
+    "generatedOutputAuthority": "lower-authority-projection-only",
+    "readinessClaims": {
+      "generatedClientReady": true,
+      "sdkReady": true
+    },
+    "operations": [
+      {
+        "routeId": "example.get",
+        "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=example.get",
+        "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=example.get",
+        "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+        "generatedClientInputStatus": "fresh-current-main",
+        "metadataProjectionStatus": "complete-from-client-contract-map",
+        "readiness": {
+          "generatedClientReady": true,
+          "sdkOperationReady": true
+        }
+      }
+    ]
+  }
+}

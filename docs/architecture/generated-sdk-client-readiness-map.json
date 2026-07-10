@@ -1,0 +1,578 @@
+{
+  "id": "generated-sdk-client-readiness-map",
+  "title": "Generated SDK and Client Readiness Map",
+  "ownerIssueId": "USF-1050",
+  "childIssueIds": [
+    "USF-1051",
+    "USF-1052",
+    "USF-1053"
+  ],
+  "lifecycleState": "current-main-validator-enforced",
+  "authorityLevel": "validator-enforced-readiness-map",
+  "readinessScope": "bounded-current-main-contract-generation-input-and-sdk-operation-projection",
+  "generatedOutputAuthority": "lower-authority-projection-only",
+  "authorityBoundary": {
+    "repositoryAuthority": "This artefact records the bounded current-main generated SDK/client readiness posture derived from USF semantic definitions, interface contracts, the non-UI client-callable contract map, and package metadata.",
+    "linearAuthority": "Linear tracks work only and does not define SDK, client, package, publication, public API, runtime, UI, deployment, provider, compliance, monetisation, app-store, or human-acceptance authority.",
+    "sourceCodeBoundary": "Source code alone does not define intended SDK/client behaviour; source paths are used only when bound to semantic/interface contracts and validator-enforced current-main anchors.",
+    "generatedOutputBoundary": "Generated clients, SDK metadata projections, OpenAPI output, examples, and reports remain lower-authority projections and cannot override semantic definitions, interface contracts, validators, or proof evidence."
+  },
+  "sourceAuthorities": [
+    "docs/architecture/charter.md",
+    "docs/architecture/authority-model.md",
+    "docs/architecture/shared-client-sdk-semantic-surface.json",
+    "docs/architecture/generated-client-contract-validation-semantics.json",
+    "docs/architecture/non-ui-client-callable-contract-map.json",
+    "docs/architecture/api-route-interface-contract-coverage.json",
+    "packages/contracts/src/api-surface.ts",
+    "packages/client/package.json",
+    "packages/client/src/index.ts"
+  ],
+  "sourceTreeAnchors": [
+    {
+      "path": "docs/architecture/non-ui-client-callable-contract-map.json",
+      "blobSha": "40c8e43124418b4266c321ab599262c910bcc9c7",
+      "authorityRole": "client-callable-contract-map"
+    },
+    {
+      "path": "docs/architecture/api-route-interface-contract-coverage.json",
+      "blobSha": "7071de766385a2bf8ceff300f18ee59c00d1e807",
+      "authorityRole": "interface-contract-coverage"
+    },
+    {
+      "path": "docs/architecture/shared-client-sdk-semantic-surface.json",
+      "blobSha": "85f93dcd0454d88334071424644f7bd302a732a3",
+      "authorityRole": "sdk-semantic-surface"
+    },
+    {
+      "path": "docs/architecture/generated-client-contract-validation-semantics.json",
+      "blobSha": "2f3e797350fbf2c0436e3eff20d5f984544b5bcb",
+      "authorityRole": "generated-client-validation-semantics"
+    },
+    {
+      "path": "docs/architecture/app-surface-shared-client-consumption-path.json",
+      "blobSha": "1f9d501b012e254d3c423c5f63df570c57b313ca",
+      "authorityRole": "shared-client-consumption-boundary"
+    },
+    {
+      "path": "packages/client/package.json",
+      "blobSha": "a45b291fdf0926a4af4605d591eb48b17b2198ae",
+      "authorityRole": "client-package-version-fixture"
+    },
+    {
+      "path": "packages/client/src/index.ts",
+      "blobSha": "6e6eea831a9268e75510cecdd5732bd30562d856",
+      "authorityRole": "bounded-client-validation-implementation"
+    },
+    {
+      "path": "packages/contracts/src/api-surface.ts",
+      "blobSha": "e734c7c340aea2d814677c16ccb4c90909251cef",
+      "authorityRole": "canonical-route-contract-source"
+    },
+    {
+      "path": "packages/openapi/openapi.json",
+      "blobSha": "5b1f68bc48265c79260ce654dd2042f679b50e37",
+      "authorityRole": "lower-authority-openapi-projection"
+    }
+  ],
+  "readinessClaims": {
+    "generatedClientReady": true,
+    "sdkReady": true,
+    "packagePublicationReady": false,
+    "productUiReady": false,
+    "publicApiReady": false,
+    "runtimeProductReady": false,
+    "publicDeploymentReady": false,
+    "publicFqdnReady": false,
+    "deploymentReady": false,
+    "stagingReady": false,
+    "productionReady": false,
+    "liveProviderReady": false,
+    "complianceReady": false,
+    "monetisationReady": false,
+    "appStoreReady": false,
+    "humanAcceptanceComplete": false
+  },
+  "operationCoverage": {
+    "totalOperations": 32,
+    "sdkSupportedOperations": 28,
+    "sdkExcludedOperations": 4,
+    "clientCallableLocalContractOperations": 20,
+    "operatorToolingLocalContractOperations": 8,
+    "internalSupportOnlyOperations": 1,
+    "notClaimedOperations": 3
+  },
+  "metadataProjection": {
+    "status": "complete-for-supported-current-main-sdk-operations",
+    "source": "docs/architecture/non-ui-client-callable-contract-map.json",
+    "requiredFields": [
+      "authScheme",
+      "tenantScope",
+      "permissionRefs",
+      "validationRefs",
+      "errorRefs",
+      "auditEventRefs",
+      "telemetryRefs",
+      "dataClassification",
+      "requestSemanticsRef",
+      "responseSemanticsRef",
+      "proofRefs"
+    ],
+    "uiInventedBehaviourAllowed": false,
+    "generatedClientMayDefineSemantics": false
+  },
+  "packageReadiness": {
+    "packageName": "@foundation/client",
+    "versionFixture": "0.1.0",
+    "packagePrivate": true,
+    "packageMetadataRef": "packages/client/package.json",
+    "packageValidationImplementationRef": "packages/client/src/index.ts",
+    "publicationReady": false,
+    "npmPublicationClaim": false,
+    "publicationStatus": "not-published-private-package-publication-not-claimed",
+    "publicationRationale": "The current package/version fixture is validator-bound for local generated SDK/client readiness only. External package publication, registry availability, signing, release promotion, and consumer distribution are not claimed."
+  },
+  "fixturesAndExamples": {
+    "status": "authority-derived-current-main-fixture-inputs",
+    "authorityDerivedFromCanonicalContracts": true,
+    "sourceRefs": [
+      "packages/contracts/src/api-surface.ts#examples",
+      "docs/architecture/non-ui-client-callable-contract-map.json#operations",
+      "docs/architecture/app-surface-shared-client-consumption-path.json#generatedClient"
+    ],
+    "nonClaims": [
+      "no-external-developer-documentation-publication",
+      "no-package-publication-claim",
+      "no-product-ui-readiness-claim"
+    ]
+  },
+  "operations": [
+    {
+      "routeId": "healthz.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=healthz.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=healthz.get",
+      "sdkExposureDisposition": "excluded-not-authorised-for-generation",
+      "generatedClientInputStatus": "not-authorised-for-generation",
+      "metadataProjectionStatus": "not-projected-not-authorised",
+      "readiness": {
+        "generatedClientReady": false,
+        "sdkOperationReady": false
+      },
+      "exclusionRationale": "Health probe route is retained for completeness but is not authorised as a generated SDK/client operation."
+    },
+    {
+      "routeId": "readyz.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=readyz.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=readyz.get",
+      "sdkExposureDisposition": "excluded-not-authorised-for-generation",
+      "generatedClientInputStatus": "not-authorised-for-generation",
+      "metadataProjectionStatus": "not-projected-not-authorised",
+      "readiness": {
+        "generatedClientReady": false,
+        "sdkOperationReady": false
+      },
+      "exclusionRationale": "Readiness probe route is retained for completeness but is not authorised as a generated SDK/client operation."
+    },
+    {
+      "routeId": "openapi.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=openapi.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=openapi.get",
+      "sdkExposureDisposition": "excluded-not-authorised-for-generation",
+      "generatedClientInputStatus": "not-authorised-for-generation",
+      "metadataProjectionStatus": "not-projected-not-authorised",
+      "readiness": {
+        "generatedClientReady": false,
+        "sdkOperationReady": false
+      },
+      "exclusionRationale": "OpenAPI projection delivery is not itself a generated SDK/client operation."
+    },
+    {
+      "routeId": "tenant-context.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=tenant-context.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=tenant-context.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "auth-login.post",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=auth-login.post",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=auth-login.post",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "authz-check.post",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-check.post",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-check.post",
+      "sdkExposureDisposition": "excluded-internal-support-only",
+      "generatedClientInputStatus": "not-authorised-for-generation",
+      "metadataProjectionStatus": "not-projected-not-authorised",
+      "readiness": {
+        "generatedClientReady": false,
+        "sdkOperationReady": false
+      },
+      "exclusionRationale": "Internal authorization support route is not exposed as a generated SDK/client operation."
+    },
+    {
+      "routeId": "authz-permissions.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-permissions.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=authz-permissions.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "audit-events.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.list",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.list",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "audit-events.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-events.get",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "audit-verify.post",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-verify.post",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=audit-verify.post",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "config-current.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-current.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-current.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "config-flags.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-flags.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-flags.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "config-provider-status.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-provider-status.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=config-provider-status.get",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "providers.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.list",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.list",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "providers.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=providers.get",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "observability-readiness.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-readiness.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-readiness.get",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "observability-signals.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-signals.list",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=observability-signals.list",
+      "sdkExposureDisposition": "operator-tooling-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "files.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.list",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.list",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "files.upload",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.upload",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.upload",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "files.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "files.download",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.download",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.download",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "files.verify",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.verify",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=files.verify",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "jobs.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.list",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.list",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "jobs.create",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.create",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.create",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "jobs.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "jobs.cancel",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.cancel",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=jobs.cancel",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "notification-templates.create",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notification-templates.create",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notification-templates.create",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "notifications.list",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.list",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.list",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "notifications.create",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.create",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.create",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "notifications.get",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.get",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.get",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "notifications.send",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.send",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.send",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    },
+    {
+      "routeId": "notifications.cancel",
+      "clientContractRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.cancel",
+      "sourceMetadataRef": "docs/architecture/non-ui-client-callable-contract-map.json#routeId=notifications.cancel",
+      "sdkExposureDisposition": "generated-sdk-supported-local-contract",
+      "generatedClientInputStatus": "fresh-current-main",
+      "metadataProjectionStatus": "complete-from-client-contract-map",
+      "readiness": {
+        "generatedClientReady": true,
+        "sdkOperationReady": true
+      }
+    }
+  ],
+  "validatorCoverage": [
+    "validate-spec.generated-sdk-client-readiness-map",
+    "validate-spec.non-ui-client-contract-map",
+    "validate-spec.api-route-interface-coverage",
+    "openapi:check"
+  ],
+  "plantedDefectCoverage": [
+    {
+      "ruleId": "USF-GENERATED-SDK-001",
+      "path": "tools/validate-spec/planted-defects/generated-sdk-source-anchor-stale.json"
+    },
+    {
+      "ruleId": "USF-GENERATED-SDK-002",
+      "path": "tools/validate-spec/planted-defects/generated-sdk-operation-missing.json"
+    },
+    {
+      "ruleId": "USF-GENERATED-SDK-003",
+      "path": "tools/validate-spec/planted-defects/generated-sdk-metadata-missing.json"
+    },
+    {
+      "ruleId": "USF-GENERATED-SDK-004",
+      "path": "tools/validate-spec/planted-defects/generated-sdk-publication-overclaim.json"
+    }
+  ],
+  "nonClaims": [
+    "no-package-publication-claim",
+    "no-product-ui-readiness-claim",
+    "no-public-api-readiness-claim",
+    "no-runtime-product-readiness-upgrade",
+    "no-public-fqdn-claim",
+    "no-staging-claim",
+    "no-production-claim",
+    "no-deployment-claim",
+    "no-live-provider-claim",
+    "no-compliance-claim",
+    "no-monetisation-claim",
+    "no-app-store-claim",
+    "no-human-acceptance-claim"
+  ]
+}

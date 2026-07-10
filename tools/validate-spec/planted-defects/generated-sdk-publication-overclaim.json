@@ -1,0 +1,34 @@
+{
+  "target": "generated-sdk-client-readiness-map",
+  "expectedRule": "USF-GENERATED-SDK-004",
+  "clientContractMap": {
+    "operations": []
+  },
+  "record": {
+    "readinessScope": "bounded-current-main-contract-generation-input-and-sdk-operation-projection",
+    "generatedOutputAuthority": "lower-authority-projection-only",
+    "readinessClaims": {
+      "generatedClientReady": true,
+      "sdkReady": true,
+      "packagePublicationReady": true,
+      "productUiReady": false,
+      "publicApiReady": false,
+      "runtimeProductReady": false,
+      "publicDeploymentReady": false,
+      "publicFqdnReady": false,
+      "deploymentReady": false,
+      "stagingReady": false,
+      "productionReady": false,
+      "liveProviderReady": false,
+      "complianceReady": false,
+      "monetisationReady": false,
+      "appStoreReady": false,
+      "humanAcceptanceComplete": false
+    },
+    "packageReadiness": {
+      "publicationReady": true,
+      "npmPublicationClaim": true
+    },
+    "operations": []
+  }
+}
