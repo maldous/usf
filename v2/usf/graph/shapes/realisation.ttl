@@ -1,0 +1,41 @@
+@prefix usf: <urn:usf:ontology:> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix shp: <urn:usf:shacl:> .
+
+shp:RealisationShape a sh:NodeShape ;
+    usf:canonicalName "realisationshape" ;
+    sh:targetClass usf:Realisation ;
+    sh:property [ sh:path usf:realisesContract ; sh:minCount 1 ; sh:class usf:SemanticContract ;
+        sh:message "realisationcontract: realisation must realise at least one semantic contract" ] ;
+    sh:property [ sh:path usf:realisingImplementation ; sh:minCount 1 ; sh:class usf:Implementation ;
+        sh:message "realisationimplementation: realisation must name the realising implementation" ] ;
+    sh:property [ sh:path usf:realisationState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RealisationState ;
+        sh:message "realisationstate: realisation must declare one state" ] .
+
+shp:ImplementationShape a sh:NodeShape ;
+    usf:canonicalName "implementationshape" ;
+    sh:targetClass usf:Implementation .
+
+shp:ServiceShape a sh:NodeShape ;
+    usf:canonicalName "serviceshape" ;
+    sh:targetClass usf:Service .
+
+shp:AdapterShape a sh:NodeShape ;
+    usf:canonicalName "adaptershape" ;
+    sh:targetClass usf:Adapter ;
+    sh:property [ sh:path usf:implementsPort ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Port ;
+        sh:message "adapterport: adapter must implement exactly one port" ] ;
+    sh:property [ sh:path usf:bindsProvider ; sh:minCount 1 ; sh:class usf:Provider ;
+        sh:message "adapterprovider: adapter must bind at least one provider" ] .
+
+shp:BindingShape a sh:NodeShape ;
+    usf:canonicalName "bindingshape" ;
+    sh:targetClass usf:Binding ;
+    sh:property [ sh:path usf:bindsPort ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Port ;
+        sh:message "bindingport: binding must name exactly one port" ] ;
+    sh:property [ sh:path usf:bindsProvider ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Provider ;
+        sh:message "bindingprovider: binding must name exactly one provider" ] ;
+    sh:property [ sh:path usf:hasProviderMode ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProviderMode ;
+        sh:message "bindingprovidermode: binding must declare exactly one provider mode" ] ;
+    sh:property [ sh:path usf:bindingState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:BindingState ;
+        sh:message "bindingstate: binding must declare exactly one lifecycle state" ] .

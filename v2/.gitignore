@@ -1,0 +1,5 @@
+# The chroot root filesystem (Stardog, Temurin JDK, OS packages) is a runtime dependency
+# used only for database provisioning — not USF source. Track only the usf/ artefacts.
+/*
+!/.gitignore
+!/usf/

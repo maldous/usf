@@ -1,0 +1,34 @@
+PREFIX usf: <urn:usf:ontology:>
+# Derive one evidence requirement per proof obligation: fresh runtime proof evidence on a
+# compatible provider mode. Requirements are never authored; they are recomputed here.
+CONSTRUCT {
+  ?er a usf:EvidenceRequirement ;
+      usf:canonicalName ?ln ;
+      usf:requiresEvidenceKind <urn:usf:evidencekind:runtimeproofevidence> ;
+      usf:requiresFreshness <urn:usf:freshness:fresh> ;
+      usf:requiresProviderMode <urn:usf:providermode:hermeticmock> ;
+      usf:obligationFor ?c ;
+      usf:derivedFrom ?po .
+}
+WHERE {
+  ?po a usf:ProofObligation ; usf:obligationFor ?c .
+  FILTER(STRSTARTS(STR(?c), "urn:usf:semanticcontract:"))
+  BIND(REPLACE(STR(?po), "^.*:", "") AS ?ln)
+  BIND(IRI(CONCAT("urn:usf:evidencerequirement:", ?ln)) AS ?er)
+}
+#---NEXT---#
+PREFIX usf: <urn:usf:ontology:>
+# A collected evidence result satisfies a requirement only when it is fresh and its provider
+# mode matches what the requirement demands. Stale or mismatched evidence yields no edge.
+CONSTRUCT {
+  ?ev usf:satisfies ?er .
+}
+WHERE {
+  ?ev a usf:EvidenceResult ;
+      usf:evidenceForContract ?c ;
+      usf:hasFreshness <urn:usf:freshness:fresh> ;
+      usf:usesProviderMode ?pm .
+  ?er a usf:EvidenceRequirement ;
+      usf:obligationFor ?c ;
+      usf:requiresProviderMode ?pm .
+}

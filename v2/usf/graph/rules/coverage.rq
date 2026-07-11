@@ -1,0 +1,16 @@
+PREFIX usf: <urn:usf:ontology:>
+# Derive coverage of each test obligation: covered when a test verifies its subject, else uncovered.
+CONSTRUCT {
+  ?cov a usf:Coverage ;
+       usf:canonicalName ?ln ;
+       usf:coverageOf ?to ;
+       usf:coverageState ?state ;
+       usf:derivedFrom ?to .
+}
+WHERE {
+  ?to a usf:TestObligation ; usf:obligationFor ?subj .
+  BIND(REPLACE(STR(?to), "^.*:", "") AS ?ln)
+  BIND(IRI(CONCAT("urn:usf:coverage:", ?ln)) AS ?cov)
+  BIND(IF(EXISTS { ?t usf:testsContract ?subj } || EXISTS { ?t2 usf:testsControl ?subj },
+       <urn:usf:coveragestate:covered>, <urn:usf:coveragestate:uncovered>) AS ?state)
+}

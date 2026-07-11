@@ -1,0 +1,754 @@
+@prefix usf:  <urn:usf:ontology:> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:usf:ontology> a owl:Ontology ;
+    rdfs:label "Universal Service Foundation ontology" .
+
+########################################################################
+# Abstract roots
+########################################################################
+
+usf:Entity a owl:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "Root of every authored USF concept." .
+
+usf:ControlledValue a owl:Class ;
+    rdfs:label "ControlledValue" ;
+    rdfs:comment "Root of closed controlled-value classes whose members are named individuals." .
+
+usf:DerivedEntity a owl:Class ;
+    rdfs:subClassOf usf:Entity ;
+    rdfs:label "DerivedEntity" ;
+    rdfs:comment "An entity that may exist only in a derived graph, recomputed from authored state." .
+
+########################################################################
+# Contract core
+########################################################################
+
+usf:Capability a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Capability" ;
+    rdfs:comment "A bounded platform ability with one canonical identity, defined by semantic contracts and realised by implementations." .
+
+usf:SemanticContract a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "SemanticContract" ;
+    rdfs:comment "A normative statement of intended behaviour or structure, independent of any implementation." .
+
+usf:ContractFacet a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ContractFacet" ;
+    rdfs:comment "One required aspect of a semantic contract, classified by a FacetKind." .
+
+usf:Policy a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Policy" ;
+    rdfs:comment "A binding rule governing permitted behaviour of a contract or capability." .
+
+usf:Constraint a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Constraint" ;
+    rdfs:comment "A specific restriction imposed by a policy on state or behaviour." .
+
+usf:Claim a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Claim" ;
+    rdfs:comment "A statement of what the foundation asserts to be true, requiring evidence." .
+
+usf:NonClaim a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "NonClaim" ;
+    rdfs:comment "A statement of what the foundation explicitly does not assert." .
+
+usf:Permission a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Permission" ;
+    rdfs:comment "An authorisation token required to perform an operation." .
+
+usf:Role a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Role" ;
+    rdfs:comment "A named grouping of permissions assignable to a subject." .
+
+usf:TenantBoundary a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "TenantBoundary" ;
+    rdfs:comment "An isolation boundary that confines data and behaviour to a single tenant." .
+
+usf:PrivacyClassification a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "PrivacyClassification" ;
+    rdfs:comment "A classification of data sensitivity governing its handling." .
+
+usf:RetentionPolicy a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "RetentionPolicy" ;
+    rdfs:comment "A rule governing how long data is retained and when it is deleted." .
+
+usf:ConsentRequirement a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ConsentRequirement" ;
+    rdfs:comment "A requirement that a subject grant consent before an operation proceeds." .
+
+usf:CapabilityDomain a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "CapabilityDomain" ;
+    rdfs:comment "A top-level classification grouping related capabilities." .
+
+########################################################################
+# Interface and interaction
+########################################################################
+
+usf:Port a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Port" ;
+    rdfs:comment "A semantic boundary through which a service interacts with a provider or peer." .
+
+usf:Interface a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Interface" ;
+    rdfs:comment "A callable contract surface grouping related operations." .
+
+usf:Operation a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Operation" ;
+    rdfs:comment "A single callable action of an interface." .
+
+usf:Command a owl:Class ; rdfs:subClassOf usf:Operation ;
+    rdfs:label "Command" ;
+    rdfs:comment "An operation that mutates governed state." .
+
+usf:Query a owl:Class ; rdfs:subClassOf usf:Operation ;
+    rdfs:label "Query" ;
+    rdfs:comment "An operation that reads state without mutation." .
+
+usf:Event a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Event" ;
+    rdfs:comment "A semantic occurrence that records or communicates a state change." .
+
+usf:Message a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Message" ;
+    rdfs:comment "A transport payload conveyed over a bus, distinct from the occurrence it carries." .
+
+usf:Workflow a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Workflow" ;
+    rdfs:comment "An ordered or conditional orchestration of operations and events across capabilities." .
+
+usf:State a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "State" ;
+    rdfs:comment "A discrete condition of a workflow or lifecycle." .
+
+usf:Transition a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Transition" ;
+    rdfs:comment "A directed change from one state to another, optionally triggered by an event." .
+
+########################################################################
+# Platform and data
+########################################################################
+
+usf:Provider a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Provider" ;
+    rdfs:comment "A dependency that fulfils a port under a provider mode." .
+
+usf:ProviderMode a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "ProviderMode" ;
+    rdfs:comment "The class of substrate a provider or binding uses to fulfil a port." .
+
+usf:Environment a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Environment" ;
+    rdfs:comment "A named execution context in which behaviour or proof occurs." .
+
+usf:EnvironmentClass a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "EnvironmentClass" ;
+    rdfs:comment "The class of an environment on the promotion ladder." .
+
+usf:Promotion a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Promotion" ;
+    rdfs:comment "A permitted movement of state from one environment to another under gating conditions." .
+
+usf:ConfigurationKey a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ConfigurationKey" ;
+    rdfs:comment "A typed configuration setting that influences behaviour, generated from a manifest." .
+
+usf:DataModel a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "DataModel" ;
+    rdfs:comment "A persistence contract for records, identifiers and relationships backing a capability." .
+
+usf:PersistenceContract a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "PersistenceContract" ;
+    rdfs:comment "The durability and consistency guarantees under which a data model is stored." .
+
+usf:Migration a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Migration" ;
+    rdfs:comment "A forward-only, checksum-immutable change to a data model." .
+
+usf:BackupRestore a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "BackupRestore" ;
+    rdfs:comment "An operational capability protecting and recovering a data model, including point-in-time recovery." .
+
+########################################################################
+# Signals and experience
+########################################################################
+
+usf:AuditEvent a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "AuditEvent" ;
+    rdfs:comment "A record of a security-sensitive or state-changing action, carrying actor, subject and tenant context." .
+
+usf:ObservabilitySignal a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ObservabilitySignal" ;
+    rdfs:comment "A log, metric, trace, span or runtime output used to observe behaviour." .
+
+usf:Alert a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Alert" ;
+    rdfs:comment "A condition over observability signals that raises an incident." .
+
+usf:Journey a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Journey" ;
+    rdfs:comment "A user-facing interaction path across interaction states, independent of visual design." .
+
+usf:InteractionState a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "InteractionState" ;
+    rdfs:comment "A discrete state of a journey with its own validation, permissions and actions." .
+
+usf:AccessibilityRequirement a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "AccessibilityRequirement" ;
+    rdfs:comment "A normative accessibility contract on a journey or interface." .
+
+usf:LocalisationRequirement a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "LocalisationRequirement" ;
+    rdfs:comment "A requirement that a surface support localisation and locale-aware validation." .
+
+########################################################################
+# Assurance (authored facts)
+########################################################################
+
+usf:Proof a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Proof" ;
+    rdfs:comment "A definition of how a claim is exercised at a stated proof rung under a provider mode and environment." .
+
+usf:ProofExecution a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ProofExecution" ;
+    rdfs:comment "A single run of a proof producing a proof result." .
+
+usf:ProofResult a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ProofResult" ;
+    rdfs:comment "The recorded outcome of a proof execution, carrying claimed and observed rungs and freshness." .
+
+usf:ProofRung a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "ProofRung" ;
+    rdfs:comment "A level on the ordered proof ladder describing how strongly a claim is proven." .
+
+usf:EvidenceResult a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "EvidenceResult" ;
+    rdfs:comment "A collected item of evidence that may satisfy an evidence requirement." .
+
+usf:Control a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Control" ;
+    rdfs:comment "A safeguard that mitigates a risk and achieves a control objective." .
+
+usf:ControlObjective a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ControlObjective" ;
+    rdfs:comment "A goal that one or more controls exist to achieve." .
+
+usf:Risk a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Risk" ;
+    rdfs:comment "A potential adverse outcome that controls mitigate." .
+
+usf:Test a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Test" ;
+    rdfs:comment "An executable check that fulfils a test obligation." .
+
+usf:Fixture a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Fixture" ;
+    rdfs:comment "A prepared graph input exercising a shape or rule, either conforming or defect-bearing." .
+
+usf:Defect a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Defect" ;
+    rdfs:comment "A deliberately planted violation a validator rule must detect." .
+
+########################################################################
+# Assurance (derived only)
+########################################################################
+
+usf:ProofObligation a owl:Class ; rdfs:subClassOf usf:DerivedEntity ;
+    rdfs:label "ProofObligation" ;
+    rdfs:comment "A derived requirement that a contract or control be proven to a minimum rung." .
+
+usf:TestObligation a owl:Class ; rdfs:subClassOf usf:DerivedEntity ;
+    rdfs:label "TestObligation" ;
+    rdfs:comment "A derived requirement that a contract or control be verified by a test." .
+
+usf:EvidenceRequirement a owl:Class ; rdfs:subClassOf usf:DerivedEntity ;
+    rdfs:label "EvidenceRequirement" ;
+    rdfs:comment "A derived requirement for evidence of a given kind, freshness and provider compatibility." .
+
+usf:Surface a owl:Class ; rdfs:subClassOf usf:DerivedEntity ;
+    rdfs:label "Surface" ;
+    rdfs:comment "A derived aggregate describing an exposed surface generated from authored state." .
+
+usf:ContractSurface a owl:Class ; rdfs:subClassOf usf:Surface ;
+    rdfs:label "ContractSurface" ;
+    rdfs:comment "The derived surface of a single semantic contract: its exposed interfaces and operations." .
+
+usf:Coverage a owl:Class ; rdfs:subClassOf usf:DerivedEntity ;
+    rdfs:label "Coverage" ;
+    rdfs:comment "A derived state recording whether an obligation or shape is covered by a test, fixture or validator." .
+
+usf:Readiness a owl:Class ; rdfs:subClassOf usf:DerivedEntity ;
+    rdfs:label "Readiness" ;
+    rdfs:comment "A derived state of a capability computed only from satisfied obligations and fresh compatible evidence." .
+
+########################################################################
+# Realisation
+########################################################################
+
+usf:Service a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Service" ;
+    rdfs:comment "A logical or composed runtime unit that serves one or more capabilities." .
+
+usf:Implementation a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Implementation" ;
+    rdfs:comment "An implementation unit that realises semantic contracts." .
+
+usf:Adapter a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Adapter" ;
+    rdfs:comment "An implementation that binds a port to a concrete provider." .
+
+usf:Binding a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Binding" ;
+    rdfs:comment "The fact that a provider fulfils a port under a provider mode with a lifecycle state." .
+
+usf:Realisation a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Realisation" ;
+    rdfs:comment "The fact that an implementation realises a semantic contract through services, adapters and bindings." .
+
+########################################################################
+# Execution
+########################################################################
+
+usf:Agent a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Agent" ;
+    rdfs:comment "An autonomous or assisted actor bound by execution constraints." .
+
+usf:AgentConstraint a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "AgentConstraint" ;
+    rdfs:comment "A duty, permitted action, forbidden action, stop condition or required output binding an agent." .
+
+usf:ValidatorRule a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "ValidatorRule" ;
+    rdfs:comment "An executable, fail-closed check over graph state with a severity and result code." .
+
+usf:IntegrityRule a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "IntegrityRule" ;
+    rdfs:comment "A whole-dataset invariant that must return no violations." .
+
+usf:DerivationRule a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "DerivationRule" ;
+    rdfs:comment "A deterministic rule that constructs derived state from authored state." .
+
+usf:Shape a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "Shape" ;
+    rdfs:comment "A validation shape constraining instances of an ontology class." .
+
+########################################################################
+# Graph authority
+########################################################################
+
+usf:NamedGraph a owl:Class ; rdfs:subClassOf usf:Entity ;
+    rdfs:label "NamedGraph" ;
+    rdfs:comment "A registered named graph with one owner class and one write policy." .
+
+usf:GraphClass a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "GraphClass" ;
+    rdfs:comment "The authority class of a named graph governing what it may assert, constrain or derive." .
+
+########################################################################
+# Remaining controlled-value classes
+########################################################################
+
+usf:FacetKind         a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "FacetKind" ;
+    rdfs:comment "A required aspect kind of a semantic contract." .
+usf:EvidenceKind      a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "EvidenceKind" ;
+    rdfs:comment "The kind of an evidence requirement or result." .
+usf:Freshness         a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Freshness" ;
+    rdfs:comment "Whether evidence is fresh or stale against the current state." .
+usf:Severity          a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "Severity" ;
+    rdfs:comment "The severity of a validator finding." .
+usf:AuditSeverity     a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "AuditSeverity" ;
+    rdfs:comment "The severity of an audit event." .
+usf:RiskSeverity      a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "RiskSeverity" ;
+    rdfs:comment "The severity of a risk." .
+usf:AuditCategory     a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "AuditCategory" ;
+    rdfs:comment "The category of an audit event." .
+usf:SignalKind        a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "SignalKind" ;
+    rdfs:comment "The kind of an observability signal." .
+usf:DeliverySemantics a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "DeliverySemantics" ;
+    rdfs:comment "The delivery guarantee of an event or message." .
+usf:SecretClassification a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "SecretClassification" ;
+    rdfs:comment "Whether a configuration key bears a secret." .
+usf:ConstraintKind    a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "ConstraintKind" ;
+    rdfs:comment "The kind of an agent constraint." .
+usf:CoverageState     a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "CoverageState" ;
+    rdfs:comment "Whether an obligation or shape is covered." .
+usf:ReadinessState    a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "ReadinessState" ;
+    rdfs:comment "The computed readiness state of a capability." .
+usf:ReportStatus      a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "ReportStatus" ;
+    rdfs:comment "The status of a validation or derivation result." .
+usf:BindingState      a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "BindingState" ;
+    rdfs:comment "The lifecycle state of a provider binding, distinct from its provider mode." .
+usf:RealisationState  a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "RealisationState" ;
+    rdfs:comment "The state of a realisation of a contract by an implementation." .
+usf:TenancyStrategy   a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "TenancyStrategy" ;
+    rdfs:comment "The strategy by which a data model enforces tenant isolation." .
+usf:ConsentBasis      a owl:Class ; rdfs:subClassOf usf:ControlledValue ; rdfs:label "ConsentBasis" ;
+    rdfs:comment "The lawful basis on which consent is obtained." .
+
+########################################################################
+# Disjointness of the materially distinct concept groups
+########################################################################
+
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Capability usf:SemanticContract usf:ContractSurface ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Port usf:Interface usf:Operation usf:Event usf:Message usf:Workflow ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Command usf:Query ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Provider usf:ProviderMode usf:Environment usf:EnvironmentClass ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Service usf:Implementation usf:Adapter usf:Binding usf:Realisation ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Claim usf:NonClaim usf:Policy usf:Constraint ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Proof usf:ProofObligation usf:ProofExecution usf:ProofResult ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:EvidenceRequirement usf:EvidenceResult ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Control usf:ControlObjective usf:Risk ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Test usf:TestObligation usf:Fixture usf:Defect ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Shape usf:ValidatorRule usf:IntegrityRule usf:DerivationRule ) .
+[] a owl:AllDisjointClasses ; owl:members
+    ( usf:Surface usf:Coverage usf:Readiness ) .
+
+########################################################################
+# Object properties
+########################################################################
+
+# --- capability / contract
+usf:inDomain a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Capability ; rdfs:range usf:CapabilityDomain ; rdfs:label "inDomain" .
+usf:dependsOn a owl:ObjectProperty ;
+    rdfs:domain usf:Capability ; rdfs:range usf:Capability ; rdfs:label "dependsOn" .
+usf:composedOf a owl:ObjectProperty ;
+    rdfs:domain usf:Capability ; rdfs:range usf:Capability ; rdfs:label "composedOf" .
+usf:hasContract a owl:ObjectProperty ;
+    rdfs:domain usf:Capability ; rdfs:range usf:SemanticContract ; rdfs:label "hasContract" .
+usf:declaresFacet a owl:ObjectProperty ;
+    rdfs:domain usf:SemanticContract ; rdfs:range usf:ContractFacet ; rdfs:label "declaresFacet" .
+usf:facetKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ContractFacet ; rdfs:range usf:FacetKind ; rdfs:label "facetKind" .
+usf:governedByPolicy a owl:ObjectProperty ;
+    rdfs:domain usf:SemanticContract ; rdfs:range usf:Policy ; rdfs:label "governedByPolicy" .
+usf:appliesToCapability a owl:ObjectProperty ;
+    rdfs:domain usf:Policy ; rdfs:range usf:Capability ; rdfs:label "appliesToCapability" .
+usf:policyConstrains a owl:ObjectProperty ;
+    rdfs:domain usf:Policy ; rdfs:range usf:Constraint ; rdfs:label "policyConstrains" .
+usf:asserts a owl:ObjectProperty ;
+    rdfs:domain usf:SemanticContract ; rdfs:range usf:Claim ; rdfs:label "asserts" .
+usf:disclaims a owl:ObjectProperty ;
+    rdfs:domain usf:SemanticContract ; rdfs:range usf:NonClaim ; rdfs:label "disclaims" .
+usf:requiresPermission a owl:ObjectProperty ;
+    rdfs:domain usf:Operation ; rdfs:range usf:Permission ; rdfs:label "requiresPermission" .
+usf:grantsPermission a owl:ObjectProperty ;
+    rdfs:domain usf:Role ; rdfs:range usf:Permission ; rdfs:label "grantsPermission" .
+usf:boundedBy a owl:ObjectProperty ;
+    rdfs:domain usf:Permission ; rdfs:range usf:TenantBoundary ; rdfs:label "boundedBy" .
+usf:enforcesTenantBoundary a owl:ObjectProperty ;
+    rdfs:range usf:TenantBoundary ; rdfs:label "enforcesTenantBoundary" .
+usf:hasPrivacyClassification a owl:ObjectProperty ;
+    rdfs:range usf:PrivacyClassification ; rdfs:label "hasPrivacyClassification" .
+usf:hasRetentionPolicy a owl:ObjectProperty ;
+    rdfs:range usf:RetentionPolicy ; rdfs:label "hasRetentionPolicy" .
+usf:requiresConsent a owl:ObjectProperty ;
+    rdfs:range usf:ConsentRequirement ; rdfs:label "requiresConsent" .
+usf:consentBasis a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ConsentRequirement ; rdfs:range usf:ConsentBasis ; rdfs:label "consentBasis" .
+
+# --- interface / interaction
+usf:exposesInterface a owl:ObjectProperty ;
+    rdfs:range usf:Interface ; rdfs:label "exposesInterface" .
+usf:interfaceForContract a owl:ObjectProperty ;
+    rdfs:domain usf:Interface ; rdfs:range usf:SemanticContract ; rdfs:label "interfaceForContract" .
+usf:interfaceAtPort a owl:ObjectProperty ;
+    rdfs:domain usf:Interface ; rdfs:range usf:Port ; rdfs:label "interfaceAtPort" .
+usf:hasOperation a owl:ObjectProperty ;
+    rdfs:domain usf:Interface ; rdfs:range usf:Operation ; rdfs:label "hasOperation" .
+usf:producesEvent a owl:ObjectProperty ;
+    rdfs:range usf:Event ; rdfs:label "producesEvent" .
+usf:consumesEvent a owl:ObjectProperty ;
+    rdfs:range usf:Event ; rdfs:label "consumesEvent" .
+usf:hasDeliverySemantics a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:DeliverySemantics ; rdfs:label "hasDeliverySemantics" .
+usf:carriesMessage a owl:ObjectProperty ;
+    rdfs:range usf:Message ; rdfs:label "carriesMessage" .
+usf:partOfWorkflow a owl:ObjectProperty ;
+    rdfs:range usf:Workflow ; rdfs:label "partOfWorkflow" .
+usf:crossesCapability a owl:ObjectProperty ;
+    rdfs:domain usf:Workflow ; rdfs:range usf:Capability ; rdfs:label "crossesCapability" .
+usf:hasState a owl:ObjectProperty ;
+    rdfs:range usf:State ; rdfs:label "hasState" .
+usf:hasTransition a owl:ObjectProperty ;
+    rdfs:range usf:Transition ; rdfs:label "hasTransition" .
+usf:fromState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Transition ; rdfs:range usf:State ; rdfs:label "fromState" .
+usf:toState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Transition ; rdfs:range usf:State ; rdfs:label "toState" .
+usf:onEvent a owl:ObjectProperty ;
+    rdfs:domain usf:Transition ; rdfs:range usf:Event ; rdfs:label "onEvent" .
+usf:compensates a owl:ObjectProperty ;
+    rdfs:domain usf:Transition ; rdfs:range usf:Transition ; rdfs:label "compensates" .
+
+# --- platform / data
+usf:fulfilsPort a owl:ObjectProperty ;
+    rdfs:domain usf:Provider ; rdfs:range usf:Port ; rdfs:label "fulfilsPort" .
+usf:hasProviderMode a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:ProviderMode ; rdfs:label "hasProviderMode" .
+usf:implementsPort a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Adapter ; rdfs:range usf:Port ; rdfs:label "implementsPort" .
+usf:bindsProvider a owl:ObjectProperty ;
+    rdfs:range usf:Provider ; rdfs:label "bindsProvider" .
+usf:bindsPort a owl:ObjectProperty ;
+    rdfs:domain usf:Binding ; rdfs:range usf:Port ; rdfs:label "bindsPort" .
+usf:bindingState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Binding ; rdfs:range usf:BindingState ; rdfs:label "bindingState" .
+usf:hasEnvironmentClass a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Environment ; rdfs:range usf:EnvironmentClass ; rdfs:label "hasEnvironmentClass" .
+usf:permitsProviderMode a owl:ObjectProperty ;
+    rdfs:range usf:ProviderMode ; rdfs:label "permitsProviderMode" .
+usf:promotesFrom a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Promotion ; rdfs:range usf:Environment ; rdfs:label "promotesFrom" .
+usf:promotesTo a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Promotion ; rdfs:range usf:Environment ; rdfs:label "promotesTo" .
+usf:promotionRequires a owl:ObjectProperty ;
+    rdfs:domain usf:Promotion ; rdfs:range usf:Control ; rdfs:label "promotionRequires" .
+usf:configures a owl:ObjectProperty ;
+    rdfs:domain usf:ConfigurationKey ; rdfs:range usf:Entity ; rdfs:label "configures" .
+usf:hasSecretClassification a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ConfigurationKey ; rdfs:range usf:SecretClassification ; rdfs:label "hasSecretClassification" .
+usf:backsCapability a owl:ObjectProperty ;
+    rdfs:domain usf:DataModel ; rdfs:range usf:Capability ; rdfs:label "backsCapability" .
+usf:changedByMigration a owl:ObjectProperty ;
+    rdfs:domain usf:DataModel ; rdfs:range usf:Migration ; rdfs:label "changedByMigration" .
+usf:protectedByRecovery a owl:ObjectProperty ;
+    rdfs:domain usf:DataModel ; rdfs:range usf:BackupRestore ; rdfs:label "protectedByRecovery" .
+usf:enforcesTenancy a owl:ObjectProperty ;
+    rdfs:domain usf:DataModel ; rdfs:range usf:TenantBoundary ; rdfs:label "enforcesTenancy" .
+usf:tenancyStrategy a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:DataModel ; rdfs:range usf:TenancyStrategy ; rdfs:label "tenancyStrategy" .
+usf:persistedUnder a owl:ObjectProperty ;
+    rdfs:domain usf:DataModel ; rdfs:range usf:PersistenceContract ; rdfs:label "persistedUnder" .
+
+# --- signals / experience
+usf:emitsAuditEvent a owl:ObjectProperty ;
+    rdfs:domain usf:Operation ; rdfs:range usf:AuditEvent ; rdfs:label "emitsAuditEvent" .
+usf:recordsOperation a owl:ObjectProperty ;
+    rdfs:domain usf:AuditEvent ; rdfs:range usf:Operation ; rdfs:label "recordsOperation" .
+usf:auditCategory a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:AuditEvent ; rdfs:range usf:AuditCategory ; rdfs:label "auditCategory" .
+usf:auditSeverity a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:AuditEvent ; rdfs:range usf:AuditSeverity ; rdfs:label "auditSeverity" .
+usf:emitsSignal a owl:ObjectProperty ;
+    rdfs:range usf:ObservabilitySignal ; rdfs:label "emitsSignal" .
+usf:emittedBy a owl:ObjectProperty ;
+    rdfs:range usf:Service ; rdfs:label "emittedBy" .
+usf:signalKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ObservabilitySignal ; rdfs:range usf:SignalKind ; rdfs:label "signalKind" .
+usf:correlatesWith a owl:ObjectProperty ;
+    rdfs:domain usf:ObservabilitySignal ; rdfs:range usf:AuditEvent ; rdfs:label "correlatesWith" .
+usf:triggeredBySignal a owl:ObjectProperty ;
+    rdfs:domain usf:Alert ; rdfs:range usf:ObservabilitySignal ; rdfs:label "triggeredBySignal" .
+usf:mapsToCapability a owl:ObjectProperty ;
+    rdfs:domain usf:Journey ; rdfs:range usf:Capability ; rdfs:label "mapsToCapability" .
+usf:invokesOperation a owl:ObjectProperty ;
+    rdfs:range usf:Operation ; rdfs:label "invokesOperation" .
+usf:hasInteractionState a owl:ObjectProperty ;
+    rdfs:domain usf:Journey ; rdfs:range usf:InteractionState ; rdfs:label "hasInteractionState" .
+usf:requiresAccessibility a owl:ObjectProperty ;
+    rdfs:range usf:AccessibilityRequirement ; rdfs:label "requiresAccessibility" .
+usf:requiresLocalisation a owl:ObjectProperty ;
+    rdfs:range usf:LocalisationRequirement ; rdfs:label "requiresLocalisation" .
+
+# --- assurance
+usf:atRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:ProofRung ; rdfs:label "atRung" .
+usf:exercises a owl:ObjectProperty ;
+    rdfs:domain usf:Proof ; rdfs:range usf:SemanticContract ; rdfs:label "exercises" .
+usf:usesProviderMode a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:ProviderMode ; rdfs:label "usesProviderMode" .
+usf:inEnvironment a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:Environment ; rdfs:label "inEnvironment" .
+usf:executesProof a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ProofExecution ; rdfs:range usf:Proof ; rdfs:label "executesProof" .
+usf:producesResult a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ProofExecution ; rdfs:range usf:ProofResult ; rdfs:label "producesResult" .
+usf:claimedRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ProofResult ; rdfs:range usf:ProofRung ; rdfs:label "claimedRung" .
+usf:observedRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ProofResult ; rdfs:range usf:ProofRung ; rdfs:label "observedRung" .
+usf:hasFreshness a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:Freshness ; rdfs:label "hasFreshness" .
+usf:resultForProof a owl:ObjectProperty ;
+    rdfs:domain usf:ProofResult ; rdfs:range usf:Proof ; rdfs:label "resultForProof" .
+usf:evidenceKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:EvidenceKind ; rdfs:label "evidenceKind" .
+usf:satisfies a owl:ObjectProperty ;
+    rdfs:domain usf:EvidenceResult ; rdfs:range usf:EvidenceRequirement ; rdfs:label "satisfies" .
+usf:evidenceForContract a owl:ObjectProperty ;
+    rdfs:domain usf:EvidenceResult ; rdfs:range usf:SemanticContract ; rdfs:label "evidenceForContract" .
+usf:requiresEvidenceKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:EvidenceRequirement ; rdfs:range usf:EvidenceKind ; rdfs:label "requiresEvidenceKind" .
+usf:requiresProviderMode a owl:ObjectProperty ;
+    rdfs:domain usf:EvidenceRequirement ; rdfs:range usf:ProviderMode ; rdfs:label "requiresProviderMode" .
+usf:requiresFreshness a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:EvidenceRequirement ; rdfs:range usf:Freshness ; rdfs:label "requiresFreshness" .
+usf:mitigates a owl:ObjectProperty ;
+    rdfs:domain usf:Control ; rdfs:range usf:Risk ; rdfs:label "mitigates" .
+usf:achievesObjective a owl:ObjectProperty ;
+    rdfs:domain usf:Control ; rdfs:range usf:ControlObjective ; rdfs:label "achievesObjective" .
+usf:controlForContract a owl:ObjectProperty ;
+    rdfs:domain usf:Control ; rdfs:range usf:SemanticContract ; rdfs:label "controlForContract" .
+usf:verifiedBy a owl:ObjectProperty ;
+    rdfs:domain usf:Control ; rdfs:range usf:TestObligation ; rdfs:label "verifiedBy" .
+usf:riskSeverity a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Risk ; rdfs:range usf:RiskSeverity ; rdfs:label "riskSeverity" .
+usf:fulfilsTestObligation a owl:ObjectProperty ;
+    rdfs:domain usf:Test ; rdfs:range usf:TestObligation ; rdfs:label "fulfilsTestObligation" .
+usf:testsContract a owl:ObjectProperty ;
+    rdfs:domain usf:Test ; rdfs:range usf:SemanticContract ; rdfs:label "testsContract" .
+usf:testsControl a owl:ObjectProperty ;
+    rdfs:domain usf:Test ; rdfs:range usf:Control ; rdfs:label "testsControl" .
+usf:exercisesShape a owl:ObjectProperty ;
+    rdfs:domain usf:Fixture ; rdfs:range usf:Shape ; rdfs:label "exercisesShape" .
+usf:conforming a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Fixture ; rdfs:range xsd:boolean ; rdfs:label "conforming" .
+usf:coveredByFixture a owl:ObjectProperty ;
+    rdfs:domain usf:TestObligation ; rdfs:range usf:Fixture ; rdfs:label "coveredByFixture" .
+usf:coveredByValidator a owl:ObjectProperty ;
+    rdfs:domain usf:TestObligation ; rdfs:range usf:ValidatorRule ; rdfs:label "coveredByValidator" .
+usf:demonstratesDefect a owl:ObjectProperty ;
+    rdfs:domain usf:Fixture ; rdfs:range usf:Defect ; rdfs:label "demonstratesDefect" .
+usf:detectsDefect a owl:ObjectProperty ;
+    rdfs:domain usf:ValidatorRule ; rdfs:range usf:Defect ; rdfs:label "detectsDefect" .
+
+# --- derived links
+usf:derivedFrom a owl:ObjectProperty ;
+    rdfs:domain usf:DerivedEntity ; rdfs:label "derivedFrom" .
+usf:obligationFor a owl:ObjectProperty ;
+    rdfs:domain usf:DerivedEntity ; rdfs:label "obligationFor" .
+usf:requiresRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ProofObligation ; rdfs:range usf:ProofRung ; rdfs:label "requiresRung" .
+usf:requiresEvidence a owl:ObjectProperty ;
+    rdfs:domain usf:ProofObligation ; rdfs:range usf:EvidenceRequirement ; rdfs:label "requiresEvidence" .
+usf:surfaceOf a owl:ObjectProperty ;
+    rdfs:domain usf:Surface ; rdfs:range usf:Entity ; rdfs:label "surfaceOf" .
+usf:coverageOf a owl:ObjectProperty ;
+    rdfs:domain usf:Coverage ; rdfs:range usf:Entity ; rdfs:label "coverageOf" .
+usf:coverageState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Coverage ; rdfs:range usf:CoverageState ; rdfs:label "coverageState" .
+usf:readinessOf a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Readiness ; rdfs:range usf:Capability ; rdfs:label "readinessOf" .
+usf:readinessState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Readiness ; rdfs:range usf:ReadinessState ; rdfs:label "readinessState" .
+usf:readinessRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Readiness ; rdfs:range usf:ProofRung ; rdfs:label "readinessRung" .
+
+# --- realisation
+usf:serves a owl:ObjectProperty ;
+    rdfs:domain usf:Service ; rdfs:range usf:Capability ; rdfs:label "serves" .
+usf:dependsOnService a owl:ObjectProperty ;
+    rdfs:domain usf:Service ; rdfs:range usf:Service ; rdfs:label "dependsOnService" .
+usf:realisesContract a owl:ObjectProperty ;
+    rdfs:domain usf:Realisation ; rdfs:range usf:SemanticContract ; rdfs:label "realisesContract" .
+usf:realisingImplementation a owl:ObjectProperty ;
+    rdfs:domain usf:Realisation ; rdfs:range usf:Implementation ; rdfs:label "realisingImplementation" .
+usf:viaService a owl:ObjectProperty ;
+    rdfs:domain usf:Realisation ; rdfs:range usf:Service ; rdfs:label "viaService" .
+usf:viaAdapter a owl:ObjectProperty ;
+    rdfs:domain usf:Realisation ; rdfs:range usf:Adapter ; rdfs:label "viaAdapter" .
+usf:viaBinding a owl:ObjectProperty ;
+    rdfs:domain usf:Realisation ; rdfs:range usf:Binding ; rdfs:label "viaBinding" .
+usf:realisationState a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Realisation ; rdfs:range usf:RealisationState ; rdfs:label "realisationState" .
+usf:implementsContract a owl:ObjectProperty ;
+    rdfs:domain usf:Implementation ; rdfs:range usf:SemanticContract ; rdfs:label "implementsContract" .
+
+# --- execution
+usf:hasConstraint a owl:ObjectProperty ;
+    rdfs:domain usf:Agent ; rdfs:range usf:AgentConstraint ; rdfs:label "hasConstraint" .
+usf:constraintKind a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:AgentConstraint ; rdfs:range usf:ConstraintKind ; rdfs:label "constraintKind" .
+usf:targetsGraph a owl:ObjectProperty ;
+    rdfs:domain usf:ValidatorRule ; rdfs:range usf:NamedGraph ; rdfs:label "targetsGraph" .
+usf:validatorSeverity a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ValidatorRule ; rdfs:range usf:Severity ; rdfs:label "validatorSeverity" .
+usf:enforcesShape a owl:ObjectProperty ;
+    rdfs:domain usf:ValidatorRule ; rdfs:range usf:Shape ; rdfs:label "enforcesShape" .
+usf:enforcesConstraint a owl:ObjectProperty ;
+    rdfs:domain usf:ValidatorRule ; rdfs:range usf:Constraint ; rdfs:label "enforcesConstraint" .
+usf:shapeForClass a owl:ObjectProperty ;
+    rdfs:domain usf:Shape ; rdfs:label "shapeForClass" .
+
+# --- graph authority
+usf:graphClass a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:NamedGraph ; rdfs:range usf:GraphClass ; rdfs:label "graphClass" .
+usf:mayConstrain a owl:ObjectProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range usf:GraphClass ; rdfs:label "mayConstrain" .
+usf:mayReference a owl:ObjectProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range usf:GraphClass ; rdfs:label "mayReference" .
+usf:mayDerive a owl:ObjectProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range usf:GraphClass ; rdfs:label "mayDerive" .
+usf:inNamedGraph a owl:ObjectProperty ;
+    rdfs:range usf:NamedGraph ; rdfs:label "inNamedGraph" .
+usf:mayDeclareTerms a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range xsd:boolean ; rdfs:label "mayDeclareTerms" .
+usf:mayAssertInstances a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range xsd:boolean ; rdfs:label "mayAssertInstances" .
+usf:authoritative a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range xsd:boolean ; rdfs:label "authoritative" .
+usf:loadedAsAuthority a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:GraphClass ; rdfs:range xsd:boolean ; rdfs:label "loadedAsAuthority" .
+
+########################################################################
+# Datatype properties
+########################################################################
+
+usf:canonicalName a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:string ; rdfs:label "canonicalName" ;
+    rdfs:comment "The single canonical local term of a resource; nonhyphenated." .
+usf:definition a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:string ; rdfs:label "definition" ;
+    rdfs:comment "A concise formal definition of a resource." .
+usf:rungOrder a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ProofRung ; rdfs:range xsd:integer ; rdfs:label "rungOrder" .
+usf:severityOrder a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:integer ; rdfs:label "severityOrder" .
+usf:loadOrder a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:NamedGraph ; rdfs:range xsd:integer ; rdfs:label "loadOrder" .
+usf:graphValidationOrder a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:NamedGraph ; rdfs:range xsd:integer ; rdfs:label "graphValidationOrder" .
+usf:validationOrder a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:ValidatorRule ; rdfs:range xsd:integer ; rdfs:label "validationOrder" .
+usf:resultCode a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:string ; rdfs:label "resultCode" .
+usf:graphIri a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:NamedGraph ; rdfs:range xsd:anyURI ; rdfs:label "graphIri" .
+usf:higherRungThan a owl:ObjectProperty ;
+    rdfs:domain usf:ProofRung ; rdfs:range usf:ProofRung ; rdfs:label "higherRungThan" .
+usf:idempotent a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Operation ; rdfs:range xsd:boolean ; rdfs:label "idempotent" .
+usf:reservedEvent a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:AuditEvent ; rdfs:range xsd:boolean ; rdfs:label "reservedEvent" .
+usf:proofOnly a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:Implementation ; rdfs:range xsd:boolean ; rdfs:label "proofOnly" .
+usf:deferred a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:range xsd:boolean ; rdfs:label "deferred" .
+
+########################################################################
+# Ladder floors (foundation-wide constants)
+########################################################################
+
+usf:deliveredMinimumRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:ProofRung ; rdfs:label "deliveredMinimumRung" .
+usf:liveMinimumRung a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:range usf:ProofRung ; rdfs:label "liveMinimumRung" .
+usf:mandatoryFacets a owl:ObjectProperty ;
+    rdfs:range usf:FacetKind ; rdfs:label "mandatoryFacets" ;
+    rdfs:comment "The closed set of facet kinds every semantic contract must declare." .

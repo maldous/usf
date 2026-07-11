@@ -1,0 +1,277 @@
+@prefix usf:  <urn:usf:ontology:> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix dom:   <urn:usf:capabilitydomain:> .
+@prefix facet: <urn:usf:facetkind:> .
+@prefix rung:  <urn:usf:proofrung:> .
+@prefix pmode: <urn:usf:providermode:> .
+@prefix envc:  <urn:usf:environmentclass:> .
+@prefix evk:   <urn:usf:evidencekind:> .
+@prefix fresh: <urn:usf:freshness:> .
+@prefix sev:   <urn:usf:severity:> .
+@prefix asev:  <urn:usf:auditseverity:> .
+@prefix rsev:  <urn:usf:riskseverity:> .
+@prefix acat:  <urn:usf:auditcategory:> .
+@prefix sigk:  <urn:usf:signalkind:> .
+@prefix del:   <urn:usf:deliverysemantics:> .
+@prefix seck:  <urn:usf:secretclassification:> .
+@prefix cnk:   <urn:usf:constraintkind:> .
+@prefix covs:  <urn:usf:coveragestate:> .
+@prefix rds:   <urn:usf:readinessstate:> .
+@prefix rpt:   <urn:usf:reportstatus:> .
+@prefix bst:   <urn:usf:bindingstate:> .
+@prefix rst:   <urn:usf:realisationstate:> .
+@prefix ten:   <urn:usf:tenancystrategy:> .
+@prefix cbasis:<urn:usf:consentbasis:> .
+@prefix gcl:   <urn:usf:graphclass:> .
+
+########################################################################
+# CapabilityDomain (closed, 14)
+########################################################################
+dom:authentication     a usf:CapabilityDomain ; usf:canonicalName "authentication" .
+dom:computeruntime     a usf:CapabilityDomain ; usf:canonicalName "computeruntime" .
+dom:configuration      a usf:CapabilityDomain ; usf:canonicalName "configuration" .
+dom:dataplatform       a usf:CapabilityDomain ; usf:canonicalName "dataplatform" .
+dom:developerplatform  a usf:CapabilityDomain ; usf:canonicalName "developerplatform" .
+dom:entitlementsbilling a usf:CapabilityDomain ; usf:canonicalName "entitlementsbilling" .
+dom:eventsworkflow     a usf:CapabilityDomain ; usf:canonicalName "eventsworkflow" .
+dom:foundation         a usf:CapabilityDomain ; usf:canonicalName "foundation" .
+dom:identityaccess     a usf:CapabilityDomain ; usf:canonicalName "identityaccess" .
+dom:observabilityops   a usf:CapabilityDomain ; usf:canonicalName "observabilityops" .
+dom:search             a usf:CapabilityDomain ; usf:canonicalName "search" .
+dom:securitygovernance a usf:CapabilityDomain ; usf:canonicalName "securitygovernance" .
+dom:storage            a usf:CapabilityDomain ; usf:canonicalName "storage" .
+dom:supportadmin       a usf:CapabilityDomain ; usf:canonicalName "supportadmin" .
+
+########################################################################
+# FacetKind (closed, 10 required aspects of a semantic contract)
+########################################################################
+facet:lifecycle      a usf:FacetKind ; usf:canonicalName "lifecycle" .
+facet:statemodel     a usf:FacetKind ; usf:canonicalName "statemodel" .
+facet:permissions    a usf:FacetKind ; usf:canonicalName "permissions" .
+facet:contracts      a usf:FacetKind ; usf:canonicalName "contracts" .
+facet:validation     a usf:FacetKind ; usf:canonicalName "validation" .
+facet:errormodel     a usf:FacetKind ; usf:canonicalName "errormodel" .
+facet:auditmodel     a usf:FacetKind ; usf:canonicalName "auditmodel" .
+facet:readinessmodel a usf:FacetKind ; usf:canonicalName "readinessmodel" .
+facet:proof          a usf:FacetKind ; usf:canonicalName "proof" .
+facet:uisemantics    a usf:FacetKind ; usf:canonicalName "uisemantics" .
+
+# The ten facet kinds every semantic contract must declare.
+<urn:usf:ontology> usf:mandatoryFacets ( facet:lifecycle facet:statemodel facet:permissions
+    facet:contracts facet:validation facet:errormodel facet:auditmodel facet:readinessmodel
+    facet:proof facet:uisemantics ) .
+
+########################################################################
+# ProofRung (ordered ladder, 7) with freeze floors
+########################################################################
+rung:discovery   a usf:ProofRung ; usf:canonicalName "discovery"   ; usf:rungOrder 0 .
+rung:executable  a usf:ProofRung ; usf:canonicalName "executable"  ; usf:rungOrder 1 ; usf:higherRungThan rung:discovery .
+rung:contract    a usf:ProofRung ; usf:canonicalName "contract"    ; usf:rungOrder 2 ; usf:higherRungThan rung:executable .
+rung:behaviour   a usf:ProofRung ; usf:canonicalName "behaviour"   ; usf:rungOrder 3 ; usf:higherRungThan rung:contract .
+rung:substrate   a usf:ProofRung ; usf:canonicalName "substrate"   ; usf:rungOrder 4 ; usf:higherRungThan rung:behaviour .
+rung:resilience  a usf:ProofRung ; usf:canonicalName "resilience"  ; usf:rungOrder 5 ; usf:higherRungThan rung:substrate .
+rung:foundation  a usf:ProofRung ; usf:canonicalName "foundation"  ; usf:rungOrder 6 ; usf:higherRungThan rung:resilience .
+
+<urn:usf:ontology> usf:deliveredMinimumRung rung:behaviour ;
+                   usf:liveMinimumRung rung:substrate .
+
+########################################################################
+# ProviderMode (closed, 4) — distinct from BindingState
+########################################################################
+pmode:hermeticmock     a usf:ProviderMode ; usf:canonicalName "hermeticmock" ;
+    usf:definition "In-memory or fixture substrate, fully local and deterministic." .
+pmode:composedreal     a usf:ProviderMode ; usf:canonicalName "composedreal" ;
+    usf:definition "A real provider run locally through the composed substrate." .
+pmode:externalsandbox  a usf:ProviderMode ; usf:canonicalName "externalsandbox" ;
+    usf:definition "A real external provider in a non-production sandbox tenant." .
+pmode:liveexternal     a usf:ProviderMode ; usf:canonicalName "liveexternal" ;
+    usf:definition "A real external provider in production." .
+
+########################################################################
+# EnvironmentClass (closed, 6 ladder classes)
+########################################################################
+envc:local            a usf:EnvironmentClass ; usf:canonicalName "local" .
+envc:hermetic         a usf:EnvironmentClass ; usf:canonicalName "hermetic" .
+envc:integration      a usf:EnvironmentClass ; usf:canonicalName "integration" .
+envc:staging          a usf:EnvironmentClass ; usf:canonicalName "staging" .
+envc:productionshaped  a usf:EnvironmentClass ; usf:canonicalName "productionshaped" .
+envc:productionlive   a usf:EnvironmentClass ; usf:canonicalName "productionlive" .
+
+########################################################################
+# EvidenceKind (closed, 10)
+########################################################################
+evk:rawsourceevidence   a usf:EvidenceKind ; usf:canonicalName "rawsourceevidence" .
+evk:semanticevidence    a usf:EvidenceKind ; usf:canonicalName "semanticevidence" .
+evk:runtimeproofevidence a usf:EvidenceKind ; usf:canonicalName "runtimeproofevidence" .
+evk:normalisedevidence  a usf:EvidenceKind ; usf:canonicalName "normalisedevidence" .
+evk:generatedreport     a usf:EvidenceKind ; usf:canonicalName "generatedreport" .
+evk:attestation         a usf:EvidenceKind ; usf:canonicalName "attestation" .
+evk:importevidence      a usf:EvidenceKind ; usf:canonicalName "importevidence" .
+evk:validationevidence  a usf:EvidenceKind ; usf:canonicalName "validationevidence" .
+evk:operationalevidence a usf:EvidenceKind ; usf:canonicalName "operationalevidence" .
+evk:auditevidence       a usf:EvidenceKind ; usf:canonicalName "auditevidence" .
+
+########################################################################
+# Freshness (closed, 2)
+########################################################################
+fresh:fresh a usf:Freshness ; usf:canonicalName "fresh" .
+fresh:stale a usf:Freshness ; usf:canonicalName "stale" .
+
+########################################################################
+# Severity (validator findings, closed 5) with order
+########################################################################
+sev:blocking a usf:Severity ; usf:canonicalName "blocking" ; usf:severityOrder 4 .
+sev:error    a usf:Severity ; usf:canonicalName "error"    ; usf:severityOrder 3 .
+sev:warning  a usf:Severity ; usf:canonicalName "warning"  ; usf:severityOrder 2 .
+sev:advisory a usf:Severity ; usf:canonicalName "advisory" ; usf:severityOrder 1 .
+sev:info     a usf:Severity ; usf:canonicalName "info"     ; usf:severityOrder 0 .
+
+########################################################################
+# AuditSeverity (closed, 6)
+########################################################################
+asev:critical a usf:AuditSeverity ; usf:canonicalName "critical" ; usf:severityOrder 5 .
+asev:high     a usf:AuditSeverity ; usf:canonicalName "high"     ; usf:severityOrder 4 .
+asev:warning  a usf:AuditSeverity ; usf:canonicalName "warning"  ; usf:severityOrder 3 .
+asev:notice   a usf:AuditSeverity ; usf:canonicalName "notice"   ; usf:severityOrder 2 .
+asev:info     a usf:AuditSeverity ; usf:canonicalName "info"     ; usf:severityOrder 1 .
+asev:debug    a usf:AuditSeverity ; usf:canonicalName "debug"    ; usf:severityOrder 0 .
+
+########################################################################
+# RiskSeverity (closed, 4)
+########################################################################
+rsev:critical a usf:RiskSeverity ; usf:canonicalName "critical" ; usf:severityOrder 3 .
+rsev:high     a usf:RiskSeverity ; usf:canonicalName "high"     ; usf:severityOrder 2 .
+rsev:medium   a usf:RiskSeverity ; usf:canonicalName "medium"   ; usf:severityOrder 1 .
+rsev:low      a usf:RiskSeverity ; usf:canonicalName "low"      ; usf:severityOrder 0 .
+
+########################################################################
+# AuditCategory (closed, 18)
+########################################################################
+acat:admin          a usf:AuditCategory ; usf:canonicalName "admin" .
+acat:auditsystem    a usf:AuditCategory ; usf:canonicalName "auditsystem" .
+acat:authentication a usf:AuditCategory ; usf:canonicalName "authentication" .
+acat:authorization  a usf:AuditCategory ; usf:canonicalName "authorization" .
+acat:breakglass     a usf:AuditCategory ; usf:canonicalName "breakglass" .
+acat:bulkoperation  a usf:AuditCategory ; usf:canonicalName "bulkoperation" .
+acat:configuration  a usf:AuditCategory ; usf:canonicalName "configuration" .
+acat:dataaccess     a usf:AuditCategory ; usf:canonicalName "dataaccess" .
+acat:datamutation   a usf:AuditCategory ; usf:canonicalName "datamutation" .
+acat:file           a usf:AuditCategory ; usf:canonicalName "file" .
+acat:guardrail      a usf:AuditCategory ; usf:canonicalName "guardrail" .
+acat:integration    a usf:AuditCategory ; usf:canonicalName "integration" .
+acat:job            a usf:AuditCategory ; usf:canonicalName "job" .
+acat:notification   a usf:AuditCategory ; usf:canonicalName "notification" .
+acat:search         a usf:AuditCategory ; usf:canonicalName "search" .
+acat:security       a usf:AuditCategory ; usf:canonicalName "security" .
+acat:system         a usf:AuditCategory ; usf:canonicalName "system" .
+acat:tenantcontext  a usf:AuditCategory ; usf:canonicalName "tenantcontext" .
+
+########################################################################
+# SignalKind (closed, 8)
+########################################################################
+sigk:log                      a usf:SignalKind ; usf:canonicalName "log" .
+sigk:metric                   a usf:SignalKind ; usf:canonicalName "metric" .
+sigk:trace                    a usf:SignalKind ; usf:canonicalName "trace" .
+sigk:span                     a usf:SignalKind ; usf:canonicalName "span" .
+sigk:runtimeevent             a usf:SignalKind ; usf:canonicalName "runtimeevent" .
+sigk:runtimeproofoutput       a usf:SignalKind ; usf:canonicalName "runtimeproofoutput" .
+sigk:serviceresourceattribute a usf:SignalKind ; usf:canonicalName "serviceresourceattribute" .
+sigk:correlationidentifier    a usf:SignalKind ; usf:canonicalName "correlationidentifier" .
+
+########################################################################
+# DeliverySemantics (closed, 4)
+########################################################################
+del:atleastonce a usf:DeliverySemantics ; usf:canonicalName "atleastonce" .
+del:atmostonce  a usf:DeliverySemantics ; usf:canonicalName "atmostonce" .
+del:exactlyonce a usf:DeliverySemantics ; usf:canonicalName "exactlyonce" .
+del:besteffort  a usf:DeliverySemantics ; usf:canonicalName "besteffort" .
+
+########################################################################
+# SecretClassification (closed, 2)
+########################################################################
+seck:secret    a usf:SecretClassification ; usf:canonicalName "secret" .
+seck:nonsecret a usf:SecretClassification ; usf:canonicalName "nonsecret" .
+
+########################################################################
+# ConstraintKind (closed, 5)
+########################################################################
+cnk:duty           a usf:ConstraintKind ; usf:canonicalName "duty" .
+cnk:permitted      a usf:ConstraintKind ; usf:canonicalName "permitted" .
+cnk:forbidden      a usf:ConstraintKind ; usf:canonicalName "forbidden" .
+cnk:stopcondition  a usf:ConstraintKind ; usf:canonicalName "stopcondition" .
+cnk:requiredoutput a usf:ConstraintKind ; usf:canonicalName "requiredoutput" .
+
+########################################################################
+# CoverageState (closed, 2)
+########################################################################
+covs:covered   a usf:CoverageState ; usf:canonicalName "covered" .
+covs:uncovered a usf:CoverageState ; usf:canonicalName "uncovered" .
+
+########################################################################
+# ReadinessState (closed, 3)
+########################################################################
+rds:ready          a usf:ReadinessState ; usf:canonicalName "ready" .
+rds:partiallyready a usf:ReadinessState ; usf:canonicalName "partiallyready" .
+rds:notready       a usf:ReadinessState ; usf:canonicalName "notready" .
+
+########################################################################
+# ReportStatus (closed, 7)
+########################################################################
+rpt:pass     a usf:ReportStatus ; usf:canonicalName "pass" .
+rpt:fail     a usf:ReportStatus ; usf:canonicalName "fail" .
+rpt:partial  a usf:ReportStatus ; usf:canonicalName "partial" .
+rpt:stale    a usf:ReportStatus ; usf:canonicalName "stale" .
+rpt:notrun   a usf:ReportStatus ; usf:canonicalName "notrun" .
+rpt:advisory a usf:ReportStatus ; usf:canonicalName "advisory" .
+rpt:unknown  a usf:ReportStatus ; usf:canonicalName "unknown" .
+
+########################################################################
+# BindingState (closed, 6) — lifecycle state, NOT provider mode
+########################################################################
+bst:inmemory    a usf:BindingState ; usf:canonicalName "inmemory" .
+bst:composed    a usf:BindingState ; usf:canonicalName "composed" .
+bst:external    a usf:BindingState ; usf:canonicalName "external" .
+bst:disabled    a usf:BindingState ; usf:canonicalName "disabled" .
+bst:unavailable a usf:BindingState ; usf:canonicalName "unavailable" .
+bst:deferred    a usf:BindingState ; usf:canonicalName "deferred" .
+
+########################################################################
+# RealisationState (closed, 7)
+########################################################################
+rst:contractonly    a usf:RealisationState ; usf:canonicalName "contractonly" .
+rst:routerealised   a usf:RealisationState ; usf:canonicalName "routerealised" .
+rst:operatortooling a usf:RealisationState ; usf:canonicalName "operatortooling" .
+rst:deferred        a usf:RealisationState ; usf:canonicalName "deferred" .
+rst:notclaimed      a usf:RealisationState ; usf:canonicalName "notclaimed" .
+rst:internal        a usf:RealisationState ; usf:canonicalName "internal" .
+rst:deprecated      a usf:RealisationState ; usf:canonicalName "deprecated" .
+
+########################################################################
+# TenancyStrategy (closed, 2) — current invariant is forcedrls
+########################################################################
+ten:forcedrls a usf:TenancyStrategy ; usf:canonicalName "forcedrls" .
+ten:none      a usf:TenancyStrategy ; usf:canonicalName "none" .
+
+########################################################################
+# ConsentBasis (closed, 6 lawful bases)
+########################################################################
+cbasis:consent            a usf:ConsentBasis ; usf:canonicalName "consent" .
+cbasis:contract           a usf:ConsentBasis ; usf:canonicalName "contract" .
+cbasis:legalobligation    a usf:ConsentBasis ; usf:canonicalName "legalobligation" .
+cbasis:vitalinterest      a usf:ConsentBasis ; usf:canonicalName "vitalinterest" .
+cbasis:publictask         a usf:ConsentBasis ; usf:canonicalName "publictask" .
+cbasis:legitimateinterest a usf:ConsentBasis ; usf:canonicalName "legitimateinterest" .
+
+########################################################################
+# GraphClass (closed, 6)
+########################################################################
+gcl:definitiongraph a usf:GraphClass ; usf:canonicalName "definitiongraph" .
+gcl:authoredgraph   a usf:GraphClass ; usf:canonicalName "authoredgraph" .
+gcl:shapegraph      a usf:GraphClass ; usf:canonicalName "shapegraph" .
+gcl:rulegraph       a usf:GraphClass ; usf:canonicalName "rulegraph" .
+gcl:derivedgraph    a usf:GraphClass ; usf:canonicalName "derivedgraph" .
+gcl:fixturegraph    a usf:GraphClass ; usf:canonicalName "fixturegraph" .

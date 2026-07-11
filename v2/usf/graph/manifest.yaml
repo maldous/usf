@@ -1,0 +1,126 @@
+version: 1
+database: USF
+baseIri: "urn:usf:"
+definitionGraphs:
+  - file: ontology.ttl
+    graph: "urn:usf:graph:ontology"
+    loadOrder: 1
+  - file: taxonomy.ttl
+    graph: "urn:usf:graph:taxonomy"
+    loadOrder: 2
+  - file: vocabulary.ttl
+    graph: "urn:usf:graph:vocabulary"
+    loadOrder: 3
+  - file: authority.ttl
+    graph: "urn:usf:graph:authority"
+    loadOrder: 4
+  - file: registry.ttl
+    graph: "urn:usf:graph:registry"
+    loadOrder: 5
+authoredGraphs:
+  - file: providers.ttl
+    graph: "urn:usf:graph:providers"
+    loadOrder: 6
+  - file: environments.ttl
+    graph: "urn:usf:graph:environments"
+    loadOrder: 7
+  - file: claims.ttl
+    graph: "urn:usf:graph:claims"
+    loadOrder: 8
+  - file: contracts/capabilities.trig
+    graph: "urn:usf:graph:capabilities"
+    loadOrder: 9
+  - file: contracts/policies.trig
+    graph: "urn:usf:graph:policies"
+    loadOrder: 10
+  - file: contracts/interfaces.trig
+    graph: "urn:usf:graph:interfaces"
+    loadOrder: 11
+  - file: contracts/interactions.trig
+    graph: "urn:usf:graph:interactions"
+    loadOrder: 12
+  - file: contracts/platform.trig
+    graph: "urn:usf:graph:platform"
+    loadOrder: 13
+  - file: contracts/data.trig
+    graph: "urn:usf:graph:data"
+    loadOrder: 14
+  - file: contracts/signals.trig
+    graph: "urn:usf:graph:signals"
+    loadOrder: 15
+  - file: contracts/experience.trig
+    graph: "urn:usf:graph:experience"
+    loadOrder: 16
+  - file: assurance/proofs.trig
+    graph: "urn:usf:graph:proofs"
+    loadOrder: 17
+  - file: assurance/evidence.trig
+    graph: "urn:usf:graph:evidence"
+    loadOrder: 18
+  - file: assurance/controls.trig
+    graph: "urn:usf:graph:controls"
+    loadOrder: 19
+  - file: assurance/tests.trig
+    graph: "urn:usf:graph:tests"
+    loadOrder: 20
+  - file: realisation/services.trig
+    graph: "urn:usf:graph:services"
+    loadOrder: 21
+  - file: realisation/implementations.trig
+    graph: "urn:usf:graph:implementations"
+    loadOrder: 22
+  - file: realisation/bindings.trig
+    graph: "urn:usf:graph:bindings"
+    loadOrder: 23
+  - file: execution/agents.trig
+    graph: "urn:usf:graph:agents"
+    loadOrder: 24
+  - file: execution/validators.trig
+    graph: "urn:usf:graph:validators"
+    loadOrder: 25
+shapeGraphs:
+  - file: shapes.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/contracts.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/assurance.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/realisation.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/execution.ttl
+    graph: "urn:usf:graph:shapes"
+  - file: shapes/derivation.ttl
+    graph: "urn:usf:graph:shapes"
+rules:
+  - file: rules/obligations.rq
+    output: "urn:usf:graph:derived:obligations"
+    kind: derivation
+  - file: rules/evidence.rq
+    output: "urn:usf:graph:derived:evidence"
+    kind: derivation
+  - file: rules/surfaces.rq
+    output: "urn:usf:graph:derived:surfaces"
+    kind: derivation
+  - file: rules/coverage.rq
+    output: "urn:usf:graph:derived:coverage"
+    kind: derivation
+  - file: rules/readiness.rq
+    output: "urn:usf:graph:derived:readiness"
+    kind: derivation
+  - file: rules/integrity.rq
+    kind: integrity
+derivedGraphs:
+  - file: derived/obligations.trig
+    graph: "urn:usf:graph:derived:obligations"
+  - file: derived/evidence.trig
+    graph: "urn:usf:graph:derived:evidence"
+  - file: derived/surfaces.trig
+    graph: "urn:usf:graph:derived:surfaces"
+  - file: derived/coverage.trig
+    graph: "urn:usf:graph:derived:coverage"
+  - file: derived/readiness.trig
+    graph: "urn:usf:graph:derived:readiness"
+fixtures:
+  conforming: fixtures/conforming
+  defects: fixtures/defects
+  loadAsAuthority: false

@@ -1,0 +1,24 @@
+PREFIX usf: <urn:usf:ontology:>
+# Derive readiness of each capability purely from satisfied evidence. Readiness is never
+# authored: a capability is ready only when every proof obligation of its contract has a
+# satisfied evidence requirement backed by fresh, provider-compatible evidence.
+CONSTRUCT {
+  ?rd a usf:Readiness ;
+      usf:canonicalName ?ln ;
+      usf:readinessOf ?cap ;
+      usf:readinessState ?state ;
+      usf:readinessRung ?rung ;
+      usf:derivedFrom ?cap .
+}
+WHERE {
+  ?cap a usf:Capability ; usf:hasContract ?c .
+  BIND(REPLACE(STR(?cap), "^.*:", "") AS ?ln)
+  BIND(IRI(CONCAT("urn:usf:readiness:", ?ln)) AS ?rd)
+  BIND(EXISTS {
+        ?po a usf:ProofObligation ; usf:obligationFor ?c .
+        ?er a usf:EvidenceRequirement ; usf:obligationFor ?c .
+        ?ev usf:satisfies ?er .
+      } AS ?satisfied)
+  BIND(IF(?satisfied, <urn:usf:readinessstate:ready>, <urn:usf:readinessstate:notready>) AS ?state)
+  BIND(IF(?satisfied, <urn:usf:proofrung:behaviour>, <urn:usf:proofrung:discovery>) AS ?rung)
+}

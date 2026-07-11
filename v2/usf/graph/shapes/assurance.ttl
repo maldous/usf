@@ -1,0 +1,83 @@
+@prefix usf: <urn:usf:ontology:> .
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix shp: <urn:usf:shacl:> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+shp:ProofShape a sh:NodeShape ;
+    usf:canonicalName "proofshape" ;
+    sh:targetClass usf:Proof ;
+    sh:property [ sh:path usf:atRung ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProofRung ;
+        sh:message "proofrung: proof must state one rung" ] ;
+    sh:property [ sh:path usf:usesProviderMode ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProviderMode ;
+        sh:message "proofprovidermode: proof must record its provider mode" ] ;
+    sh:property [ sh:path usf:inEnvironment ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Environment ;
+        sh:message "proofenvironment: proof must record its environment" ] ;
+    sh:property [ sh:path usf:exercises ; sh:minCount 1 ; sh:class usf:SemanticContract ;
+        sh:message "proofexercises: proof must exercise at least one semantic contract" ] .
+
+shp:ProofExecutionShape a sh:NodeShape ;
+    usf:canonicalName "proofexecutionshape" ;
+    sh:targetClass usf:ProofExecution ;
+    sh:property [ sh:path usf:executesProof ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Proof ] ;
+    sh:property [ sh:path usf:producesResult ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProofResult ] .
+
+shp:ProofResultShape a sh:NodeShape ;
+    usf:canonicalName "proofresultshape" ;
+    sh:targetClass usf:ProofResult ;
+    sh:property [ sh:path usf:claimedRung ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProofRung ] ;
+    sh:property [ sh:path usf:observedRung ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProofRung ] ;
+    sh:property [ sh:path usf:hasFreshness ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Freshness ] ;
+    sh:sparql [
+        sh:message "readinessoverclaim: claimed rung exceeds observed rung" ;
+        sh:prefixes usf:prefixes ;
+        sh:select """SELECT $this WHERE {
+            $this usf:claimedRung ?c . ?c usf:rungOrder ?co .
+            $this usf:observedRung ?o . ?o usf:rungOrder ?oo .
+            FILTER(?co > ?oo)
+        }""" ;
+    ] .
+
+shp:EvidenceResultShape a sh:NodeShape ;
+    usf:canonicalName "evidenceresultshape" ;
+    sh:targetClass usf:EvidenceResult ;
+    sh:property [ sh:path usf:evidenceKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:EvidenceKind ] ;
+    sh:property [ sh:path usf:usesProviderMode ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:ProviderMode ;
+        sh:message "evidenceprovidermode: evidence result must record its provider mode" ] ;
+    sh:property [ sh:path usf:inEnvironment ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Environment ] ;
+    sh:property [ sh:path usf:hasFreshness ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Freshness ] ;
+    sh:property [ sh:path usf:evidenceForContract ; sh:minCount 1 ; sh:class usf:SemanticContract ;
+        sh:message "evidencecontract: evidence result must attach to a semantic contract" ] .
+
+shp:ControlShape a sh:NodeShape ;
+    usf:canonicalName "controlshape" ;
+    sh:targetClass usf:Control ;
+    sh:property [ sh:path usf:mitigates ; sh:minCount 1 ; sh:class usf:Risk ;
+        sh:message "controlrisk: control must mitigate at least one risk" ] ;
+    sh:property [ sh:path usf:controlForContract ; sh:minCount 1 ; sh:class usf:SemanticContract ;
+        sh:message "controlcontract: control must attach to a semantic contract" ] .
+
+shp:RiskShape a sh:NodeShape ;
+    usf:canonicalName "riskshape" ;
+    sh:targetClass usf:Risk ;
+    sh:property [ sh:path usf:riskSeverity ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:RiskSeverity ] .
+
+shp:TestShape a sh:NodeShape ;
+    usf:canonicalName "testshape" ;
+    sh:targetClass usf:Test ;
+    sh:or (
+        [ sh:property [ sh:path usf:testsContract ; sh:minCount 1 ] ]
+        [ sh:property [ sh:path usf:testsControl ; sh:minCount 1 ] ]
+    ) ;
+    sh:message "testsubject: test must verify a contract or a control" .
+
+shp:FixtureShape a sh:NodeShape ;
+    usf:canonicalName "fixtureshape" ;
+    sh:targetClass usf:Fixture ;
+    sh:property [ sh:path usf:conforming ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+        sh:message "fixtureconforming: fixture must state whether it conforms" ] .
+
+shp:DefectShape a sh:NodeShape ;
+    usf:canonicalName "defectshape" ;
+    sh:targetClass usf:Defect ;
+    sh:property [ sh:path [ sh:inversePath usf:detectsDefect ] ; sh:minCount 1 ;
+        sh:message "defectcoverage: every defect must be detected by at least one validator rule" ] .

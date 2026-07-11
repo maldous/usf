@@ -1,0 +1,107 @@
+@prefix usf: <urn:usf:ontology:> .
+@prefix impl: <urn:usf:implementation:> .
+
+<urn:usf:graph:implementations> {
+    impl:audit a usf:Implementation ;
+        usf:canonicalName "audit" .
+    impl:auth a usf:Implementation ;
+        usf:canonicalName "auth" .
+    impl:bulk a usf:Implementation ;
+        usf:canonicalName "bulk" .
+    impl:config a usf:Implementation ;
+        usf:canonicalName "config" .
+    impl:files a usf:Implementation ;
+        usf:canonicalName "files" .
+    impl:foundationadapterassurance a usf:Implementation ;
+        usf:canonicalName "foundationadapterassurance" .
+    impl:foundationadapterbulk a usf:Implementation ;
+        usf:canonicalName "foundationadapterbulk" .
+    impl:foundationadapterbus a usf:Implementation ;
+        usf:canonicalName "foundationadapterbus" .
+    impl:foundationadapterdb a usf:Implementation ;
+        usf:canonicalName "foundationadapterdb" .
+    impl:foundationadapterguardrails a usf:Implementation ;
+        usf:canonicalName "foundationadapterguardrails" .
+    impl:foundationadapteridp a usf:Implementation ;
+        usf:canonicalName "foundationadapteridp" .
+    impl:foundationadaptermail a usf:Implementation ;
+        usf:canonicalName "foundationadaptermail" .
+    impl:foundationadapterobs a usf:Implementation ;
+        usf:canonicalName "foundationadapterobs" .
+    impl:foundationadapterresources a usf:Implementation ;
+        usf:canonicalName "foundationadapterresources" .
+    impl:foundationadaptersearch a usf:Implementation ;
+        usf:canonicalName "foundationadaptersearch" .
+    impl:foundationadaptersecrets a usf:Implementation ;
+        usf:canonicalName "foundationadaptersecrets" .
+    impl:foundationadapterstore a usf:Implementation ;
+        usf:canonicalName "foundationadapterstore" .
+    impl:foundationadapterwf a usf:Implementation ;
+        usf:canonicalName "foundationadapterwf" .
+    impl:foundationappapi a usf:Implementation ;
+        usf:canonicalName "foundationappapi" .
+    impl:foundationappmobile a usf:Implementation ;
+        usf:canonicalName "foundationappmobile" .
+    impl:foundationapppublicprooforigin a usf:Implementation ;
+        usf:canonicalName "foundationapppublicprooforigin" .
+    impl:foundationappstagingproofcockpit a usf:Implementation ;
+        usf:canonicalName "foundationappstagingproofcockpit" .
+    impl:foundationappsurface a usf:Implementation ;
+        usf:canonicalName "foundationappsurface" .
+    impl:foundationappweb a usf:Implementation ;
+        usf:canonicalName "foundationappweb" .
+    impl:foundationappwork a usf:Implementation ;
+        usf:canonicalName "foundationappwork" .
+    impl:foundationbootstrap a usf:Implementation ;
+        usf:canonicalName "foundationbootstrap" .
+    impl:foundationcapabilityaudit a usf:Implementation ;
+        usf:canonicalName "foundationcapabilityaudit" .
+    impl:foundationcapabilityauth a usf:Implementation ;
+        usf:canonicalName "foundationcapabilityauth" ;
+        usf:dependsOn impl:foundationcore , impl:foundationports .
+    impl:foundationcapabilitybulk a usf:Implementation ;
+        usf:canonicalName "foundationcapabilitybulk" .
+    impl:foundationcapabilityconfig a usf:Implementation ;
+        usf:canonicalName "foundationcapabilityconfig" .
+    impl:foundationcapabilityfiles a usf:Implementation ;
+        usf:canonicalName "foundationcapabilityfiles" .
+    impl:foundationcapabilityjobs a usf:Implementation ;
+        usf:canonicalName "foundationcapabilityjobs" .
+    impl:foundationcapabilitynotify a usf:Implementation ;
+        usf:canonicalName "foundationcapabilitynotify" .
+    impl:foundationcapabilityresources a usf:Implementation ;
+        usf:canonicalName "foundationcapabilityresources" .
+    impl:foundationcapabilitysearch a usf:Implementation ;
+        usf:canonicalName "foundationcapabilitysearch" .
+    impl:foundationcapabilitytenant a usf:Implementation ;
+        usf:canonicalName "foundationcapabilitytenant" .
+    impl:foundationclient a usf:Implementation ;
+        usf:canonicalName "foundationclient" .
+    impl:foundationcontracts a usf:Implementation ;
+        usf:canonicalName "foundationcontracts" .
+    impl:foundationcore a usf:Implementation ;
+        usf:canonicalName "foundationcore" .
+    impl:foundationopenapi a usf:Implementation ;
+        usf:canonicalName "foundationopenapi" .
+    impl:foundationports a usf:Implementation ;
+        usf:canonicalName "foundationports" ;
+        usf:dependsOn impl:foundationcore .
+    impl:foundationproof a usf:Implementation ;
+        usf:canonicalName "foundationproof" .
+    impl:foundationsource a usf:Implementation ;
+        usf:canonicalName "foundationsource" .
+    impl:foundationtest a usf:Implementation ;
+        usf:canonicalName "foundationtest" .
+    impl:foundationui a usf:Implementation ;
+        usf:canonicalName "foundationui" .
+    impl:jobs a usf:Implementation ;
+        usf:canonicalName "jobs" .
+    impl:notify a usf:Implementation ;
+        usf:canonicalName "notify" .
+    impl:resources a usf:Implementation ;
+        usf:canonicalName "resources" .
+    impl:search a usf:Implementation ;
+        usf:canonicalName "search" .
+    impl:tenant a usf:Implementation ;
+        usf:canonicalName "tenant" .
+}
