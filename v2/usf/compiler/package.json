@@ -1,0 +1,21 @@
+{
+  "name": "usf-compiler",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Node command-line compiler that provisions the USF v2 graph into Stardog Cloud via the official Stardog SDK.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "node src/cli.js check",
+    "compile": "node src/cli.js compile",
+    "verify": "node src/cli.js verify",
+    "test": "node --test test/compiler.test.js",
+    "test:cloud": "node --test test/cloud.test.js"
+  },
+  "dependencies": {
+    "stardog": "10.0.1",
+    "yaml": "2.9.0"
+  }
+}
