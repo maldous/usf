@@ -1,0 +1,16 @@
+{
+  "name": "@usf/regeneration-census",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "closure": "node src/closure.mjs",
+    "test": "node --test",
+    "validate": "node src/validate.mjs",
+    "verify-drift": "node src/verify-drift.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
