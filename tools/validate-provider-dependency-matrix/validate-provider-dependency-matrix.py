@@ -43,7 +43,8 @@ ENVELOPE_FIELDS = [
 
 REQUIRED_PROVIDER_KEYS = {
     "canonicalIdentity": str, "displayName": str, "providerMode": str, "classificationRef": dict,
-    "profileMembership": str, "profileGatingCondition": str, "directDependencies": list,
+    "profileMembership": str, "profileGatingCondition": str, "composeProfiles": list,
+    "directDependencies": list,
     "transitiveDependencies": list, "startupPrerequisites": list, "startupOrder": int,
     "healthCondition": str, "readinessCondition": str, "readinessDependencies": list,
     "teardownPrerequisites": list, "teardownOrder": int, "cleanupResponsibility": str,
@@ -107,6 +108,7 @@ def load_data() -> dict[str, Any]:
     cat_ports: dict[str, set[int]] = {}
     cat_all_ports: set[int] = set()
     cat_persistent: dict[str, set[str]] = {}
+    cat_profiles: dict[str, set[str]] = {}
     for sid, s in services.items():
         ports = {p.get("publishedPort") for p in s.get("ports", []) if p.get("publishedPort") is not None}
         cat_ports[sid] = ports
@@ -116,9 +118,17 @@ def load_data() -> dict[str, Any]:
             if "persistent" in (v.get("lifecycle") or "") or "shared-long-lived" in (v.get("lifecycle") or "")
         }
         cat_persistent[sid] = {v for v in vols if v}
+        # authoritative compose profile set: union of every environmentPolicies[*].composeProfiles,
+        # the generated composeService.profiles, and the top-level composeProfiles.
+        allowed: set[str] = set(s.get("composeProfiles", []) or [])
+        for policy in (s.get("environmentPolicies", {}) or {}).values():
+            allowed |= set((policy or {}).get("composeProfiles", []) or [])
+        allowed |= set((s.get("composeService", {}) or {}).get("profiles", []) or [])
+        cat_profiles[sid] = allowed
     data["catPorts"] = cat_ports
     data["catAllPorts"] = cat_all_ports
     data["catPersistent"] = cat_persistent
+    data["catProfiles"] = cat_profiles
     consolidation = load_json(CONSOLIDATION_PATH)
     data["classification"] = {
         p.get("providerId"): p.get("classification") for p in consolidation.get("providers", [])
@@ -291,21 +301,35 @@ def rule_006_dependency_cycle(data: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def rule_007_missing_profile_membership(data: dict[str, Any]) -> list[dict[str, str]]:
+    """profileMembership prose must be present, AND every declared composeProfile must be one of the
+    provider's actual compose-service catalogue profiles (a row may not name a nonexistent profile)."""
     failures: list[dict[str, str]] = []
+    cat_profiles = data["catProfiles"]
     for index, provider in enumerate(providers(data)):
+        pid = provider.get("canonicalIdentity")
         if not str(provider.get("profileMembership", "")).strip():
-            failures.append(fail("USF-PROVIDER-DEP-007", f"provider {provider.get('canonicalIdentity')!r} has empty profileMembership", f"providers[{index}].profileMembership"))
+            failures.append(fail("USF-PROVIDER-DEP-007", f"provider {pid!r} has empty profileMembership", f"providers[{index}].profileMembership"))
+        allowed = cat_profiles.get(pid, set())
+        for profile in provider.get("composeProfiles", []) or []:
+            if profile not in allowed:
+                failures.append(fail("USF-PROVIDER-DEP-007", f"provider {pid!r} names compose profile {profile!r} that is not published for it in the compose-service catalogue (allowed: {sorted(allowed)})", f"providers[{index}].composeProfiles"))
     return failures
 
 
 def rule_008_missing_profile_gating(data: dict[str, Any]) -> list[dict[str, str]]:
+    """A profile-gated provider must carry a gating condition AND declare the non-empty set of compose
+    profiles that gate it."""
     failures: list[dict[str, str]] = []
     classification = data["classification"]
     for index, provider in enumerate(providers(data)):
+        pid = provider.get("canonicalIdentity")
         ref = provider.get("classificationRef", {}) or {}
         cls = classification.get(ref.get("providerId"))
-        if cls == "profile-gated" and not str(provider.get("profileGatingCondition", "")).strip():
-            failures.append(fail("USF-PROVIDER-DEP-008", f"profile-gated provider {provider.get('canonicalIdentity')!r} has no profileGatingCondition", f"providers[{index}].profileGatingCondition"))
+        if cls == "profile-gated":
+            if not str(provider.get("profileGatingCondition", "")).strip():
+                failures.append(fail("USF-PROVIDER-DEP-008", f"profile-gated provider {pid!r} has no profileGatingCondition", f"providers[{index}].profileGatingCondition"))
+            if not (provider.get("composeProfiles") or []):
+                failures.append(fail("USF-PROVIDER-DEP-008", f"profile-gated provider {pid!r} declares no composeProfiles", f"providers[{index}].composeProfiles"))
     return failures
 
 
@@ -367,16 +391,18 @@ def rule_012_teardown_order(data: dict[str, Any]) -> list[dict[str, str]]:
 
 
 def rule_013_undeclared_port(data: dict[str, Any]) -> list[dict[str, str]]:
-    """A declared host port must be published somewhere in the compose-service catalogue (no fabricated port).
-    Two providers sharing a real port in the same profile/env is the collision rule's concern (014)."""
+    """A declared host port must be published by THAT provider's own compose-service catalogue entry.
+    A provider borrowing another service's published port fails closed here, independently of whether the
+    collision rule (014) also fires (it will not when the borrowed port lands in a different profile/env)."""
     failures: list[dict[str, str]] = []
-    cat_all = data["catAllPorts"]
+    cat_ports = data["catPorts"]
     for index, provider in enumerate(providers(data)):
         pid = provider.get("canonicalIdentity")
+        declared = cat_ports.get(pid, set())
         for port in (provider.get("portBoundary", {}) or {}).get("ports", []) or []:
             host = port.get("hostPort")
-            if host is not None and host not in cat_all:
-                failures.append(fail("USF-PROVIDER-DEP-013", f"provider {pid!r} declares host port {host} not published anywhere in the compose-service catalogue", f"providers[{index}].portBoundary"))
+            if host is not None and host not in declared:
+                failures.append(fail("USF-PROVIDER-DEP-013", f"provider {pid!r} declares host port {host} not published by its own compose-service catalogue entry (its ports: {sorted(declared)})", f"providers[{index}].portBoundary"))
     return failures
 
 
@@ -393,8 +419,8 @@ def rule_014_port_collision(data: dict[str, Any]) -> list[dict[str, str]]:
             for env in port.get("environments", []) or ["*"]:
                 claims.setdefault((host, profile, env), []).append(pid)
     for (host, profile, env), owners in sorted(claims.items()):
-        if len(set(owners)) > 1:
-            failures.append(fail("USF-PROVIDER-DEP-014", f"host port {host} claimed by multiple providers ({', '.join(sorted(set(owners)))}) in profile {profile!r} env {env!r}", "portBoundary"))
+        if len(owners) > 1:
+            failures.append(fail("USF-PROVIDER-DEP-014", f"host port {host} bound more than once ({', '.join(sorted(owners))}) in profile {profile!r} env {env!r} — collision", "portBoundary"))
     return failures
 
 

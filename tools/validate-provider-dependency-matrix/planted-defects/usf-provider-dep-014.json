@@ -6,12 +6,12 @@
   "mustBeDistinct": true,
   "failureShape": {
     "shape": "port-collision",
-    "description": "two providers claim the same host port in the same profile and environment"
+    "description": "the same host port is bound twice in the same profile and environment"
   },
   "mutations": [
     {
       "op": "appendPort",
-      "id": "nats",
+      "id": "postgres",
       "value": {
         "portId": "collision",
         "purpose": "collide",
