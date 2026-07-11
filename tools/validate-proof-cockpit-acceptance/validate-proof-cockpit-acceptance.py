@@ -164,6 +164,7 @@ REQUIRED_FINAL_REPORT_SECTIONS = [
 EVIDENCE_ONLY_PREFIXES = (
     "artifacts/proof-cockpit/",
     "evidence/proof-evidence/proof-cockpit/",
+    "v2/",  # transitional graph-authority workspace; excluded from the proof-cockpit acceptance basis
 )
 SOURCE_TREE_HASH_ALGORITHM = "sha256-git-ls-tree-non-proof-evidence-v1"
 
