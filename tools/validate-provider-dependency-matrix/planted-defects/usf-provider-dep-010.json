@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-010-startup-order-contradicts-dependency",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-010"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "startup-order-contradicts-dependency",
+    "description": "dependent startupOrder not greater than its dependency"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "keycloak",
+      "field": "startupOrder",
+      "value": 1
+    }
+  ]
+}

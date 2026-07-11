@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-007-missing-profile-membership",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-007"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "missing-profile-membership",
+    "description": "profileMembership emptied"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "postgres",
+      "field": "profileMembership",
+      "value": ""
+    }
+  ]
+}

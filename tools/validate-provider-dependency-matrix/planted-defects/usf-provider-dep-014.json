@@ -1,0 +1,29 @@
+{
+  "id": "usf-provider-dep-014-port-collision",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-014"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "port-collision",
+    "description": "two providers claim the same host port in the same profile and environment"
+  },
+  "mutations": [
+    {
+      "op": "appendPort",
+      "id": "nats",
+      "value": {
+        "portId": "collision",
+        "purpose": "collide",
+        "hostPort": 5433,
+        "containerPort": 5432,
+        "profile": "default",
+        "environments": [
+          "dev",
+          "test",
+          "staging"
+        ]
+      }
+    }
+  ]
+}

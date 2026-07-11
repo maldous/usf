@@ -128,4 +128,17 @@
         usf:canonicalName "windmillworker" .
     svc:wiremock a usf:Service ;
         usf:canonicalName "wiremock" .
+
+    # Normative service dependency ordering. Reuses the existing canonical
+    # property usf:dependsOnService (Service -> Service). A dependent
+    # service is not ready until every service it depends on is ready; the
+    # dependency graph is acyclic and integrity fails closed on self, unknown,
+    # or cyclic dependency.
+    svc:keycloak usf:dependsOnService svc:keycloakdb .
+    svc:temporal usf:dependsOnService svc:postgres .
+    svc:temporalui usf:dependsOnService svc:temporal .
+    svc:sonarqube usf:dependsOnService svc:sonarpostgres .
+    svc:windmill usf:dependsOnService svc:windmillpostgres , svc:windmillredis .
+    svc:windmillworker usf:dependsOnService svc:windmill , svc:windmillpostgres , svc:windmillredis .
+    svc:pgbackrest usf:dependsOnService svc:postgres .
 }

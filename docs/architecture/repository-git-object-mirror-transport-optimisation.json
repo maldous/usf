@@ -44,6 +44,18 @@
     "fullHistoryFetch": false,
     "boundedShallowFetchPreserved": true
   },
+  "mirrorLocationSafety": {
+    "requiredAbsolutePath": true,
+    "requiredOutsideWorkspace": true,
+    "requiredOutsideRunnerTemp": true,
+    "removableByRunnerCleanup": false,
+    "failClosedOnUnsafePath": true,
+    "workspaceEnvVar": "GITHUB_WORKSPACE",
+    "runnerTempEnvVar": "RUNNER_TEMP",
+    "documentedSafePath": "/opt/usf-runner/git-object-mirror",
+    "documentedProvisioningDoc": "docs/architecture/repository-git-object-mirror-safe-provisioning.md",
+    "rationale": "A configured object alternate must live on durable host storage that the runner workspace and runner temp cleanup lifecycle never removes, so it cannot be deleted mid-run. The priming workflow step fails closed (exit 1) before exporting GIT_ALTERNATE_OBJECT_DIRECTORIES if the configured path is not absolute or resolves under the cleanup-controlled GITHUB_WORKSPACE or RUNNER_TEMP roots. The mirror remains opt-in and inert when the variable is unset; runner-local state is never authority."
+  },
   "timingEvidence": {
     "afterStatus": "external-operational-record-required",
     "afterRecordLocation": "pull-request-body-or-comment",

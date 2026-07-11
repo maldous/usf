@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-017-missing-synthetic-data-classification",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-017"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "missing-synthetic-data-classification",
+    "description": "syntheticDataRequirement emptied"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "postgres",
+      "field": "syntheticDataRequirement",
+      "value": ""
+    }
+  ]
+}

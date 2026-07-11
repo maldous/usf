@@ -1,0 +1,32 @@
+{
+  "id": "usf-provider-dep-022-duplicate-planted-coverage",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-022"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "duplicate-planted-coverage",
+    "description": "two planted defects target the same rule, leaving others uncovered"
+  },
+  "mutations": [
+    {
+      "op": "setPlantedCorpus",
+      "value": [
+        {
+          "expectedRuleIds": [
+            "USF-PROVIDER-DEP-001"
+          ],
+          "mustBeDistinct": true,
+          "_path": "dup-a"
+        },
+        {
+          "expectedRuleIds": [
+            "USF-PROVIDER-DEP-001"
+          ],
+          "mustBeDistinct": true,
+          "_path": "dup-b"
+        }
+      ]
+    }
+  ]
+}

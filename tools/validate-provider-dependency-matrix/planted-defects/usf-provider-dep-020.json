@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-020-unreviewed-profile-promotion",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-020"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "unreviewed-profile-promotion",
+    "description": "promotion-recommended provider loses its evidence/non-claim boundary"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "alertmanager",
+      "field": "promotionProhibition",
+      "value": ""
+    }
+  ]
+}

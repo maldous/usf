@@ -85,7 +85,11 @@ REFERENCE_SCAN_BINARY_SUFFIXES = {
     ".webp",
     ".zip",
 }
-REFERENCE_SCAN_EXCLUDED_DIR_NAMES = {".claude", ".codex", ".git"}
+# v2/ is scoped out of foundation verification (its semantic graph is validated
+# by the v2 compiler against Stardog, and the local workspace may contain a
+# root-owned chroot rootfs under v2/). Excluded here for parity with the other
+# foundation validators' v2 exclusion.
+REFERENCE_SCAN_EXCLUDED_DIR_NAMES = {".claude", ".codex", ".git", "v2"}
 
 
 def load_json(path: Path) -> dict[str, Any]:

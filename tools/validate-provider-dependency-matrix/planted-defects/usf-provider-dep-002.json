@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-002-absolute-exclusion-github-url",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-002"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "absolute-exclusion-github-url",
+    "description": "a repository URL (github.com) embedded as provider data"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "postgres",
+      "field": "evidenceCapturePoint",
+      "value": "see https://github.com/example/repo/tree/main"
+    }
+  ]
+}

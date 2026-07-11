@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-009-unavailable-required-dependency",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-009"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "unavailable-required-dependency",
+    "description": "a directDependency points at a deferred (unavailable) provider"
+  },
+  "mutations": [
+    {
+      "op": "appendList",
+      "id": "temporal-ui",
+      "field": "directDependencies",
+      "value": "mock-oidc"
+    }
+  ]
+}

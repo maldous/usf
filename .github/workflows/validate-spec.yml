@@ -41,6 +41,33 @@ jobs:
             echo "usf-git-object-mirror: not configured; skipping (no-op)"
             exit 0
           fi
+          # Mirror location safety (fail closed): a configured object alternate must live on durable
+          # host storage that the runner workspace / runner temp cleanup lifecycle never removes, so
+          # it cannot be deleted mid-run. Reject non-absolute paths and any path under the
+          # cleanup-controlled GITHUB_WORKSPACE or RUNNER_TEMP roots BEFORE exporting the alternate.
+          case "$USF_GIT_OBJECT_MIRROR" in
+            /*) : ;;
+            *)
+              echo "usf-git-object-mirror: USF_GIT_OBJECT_MIRROR must be an absolute host path, got '$USF_GIT_OBJECT_MIRROR'" >&2
+              exit 1
+              ;;
+          esac
+          if [ -n "$GITHUB_WORKSPACE" ]; then
+            case "$USF_GIT_OBJECT_MIRROR" in
+              "$GITHUB_WORKSPACE"|"$GITHUB_WORKSPACE"/*)
+                echo "usf-git-object-mirror: USF_GIT_OBJECT_MIRROR must not live under GITHUB_WORKSPACE (removable by workspace cleanup)" >&2
+                exit 1
+                ;;
+            esac
+          fi
+          if [ -n "$RUNNER_TEMP" ]; then
+            case "$USF_GIT_OBJECT_MIRROR" in
+              "$RUNNER_TEMP"|"$RUNNER_TEMP"/*)
+                echo "usf-git-object-mirror: USF_GIT_OBJECT_MIRROR must not live under RUNNER_TEMP (removable by runner cleanup)" >&2
+                exit 1
+                ;;
+            esac
+          fi
           if [ ! -d "$USF_GIT_OBJECT_MIRROR/objects" ]; then
             echo "usf-git-object-mirror: configured path has no objects directory; skipping (no-op)"
             exit 0

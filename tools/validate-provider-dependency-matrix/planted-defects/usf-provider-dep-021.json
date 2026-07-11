@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-021-provider-readiness-overclaim",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-021"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "provider-readiness-overclaim",
+    "description": "readinessCondition asserts a forbidden production-ready claim"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "postgres",
+      "field": "readinessCondition",
+      "value": "production-ready in dev"
+    }
+  ]
+}

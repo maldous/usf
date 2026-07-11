@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -992,6 +993,230 @@ def check_runner_capacity_artifact(runner_data: dict[str, Any] | None = None) ->
     return findings
 
 
+CHECKOUT_ACTION_PREFIX = "actions/checkout"
+EVENT_SHA_STEP_NAME = "Verify checkout equals GitHub event SHA"
+MIRROR_STEP_NAME_PREFIX = "Prime local git object mirror"
+
+
+def _validate_steps(workflow: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return the ordered list of step objects for the validate job."""
+    jobs = workflow.get("jobs", {}) if isinstance(workflow, dict) else {}
+    validate_job = jobs.get("validate", {}) if isinstance(jobs, dict) else {}
+    raw_steps = validate_job.get("steps", []) if isinstance(validate_job, dict) else []
+    return [step for step in raw_steps if isinstance(step, dict)]
+
+
+def _run_text(step: dict[str, Any]) -> str:
+    run = step.get("run")
+    return run if isinstance(run, str) else ""
+
+
+def _script_lines(run_text: str) -> list[str]:
+    """Non-blank, non-comment lines with leading indentation preserved.
+
+    Full-line shell comments are dropped so a comparison that is merely commented
+    out (or reduced to a comment) cannot satisfy the structural gate.
+    """
+    lines: list[str] = []
+    for raw in run_text.split("\n"):
+        stripped = raw.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        lines.append(raw)
+    return lines
+
+
+def _indent(line: str) -> int:
+    return len(line) - len(line.lstrip())
+
+
+def _has_nonzero_exit(lines: list[str]) -> bool:
+    """True if any line performs `exit` with a non-zero status token."""
+    for line in lines:
+        for match in re.finditer(r"(?:^|[;&|]|\s)exit\s+([^\s;)&|]+)", line):
+            if match.group(1) != "0":
+                return True
+    return False
+
+
+def _collect_branches(lines: list[str], if_index: int) -> tuple[list[str], list[str]]:
+    """Split the body of the `if` opened at ``if_index`` into then/else lines."""
+    then_lines: list[str] = []
+    else_lines: list[str] = []
+    target = then_lines
+    depth = 1
+    for line in lines[if_index + 1 :]:
+        stripped = line.strip()
+        if re.match(r"if\b", stripped):
+            depth += 1
+            target.append(line)
+            continue
+        if stripped in {"fi", "fi;", "fi ;"} or stripped.endswith("; fi"):
+            depth -= 1
+            if depth == 0:
+                break
+            target.append(line)
+            continue
+        if depth == 1 and stripped == "else":
+            target = else_lines
+            continue
+        target.append(line)
+    return then_lines, else_lines
+
+
+def _check_event_sha_gate(workflow: dict[str, Any], findings: list[dict[str, str]]) -> None:
+    """USF-OPT-MIRROR-004: structural proof of the fail-closed event-SHA gate.
+
+    Proves, by walking the parsed workflow (not by matching free-text markers),
+    that a step exists which captures the checked-out object identity, compares it
+    against the expected GitHub event identity, fails closed (non-zero exit) on
+    mismatch, does so unconditionally, and runs after the checkout step.
+    """
+    rid = "USF-OPT-MIRROR-004"
+    steps = _validate_steps(workflow)
+    if not steps:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "validate job must define steps for the event-SHA gate"))
+        return
+
+    checkout_index: int | None = None
+    for index, step in enumerate(steps):
+        if str(step.get("uses", "")).startswith(CHECKOUT_ACTION_PREFIX):
+            checkout_index = index
+            with_block = step.get("with", {})
+            depth = with_block.get("fetch-depth") if isinstance(with_block, dict) else None
+            if depth != 512:
+                findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "checkout step must preserve bounded shallow fetch-depth 512"))
+            break
+    if checkout_index is None:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "workflow must retain an actions/checkout step before the event-SHA gate"))
+
+    gate_index: int | None = None
+    gate_step: dict[str, Any] | None = None
+    for index, step in enumerate(steps):
+        if str(step.get("name", "")) == EVENT_SHA_STEP_NAME:
+            gate_index = index
+            gate_step = step
+            break
+    if gate_step is None:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "workflow must contain the unconditional event-SHA verification step"))
+        return
+
+    # (5) Unconditional: the step must carry no `if:` guard that could skip it.
+    if "if" in gate_step:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA verification step must be unconditional (no step-level if guard)"))
+
+    # (6) Ordering: the gate must run after the checkout step.
+    if checkout_index is not None and gate_index is not None and gate_index <= checkout_index:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA verification must run after the checkout step"))
+
+    lines = _script_lines(_run_text(gate_step))
+    if not lines:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA verification step must run a live shell comparison (not empty or commented out)"))
+        return
+
+    # (1) Capture the checked-out object identity: git rev-parse HEAD into a variable.
+    head_var: str | None = None
+    for line in lines:
+        match = re.search(r"\b([A-Za-z_][A-Za-z0-9_]*)=\s*\"?\$\(\s*git\s+rev-parse\s+HEAD\s*\)\"?", line)
+        if match:
+            head_var = match.group(1)
+            break
+    if head_var is None:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA gate must capture the checked-out identity via git rev-parse HEAD into a variable"))
+        return
+
+    # (2, 3) Compare the captured HEAD variable against GITHUB_SHA in a real shell test.
+    compare_index: int | None = None
+    compare_op: str | None = None
+    for index, line in enumerate(lines):
+        match = re.search(r"\bif\s+\[\[?(.+?)\]\]?\s*;?\s*then", line)
+        if not match:
+            continue
+        content = match.group(1)
+        if "GITHUB_SHA" not in content:
+            continue
+        if not re.search(r"\$\{?" + re.escape(head_var) + r"\b", content):
+            continue
+        if "!=" in content:
+            compare_op = "!="
+        elif re.search(r"(?<![!<>])=(?!=)", content) or "==" in content:
+            compare_op = "="
+        else:
+            continue
+        # (5) Bypass-resistant: the comparison must be at the top level of the script,
+        # not nested inside another conditional that could be skipped.
+        if _indent(line) != 0:
+            findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA comparison must be at the top level of the step (not nested inside a bypassable conditional)"))
+        compare_index = index
+        break
+    if compare_index is None:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA gate must compare the checked-out HEAD against GITHUB_SHA in a shell test"))
+        return
+
+    # (4, 7) Fail closed: the mismatch branch must exit non-zero.
+    then_lines, else_lines = _collect_branches(lines, compare_index)
+    fail_branch = then_lines if compare_op == "!=" else else_lines
+    if not _has_nonzero_exit(fail_branch):
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "event-SHA gate must fail closed (exit non-zero) when HEAD does not equal GITHUB_SHA"))
+
+
+def _check_mirror_location_safety(
+    data: dict[str, Any], workflow: dict[str, Any], findings: list[dict[str, str]]
+) -> None:
+    """USF-OPT-MIRROR-006: a configured mirror must live outside cleanup-controlled roots.
+
+    Fails closed if the declared safety constraints are weakened, or if the priming
+    workflow step no longer fails closed on a non-absolute mirror path or a path under
+    GITHUB_WORKSPACE / RUNNER_TEMP before exporting the read-only object alternate.
+    """
+    rid = "USF-OPT-MIRROR-006"
+    safety = data.get("mirrorLocationSafety", {})
+    if not isinstance(safety, dict):
+        findings.append(finding(rid, rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirrorLocationSafety must be an object"))
+        safety = {}
+    for key in ["requiredAbsolutePath", "requiredOutsideWorkspace", "requiredOutsideRunnerTemp", "failClosedOnUnsafePath"]:
+        if safety.get(key) is not True:
+            findings.append(finding(rid, rel(GIT_OBJECT_MIRROR_ARTIFACT), f"mirror location safety field must be true: {key}"))
+    if safety.get("removableByRunnerCleanup") is not False:
+        findings.append(finding(rid, rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must not be removable by runner cleanup: removableByRunnerCleanup"))
+    documented = safety.get("documentedSafePath")
+    if not isinstance(documented, str) or not documented.startswith("/"):
+        findings.append(finding(rid, rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror location safety must document an absolute safe host path"))
+
+    steps = _validate_steps(workflow)
+    mirror_step: dict[str, Any] | None = None
+    for step in steps:
+        if str(step.get("name", "")).startswith(MIRROR_STEP_NAME_PREFIX):
+            mirror_step = step
+            break
+    if mirror_step is None:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "workflow must contain the opt-in git object mirror priming step"))
+        return
+    run = _run_text(mirror_step)
+    if not run:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "git object mirror step must run a shell guard"))
+        return
+    # Opt-in + inert-when-absent must be preserved (unset => no-op exit 0).
+    if '-z "$USF_GIT_OBJECT_MIRROR"' not in run or "exit 0" not in run:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "mirror step must stay inert (no-op exit 0) when USF_GIT_OBJECT_MIRROR is unset"))
+    # Fail-closed guards must reject non-absolute paths and cleanup-controlled roots.
+    if 'case "$USF_GIT_OBJECT_MIRROR" in' not in run or "exit 1" not in run:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "mirror step must fail closed (exit 1) on a non-absolute or unsafe mirror path"))
+    if "GITHUB_WORKSPACE" not in run:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "mirror step must reject a mirror path under GITHUB_WORKSPACE"))
+    if "RUNNER_TEMP" not in run:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "mirror step must reject a mirror path under RUNNER_TEMP"))
+    # Ordering: safety guards must run before exporting the object alternate.
+    export_token = "GIT_ALTERNATE_OBJECT_DIRECTORIES"
+    if export_token not in run:
+        findings.append(finding(rid, rel(VALIDATE_WORKFLOW), "mirror step must export the read-only object alternate when the path is safe"))
+    else:
+        export_at = run.index(export_token)
+        for guard_token in ["GITHUB_WORKSPACE", "RUNNER_TEMP"]:
+            if guard_token in run and run.index(guard_token) > export_at:
+                findings.append(finding(rid, rel(VALIDATE_WORKFLOW), f"mirror safety guard ({guard_token}) must run before exporting the object alternate"))
+
+
 def check_git_object_mirror(
     mirror_data: dict[str, Any] | None = None,
     workflow_text: str | None = None,
@@ -1010,6 +1235,11 @@ def check_git_object_mirror(
         if workflow_text is not None
         else VALIDATE_WORKFLOW.read_text(encoding="utf-8")
     )
+    try:
+        workflow = workflow_data(workflow_source)
+    except (yaml.YAMLError, ValueError) as exc:
+        findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), f"validate-spec workflow must parse as YAML: {exc}"))
+        workflow = {}
 
     # USF-OPT-MIRROR-001: ownership and identity.
     if data.get("artifactId") != "usf.repository-git-object-mirror-transport-optimisation":
@@ -1052,22 +1282,15 @@ def check_git_object_mirror(
     if not isinstance(event, dict) or event.get("required") is not True or event.get("failClosed") is not True:
         findings.append(finding("USF-OPT-MIRROR-003", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror artefact must require fail-closed event-SHA verification"))
 
-    # USF-OPT-MIRROR-004: workflow wiring (opt-in mirror step + always-on fail-closed event-SHA gate).
-    for marker in [
-        "Prime local git object mirror",
-        "vars.USF_GIT_OBJECT_MIRROR",
-        "GIT_ALTERNATE_OBJECT_DIRECTORIES",
-        "Verify checkout equals GitHub event SHA",
-        "git rev-parse HEAD",
-        "uses: actions/checkout@v4",
-        "fetch-depth: 512",
-    ]:
-        if marker not in workflow_source:
-            findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), f"workflow missing git object mirror / event-SHA marker: {marker}"))
-    if '!= "$GITHUB_SHA"' not in workflow_source or "exit 1" not in workflow_source:
-        findings.append(finding("USF-OPT-MIRROR-004", rel(VALIDATE_WORKFLOW), "event-SHA verification must fail closed when HEAD does not equal the event SHA"))
+    # USF-OPT-MIRROR-004: structural proof of the opt-in mirror wiring + always-on,
+    # unconditional, fail-closed event-SHA gate (parsed from the workflow, not markers).
+    _check_event_sha_gate(workflow, findings)
     if data.get("checkoutBaseline", {}).get("fullHistoryFetch") is not False:
         findings.append(finding("USF-OPT-MIRROR-004", rel(GIT_OBJECT_MIRROR_ARTIFACT), "mirror must preserve bounded shallow checkout (no full-history fetch)"))
+
+    # USF-OPT-MIRROR-006: a configured mirror must live outside cleanup-controlled roots,
+    # and the priming step must fail closed on an unsafe path before exporting the alternate.
+    _check_mirror_location_safety(data, workflow, findings)
 
     # USF-OPT-MIRROR-005: timing non-claims and non-claim tokens.
     timing = data.get("timingEvidence", {})
@@ -1389,6 +1612,126 @@ def selftest() -> list[dict[str, str]]:
     mutated_mirror = copy.deepcopy(mirror)
     mutated_mirror["timingEvidence"]["speedupClaimMade"] = True
     tests.append(("mirror-speedup-claim", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-005"))
+
+    # USF-OPT-MIRROR-004 structural event-SHA gate: planted defects that must each be
+    # caught. The gate is located structurally in the parsed workflow, so a comparison
+    # that is removed, neutralised, made conditional, reordered, downgraded to display
+    # text, commented out, or left without a failing exit cannot slip through.
+    gate_if_block = (
+        '          if [ "$head_sha" != "$GITHUB_SHA" ]; then\n'
+        '            echo "checkout HEAD $head_sha does not equal event SHA $GITHUB_SHA" >&2\n'
+        "            exit 1\n"
+        "          fi"
+    )
+
+    # (1) comparison removed (test reduced to an unconditional truth).
+    mutated_mirror_workflow = mirror_workflow.replace('[ "$head_sha" != "$GITHUB_SHA" ]', "true")
+    tests.append(("mirror-event-sha-comparison-removed", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (2) failure-exit removed (exit 1 downgraded to exit 0).
+    mutated_mirror_workflow = mirror_workflow.replace(
+        gate_if_block,
+        (
+            '          if [ "$head_sha" != "$GITHUB_SHA" ]; then\n'
+            '            echo "checkout HEAD $head_sha does not equal event SHA $GITHUB_SHA" >&2\n'
+            "            exit 0\n"
+            "          fi"
+        ),
+    )
+    tests.append(("mirror-event-sha-failure-exit-removed", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (3) comparison made conditional (step-level if guard that could skip it).
+    mutated_mirror_workflow = mirror_workflow.replace(
+        "      - name: Verify checkout equals GitHub event SHA\n",
+        "      - name: Verify checkout equals GitHub event SHA\n        if: ${{ always() }}\n",
+    )
+    tests.append(("mirror-event-sha-step-conditional", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (4) expected identity replaced (GITHUB_SHA swapped for another variable).
+    mutated_mirror_workflow = mirror_workflow.replace('!= "$GITHUB_SHA"', '!= "$GITHUB_REF"')
+    tests.append(("mirror-event-sha-expected-identity-swapped", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (5) checked identity replaced (git rev-parse HEAD swapped for another ref).
+    mutated_mirror_workflow = mirror_workflow.replace(
+        'head_sha="$(git rev-parse HEAD)"',
+        'head_sha="$(git rev-parse refs/remotes/origin/main)"',
+    )
+    tests.append(("mirror-event-sha-checked-identity-swapped", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (6) step placed before checkout (reordered so it can no longer verify the checkout).
+    reorder_workflow = yaml.safe_load(mirror_workflow)
+    reorder_steps = reorder_workflow["jobs"]["validate"]["steps"]
+    gate_position = next(
+        index for index, step in enumerate(reorder_steps)
+        if isinstance(step, dict) and step.get("name") == EVENT_SHA_STEP_NAME
+    )
+    gate_object = reorder_steps.pop(gate_position)
+    checkout_position = next(
+        index for index, step in enumerate(reorder_steps)
+        if isinstance(step, dict) and str(step.get("uses", "")).startswith(CHECKOUT_ACTION_PREFIX)
+    )
+    reorder_steps.insert(checkout_position, gate_object)
+    reordered_text = yaml.safe_dump(reorder_workflow, sort_keys=False)
+    tests.append(("mirror-event-sha-reordered-before-checkout", check_git_object_mirror(workflow_text=reordered_text), "USF-OPT-MIRROR-004"))
+
+    # (7) comparison only present in display text (echo only, no shell test).
+    mutated_mirror_workflow = mirror_workflow.replace(
+        gate_if_block,
+        '          echo "compare $head_sha != $GITHUB_SHA (informational only)"',
+    )
+    tests.append(("mirror-event-sha-echo-only", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (8) comparison only present in a comment.
+    mutated_mirror_workflow = mirror_workflow.replace(
+        gate_if_block,
+        (
+            '          # if [ "$head_sha" != "$GITHUB_SHA" ]; then\n'
+            '          #   echo "checkout HEAD $head_sha does not equal event SHA $GITHUB_SHA" >&2\n'
+            "          #   exit 1\n"
+            "          # fi"
+        ),
+    )
+    tests.append(("mirror-event-sha-comment-only", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (9) comparison result ignored (compared but no exit on mismatch).
+    mutated_mirror_workflow = mirror_workflow.replace(
+        gate_if_block,
+        (
+            '          if [ "$head_sha" != "$GITHUB_SHA" ]; then\n'
+            '            echo "checkout HEAD $head_sha does not equal event SHA $GITHUB_SHA (ignored)"\n'
+            "          fi"
+        ),
+    )
+    tests.append(("mirror-event-sha-result-ignored", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # (10) comparison wrapped inside a bypassable conditional (nested, skippable).
+    mutated_mirror_workflow = mirror_workflow.replace(
+        gate_if_block,
+        (
+            '          if [ -n "${USF_SKIP_EVENT_SHA:-}" ]; then\n'
+            '            if [ "$head_sha" != "$GITHUB_SHA" ]; then\n'
+            '              echo "checkout HEAD $head_sha does not equal event SHA $GITHUB_SHA" >&2\n'
+            "              exit 1\n"
+            "            fi\n"
+            "          fi"
+        ),
+    )
+    tests.append(("mirror-event-sha-wrapped-conditional", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-004"))
+
+    # USF-OPT-MIRROR-006 mirror location safety: planted defects for the declared
+    # constraints and the fail-closed workflow guard.
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["mirrorLocationSafety"]["requiredOutsideWorkspace"] = False
+    tests.append(("mirror-location-outside-workspace-weakened", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-006"))
+
+    mutated_mirror = copy.deepcopy(mirror)
+    mutated_mirror["mirrorLocationSafety"]["removableByRunnerCleanup"] = True
+    tests.append(("mirror-location-removable-by-cleanup", check_git_object_mirror(mirror_data=mutated_mirror), "USF-OPT-MIRROR-006"))
+
+    mutated_mirror_workflow = mirror_workflow.replace(
+        'case "$USF_GIT_OBJECT_MIRROR" in', 'case "$USF_GIT_OBJECT_MIRROR_DISABLED" in'
+    )
+    tests.append(("mirror-location-workflow-guard-removed", check_git_object_mirror(workflow_text=mutated_mirror_workflow), "USF-OPT-MIRROR-006"))
 
     opt_map = load_json(OPTIMISATION_READINESS_MAP)
     mutated_map = copy.deepcopy(opt_map)

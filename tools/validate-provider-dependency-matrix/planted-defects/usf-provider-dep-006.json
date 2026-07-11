@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-006-dependency-cycle",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-006"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "dependency-cycle",
+    "description": "keycloak-db depends on keycloak which already depends on keycloak-db"
+  },
+  "mutations": [
+    {
+      "op": "appendList",
+      "id": "keycloak-db",
+      "field": "directDependencies",
+      "value": "keycloak"
+    }
+  ]
+}

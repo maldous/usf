@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-004-unknown-dependency",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-004"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "unknown-dependency",
+    "description": "directDependency references a provider that does not exist"
+  },
+  "mutations": [
+    {
+      "op": "appendList",
+      "id": "postgres",
+      "field": "directDependencies",
+      "value": "ghost-provider"
+    }
+  ]
+}

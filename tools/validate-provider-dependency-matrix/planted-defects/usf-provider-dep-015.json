@@ -1,0 +1,18 @@
+{
+  "id": "usf-provider-dep-015-undeclared-secret-usage",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-015"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "undeclared-secret-usage",
+    "description": "secret placeholder ref not in the approved local placeholder list"
+  },
+  "mutations": [
+    {
+      "op": "appendSecretRef",
+      "id": "postgres",
+      "value": "unapproved-secret-ref"
+    }
+  ]
+}

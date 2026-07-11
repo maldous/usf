@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-018-hidden-persistent-state",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-018"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "hidden-persistent-state",
+    "description": "a persistent compose volume not declared in persistentState"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "postgres",
+      "field": "persistentState",
+      "value": []
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "usf-provider-dep-003-provider-record-missing-key",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-003"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "provider-record-missing-key",
+    "description": "a required per-provider key (failureBehaviour) removed"
+  },
+  "mutations": [
+    {
+      "op": "delProviderField",
+      "id": "postgres",
+      "field": "failureBehaviour"
+    }
+  ]
+}
