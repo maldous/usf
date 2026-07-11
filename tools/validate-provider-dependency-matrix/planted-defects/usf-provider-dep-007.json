@@ -1,0 +1,21 @@
+{
+  "id": "usf-provider-dep-007-profile-not-in-catalogue",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-007"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "profile-not-in-catalogue",
+    "description": "profile-gated provider names a compose profile not published for it"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "pgadmin",
+      "field": "composeProfiles",
+      "value": [
+        "nonexistent-profile"
+      ]
+    }
+  ]
+}

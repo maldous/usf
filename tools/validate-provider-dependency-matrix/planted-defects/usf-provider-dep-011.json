@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-011-readiness-without-required-dependency",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-011"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "readiness-without-required-dependency",
+    "description": "readinessDependency not present in directDependencies"
+  },
+  "mutations": [
+    {
+      "op": "appendList",
+      "id": "keycloak",
+      "field": "readinessDependencies",
+      "value": "minio"
+    }
+  ]
+}

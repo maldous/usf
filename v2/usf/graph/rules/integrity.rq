@@ -58,5 +58,20 @@ SELECT DISTINCT ?violation ?subject WHERE {
              usf:observedRung/usf:rungOrder ?oo .
     FILTER(?co > ?oo)
     BIND("readinessoverclaim" AS ?violation)
+  } UNION {
+    # a service declared to depend on itself
+    ?subject usf:dependsOnService ?subject .
+    BIND("selfdependency" AS ?violation)
+  } UNION {
+    # a service dependency whose target is not a declared service
+    ?subject usf:dependsOnService ?dep .
+    FILTER NOT EXISTS { ?dep a usf:Service }
+    BIND("unknowndependency" AS ?violation)
+  } UNION {
+    # a dependency cycle through at least one other service
+    ?subject usf:dependsOnService ?mid .
+    ?mid usf:dependsOnService+ ?subject .
+    FILTER(?subject != ?mid)
+    BIND("dependencycycle" AS ?violation)
   }
 }

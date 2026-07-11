@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-008-missing-profile-gating",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-008"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "missing-profile-gating",
+    "description": "profile-gated provider gating condition emptied"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "pgadmin",
+      "field": "profileGatingCondition",
+      "value": ""
+    }
+  ]
+}

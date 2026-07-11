@@ -18,7 +18,9 @@ shp:ImplementationShape a sh:NodeShape ;
 
 shp:ServiceShape a sh:NodeShape ;
     usf:canonicalName "serviceshape" ;
-    sh:targetClass usf:Service .
+    sh:targetClass usf:Service ;
+    sh:property [ sh:path usf:dependsOnService ; sh:nodeKind sh:IRI ; sh:class usf:Service ;
+        sh:message "servicedependency: a service dependency must reference a declared service" ] .
 
 shp:AdapterShape a sh:NodeShape ;
     usf:canonicalName "adaptershape" ;

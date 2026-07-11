@@ -1,0 +1,17 @@
+{
+  "id": "usf-provider-dep-001-envelope-missing-createddate",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-001"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "envelope-missing-createddate",
+    "description": "envelope createdDate removed"
+  },
+  "mutations": [
+    {
+      "op": "delTop",
+      "field": "createdDate"
+    }
+  ]
+}

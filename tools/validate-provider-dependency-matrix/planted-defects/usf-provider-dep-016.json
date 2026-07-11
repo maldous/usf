@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-016-secret-value-embedded",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-016"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "secret-value-embedded",
+    "description": "a real-secret-looking literal embedded in the secret boundary"
+  },
+  "mutations": [
+    {
+      "op": "setSecretField",
+      "id": "postgres",
+      "field": "description",
+      "value": "AKIAIOSFODNN7EXAMPLE"
+    }
+  ]
+}

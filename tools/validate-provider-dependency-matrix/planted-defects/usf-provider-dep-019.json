@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-019-missing-cleanup-responsibility",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-019"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "missing-cleanup-responsibility",
+    "description": "cleanupResponsibility emptied"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "postgres",
+      "field": "cleanupResponsibility",
+      "value": ""
+    }
+  ]
+}

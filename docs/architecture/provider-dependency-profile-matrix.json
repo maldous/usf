@@ -1,0 +1,2316 @@
+{
+  "id": "provider-dependency-profile-matrix",
+  "title": "USF-1086 Dev Compose Provider Dependency and Profile Matrix",
+  "schemaVersion": "1.0.0",
+  "ownerIssueId": "USF-1086",
+  "parentIssueId": "USF-1074",
+  "authorityLevel": "semantic-definition-supporting-map",
+  "authorityBoundary": "This matrix is a lower-authority supporting map. It is lower authority than the compose manifests, the compose-service catalogue, the semantic contracts, and the v2 semantic graph. It records dev-compose provider dependency, profile, startup/teardown, readiness, port, secret and cleanup boundaries only, and asserts no live-provider, staging, production, supplier, deployment or compliance readiness.",
+  "createdDate": "2026-07-11",
+  "providerCount": 40,
+  "scopeNote": "Covers the 40 compose-service catalogue providers across all classes (canonical-dev-compose, profile-gated, test-staging-live-only, deferred, out-of-foundation-scope), including paired/consolidated providers that keep distinct runtime responsibilities. The consolidation map's additional not-found placeholder carries no runtime dependency or profile semantics and is intentionally not modelled here.",
+  "nonClaims": [
+    "no-live-provider-readiness",
+    "no-staging-readiness",
+    "no-production-readiness",
+    "no-supplier-readiness",
+    "no-deployment-readiness",
+    "no-compliance-readiness",
+    "no-runtime-product-readiness-upgrade-from-compose-or-health-or-readiness-success"
+  ],
+  "evidenceScoping": {
+    "statement": "Provider readiness is scoped and never global. Compose start, health and readiness success prove only the scoped dev-compose fact and none of the non-claims above.",
+    "scopedBy": [
+      "provider",
+      "providerMode",
+      "environment",
+      "proofRung",
+      "freshness",
+      "dependencyState"
+    ],
+    "cannotSatisfyReadinessWhenDependencyIs": [
+      "missing",
+      "unhealthy",
+      "notReady",
+      "incorrectlyProfiled",
+      "stale",
+      "mismatched"
+    ]
+  },
+  "providers": [
+    {
+      "canonicalIdentity": "postgres",
+      "displayName": "Postgres",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "postgres"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD-SHELL pg_isready -U foundation_app -d foundation ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "torn down after dependents pgbackrest, temporal have stopped"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "named volume(s) postgres-data retained across runs; operator resets via 'compose down -v'; synthetic data only",
+      "persistentState": [
+        "postgres-data"
+      ],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for postgres; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "postgres",
+            "purpose": "database",
+            "hostPort": 5433,
+            "containerPort": 5432,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "foundation_app_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (pgbackrest, temporal) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "keycloak-db",
+      "displayName": "Keycloak Database",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "keycloak-db"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD-SHELL pg_isready -U keycloak -d keycloak ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "torn down after dependents keycloak have stopped"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "named volume(s) keycloak-db-data retained across runs; operator resets via 'compose down -v'; synthetic data only",
+      "persistentState": [
+        "keycloak-db-data"
+      ],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "keycloak_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (keycloak) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "keycloak",
+      "displayName": "Keycloak",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "keycloak"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [
+        "keycloak-db"
+      ],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "keycloak-db reaches healthy (compose depends_on service_healthy)"
+      ],
+      "startupOrder": 2,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes AND every readinessDependency (keycloak-db) is healthy within the active dev-compose profile; dev-compose scope only",
+      "readinessDependencies": [
+        "keycloak-db"
+      ],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 2,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for keycloak-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "keycloak-http",
+            "purpose": "identity",
+            "hostPort": 8090,
+            "containerPort": 8080,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "admin_password",
+          "keycloak_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "nats",
+      "displayName": "NATS",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "nats"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for nats; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "nats",
+            "purpose": "runtime-api",
+            "hostPort": 4222,
+            "containerPort": 4222,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "temporal",
+      "displayName": "Temporal",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "temporal"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [
+        "postgres"
+      ],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "postgres reaches healthy (compose depends_on service_healthy)"
+      ],
+      "startupOrder": 2,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes AND every readinessDependency (postgres) is healthy within the active dev-compose profile; dev-compose scope only",
+      "readinessDependencies": [
+        "postgres"
+      ],
+      "teardownPrerequisites": [
+        "torn down after dependents temporal-ui have stopped"
+      ],
+      "teardownOrder": 2,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for temporal-grpc; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "temporal-grpc",
+            "purpose": "workflow-runtime",
+            "hostPort": 7233,
+            "containerPort": 7233,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "foundation_app_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (temporal-ui) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "minio",
+      "displayName": "MinIO",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "minio"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD mc ready ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for s3-api, minio-console; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "s3-api",
+            "purpose": "object-storage",
+            "hostPort": 9000,
+            "containerPort": 9000,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          },
+          {
+            "portId": "minio-console",
+            "purpose": "object-storage",
+            "hostPort": 9001,
+            "containerPort": 9001,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "minio_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "openbao",
+      "displayName": "OpenBao",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "openbao"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for bao-api; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "bao-api",
+            "purpose": "secrets",
+            "hostPort": 8200,
+            "containerPort": 8200,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "dev-root-token"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "otel-collector",
+      "displayName": "OpenTelemetry Collector",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "otel-collector"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for otel-collector, otel-collector-4318; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "otel-collector",
+            "purpose": "observability",
+            "hostPort": 4317,
+            "containerPort": 4317,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          },
+          {
+            "portId": "otel-collector-4318",
+            "purpose": "observability",
+            "hostPort": 4318,
+            "containerPort": 4318,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "prometheus",
+      "displayName": "Prometheus",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "prometheus"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for prometheus; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "prometheus",
+            "purpose": "observability",
+            "hostPort": 9090,
+            "containerPort": 9090,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "grafana",
+      "displayName": "Grafana",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "grafana"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for grafana; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "grafana",
+            "purpose": "observability",
+            "hostPort": 3000,
+            "containerPort": 3000,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "admin_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "loki",
+      "displayName": "Loki",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "loki"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for loki; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "loki",
+            "purpose": "observability",
+            "hostPort": 3100,
+            "containerPort": 3100,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "tempo",
+      "displayName": "Tempo",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "tempo"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for tempo; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "tempo",
+            "purpose": "observability",
+            "hostPort": 3200,
+            "containerPort": 3200,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "mailpit",
+      "displayName": "Mailpit",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "mailpit"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for smtp, mailpit-ui; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "smtp",
+            "purpose": "notification-test",
+            "hostPort": 1025,
+            "containerPort": 1025,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          },
+          {
+            "portId": "mailpit-ui",
+            "purpose": "notification-test",
+            "hostPort": 8025,
+            "containerPort": 8025,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "webhook-sink",
+      "displayName": "Webhook Sink",
+      "providerMode": "canonical-dev-compose-default",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "webhook-sink"
+      },
+      "profileMembership": "default (no compose profile; started on every dev bootstrap)",
+      "profileGatingCondition": "always-on in the default dev compose project (no profile gate)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for webhook-sink; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "webhook-sink",
+            "purpose": "webhook-test",
+            "hostPort": 18088,
+            "containerPort": 8080,
+            "profile": "default",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "runtime compose provider-binding readiness and retry evidence point (runtime-proof providerBindingMatrix)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "redis",
+      "displayName": "Redis",
+      "providerMode": "runtime-providers-profile-dev-in-memory-substitute",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "redis"
+      },
+      "profileMembership": "runtime-providers (composed only in test/staging; dev uses an in-memory substitute)",
+      "profileGatingCondition": "composed only under the 'runtime-providers' profile in test/staging; dev provides an in-memory substitute so no dev compose profile starts it",
+      "composeProfiles": [
+        "runtime-providers"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for redis; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "redis",
+            "purpose": "cache",
+            "hostPort": 6379,
+            "containerPort": 6379,
+            "profile": "runtime-providers",
+            "environments": [
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "none in dev (in-memory substitute); synthetic-only when composed in test/staging; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (substrate proof); no dev compose provider start",
+      "proofObligation": "dev in-memory substitute must prove bounded semantics and record non-equivalence.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "meilisearch",
+      "displayName": "Meilisearch",
+      "providerMode": "runtime-providers-profile-dev-in-memory-substitute",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "meilisearch"
+      },
+      "profileMembership": "runtime-providers (composed only in test/staging; dev uses an in-memory substitute)",
+      "profileGatingCondition": "composed only under the 'runtime-providers' profile in test/staging; dev provides an in-memory substitute so no dev compose profile starts it",
+      "composeProfiles": [
+        "runtime-providers"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for meilisearch; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "meilisearch",
+            "purpose": "runtime-api",
+            "hostPort": 7700,
+            "containerPort": 7700,
+            "profile": "runtime-providers",
+            "environments": [
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "none in dev (in-memory substitute); synthetic-only when composed in test/staging; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (substrate proof); no dev compose provider start",
+      "proofObligation": "dev in-memory substitute must prove bounded semantics and record non-equivalence.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "clickhouse",
+      "displayName": "ClickHouse",
+      "providerMode": "runtime-providers-profile-dev-in-memory-substitute",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "clickhouse"
+      },
+      "profileMembership": "runtime-providers (composed only in test/staging; dev uses an in-memory substitute)",
+      "profileGatingCondition": "composed only under the 'runtime-providers' profile in test/staging; dev provides an in-memory substitute so no dev compose profile starts it",
+      "composeProfiles": [
+        "runtime-providers"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for clickhouse-http, clickhouse-native; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "clickhouse-http",
+            "purpose": "runtime-api",
+            "hostPort": 18123,
+            "containerPort": 8123,
+            "profile": "runtime-providers",
+            "environments": [
+              "test",
+              "staging"
+            ]
+          },
+          {
+            "portId": "clickhouse-native",
+            "purpose": "runtime-api",
+            "hostPort": 19000,
+            "containerPort": 9000,
+            "profile": "runtime-providers",
+            "environments": [
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "none in dev (in-memory substitute); synthetic-only when composed in test/staging; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (substrate proof); no dev compose provider start",
+      "proofObligation": "dev in-memory substitute must prove bounded semantics and record non-equivalence.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "pgadmin",
+      "displayName": "pgAdmin",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "pgadmin"
+      },
+      "profileMembership": "operator-tools",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'operator-tools'",
+      "composeProfiles": [
+        "operator-tools"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for pgadmin-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "pgadmin-http",
+            "purpose": "operator-admin",
+            "hostPort": 5050,
+            "containerPort": 80,
+            "profile": "operator-tools",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "admin_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "sonar-postgres",
+      "displayName": "SonarQube Postgres",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "sonar-postgres"
+      },
+      "profileMembership": "assurance",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'assurance'",
+      "composeProfiles": [
+        "assurance"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD-SHELL pg_isready -U sonar -d sonar ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "torn down after dependents sonarqube have stopped"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "named volume(s) sonar-postgres-data retained across runs; operator resets via 'compose down -v'; synthetic data only",
+      "persistentState": [
+        "sonar-postgres-data"
+      ],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "sonar_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (sonarqube) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "sonar-oidc-plugin",
+      "displayName": "SonarQube OIDC Plugin Fetcher",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "sonar-oidc-plugin"
+      },
+      "profileMembership": "assurance",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'assurance'",
+      "composeProfiles": [
+        "assurance"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "sonarqube",
+      "displayName": "SonarQube",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "sonarqube"
+      },
+      "profileMembership": "assurance",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'assurance'",
+      "composeProfiles": [
+        "assurance"
+      ],
+      "directDependencies": [
+        "sonar-postgres"
+      ],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "sonar-postgres reaches healthy (compose depends_on service_healthy)"
+      ],
+      "startupOrder": 2,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes AND every readinessDependency (sonar-postgres) is healthy within the active dev-compose profile; dev-compose scope only",
+      "readinessDependencies": [
+        "sonar-postgres"
+      ],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 2,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for sonarqube-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "sonarqube-http",
+            "purpose": "assurance",
+            "hostPort": 9002,
+            "containerPort": 9000,
+            "profile": "assurance",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "sonar_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "mock-oidc",
+      "displayName": "Mock OIDC",
+      "providerMode": "deferred-hermetic-mock",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "mock-oidc"
+      },
+      "profileMembership": "none (deferred; not composed in dev)",
+      "profileGatingCondition": "not gated into any dev compose profile (deferred realisation)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "not-applicable in dev (provider is not started in the default dev compose project)",
+      "persistentState": [],
+      "ephemeralState": [],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic/hermetic identity only; no production data (deferred, not composed in dev)",
+      "evidenceCapturePoint": "hermetic-mock provider-mode behaviour evidence point (authentication slice proof)",
+      "proofObligation": "dev deferred realisation cannot satisfy readiness.",
+      "failureBehaviour": "not started in the dev compose project; its absence is expected and asserts no readiness",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "localstack",
+      "displayName": "LocalStack",
+      "providerMode": "emulated-provider-profile",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "localstack"
+      },
+      "profileMembership": "provider-emulation",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'provider-emulation'",
+      "composeProfiles": [
+        "provider-emulation"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for localstack-edge; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "localstack-edge",
+            "purpose": "provider-emulation",
+            "hostPort": 4566,
+            "containerPort": 4566,
+            "profile": "provider-emulation",
+            "environments": [
+              "dev",
+              "test"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (mock-substrate proof)",
+      "proofObligation": "dev emulation must not be treated as live provider readiness.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "wiremock",
+      "displayName": "WireMock",
+      "providerMode": "mock-provider-profile",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "wiremock"
+      },
+      "profileMembership": "provider-mocks",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'provider-mocks'",
+      "composeProfiles": [
+        "provider-mocks"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for wiremock-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "wiremock-http",
+            "purpose": "provider-mock",
+            "hostPort": 8089,
+            "containerPort": 8080,
+            "profile": "provider-mocks",
+            "environments": [
+              "dev",
+              "test"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (mock-substrate proof)",
+      "proofObligation": "dev mock must not be treated as live provider readiness.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "alertmanager",
+      "displayName": "Alertmanager",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "alertmanager"
+      },
+      "profileMembership": "observability",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'observability'",
+      "composeProfiles": [
+        "observability"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for alertmanager-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "alertmanager-http",
+            "purpose": "observability",
+            "hostPort": 9093,
+            "containerPort": 9093,
+            "profile": "observability",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "alloy",
+      "displayName": "Grafana Alloy",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "alloy"
+      },
+      "profileMembership": "observability",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'observability'",
+      "composeProfiles": [
+        "observability"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for alloy-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "alloy-http",
+            "purpose": "observability",
+            "hostPort": 12345,
+            "containerPort": 12345,
+            "profile": "observability",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "windmill-postgres",
+      "displayName": "Windmill Postgres",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "windmill-postgres"
+      },
+      "profileMembership": "workflow-provider",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'workflow-provider'",
+      "composeProfiles": [
+        "workflow-provider"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD-SHELL pg_isready -U windmill -d windmill ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "torn down after dependents windmill, windmill-worker have stopped"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "windmill_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (workflow windmill proof)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (windmill, windmill-worker) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "windmill-redis",
+      "displayName": "Windmill Redis",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "windmill-redis"
+      },
+      "profileMembership": "workflow-provider",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'workflow-provider'",
+      "composeProfiles": [
+        "workflow-provider"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD redis-cli ping ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "torn down after dependents windmill, windmill-worker have stopped"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (workflow windmill proof)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (windmill, windmill-worker) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "windmill",
+      "displayName": "Windmill",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "windmill"
+      },
+      "profileMembership": "workflow-provider",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'workflow-provider'",
+      "composeProfiles": [
+        "workflow-provider"
+      ],
+      "directDependencies": [
+        "windmill-postgres",
+        "windmill-redis"
+      ],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "windmill-postgres reaches healthy (compose depends_on service_healthy)",
+        "windmill-redis reaches healthy (compose depends_on service_healthy)"
+      ],
+      "startupOrder": 2,
+      "healthCondition": "compose healthcheck (CMD-SHELL curl -fsS http://127.0.0.1:8000/api/version >/dev/null || exit 1 ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes AND every readinessDependency (windmill-postgres, windmill-redis) is healthy within the active dev-compose profile; dev-compose scope only",
+      "readinessDependencies": [
+        "windmill-postgres",
+        "windmill-redis"
+      ],
+      "teardownPrerequisites": [
+        "torn down after dependents windmill-worker have stopped"
+      ],
+      "teardownOrder": 2,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for windmill-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "windmill-http",
+            "purpose": "operator-admin",
+            "hostPort": 8001,
+            "containerPort": 8000,
+            "profile": "workflow-provider",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "postgres://windmill:windmill_password@windmill-postgres:5432/windmill",
+          "usf-local-windmill-superadmin-placeholder",
+          "windmill_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (workflow windmill proof)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy or missing, dependents (windmill-worker) do not start and cannot satisfy readiness; dev bootstrap fails closed for that path",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "windmill-worker",
+      "displayName": "Windmill Worker",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "windmill-worker"
+      },
+      "profileMembership": "workflow-provider",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'workflow-provider'",
+      "composeProfiles": [
+        "workflow-provider"
+      ],
+      "directDependencies": [
+        "windmill-postgres",
+        "windmill-redis",
+        "windmill"
+      ],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "windmill-postgres reaches healthy (compose depends_on service_healthy)",
+        "windmill-redis reaches healthy (compose depends_on service_healthy)",
+        "windmill reaches healthy (compose depends_on service_healthy)"
+      ],
+      "startupOrder": 3,
+      "healthCondition": "compose healthcheck (CMD-SHELL windmill --version >/dev/null 2>&1 || exit 1 ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes AND every readinessDependency (windmill-postgres, windmill-redis, windmill) is healthy within the active dev-compose profile; dev-compose scope only",
+      "readinessDependencies": [
+        "windmill-postgres",
+        "windmill-redis",
+        "windmill"
+      ],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 1,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "postgres://windmill:windmill_password@windmill-postgres:5432/windmill",
+          "usf-local-windmill-superadmin-placeholder",
+          "windmill_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "synthetic tenant/actor/file/job/notification/provider/secret proof data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (workflow windmill proof)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "temporal-postgres",
+      "displayName": "Temporal Postgres",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "temporal-postgres"
+      },
+      "profileMembership": "workflow-provider",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'workflow-provider'",
+      "composeProfiles": [
+        "workflow-provider"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD-SHELL pg_isready -U temporal -d temporal ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "temporal_password"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "temporal-ui",
+      "displayName": "Temporal UI",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "temporal-ui"
+      },
+      "profileMembership": "workflow-provider",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'workflow-provider'",
+      "composeProfiles": [
+        "workflow-provider"
+      ],
+      "directDependencies": [
+        "temporal"
+      ],
+      "transitiveDependencies": [
+        "postgres"
+      ],
+      "startupPrerequisites": [
+        "temporal reaches started (compose depends_on service_started)"
+      ],
+      "startupOrder": 3,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 1,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for temporal-ui; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "temporal-ui",
+            "purpose": "workflow-ui",
+            "hostPort": 8088,
+            "containerPort": 8080,
+            "profile": "workflow-provider",
+            "environments": [
+              "dev",
+              "test",
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "pgbackrest",
+      "displayName": "pgBackRest",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "pgbackrest"
+      },
+      "profileMembership": "backup-restore",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'backup-restore'",
+      "composeProfiles": [
+        "backup-restore"
+      ],
+      "directDependencies": [
+        "postgres"
+      ],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "postgres reaches healthy (compose depends_on service_healthy)"
+      ],
+      "startupOrder": 2,
+      "healthCondition": "compose healthcheck (CMD-SHELL pgbackrest version >/dev/null ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes AND every readinessDependency (postgres) is healthy within the active dev-compose profile; dev-compose scope only",
+      "readinessDependencies": [
+        "postgres"
+      ],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 2,
+      "cleanupResponsibility": "volume(s) pgbackrest-repo, pgbackrest-restore reset-per-run; 'compose down' discards all container and drill state",
+      "persistentState": [],
+      "ephemeralState": [
+        "pgbackrest-repo",
+        "pgbackrest-restore"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic backup/restore drill data only; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (mock-substrate proof)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "clamav",
+      "displayName": "ClamAV",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "clamav"
+      },
+      "profileMembership": "scanning",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'scanning'",
+      "composeProfiles": [
+        "scanning"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "stateless container; 'compose down' removes it; state reset-per-run (seedReset=reset-per-run)",
+      "persistentState": [],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "bounded-local proof provider-binding evidence point (mock-substrate proof)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "sentry",
+      "displayName": "Sentry",
+      "providerMode": "external-reference-only",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "sentry"
+      },
+      "profileMembership": "none (deferred; not composed in dev)",
+      "profileGatingCondition": "not gated into any dev compose profile (deferred realisation)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "not-applicable in dev (provider is not started in the default dev compose project)",
+      "persistentState": [],
+      "ephemeralState": [],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "synthetic/hermetic identity only; no production data (deferred, not composed in dev)",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev shared control plane must prove project/environment boundary, access boundary, and evidence separation.",
+      "failureBehaviour": "not started in the dev compose project; its absence is expected and asserts no readiness",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "public-proof-origin",
+      "displayName": "Public Proof Origin",
+      "providerMode": "staging-only-composed",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "public-proof-origin"
+      },
+      "profileMembership": "public-proof-origin (staging only; prohibited in dev)",
+      "profileGatingCondition": "prohibited in dev; activated only in staging under the 'public-proof-origin' profile",
+      "composeProfiles": [
+        "public-proof-origin"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD node -e ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "not-applicable in dev (provider is not started in the default dev compose project)",
+      "persistentState": [],
+      "ephemeralState": [],
+      "portBoundary": {
+        "semantic": "semantic host boundary for public-proof-origin-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "public-proof-origin-http",
+            "purpose": "runtime-api",
+            "hostPort": 18080,
+            "containerPort": 8080,
+            "profile": "public-proof-origin",
+            "environments": [
+              "staging",
+              "production"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "not-applicable in dev (provider is prohibited/out-of-scope for the default dev compose project)",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must preserve gateway neutrality, non-product proof endpoints, and non-claims.",
+      "failureBehaviour": "not started in the dev compose project; its absence is expected and asserts no readiness",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "staging-proof-cockpit",
+      "displayName": "Staging Proof Cockpit",
+      "providerMode": "staging-only-composed",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "staging-proof-cockpit"
+      },
+      "profileMembership": "proof-cockpit (staging only; prohibited in dev)",
+      "profileGatingCondition": "prohibited in dev; activated only in staging under the 'proof-cockpit' profile",
+      "composeProfiles": [
+        "proof-cockpit"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "compose healthcheck (CMD node -e ...); healthy on exit 0",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "not-applicable in dev (provider is not started in the default dev compose project)",
+      "persistentState": [
+        "proof-cockpit-ledger"
+      ],
+      "ephemeralState": [],
+      "portBoundary": {
+        "semantic": "semantic host boundary for staging-proof-cockpit-http; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "staging-proof-cockpit-http",
+            "purpose": "operator-admin",
+            "hostPort": 18085,
+            "containerPort": 8080,
+            "profile": "proof-cockpit",
+            "environments": [
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": true,
+        "placeholderRefs": [
+          "${USF_PROOF_COCKPIT_REVIEW_SECRET:-}"
+        ],
+        "description": "binds approved local secret placeholder(s) by name only; no real secret value is embedded"
+      },
+      "syntheticDataRequirement": "not-applicable in dev (provider is prohibited/out-of-scope for the default dev compose project)",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must preserve the edge operator-authentication gate, loopback-only port, guarded write mode, non-auto-completed signoff, and non-claims.",
+      "failureBehaviour": "not started in the dev compose project; its absence is expected and asserts no readiness",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "caddy",
+      "displayName": "Caddy Gateway",
+      "providerMode": "profile-gated-compose",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "caddy"
+      },
+      "profileMembership": "gateway (also joins proof-cockpit profile)",
+      "profileGatingCondition": "activated only when COMPOSE_PROFILES includes 'gateway'",
+      "composeProfiles": [
+        "gateway",
+        "proof-cockpit"
+      ],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "named volume(s) caddy-data retained across runs; operator resets via 'compose down -v'; synthetic data only",
+      "persistentState": [
+        "caddy-data"
+      ],
+      "ephemeralState": [
+        "container-local ephemeral state (reset-per-run)"
+      ],
+      "portBoundary": {
+        "semantic": "semantic host boundary for gateway-http, gateway-https; host port numbers are operational metadata, not authority",
+        "ports": [
+          {
+            "portId": "gateway-http",
+            "purpose": "gateway",
+            "hostPort": 80,
+            "containerPort": 80,
+            "profile": "gateway",
+            "environments": [
+              "staging"
+            ]
+          },
+          {
+            "portId": "gateway-https",
+            "purpose": "gateway",
+            "hostPort": 443,
+            "containerPort": 443,
+            "profile": "gateway",
+            "environments": [
+              "staging"
+            ]
+          }
+        ]
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "metadata-only; no synthetic tenant data; no production data",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "dev realisation must prove environment-scoped policy compliance.",
+      "failureBehaviour": "if unhealthy, only this provider's own readiness is unsatisfied; no dependent is blocked",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "platform-api",
+      "displayName": "source-lineage Platform API",
+      "providerMode": "out-of-foundation-scope",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "platform-api"
+      },
+      "profileMembership": "none (out-of-foundation-scope; not a composed provider)",
+      "profileGatingCondition": "not gated into any dev compose profile (out-of-foundation-scope)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "not-applicable in dev (provider is not started in the default dev compose project)",
+      "persistentState": [],
+      "ephemeralState": [],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "not-applicable in dev (provider is prohibited/out-of-scope for the default dev compose project)",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "No proof obligation because not required.",
+      "failureBehaviour": "not started in the dev compose project; its absence is expected and asserts no readiness",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    },
+    {
+      "canonicalIdentity": "web-app",
+      "displayName": "source-lineage App",
+      "providerMode": "out-of-foundation-scope",
+      "classificationRef": {
+        "source": "provider-consolidation-map",
+        "providerId": "web-app"
+      },
+      "profileMembership": "none (out-of-foundation-scope; not a composed provider)",
+      "profileGatingCondition": "not gated into any dev compose profile (out-of-foundation-scope)",
+      "composeProfiles": [],
+      "directDependencies": [],
+      "transitiveDependencies": [],
+      "startupPrerequisites": [
+        "USF compose project network available (no service dependency)"
+      ],
+      "startupOrder": 1,
+      "healthCondition": "no compose healthcheck declared; health observed only via dependent runtime proof",
+      "readinessCondition": "ready only when this provider's own health signal passes within the active dev-compose profile; no health-gated dependency; dev-compose scope only",
+      "readinessDependencies": [],
+      "teardownPrerequisites": [
+        "no dependent; may be torn down independently"
+      ],
+      "teardownOrder": 3,
+      "cleanupResponsibility": "not-applicable in dev (provider is not started in the default dev compose project)",
+      "persistentState": [],
+      "ephemeralState": [],
+      "portBoundary": {
+        "semantic": "no published host port (internal service network only)",
+        "ports": []
+      },
+      "secretBoundary": {
+        "usesSecrets": false,
+        "placeholderRefs": [],
+        "description": "no credential bound in dev compose for this provider"
+      },
+      "syntheticDataRequirement": "not-applicable in dev (provider is prohibited/out-of-scope for the default dev compose project)",
+      "evidenceCapturePoint": "none-recorded in the dev compose project (see consolidation map recorded readiness gap)",
+      "proofObligation": "No proof obligation because not required.",
+      "failureBehaviour": "not started in the dev compose project; its absence is expected and asserts no readiness",
+      "promotionProhibition": "any profile promotion requires repository-owned readiness/health/teardown evidence and, on its own, confers no live-provider, staging, production, supplier, deployment or compliance readiness; classification is authored in the provider-consolidation-map, not restated here"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "usf-provider-dep-013-port-borrowed-from-other-provider",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-013"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "port-borrowed-from-other-provider",
+    "description": "provider declares a host port published by a different service"
+  },
+  "mutations": [
+    {
+      "op": "appendPort",
+      "id": "nats",
+      "value": {
+        "portId": "borrowed",
+        "purpose": "borrow",
+        "hostPort": 5433,
+        "containerPort": 5432,
+        "profile": "provider-mocks",
+        "environments": [
+          "dev"
+        ]
+      }
+    }
+  ]
+}

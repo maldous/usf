@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-005-self-dependency",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-005"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "self-dependency",
+    "description": "provider lists itself as a directDependency"
+  },
+  "mutations": [
+    {
+      "op": "appendList",
+      "id": "postgres",
+      "field": "directDependencies",
+      "value": "postgres"
+    }
+  ]
+}

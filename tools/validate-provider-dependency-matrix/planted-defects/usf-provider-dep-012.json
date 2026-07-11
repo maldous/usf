@@ -1,0 +1,19 @@
+{
+  "id": "usf-provider-dep-012-teardown-order-contradicts-dependency",
+  "expectedRuleIds": [
+    "USF-PROVIDER-DEP-012"
+  ],
+  "mustBeDistinct": true,
+  "failureShape": {
+    "shape": "teardown-order-contradicts-dependency",
+    "description": "dependent teardownOrder not less than its dependency"
+  },
+  "mutations": [
+    {
+      "op": "setProvider",
+      "id": "keycloak",
+      "field": "teardownOrder",
+      "value": 9
+    }
+  ]
+}
