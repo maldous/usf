@@ -1,0 +1,102 @@
+{
+  "auditId": "independent-hardened-regeneration-census",
+  "checks": [
+    {
+      "facts": {
+        "memberCount": 3192,
+        "universeCount": 4
+      },
+      "findings": [],
+      "id": "universes",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "inventoryCount": 2651,
+        "parserCount": 3192,
+        "relationshipCount": 29464
+      },
+      "findings": [],
+      "id": "parser-relationships",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "ownerCount": 3192
+      },
+      "findings": [],
+      "id": "family-ownership",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "coverageCount": 3192,
+        "mappingCount": 3192
+      },
+      "findings": [],
+      "id": "mappings-coverage",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "canonicalArtifactCount": 3004,
+        "replacementGroupCount": 3016
+      },
+      "findings": [],
+      "id": "canonical-replacements",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "workPackageCount": 10
+      },
+      "findings": [],
+      "id": "work-packages",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "dependencyCount": 20
+      },
+      "findings": [],
+      "id": "dependencies",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "missingEntirelyCount": 2912,
+        "workPackageCount": 10
+      },
+      "findings": [],
+      "id": "architectural-review",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "canonicalDigest": "964318ddeed1d8e99e50273ca827fd3fa5583168ac037ffe153daa9228f36d4e",
+        "outputCount": 12
+      },
+      "findings": [],
+      "id": "determinism",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "inspectedIssueCount": 10
+      },
+      "findings": [],
+      "id": "linear-readiness",
+      "status": "pass"
+    },
+    {
+      "facts": {
+        "afterCount": 3192,
+        "beforeCount": 3192
+      },
+      "findings": [],
+      "id": "mutation-boundary",
+      "status": "pass"
+    }
+  ],
+  "status": "pass"
+}

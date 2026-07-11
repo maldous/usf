@@ -1,94 +1,194 @@
 {
+  "absentCount": 2912,
+  "artifactCount": 3192,
   "artifactFamilyDistribution": {
-    "automation": 13,
-    "documentation-assets": 466,
-    "implementation": 1447,
-    "machine-semantics": 245,
-    "proof-evidence": 601,
-    "repository-governance": 43,
-    "runtime-topology": 17,
-    "v2-support": 22,
-    "verification": 1674
+    "automation": 3,
+    "documentation-assets": 474,
+    "implementation": 133,
+    "machine-semantics": 110,
+    "proof-evidence": 56,
+    "repository-governance": 2311,
+    "runtime-topology": 9,
+    "v2-support": 9,
+    "verification": 87
+  },
+  "baselineDependencyCount": 469,
+  "baselineWorkPackageCount": 73,
+  "blockingCycleCount": 0,
+  "blockingRelationshipCount": 8,
+  "canonicalArtifactCount": 3004,
+  "closureStatus": "pending-independent-audit",
+  "consolidationDistribution": {
+    "compatibility-duplication": 179,
+    "necessary-projection": 2803,
+    "progressive-or-runtime-output": 12,
+    "required-new-output": 22
+  },
+  "coordinationRelationshipCount": 12,
+  "coverageConfidenceDistribution": {
+    "high": 3015,
+    "medium": 177
+  },
+  "coverageStateDistribution": {
+    "absent": 2912,
+    "notrequired": 12,
+    "partial": 268
+  },
+  "criticalPathLength": 5,
+  "dependencyLineageDistribution": {
+    "removed-unsupported": 103,
+    "represented-indirectly": 98,
+    "retained-with-evidence": 268
   },
   "equivalenceDistribution": {
-    "behavioural": 1919,
-    "evidential": 491,
-    "exact": 82,
-    "none": 26,
-    "normalised": 2010
+    "behavioural": 231,
+    "evidential": 5,
+    "exact": 212,
+    "normalised": 2556
   },
+  "familyConfidenceDistribution": {
+    "high": 3112,
+    "medium": 80
+  },
+  "familyOnlyLinkCount": 0,
+  "familyReviewCandidateCount": 358,
   "gapDistribution": {
-    "ambiguousmapping": 16,
-    "missingartifactplan": 588,
-    "missingcollector": 20,
-    "missingconstraint": 13,
-    "missingderivation": 250,
-    "missingequivalence": 4502,
-    "missingfixture": 1766,
-    "missinggenerator": 2196,
-    "missingimplementation": 114,
-    "missingingestion": 19,
-    "missingmaterialisation": 33,
-    "missingobligation": 1782,
-    "missingpolicy": 44,
-    "missingrelationship": 48,
-    "missingrenderer": 422,
-    "missingselfhosting": 15
+    "required-artifact-semantic-definition": 2912
   },
-  "inventoryCount": 1465,
+  "identityOnlyCohortSize": 0,
+  "identityReviewCount": 100,
+  "inventoryCount": 2651,
+  "inventoryFindingCount": 134815,
+  "mappingTypeDistribution": {
+    "contract-or-obligation-implementation": 83,
+    "not-required": 12,
+    "one-artifact-many-resources": 2,
+    "requirement-fixture-or-proof": 106,
+    "semantic-resource-component": 66,
+    "semantic-resource-projection": 3,
+    "support-contract-materialisation": 8,
+    "unmapped": 2912
+  },
+  "materialisationContractCount": 3,
+  "missingEntirelyCount": 2912,
+  "newCanonicalArtifactCount": 22,
   "outputDispositionDistribution": {
-    "collect": 13,
-    "derive": 230,
-    "exclude": 446,
-    "generate": 2337,
-    "materialise": 1338,
-    "remove": 26,
-    "retain": 138
+    "collect": 5,
+    "derive": 5,
+    "generate": 2780,
+    "materialise": 2,
+    "retain": 212
   },
-  "parallelWorkstreams": 33,
-  "relationshipCount": 46760,
+  "parallelWaveCount": 5,
+  "parserCount": 3192,
+  "parserCoverageByFormat": {
+    "binary": 202,
+    "compose-yaml": 5,
+    "configuration": 5,
+    "html": 2,
+    "javascript-typescript": 215,
+    "json-schema": 36,
+    "make": 1,
+    "markdown": 261,
+    "plain-text": 17,
+    "python": 52,
+    "rdf-trig": 22,
+    "rdf-turtle": 44,
+    "shell": 22,
+    "sparql": 6,
+    "sql": 4,
+    "structured-json": 2281,
+    "svg": 6,
+    "toml": 2,
+    "workflow-yaml": 2,
+    "yaml": 7
+  },
+  "relationshipCount": 29464,
+  "replacementCardinalityDistribution": {
+    "many-to-one": 179,
+    "one-to-one": 2803,
+    "one-to-zero": 12,
+    "zero-to-one": 22
+  },
   "repositoryUniverseDigest": "8f74c5d3cb36f06f0c600f31802db35f44f831123954ead51a5be7820f16280e",
   "requiredSemanticLayerDistribution": {
-    "artifact-output-plans": 2724,
-    "collector-normaliser-ingestion-contracts": 81,
-    "constraints-permissions": 39,
-    "derivation-integrity": 810,
-    "equivalence-rules": 11828,
-    "evidence-requirements": 77,
-    "execution-agent-constraints": 10,
-    "generation-renderer-contracts": 9820,
-    "implementation-obligations": 471,
-    "materialisation-contracts": 135,
-    "ontology": 60,
-    "policy": 157,
-    "proof-obligations": 7129,
-    "provider-service-realisation": 170,
-    "requirements-projections": 1212,
-    "self-hosting-clean-room-support": 45,
-    "validation-tests-fixtures-defects": 7064
+    "artifact-output-plans": 2864,
+    "collector-normaliser-ingestion-contracts": 17,
+    "constraints-permissions": 2300,
+    "contracts": 91,
+    "data-configuration-lifecycle": 1,
+    "derivation-integrity": 41,
+    "equivalence-rules": 61,
+    "evidence-requirements": 17,
+    "generation-renderer-contracts": 545,
+    "implementation-obligations": 50,
+    "interfaces-events-workflows": 1,
+    "materialisation-contracts": 10,
+    "ontology": 41,
+    "policy": 2299,
+    "proof-obligations": 37,
+    "provider-service-realisation": 1,
+    "readiness-consequences": 17,
+    "requirements-projections": 474,
+    "self-hosting-clean-room-support": 9,
+    "taxonomy": 41,
+    "validation-tests-fixtures-defects": 20,
+    "vocabulary": 41
   },
   "reuseDistribution": {
-    "adopt": 124,
-    "none": 1808,
-    "replace": 230,
-    "rewrite": 114,
-    "template": 2223,
-    "wrap": 29
+    "adopt": 217,
+    "none": 34,
+    "replace": 38,
+    "rewrite": 50,
+    "template": 2585,
+    "wrap": 92
   },
-  "sequentialGates": 6,
+  "structuralCoverageDistribution": {
+    "complete": 2658,
+    "not-applicable": 202,
+    "partial": 332
+  },
+  "transitiveLinksRemoved": 5,
   "universeCounts": {
     "repository-output": 3088,
-    "v2-compiler-implementation": 1345,
+    "v2-compiler-implementation": 9,
     "v2-graph-authority": 73,
     "v2-support-provisioning": 22
   },
-  "v2CompilerUniverseDigest": "f2e28cb2f5ad7b6d233c74933fb2379b67fa10997c8a5e422f56eeaf9a7fe3fb",
-  "v2CoverageDistribution": {
-    "identityonly": 1894,
-    "notrequired": 1842,
-    "partial": 792
-  },
+  "unresolvedRelationshipFindingCount": 57044,
+  "unreviewedParallelismReductionCount": 0,
+  "unsupportedEvidenceCount": 0,
+  "unsupportedFormatCount": 0,
+  "untypedLinkCount": 0,
+  "v2CompilerUniverseDigest": "8fcc2287f3cb4f57f423c44e0d2671d065bc318f04492fdc9fb7ae31eded177d",
   "v2GraphUniverseDigest": "65ac44a0c63a3f390c4ca0ea8f1e57ffe4bed00f9348091ed973763851274626",
   "v2SupportUniverseDigest": "50fb8b6255fe98b1aaac08aea93fbf04a284c2a16bc09af13a450bb658098465",
-  "workPackageCount": 73
+  "waves": [
+    [
+      "work-package-0a3c1e0b12a4432e4e4e",
+      "work-package-0e2ce40ffe11c9d76918",
+      "work-package-482f0438c3f7d5735f7b",
+      "work-package-a3bf8016200aff6e3d9d"
+    ],
+    [
+      "work-package-1b5e0303f76e69e58aff"
+    ],
+    [
+      "work-package-2db0a4a70fccc5f43d5a",
+      "work-package-61f504337bfb90c2afab"
+    ],
+    [
+      "work-package-954c7712a75b7d1dcf18",
+      "work-package-9b6d31164bc1832abc3c"
+    ],
+    [
+      "work-package-bdfddef77834fbdae0bb"
+    ]
+  ],
+  "workPackageCount": 10,
+  "workPackageLineageDistribution": {
+    "merged-successor": 46,
+    "retired-invalid-bucket": 5,
+    "split-successors": 22
+  }
 }

@@ -1,101 +1,1063 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:usf:census:regeneration-census",
-  "title": "USF repository regeneration census contract",
-  "description": "Closed machine contract for deterministic four-universe census records and closure outputs.",
-  "type": "object",
-  "required": ["recordType", "record"],
-  "properties": {
-    "recordType": {
-      "enum": ["universe-member", "artifact", "relationship", "inventory", "finding", "coverage", "gap", "output", "replacement", "work-package", "summary", "closure"]
+  "$defs": {
+    "architecturalReview": {
+      "properties": {
+        "convergence": {
+          "type": "object"
+        },
+        "inputDigests": {
+          "type": "object"
+        },
+        "missingEntirely": {
+          "type": "object"
+        },
+        "reviewId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "reviewStatus": {
+          "const": "independently-reviewed"
+        },
+        "verdict": {
+          "const": "pass"
+        }
+      },
+      "required": [
+        "reviewId",
+        "reviewStatus",
+        "verdict",
+        "inputDigests",
+        "convergence",
+        "missingEntirely"
+      ],
+      "type": "object"
     },
-    "record": {
+    "artifact": {
+      "properties": {
+        "artifactFamily": {
+          "type": "string"
+        },
+        "artifactKey": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "authorityStatus": {
+          "type": "string"
+        },
+        "contentDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "coverageConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "familyConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "formatConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "mappingConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "ownershipEvidence": {
+          "items": {
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "relationshipConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "reviewStatus": {
+          "type": "string"
+        },
+        "universe": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifactKey",
+        "path",
+        "universe",
+        "contentDigest",
+        "artifactFamily",
+        "authorityStatus",
+        "ownershipEvidence",
+        "formatConfidence",
+        "relationshipConfidence",
+        "familyConfidence",
+        "mappingConfidence",
+        "coverageConfidence",
+        "reviewStatus"
+      ],
+      "type": "object"
+    },
+    "audit": {
+      "properties": {
+        "auditId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "checks": {
+          "items": {
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "incomplete"
+          ]
+        }
+      },
+      "required": [
+        "auditId",
+        "status",
+        "checks"
+      ],
+      "type": "object"
+    },
+    "canonicalArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptanceGates": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "artifactDependencies": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "artifactKind": {
+          "type": "string"
+        },
+        "authorityStatus": {
+          "type": "string"
+        },
+        "canonicalArtifactKey": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "collectorIngestionContract": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "currentArtifacts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "equivalenceContract": {
+          "type": "object"
+        },
+        "evidenceInputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "implementationObligations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "integrityPolicy": {
+          "type": "object"
+        },
+        "lifecyclePolicy": {
+          "type": "object"
+        },
+        "materialisationContract": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mediaType": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "mutabilityClass": {
+          "type": "string"
+        },
+        "normalisationRules": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pathRule": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "productionContract": {
+          "type": "object"
+        },
+        "productionResponsibilities": {
+          "$ref": "#/$defs/nonemptyStrings"
+        },
+        "proofInputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "replacementGroup": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "requiredSemanticLayers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "retainedInputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reviewStatus": {
+          "type": "string"
+        },
+        "semanticInputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "semanticPurpose": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "targetPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "canonicalArtifactKey",
+        "semanticPurpose",
+        "artifactKind",
+        "mediaType",
+        "targetPath",
+        "pathRule",
+        "authorityStatus",
+        "mutabilityClass",
+        "semanticInputs",
+        "requiredSemanticLayers",
+        "proofInputs",
+        "evidenceInputs",
+        "implementationObligations",
+        "artifactDependencies",
+        "productionResponsibilities",
+        "productionContract",
+        "retainedInputs",
+        "materialisationContract",
+        "collectorIngestionContract",
+        "normalisationRules",
+        "integrityPolicy",
+        "equivalenceContract",
+        "acceptanceGates",
+        "currentArtifacts",
+        "replacementGroup",
+        "lifecyclePolicy",
+        "confidence",
+        "reviewStatus"
+      ],
+      "type": "object"
+    },
+    "closure": {
+      "properties": {
+        "closureChecks": {
+          "type": "object"
+        },
+        "closureStatus": {
+          "enum": [
+            "complete",
+            "incomplete"
+          ]
+        },
+        "failedChecks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "independentlyRecomputed": {
+          "const": true
+        },
+        "verdict": {
+          "enum": [
+            "HARDENED_CENSUS_READY_FOR_PROGRAMME_MATERIALISATION",
+            "HARDENED_CENSUS_INCOMPLETE"
+          ]
+        }
+      },
+      "required": [
+        "closureStatus",
+        "verdict",
+        "closureChecks",
+        "failedChecks",
+        "independentlyRecomputed"
+      ],
+      "type": "object"
+    },
+    "confidence": {
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "reasons": {
+          "$ref": "#/$defs/nonemptyStrings"
+        },
+        "score": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "level",
+        "score",
+        "reasons"
+      ],
+      "type": "object"
+    },
+    "dependency": {
+      "additionalProperties": false,
+      "properties": {
+        "artifactEvidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "dependencyType": {
+          "type": "string"
+        },
+        "migrationEvidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "prerequisite": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "proofEquivalenceEvidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reasonCode": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "repositoryRelationshipEvidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reviewStatus": {
+          "type": "string"
+        },
+        "semanticEvidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "prerequisite",
+        "dependencyType",
+        "status",
+        "reasonCode",
+        "semanticEvidence",
+        "artifactEvidence",
+        "repositoryRelationshipEvidence",
+        "proofEquivalenceEvidence",
+        "migrationEvidence",
+        "confidence",
+        "reviewStatus"
+      ],
+      "type": "object"
+    },
+    "digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "mapping": {
+      "additionalProperties": false,
+      "properties": {
+        "ambiguities": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "artifactKey": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "conflicts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "coverageConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "coverageDecision": {
+          "type": "string"
+        },
+        "coverageReason": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "mappingCardinality": {
+          "type": "string"
+        },
+        "mappingConfidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "mappingEvidence": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "mappingType": {
+          "type": "string"
+        },
+        "matchedResources": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "missingSemantics": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "representedConstraints": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "representedGeneration": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "representedProofEvidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "representedSemantics": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reviewStatus": {
+          "type": "string"
+        },
+        "universe": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifactKey",
+        "path",
+        "universe",
+        "mappingType",
+        "mappingCardinality",
+        "matchedResources",
+        "mappingEvidence",
+        "representedSemantics",
+        "missingSemantics",
+        "representedConstraints",
+        "representedProofEvidence",
+        "representedGeneration",
+        "ambiguities",
+        "conflicts",
+        "mappingConfidence",
+        "coverageDecision",
+        "coverageReason",
+        "coverageConfidence",
+        "reviewStatus"
+      ],
+      "type": "object"
+    },
+    "materialisation": {
+      "additionalProperties": false,
+      "properties": {
+        "canonicalDigestInput": {
+          "type": "boolean"
+        },
+        "currentStatus": {
+          "type": "string"
+        },
+        "expectedClosureDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "installCommand": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "integrityPolicy": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "key": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "lockPaths": {
+          "items": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "manifestPaths": {
+          "items": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "nativeBuildPolicy": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "packageManager": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtimeConstraint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceRoot": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "verification": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "key",
+        "kind",
+        "sourceRoot",
+        "packageManager",
+        "runtimeConstraint",
+        "manifestPaths",
+        "lockPaths",
+        "installCommand",
+        "integrityPolicy",
+        "nativeBuildPolicy",
+        "expectedClosureDigest",
+        "currentStatus",
+        "canonicalDigestInput",
+        "verification"
+      ],
+      "type": "object"
+    },
+    "nonemptyStrings": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "parserResult": {
+      "additionalProperties": false,
+      "properties": {
+        "cacheKey": {
+          "$ref": "#/$defs/digest"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "contentDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "declarations": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "formatKind": {
+          "type": "string"
+        },
+        "inventory": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "parserImplementation": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "parserMode": {
+          "type": "string"
+        },
+        "parserVersion": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "pathContext": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "relationships": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "structuralCoverage": {
+          "type": "string"
+        },
+        "syntaxKind": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "universe": {
+          "type": "string"
+        },
+        "unsupportedStructures": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "path",
+        "universe",
+        "contentDigest",
+        "formatKind",
+        "syntaxKind",
+        "parserMode",
+        "parserImplementation",
+        "parserVersion",
+        "pathContext",
+        "cacheKey",
+        "structuralCoverage",
+        "unsupportedStructures",
+        "confidence",
+        "declarations",
+        "relationships",
+        "inventory"
+      ],
+      "type": "object"
+    },
+    "relationship": {
+      "properties": {
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "evidenceKind": {
+          "type": "string"
+        },
+        "extractionMethod": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "reasonCodes": {
+          "$ref": "#/$defs/nonemptyStrings"
+        },
+        "relationshipType": {
+          "type": "string"
+        },
+        "resolved": {
+          "type": "boolean"
+        },
+        "source": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "target": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "targetKind": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "relationshipType",
+        "target",
+        "targetKind",
+        "extractionMethod",
+        "evidenceKind",
+        "confidence",
+        "resolved",
+        "reasonCodes"
+      ],
+      "type": "object"
+    },
+    "relativePath": {
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\u0000).+$",
+      "type": "string"
+    },
+    "replacementGroup": {
+      "properties": {
+        "canonicalArtifacts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "cardinality": {
+          "type": "string"
+        },
+        "currentArtifacts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "equivalenceGates": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "groupKey": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "migrationOrdering": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "proofEvidenceGates": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reuseActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reviewStatus": {
+          "type": "string"
+        },
+        "semanticInvariant": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "groupKey",
+        "semanticInvariant",
+        "currentArtifacts",
+        "canonicalArtifacts",
+        "cardinality",
+        "reuseActions",
+        "equivalenceGates",
+        "proofEvidenceGates",
+        "migrationOrdering",
+        "reviewStatus"
+      ],
+      "type": "object"
+    },
+    "universeMember": {
+      "additionalProperties": false,
+      "properties": {
+        "binary": {
+          "type": "boolean"
+        },
+        "byteSize": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "canonicalSource": {
+          "const": true
+        },
+        "contentDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "executable": {
+          "type": "boolean"
+        },
+        "extension": {
+          "type": "string"
+        },
+        "fileMode": {
+          "pattern": "^[0-7]{6}$",
+          "type": "string"
+        },
+        "formatKind": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "mediaType": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sourceState": {
+          "type": "string"
+        },
+        "symbolicLinkTarget": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "universe": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "universe",
+        "sourceState",
+        "contentDigest",
+        "byteSize",
+        "fileMode",
+        "executable",
+        "binary",
+        "extension",
+        "mediaType",
+        "formatKind",
+        "symbolicLinkTarget",
+        "canonicalSource"
+      ],
+      "type": "object"
+    },
+    "workPackage": {
+      "properties": {
+        "acceptanceCriteria": {
+          "items": {
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "architecturalOutcome": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "complexity": {
+          "type": "string"
+        },
+        "complexityDrivers": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "complexityEvidence": {
+          "items": {
+            "type": "object"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "key": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "outcomeClass": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "primaryOwnership": {
+          "type": "object"
+        },
+        "productionResponsibilities": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "requiredSemanticLayers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reviewStatus": {
+          "type": "string"
+        },
+        "safeParallelism": {
+          "type": "object"
+        },
+        "semanticInputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "key",
+        "architecturalOutcome",
+        "outcomeClass",
+        "primaryOwnership",
+        "semanticInputs",
+        "requiredSemanticLayers",
+        "productionResponsibilities",
+        "acceptanceCriteria",
+        "complexity",
+        "complexityDrivers",
+        "complexityEvidence",
+        "safeParallelism",
+        "confidence",
+        "reviewStatus"
+      ],
       "type": "object"
     }
   },
+  "$id": "urn:usf:census:hardened-regeneration-census",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "$defs": {
-    "relativePath": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\u0000).+$"
+  "description": "Closed contracts for normalized universes, structural parsing, semantic mappings, canonical artifacts, architectural work packages, evidence-derived dependencies, and independent audit.",
+  "properties": {
+    "record": {
+      "type": "object"
     },
-    "digest": {
-      "type": "string",
-      "pattern": "^[a-f0-9]{64}$"
-    },
-    "confidence": {
-      "type": "object",
-      "required": ["level", "score", "reasons"],
-      "properties": {
-        "level": {"enum": ["low", "medium", "high"]},
-        "score": {"type": "number", "minimum": 0, "maximum": 1},
-        "reasons": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
-      },
-      "additionalProperties": false
-    },
-    "universeMember": {
-      "type": "object",
-      "required": ["path", "universe", "sourceState", "contentDigest", "byteSize", "fileMode", "executable", "binary", "extension", "mediaType", "formatKind", "symbolicLinkTarget"],
-      "properties": {
-        "path": {"$ref": "#/$defs/relativePath"},
-        "universe": {"type": "string"},
-        "sourceState": {"type": "string"},
-        "contentDigest": {"$ref": "#/$defs/digest"},
-        "byteSize": {"type": "integer", "minimum": 0},
-        "fileMode": {"type": "string", "pattern": "^[0-7]{6}$"},
-        "executable": {"type": "boolean"},
-        "binary": {"type": "boolean"},
-        "extension": {"type": "string"},
-        "mediaType": {"type": "string", "minLength": 1},
-        "formatKind": {"type": "string", "minLength": 1},
-        "symbolicLinkTarget": {"type": ["string", "null"]}
-      },
-      "additionalProperties": false
-    },
-    "artifact": {
-      "type": "object",
-      "required": ["path", "universe", "sourceState", "contentDigest", "mediaType", "fileMode", "formatKind", "artifactFamily", "authorityStatus", "canonicalOutputRequirement", "productionResponsibility", "expectedGenerator", "equivalenceClass", "reuseStrategy", "v2ConceptCoverage", "gapClassification", "requiredSemanticLayers", "implementationSize", "confidence", "riskDrivers", "reasonCodes", "primaryOwner"],
-      "properties": {
-        "path": {"$ref": "#/$defs/relativePath"},
-        "universe": {"type": "string"},
-        "sourceState": {"type": "string"},
-        "contentDigest": {"$ref": "#/$defs/digest"},
-        "mediaType": {"type": "string"},
-        "fileMode": {"type": "string"},
-        "formatKind": {"type": "string"},
-        "artifactFamily": {"type": "string"},
-        "authorityStatus": {"type": "string"},
-        "canonicalOutputRequirement": {"type": "string"},
-        "productionResponsibility": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
-        "expectedGenerator": {"type": ["string", "null"]},
-        "equivalenceClass": {"type": "string"},
-        "reuseStrategy": {"type": "string"},
-        "v2ConceptCoverage": {"type": "string"},
-        "gapClassification": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-        "requiredSemanticLayers": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-        "implementationSize": {"type": "string"},
-        "confidence": {"$ref": "#/$defs/confidence"},
-        "riskDrivers": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-        "reasonCodes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
-        "primaryOwner": {"type": "string", "minLength": 1}
-      },
-      "additionalProperties": false
-    },
-    "relationship": {
-      "type": "object",
-      "required": ["source", "relationshipType", "target", "targetKind", "extractionMethod", "confidence", "resolved", "reasonCodes"],
-      "properties": {
-        "source": {"$ref": "#/$defs/relativePath"},
-        "relationshipType": {"type": "string"},
-        "target": {"type": "string", "minLength": 1},
-        "targetKind": {"type": "string"},
-        "extractionMethod": {"type": "string", "minLength": 1},
-        "confidence": {"$ref": "#/$defs/confidence"},
-        "resolved": {"type": "boolean"},
-        "reasonCodes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
-      },
-      "additionalProperties": false
+    "recordType": {
+      "enum": [
+        "universe-member",
+        "materialisation",
+        "parser-result",
+        "relationship",
+        "inventory",
+        "inventory-finding",
+        "artifact",
+        "mapping",
+        "coverage",
+        "missing-entirely",
+        "canonical-artifact",
+        "replacement-group",
+        "work-package",
+        "work-package-lineage",
+        "dependency",
+        "dependency-lineage",
+        "identity-review",
+        "summary",
+        "audit",
+        "architectural-review",
+        "closure"
+      ]
     }
-  }
+  },
+  "required": [
+    "recordType",
+    "record"
+  ],
+  "title": "USF hardened repository regeneration census contract",
+  "type": "object"
 }

@@ -1,0 +1,162 @@
+{
+  "convergence": {
+    "findingCounts": {
+      "avoidableTransitiveBlockers": 0,
+      "blockingCycles": 0,
+      "conceptualPackageDuplicates": 0,
+      "dependencyEvidenceGaps": 0,
+      "exactPackageDuplicates": 0,
+      "falseMerges": 0,
+      "falseSplits": 0,
+      "genericAcceptanceEvidence": 0,
+      "invalidComplexitySizing": 0,
+      "lostParallelism": 0,
+      "missingEntirelyClosureGaps": 0,
+      "nonConvergentFoundations": 0,
+      "reuseEquivalenceOwnershipGaps": 0
+    },
+    "highestImpactFindings": [],
+    "inputs": [
+      "workpackages.json",
+      "workpackage-lineage.jsonl",
+      "dependencies.jsonl",
+      "dependency-lineage.jsonl",
+      "missing-entirely.jsonl"
+    ],
+    "metrics": {
+      "blockingDependencyCount": 8,
+      "complexityDistribution": {
+        "large": 4,
+        "medium": 2,
+        "programme": 1,
+        "small": 3
+      },
+      "coordinationDependencyCount": 12,
+      "dependencyCount": 20,
+      "dependencyLineageCount": 469,
+      "dependencyWaveWidths": [
+        4,
+        1,
+        2,
+        2,
+        1
+      ],
+      "equivalenceGateOwnershipCount": 3028,
+      "lineageDispositionCounts": {
+        "merged-successor": 46,
+        "retired-invalid-bucket": 5,
+        "split-successors": 22
+      },
+      "missingEntirelyCount": 2912,
+      "replacementGroupOwnershipCount": 3016,
+      "reuseActionOwnershipCount": 3016,
+      "workPackageCount": 10
+    },
+    "reviewStatus": "independently-reviewed",
+    "verdict": "pass"
+  },
+  "inputDigests": {
+    "convergence": "2e8410b0cd33edf621ca336785820c836597988ce4cf1a218e4ab8b97609cfbf",
+    "missingEntirely": "99e4d00b244378531fc688873095a63e17379d03780fca8d1b961e1fd98a4c33"
+  },
+  "missingEntirely": {
+    "conflicts": [],
+    "highImpactClusters": [
+      {
+        "assessment": "Planned missing output semantics; every row has one canonical plan and one work-package owner.",
+        "count": 2864,
+        "pattern": "outputWithoutPlan",
+        "primaryWorkPackageCounts": {
+          "work-package-61f504337bfb90c2afab": 2606,
+          "work-package-954c7712a75b7d1dcf18": 208,
+          "work-package-9b6d31164bc1832abc3c": 50
+        },
+        "samplePaths": [
+          ".gitignore",
+          ".npmrc",
+          ".prettierrc.json"
+        ]
+      },
+      {
+        "assessment": "Governance absence is concentrated in the canonical-generation outcome and is explicitly planned rather than silently inferred from configuration files.",
+        "count": 2201,
+        "pattern": "configurationWithoutGovernance",
+        "primaryWorkPackageCounts": {
+          "work-package-61f504337bfb90c2afab": 2201
+        },
+        "samplePaths": [
+          ".gitignore",
+          ".npmrc",
+          ".prettierrc.json"
+        ]
+      },
+      {
+        "assessment": "Requirement projections lack an adequate semantic source but are split between canonical generation and retained-asset ownership with explicit plans.",
+        "count": 474,
+        "pattern": "requirementWithoutSemanticSource",
+        "primaryWorkPackageCounts": {
+          "work-package-61f504337bfb90c2afab": 266,
+          "work-package-954c7712a75b7d1dcf18": 208
+        },
+        "samplePaths": [
+          "AGENTS.md",
+          "artifacts/proof-cockpit/machine-runs/2026-07-11T03-59-53-440Z/external-review-bundle/corrective-actions.md",
+          "artifacts/proof-cockpit/machine-runs/2026-07-11T03-59-53-440Z/external-review-bundle/detailed-report.md"
+        ]
+      },
+      {
+        "assessment": "The same 50 source modules account for behavior-without-contract and implementation-without-obligation; one implementation-realisation package owns both obligations, avoiding duplicate execution ownership.",
+        "count": 50,
+        "overlappingPatterns": [
+          "behaviorWithoutContract",
+          "implementationWithoutObligation"
+        ],
+        "primaryWorkPackageCounts": {
+          "work-package-9b6d31164bc1832abc3c": 50
+        },
+        "samplePaths": [
+          "adapters/db/src/check-generated-types.ts",
+          "adapters/db/src/generated-types.ts",
+          "adapters/store/src/clamscan.d.ts"
+        ]
+      },
+      {
+        "assessment": "The same 12 proof executables account for missing proof obligations and collector/ingestion semantics; one proof-evidence package owns both obligations.",
+        "count": 12,
+        "overlappingPatterns": [
+          "proofWithoutObligation",
+          "evidenceWithoutCollectorIngestion"
+        ],
+        "primaryWorkPackageCounts": {
+          "work-package-a3bf8016200aff6e3d9d": 12
+        },
+        "samplePaths": [
+          "apps/staging-proof-cockpit/src/promote.d.mts",
+          "apps/staging-proof-cockpit/src/server.d.mts",
+          "apps/staging-proof-cockpit/src/server.mjs"
+        ]
+      }
+    ],
+    "patternCounts": {
+      "behaviorWithoutContract": 50,
+      "commandWithoutExecutionSemantics": 56,
+      "configurationWithoutGovernance": 2201,
+      "contractWithoutRealization": 40,
+      "equivalenceMigrationGateWithoutOwner": 0,
+      "evidenceWithoutCollectorIngestion": 12,
+      "implementationWithoutObligation": 50,
+      "outputWithoutPlan": 2864,
+      "proofWithoutObligation": 12,
+      "requirementWithoutSemanticSource": 474,
+      "selfHostingWithoutMaterialisation": 9,
+      "workflowWithoutGenerationSemantics": 1
+    },
+    "reviewStatus": "independently-reviewed",
+    "unownedCount": 0,
+    "unplannedCount": 0,
+    "verdict": "pass"
+  },
+  "reviewId": "hardened-census-architectural-acceptance",
+  "reviewStatus": "independently-reviewed",
+  "verdict": "pass"
+}
