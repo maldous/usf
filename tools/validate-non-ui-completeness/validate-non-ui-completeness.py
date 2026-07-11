@@ -59,6 +59,7 @@ MD_DOCS = {
 SOURCE_TREE_ANCHOR_EXCLUDED_PREFIXES = (
     "artifacts/",
     "evidence/",
+    "v2/",  # transitional graph-authority workspace; not foundation source until promoted
 )
 
 ALLOWED_DISPOSITIONS = {

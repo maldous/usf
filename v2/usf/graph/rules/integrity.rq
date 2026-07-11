@@ -1,0 +1,62 @@
+PREFIX usf:  <urn:usf:ontology:>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+# Whole-dataset integrity invariants. A conforming graph returns zero rows.
+# Each branch binds ?violation (the integrity rule code) and ?subject (the offending node).
+SELECT DISTINCT ?violation ?subject WHERE {
+  {
+    # hyphenated or underscored canonical local name
+    ?subject ?p ?o .
+    FILTER(isIRI(?subject) && STRSTARTS(STR(?subject), "urn:usf:"))
+    BIND(REPLACE(STR(?subject), "^.*:", "") AS ?ln)
+    FILTER(REGEX(?ln, "[-_]"))
+    BIND("hyphenatedidentifier" AS ?violation)
+  } UNION {
+    # duplicate canonical meaning within one class
+    ?subject a ?cls ; usf:canonicalName ?n .
+    ?other a ?cls ; usf:canonicalName ?n .
+    FILTER(?subject != ?other)
+    FILTER(STRSTARTS(STR(?cls), "urn:usf:ontology:"))
+    BIND("duplicatemeaning" AS ?violation)
+  } UNION {
+    # instance typed with an undeclared ontology class
+    ?subject a ?cls .
+    FILTER(STRSTARTS(STR(?cls), "urn:usf:ontology:"))
+    FILTER NOT EXISTS { ?cls a owl:Class }
+    BIND("undefinedterm" AS ?violation)
+  } UNION {
+    # unresolved cross-graph reference: an entity/value IRI referenced but never defined
+    ?s ?pp ?subject .
+    FILTER(isIRI(?subject) && STRSTARTS(STR(?subject), "urn:usf:"))
+    FILTER(!STRSTARTS(STR(?subject), "urn:usf:ontology:"))
+    FILTER(!STRSTARTS(STR(?subject), "urn:usf:graph:"))
+    FILTER NOT EXISTS { ?subject ?p2 ?o2 }
+    BIND("unresolvedreference" AS ?violation)
+  } UNION {
+    # a derived-only class asserted outside a derived graph (direct authored readiness etc.)
+    GRAPH ?g {
+      ?subject a ?dc .
+    }
+    VALUES ?dc { usf:Readiness usf:Coverage usf:Surface usf:ContractSurface
+                 usf:ProofObligation usf:TestObligation usf:EvidenceRequirement }
+    FILTER(!STRSTARTS(STR(?g), "urn:usf:graph:derived"))
+    BIND("directauthoredreadiness" AS ?violation)
+  } UNION {
+    # the same resource typed in more than one named graph (must be declared exactly once)
+    GRAPH ?g1 { ?subject a ?t1 }
+    GRAPH ?g2 { ?subject a ?t2 }
+    FILTER(?g1 != ?g2)
+    FILTER(isIRI(?subject) && STRSTARTS(STR(?subject), "urn:usf:"))
+    FILTER(!STRSTARTS(STR(?g1), "urn:usf:graph:shapes"))
+    FILTER(!STRSTARTS(STR(?g2), "urn:usf:graph:shapes"))
+    BIND("multipledeclaration" AS ?violation)
+  } UNION {
+    # proof result claiming a higher rung than observed
+    ?subject a usf:ProofResult ;
+             usf:claimedRung/usf:rungOrder ?co ;
+             usf:observedRung/usf:rungOrder ?oo .
+    FILTER(?co > ?oo)
+    BIND("readinessoverclaim" AS ?violation)
+  }
+}

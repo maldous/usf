@@ -1,0 +1,111 @@
+@prefix usf:  <urn:usf:ontology:> .
+@prefix tax:  <urn:usf:taxonomy:> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+# The taxonomy classifies ontology classes into semantic families and records the
+# authored/derived split. It adds classification only; it declares no new terms.
+
+usf:SemanticFamily a owl:Class ; rdfs:subClassOf usf:ControlledValue ;
+    rdfs:label "SemanticFamily" ;
+    rdfs:comment "A top-level grouping of ontology classes into one coherent concern." .
+
+usf:classifiedAs a owl:ObjectProperty ;
+    rdfs:range usf:SemanticFamily ; rdfs:label "classifiedAs" ;
+    rdfs:comment "Classifies an ontology class under one semantic family." .
+
+tax:contract    a usf:SemanticFamily ; usf:canonicalName "contract" .
+tax:interaction a usf:SemanticFamily ; usf:canonicalName "interaction" .
+tax:platform    a usf:SemanticFamily ; usf:canonicalName "platform" .
+tax:experience  a usf:SemanticFamily ; usf:canonicalName "experience" .
+tax:assurance   a usf:SemanticFamily ; usf:canonicalName "assurance" .
+tax:realisation a usf:SemanticFamily ; usf:canonicalName "realisation" .
+tax:execution   a usf:SemanticFamily ; usf:canonicalName "execution" .
+tax:derivation  a usf:SemanticFamily ; usf:canonicalName "derivation" .
+tax:authority   a usf:SemanticFamily ; usf:canonicalName "authority" .
+
+# Contract family
+usf:Capability            usf:classifiedAs tax:contract .
+usf:SemanticContract      usf:classifiedAs tax:contract .
+usf:ContractFacet         usf:classifiedAs tax:contract .
+usf:Policy                usf:classifiedAs tax:contract .
+usf:Constraint            usf:classifiedAs tax:contract .
+usf:Claim                 usf:classifiedAs tax:contract .
+usf:NonClaim              usf:classifiedAs tax:contract .
+usf:Permission            usf:classifiedAs tax:contract .
+usf:Role                  usf:classifiedAs tax:contract .
+usf:TenantBoundary        usf:classifiedAs tax:contract .
+usf:PrivacyClassification usf:classifiedAs tax:contract .
+usf:RetentionPolicy       usf:classifiedAs tax:contract .
+usf:ConsentRequirement    usf:classifiedAs tax:contract .
+
+# Interaction family
+usf:Port       usf:classifiedAs tax:interaction .
+usf:Interface  usf:classifiedAs tax:interaction .
+usf:Operation  usf:classifiedAs tax:interaction .
+usf:Command    usf:classifiedAs tax:interaction .
+usf:Query      usf:classifiedAs tax:interaction .
+usf:Event      usf:classifiedAs tax:interaction .
+usf:Message    usf:classifiedAs tax:interaction .
+usf:Workflow   usf:classifiedAs tax:interaction .
+usf:State      usf:classifiedAs tax:interaction .
+usf:Transition usf:classifiedAs tax:interaction .
+
+# Platform family
+usf:Provider            usf:classifiedAs tax:platform .
+usf:Environment         usf:classifiedAs tax:platform .
+usf:Promotion           usf:classifiedAs tax:platform .
+usf:ConfigurationKey    usf:classifiedAs tax:platform .
+usf:DataModel           usf:classifiedAs tax:platform .
+usf:PersistenceContract usf:classifiedAs tax:platform .
+usf:Migration           usf:classifiedAs tax:platform .
+usf:BackupRestore       usf:classifiedAs tax:platform .
+
+# Experience family
+usf:AuditEvent               usf:classifiedAs tax:experience .
+usf:ObservabilitySignal      usf:classifiedAs tax:experience .
+usf:Alert                    usf:classifiedAs tax:experience .
+usf:Journey                  usf:classifiedAs tax:experience .
+usf:InteractionState         usf:classifiedAs tax:experience .
+usf:AccessibilityRequirement usf:classifiedAs tax:experience .
+usf:LocalisationRequirement  usf:classifiedAs tax:experience .
+
+# Assurance family (authored + derived)
+usf:Proof               usf:classifiedAs tax:assurance .
+usf:ProofExecution      usf:classifiedAs tax:assurance .
+usf:ProofResult         usf:classifiedAs tax:assurance .
+usf:EvidenceResult      usf:classifiedAs tax:assurance .
+usf:Control             usf:classifiedAs tax:assurance .
+usf:ControlObjective    usf:classifiedAs tax:assurance .
+usf:Risk                usf:classifiedAs tax:assurance .
+usf:Test                usf:classifiedAs tax:assurance .
+usf:Fixture             usf:classifiedAs tax:assurance .
+usf:Defect              usf:classifiedAs tax:assurance .
+
+# Realisation family
+usf:Service        usf:classifiedAs tax:realisation .
+usf:Implementation usf:classifiedAs tax:realisation .
+usf:Adapter        usf:classifiedAs tax:realisation .
+usf:Binding        usf:classifiedAs tax:realisation .
+usf:Realisation    usf:classifiedAs tax:realisation .
+
+# Execution family
+usf:Agent           usf:classifiedAs tax:execution .
+usf:AgentConstraint usf:classifiedAs tax:execution .
+usf:ValidatorRule   usf:classifiedAs tax:execution .
+usf:IntegrityRule   usf:classifiedAs tax:execution .
+usf:DerivationRule  usf:classifiedAs tax:execution .
+usf:Shape           usf:classifiedAs tax:execution .
+
+# Derivation family (derived-only classes)
+usf:ProofObligation     usf:classifiedAs tax:derivation .
+usf:TestObligation      usf:classifiedAs tax:derivation .
+usf:EvidenceRequirement usf:classifiedAs tax:derivation .
+usf:Surface             usf:classifiedAs tax:derivation .
+usf:ContractSurface     usf:classifiedAs tax:derivation .
+usf:Coverage            usf:classifiedAs tax:derivation .
+usf:Readiness           usf:classifiedAs tax:derivation .
+
+# Authority family
+usf:NamedGraph usf:classifiedAs tax:authority .

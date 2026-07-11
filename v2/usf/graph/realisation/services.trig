@@ -1,0 +1,131 @@
+@prefix usf: <urn:usf:ontology:> .
+@prefix svc: <urn:usf:service:> .
+
+<urn:usf:graph:services> {
+    svc:alertmanager a usf:Service ;
+        usf:canonicalName "alertmanager" .
+    svc:alloy a usf:Service ;
+        usf:canonicalName "alloy" .
+    svc:breakglassregistry a usf:Service ;
+        usf:canonicalName "breakglassregistry" .
+    svc:caddy a usf:Service ;
+        usf:canonicalName "caddy" .
+    svc:clamav a usf:Service ;
+        usf:canonicalName "clamav" .
+    svc:clickhouse a usf:Service ;
+        usf:canonicalName "clickhouse" .
+    svc:contextfromclaims a usf:Service ;
+        usf:canonicalName "contextfromclaims" .
+    svc:createauditqueryservice a usf:Service ;
+        usf:canonicalName "createauditqueryservice" .
+    svc:createauditrecorder a usf:Service ;
+        usf:canonicalName "createauditrecorder" .
+    svc:createauthorizer a usf:Service ;
+        usf:canonicalName "createauthorizer" .
+    svc:createauthservice a usf:Service ;
+        usf:canonicalName "createauthservice" .
+    svc:createbulkoperationservice a usf:Service ;
+        usf:canonicalName "createbulkoperationservice" .
+    svc:createconfigservice a usf:Service ;
+        usf:canonicalName "createconfigservice" .
+    svc:createenterpriseidentitycontrolplane a usf:Service ;
+        usf:canonicalName "createenterpriseidentitycontrolplane" .
+    svc:createenterprisenotificationcontrolplane a usf:Service ;
+        usf:canonicalName "createenterprisenotificationcontrolplane" .
+    svc:createenterpriseworkflowcontrolplane a usf:Service ;
+        usf:canonicalName "createenterpriseworkflowcontrolplane" .
+    svc:createfileservice a usf:Service ;
+        usf:canonicalName "createfileservice" .
+    svc:createjobservice a usf:Service ;
+        usf:canonicalName "createjobservice" .
+    svc:createkeycloakauthservice a usf:Service ;
+        usf:canonicalName "createkeycloakauthservice" .
+    svc:createpolicydecisionpoint a usf:Service ;
+        usf:canonicalName "createpolicydecisionpoint" .
+    svc:createresourcelifecycleservice a usf:Service ;
+        usf:canonicalName "createresourcelifecycleservice" .
+    svc:createsearchservice a usf:Service ;
+        usf:canonicalName "createsearchservice" .
+    svc:createsecretservice a usf:Service ;
+        usf:canonicalName "createsecretservice" .
+    svc:createsessionservice a usf:Service ;
+        usf:canonicalName "createsessionservice" .
+    svc:createworkflowservice a usf:Service ;
+        usf:canonicalName "createworkflowservice" .
+    svc:filecapability a usf:Service ;
+        usf:canonicalName "filecapability" .
+    svc:grafana a usf:Service ;
+        usf:canonicalName "grafana" .
+    svc:jobcapability a usf:Service ;
+        usf:canonicalName "jobcapability" .
+    svc:keycloak a usf:Service ;
+        usf:canonicalName "keycloak" .
+    svc:keycloakdb a usf:Service ;
+        usf:canonicalName "keycloakdb" .
+    svc:localstack a usf:Service ;
+        usf:canonicalName "localstack" .
+    svc:loki a usf:Service ;
+        usf:canonicalName "loki" .
+    svc:mailpit a usf:Service ;
+        usf:canonicalName "mailpit" .
+    svc:meilisearch a usf:Service ;
+        usf:canonicalName "meilisearch" .
+    svc:minio a usf:Service ;
+        usf:canonicalName "minio" .
+    svc:mockoidc a usf:Service ;
+        usf:canonicalName "mockoidc" .
+    svc:nats a usf:Service ;
+        usf:canonicalName "nats" .
+    svc:notificationcapability a usf:Service ;
+        usf:canonicalName "notificationcapability" .
+    svc:openbao a usf:Service ;
+        usf:canonicalName "openbao" .
+    svc:otelcollector a usf:Service ;
+        usf:canonicalName "otelcollector" .
+    svc:pgadmin a usf:Service ;
+        usf:canonicalName "pgadmin" .
+    svc:pgbackrest a usf:Service ;
+        usf:canonicalName "pgbackrest" .
+    svc:platformapi a usf:Service ;
+        usf:canonicalName "platformapi" .
+    svc:postgres a usf:Service ;
+        usf:canonicalName "postgres" .
+    svc:prometheus a usf:Service ;
+        usf:canonicalName "prometheus" .
+    svc:publicprooforigin a usf:Service ;
+        usf:canonicalName "publicprooforigin" .
+    svc:redis a usf:Service ;
+        usf:canonicalName "redis" .
+    svc:sentry a usf:Service ;
+        usf:canonicalName "sentry" .
+    svc:sonaroidcplugin a usf:Service ;
+        usf:canonicalName "sonaroidcplugin" .
+    svc:sonarpostgres a usf:Service ;
+        usf:canonicalName "sonarpostgres" .
+    svc:sonarqube a usf:Service ;
+        usf:canonicalName "sonarqube" .
+    svc:stagingproofcockpit a usf:Service ;
+        usf:canonicalName "stagingproofcockpit" .
+    svc:tempo a usf:Service ;
+        usf:canonicalName "tempo" .
+    svc:temporal a usf:Service ;
+        usf:canonicalName "temporal" .
+    svc:temporalpostgres a usf:Service ;
+        usf:canonicalName "temporalpostgres" .
+    svc:temporalui a usf:Service ;
+        usf:canonicalName "temporalui" .
+    svc:webapp a usf:Service ;
+        usf:canonicalName "webapp" .
+    svc:webhooksink a usf:Service ;
+        usf:canonicalName "webhooksink" .
+    svc:windmill a usf:Service ;
+        usf:canonicalName "windmill" .
+    svc:windmillpostgres a usf:Service ;
+        usf:canonicalName "windmillpostgres" .
+    svc:windmillredis a usf:Service ;
+        usf:canonicalName "windmillredis" .
+    svc:windmillworker a usf:Service ;
+        usf:canonicalName "windmillworker" .
+    svc:wiremock a usf:Service ;
+        usf:canonicalName "wiremock" .
+}

@@ -1,0 +1,42 @@
+PREFIX usf: <urn:usf:ontology:>
+# Derive one proof obligation per semantic contract, requiring the delivered-minimum rung.
+CONSTRUCT {
+  ?po a usf:ProofObligation ;
+      usf:canonicalName ?ln ;
+      usf:obligationFor ?c ;
+      usf:requiresRung <urn:usf:proofrung:behaviour> ;
+      usf:derivedFrom ?c .
+}
+WHERE {
+  ?c a usf:SemanticContract .
+  BIND(REPLACE(STR(?c), "^.*:", "") AS ?ln)
+  BIND(IRI(CONCAT("urn:usf:proofobligation:", ?ln)) AS ?po)
+}
+#---NEXT---#
+PREFIX usf: <urn:usf:ontology:>
+# Derive one test obligation per semantic contract.
+CONSTRUCT {
+  ?to a usf:TestObligation ;
+      usf:canonicalName ?ln ;
+      usf:obligationFor ?c ;
+      usf:derivedFrom ?c .
+}
+WHERE {
+  ?c a usf:SemanticContract .
+  BIND(REPLACE(STR(?c), "^.*:", "") AS ?ln)
+  BIND(IRI(CONCAT("urn:usf:testobligation:", ?ln)) AS ?to)
+}
+#---NEXT---#
+PREFIX usf: <urn:usf:ontology:>
+# Derive one test obligation per control.
+CONSTRUCT {
+  ?to a usf:TestObligation ;
+      usf:canonicalName ?cn ;
+      usf:obligationFor ?ctl ;
+      usf:derivedFrom ?ctl .
+}
+WHERE {
+  ?ctl a usf:Control .
+  BIND(CONCAT(REPLACE(STR(?ctl), "^.*:", ""), "control") AS ?cn)
+  BIND(IRI(CONCAT("urn:usf:testobligation:", ?cn)) AS ?to)
+}

@@ -30,6 +30,7 @@ const SOURCE_TREE_HASH_ALGORITHM = "sha256-git-ls-tree-non-proof-evidence-v1";
 const SOURCE_TREE_HASH_EXCLUDED_PREFIXES = Object.freeze([
   "artifacts/proof-cockpit/",
   "evidence/proof-evidence/proof-cockpit/",
+  "v2/",
 ]);
 
 function parseArgs(argv) {

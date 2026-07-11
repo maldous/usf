@@ -19,6 +19,7 @@ const SOURCE_TREE_HASH_ALGORITHM = "sha256-git-ls-tree-non-proof-evidence-v1";
 const SOURCE_TREE_HASH_EXCLUDED_PREFIXES = Object.freeze([
   "artifacts/proof-cockpit/",
   "evidence/proof-evidence/proof-cockpit/",
+  "v2/",
 ]);
 const CHROMIUM_UNSAFE_PORTS = new Set([
   1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79, 87, 95, 101,

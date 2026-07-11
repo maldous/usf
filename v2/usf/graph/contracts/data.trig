@@ -1,0 +1,127 @@
+@prefix usf: <urn:usf:ontology:> .
+@prefix dm: <urn:usf:datamodel:> .
+@prefix mig: <urn:usf:migration:> .
+@prefix br: <urn:usf:backuprestore:> .
+@prefix tb: <urn:usf:tenantboundary:> .
+@prefix ten: <urn:usf:tenancystrategy:> .
+@prefix pers: <urn:usf:persistencecontract:> .
+
+<urn:usf:graph:data> {
+    br:backupevidencerestoreevidence a usf:BackupRestore ;
+        usf:canonicalName "backupevidencerestoreevidence" .
+    br:backuprestoreproviderdispositionmatrix a usf:BackupRestore ;
+        usf:canonicalName "backuprestoreproviderdispositionmatrix" .
+    br:environmentrecoverypostures a usf:BackupRestore ;
+        usf:canonicalName "environmentrecoverypostures" .
+    br:pgbackrest a usf:BackupRestore ;
+        usf:canonicalName "pgbackrest" .
+    br:retentionlegalholddeletion a usf:BackupRestore ;
+        usf:canonicalName "retentionlegalholddeletion" .
+    dm:appendonlyledger a usf:DataModel ;
+        usf:canonicalName "appendonlyledger" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:auditevidence a usf:DataModel ;
+        usf:canonicalName "auditevidence" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:auditledger a usf:DataModel ;
+        usf:canonicalName "auditledger" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:breakglassgrants a usf:DataModel ;
+        usf:canonicalName "breakglassgrants" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:crosstenantaggregate a usf:DataModel ;
+        usf:canonicalName "crosstenantaggregate" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:dataidentityschema a usf:DataModel ;
+        usf:canonicalName "dataidentityschema" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:ephemeralruntimestate a usf:DataModel ;
+        usf:canonicalName "ephemeralruntimestate" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:files a usf:DataModel ;
+        usf:canonicalName "files" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:globalreference a usf:DataModel ;
+        usf:canonicalName "globalreference" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:migrationcontrolplane a usf:DataModel ;
+        usf:canonicalName "migrationcontrolplane" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:schemamigrations a usf:DataModel ;
+        usf:canonicalName "schemamigrations" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:systeminternal a usf:DataModel ;
+        usf:canonicalName "systeminternal" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:tenantmemberships a usf:DataModel ;
+        usf:canonicalName "tenantmemberships" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:tenants a usf:DataModel ;
+        usf:canonicalName "tenants" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    dm:tenantscoped a usf:DataModel ;
+        usf:canonicalName "tenantscoped" ;
+        usf:changedByMigration mig:relationalforwardonly ;
+        usf:enforcesTenancy tb:tenant ;
+        usf:persistedUnder pers:adaptersdbmigrationsmanifest ;
+        usf:protectedByRecovery br:pgbackrest ;
+        usf:tenancyStrategy ten:forcedrls .
+    mig:relationalforwardonly a usf:Migration ;
+        usf:canonicalName "relationalforwardonly" .
+}
