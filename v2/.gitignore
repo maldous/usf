@@ -1,5 +1,14 @@
 # The chroot root filesystem (Stardog, Temurin JDK, OS packages) is a runtime dependency
-# used only for database provisioning — not USF source. Track only the usf/ artefacts.
+# used only for database provisioning — not USF source. Track the usf/ artefacts and the
+# token-free profile.d shell wiring only; everything else in the chroot is ignored.
 /*
 !/.gitignore
 !/usf/
+
+# token-free profile.d environment wiring (credentials stay in the git-ignored /usf/.env)
+!/etc/
+/etc/*
+!/etc/profile.d/
+/etc/profile.d/*
+!/etc/profile.d/java.sh
+!/etc/profile.d/stardog.sh
