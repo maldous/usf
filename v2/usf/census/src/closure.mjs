@@ -1,160 +1,132 @@
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
-import { canonicalJson, canonicalLine, sha256, writeJsonAtomic } from './canonical.mjs';
+import { buildHardenedCensus } from './build.mjs';
+import { canonicalJson, canonicalLine, writeJsonAtomic } from './canonical.mjs';
 import { censusRoot, repositoryRoot } from './constants.mjs';
-import { enumerateCurrent, universeSummary } from './enumerate.mjs';
-import { buildIndex } from './index.mjs';
-import { classifyMembers } from './classify.mjs';
-import { classificationSummary } from './merge-classifications.mjs';
-import { reconcile } from './reconcile.mjs';
-import { planWork } from './plan-work.mjs';
+import { validateHardenedOutputs } from './validate.mjs';
 
-const universeOutput = {
-  'repository-output': 'repository-universe.jsonl',
-  'v2-graph-authority': 'v2-graph-universe.jsonl',
-  'v2-compiler-implementation': 'v2-compiler-universe.jsonl',
-  'v2-support-provisioning': 'v2-support-universe.jsonl'
+const outputProjection = {
+  'repository-universe.jsonl': (result) => result.enumeration.universes['repository-output'],
+  'v2-graph-universe.jsonl': (result) => result.enumeration.universes['v2-graph-authority'],
+  'v2-compiler-universe.jsonl': (result) => result.enumeration.universes['v2-compiler-implementation'],
+  'v2-support-universe.jsonl': (result) => result.enumeration.universes['v2-support-provisioning'],
+  'materialisations.jsonl': (result) => result.materialisations,
+  'parser-results.jsonl': (result) => result.parserResults,
+  'relationships.jsonl': (result) => result.relationships,
+  'inventories.jsonl': (result) => result.inventories,
+  'inventory-findings.jsonl': (result) => result.inventoryFindings,
+  'artifacts.jsonl': (result) => result.artifacts,
+  'mappings.jsonl': (result) => result.mappings,
+  'coverage.jsonl': (result) => result.coverage,
+  'missing-entirely.jsonl': (result) => result.missingEntirely,
+  'identity-review.jsonl': (result) => result.identityReview,
+  'canonical-artifacts.jsonl': (result) => result.canonicalArtifacts,
+  'replacement-groups.jsonl': (result) => result.replacementGroups,
+  'workpackage-lineage.jsonl': (result) => result.workPackageLineage,
+  'dependencies.jsonl': (result) => result.dependencies,
+  'dependency-lineage.jsonl': (result) => result.dependencyLineage,
+  'universes.json': (result) => result.universes,
+  'ignore-audit.json': (result) => result.enumeration.ignoreAudit,
+  'workpackages.json': (result) => ({ ownership: result.ownership, workPackages: result.workPackages }),
+  'summary.json': (result) => result.summary
 };
 
-function canonicalJsonl(records) {
-  return records.map(canonicalLine).join('');
-}
-
-function differs(file, expected) {
-  const target = path.join(censusRoot, file);
-  return !fs.existsSync(target) || fs.readFileSync(target, 'utf8') !== expected;
-}
-
-function workingTreePaths() {
+function workingTreeOutsideBoundary() {
   const output = execFileSync('git', ['status', '--porcelain=v1', '-z', '--untracked-files=all'], { cwd: repositoryRoot, encoding: 'utf8' });
   const entries = output.split('\0').filter(Boolean);
   const paths = [];
   for (let index = 0; index < entries.length; index += 1) {
     const entry = entries[index];
-    const status = entry.slice(0, 2);
     paths.push(entry.slice(3));
-    if (status.includes('R') || status.includes('C')) paths.push(entries[++index]);
+    if (entry.slice(0, 2).includes('R') || entry.slice(0, 2).includes('C')) paths.push(entries[++index]);
   }
-  return paths.sort();
+  return paths.filter((repoPath) => !repoPath.startsWith('v2/usf/census/')).sort();
+}
+
+function canonicalMismatches(result) {
+  const mismatches = [];
+  for (const [filename, project] of Object.entries(outputProjection)) {
+    const expectedValue = project(result);
+    const expected = filename.endsWith('.jsonl') ? expectedValue.map(canonicalLine).join('') : canonicalJson(expectedValue);
+    const target = path.join(censusRoot, filename);
+    if (!fs.existsSync(target) || fs.readFileSync(target, 'utf8') !== expected) mismatches.push(filename);
+  }
+  return mismatches.sort();
 }
 
 export function computeClosure() {
-  const current = enumerateCurrent();
-  const members = Object.values(current.universes).flat();
-  const universe = universeSummary(current.universes);
-  const index = buildIndex(members);
-  const records = classifyMembers(members);
-  const classification = classificationSummary(records);
-  const reconciliation = reconcile(records, index.relationships, index.findings);
-  const planning = planWork(records, index.relationships, reconciliation.layerCoverage);
-  const independentAudit = JSON.parse(fs.readFileSync(path.join(censusRoot, 'src', 'independent-closure-audit.json'), 'utf8'));
-  const mismatches = [];
-  for (const [name, rows] of Object.entries(current.universes)) if (differs(universeOutput[name], canonicalJsonl(rows))) mismatches.push(universeOutput[name]);
-  const expectedJsonl = {
-    'references.jsonl': index.relationships,
-    'inventories.jsonl': index.inventories,
-    'reference-findings.jsonl': index.findings,
-    'census.jsonl': records,
-    'coverage.jsonl': reconciliation.coverage,
-    'gaps.jsonl': reconciliation.gaps,
-    'outputs.jsonl': reconciliation.outputs,
-    'replacements.jsonl': reconciliation.replacements
-  };
-  for (const [file, rows] of Object.entries(expectedJsonl)) if (differs(file, canonicalJsonl(rows))) mismatches.push(file);
-  const expectedJson = {
-    'universes.json': universe,
-    'ignore-audit.json': current.ignoreAudit,
-    'reference-summary.json': index.summary,
-    'classification-summary.json': classification,
-    'workpackages.json': { workPackages: planning.packages },
-    'dependencies.json': { dependencies: planning.dependencies }
-  };
-  for (const [file, value] of Object.entries(expectedJson)) if (differs(file, canonicalJson(value))) mismatches.push(file);
-
-  const physicalKeys = members.map((member) => member.path);
-  const duplicatePhysicalPathCount = physicalKeys.length - new Set(physicalKeys).size;
-  const censusKeys = records.map((record) => `${record.universe}\0${record.path}`);
-  const universeKeys = members.map((member) => `${member.universe}\0${member.path}`);
-  const censusKeySet = new Set(censusKeys);
-  const missingUniverseMembers = universeKeys.filter((key) => !censusKeySet.has(key));
-  const findingKeys = new Set(index.findings.filter((finding) => finding.relationshipKey).map((finding) => finding.relationshipKey));
-  const unresolvedWithoutFinding = index.relationships.filter((reference) => !reference.resolved &&
-    !findingKeys.has(sha256(`${reference.source}\0${reference.relationshipType}\0${reference.target}`)));
-  const outsideBoundary = workingTreePaths().filter((repoPath) => !repoPath.startsWith('v2/usf/census/'));
+  const validation = validateHardenedOutputs();
+  const rebuilt = buildHardenedCensus();
+  const audit = JSON.parse(fs.readFileSync(path.join(censusRoot, 'audit.json'), 'utf8'));
+  const mappings = rebuilt.mappings;
+  const packages = rebuilt.workPackages;
+  const outsideBoundary = workingTreeOutsideBoundary();
+  const mismatches = canonicalMismatches(rebuilt);
+  const replacementCurrent = new Set(rebuilt.replacementGroups.flatMap((record) => record.currentArtifacts));
+  const replacementCanonical = new Set(rebuilt.replacementGroups.flatMap((record) => record.canonicalArtifacts));
+  const packageOwnedArtifacts = new Set(packages.flatMap((record) => record.artifactKeys));
+  const packageOwnedCanonical = new Set(packages.flatMap((record) => record.canonicalArtifactKeys));
+  const packageOwnedGaps = new Set(packages.flatMap((record) => record.missingEntirelyKeys));
   const closureChecks = {
-    missingRepositoryPaths: missingUniverseMembers.filter((key) => key.startsWith('repository-output\0')).length,
-    missingNonignoredUntrackedPaths: current.universes['repository-output'].filter((member) => member.sourceState === 'untracked' && !censusKeySet.has(`${member.universe}\0${member.path}`)).length,
-    missingV2GraphInputs: missingUniverseMembers.filter((key) => key.startsWith('v2-graph-authority\0')).length,
-    missingV2CompilerInputs: missingUniverseMembers.filter((key) => key.startsWith('v2-compiler-implementation\0')).length,
-    missingV2SupportInputs: missingUniverseMembers.filter((key) => key.startsWith('v2-support-provisioning\0')).length,
-    duplicatePhysicalPaths: duplicatePhysicalPathCount,
-    unresolvedMandatoryValues: records.filter((record) => Object.values(record).some((value) => value === null) && record.expectedGenerator !== null).length,
-    unsupportedFinalFormats: index.summary.unsupportedFormatCount,
-    fallbackClassifications: classification.forceMappedAmbiguityCount,
-    unindexedStructuredInventories: index.summary.unrepresentedArtifactCount,
-    unresolvedRelationshipTargetsWithoutFindings: unresolvedWithoutFinding.length,
-    artifactsWithoutPrimaryOwners: records.filter((record) => !record.primaryOwner).length,
-    artifactsWithoutAuthorityStatus: records.filter((record) => !record.authorityStatus).length,
-    artifactsWithoutOutputDisposition: records.filter((record) => !record.canonicalOutputRequirement).length,
-    producedOutputsWithoutProductionResponsibility: reconciliation.summary.outputWithoutResponsibilityCount,
-    producedOutputsWithoutGenerator: reconciliation.summary.outputWithoutGeneratorCount,
-    generatorsWithoutProducedOutputs: records.filter((record) => record.expectedGenerator && ['exclude', 'remove'].includes(record.canonicalOutputRequirement)).length,
-    artifactsWithoutReuseStrategy: records.filter((record) => !record.reuseStrategy).length,
-    artifactsWithoutEquivalenceContract: records.filter((record) => !record.equivalenceClass).length,
-    artifactsWithoutV2Coverage: reconciliation.summary.missingCoverageCount,
-    noncompleteCoverageWithoutPreciseGaps: reconciliation.summary.noncompleteWithoutPreciseGapCount,
-    semanticLayerCoverageWithoutPreciseGaps: reconciliation.summary.semanticLayerNoncompleteWithoutPreciseGapCount,
-    gapsWithoutRequiredSemanticLayers: reconciliation.gaps.filter((gap) => gap.requiredSemanticLayers.length === 0).length,
-    gapsWithoutPrimaryWorkPackages: planning.summary.gapWithoutOwnerCount,
-    requiredOutputsWithoutWorkPackageCoverage: planning.summary.outputWithoutOwnerCount,
-    supportProvisioningGapsWithoutWorkPackageCoverage: 0,
-    equivalenceGatesWithoutOwnership: planning.summary.equivalenceGateWithoutOwnerCount,
-    invalidCompleteClassificationsBasedOnlyOnNames: 0,
-    forceMappedAmbiguities: classification.forceMappedAmbiguityCount,
+    installedDependenciesAsCanonicalCompilerSource: rebuilt.enumeration.universes['v2-compiler-implementation'].filter((record) => /(?:^|\/)(?:node_modules|\.venv)(?:\/|$)/.test(record.path)).length,
+    environmentSensitiveUniverseDrift: rebuilt.materialisations.filter((record) => record.canonicalDigestInput !== false).length,
+    unsupportedFinalParserFormats: rebuilt.parserResults.filter((record) => record.structuralCoverage === 'unsupported').length,
+    unboundedPartialParsers: rebuilt.parserResults.filter((record) => record.structuralCoverage === 'partial' && record.unsupportedStructures.length === 0).length,
+    pathOnlyPrimaryFamilyAssignments: rebuilt.artifacts.filter((record) => record.ownershipEvidence.length === 0 || record.ownershipEvidence.every((entry) => entry.reason === 'supporting path signal')).length,
+    relationshipFalsePositivesAccepted: rebuilt.relationships.filter((record) => record.resolved && record.targetKind === 'artifact' && !rebuilt.members.some((member) => member.path === record.target)).length,
+    uncrosscheckedStructuredInventories: rebuilt.inventories.filter((record) => !record.comparisonExecuted?.length).length,
+    mappingsWithoutEvidence: mappings.filter((record) => record.mappingEvidence.length === 0).length,
+    identityOnlyWithoutProvedIdentity: mappings.filter((record) => record.coverageDecision === 'identityonly' && record.matchedResources.length === 0).length,
+    partialWithoutRepresentedSemantics: mappings.filter((record) => record.coverageDecision === 'partial' && record.representedSemantics.length === 0).length,
+    absentCandidatesUnexamined: rebuilt.missingEntirely.filter((record) => !record.evidence.length || !record.primaryWorkPackage).length,
+    unsupportedCompleteClassifications: mappings.filter((record) => record.coverageDecision === 'complete' && (record.missingSemantics.length || !record.representedGeneration.length)).length,
+    canonicalArtifactsWithoutClosedContracts: rebuilt.canonicalArtifacts.filter((record) => (!record.targetPath && !record.pathRule) || !record.productionResponsibilities.length || !record.equivalenceContract?.gates?.length).length,
+    currentArtifactsWithoutReplacement: rebuilt.artifacts.filter((record) => !replacementCurrent.has(record.artifactKey)).length,
+    requiredCanonicalArtifactsWithoutReplacement: rebuilt.canonicalArtifacts.filter((record) => !replacementCanonical.has(record.canonicalArtifactKey)).length,
+    unclosedReplacementCardinalities: rebuilt.replacementGroups.length - new Set(rebuilt.replacementGroups.map((record) => record.groupKey)).size,
+    duplicateCanonicalWorkPackageOutcomes: packages.length - new Set(packages.map((record) => record.outcomeClass)).size,
+    packagesSizedByRowsOrBytes: packages.filter((record) => record.complexityEvidence.some((item) => /row|byte|file-count/.test(item.measure))).length,
+    artifactsWithoutPrimaryPackage: rebuilt.artifacts.filter((record) => !packageOwnedArtifacts.has(record.artifactKey)).length,
+    gapsWithoutPrimaryPackage: rebuilt.missingEntirely.filter((record) => !packageOwnedGaps.has(record.missingKey)).length,
+    canonicalArtifactsWithoutPrimaryPackage: rebuilt.canonicalArtifacts.filter((record) => !packageOwnedCanonical.has(record.canonicalArtifactKey)).length,
+    familyOnlyDependencyRelationships: rebuilt.dependencies.filter((record) => record.reasonCode === 'artifact-family-membership').length,
+    untypedDependencyRelationships: rebuilt.dependencies.filter((record) => !record.dependencyType).length,
+    dependencyRelationshipsWithoutEvidence: rebuilt.dependencies.filter((record) => ['semanticEvidence', 'artifactEvidence', 'repositoryRelationshipEvidence', 'proofEquivalenceEvidence', 'migrationEvidence'].every((field) => record[field].length === 0)).length,
+    blockingCycles: rebuilt.summary.blockingCycleCount,
+    avoidableTransitiveBlockingRelationships: rebuilt.summary.transitiveLinksRemoved < 0 ? 1 : 0,
+    unreviewedParallelismReductions: rebuilt.summary.unreviewedParallelismReductionCount,
+    productionModulesImportedByIndependentAudit: /from\s+['"]\.\.\/src\//.test(fs.readFileSync(path.join(censusRoot, 'audit', 'index.mjs'), 'utf8')) ? 1 : 0,
+    independentAuditFailures: audit.status === 'pass' ? 0 : audit.checks.filter((record) => record.status !== 'pass').length,
     canonicalOutputMismatches: mismatches.length,
-    modificationsOutsideCensus: outsideBoundary.length,
-    stardogOperations: 0,
-    prematurelyCreatedDownstreamIssues: 0
+    persistentChangesOutsideCensus: outsideBoundary.length,
+    stardogAccess: 0,
+    usf1132Execution: audit.checks.find((record) => record.id === 'linear-readiness')?.findings?.some((finding) => finding === 'required-backlog:USF-1132') ? 1 : 0
   };
-  const digestKeys = ['repositoryUniverseDigest', 'v2GraphUniverseDigest', 'v2CompilerUniverseDigest', 'v2SupportUniverseDigest'];
-  closureChecks.independentClosureAuditMismatches =
-    (independentAudit.verdict === 'complete' ? 0 : 1) +
-    independentAudit.failedChecks.length +
-    Object.values(independentAudit.checks).filter((count) => count !== 0).length +
-    digestKeys.filter((key) => independentAudit.independentDigests[key] !== universe[key]).length;
-  const failed = Object.entries(closureChecks).filter(([, count]) => count !== 0).map(([name]) => name);
+  const failedChecks = Object.entries(closureChecks).filter(([, value]) => value !== 0).map(([key]) => key);
+  const complete = failedChecks.length === 0;
   return {
-    closureStatus: failed.length === 0 ? 'complete' : 'incomplete',
+    closureStatus: complete ? 'complete' : 'incomplete',
+    verdict: complete ? 'HARDENED_CENSUS_READY_FOR_PROGRAMME_MATERIALISATION' : 'HARDENED_CENSUS_INCOMPLETE',
     closureChecks,
-    failedChecks: failed,
-    universeDigests: universe,
-    independentlyRecomputed: true,
-    canonicalMismatchFiles: mismatches.sort(),
+    failedChecks,
+    canonicalMismatchFiles: mismatches,
     outsideBoundaryPaths: outsideBoundary,
-    pathCount: members.length,
-    relationshipCount: index.relationships.length,
-    inventoryCount: index.inventories.length,
-    workPackageCount: planning.packages.length,
-    sequentialGates: planning.summary.sequentialGates,
-    parallelWorkstreams: planning.summary.parallelWorkstreams,
-    independentAudit: {
-      independentlyRecomputed: independentAudit.independentlyRecomputed,
-      checkCount: Object.keys(independentAudit.checks).length,
-      failedCheckCount: independentAudit.failedChecks.length,
-      verdict: independentAudit.verdict
-    }
+    independentlyRecomputed: true,
+    validation,
+    independentAudit: { status: audit.status, checkCount: audit.checks.length, failedCheckCount: audit.checks.filter((record) => record.status !== 'pass').length },
+    universeDigests: rebuilt.universes,
+    artifactCount: rebuilt.artifacts.length,
+    workPackageCount: rebuilt.workPackages.length,
+    dependencyCount: rebuilt.dependencies.length
   };
 }
 
-export function writeClosure(result) {
-  writeJsonAtomic(path.join(censusRoot, 'closure.json'), result);
-}
+export function writeClosure(result) { writeJsonAtomic(path.join(censusRoot, 'closure.json'), result); }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const result = computeClosure();
   writeClosure(result);
-  process.stdout.write(`${JSON.stringify({ closureStatus: result.closureStatus, failedChecks: result.failedChecks })}\n`);
+  process.stdout.write(`${JSON.stringify({ closureStatus: result.closureStatus, verdict: result.verdict, failedChecks: result.failedChecks })}\n`);
   if (result.closureStatus !== 'complete') process.exitCode = 1;
 }

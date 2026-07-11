@@ -18,26 +18,24 @@ test('semantic layer review covers the complete controlled layer set', () => {
   assert.ok(rows.every((row) => row.coverageStatus === 'complete' || (row.preciseGaps.length > 0 && row.requiredSemanticLayers.length > 0)));
 });
 
-test('work packages own every row and relationship exactly once', () => {
-  const packages = JSON.parse(fs.readFileSync(path.join(censusRoot, 'workpackages.json'), 'utf8')).workPackages;
-  const rows = packages.flatMap((item) => item.affectedRows);
-  const relationships = packages.flatMap((item) => item.affectedRelationships);
-  assert.equal(rows.length, new Set(rows).size);
-  assert.equal(relationships.length, new Set(relationships).size);
-  assert.equal(rows.length, readJsonl(path.join(censusRoot, 'census.jsonl')).length + classifications.semanticLayers.length);
-  assert.equal(relationships.length, readJsonl(path.join(censusRoot, 'references.jsonl')).length);
+test('work packages own every hardened entity exactly once', () => {
+  const work = JSON.parse(fs.readFileSync(path.join(censusRoot, 'workpackages.json'), 'utf8'));
+  for (const records of Object.values(work.ownership)) assert.equal(records.length, new Set(records.map((item) => item.ownedKey)).size);
+  assert.equal(work.ownership.artifacts.length, readJsonl(path.join(censusRoot, 'artifacts.jsonl')).length);
+  assert.equal(work.ownership.canonicalArtifacts.length, readJsonl(path.join(censusRoot, 'canonical-artifacts.jsonl')).length);
+  assert.equal(work.ownership.missingEntirely.length, readJsonl(path.join(censusRoot, 'missing-entirely.jsonl')).length);
 });
 
 test('work-package hard dependencies are valid and acyclic', () => {
   const packages = JSON.parse(fs.readFileSync(path.join(censusRoot, 'workpackages.json'), 'utf8')).workPackages;
-  const dependencies = JSON.parse(fs.readFileSync(path.join(censusRoot, 'dependencies.json'), 'utf8')).dependencies;
+  const dependencies = readJsonl(path.join(censusRoot, 'dependencies.jsonl')).filter((item) => item.status === 'blocking');
   const keys = new Set(packages.map((item) => item.key));
   const graph = new Map();
   for (const dependency of dependencies) {
-    assert.ok(keys.has(dependency.workPackage));
-    assert.ok(keys.has(dependency.dependsOn));
-    if (!graph.has(dependency.workPackage)) graph.set(dependency.workPackage, []);
-    graph.get(dependency.workPackage).push(dependency.dependsOn);
+    assert.ok(keys.has(dependency.source));
+    assert.ok(keys.has(dependency.prerequisite));
+    if (!graph.has(dependency.source)) graph.set(dependency.source, []);
+    graph.get(dependency.source).push(dependency.prerequisite);
   }
   const active = new Set();
   const complete = new Set();

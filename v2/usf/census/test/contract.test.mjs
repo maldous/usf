@@ -19,7 +19,7 @@ function member(overrides = {}) {
   return {
     path: 'docs/example.md', universe: 'repository-output', sourceState: 'tracked', contentDigest: digest,
     byteSize: 1, fileMode: '100644', executable: false, binary: false, extension: '.md',
-    mediaType: 'text/markdown', formatKind: 'document-markdown', symbolicLinkTarget: null, ...overrides
+    mediaType: 'text/markdown', formatKind: 'document-markdown', symbolicLinkTarget: null, canonicalSource: true, ...overrides
   };
 }
 
@@ -71,7 +71,7 @@ test('noncomplete classifications require precise gaps and semantic layers', () 
 });
 
 test('malformed relationships are rejected', () => {
-  assert.throws(() => validateRelationship({ source: 'a', relationshipType: 'references', target: '', targetKind: 'artifact', extractionMethod: 'parser', confidence, resolved: false, reasonCodes: ['x'] }), /target required/);
+  assert.throws(() => validateRelationship({ source: 'a', relationshipType: 'references', target: '', targetKind: 'artifact', extractionMethod: 'parser', evidenceKind: 'structurally-proven', confidence, resolved: false, reasonCodes: ['x'] }), /target required/);
 });
 
 test('unsupported inventory records are rejected', () => {
