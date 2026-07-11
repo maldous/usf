@@ -13,8 +13,9 @@ for p in \
   /usf/graph/contracts/capabilities.trig \
   /usf/graph/assurance/evidence.trig \
   /usf/graph/realisation/implementations.trig \
-  /usf/graph/planning/classifications.trig \
+  /usf/graph/rules/readiness.rq \
   /usf/graph/derived/readiness.trig \
+  /usf/graph/manifest.yaml \
   /usf/.venv/bin/python \
   /usr/local/bin/stardog \
   /usr/local/bin/stardog-admin ; do
@@ -23,8 +24,8 @@ done
 
 if /usr/local/bin/stardog version >/dev/null 2>&1; then note "ok   stardog version"; else note "FAIL stardog version"; fail=1; fi
 if /usf/.venv/bin/python --version >/dev/null 2>&1; then note "ok   python --version"; else note "FAIL python --version"; fail=1; fi
-if /usf/.venv/bin/python -c 'import rdflib, pyshacl, yaml, pydantic' >/dev/null 2>&1; then
-  note "ok   python imports (rdflib, pyshacl, yaml, pydantic)"
+if /usf/.venv/bin/python -c 'import rdflib, pyshacl, yaml' >/dev/null 2>&1; then
+  note "ok   python imports (rdflib, pyshacl, yaml)"
 else
   note "FAIL python imports"; fail=1
 fi

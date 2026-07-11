@@ -63,7 +63,11 @@ verify(){
   sdq "SELECT ?g (COUNT(*) AS ?n) WHERE { GRAPH ?g { ?s ?p ?o } } GROUP BY ?g ORDER BY ?g" | tail -n +1
   echo "== total triples =="; sdq "SELECT (COUNT(*) AS ?n) WHERE { GRAPH ?g { ?s ?p ?o } }" | tail -4
   echo "== SHACL validation (expect sh:conforms true) =="
-  "$SD" "${G[@]}" icv report "${AUTH[@]}" "$DB" 2>&1 | grep -E 'sh:conforms'
+  if "$SD" "${G[@]}" icv report "${AUTH[@]}" "$DB" 2>&1 | grep -qE 'sh:conforms[[:space:]]+true'; then
+    echo "  sh:conforms true"
+  else
+    echo "  SHACL NOT CONFORMANT (or unavailable) — failing closed"; PROOF_FAIL=1
+  fi
   echo "== integrity query (expect 0 rows) =="; sdq "$(cat rules/integrity.rq)" | tail -5
   echo "== contamination query over all graphs except shapes (expect 0 rows) =="
   sdq 'SELECT ?s WHERE { GRAPH ?g { ?s ?p ?o } FILTER(?g != <urn:usf:graph:shapes>) FILTER( REGEX(STR(?s),"linear[.]app|USF-[0-9]|github[.]com|gitlab[.]com|refs/heads|commitSha|branchName|issueId|projectId|ADR-[0-9]") || (isLiteral(?o) && REGEX(STR(?o),"linear[.]app|USF-[0-9]|github[.]com|gitlab[.]com|refs/heads|commitSha|branchName|issueId|projectId|ADR-[0-9]")) ) } LIMIT 10' | tail -5
@@ -84,11 +88,11 @@ guarded_writes(){
   "$SDA" "${G[@]}" metadata get "${AUTH[@]}" -o "icv.enabled" -- "$DB" 2>&1 | noise | grep -i icv
   echo "-- conforming transaction (expect committed) --"
   out=$("$SD" "${G[@]}" data add "${AUTH[@]}" "$DB" -g urn:usf:graph:capabilities fixtures/conforming/capability.ttl 2>&1 | noise)
-  echo "$out" | grep -qi "committed successfully" && echo "  conforming => COMMITTED" || echo "  conforming => UNEXPECTEDLY REJECTED"
+  echo "$out" | grep -qi "committed successfully" && echo "  conforming => COMMITTED" || { echo "  conforming => UNEXPECTEDLY REJECTED"; PROOF_FAIL=1; }
   for d in missingpermission readinessoverclaim staleevidence providermismatch missingauditsignal missingcontractfacet undefinedterm; do
     out=$("$SD" "${G[@]}" data add "${AUTH[@]}" "$DB" -g urn:usf:graph:probe "fixtures/defects/$d.ttl" 2>&1 | noise)
     if echo "$out" | grep -qi "committed successfully"; then
-      echo "  defect $d => NOT REJECTED (escaped!)"
+      echo "  defect $d => NOT REJECTED (escaped!)"; PROOF_FAIL=1
     else
       msg=$(echo "$out" | grep -oE 'resultMessage "[^"]+"' | head -1)
       echo "  defect $d => REJECTED atomically ${msg}"
@@ -99,13 +103,19 @@ guarded_writes(){
 }
 
 main(){
+  PROOF_FAIL=0
   echo "== connectivity (read-only) =="
   adminq db list | grep -E "Databases|$DB" | head -3
   recreate_and_load
   verify
   guarded_writes
   echo "== final SHACL (authoritative graph unpolluted) =="
-  "$SD" "${G[@]}" icv report "${AUTH[@]}" "$DB" 2>&1 | grep -E 'sh:conforms'
+  if "$SD" "${G[@]}" icv report "${AUTH[@]}" "$DB" 2>&1 | grep -qE 'sh:conforms[[:space:]]+true'; then
+    echo "  sh:conforms true"
+  else
+    echo "  final SHACL NOT CONFORMANT — failing closed"; PROOF_FAIL=1
+  fi
+  if [ "$PROOF_FAIL" -ne 0 ]; then echo "provision-graph: FAILED"; exit 1; fi
   echo "provision-graph: DONE"
 }
 main "$@"
