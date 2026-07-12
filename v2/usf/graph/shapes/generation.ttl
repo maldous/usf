@@ -19,7 +19,14 @@ shp:ArtefactShape a sh:NodeShape ; usf:canonicalName "artefactshape" ; sh:target
 
 shp:ArtefactPlanShape a sh:NodeShape ; usf:canonicalName "artefactplanshape" ; sh:targetClass usf:ArtefactPlan ;
   sh:property [ sh:path usf:ownedByRepository ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Repository ] ;
-  sh:property [ sh:path usf:plansArtefact ; sh:minCount 1 ; sh:class usf:Artefact ] .
+  sh:property [ sh:path usf:plansArtefact ; sh:minCount 1 ; sh:class usf:Artefact ] ;
+  sh:property [ sh:path usf:plansSemanticResource ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:sparql [ sh:prefixes usf:prefixes ; sh:message "planspecificsemanticresource: source-specific semantic-contract output requires exactly one planned semantic resource" ;
+    sh:select """SELECT $this WHERE {
+      $this usf:plansArtefact ?artefact .
+      ?artefact usf:generatedByComponent <urn:usf:generator:semanticcontract> .
+      FILTER NOT EXISTS { $this usf:plansSemanticResource ?resource }
+    }""" ] .
 
 shp:AutomationWorkflowContractShape a sh:NodeShape ; usf:canonicalName "automationworkflowcontractshape" ; sh:targetClass usf:AutomationWorkflowContract ;
   sh:property [ sh:path usf:workflowTemplate ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:Template ] ;
@@ -114,6 +121,13 @@ shp:EquivalenceClaimShape a sh:NodeShape ; usf:canonicalName "equivalenceclaimsh
   sh:property [ sh:path usf:equivalenceSubject ; sh:minCount 1 ; sh:class usf:Artefact ] ;
   sh:property [ sh:path usf:equivalenceOracle ; sh:minCount 1 ; sh:class usf:Artefact ] ;
   sh:property [ sh:path usf:verifiesRun ; sh:minCount 1 ; sh:class usf:CompilerRun ] .
+
+shp:EquivalenceRuleShape a sh:NodeShape ; usf:canonicalName "equivalenceruleshape" ; sh:targetClass usf:EquivalenceRule ;
+  sh:property [ sh:path usf:equivalenceRuleKind ; sh:minCount 1 ; sh:class usf:EquivalenceKind ] ;
+  sh:property [ sh:path usf:equivalenceRuleComponent ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:CompilerComponent ] ;
+  sh:property [ sh:path usf:equivalenceRuleInputRole ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:GenerationInputRole ] ;
+  sh:property [ sh:path usf:equivalenceRuleComparesPredicate ; sh:minCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path usf:equivalenceRuleFailureCode ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Z]+-[A-Z]+-[0-9]{3}$" ] .
 
 shp:CleanRoomGenerationShape a sh:NodeShape ; usf:canonicalName "cleanroomgenerationshape" ; sh:targetClass usf:CleanRoomGeneration ;
   sh:property [ sh:path usf:cleanRoomInput ; sh:minCount 1 ; sh:class usf:Artefact ] ;

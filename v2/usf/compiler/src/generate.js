@@ -21,6 +21,7 @@ const { namedNode } = DataFactory;
 const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 const stableJson = (value) => `${JSON.stringify(value, null, 2)}\n`;
+const canonical = (value) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 function authorityDigest(store) {
   const rows = store.getQuads(null, null, null, null).map((q) =>
@@ -51,10 +52,40 @@ function componentQuery(store, component) {
 
 function projection(store, output, sourceDigest) {
   const selected = componentQuery(store, output.component);
-  const resources = subjectsOfType(store, selected.classIri)
+  const selectedSubjects = subjectsOfType(store, selected.classIri)
     .filter((subject) => selected.constraints.every((constraint) =>
       store.countQuads(subject, namedNode(constraint.predicate), namedNode(constraint.object), null) > 0
-    ))
+    ));
+  const requested = new Set(output.semanticResources ?? []);
+  const subjects = requested.size ? selectedSubjects.filter((subject) => requested.has(subject.value)) : selectedSubjects;
+  if (requested.size && subjects.length !== requested.size) throw new CompilerError('artifact plan selects a semantic resource outside its generator query', {
+    phase: 'generate:plan-semantics', component: output.component, plan: output.plan, requested: [...requested], matched: subjects.map((subject) => subject.value),
+  });
+  const obligations = [];
+  const generatable = subjects.filter((subject) => {
+    if (selected.classIri !== `${USF}SemanticContract`) return true;
+    const lifecycle = store.getObjects(subject, namedNode(`${USF}semanticLifecycleState`), null);
+    if (lifecycle.length !== 1) {
+      obligations.push({ subject: subject.value, predicate: `${USF}semanticLifecycleState`, expected: 'exactly-one', observed: lifecycle.length });
+      return false;
+    }
+    if (['deprecated', 'retired', 'replaced'].includes(lifecycle[0].value.split(':').at(-1))) return false;
+    for (const facet of store.getObjects(subject, namedNode(`${USF}declaresFacet`), null)) {
+      const statuses = store.getObjects(facet, namedNode(`${USF}facetStatus`), null);
+      const statements = store.getObjects(facet, namedNode(`${USF}facetStatement`), null);
+      const kind = store.getObjects(facet, namedNode(`${USF}facetKind`), null)[0]?.value ?? null;
+      if (statuses.length !== 1 || statements.length !== 1) {
+        obligations.push({ subject: subject.value, facet: facet.value, facetKind: kind, expected: 'one-status-and-statement', observed: { statuses: statuses.length, statements: statements.length } });
+      } else if (statuses[0].value === 'urn:usf:facetstatus:gap') {
+        obligations.push({ subject: subject.value, facet: facet.value, facetKind: kind, status: 'gap', statement: statements[0].value });
+      }
+    }
+    return true;
+  });
+  if (obligations.length) throw new CompilerError(`semantic input has ${obligations.length} unresolved contract facet obligations for ${output.component}`, {
+    phase: 'generate:missing-semantics', component: output.component, classIri: selected.classIri, obligations,
+  });
+  const resources = generatable
     .sort((a, b) => a.value.localeCompare(b.value))
     .map((subject) => canonicalResource(store, subject));
   if (!resources.length) throw new CompilerError(`semantic input query produced no resources for ${output.component}`, {
@@ -63,6 +94,22 @@ function projection(store, output, sourceDigest) {
     classIri: selected.classIri,
     obligation: { classIri: selected.classIri, output: output.artefact },
   });
+  if (output.component === 'urn:usf:generator:semanticcontract') {
+    if (subjects.length !== 1) throw new CompilerError('semantic contract output requires exactly one planned contract', {
+      phase: 'generate:plan-semantics', component: output.component, plan: output.plan, observed: subjects.length,
+    });
+    const subject = subjects[0];
+    const canonicalName = literalValue(oneObject(store, subject, namedNode(`${USF}canonicalName`)));
+    const lifecycleState = oneObject(store, subject, namedNode(`${USF}semanticLifecycleState`))?.value.split(':').at(-1);
+    const facets = store.getObjects(subject, namedNode(`${USF}declaresFacet`), null).map((facet) => ({
+      id: facet.value,
+      kind: oneObject(store, facet, namedNode(`${USF}facetKind`))?.value,
+      status: oneObject(store, facet, namedNode(`${USF}facetStatus`))?.value.split(':').at(-1),
+      statement: literalValue(oneObject(store, facet, namedNode(`${USF}facetStatement`))),
+    })).sort((a, b) => a.kind.localeCompare(b.kind));
+    return { schemaVersion: 1, authorityDigest: sourceDigest, id: subject.value, canonicalName, lifecycleState, facets,
+      nonClaims: ['generated projection is lower authority than its semantic inputs'] };
+  }
   return {
     schemaVersion: 1,
     authorityDigest: sourceDigest,
@@ -73,6 +120,58 @@ function projection(store, output, sourceDigest) {
     resources,
     nonClaims: ['generated projection is lower authority than its semantic inputs'],
   };
+}
+
+function semanticContractSourceEquivalence(store, output, data, sourceRoot) {
+  if (!sourceRoot) throw new CompilerError('semantic contract equivalence requires an explicit source root', {
+    phase: 'generate:equivalence', code: 'USF-SCG-001', plan: output.plan,
+  });
+  const plan = namedNode(output.plan);
+  const bindings = store.getSubjects(namedNode(`${USF}sourceBindingArtefactPlan`), plan, null);
+  if (bindings.length !== 1) throw new CompilerError('semantic contract plan requires exactly one source binding', {
+    phase: 'generate:equivalence', code: 'USF-SCG-002', plan: output.plan, observed: bindings.length,
+  });
+  const binding = bindings[0];
+  const sourcePath = literalValue(oneObject(store, binding, namedNode(`${USF}sourceBindingPath`)));
+  const expectedDigest = literalValue(oneObject(store, binding, namedNode(`${USF}sourceBindingContentDigest`)));
+  const kinds = store.getObjects(binding, namedNode(`${USF}sourceBindingEquivalenceKind`), null).map((term) => term.value.split(':').at(-1)).sort();
+  const root = resolve(sourceRoot);
+  const path = resolve(root, sourcePath ?? '');
+  if (!sourcePath || (path !== root && !path.startsWith(`${root}/`))) throw new CompilerError('semantic contract equivalence path escapes the declared source root', {
+    phase: 'generate:equivalence', code: 'USF-SCG-003', binding: binding.value, sourcePath,
+  });
+  if (!existsSync(path)) throw new CompilerError('semantic contract equivalence subject is missing', {
+    phase: 'generate:equivalence', code: 'USF-SCG-004', binding: binding.value, sourcePath,
+  });
+  const bytes = readFileSync(path);
+  const observedDigest = sha256(bytes);
+  if (observedDigest !== expectedDigest) throw new CompilerError('semantic contract equivalence subject digest changed', {
+    phase: 'generate:equivalence', code: 'USF-SCG-005', binding: binding.value, sourcePath, expectedDigest, observedDigest,
+  });
+  let source;
+  try { source = JSON.parse(bytes); }
+  catch (error) { throw new CompilerError('semantic contract equivalence subject is not strict JSON', {
+    phase: 'generate:equivalence', code: 'USF-SCG-005', binding: binding.value, sourcePath, cause: error.message,
+  }); }
+  const failures = [];
+  if (canonical(source.capability ?? '') !== data.canonicalName) failures.push({ field: 'capability', expected: data.canonicalName, observed: source.capability });
+  if (source.lifecycleState !== data.lifecycleState) failures.push({ field: 'lifecycleState', expected: data.lifecycleState, observed: source.lifecycleState });
+  const sourceFacets = new Map(Object.entries(source.facets ?? {}).map(([kind, facet]) => [kind === 'uiSemanticDefinition' ? 'uisemantics' : canonical(kind), facet]));
+  const outputFacets = new Map(data.facets.map((facet) => [facet.kind.split(':').at(-1), facet]));
+  if (sourceFacets.size !== 10 || outputFacets.size !== 10 || [...sourceFacets.keys()].some((kind) => !outputFacets.has(kind))) {
+    failures.push({ field: 'facets', expectedKinds: [...outputFacets.keys()].sort(), observedKinds: [...sourceFacets.keys()].sort() });
+  }
+  if (kinds.includes('semantic')) for (const [kind, sourceFacet] of sourceFacets) {
+    const generated = outputFacets.get(kind);
+    const statement = String(sourceFacet?.description ?? '').replace(/fresh USF proof pending USF-[0-9]+(?:\/USF-[0-9]+)*/gi, 'fresh proof remains pending').trim();
+    if (!generated || generated.status !== canonical(sourceFacet?.status ?? '') || generated.statement !== statement) {
+      failures.push({ field: `facets.${kind}`, expected: generated, observed: { status: sourceFacet?.status, statement } });
+    }
+  }
+  if (!kinds.includes('structural') || failures.length) throw new CompilerError('semantic contract source equivalence failed', {
+    phase: 'generate:equivalence', code: 'USF-SCG-006', binding: binding.value, sourcePath, kinds, failures,
+  });
+  return { binding: binding.value, sourcePath, sourceSha256: observedDigest, kinds, structural: true, semantic: kinds.includes('semantic') };
 }
 
 function releaseAuthority(store, output) {
@@ -111,6 +210,25 @@ function render(output, data) {
         artefact: { type: 'string' }, component: { type: 'string' }, resources: { type: 'array' },
       },
       additionalProperties: true,
+    });
+  }
+  if (output.path === 'contracts/schemas/semantic-contract.schema.json') {
+    return stableJson({
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      $id: 'urn:usf:generated:schema:semantic-contract',
+      title: 'USF generated semantic contract', type: 'object',
+      required: ['schemaVersion', 'authorityDigest', 'id', 'canonicalName', 'lifecycleState', 'facets', 'sourceEquivalence', 'nonClaims'],
+      properties: {
+        schemaVersion: { const: 1 }, authorityDigest: { type: 'string', pattern: '^[0-9a-f]{64}$' },
+        id: { type: 'string', pattern: '^urn:usf:semanticcontract:[a-z0-9]+$' }, canonicalName: { type: 'string', pattern: '^[a-z0-9]+$' },
+        lifecycleState: { enum: ['proposed', 'planned', 'draft', 'active', 'deferred'] },
+        facets: { type: 'array', minItems: 10, maxItems: 10, items: { type: 'object', required: ['id', 'kind', 'status', 'statement'],
+          properties: { id: { type: 'string' }, kind: { type: 'string' }, status: { enum: ['complete', 'notapplicable'] }, statement: { type: 'string', minLength: 1 } }, additionalProperties: false } },
+        sourceEquivalence: { type: 'object', required: ['binding', 'sourcePath', 'sourceSha256', 'kinds', 'structural', 'semantic'],
+          properties: { binding: { type: 'string' }, sourcePath: { type: 'string' }, sourceSha256: { type: 'string', pattern: '^[0-9a-f]{64}$' },
+            kinds: { type: 'array', contains: { const: 'structural' } }, structural: { const: true }, semantic: { type: 'boolean' } }, additionalProperties: false },
+        nonClaims: { type: 'array', items: { type: 'string' } },
+      }, additionalProperties: false,
     });
   }
   if (output.path === 'ui/schemas/rendererinput.schema.json') {
@@ -217,6 +335,7 @@ export function generateAuthority({ store, outputDir, mode = 'full', signingKeyP
   try {
     for (const output of ordinary) {
       const data = projection(store, output, sourceDigest);
+      if (output.component === 'urn:usf:generator:semanticcontract') data.sourceEquivalence = semanticContractSourceEquivalence(store, output, data, sourceRoot);
       const content = output.template ? materialiseTemplate(output, sourceRoot) : render(output, data);
       files.push(write(staging, output.path, content, reuseRoot));
     }
@@ -318,4 +437,4 @@ export function verifyOutput(outputDir, required = true, expectedPublicKeyFinger
   return { ok: true, manifest, checked: manifest.files.length, independent };
 }
 
-export const generatorInternals = { componentQuery };
+export const generatorInternals = { componentQuery, projection, semanticContractSourceEquivalence };

@@ -5,7 +5,7 @@ import { compareBy, sortUnique, writeJsonAtomic, writeJsonlAtomic } from './cano
 import { censusRoot } from './constants.mjs';
 import { buildDependencyGraph } from './dependency-graph.mjs';
 import { classifyArtifacts, familyReviewCandidates } from './family.mjs';
-import { buildMappings, buildMissingEntirely, rankIdentityCandidates } from './mapping.mjs';
+import { applySourceDispositionMappings, buildMappings, buildMissingEntirely, rankIdentityCandidates } from './mapping.mjs';
 import { discoverMaterialisationContracts } from './materialisation.mjs';
 import { writeParserEvidence } from './parser-evidence.mjs';
 import { parseMembers } from './parsers/registry.mjs';
@@ -66,7 +66,9 @@ export function buildHardenedCensus() {
   const relationshipResult = buildRelationships(members, parserResults);
   const inventoryResult = reconcileInventories(members, parserResults, relationshipResult.relationships, relationshipResult.relationshipFindings);
   const artifacts = classifyArtifacts(members, parserResults, relationshipResult.relationships, inventoryResult.inventories);
-  const mappingResult = buildMappings(artifacts, parserResults, relationshipResult.relationships);
+  const preliminaryMappingResult = buildMappings(artifacts, parserResults, relationshipResult.relationships);
+  const preliminaryArtifactPlan = buildArtifactPlan(artifacts, parserResults, preliminaryMappingResult.mappings, [], relationshipResult.relationships);
+  const mappingResult = { ...preliminaryMappingResult, mappings: applySourceDispositionMappings(preliminaryMappingResult.mappings, preliminaryArtifactPlan.sourcePlanOwnership) };
   const identityCandidates = rankIdentityCandidates(artifacts, mappingResult.mappings, relationshipResult.relationships);
   const artifactPlan = buildArtifactPlan(artifacts, parserResults, mappingResult.mappings, [], relationshipResult.relationships);
   const missingEntirely = buildMissingEntirely(mappingResult.mappings, artifactPlan.sourcePlanOwnership);

@@ -17,6 +17,8 @@ const TERMS = Object.freeze({
   hasDisposition: `${NS}hasSourceDisposition`,
   dispositionOf: `${NS}dispositionOfSourceArtefact`,
   assignedPlan: `${NS}assignedToArtefactPlan`,
+  exactSemanticReference: `${NS}hasExactSemanticReference`,
+  facetStatus: `${NS}facetStatus`,
   hasDispositionKind: `${NS}hasDispositionKind`,
   decisionState: `${NS}hasDispositionDecisionState`
 });
@@ -220,7 +222,9 @@ export function buildSourcePlanOwnership(artifacts, parserResults, observedPlans
       planIris: disposition.planIris ?? [],
       planIri: disposition.planIri ?? null,
       dispositionKindIri: disposition.dispositionKindIri ?? null,
-      decisionStateIri: disposition.decisionStateIri ?? null
+      decisionStateIri: disposition.decisionStateIri ?? null,
+      semanticReferences: index.get(observation.observationIri, TERMS.exactSemanticReference),
+      gapSemanticReferences: index.get(observation.observationIri, TERMS.exactSemanticReference).filter((reference) => index.get(reference, TERMS.facetStatus).includes('urn:usf:facetstatus:gap'))
     };
   }).sort(compareBy(['universe', 'path']));
   const matchedObservations = new Set(assessments.map((record) => record.observationIri).filter(Boolean));

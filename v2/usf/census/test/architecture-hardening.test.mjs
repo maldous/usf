@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildArtifactPlan, validateReplacementGroup } from '../src/artifact-plan.mjs';
 import { dependencyGraphInternals } from '../src/dependency-graph.mjs';
-import { buildMappings, buildMissingEntirely } from '../src/mapping.mjs';
+import { applySourceDispositionMappings, buildMappings, buildMissingEntirely } from '../src/mapping.mjs';
 import { buildRelationships } from '../src/relationships.mjs';
 import { buildSourcePlanOwnership } from '../src/source-plan-ownership.mjs';
 
@@ -57,6 +57,22 @@ test('typed graph instances map only through exact semantic identifiers', () => 
   assert.equal(result.coverageDecision, 'partial');
   assert.deepEqual(result.matchedResources, ['urn:usf:capability:ownedthing']);
   assert.ok(!result.matchedResources.includes('urn:usf:ontology:SameName'));
+});
+
+test('accepted exact output dispositions rederive graph-grounded partial mappings without claiming equivalence', () => {
+  const sourceArtifact = artifact('a', 'src/example.ts');
+  const base = buildMappings([sourceArtifact], [parsed('src/example.ts', [])], []).mappings;
+  const mapped = applySourceDispositionMappings(base, { assessments: [{
+    artifactKey: 'a', accepted: true, planRequired: true, sourceIri: 'urn:usf:source:a', observationIri: 'urn:usf:observation:a',
+    dispositionIri: 'urn:usf:disposition:a', planIri: 'urn:usf:artefactplan:a',
+    semanticReferences: ['urn:usf:semanticcontract:a', 'urn:usf:contractfacet:auisemantics'],
+    gapSemanticReferences: ['urn:usf:contractfacet:auisemantics']
+  }] })[0];
+  assert.equal(mapped.coverageDecision, 'partial');
+  assert.equal(mapped.mappingType, 'semantic-resource-projection');
+  assert.deepEqual(mapped.missingSemantics, ['urn:usf:contractfacet:auisemantics']);
+  assert.deepEqual(mapped.representedGeneration, ['urn:usf:artefactplan:a']);
+  assert.ok(mapped.mappingEvidence.some((entry) => entry.kind === 'accepted-source-disposition' && entry.strength === 1));
 });
 
 test('artifact planning remains an explicit graph obligation and invents no target or disposition', () => {

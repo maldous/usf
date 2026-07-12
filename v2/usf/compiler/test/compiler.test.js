@@ -7,7 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, generateKeyPairSync } from 'node:crypto';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -567,6 +567,44 @@ test('generation: real authority validates before replacement and reuses determi
     { predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', object: 'urn:usf:ontology:RendererContract' },
     { predicate: 'urn:usf:ontology:rendererTarget', object: 'urn:usf:renderertarget:mobile' },
   ]);
+  const incompleteOutput = mkdtempSync(join(tmpdir(), 'usf-incomplete-generation-'));
+  dirs.push(incompleteOutput);
+  assert.throws(
+    () => generateAuthority({ store: dataset.store, outputDir: join(incompleteOutput, 'output'), mode: 'full', sourceRoot: repositoryRoot }),
+    (error) => error instanceof CompilerError && error.phase === 'generate:missing-semantics' && error.obligations?.length > 0,
+  );
+  const gapStatus = DataFactory.namedNode('urn:usf:facetstatus:gap');
+  const completeStatus = DataFactory.namedNode('urn:usf:facetstatus:complete');
+  const facetStatus = DataFactory.namedNode('urn:usf:ontology:facetStatus');
+  for (const row of dataset.store.getQuads(null, facetStatus, gapStatus, null)) {
+    dataset.store.removeQuad(row);
+    dataset.store.addQuad(row.subject, facetStatus, completeStatus, row.graph);
+  }
+  const semanticKind = DataFactory.namedNode('urn:usf:equivalencekind:semantic');
+  const bindingEquivalenceKind = DataFactory.namedNode('urn:usf:ontology:sourceBindingEquivalenceKind');
+  dataset.store.removeQuads(dataset.store.getQuads(null, bindingEquivalenceKind, semanticKind, null));
+  const generationPlan = requireCompleteGenerationPlan(dataset.store);
+  const authenticationOutput = generationPlan.outputs.find((output) => output.path === 'contracts/semantic/authenticationplatform.json');
+  const authenticationData = generatorInternals.projection(dataset.store, authenticationOutput, 'a'.repeat(64));
+  const bindingPlan = DataFactory.namedNode('urn:usf:ontology:sourceBindingArtefactPlan');
+  const authenticationBinding = dataset.store.getSubjects(bindingPlan, DataFactory.namedNode(authenticationOutput.plan), null)[0];
+  assert.equal(generatorInternals.semanticContractSourceEquivalence(dataset.store, authenticationOutput, authenticationData, repositoryRoot).structural, true);
+  const bindingDigest = DataFactory.namedNode('urn:usf:ontology:sourceBindingContentDigest');
+  const expectedBindingDigest = dataset.store.getObjects(authenticationBinding, bindingDigest, null)[0];
+  dataset.store.removeQuads(dataset.store.getQuads(authenticationBinding, bindingDigest, null, null));
+  dataset.store.addQuad(authenticationBinding, bindingDigest, DataFactory.literal('0'.repeat(64)));
+  assert.throws(
+    () => generatorInternals.semanticContractSourceEquivalence(dataset.store, authenticationOutput, authenticationData, repositoryRoot),
+    (error) => error instanceof CompilerError && error.code === 'USF-SCG-005',
+  );
+  dataset.store.removeQuads(dataset.store.getQuads(authenticationBinding, bindingDigest, null, null));
+  dataset.store.addQuad(authenticationBinding, bindingDigest, expectedBindingDigest);
+  dataset.store.addQuad(authenticationBinding, bindingEquivalenceKind, semanticKind);
+  assert.throws(
+    () => generatorInternals.semanticContractSourceEquivalence(dataset.store, authenticationOutput, authenticationData, repositoryRoot),
+    (error) => error instanceof CompilerError && error.code === 'USF-SCG-006' && error.failures.length > 0,
+  );
+  dataset.store.removeQuads(dataset.store.getQuads(authenticationBinding, bindingEquivalenceKind, semanticKind, null));
   const keys = generateKeyPairSync('ed25519');
   const fingerprint = createHash('sha256').update(keys.publicKey.export({ type: 'spki', format: 'der' })).digest('hex');
   const identity = DataFactory.namedNode('urn:usf:signingidentity:foundationrelease');
@@ -591,6 +629,13 @@ test('generation: real authority validates before replacement and reuses determi
   const outputDir = join(root, 'output');
   const full = generateAuthority({ store: dataset.store, outputDir, mode: 'full', signingKeyPath: keyPath, sourceRoot: repositoryRoot });
   assert.ok(full.outputCount > 0);
+  const semanticContractFiles = readdirSync(join(outputDir, 'contracts/semantic')).sort();
+  assert.equal(semanticContractFiles.length, 66);
+  const generatedContract = JSON.parse(readFileSync(join(outputDir, 'contracts/semantic/authenticationplatform.json'), 'utf8'));
+  assert.equal(generatedContract.id, 'urn:usf:semanticcontract:authenticationplatform');
+  assert.equal(generatedContract.facets.length, 10);
+  assert.ok(generatedContract.facets.every((facet) => facet.status === 'complete' || facet.status === 'notapplicable'));
+  assert.equal(generatedContract.sourceEquivalence.structural, true);
   assert.deepEqual(readFileSync(join(outputDir, '.github/workflows/proof-anchor.yml')), readFileSync(join(repositoryRoot, '.github/workflows/proof-anchor.yml')));
   assert.deepEqual(readFileSync(join(outputDir, '.github/workflows/validate-spec.yml')), readFileSync(join(repositoryRoot, '.github/workflows/validate-spec.yml')));
   assert.equal(verifyOutput(outputDir, true, fingerprint).independent.signingIdentityTrusted, true);

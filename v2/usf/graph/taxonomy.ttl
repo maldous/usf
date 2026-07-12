@@ -160,6 +160,7 @@ usf:ProvenanceRecord usf:classifiedAs <urn:usf:taxonomy:assurance> .
 usf:SoftwareBillOfMaterials usf:classifiedAs <urn:usf:taxonomy:assurance> .
 usf:Checksum usf:classifiedAs <urn:usf:taxonomy:assurance> .
 usf:EquivalenceClaim usf:classifiedAs <urn:usf:taxonomy:assurance> .
+usf:EquivalenceRule usf:classifiedAs <urn:usf:taxonomy:assurance> .
 
 # Enterprise assurance terms. Controlled-value subclasses remain exempt under
 # the closed-vocabulary rule below.

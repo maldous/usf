@@ -175,6 +175,51 @@ export function buildMappings(artifacts, parserResults, relationships) {
   return { mappings, resources };
 }
 
+export function applySourceDispositionMappings(mappings, sourceDispositionOwnership) {
+  const ownershipByKey = new Map(sourceDispositionOwnership.assessments.map((record) => [record.artifactKey, record]));
+  return mappings.map((record) => {
+    const ownership = ownershipByKey.get(record.artifactKey);
+    if (!ownership?.accepted) return record;
+    const references = [...new Set(ownership.semanticReferences ?? [])].sort();
+    const gapReferences = [...new Set(ownership.gapSemanticReferences ?? [])].sort();
+    const output = ownership.planRequired;
+    const evidence = [
+      { kind: 'accepted-source-disposition', source: ownership.dispositionIri, resource: ownership.sourceIri, strength: 1 },
+      ...(ownership.planIri ? [{ kind: 'graph-owned-artifact-plan', source: ownership.dispositionIri, resource: ownership.planIri, strength: 1 }] : []),
+      ...references.map((resource) => ({ kind: 'exact-observed-semantic-reference', source: ownership.observationIri, resource, strength: 1 })),
+    ];
+    const coverageDecision = output ? 'partial' : 'notrequired';
+    const mapped = {
+      ...record,
+      mappingType: output ? 'semantic-resource-projection' : 'not-required',
+      mappingCardinality: references.length > 1 ? 'one-to-many' : references.length === 1 ? 'one-to-one' : 'one-to-zero',
+      matchedResources: references,
+      mappingEvidence: evidence.sort((a, b) => String(a.resource ?? '').localeCompare(String(b.resource ?? '')) || a.kind.localeCompare(b.kind)),
+      representedSemantics: output
+        ? ['semantic-identity', 'graph-owned-source-disposition', 'graph-owned-artifact-plan']
+        : ['semantic-identity', 'graph-owned-no-output-disposition'],
+      missingSemantics: gapReferences,
+      representedConstraints: references.filter((resource) => /contractfacet|constraint|policy|permission/.test(resource)),
+      representedProofEvidence: references.filter((resource) => /proof|evidence|obligation|equivalencerule/.test(resource)),
+      representedGeneration: ownership.planIri ? [ownership.planIri] : [],
+      ambiguities: [], conflicts: [],
+      mappingConfidence: { level: 'high', score: 1, reasons: ['accepted-exact-source-disposition', ...(output ? ['graph-owned-artifact-plan'] : ['graph-owned-no-output-disposition'])] },
+      coverageDecision,
+      coverageReason: output
+        ? gapReferences.length
+          ? `An accepted exact source disposition and graph-owned output plan exist; ${gapReferences.length} exact contract facets remain gapped, so generation and equivalence are not complete.`
+          : 'An accepted exact source disposition and graph-owned output plan exist; generated equivalence evidence is still required before complete coverage.'
+        : 'An accepted exact graph-owned no-output disposition excludes this noncanonical source from generated output.',
+      coverageConfidence: output
+        ? { level: 'medium', score: 0.85, reasons: ['exact-source-disposition-and-plan', gapReferences.length ? 'unresolved-exact-facet-gaps' : 'equivalence-not-yet-observed'] }
+        : { level: 'high', score: 1, reasons: ['accepted-exact-no-output-disposition'] },
+      reviewStatus: 'machine-reviewed',
+    };
+    validateMapping(mapped);
+    return mapped;
+  }).sort(compareBy(['universe', 'path']));
+}
+
 export function rankIdentityCandidates(artifacts, mappings, relationships, baselineCandidateRows = null) {
   const relationCounts = new Map();
   for (const relation of relationships) {

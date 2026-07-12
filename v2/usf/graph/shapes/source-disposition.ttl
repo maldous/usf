@@ -64,12 +64,19 @@ shp:SourceDispositionPolicyShape a sh:NodeShape ;
       $this usf:policyDispositionKind ?kind ; usf:policyOutputMode ?mode .
       FILTER NOT EXISTS { ?kind usf:permitsDispositionOutputMode ?mode }
     }""" ] ;
-  sh:sparql [ sh:prefixes usf:prefixes ; sh:message "policyplan: canonicaloutput requires one or more exact plan IRIs; nooutput forbids every plan" ;
+  sh:sparql [ sh:prefixes usf:prefixes ; sh:message "policyplan: canonicaloutput requires an exact policy or binding plan; nooutput forbids every plan" ;
     sh:select """SELECT $this WHERE {
       $this usf:policyOutputMode ?mode .
-      { FILTER(?mode = <urn:usf:dispositionoutputmode:canonicaloutput>) FILTER NOT EXISTS { $this usf:policyArtefactPlan ?plan } }
+      { FILTER(?mode = <urn:usf:dispositionoutputmode:canonicaloutput>)
+        FILTER NOT EXISTS { $this usf:policyArtefactPlan ?plan }
+        FILTER NOT EXISTS { $this usf:policyMatchesSourceBinding/usf:sourceBindingArtefactPlan ?plan }
+      }
       UNION
-      { FILTER(?mode = <urn:usf:dispositionoutputmode:nooutput>) FILTER EXISTS { $this usf:policyArtefactPlan ?plan } }
+      { FILTER(?mode = <urn:usf:dispositionoutputmode:nooutput>)
+        { FILTER EXISTS { $this usf:policyArtefactPlan ?plan } }
+        UNION
+        { FILTER EXISTS { $this usf:policyMatchesSourceBinding/usf:sourceBindingArtefactPlan ?plan } }
+      }
     }""" ] .
 
 shp:SourceArtefactDispositionShape a sh:NodeShape ;

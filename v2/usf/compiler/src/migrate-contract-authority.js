@@ -29,6 +29,13 @@ const reviewedOverrides = new Map([
   }],
 ]);
 
+const lifecycleOverrides = new Map([
+  ['semantic-contract.alerting-incident-management-on-call-status-page', {
+    successor: 'observabilitybuiltinalertingandincidents',
+    statement: 'This deprecated contract is retained as source-lineage identity only. Its canonical successor is the observability built-in alerting and incidents contract, so none of its facets is a generation obligation.',
+  }],
+]);
+
 function parseJsonl(path) {
   return readFileSync(path, 'utf8').split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));
 }
@@ -66,6 +73,8 @@ if (documents.length !== 67 || contractsByName.size !== 67) {
 
 const quads = [];
 const boundBindings = [];
+const deprecatedBindings = [];
+let artefactPlanCount = 0;
 let facetCount = 0;
 let overrideCount = 0;
 let semanticBindingCount = 0;
@@ -101,12 +110,50 @@ for (const { sourcePath, document } of documents) {
   );
   boundBindings.push(binding);
 
-  let overridden = false;
+  const lifecycleOverride = lifecycleOverrides.get(document.id);
+  if (lifecycleOverride) {
+    const successor = contractsByName.get(lifecycleOverride.successor);
+    if (!successor || canonical(document.lifecycleState) !== 'deprecated') throw new Error(`invalid reviewed lifecycle override: ${sourcePath}`);
+    quads.push(quad(contract, p('supersededBy'), successor, GRAPH));
+    deprecatedBindings.push(binding);
+  } else {
+    const outputName = `semanticcontract${contractName}`;
+    const plan = namedNode(`urn:usf:artefactplan:${outputName}`);
+    const artefact = namedNode(`urn:usf:artefact:${outputName}`);
+    const pathRule = namedNode(`urn:usf:pathrule:${outputName}`);
+    const outputPath = `contracts/semantic/${contractName}.json`;
+    quads.push(
+      quad(namedNode('urn:usf:repository:foundation'), p('hasArtefactPlan'), plan, GRAPH),
+      quad(plan, RDF_TYPE, namedNode(`${USF}ArtefactPlan`), GRAPH),
+      quad(plan, p('canonicalName'), literal(outputName), GRAPH),
+      quad(plan, p('ownedByRepository'), namedNode('urn:usf:repository:foundation'), GRAPH),
+      quad(plan, p('plansArtefact'), artefact, GRAPH),
+      quad(plan, p('plansSemanticResource'), contract, GRAPH),
+      quad(artefact, RDF_TYPE, namedNode(`${USF}Artefact`), GRAPH),
+      quad(artefact, p('canonicalName'), literal(outputName), GRAPH),
+      quad(artefact, p('artefactKind'), namedNode('urn:usf:artefactkind:contract'), GRAPH),
+      quad(artefact, p('canonicalPath'), literal(outputPath), GRAPH),
+      quad(artefact, p('governedByPathRule'), pathRule, GRAPH),
+      quad(artefact, p('generatedByComponent'), namedNode('urn:usf:generator:semanticcontract'), GRAPH),
+      quad(pathRule, RDF_TYPE, namedNode(`${USF}PathRule`), GRAPH),
+      quad(pathRule, p('canonicalName'), literal(outputName), GRAPH),
+      quad(pathRule, p('pathPattern'), literal(outputPath), GRAPH),
+      quad(binding, p('sourceBindingArtefactPlan'), plan, GRAPH),
+      quad(binding, p('sourceBindingEquivalenceRule'), namedNode('urn:usf:equivalencerule:semanticcontractprojection'), GRAPH),
+      quad(binding, p('sourceBindingTarget'), plan, GRAPH),
+      quad(binding, p('sourceBindingTarget'), artefact, GRAPH),
+    );
+    artefactPlanCount += 1;
+  }
+
+  let overridden = Boolean(lifecycleOverride);
   for (const [sourceKind, sourceFacet] of Object.entries(document.facets)) {
     const kind = sourceKind === 'uiSemanticDefinition' ? 'uisemantics' : canonical(sourceKind);
     const facet = facetsByKind.get(kind);
     if (!facet) throw new Error(`no explicit target facet selected for ${sourcePath}#${sourceKind}`);
-    const override = reviewedOverrides.get(`${document.id}#${sourceKind}`);
+    const override = lifecycleOverride
+      ? { status: 'notapplicable', statement: lifecycleOverride.statement }
+      : reviewedOverrides.get(`${document.id}#${sourceKind}`);
     if (override) { overridden = true; overrideCount += 1; }
     const status = override?.status ?? canonical(sourceFacet.status);
     const statement = sanitiseStatement(override?.statement ?? sourceFacet.description ?? '');
@@ -129,18 +176,38 @@ const policy = namedNode('urn:usf:sourcedispositionpolicy:semanticcontractsource
 quads.push(
   quad(policy, RDF_TYPE, namedNode(`${USF}SourceDispositionPolicy`), GRAPH),
   quad(policy, p('canonicalName'), literal('semanticcontractsource'), GRAPH),
-  quad(policy, p('policyDispositionKind'), namedNode('urn:usf:dispositionkind:retainsemanticauthority'), GRAPH),
+  quad(policy, p('policyDispositionKind'), namedNode('urn:usf:dispositionkind:retireafterequivalence'), GRAPH),
+  quad(policy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:explicitplanlink'), GRAPH),
   quad(policy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:exactsemanticbinding'), GRAPH),
   quad(policy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:independentintegrityobservation'), GRAPH),
   quad(policy, p('policyDecisionState'), namedNode('urn:usf:dispositiondecisionstate:accepted'), GRAPH),
-  quad(policy, p('policyOutputMode'), namedNode('urn:usf:dispositionoutputmode:nooutput'), GRAPH),
-  quad(policy, p('policyGenerationInputRole'), namedNode('urn:usf:generationinputrole:semanticauthority'), GRAPH),
+  quad(policy, p('policyOutputMode'), namedNode('urn:usf:dispositionoutputmode:canonicaloutput'), GRAPH),
+  quad(policy, p('policyGenerationInputRole'), namedNode('urn:usf:generationinputrole:equivalencesubject'), GRAPH),
   quad(policy, p('isDefaultDispositionPolicy'), literal(false), GRAPH),
   quad(policy, p('isActiveDispositionPolicy'), literal(true), GRAPH),
-  quad(policy, p('decisionRationale'), literal('Each selected source is joined through an exact authored identity, path, and content-digest binding to its contract and facet resources; normalized names and path resemblance are not selectors.'), GRAPH),
+  quad(policy, p('decisionRationale'), literal('Each selected source is joined through an exact authored identity, path, and content-digest binding to its contract, facets, and source-specific canonical output plan. It remains an equivalence subject until the graph-generated contract projection passes semantic equivalence.'), GRAPH),
 );
-for (const binding of boundBindings.sort((a, b) => a.value.localeCompare(b.value))) {
+const deprecatedBindingNames = new Set(deprecatedBindings.map((binding) => binding.value));
+for (const binding of boundBindings.filter((item) => !deprecatedBindingNames.has(item.value)).sort((a, b) => a.value.localeCompare(b.value))) {
   quads.push(quad(policy, p('policyMatchesSourceBinding'), binding, GRAPH));
+}
+
+const deprecatedPolicy = namedNode('urn:usf:sourcedispositionpolicy:deprecatedsemanticcontractsource');
+quads.push(
+  quad(deprecatedPolicy, RDF_TYPE, namedNode(`${USF}SourceDispositionPolicy`), GRAPH),
+  quad(deprecatedPolicy, p('canonicalName'), literal('deprecatedsemanticcontractsource'), GRAPH),
+  quad(deprecatedPolicy, p('policyDispositionKind'), namedNode('urn:usf:dispositionkind:excludenoncanonical'), GRAPH),
+  quad(deprecatedPolicy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:exactsemanticbinding'), GRAPH),
+  quad(deprecatedPolicy, p('policyDispositionBasis'), namedNode('urn:usf:dispositionbasis:independentintegrityobservation'), GRAPH),
+  quad(deprecatedPolicy, p('policyDecisionState'), namedNode('urn:usf:dispositiondecisionstate:accepted'), GRAPH),
+  quad(deprecatedPolicy, p('policyOutputMode'), namedNode('urn:usf:dispositionoutputmode:nooutput'), GRAPH),
+  quad(deprecatedPolicy, p('policyGenerationInputRole'), namedNode('urn:usf:generationinputrole:equivalencesubject'), GRAPH),
+  quad(deprecatedPolicy, p('isDefaultDispositionPolicy'), literal(false), GRAPH),
+  quad(deprecatedPolicy, p('isActiveDispositionPolicy'), literal(true), GRAPH),
+  quad(deprecatedPolicy, p('decisionRationale'), literal('The exact bound source declares a deprecated contract with an authored canonical successor. It is retained for lineage and excluded from semantic generation inputs.'), GRAPH),
+);
+for (const binding of deprecatedBindings.sort((a, b) => a.value.localeCompare(b.value))) {
+  quads.push(quad(deprecatedPolicy, p('policyMatchesSourceBinding'), binding, GRAPH));
 }
 
 const writer = new Writer({ format: 'application/trig' });
@@ -148,4 +215,4 @@ writer.addQuads(quads);
 const output = await new Promise((resolveOutput, reject) => writer.end((error, value) => error ? reject(error) : resolveOutput(value)));
 mkdirSync(dirname(OUTPUT), { recursive: true });
 writeFileSync(OUTPUT, output, 'utf8');
-process.stdout.write(`${JSON.stringify({ output: 'v2/usf/graph/contracts/semantic-depth.trig', contracts: documents.length, facets: facetCount, bindings: documents.length, semanticBindings: semanticBindingCount, reviewedOverrides: overrideCount, triples: quads.length, sha256: sha256(output) })}\n`);
+process.stdout.write(`${JSON.stringify({ output: 'v2/usf/graph/contracts/semantic-depth.trig', contracts: documents.length, facets: facetCount, bindings: documents.length, artefactPlans: artefactPlanCount, semanticBindings: semanticBindingCount, reviewedFacetOverrides: overrideCount, reviewedLifecycleOverrides: lifecycleOverrides.size, triples: quads.length, sha256: sha256(output) })}\n`);

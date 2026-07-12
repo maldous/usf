@@ -3,9 +3,9 @@
   "checks": [
     {
       "facts": {
-        "recordCount": 3225,
+        "recordCount": 3227,
         "shardCount": 4,
-        "uncompressedBytes": 173820303
+        "uncompressedBytes": 182495564
       },
       "findings": [],
       "id": "parser-evidence-storage",
@@ -13,7 +13,7 @@
     },
     {
       "facts": {
-        "memberCount": 3225,
+        "memberCount": 3227,
         "universeCount": 4
       },
       "findings": [],
@@ -23,8 +23,8 @@
     {
       "facts": {
         "inventoryCount": 2651,
-        "parserCount": 3225,
-        "relationshipCount": 57464
+        "parserCount": 3227,
+        "relationshipCount": 60000
       },
       "findings": [],
       "id": "parser-relationships",
@@ -32,7 +32,7 @@
     },
     {
       "facts": {
-        "ownerCount": 3225
+        "ownerCount": 3227
       },
       "findings": [],
       "id": "family-ownership",
@@ -40,8 +40,8 @@
     },
     {
       "facts": {
-        "coverageCount": 3225,
-        "mappingCount": 3225
+        "coverageCount": 3227,
+        "mappingCount": 3227
       },
       "findings": [],
       "id": "mappings-coverage",
@@ -49,8 +49,8 @@
     },
     {
       "facts": {
-        "canonicalArtifactCount": 0,
-        "replacementGroupCount": 3225,
+        "canonicalArtifactCount": 66,
+        "replacementGroupCount": 3227,
         "semanticLayerArtifactOwnerCount": 0
       },
       "findings": [],
@@ -59,34 +59,34 @@
     },
     {
       "facts": {
-        "acceptedDispositionCount": 137,
-        "artifactCount": 3225,
-        "canonicalArtifactCount": 0,
-        "missingDispositionCount": 3088
+        "acceptedDispositionCount": 67,
+        "artifactCount": 3227,
+        "canonicalArtifactCount": 66,
+        "missingDispositionCount": 3160
       },
       "findings": [
-        "required-source-disposition-unavailable:3088"
+        "required-source-disposition-unavailable:3160"
       ],
       "id": "artifact-dispositions",
       "status": "fail"
     },
     {
       "facts": {
-        "acceptedDispositionCount": 137,
-        "artifactCount": 3225,
-        "dispositionCount": 3218,
+        "acceptedDispositionCount": 67,
+        "artifactCount": 3227,
+        "dispositionCount": 3220,
         "findingDistribution": {
-          "source-disposition-review-required": 3081,
+          "source-disposition-review-required": 3153,
           "source-observation-missing": 7
         },
-        "noOutputDispositionCount": 135,
-        "observationCount": 3218,
-        "outputPlanDispositionCount": 2,
-        "rejectedDispositionCount": 3088
+        "noOutputDispositionCount": 1,
+        "observationCount": 3220,
+        "outputPlanDispositionCount": 66,
+        "rejectedDispositionCount": 3160
       },
       "findings": [
-        "required-source-disposition-unavailable:3088",
-        "source-disposition-review-required:3081",
+        "required-source-disposition-unavailable:3160",
+        "source-disposition-review-required:3153",
         "source-observation-missing:7"
       ],
       "id": "source-disposition-ownership",
@@ -95,7 +95,7 @@
     {
       "facts": {
         "semanticLayerPackageOwnerCount": 0,
-        "workPackageCount": 98
+        "workPackageCount": 99
       },
       "findings": [],
       "id": "work-packages",
@@ -103,7 +103,7 @@
     },
     {
       "facts": {
-        "dependencyCount": 92
+        "dependencyCount": 94
       },
       "findings": [],
       "id": "dependencies",
@@ -120,7 +120,7 @@
     },
     {
       "facts": {
-        "canonicalDigest": "a77bd9397360220ac57e06903d4b578b2d1105a2b2d32ff3ed835f7132d3131d",
+        "canonicalDigest": "273981ff02ff82692e62f5fb53143db26cfaafe9d83b6c231bc41e261cc1cc88",
         "outputCount": 12
       },
       "findings": [],
@@ -129,8 +129,8 @@
     },
     {
       "facts": {
-        "afterCount": 3225,
-        "beforeCount": 3225
+        "afterCount": 3227,
+        "beforeCount": 3227
       },
       "findings": [],
       "id": "mutation-boundary",

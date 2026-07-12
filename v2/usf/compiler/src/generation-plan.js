@@ -42,6 +42,8 @@ export function buildGenerationPlan(store) {
     const artefacts = objects(store, plan, p('plansArtefact'));
     if (!artefacts.length) obligations.push({ subject: plan.value, predicate: `${USF}plansArtefact`, expected: 'one-or-more', observed: 0, kind: 'missing-plan-output' });
     for (const artefact of artefacts) {
+      const semanticResources = objects(store, plan, p('plansSemanticResource'));
+      if (semanticResources.length > 1) obligations.push({ subject: plan.value, predicate: `${USF}plansSemanticResource`, expected: 'zero-or-one', observed: semanticResources.length, kind: 'ambiguous-plan-semantic-resource' });
       const pathTerm = requiredOne(store, artefact, p('canonicalPath'), 'missing-canonical-path', obligations);
       const kindTerm = requiredOne(store, artefact, p('artefactKind'), 'missing-artefact-kind', obligations);
       const pathRule = requiredOne(store, artefact, p('governedByPathRule'), 'missing-path-rule', obligations);
@@ -72,7 +74,7 @@ export function buildGenerationPlan(store) {
           if (templatePath && digest) template = { artefact: templates[0].value, path: templatePath, sha256: digest };
         }
       }
-      if (path && kindTerm && component) outputs.push({ plan: plan.value, artefact: artefact.value, path, artefactKind: iriValue(kindTerm), component: component.value, ...(template ? { template } : {}) });
+      if (path && kindTerm && component) outputs.push({ plan: plan.value, artefact: artefact.value, path, artefactKind: iriValue(kindTerm), component: component.value, semanticResources: semanticResources.map(iriValue).filter(Boolean), ...(template ? { template } : {}) });
     }
   }
   const byPath = new Map();

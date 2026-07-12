@@ -17,7 +17,13 @@ shp:SemanticContractShape a sh:NodeShape ;
     sh:property [ sh:path usf:semanticLifecycleState ; sh:minCount 1 ; sh:maxCount 1 ; sh:class usf:SemanticLifecycleState ;
         sh:message "contractlifecycle: contract must declare exactly one semantic lifecycle state" ] ;
     sh:property [ sh:path usf:declaresFacet ; sh:minCount 1 ; sh:class usf:ContractFacet ;
-        sh:message "contractfacet: contract must declare facets" ] .
+        sh:message "contractfacet: contract must declare facets" ] ;
+    sh:property [ sh:path usf:supersededBy ; sh:maxCount 1 ; sh:class usf:SemanticContract ] ;
+    sh:sparql [ sh:prefixes usf:prefixes ; sh:message "contractsupersession: a deprecated contract requires one distinct canonical successor" ;
+      sh:select """SELECT $this WHERE {
+        $this usf:semanticLifecycleState <urn:usf:semanticlifecyclestate:deprecated> .
+        FILTER NOT EXISTS { $this usf:supersededBy ?successor . FILTER(?successor != $this) }
+      }""" ] .
 
 shp:ContractFacetShape a sh:NodeShape ;
     usf:canonicalName "contractfacetshape" ;
@@ -37,6 +43,8 @@ shp:SourceSemanticBindingShape a sh:NodeShape ;
     sh:property [ sh:path usf:sourceBindingContentDigest ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
     sh:property [ sh:path usf:sourceBindingPath ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
     sh:property [ sh:path usf:sourceBindingEquivalenceKind ; sh:minCount 1 ; sh:class usf:EquivalenceKind ] ;
+    sh:property [ sh:path usf:sourceBindingArtefactPlan ; sh:maxCount 1 ; sh:class usf:ArtefactPlan ] ;
+    sh:property [ sh:path usf:sourceBindingEquivalenceRule ; sh:maxCount 1 ; sh:class usf:EquivalenceRule ] ;
     sh:sparql [ sh:prefixes usf:prefixes ; sh:message "sourcebindingcurrent: bound path and content digest must match the source current observation" ;
       sh:select """SELECT $this WHERE {
         $this usf:sourceBindingSource ?source ; usf:sourceBindingPath ?path ; usf:sourceBindingContentDigest ?digest .

@@ -20,9 +20,14 @@ test('semantic layer review covers the complete controlled layer set', () => {
 
 test('work packages own every hardened entity exactly once', () => {
   const work = JSON.parse(fs.readFileSync(path.join(censusRoot, 'workpackages.json'), 'utf8'));
+  const summary = JSON.parse(fs.readFileSync(path.join(censusRoot, 'summary.json'), 'utf8'));
+  const canonicalArtifacts = readJsonl(path.join(censusRoot, 'canonical-artifacts.jsonl'));
   for (const records of Object.values(work.ownership)) assert.equal(records.length, new Set(records.map((item) => item.ownedKey)).size);
   assert.equal(work.ownership.artifacts.length, readJsonl(path.join(censusRoot, 'artifacts.jsonl')).length);
-  assert.equal(work.ownership.canonicalArtifacts.length, readJsonl(path.join(censusRoot, 'canonical-artifacts.jsonl')).length);
+  assert.equal(work.ownership.canonicalArtifacts.length, canonicalArtifacts.length);
+  assert.equal(canonicalArtifacts.length, summary.sourceDispositionAcceptedOutputPlanCount);
+  assert.ok(canonicalArtifacts.length > 0);
+  assert.ok(canonicalArtifacts.every((record) => record.productionContract.planIri && record.productionContract.generatorIri && record.equivalenceContract.gates.length > 0));
   assert.equal(work.ownership.missingEntirely.length, readJsonl(path.join(censusRoot, 'missing-entirely.jsonl')).length);
 });
 

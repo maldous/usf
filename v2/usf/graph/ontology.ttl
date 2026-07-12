@@ -458,6 +458,9 @@ usf:facetStatus a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:domain usf:ContractFacet ; rdfs:range usf:FacetStatus ; rdfs:label "facetStatus" .
 usf:facetStatement a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:domain usf:ContractFacet ; rdfs:range xsd:string ; rdfs:label "facetStatement" .
+usf:supersededBy a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain usf:SemanticContract ; rdfs:range usf:SemanticContract ; rdfs:label "supersededBy" ;
+    rdfs:comment "Identifies the single canonical successor of a deprecated semantic contract; the deprecated contract remains lineage and is excluded from generation." .
 usf:governedByPolicy a owl:ObjectProperty ;
     rdfs:domain usf:SemanticContract ; rdfs:range usf:Policy ; rdfs:label "governedByPolicy" .
 usf:appliesToCapability a owl:ObjectProperty ;
@@ -948,6 +951,11 @@ usf:EquivalenceClaim a owl:Class ;
   rdfs:label "Equivalence claim" ;
   rdfs:comment "A falsifiable claim comparing declared subjects under an explicit equivalence kind and observed result." .
 
+usf:EquivalenceRule a owl:Class ;
+  rdfs:subClassOf usf:Entity ;
+  rdfs:label "Equivalence rule" ;
+  rdfs:comment "An authored comparison contract declaring the semantic fields, equivalence dimensions, evaluator, input role, and fail-closed diagnostic required before a source may be retired or replaced." .
+
 usf:CleanRoomGeneration a owl:Class ;
   rdfs:subClassOf usf:CompilerRun ;
   rdfs:label "Clean-room generation" ;
@@ -1014,6 +1022,7 @@ usf:containsModule a owl:ObjectProperty ; rdfs:domain usf:Package ; rdfs:range u
 usf:hasArtefactPlan a owl:ObjectProperty ; rdfs:domain usf:Repository ; rdfs:range usf:ArtefactPlan .
 usf:ownedByRepository a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:ArtefactPlan ; rdfs:range usf:Repository .
 usf:plansArtefact a owl:ObjectProperty ; rdfs:domain usf:ArtefactPlan ; rdfs:range usf:Artefact .
+usf:plansSemanticResource a owl:ObjectProperty ; rdfs:domain usf:ArtefactPlan ; rdfs:range rdfs:Resource .
 usf:governedByPathRule a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:Artefact ; rdfs:range usf:PathRule .
 usf:canonicalPath a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:Artefact ; rdfs:range xsd:string .
 usf:pathPattern a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:PathRule ; rdfs:range xsd:string .
@@ -1094,6 +1103,11 @@ usf:lockedVersion a owl:ObjectProperty ; rdfs:domain usf:DependencyLock ; rdfs:r
 usf:lockChecksum a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:DependencyLock ; rdfs:range usf:Checksum .
 
 # Equivalence and clean-room generation.
+usf:equivalenceRuleKind a owl:ObjectProperty ; rdfs:domain usf:EquivalenceRule ; rdfs:range usf:EquivalenceKind .
+usf:equivalenceRuleComponent a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EquivalenceRule ; rdfs:range usf:CompilerComponent .
+usf:equivalenceRuleInputRole a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EquivalenceRule ; rdfs:range usf:GenerationInputRole .
+usf:equivalenceRuleComparesPredicate a owl:ObjectProperty ; rdfs:domain usf:EquivalenceRule ; rdfs:range rdf:Property .
+usf:equivalenceRuleFailureCode a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:EquivalenceRule ; rdfs:range xsd:string .
 usf:equivalenceKind a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EquivalenceClaim ; rdfs:range usf:EquivalenceKind .
 usf:equivalenceResult a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:EquivalenceClaim ; rdfs:range usf:EquivalenceResult .
 usf:equivalenceSubject a owl:ObjectProperty ; rdfs:domain usf:EquivalenceClaim ; rdfs:range usf:Artefact .
@@ -1115,6 +1129,7 @@ usf:containsModule rdfs:label "contains module" ; rdfs:comment "Relates a packag
 usf:hasArtefactPlan rdfs:label "has artefact plan" ; rdfs:comment "Identifies an artefact plan owned by a repository." .
 usf:ownedByRepository rdfs:label "owned by repository" ; rdfs:comment "Identifies the single repository that owns an artefact plan." .
 usf:plansArtefact rdfs:label "plans artefact" ; rdfs:comment "Identifies an artefact declared as an output or retained input by an artefact plan." .
+usf:plansSemanticResource rdfs:label "plans semantic resource" ; rdfs:comment "Binds a source-specific artefact plan to the exact semantic resource selected from its generator query." .
 usf:governedByPathRule rdfs:label "governed by path rule" ; rdfs:comment "Identifies the deterministic path rule governing an artefact's canonical path." .
 usf:canonicalPath rdfs:label "canonical path" ; rdfs:comment "Records one normalised repository-relative canonical path for an artefact." .
 usf:pathPattern rdfs:label "path pattern" ; rdfs:comment "Records the deterministic pattern evaluated by a path rule." .
@@ -1748,6 +1763,8 @@ usf:sourceBindingTarget a owl:ObjectProperty ; rdfs:domain usf:SourceSemanticBin
 usf:sourceBindingContentDigest a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range xsd:string .
 usf:sourceBindingPath a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range xsd:string .
 usf:sourceBindingEquivalenceKind a owl:ObjectProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range usf:EquivalenceKind .
+usf:sourceBindingArtefactPlan a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range usf:ArtefactPlan .
+usf:sourceBindingEquivalenceRule a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceSemanticBinding ; rdfs:range usf:EquivalenceRule .
 usf:isDefaultDispositionPolicy a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range xsd:boolean .
 usf:isActiveDispositionPolicy a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain usf:SourceDispositionPolicy ; rdfs:range xsd:boolean .
 usf:permitsDispositionOutputMode a owl:ObjectProperty ; rdfs:domain usf:DispositionKind ; rdfs:range usf:DispositionOutputMode .
